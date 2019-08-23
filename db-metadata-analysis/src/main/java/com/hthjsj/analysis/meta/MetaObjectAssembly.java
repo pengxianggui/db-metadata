@@ -20,7 +20,7 @@ class DBMetaObjectAssembly implements MetaObjectAssembly<Table, MetaObject> {
     
     @Override
     public MetaObject assembly(Table table) {
-        SimpleMetaObject metaObject = new SimpleMetaObject(null, null);
+        MetaObjectFacroty.DefaultMetaObject metaObject = new MetaObjectFacroty.DefaultMetaObject(null, null);
         for (Column column : table.getColumns()) {
         
         }

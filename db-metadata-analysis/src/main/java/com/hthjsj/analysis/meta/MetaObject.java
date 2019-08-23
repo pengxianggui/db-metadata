@@ -1,5 +1,7 @@
 package com.hthjsj.analysis.meta;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Collection;
 
 /**
@@ -12,34 +14,50 @@ import java.util.Collection;
  */
 public interface MetaObject {
     
+    @JSONField(name = "code")
     String code();
     
+    @JSONField(name = "code")
+    void code(String value);
+    
+    @JSONField(name = "name")
     String name();
     
+    @JSONField(name = "name")
+    void name(String value);
+    
+    @JSONField(name = "tableName")
     String tableName();
     
+    @JSONField(name = "tableName")
+    void tableName(String value);
+    
+    @JSONField(name = "schemaName")
     String schemaName();
     
+    @JSONField(name = "schemaName")
+    void schemaName(String value);
+    
+    @JSONField(name = "primarys")
     MetaField[] primarys();
     
-    Collection<MetaField> getFields();
+    @JSONField(name = "primarys")
+    void primarys(MetaField[] value);
     
-    void setFields(Collection<MetaField> fields);
+    @JSONField(name = "primaryKey")
+    String primaryKey();
+    
+    @JSONField(name = "fields")
+    Collection<MetaField> fields();
+    
+    @JSONField(name = "fields")
+    void fields(Collection<MetaField> value);
+    
+    @JSONField(name = "config")
+    MetaConfig config();
+    
+    void config(String config);
+    
+    void config(MetaConfig config);
 }
 
-interface MetaObjectAccess {
-    
-    boolean isSingle();
-    
-    boolean isShowRowNum();
-}
-
-interface MetaObjectDbBehavior {
-    
-    MetaData save(MetaData data);
-    
-    int update(MetaData data);
-    
-    int delete(MetaData data);
-    
-}

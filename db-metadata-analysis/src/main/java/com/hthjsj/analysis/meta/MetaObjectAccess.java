@@ -1,7 +1,5 @@
 package com.hthjsj.analysis.meta;
 
-import com.jfinal.plugin.activerecord.Record;
-
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -10,9 +8,9 @@ import com.jfinal.plugin.activerecord.Record;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class AbstractMetaField implements MetaField, MetaFieldAccess, MetaFieldShowBehavior, MetaObjectDbBehavior {
+interface MetaObjectAccess {
     
-    Record record;
+    boolean isSingle();
     
-    
+    boolean isShowRowNum();
 }

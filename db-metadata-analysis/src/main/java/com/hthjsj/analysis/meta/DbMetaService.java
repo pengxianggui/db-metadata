@@ -16,9 +16,8 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class DbMetaService implements MetaService {
+public class DbMetaService {
     
-    @Override
     public MetaObject importFromTable(String schema, String table) {
         DbService dbService = new MysqlService();
         Table t = dbService.getTable(schema, table);
@@ -28,10 +27,13 @@ public class DbMetaService implements MetaService {
         return dbMetaObjectAssembly.assembly(t);
     }
     
-    @Override
     public MetaObject findByCode(String code) {
         Record metaObject = Db.findFirst("select * from meta_object where code=?", code);
         List<Record> metafields = Db.find("select * from meta_field where object_code=? order by order_num ", code);
+        for (Record metafield : metafields) {
+        }
+        MetaObjectFacroty.DefaultMetaObject defaultMetaObject = new MetaObjectFacroty.DefaultMetaObject();
+        //        defaultMetaObject.setRecord(metaObject);
         return null;
     }
     
