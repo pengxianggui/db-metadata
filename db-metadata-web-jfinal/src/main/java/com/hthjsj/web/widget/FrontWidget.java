@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.widget;
 
 /**
  * <p> Class title: </p>
@@ -8,15 +8,16 @@ package com.hthjsj.web;
  *
  * <p> @author konbluesky </p>
  */
-public interface WebResult {
+public interface FrontWidget {
     
-    int code();
+    String code();
     
-    String msg();
+    String cn();
     
-    Object data();
+    String en();
     
-    Object gobalData();
+    void init();
     
-    Long timestamp();
+    Object render();
+    
 }
