@@ -1,4 +1,4 @@
-package com.hthjsj.analysis.meta;
+package com.hthjsj.analysis.meta.validate;
 
 /**
  * <p> Class title: </p>
