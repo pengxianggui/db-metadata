@@ -19,6 +19,7 @@
     <modules>
         <module>../db-metadata-analysis</module>
         <module>../db-metadata-web-jfinal</module>
+        <module>../db-metadata-web-iview</module>
     </modules>
 
     <dependencies>
