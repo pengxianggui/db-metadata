@@ -22,13 +22,13 @@ public class Table {
         this.record = record;
     }
     
+    public List<Column> getColumns() {
+        return columns;
+    }
+    
     public Table setColumns(List<Column> columns) {
         this.columns = columns;
         return this;
-    }
-    
-    public List<Column> getColumns() {
-        return columns;
     }
     
     public String getTableCatalog() {

@@ -14,7 +14,7 @@ public interface MetaField {
     
     boolean isPrimary();
     
-    String code();
+    String fieldCode();
     
     String objectCode();
     
@@ -24,12 +24,11 @@ public interface MetaField {
     
     String showType();
     
-    String rawDataType();
+    String dbType();
     
     String javaType();
     
-    String fieldCode();
-    
+    int orderNum();
 }
 
 interface MetaFieldShowBehavior {

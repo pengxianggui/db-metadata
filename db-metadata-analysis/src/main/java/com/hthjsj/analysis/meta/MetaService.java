@@ -8,10 +8,10 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-public interface ExtendImportExport {
+public interface MetaService {
     
-    void toExport();
+    MetaObject importFromTable(String schema, String table);
     
-    void toImport();
+    MetaObject findByCode(String code);
     
 }

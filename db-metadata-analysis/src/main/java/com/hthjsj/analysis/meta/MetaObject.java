@@ -1,7 +1,5 @@
 package com.hthjsj.analysis.meta;
 
-import sun.jvm.hotspot.oops.Metadata;
-
 import java.util.Collection;
 
 /**
@@ -20,11 +18,13 @@ public interface MetaObject {
     
     String tableName();
     
-    String dataSource();
+    String schemaName();
     
-    String[] primarys();
+    MetaField[] primarys();
     
     Collection<MetaField> getFields();
+    
+    void setFields(Collection<MetaField> fields);
 }
 
 interface MetaObjectAccess {
@@ -36,10 +36,10 @@ interface MetaObjectAccess {
 
 interface MetaObjectDbBehavior {
     
-    Metadata save(MetaObject object, Metadata data);
+    MetaData save(MetaData data);
     
-    int update(MetaObject object, Metadata data);
+    int update(MetaData data);
     
-    int delete(MetaObject object, Metadata data);
+    int delete(MetaData data);
     
 }

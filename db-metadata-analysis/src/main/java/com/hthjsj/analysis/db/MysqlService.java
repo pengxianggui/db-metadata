@@ -18,8 +18,12 @@ public class MysqlService implements DbService {
     
     @Override
     public List<Table> showTables(String schema) {
-        
-        return null;
+        List<Record> records = Db.find("select * from tables where table_schema=? ", schema);
+        List<Table> tables = new ArrayList<>();
+        for (Record r : records) {
+            tables.add(new Table(r));
+        }
+        return tables;
     }
     
     @Override
