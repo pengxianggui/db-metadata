@@ -22,7 +22,8 @@ public class MetaObjectConfig implements MetaConfig {
         this.objectCode = objectCode;
     }
     
-    public JSONObject getJson() {
+    @Override
+    public JSONObject toJson() {
         return JSON.parseObject(getConfig());
     }
     

@@ -25,7 +25,8 @@ public class MetaFieldConfig implements MetaConfig {
         this.fieldCode = fieldCode;
     }
     
-    public JSONObject getJson() {
+    @Override
+    public JSONObject toJson() {
         return JSON.parseObject(getConfig());
     }
     

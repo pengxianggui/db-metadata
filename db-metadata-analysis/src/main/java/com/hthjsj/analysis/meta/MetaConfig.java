@@ -1,5 +1,7 @@
 package com.hthjsj.analysis.meta;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -14,6 +16,8 @@ public interface MetaConfig {
     String MODULE_FIELD  = "meta_field";
     
     String module();
+    
+    JSONObject toJson();
     
     String moduleCode();
     
