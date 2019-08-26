@@ -28,13 +28,14 @@ public class DbMetaService {
     }
     
     public MetaObject findByCode(String code) {
-        Record metaObject = Db.findFirst("select * from meta_object where code=?", code);
+        Record moRecord = Db.findFirst("select * from meta_object where code=?", code);
         List<Record> metafields = Db.find("select * from meta_field where object_code=? order by order_num ", code);
+        MetaObject metaObject = new MetaObject.DefaultMetaObject(moRecord);
         for (Record metafield : metafields) {
+            MetaField.DefaultMetaField defaultMetaField = new MetaField.DefaultMetaField(metafield);
+            metaObject.addField(defaultMetaField);
         }
-        //        MetaObjectFacroty.DefaultMetaObject defaultMetaObject = new MetaObjectFacroty.DefaultMetaObject();
-        //        defaultMetaObject.setRecord(metaObject);
-        return null;
+        return metaObject;
     }
     
 }

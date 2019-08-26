@@ -18,7 +18,7 @@ public class MysqlService implements DbService {
     
     @Override
     public List<Table> showTables(String schema) {
-        List<Record> records = Db.find("select * from tables where table_schema=? ", schema);
+        List<Record> records = Db.find("select * from information_schema.tables where table_schema=? ", schema);
         List<Table> tables = new ArrayList<>();
         for (Record r : records) {
             tables.add(new Table(r));
@@ -28,14 +28,14 @@ public class MysqlService implements DbService {
     
     @Override
     public Table getTable(String schema, String tableName) {
-        Record record = Db.findFirst("select * from tables where table_schema=? and table_name=?", schema, tableName);
+        Record record = Db.findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
         Table table = new Table(record);
         return table.setColumns(getColumns(schema, tableName));
     }
     
     @Override
     public List<Column> getColumns(String schema, String tableName) {
-        List<Record> records = Db.find("select * from columns where table_schema=? and table_name=?", schema, tableName);
+        List<Record> records = Db.find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
         List<Column> result = new ArrayList<>();
         for (Record record : records) {
             result.add(new Column(record));

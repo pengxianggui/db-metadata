@@ -22,13 +22,13 @@ public abstract class MetaObjectDBAdapter implements MetaObject, Storage {
     
     public MetaObjectDBAdapter(Record record) {
         this.record = record;
-        this.metaObject = MetaObjectFacroty.create(record);
-        this.storage = new StorageImpl(record, metaObject);
+        this.metaObject = new DefaultMetaObject(record);
+        this.storage = new DBStorageImpl(record, metaObject);
     }
     
     public MetaObjectDBAdapter(Record record, Storage storage) {
         this.record = record;
-        this.metaObject = MetaObjectFacroty.create(record);
+        this.metaObject = new DefaultMetaObject(record);
         this.storage = storage;
     }
     
@@ -51,12 +51,12 @@ public abstract class MetaObjectDBAdapter implements MetaObject, Storage {
         return storage.delete();
     }
     
-    static class StorageImpl implements Storage {
+    static class DBStorageImpl implements Storage {
         
         Record     record;
         MetaObject metaObject;
         
-        public StorageImpl(Record record, MetaObject metaObject) {
+        public DBStorageImpl(Record record, MetaObject metaObject) {
             this.record = record;
             this.metaObject = metaObject;
         }
