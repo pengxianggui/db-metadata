@@ -1,0 +1,423 @@
+{
+  "modules": [
+    {
+      "name": "元对象",
+      "chnname": "",
+      "entities": [
+        {
+          "title": "meta_object",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "code",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "对象编码"
+            },
+            {
+              "name": "name",
+              "type": "Name",
+              "remark": "",
+              "chnname": "对象名"
+            },
+            {
+              "name": "table_name",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表名"
+            },
+            {
+              "name": "schema_name",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "库名"
+            },
+            {
+              "name": "primarys",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "主键组"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [
+            {
+              "name": "unique_metaobject_code",
+              "isUnique": true,
+              "fields": [
+                "code"
+              ]
+            }
+          ],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "元对象"
+        },
+        {
+          "title": "meta_field",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "object_code",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "对象编码"
+            },
+            {
+              "name": "field_code",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "字段编码"
+            },
+            {
+              "name": "is_primary",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "主键"
+            },
+            {
+              "name": "en",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "英文"
+            },
+            {
+              "name": "cn",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "中文"
+            },
+            {
+              "name": "order_num",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "排序"
+            },
+            {
+              "name": "db_type",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "数据类型"
+            },
+            {
+              "name": "java_type",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "JAVA类型"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "元字段"
+        },
+        {
+          "title": "meta_config",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "module",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "模块"
+            },
+            {
+              "name": "module_code",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "模块名"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
+            },
+            {
+              "name": "version",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "版本"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "配置"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [],
+        "edges": []
+      },
+      "associations": []
+    }
+  ],
+  "message": "是否主键",
+  "version": "0.8",
+  "changes": [
+    {
+      "type": "field",
+      "name": "meta_field.is_primary",
+      "opt": "add"
+    }
+  ],
+  "date": "2019/8/23 19:2:29"
+}
