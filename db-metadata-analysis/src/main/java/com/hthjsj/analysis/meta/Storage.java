@@ -8,11 +8,12 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-interface MetaObjectDbBehavior {
+interface Storage {
     
     Object save();
     
     boolean update();
     
     boolean delete();
+    
 }

@@ -13,23 +13,23 @@ import java.util.UUID;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class MetaObjectDBAdapter implements MetaObject, MetaObjectDbBehavior {
+public abstract class MetaObjectDBAdapter implements MetaObject, Storage {
     
     Record     record;
     MetaObject metaObject;
     
-    MetaObjectDbBehavior metaObjectDbBehavior;
+    Storage storage;
     
     public MetaObjectDBAdapter(Record record) {
         this.record = record;
         this.metaObject = MetaObjectFacroty.create(record);
-        this.metaObjectDbBehavior = new MetaObjectDbBehaviorImpl(record, metaObject);
+        this.storage = new StorageImpl(record, metaObject);
     }
     
-    public MetaObjectDBAdapter(Record record, MetaObjectDbBehavior metaObjectDbBehavior) {
+    public MetaObjectDBAdapter(Record record, Storage storage) {
         this.record = record;
         this.metaObject = MetaObjectFacroty.create(record);
-        this.metaObjectDbBehavior = metaObjectDbBehavior;
+        this.storage = storage;
     }
     
     public Record getRecord() {
@@ -38,25 +38,25 @@ public abstract class MetaObjectDBAdapter implements MetaObject, MetaObjectDbBeh
     
     @Override
     public Object save() {
-        return metaObjectDbBehavior.save();
+        return storage.save();
     }
     
     @Override
     public boolean update() {
-        return metaObjectDbBehavior.update();
+        return storage.update();
     }
     
     @Override
     public boolean delete() {
-        return metaObjectDbBehavior.delete();
+        return storage.delete();
     }
     
-    static class MetaObjectDbBehaviorImpl implements MetaObjectDbBehavior {
+    static class StorageImpl implements Storage {
         
         Record     record;
         MetaObject metaObject;
         
-        public MetaObjectDbBehaviorImpl(Record record, MetaObject metaObject) {
+        public StorageImpl(Record record, MetaObject metaObject) {
             this.record = record;
             this.metaObject = metaObject;
         }

@@ -32,7 +32,7 @@ public class DbMetaService {
         List<Record> metafields = Db.find("select * from meta_field where object_code=? order by order_num ", code);
         for (Record metafield : metafields) {
         }
-        MetaObjectFacroty.DefaultMetaObject defaultMetaObject = new MetaObjectFacroty.DefaultMetaObject();
+        //        MetaObjectFacroty.DefaultMetaObject defaultMetaObject = new MetaObjectFacroty.DefaultMetaObject();
         //        defaultMetaObject.setRecord(metaObject);
         return null;
     }
