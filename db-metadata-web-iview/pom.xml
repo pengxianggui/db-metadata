@@ -9,7 +9,7 @@
         <groupId>com.hthjsj</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
+    <packaging>pom</packaging>
     <artifactId>db-metadata-web-iview</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>db-metadata-web-iview</name>
@@ -68,6 +68,31 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>clean node modules</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>rm</executable>
+                    <arguments>
+                        <argument>-rf</argument>
+                        <argument>${project.basedir}/node_modules</argument>
+                        <argument>${project.basedir}/dist</argument>
+                        <argument>${project.basedir}/yarn.lock</argument>
+                        <argument>${project.basedir}/node</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
