@@ -3,7 +3,6 @@ package com.hthjsj;
 import com.jfinal.config.Plugins;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 
@@ -20,13 +19,8 @@ public class AppConfig {
     Plugins plugins = new Plugins();
     
     public AppConfig() {
-        DruidPlugin dp_eova = new DruidPlugin("jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911");
-        ActiveRecordPlugin arp_eova = new ActiveRecordPlugin("eova", dp_eova);
-        arp_eova.setDialect(new MysqlDialect());
-        arp_eova.setShowSql(true);
-        
-        DBSource mainsource = new DBSource(DbKit.MAIN_CONFIG_NAME, "jdbc:mysql://localhost:3309/information_schema?useSSL=false", "root", "gongwei911", plugins);
-        DBSource dbsource = new DBSource("eova", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
+        DBSource mainsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/metadata?useSSL=false", "root", "gongwei911", plugins);
+        //        DBSource dbsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
     }
     
     public void start() {
@@ -64,6 +58,8 @@ public class AppConfig {
         public void init(Plugins me) {
             DruidPlugin dp_info = new DruidPlugin(url, username, password);
             ActiveRecordPlugin arp_info = new ActiveRecordPlugin(configName, dp_info);
+            arp_info.addSqlTemplate("schema_init.sql.txt");
+            arp_info.addSqlTemplate("meta_operator.sql.txt");
             arp_info.setDialect(new MysqlDialect());
             arp_info.setShowSql(true);
             me.add(dp_info).add(arp_info);

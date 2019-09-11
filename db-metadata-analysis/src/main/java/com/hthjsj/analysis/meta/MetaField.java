@@ -79,7 +79,7 @@ public interface MetaField {
         
         @Override
         public boolean isPrimary() {
-            return record.getBoolean("is_primary");
+            return ("1".equals(record.getStr("is_primary")));
         }
         
         @Override
