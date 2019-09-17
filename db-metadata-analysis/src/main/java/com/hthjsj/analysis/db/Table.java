@@ -4,6 +4,7 @@ import com.jfinal.plugin.activerecord.Record;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> Class title: </p>
@@ -14,105 +15,111 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 public class Table {
-    
-    Record       record;
+
+    public Map<String, Object> dataMap;
+    Record record;
     List<Column> columns;
-    
+
     public Table(Record record) {
         this.record = record;
+        dataMap = record.getColumns();
     }
-    
+
+    public Map<String, Object> dataMap() {
+        return dataMap;
+    }
+
     public List<Column> getColumns() {
         return columns;
     }
-    
+
     public Table setColumns(List<Column> columns) {
         this.columns = columns;
         return this;
     }
-    
+
     public String getTableCatalog() {
         return record.getStr("TABLE_CATALOG");
     }
-    
+
     public String getTableSchema() {
         return record.getStr("TABLE_SCHEMA");
     }
-    
+
     public String getTableName() {
         return record.getStr("TABLE_NAME");
     }
-    
+
     public String getTableType() {
         return record.getStr("TABLE_TYPE");
     }
-    
+
     public String getEngine() {
         return record.getStr("ENGINE");
     }
-    
+
     public Long getVersion() {
         return record.getLong("VERSION");
     }
-    
+
     public String getRowFormat() {
         return record.getStr("ROW_FORMAT");
     }
-    
+
     public Long getTableRows() {
         return record.getLong("TABLE_ROWS");
     }
-    
+
     public Long getAvgRowLength() {
         return record.getLong("AVG_ROW_LENGTH");
     }
-    
+
     public Long getDataLength() {
         return record.getLong("DATA_LENGTH");
     }
-    
+
     public Long getMaxDataLength() {
         return record.getLong("MAX_DATA_LENGTH");
     }
-    
+
     public Long getIndexLength() {
         return record.getLong("INDEX_LENGTH");
     }
-    
+
     public Long getDataFree() {
         return record.getLong("DATA_FREE");
     }
-    
+
     public Long getAutoIncrement() {
         return record.getLong("AUTO_INCREMENT");
     }
-    
+
     public Date getCreateTime() {
         return record.getDate("CREATE_TIME");
     }
-    
+
     public Date getUpdateTime() {
         return record.getDate("UPDATE_TIME");
     }
-    
+
     public Date getCheckTime() {
         return record.getDate("CHECK_TIME");
     }
-    
+
     public String getTableCollation() {
         return record.getStr("TABLE_COLLATION");
     }
-    
+
     public Long getChecksum() {
         return record.getLong("CHECKSUM");
     }
-    
+
     public String getCreateOptions() {
         return record.getStr("CREATE_OPTIONS");
     }
-    
+
     public String getTableComment() {
         return record.getStr("TABLE_COMMENT");
     }
-    
+
 }

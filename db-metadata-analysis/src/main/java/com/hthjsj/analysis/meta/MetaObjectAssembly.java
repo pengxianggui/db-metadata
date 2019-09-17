@@ -12,18 +12,35 @@ import com.hthjsj.analysis.db.Table;
  * <p> @author konbluesky </p>
  */
 public interface MetaObjectAssembly<T, M> {
-    
+
     M assembly(T t);
 }
 
-class DBMetaObjectAssembly implements MetaObjectAssembly<Table, MetaObject> {
-    
+class DBMetaObjectAssembly implements MetaObjectAssembly<Table, IMetaObject> {
+
+    public static final String PRIMARY = "PRI";
+
     @Override
-    public MetaObject assembly(Table table) {
-        //        MetaObjectFacroty.DefaultMetaObject metaObject = new MetaObjectFacroty.DefaultMetaObject(null, null);
+    public IMetaObject assembly(Table table) {
+        MetaObject metaObject = new MetaObject();
+
+        metaObject.code(table.getTableName().toLowerCase());
+        metaObject.name(table.getTableName().toLowerCase());
+        metaObject.schemaName(table.getTableSchema().toLowerCase());
+
         for (Column column : table.getColumns()) {
-        
+            MetaField mf = new MetaField();
+            if (PRIMARY.equals(column.getColumnKey())) {
+                mf.isPrimary(true);
+            }
+            mf.objectCode(metaObject.code());
+            mf.cn(column.getColumnComment());
+            mf.en(column.getColumnName().toLowerCase());
+            mf.fieldCode(column.getColumnName().toLowerCase());
+
+
+            metaObject.addField(mf);
         }
-        return null;
+        return metaObject;
     }
 }

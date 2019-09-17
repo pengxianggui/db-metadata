@@ -38,7 +38,7 @@ public class MysqlService implements DbService {
         List<Record> records = Db.find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
         List<Column> result = new ArrayList<>();
         for (Record record : records) {
-            result.add(new Column(record));
+            result.add(new Column(record.getColumns()));
         }
         return result;
     }
