@@ -1,90 +1,47 @@
 <style scoped>
-    .layout {
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
-        position: relative;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    .layout-header-bar {
-        background: #fff;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    }
-
-    .menu-item span {
-        display: inline-block;
-        overflow: hidden;
-        width: 69px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: bottom;
-        transition: width .2s ease .2s;
-    }
-
-    .menu-item i {
-        transform: translateX(0px);
-        transition: font-size .2s ease, transform .2s ease;
-        vertical-align: middle;
-        font-size: 16px;
-    }
-
-    .collapsed-menu span {
-        width: 0px;
-        transition: width .2s ease;
-    }
-
-    .collapsed-menu i {
-        transform: translateX(5px);
-        transition: font-size .2s ease .2s, transform .2s ease .2s;
-        vertical-align: middle;
-        font-size: 22px;
+    .el-row {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        -webkit-box-shadow: 2px 2px 1px #eeeeee;
+        box-shadow: 5px 5px 10px 6px #ddd;
     }
 </style>
 <template>
-    <div class="layout">
-        <Layout>
-            <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
-                <Menu active-name="1-2" theme="dark" width="auto" :class="menuitemClasses">
-                    <MenuItem name="1-1">
-                        <Icon type="ios-navigate"></Icon>
-                        <span>Option 1</span>
-                    </MenuItem>
-                    <MenuItem name="1-2">
-                        <Icon type="ios-search"></Icon>
-                        <span>Option 2</span>
-                    </MenuItem>
-                    <MenuItem name="1-3">
-                        <Icon type="ios-settings"></Icon>
-                        <span>Option 3</span>
-                    </MenuItem>
-                </Menu>
-                <div slot="trigger"></div>
-            </Sider>
-            <Layout>
-                <Header class="layout-header-bar"></Header>
-                <Content :style="{margin: '20px', background: '#fff'}">
-                    Content
-                </Content>
-            </Layout>
-        </Layout>
+    <div>
+        <el-row>
+            <el-col :span="24">
+                <x-input-demo></x-input-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <x-select-demo></x-select-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <search-bar-demo></search-bar-demo>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
+    import XInputDemo from './demo/XInputDemo'
+    import XSelectDemo from './demo/XSelectDemo'
+    import SearchBarDemo from './demo/SearchBarDemo'
     export default {
-        name: "main",
+        name: "demo",
         data() {
             return {
-                isCollapsed: false
-            };
-        },
-        computed: {
-            menuitemClasses: function () {
-                return [
-                    'menu-item',
-                    this.isCollapsed ? 'collapsed-menu' : ''
-                ]
             }
+        },
+        methods: {
+        },
+        components: {
+            SearchBarDemo,
+            XInputDemo,
+            XSelectDemo
         }
     }
 </script>
