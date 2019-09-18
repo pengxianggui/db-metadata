@@ -1,6 +1,6 @@
 package com.hthjsj.analysis.meta;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * <p> Class title: </p>
@@ -11,18 +11,16 @@ import com.alibaba.fastjson.JSONObject;
  * <p> @author konbluesky </p>
  */
 public interface MetaConfig {
-    
+
     String MODULE_OBJECT = "meta_object";
-    String MODULE_FIELD  = "meta_field";
-    
+    String MODULE_FIELD = "meta_field";
+
     String module();
-    
-    JSONObject toJson();
-    
+
     String moduleCode();
-    
+
     String getVersion();
-    
+
+    @JSONField(serialize = false)
     String getConfig();
-    
 }

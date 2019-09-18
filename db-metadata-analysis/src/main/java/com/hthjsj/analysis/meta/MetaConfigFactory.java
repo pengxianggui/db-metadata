@@ -1,7 +1,8 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 
 /**
  * <p> Class title: </p>
@@ -12,93 +13,103 @@ import com.alibaba.fastjson.JSONObject;
  * <p> @author konbluesky </p>
  */
 public class MetaConfigFactory {
-    
-    public static MetaFieldConfig create(String config, String objectCode, String fieldCode) {
-        return new MetaFieldConfig(config, objectCode, fieldCode);
+
+    public static MetaFieldConfig createEmptyFieldConfig(String objectCode, String fieldCode) {
+        return new MetaFieldConfig(objectCode, fieldCode);
     }
-    
-    public static MetaObjectConfig create(String config, String objectCode) {
-        return new MetaObjectConfig(config, objectCode);
+
+    public static MetaObjectConfig createEmptyObjectConfig(String objectCode) {
+        return new MetaObjectConfig(objectCode);
     }
-    
-    public static class MetaFieldConfig implements MetaConfig {
-        
+
+    public static MetaObjectConfig createV1ObjectConfig(String objectCode, String isUUIDPri) {
+        MetaObjectConfig metaObjectConfig = createEmptyObjectConfig(objectCode);
+        metaObjectConfig.set("isUUIDPrimary", Boolean.parseBoolean(isUUIDPri));
+        return metaObjectConfig;
+    }
+
+    public static MetaFieldConfig createV1FieldConfig(String objectCode, String fieldCode, String defaultValue, String isNUll) {
+        MetaFieldConfig metaFieldConfig = createEmptyFieldConfig(objectCode, fieldCode);
+        metaFieldConfig.set("isNullable", "yes".equalsIgnoreCase(isNUll));
+        metaFieldConfig.set("defaultValue", defaultValue == null ? "" : defaultValue);
+        return metaFieldConfig;
+    }
+
+    public static class MetaFieldConfig extends Kv implements MetaConfig {
+
         public static final String VERSION_0_1 = "0.1";
-        
-        private String config;
-        private String objectCode;
-        private String fieldCode;
-        
+
         public MetaFieldConfig(String config, String objectCode, String fieldCode) {
-            this.config = config;
-            this.objectCode = objectCode;
-            this.fieldCode = fieldCode;
+            if (!StrKit.isBlank(config)) {
+                set(JSON.parseObject(config));
+            }
+            set("objectCode", objectCode);
+            set("fieldCode", fieldCode);
+            set("version", VERSION_0_1);
         }
-        
-        @Override
-        public JSONObject toJson() {
-            return JSON.parseObject(getConfig());
+
+        public MetaFieldConfig(String objectCode, String fieldCode) {
+            this("", objectCode, fieldCode);
         }
-        
+
         @Override
         public String module() {
             return MODULE_FIELD;
         }
-        
+
         @Override
         public String moduleCode() {
-            return new StringBuilder(objectCode).append(".").append(fieldCode).toString();
+            return new StringBuilder(getStr("objectCode")).append(".").append(getStr("fieldCode")).toString();
         }
-        
+
         @Override
         public String getVersion() {
-            return null;
+            return getStr("version");
         }
-        
+
         @Override
         public String getConfig() {
-            return config;
+            return toJson();
         }
     }
-    
-    public static class MetaObjectConfig implements MetaConfig {
-        
+
+    public static class MetaObjectConfig extends Kv implements MetaConfig {
+
         public static final String VERSION_0_1 = "0.1";
-        private             String config;
-        private             String objectCode;
-        
+
         public MetaObjectConfig(String config, String objectCode) {
-            this.config = config;
-            this.objectCode = objectCode;
+            if (!StrKit.isBlank(config)) {
+                set(JSON.parseObject(config));
+            }
+            set("objectCode", objectCode);
         }
-        
-        @Override
-        public JSONObject toJson() {
-            return JSON.parseObject(getConfig());
+
+        public MetaObjectConfig(String objectCode) {
+            this("", objectCode);
         }
-        
+
+        public boolean isUUIDPrimary() {
+            return getBoolean("isUUIDPrimary");
+        }
+
         @Override
         public String module() {
             return MODULE_OBJECT;
         }
-        
+
         @Override
         public String moduleCode() {
-            return objectCode;
+            return getStr("objectCode");
         }
-        
+
         @Override
         public String getVersion() {
-            return VERSION_0_1;
+            return getStr("version");
         }
-        
+
         @Override
         public String getConfig() {
-            return config;
-        }
-        
-        public void setConfig(String config) {
-            this.config = config;
+            return toJson();
         }
     }
 }

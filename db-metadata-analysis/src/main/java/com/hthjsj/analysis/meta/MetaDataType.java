@@ -55,17 +55,14 @@ public class MetaDataType {
             put("DECIMAL", BigDecimal.class);
 
             put("CHAR", String.class);
-            put("VARCHAR", String.class);
             put("BINARY", Byte[].class);
             put("VARBINARY", Byte[].class);
             put("TINYBLOB", Byte[].class);
-            put("VARCHAR", String.class);
             put("BLOB", Byte[].class);
-            put("VARCHAR", String.class);
             put("MEDIUMBLOB", Byte[].class);
-            put("VARCHAR", String.class);
             put("LONGBLOB", Byte[].class);
             put("VARCHAR", String.class);
+            put("JSON", String.class);
         }
     };
 
@@ -73,12 +70,17 @@ public class MetaDataType {
         return map.get(dataType);
     }
 
+    public static String getTypeName(String dataType) {
+        System.out.println("dataType:" + dataType);
+        return map.get(dataType).getTypeName();
+    }
+
     public static Object convert(MetaField field, Object o) {
         if (o == null) {
             return null;
         }
         String typeName = field.dbType();
-        Integer size = field.dbTypeLength();
+        Integer size = field.dbTypeLength().intValue();
 
         Class clazz = getType(typeName);
 

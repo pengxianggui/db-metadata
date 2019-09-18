@@ -63,10 +63,10 @@ public interface IMetaField {
     void orderNum(int value);
 
     @JSONField(name = "dbTypeLength")
-    int dbTypeLength();
+    Long dbTypeLength();
 
     @JSONField(name = "dbTypeLength")
-    void dbTypeLength(int value);
+    void dbTypeLength(Long value);
 
     @JSONField(name = "config")
     MetaConfig config();

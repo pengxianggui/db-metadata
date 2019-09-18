@@ -20,10 +20,10 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     Storage storage;
 
 
-    public MetaObjectDBAdapter(Record record) {
-        this.record = record;
-        this.metaObject = new MetaObject(record.getColumns());
-        this.storage = new DBStorageImpl(record, metaObject);
+    public MetaObjectDBAdapter(MetaObject object) {
+        this.metaObject = object;
+        this.record = object.record;
+        this.storage = new DBStorageImpl(object.record, metaObject);
     }
 
     public MetaObjectDBAdapter(Record record, Storage storage) {

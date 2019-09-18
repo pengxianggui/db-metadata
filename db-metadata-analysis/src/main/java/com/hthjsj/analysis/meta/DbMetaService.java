@@ -3,12 +3,14 @@ package com.hthjsj.analysis.meta;
 import com.hthjsj.analysis.db.DbService;
 import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
+import com.jfinal.aop.Before;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <p> Class title: </p>
@@ -18,6 +20,7 @@ import java.util.UUID;
  *
  * <p> @author konbluesky </p>
  */
+@Before(Tx.class)
 public class DbMetaService {
 
 
@@ -41,9 +44,29 @@ public class DbMetaService {
         return IMetaObject;
     }
 
+    public boolean saveMetaObject(MetaObjectDBAdapter object, boolean saveFields) {
+
+        if (((MetaConfigFactory.MetaObjectConfig) object.config()).isUUIDPrimary()) {
+            object.record.set("id", StrKit.getRandomUUID());
+        }
+        boolean moSaved = Db.save("meta_object", object.record);
+        if (saveFields) {
+            List<Record> updateRecords = new ArrayList<>();
+            object.fields().forEach((re) -> {
+//                if (re.isPrimary()) {
+                re.dataMap().put("id", StrKit.getRandomUUID());
+//                }
+                updateRecords.add(new Record().setColumns(re.dataMap()));
+            });
+            int[] result = Db.batchSave("meta_field", updateRecords, 50);
+            System.out.println(result);
+        }
+        return moSaved;
+    }
+
     public boolean saveMetaObject(MetaObjectDBAdapter object, List<IMetaField> fields) {
 
-        object.record.set("id", UUID.randomUUID().toString().replaceAll("-", ""));
+        object.record.set("id", StrKit.getRandomUUID());
 
         boolean moSaved = Db.save("meta_object", object.record);
 

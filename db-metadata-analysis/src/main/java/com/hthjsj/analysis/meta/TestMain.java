@@ -18,8 +18,9 @@ import java.util.Date;
 public class TestMain {
 
     public static void main(String[] args) throws ParseException {
-        testDateend();
-
+//        testDateend();
+        System.out.println(String.class.getSimpleName());
+        System.out.println(String.class.getTypeName());
     }
 
     public static void testJsonSerilizble() {

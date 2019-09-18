@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class MetaField implements IMetaField {
 
-    Record record;
+    Record record = new Record();
     MetaConfig metaFieldConfig;
 
     public MetaField(Map<String, Object> fieldMap) {
@@ -32,7 +32,7 @@ public class MetaField implements IMetaField {
 
     @Override
     public void isPrimary(boolean value) {
-        record.set("is_primary", value);
+        record.set("is_primary", value ? 1 : 0);
     }
 
     @Override
@@ -106,12 +106,12 @@ public class MetaField implements IMetaField {
     }
 
     @Override
-    public int dbTypeLength() {
-        return record.getInt("db_type_length");
+    public Long dbTypeLength() {
+        return record.getLong("db_type_length");
     }
 
     @Override
-    public void dbTypeLength(int value) {
+    public void dbTypeLength(Long value) {
         record.set("db_type_length", value);
     }
 

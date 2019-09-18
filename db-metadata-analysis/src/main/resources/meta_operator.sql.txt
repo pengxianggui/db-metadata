@@ -1,0 +1,5 @@
+#sql("")
+select * from meta_field as
+left join  meta_config as mc on as.object_code=mc.module_code and mc.module='meta_object'
+where object_code=? order by order_num
+#end

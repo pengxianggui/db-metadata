@@ -93,12 +93,12 @@ public class MetaFieldDBAdapter implements IMetaField, Storage {
     }
 
     @Override
-    public int dbTypeLength() {
-        return 0;
+    public Long dbTypeLength() {
+        return 0L;
     }
 
     @Override
-    public void dbTypeLength(int value) {
+    public void dbTypeLength(Long value) {
 
     }
 

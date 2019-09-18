@@ -195,6 +195,12 @@
               "chnname": "数据类型"
             },
             {
+              "name": "db_type_length",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "数据长度"
+            },
+            {
               "name": "java_type",
               "type": "ShortString",
               "remark": "",

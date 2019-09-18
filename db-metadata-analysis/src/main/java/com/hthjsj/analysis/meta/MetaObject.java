@@ -17,13 +17,12 @@ import java.util.Map;
  */
 public class MetaObject implements IMetaObject {
 
-    List<IMetaField> primarys = new ArrayList<>();
+    List<IMetaField> _primarys = new ArrayList<>();
     List<IMetaField> fields = new ArrayList<>();
-    Record record;
+    Record record = new Record();
     MetaConfig metaConfig;
 
     public MetaObject() {
-
     }
 
     public MetaObject(Map<String, Object> dataMap) {
@@ -75,14 +74,14 @@ public class MetaObject implements IMetaObject {
 
     @Override
     public IMetaField[] primarys() {
-        if (primarys.isEmpty()) {
+        if (_primarys.isEmpty()) {
             for (IMetaField field : fields) {
                 if (field.isPrimary()) {
-                    primarys.add(field);
+                    _primarys.add(field);
                 }
             }
         }
-        return primarys.toArray(new IMetaField[10]);
+        return _primarys.toArray(new IMetaField[_primarys.size()]);
     }
 
     @Override
@@ -92,6 +91,11 @@ public class MetaObject implements IMetaObject {
             sb.append(",").append(mf.fieldCode());
         }
         record.set("primarys", sb.substring(1));
+    }
+
+    public void addPrimary(IMetaField field) {
+        _primarys.add(field);
+        primarys(_primarys.toArray(new IMetaField[_primarys.size()]));
     }
 
     @Override
