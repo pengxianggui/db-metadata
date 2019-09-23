@@ -27,6 +27,9 @@ public class App {
         System.out.println(JSON.toJSONString(metaObject, SerializerFeature.DisableCircularReferenceDetect));
 
         MetaObjectDBAdapter adapter = new MetaObjectDBAdapter(metaObject);
+
+
+        dbMetaService.deleteMetaObject(metaObject);
         dbMetaService.saveMetaObject(adapter, true);
     }
 

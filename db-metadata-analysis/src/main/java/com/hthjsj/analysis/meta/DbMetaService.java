@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,29 +54,18 @@ public class DbMetaService {
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
             object.fields().forEach((re) -> {
-//                if (re.isPrimary()) {
                 re.dataMap().put("id", StrKit.getRandomUUID());
-//                }
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = Db.batchSave("meta_field", updateRecords, 50);
-            System.out.println(result);
+            System.out.println(Arrays.toString(result));
         }
         return moSaved;
     }
 
-    public boolean saveMetaObject(MetaObjectDBAdapter object, List<IMetaField> fields) {
-
-        object.record.set("id", StrKit.getRandomUUID());
-
-        boolean moSaved = Db.save("meta_object", object.record);
-
-        List<Record> updateRecords = new ArrayList<>();
-        fields.forEach((re) -> updateRecords.add(new Record().setColumns(re.dataMap())));
-
-        int[] result = Db.batchSave("meta_field", updateRecords, 50);
-        System.out.println(result);
-        return moSaved;
+    public void deleteMetaObject(MetaObject metaObject) {
+        Db.delete("delete from meta_object where code=?", metaObject.code());
+        Db.delete("delete from meta_field where object_code=?", metaObject.code());
     }
 
 }

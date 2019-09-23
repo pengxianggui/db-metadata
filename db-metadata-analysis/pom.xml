@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
-            <version>4.4</version>
+            <version>4.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.28</version>
         </dependency>
 
 

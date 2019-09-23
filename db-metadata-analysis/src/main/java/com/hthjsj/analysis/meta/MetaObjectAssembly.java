@@ -33,10 +33,7 @@ class DBMetaObjectAssembly implements MetaObjectAssembly<Table, IMetaObject> {
         for (int i = 0; i < table.getColumns().size(); i++) {
             Column column = table.getColumns().get(i);
             MetaField mf = new MetaField();
-            if (PRIMARY.equals(column.getColumnKey())) {
-                mf.isPrimary(true);
-                metaObject.addPrimary(mf);
-            }
+
             mf.objectCode(metaObject.code());
             mf.cn(column.getColumnComment().trim());
             mf.en(column.getColumnName().toLowerCase());
@@ -56,6 +53,10 @@ class DBMetaObjectAssembly implements MetaObjectAssembly<Table, IMetaObject> {
 
             mf.config(fieldConfig);
 
+            if (PRIMARY.equals(column.getColumnKey())) {
+                mf.isPrimary(true);
+                metaObject.addPrimary(mf);
+            }
 
             metaObject.addField(mf);
         }
