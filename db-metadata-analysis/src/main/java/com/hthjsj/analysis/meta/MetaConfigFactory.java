@@ -1,7 +1,6 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
 /**
@@ -35,7 +34,7 @@ public class MetaConfigFactory {
         return metaFieldConfig;
     }
 
-    public static class MetaFieldConfig extends Kv implements MetaConfig {
+    public static class MetaFieldConfig extends MetaData implements MetaConfig {
 
         public static final String VERSION_0_1 = "0.1";
 
@@ -73,7 +72,7 @@ public class MetaConfigFactory {
         }
     }
 
-    public static class MetaObjectConfig extends Kv implements MetaConfig {
+    public static class MetaObjectConfig extends MetaData implements MetaConfig {
 
         public static final String VERSION_0_1 = "0.1";
 

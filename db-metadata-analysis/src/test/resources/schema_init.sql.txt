@@ -1,0 +1,51 @@
+#sql("create_meta_object_table")
+    DROP TABLE meta_object;;/*SkipError*/
+    CREATE TABLE meta_object(
+        id VARCHAR(32) NOT NULL   COMMENT '主键' ,
+        code VARCHAR(64)    COMMENT '对象编码' ,
+        name VARCHAR(128)    COMMENT '对象名' ,
+        table_name VARCHAR(64)    COMMENT '表名' ,
+        schema_name VARCHAR(64)    COMMENT '库名' ,
+        primarys VARCHAR(128)    COMMENT '主键组' ,
+        created_by VARCHAR(64)    COMMENT '创建人' ,
+        created_time DATETIME    COMMENT '创建时间' ,
+        updated_by VARCHAR(64)    COMMENT '更新人' ,
+        updated_time DATETIME    COMMENT '更新时间' ,
+        remark VARCHAR(32)    COMMENT '备注' ,
+        PRIMARY KEY (id)
+    ) COMMENT = '元对象 ';;
+    ALTER TABLE meta_object ADD UNIQUE unique_metaobject_code(code);;
+    DROP TABLE meta_field;;/*SkipError*/
+    CREATE TABLE meta_field(
+        id VARCHAR(32) NOT NULL   COMMENT '主键' ,
+        object_code VARCHAR(64)    COMMENT '对象编码' ,
+        field_code VARCHAR(64)    COMMENT '字段编码' ,
+        en VARCHAR(128)    COMMENT '英文' ,
+        cn VARCHAR(128)    COMMENT '中文' ,
+        order_num INT    COMMENT '排序' ,
+        db_type VARCHAR(128)    COMMENT '数据类型' ,
+        java_type VARCHAR(128)    COMMENT 'JAVA类型' ,
+        created_by VARCHAR(64)    COMMENT '创建人' ,
+        created_time DATETIME    COMMENT '创建时间' ,
+        updated_by VARCHAR(64)    COMMENT '更新人' ,
+        updated_time DATETIME    COMMENT '更新时间' ,
+        remark VARCHAR(32)    COMMENT '备注' ,
+        PRIMARY KEY (id)
+    ) COMMENT = '元字段 ';;
+
+    DROP TABLE meta_config;;/*SkipError*/
+    CREATE TABLE meta_config(
+        id VARCHAR(32) NOT NULL   COMMENT '主键' ,
+        module VARCHAR(1024)    COMMENT '模块' ,
+        module_code VARCHAR(1024)    COMMENT '模块名' ,
+        config TEXT    COMMENT '配置' ,
+        version VARCHAR(32)    COMMENT '版本' ,
+        created_by VARCHAR(64)    COMMENT '创建人' ,
+        created_time DATETIME    COMMENT '创建时间' ,
+        updated_by VARCHAR(64)    COMMENT '更新人' ,
+        updated_time DATETIME    COMMENT '更新时间' ,
+        remark VARCHAR(32)    COMMENT '备注' ,
+        PRIMARY KEY (id)
+    ) COMMENT = '配置 ';;
+    ;
+#end

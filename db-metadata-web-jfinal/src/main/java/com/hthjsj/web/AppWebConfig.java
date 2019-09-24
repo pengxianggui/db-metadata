@@ -1,6 +1,7 @@
 package com.hthjsj.web;
 
 import com.jfinal.config.*;
+import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
 
 /**
@@ -14,7 +15,7 @@ import com.jfinal.template.Engine;
 public class AppWebConfig extends JFinalConfig {
     
     public static void main(String[] args) {
-    
+        UndertowServer.start(AppWebConfig.class, 8888, true);
     }
     
     @Override
@@ -24,7 +25,7 @@ public class AppWebConfig extends JFinalConfig {
     
     @Override
     public void configRoute(Routes me) {
-    
+        me.add("/", IndexController.class);
     }
     
     @Override

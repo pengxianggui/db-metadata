@@ -1,13 +1,12 @@
 package com.hthjsj.analysis.meta;
 
-import com.hthjsj.analysis.db.DbService;
-import com.hthjsj.analysis.db.MysqlService;
-import com.hthjsj.analysis.db.Table;
+import com.hthjsj.analysis.db.*;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +20,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 @Before(Tx.class)
 public class DbMetaService {
 
@@ -29,7 +29,7 @@ public class DbMetaService {
         DbService dbService = new MysqlService();
         Table t = dbService.getTable(schema, table);
 
-        DBMetaObjectAssembly dbMetaObjectAssembly = new DBMetaObjectAssembly();
+        MetaObjectAssembly<Table, IMetaObject> dbMetaObjectAssembly = new MetaObjectMysqlAssembly();
 
         return dbMetaObjectAssembly.assembly(t);
     }
@@ -58,7 +58,7 @@ public class DbMetaService {
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = Db.batchSave("meta_field", updateRecords, 50);
-            System.out.println(Arrays.toString(result));
+            log.info("batchSave result:{}", Arrays.toString(result));
         }
         return moSaved;
     }

@@ -1,6 +1,6 @@
 package com.hthjsj.analysis.meta;
 
-import java.util.HashMap;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
@@ -10,6 +10,6 @@ import java.util.HashMap;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaData extends HashMap {
+public class MetaData extends Kv {
 
 }
