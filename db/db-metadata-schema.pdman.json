@@ -407,6 +407,140 @@
             }
           ],
           "chnname": "配置"
+        },
+        {
+          "title": "test_table",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "col_int",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "普通整数"
+            },
+            {
+              "name": "col_bigint",
+              "type": "BigInt",
+              "remark": "",
+              "chnname": "大整数"
+            },
+            {
+              "name": "col_bool",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "布尔"
+            },
+            {
+              "name": "col_date",
+              "type": "Date",
+              "remark": "",
+              "chnname": "日期"
+            },
+            {
+              "name": "col_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "时间"
+            },
+            {
+              "name": "col_decimal",
+              "type": "Money",
+              "remark": "",
+              "chnname": "金额"
+            },
+            {
+              "name": "col_nor_str",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "普通字符"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "测试表"
         }
       ],
       "graphCanvas": {
@@ -940,8 +1074,8 @@
         "defaultDB": true,
         "properties": {
           "driver_class_name": "com.mysql.jdbc.Driver",
-          "url": "jdbc:mysql://localhost:3309/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
-          "password": "gongwei911",
+          "url": "jdbc:mysql://192.168.1.93:3310/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
+          "password": "123456",
           "username": "root"
         }
       }

@@ -28,7 +28,7 @@ public class AnalysisConfig {
     }
 
     public AnalysisConfig() {
-        DBSource mainsource = new DBSource(App.DB_MAIN, "jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8", "root", "gongwei911", plugins);
+        DBSource mainsource = new DBSource(App.DB_MAIN, "jdbc:mysql://192.168.1.93:3310/metadata?useSSL=false&characterEncoding=utf-8", "root", "123456", plugins);
         //        DBSource dbsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
     }
 

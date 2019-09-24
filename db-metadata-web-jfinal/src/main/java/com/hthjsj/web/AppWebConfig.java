@@ -1,5 +1,7 @@
 package com.hthjsj.web;
 
+import com.hthjsj.AnalysisConfig;
+import com.hthjsj.web.fastjson.CrackFastJsonFactory;
 import com.jfinal.config.*;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
@@ -20,12 +22,15 @@ public class AppWebConfig extends JFinalConfig {
     
     @Override
     public void configConstant(Constants me) {
-    
+        me.setJsonFactory(new CrackFastJsonFactory());
+
+
     }
     
     @Override
     public void configRoute(Routes me) {
         me.add("/", IndexController.class);
+        me.add("/meta", MetaController.class);
     }
     
     @Override
@@ -35,14 +40,17 @@ public class AppWebConfig extends JFinalConfig {
     
     @Override
     public void configPlugin(Plugins me) {
-    
+        AnalysisConfig analysisConfig = new AnalysisConfig();
+        analysisConfig.getPlugins().forEach(p -> me.add(p));
+
     }
     
     @Override
     public void configInterceptor(Interceptors me) {
-    
+
     }
-    
+
+
     @Override
     public void configHandler(Handlers me) {
     
