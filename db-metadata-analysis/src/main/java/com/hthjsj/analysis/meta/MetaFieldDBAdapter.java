@@ -103,7 +103,7 @@ public class MetaFieldDBAdapter implements IMetaField, Storage {
     }
 
     @Override
-    public MetaConfig config() {
+    public IMetaConfig config() {
         return null;
     }
 
@@ -123,7 +123,7 @@ public class MetaFieldDBAdapter implements IMetaField, Storage {
     }
 
     @Override
-    public void config(MetaConfig config) {
+    public void config(IMetaConfig config) {
 
     }
 

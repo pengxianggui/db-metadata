@@ -1,5 +1,6 @@
 package com.hthjsj.analysis.meta;
 
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class MetaField implements IMetaField {
 
     Record record = new Record();
-    MetaConfig metaFieldConfig;
+    IMetaConfig metaFieldConfig;
 
     public MetaField(Map<String, Object> fieldMap) {
         this.record = new Record().setColumns(fieldMap);
@@ -107,7 +108,8 @@ public class MetaField implements IMetaField {
 
     @Override
     public Long dbTypeLength() {
-        return record.getLong("db_type_length");
+        String val = record.getStr("db_type_length");
+        return Long.valueOf(StrKit.isBlank(val) ? "0" : val);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class MetaField implements IMetaField {
     }
 
     @Override
-    public MetaConfig config() {
+    public IMetaConfig config() {
         return new MetaConfigFactory.MetaFieldConfig(record.getStr("config"), objectCode(), fieldCode());
     }
 
@@ -136,7 +138,7 @@ public class MetaField implements IMetaField {
     }
 
     @Override
-    public void config(MetaConfig config) {
+    public void config(IMetaConfig config) {
         metaFieldConfig = config;
         record.set("config", config.getConfig());
     }

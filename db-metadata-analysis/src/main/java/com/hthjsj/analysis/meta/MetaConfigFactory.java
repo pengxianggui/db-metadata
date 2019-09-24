@@ -24,6 +24,8 @@ public class MetaConfigFactory {
     public static MetaObjectConfig createV1ObjectConfig(String objectCode, String isUUIDPri) {
         MetaObjectConfig metaObjectConfig = createEmptyObjectConfig(objectCode);
         metaObjectConfig.set("isUUIDPrimary", Boolean.parseBoolean(isUUIDPri));
+        //common config
+        metaObjectConfig.set("isMultiple", false);
         return metaObjectConfig;
     }
 
@@ -31,10 +33,12 @@ public class MetaConfigFactory {
         MetaFieldConfig metaFieldConfig = createEmptyFieldConfig(objectCode, fieldCode);
         metaFieldConfig.set("isNullable", "yes".equalsIgnoreCase(isNUll));
         metaFieldConfig.set("defaultValue", defaultValue == null ? "" : defaultValue);
+        //common config
+        metaFieldConfig.set("isMultiple", false);
         return metaFieldConfig;
     }
 
-    public static class MetaFieldConfig extends MetaData implements MetaConfig {
+    public static class MetaFieldConfig extends MetaData implements IMetaConfig {
 
         public static final String VERSION_0_1 = "0.1";
 
@@ -72,7 +76,7 @@ public class MetaConfigFactory {
         }
     }
 
-    public static class MetaObjectConfig extends MetaData implements MetaConfig {
+    public static class MetaObjectConfig extends MetaData implements IMetaConfig {
 
         public static final String VERSION_0_1 = "0.1";
 

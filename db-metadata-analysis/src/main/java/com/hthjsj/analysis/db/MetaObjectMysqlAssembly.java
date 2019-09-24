@@ -50,6 +50,8 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
             if (PRIMARY.equals(column.getColumnKey())) {
                 mf.isPrimary(true);
                 metaObject.addPrimary(mf);
+            } else {
+                mf.isPrimary(false);
             }
 
             metaObject.addField(mf);

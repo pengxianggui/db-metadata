@@ -9,6 +9,8 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 
+import java.util.List;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -17,12 +19,16 @@ import com.jfinal.plugin.druid.DruidPlugin;
  *
  * <p> @author konbluesky </p>
  */
-public class AppConfig {
+public class AnalysisConfig {
 
     Plugins plugins = new Plugins();
 
-    public AppConfig() {
-        DBSource mainsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8", "root", "gongwei911", plugins);
+    public List<IPlugin> getPlugins() {
+        return plugins.getPluginList();
+    }
+
+    public AnalysisConfig() {
+        DBSource mainsource = new DBSource(App.DB_MAIN, "jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8", "root", "gongwei911", plugins);
         //        DBSource dbsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
     }
 
@@ -72,8 +78,8 @@ public class AppConfig {
             dp_info.addFilter(wallFilter);
 
             ActiveRecordPlugin arp_info = new ActiveRecordPlugin(configName, dp_info);
-            arp_info.addSqlTemplate("schema_init.sql.txt");
-            arp_info.addSqlTemplate("meta_operator.sql.txt");
+            //            arp_info.addSqlTemplate("schema_init.sql.txt");
+            //            arp_info.addSqlTemplate("meta_operator.sql.txt");
             arp_info.setDialect(new MysqlDialect());
             arp_info.setShowSql(false);
 

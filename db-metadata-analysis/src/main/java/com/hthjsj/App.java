@@ -7,15 +7,18 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.analysis.meta.MetaObjectDBAdapter;
 import com.jfinal.aop.Aop;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Hello world!
  */
 public class App {
 
+    public static final String DB_MAIN = "db_main";
     public static void main(String[] args) {
 
-        AppConfig appConfig = new AppConfig();
-        appConfig.start();
+        AnalysisConfig analysisConfig = new AnalysisConfig();
+        analysisConfig.start();
 
 //        Table table = new MysqlService().getTable("metadata", "meta_field");
 //        System.out.println(JSON.toJSON(table));
@@ -31,12 +34,11 @@ public class App {
 
         dbMetaService.deleteMetaObject(metaObject);
         dbMetaService.saveMetaObject(adapter, true);
-    }
-
-
-    public void testSaveMetaObject() {
-
-
+        AtomicInteger i = new AtomicInteger();
+        metaObject.fields().forEach((field) -> {
+            field.cn(field.cn() + (i.getAndIncrement()));
+        });
+        dbMetaService.updateMetaObject(metaObject);
     }
 
 

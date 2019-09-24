@@ -1,9 +1,11 @@
 package com.hthjsj.analysis.meta;
 
+import com.jfinal.aop.Aop;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * <p> Class title: </p>
@@ -23,7 +25,7 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     public MetaObjectDBAdapter(MetaObject object) {
         this.metaObject = object;
         this.record = object.record;
-        this.storage = new DBStorageImpl(object.record, metaObject);
+        this.storage = new DBStorageImpl();
     }
 
     public MetaObjectDBAdapter(Record record, Storage storage) {
@@ -122,7 +124,7 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     }
 
     @Override
-    public MetaConfig config() {
+    public IMetaConfig config() {
         return metaObject.config();
     }
 
@@ -132,24 +134,27 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     }
 
     @Override
-    public void config(MetaConfig config) {
+    public void config(IMetaConfig config) {
         metaObject.config(config);
     }
 
-    static class DBStorageImpl implements Storage {
+    @Override
+    public Map<String, Object> dataMap() {
+        return metaObject.dataMap();
+    }
 
-        Record record;
-        IMetaObject metaObject;
+    @Override
+    public void dataMap(Map<String, Object> data) {
+        metaObject.dataMap(data);
+    }
 
-        public DBStorageImpl(Record record, IMetaObject metaObject) {
-            this.record = record;
-            this.metaObject = metaObject;
-        }
+    class DBStorageImpl implements Storage {
 
         @Override
         public Object save() {
-            Db.save(metaObject.tableName(), metaObject.primaryKey(), record);
-            return record.getStr(metaObject.primaryKey());
+            DbMetaService dbMetaService = Aop.get(DbMetaService.class);
+            dbMetaService.saveMetaObject(metaObject, true);
+            return metaObject.dataMap().get(metaObject.primaryKey());
         }
 
         @Override

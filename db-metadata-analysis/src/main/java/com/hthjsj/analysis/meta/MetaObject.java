@@ -20,16 +20,13 @@ public class MetaObject implements IMetaObject {
     List<IMetaField> _primarys = new ArrayList<>();
     List<IMetaField> fields = new ArrayList<>();
     Record record = new Record();
-    MetaConfig metaConfig;
+    IMetaConfig metaConfig;
 
     public MetaObject() {
     }
 
     public MetaObject(Map<String, Object> dataMap) {
         this.record = new Record().setColumns(dataMap);
-    }
-
-    public MetaObject(String code, String name, String tableName, String schemaName) {
     }
 
     @Override
@@ -119,7 +116,7 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
-    public MetaConfig config() {
+    public IMetaConfig config() {
         return new MetaConfigFactory.MetaObjectConfig(record.getStr("config"), code());
     }
 
@@ -129,9 +126,19 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
-    public void config(MetaConfig config) {
+    public void config(IMetaConfig config) {
         this.metaConfig = config;
         record.set("config", metaConfig.getConfig());
+    }
+
+    @Override
+    public Map<String, Object> dataMap() {
+        return record.getColumns();
+    }
+
+    @Override
+    public void dataMap(Map<String, Object> data) {
+        record.setColumns(data);
     }
 
 }

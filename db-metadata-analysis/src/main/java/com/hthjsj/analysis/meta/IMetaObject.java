@@ -3,6 +3,7 @@ package com.hthjsj.analysis.meta;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * <p> Class title: </p>
@@ -56,12 +57,15 @@ public interface IMetaObject {
     void addField(IMetaField value);
 
     @JSONField(name = "config")
-    MetaConfig config();
+    IMetaConfig config();
 
     void config(String config);
 
-    void config(MetaConfig config);
+    void config(IMetaConfig config);
 
+    Map<String, Object> dataMap();
+
+    void dataMap(Map<String, Object> data);
 
 }
 

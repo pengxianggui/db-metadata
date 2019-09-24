@@ -10,7 +10,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  *
  * <p> @author konbluesky </p>
  */
-public interface MetaConfig {
+public interface IMetaConfig {
 
     String MODULE_OBJECT = "meta_object";
     String MODULE_FIELD = "meta_field";
