@@ -74,6 +74,16 @@ public class MetaConfigFactory {
         public String getConfig() {
             return toJson();
         }
+
+        @Override
+        public void setItem(Object key, Object value) {
+            set(key, value);
+        }
+
+        @Override
+        public <T> T getItem(Object key) {
+            return getAs(key);
+        }
     }
 
     public static class MetaObjectConfig extends MetaData implements IMetaConfig {
@@ -113,6 +123,16 @@ public class MetaConfigFactory {
         @Override
         public String getConfig() {
             return toJson();
+        }
+
+        @Override
+        public void setItem(Object key, Object value) {
+            set(key, value);
+        }
+
+        @Override
+        public <T> T getItem(Object key) {
+            return getAs(key);
         }
     }
 }

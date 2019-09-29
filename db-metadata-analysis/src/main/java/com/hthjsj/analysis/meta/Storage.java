@@ -8,7 +8,7 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-interface Storage {
+public interface Storage {
     
     Object save();
     

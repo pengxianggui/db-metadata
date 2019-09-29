@@ -14,6 +14,7 @@ public interface IMetaConfig {
 
     String MODULE_OBJECT = "meta_object";
     String MODULE_FIELD = "meta_field";
+    String UI = "ui";
 
     String module();
 
@@ -23,4 +24,11 @@ public interface IMetaConfig {
 
     @JSONField(serialize = false)
     String getConfig();
+
+    @JSONField(serialize = false)
+    void setItem(Object key, Object value);
+
+    @JSONField(serialize = false)
+    <T> T getItem(Object key);
+
 }
