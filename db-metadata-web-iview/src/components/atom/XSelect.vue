@@ -77,12 +77,6 @@
                 default: function () {
                     return {}
                 }
-            },
-            optionData: {
-                type: Object,
-                default: function () {
-                    return []
-                }
             }
         }
     }
