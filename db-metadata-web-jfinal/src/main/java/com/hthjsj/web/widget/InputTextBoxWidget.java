@@ -9,22 +9,27 @@ package com.hthjsj.web.widget;
  * <p> @author konbluesky </p>
  */
 public class InputTextBoxWidget implements FrontWidget {
-    
+
     @Override
-    public String code() {
-        return null;
-    }
-    
-    @Override
-    public String cn() {
+    public String name() {
         return "文本框";
     }
-    
+
     @Override
-    public String en() {
+    public String code() {
         return "text";
     }
-    
+
+    @Override
+    public String config() {
+        return null;
+    }
+
+    @Override
+    public String type() {
+        return "form.field.inputTextBox";
+    }
+
     @Override
     public void init() {
     

@@ -1,4 +1,4 @@
-package com.hthjsj.analysis.meta;
+package com.hthjsj.web.ui;
 
 /**
  * <p> Class title: </p>
@@ -8,7 +8,7 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-interface MetaObjectAccess {
+interface UIMetaObjectAccess {
     
     boolean isSingle();
     

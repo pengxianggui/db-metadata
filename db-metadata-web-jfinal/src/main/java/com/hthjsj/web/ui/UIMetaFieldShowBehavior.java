@@ -1,4 +1,4 @@
-package com.hthjsj.analysis.meta;
+package com.hthjsj.web.ui;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -10,7 +10,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  *
  * <p> @author konbluesky </p>
  */
-interface MetaFieldShowBehavior {
+interface UIMetaFieldShowBehavior {
     
     /**
      * TODO 预留扩展机制

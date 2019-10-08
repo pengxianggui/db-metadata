@@ -1,4 +1,4 @@
-package com.hthjsj.analysis.meta;
+package com.hthjsj.web.ui;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -10,7 +10,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  *
  * <p> @author konbluesky </p>
  */
-interface MetaFieldAccess {
+interface UIMetaFieldAccess {
     
     @JSONField(name = "isQuery")
     boolean isQuery();

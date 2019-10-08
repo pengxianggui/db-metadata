@@ -1,5 +1,7 @@
 package com.hthjsj.web.widget;
 
+import com.hthjsj.analysis.meta.ui.ShowType;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -8,13 +10,7 @@ package com.hthjsj.web.widget;
  *
  * <p> @author konbluesky </p>
  */
-public interface FrontWidget {
-    
-    String code();
-    
-    String cn();
-    
-    String en();
+public interface FrontWidget extends ShowType {
     
     void init();
     
