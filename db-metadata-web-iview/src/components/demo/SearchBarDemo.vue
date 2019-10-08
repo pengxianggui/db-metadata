@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import SearchBar from '../base/SearchBar'
+    import SearchBar from '@/components/base/SearchBar'
     import XInput from '../atom/XInput'
     export default {
         name: "search-bar-demo",
@@ -56,7 +56,6 @@
                 keys.forEach(key => {
                     params[key] = model[key]
                 })
-
                 // this.$refs.pageTable.refreshNew()
                 // or show as a demo:
                 alert("搜索数据模型： " + JSON.stringify(params))

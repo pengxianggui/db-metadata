@@ -1,19 +1,17 @@
 <template>
     <div id="app">
-        <demo></demo>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-    import demo from "./components/Main";
-
     export default {
-        name: 'app',
-        components: {
-            demo
-        }
+        name: 'app'
     }
 </script>
 
 <style>
+    .el-card {
+        padding: 10px;
+    }
 </style>
