@@ -2,71 +2,69 @@
     <div>
         <h2>搜索条(searchBar): </h2>
         <b>元数据:</b>
-        <x-input :options="options" v-model="searchItemsStr" @change="searchItemsChange"></x-input>
+        {{searchMetadata}}
+        <br>
         <b>效果:</b>
-        <search-bar v-if="searchItems.length > 0" :form-items="searchItems" @search="search"></search-bar>
+        <search-bar v-if="searchMetadata.length > 0" :search-model.sync="searchModel" :meta-data="searchMetadata" @search="search"></search-bar>
+        <b>表单模型:</b> {{searchModel}}
     </div>
 </template>
 
 <script>
     import SearchBar from '@/components/base/SearchBar'
-    import XInput from '../atom/XInput'
+
     export default {
         name: "search-bar-demo",
         data() {
             return {
-                options: {
-                  type: 'textarea'
-                },
-                searchItems: [
+                searchMetadata: [
                     {
-                        name: 'enterpriseId',
-                        label: '所属企业',
-                        value: '',
-                        formType: 'x-select',
-                        rules: [
-                            { required: true, type: 'number', message: '请选择所属单位', trigger: 'change' }
-                        ],
-                        options: {
-                            selectItems: [],
-                            selectLabelKey: 'enterpriseName',
-                            selectValueKey: 'id',
-                            width: 200
+                        "id": "1",
+                        "object_code": "meta_object_code",
+                        "en": "id",
+                        "cn": "ID",
+                        "order_num": 1,
+                        "db_type": "varchar",
+                        "db_type_length": "32",
+                        "java_type": "String",
+                        "component_type": "TextBox",
+                        "config": {
+                            "placeholder": "请输入查询关键词",
+                            "clearable": false,
+                            "show_label": true, // 显示内容为cn||en
+                            "size": "small",
                         }
-                    },
-                    {
-                        name: 'plateNo',
-                        label: '车牌号',
-                        value: '',
-                        formType: 'x-input',
-                        options: {}
+                    }, {
+                        "id": "2",
+                        "object_code": "meta_object_code",
+                        "is_primary": "false",
+                        "en": "object_code",
+                        "cn": "对象编码",
+                        "order_num": 2,
+                        "db_type": "varchar",
+                        "db_type_length": "64",
+                        "java_type": "String",
+                        "component_type": "TextBox",
+                        "config": {
+                            "placeholder": "请输入查询关键词",
+                            "clearable": false,
+                            "show_label": true, // 显示内容为cn||en
+                            "size": "small" // mini, small, medium
+                        }
                     }
                 ],
-                searchItemsStr: '',
                 searchModel: {}
             };
         },
         methods: {
-            searchItemsChange () {
-                this.searchItems = JSON.parse(this.searchItemsStr)
-            },
-            search (model) {
-                let params= {}
-                let keys = Object.keys(model)
-                keys.forEach(key => {
-                    params[key] = model[key]
-                })
+            search () {
                 // this.$refs.pageTable.refreshNew()
                 // or show as a demo:
-                alert("搜索数据模型： " + JSON.stringify(params))
+                alert("搜索数据模型： " + JSON.stringify(this.searchModel))
             }
-        },
-        mounted() {
-            this.searchItemsStr = JSON.stringify(this.searchItems)
         },
         components: {
             SearchBar,
-            XInput
         }
     }
 </script>

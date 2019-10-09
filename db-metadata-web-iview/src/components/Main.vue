@@ -11,12 +11,32 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <x-input-demo></x-input-demo>
+                <text-box-demo></text-box-demo>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
-                <x-select-demo></x-select-demo>
+                <pass-box-demo></pass-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <bool-box-demo></bool-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <text-area-box-demo></text-area-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <drop-down-box-demo></drop-down-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <json-box-demo></json-box-demo>
             </el-col>
         </el-row>
         <el-row>
@@ -27,9 +47,17 @@
     </div>
 </template>
 <script>
-    import XInputDemo from './demo/XInputDemo'
-    import XSelectDemo from './demo/XSelectDemo'
-    import SearchBarDemo from './demo/SearchBarDemo'
+
+    // 批量注册
+    const requireComponent = require.context('./demo', false, /\w+\.(vue|js)$/);
+    let demos = {};
+
+    requireComponent.keys().map(fileName => {
+        let cmp = requireComponent(fileName).default;
+        demos[cmp.name] = cmp;
+    });
+    console.log(demos)
+
     export default {
         name: "demo",
         data() {
@@ -38,10 +66,6 @@
         },
         methods: {
         },
-        components: {
-            SearchBarDemo,
-            XInputDemo,
-            XSelectDemo
-        }
+        components: demos
     }
 </script>

@@ -3,8 +3,8 @@
         <el-row class="el-card">
             <el-col :span="24">
                 搜索表单模型： {{searchModel}}
-                <search-bar v-if="searchItems.length > 0" :form-items="searchItems"
-                            :search-model.sync="searchModel" @search="masterSearch" :options="masterMetadata.config"></search-bar>
+                <search-bar v-if="masterSearchMetadata.length > 0" :meta-data="masterSearchMetadata"
+                            :search-model.sync="searchModel" @search="masterSearch"></search-bar>
             </el-col>
             <el-col :span="24">
                 勾选数据：{{choseMasterData}}
@@ -42,6 +42,7 @@
         name: "MasterSlaveComponent",
         data() {
             return {
+                masterSearchMetadata: [],
                 masterMetadata: {}, // 主表元对象
                 slaveMetadata: {}, // 子表元对象
                 masterFieldMetadata: [], // 主表元字段
@@ -66,6 +67,9 @@
             }
         },
         methods: {
+            getMasterSearchMetadata () {
+                return mockData.masterSearchBarMetadata
+            },
             getMasterMetadata () {
                 return mockData.masterMetadata
             },
@@ -95,21 +99,18 @@
             },
             slaveSearch () {
                 this.slaveData = this.getSlaveData()
-            },
-            filterQueryFields () {
-                return this.masterFieldMetadata.filter(item => {
-                    return item.config.search_options.searchable
-                })
             }
         },
         created () {
-            // todo 获取初始化数据
+            // 获取元数据
+            this.masterSearchMetadata = this.getMasterSearchMetadata()
             this.masterMetadata = this.getMasterMetadata()
             this.masterFieldMetadata = this.getMasterFieldMetadata()
             this.slaveMetadata = this.getSlaveMetadata()
             this.slaveFieldMetadata = this.getSlaveFieldMetadata()
-            // filter columns which need to be searched
-            this.searchItems = this.filterQueryFields()
+        },
+        mounted () {
+            // 获取业务数据
             this.masterSearch({})
         },
         watch: {

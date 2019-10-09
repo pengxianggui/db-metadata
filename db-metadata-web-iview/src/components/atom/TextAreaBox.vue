@@ -1,21 +1,22 @@
 <template>
-    <el-input v-model="formValue"
+    <el-input type="textarea"
+              v-model="currValue"
               v-bind="options"
-              @input.native="$emit('input', formValue)"
+              @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
               @clear="$emit('clear', $event)"
-              v-bind:style="options.style"
-    ></el-input>
+              v-bind:style="options.style">
+    </el-input>
 </template>
 
 <script>
     export default {
-        name: "x-input",
+        name: "text-area-box",
         props: {
             value: {
-                required: true
+                type: String
             },
             options: {
                 type: Object,
@@ -26,24 +27,17 @@
         },
         data () {
             return {
-                formValue: null
             }
         },
-        watch: {
-            value () {
-                this.initData()
+        computed: {
+            currValue: {
+                get: function() {
+                    return this.value;
+                },
+                set: function(newValue) {
+                    this.$emit("input", newValue); // 通过 input 事件更新 model
+                }
             }
-        },
-        methods: {
-            initData () {
-                this.formValue = this.value
-            }
-        },
-        mounted () {
-            this.initData()
-            // this.on('initFormItem', () => {
-            //     this.initData()
-            // })
         }
     }
 </script>

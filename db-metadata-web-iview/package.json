@@ -10,7 +10,9 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "element-ui": "^2.12.0",
+    "lodash": "latest",
     "vue": "^2.6.10",
+    "vue-json-editor": "^1.4.0",
     "vue-router": "^3.1.3"
   },
   "devDependencies": {
