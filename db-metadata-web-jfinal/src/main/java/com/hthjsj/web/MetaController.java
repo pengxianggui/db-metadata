@@ -3,7 +3,6 @@ package com.hthjsj.web;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.aop.Aop;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
 
 /**
@@ -14,21 +13,26 @@ import com.jfinal.kit.Ret;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaController extends Controller {
+public class MetaController extends FrontRestController {
 
 
-    public void index() {
+    /**
+     * <pre>
+     *
+     * param :
+     *      objectCode
+     *
+     * </pre>
+     */
+    public Ret index() {
+
         String metaObjectCode = getPara(0);
 
 
         DbMetaService dbMetaService = Aop.get(DbMetaService.class);
 
         IMetaObject metaObject = dbMetaService.findByCode(metaObjectCode);
-
-
         renderJson(Ret.ok("data", metaObject));
-
+        return null;
     }
-
-
 }

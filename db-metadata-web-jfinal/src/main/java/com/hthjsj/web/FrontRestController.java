@@ -1,56 +1,69 @@
-package com.hthjsj.web.widget;
+package com.hthjsj.web;
 
-import com.hthjsj.web.FrontRest;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
- * <p> @Date : 2019-08-22 </p>
+ * <p> @Date : 2019/10/9 </p>
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
  */
-public class WidgetRestContoller extends Controller implements FrontRest {
+public abstract class FrontRestController extends Controller implements FrontRest {
+
 
     @Override
     public Ret index() {
+        renderJson(faildMsgInfo());
         return null;
     }
 
     @Override
     public Ret toAdd() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret doAdd() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret toUpdate() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret doUpdate() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret detail() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret delete() {
+        renderJson(faildMsgInfo());
         return null;
     }
-    
+
     @Override
     public Ret list() {
+        renderJson(Ret.fail("msg", ""));
         return null;
+    }
+
+    Ret faildMsgInfo() {
+        Ret ret = Ret.fail();
+        ret.set("request_uri", getRequest().getRequestURI());
+        ret.set("msg", "not implementation!");
+        return ret;
     }
 }

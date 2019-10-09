@@ -1,7 +1,8 @@
 package com.hthjsj.web;
 
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.web.fastjson.CrackFastJsonFactory;
+import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
+import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.jfinal.config.*;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
@@ -23,19 +24,21 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configConstant(Constants me) {
         me.setJsonFactory(new CrackFastJsonFactory());
-
-
+        me.setRenderFactory(new ErrorJsonRenderFactory());
     }
     
     @Override
     public void configRoute(Routes me) {
+        me.setMappingSuperClass(true);
         me.add("/", IndexController.class);
         me.add("/meta", MetaController.class);
+        me.add("/db", DBController.class);
+        me.add("/component", ComponentController.class);
     }
     
     @Override
     public void configEngine(Engine me) {
-    
+
     }
     
     @Override

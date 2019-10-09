@@ -1,5 +1,7 @@
 package com.hthjsj.web;
 
+import com.jfinal.kit.Ret;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -9,18 +11,20 @@ package com.hthjsj.web;
  * <p> @author konbluesky </p>
  */
 public interface FrontRest {
-    
-    WebResult toAdd();
-    
-    WebResult doAdd();
-    
-    WebResult toUpdate();
-    
-    WebResult doUpdate();
-    
-    WebResult detail();
-    
-    WebResult delete();
-    
-    WebResult list();
+
+    Ret index();
+
+    Ret toAdd();
+
+    Ret doAdd();
+
+    Ret toUpdate();
+
+    Ret doUpdate();
+
+    Ret detail();
+
+    Ret delete();
+
+    Ret list();
 }

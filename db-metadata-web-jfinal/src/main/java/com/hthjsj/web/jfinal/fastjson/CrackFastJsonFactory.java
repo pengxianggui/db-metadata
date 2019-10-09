@@ -1,4 +1,4 @@
-package com.hthjsj.web.fastjson;
+package com.hthjsj.web.jfinal.fastjson;
 
 import com.jfinal.json.FastJsonFactory;
 import com.jfinal.json.Json;
