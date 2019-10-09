@@ -4,8 +4,6 @@ import com.jfinal.json.FastJsonFactory;
 import com.jfinal.json.Json;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/9/24 </p>
  * <p> @Project : db-meta-serve</p>
  *

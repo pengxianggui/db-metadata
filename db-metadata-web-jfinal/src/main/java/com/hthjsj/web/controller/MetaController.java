@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -24,6 +24,7 @@ public class MetaController extends FrontRestController {
      *
      * </pre>
      */
+    @Override
     public Ret index() {
 
         String metaObjectCode = getPara(0);

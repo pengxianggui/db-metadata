@@ -1,6 +1,6 @@
 package com.hthjsj.web.widget;
 
-import com.hthjsj.web.FrontRest;
+import com.hthjsj.web.controller.FrontRest;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
 

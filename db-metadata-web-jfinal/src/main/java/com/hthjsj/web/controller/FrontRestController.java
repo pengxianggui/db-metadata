@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.controller;
 
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
@@ -14,7 +14,8 @@ public abstract class FrontRestController extends Controller implements FrontRes
 
     @Override
     public Ret index() {
-        renderJson(faildMsgInfo());
+        list();
+//        renderJson(faildMsgInfo());
         return null;
     }
 

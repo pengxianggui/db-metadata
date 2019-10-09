@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.controller;
 
 import com.jfinal.kit.Ret;
 

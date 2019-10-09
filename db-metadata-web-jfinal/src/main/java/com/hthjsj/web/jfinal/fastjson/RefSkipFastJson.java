@@ -5,8 +5,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jfinal.json.FastJson;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/9/24 </p>
  * <p> @Project : db-meta-serve</p>
  *

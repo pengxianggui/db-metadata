@@ -1,6 +1,10 @@
 package com.hthjsj.web;
 
 import com.hthjsj.AnalysisConfig;
+import com.hthjsj.web.controller.ComponentController;
+import com.hthjsj.web.controller.DBController;
+import com.hthjsj.web.controller.IndexController;
+import com.hthjsj.web.controller.MetaController;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.jfinal.config.*;
