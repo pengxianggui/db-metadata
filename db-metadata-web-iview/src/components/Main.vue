@@ -41,6 +41,31 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <time-box-demo></time-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <date-box-demo></date-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <date-time-box-demo></date-time-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <num-box-demo></num-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <radio-box-demo></radio-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <search-bar-demo></search-bar-demo>
             </el-col>
         </el-row>
