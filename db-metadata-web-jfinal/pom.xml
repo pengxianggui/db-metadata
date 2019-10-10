@@ -23,6 +23,11 @@
             <artifactId>jfinal-undertow</artifactId>
             <version>1.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1-jre</version>
+        </dependency>
         <!--        <dependency>-->
         <!--            <groupId>io.undertow</groupId>-->
         <!--            <artifactId>undertow-websockets-jsr</artifactId>-->
