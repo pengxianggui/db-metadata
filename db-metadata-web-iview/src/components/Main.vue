@@ -66,6 +66,11 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <check-box-demo></check-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <search-bar-demo></search-bar-demo>
             </el-col>
         </el-row>
