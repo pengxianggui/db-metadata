@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class Table {
 
-    public Map<String, Object> dataMap;
+    private Map<String, Object> dataMap;
     Record record;
     List<Column> columns;
 

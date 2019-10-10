@@ -1,4 +1,4 @@
-package com.hthjsj.web.widget;
+package com.hthjsj.web.component;
 
 import java.util.ArrayList;
 import java.util.List;

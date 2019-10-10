@@ -1,7 +1,6 @@
-package com.hthjsj.web.widget;
+package com.hthjsj.web.component;
 
-import com.hthjsj.web.controller.FrontRest;
-import com.jfinal.core.Controller;
+import com.hthjsj.web.controller.FrontRestController;
 import com.jfinal.kit.Ret;
 
 /**
@@ -12,7 +11,7 @@ import com.jfinal.kit.Ret;
  *
  * <p> @author konbluesky </p>
  */
-public class WidgetRestContoller extends Controller implements FrontRest {
+public class WidgetRestContoller extends FrontRestController {
 
     @Override
     public Ret index() {
