@@ -4,6 +4,7 @@ import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Plugins;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
@@ -28,7 +29,11 @@ public class AnalysisConfig {
     }
 
     public AnalysisConfig() {
-        DBSource mainsource = new DBSource(App.DB_MAIN, "jdbc:mysql://192.168.1.93:3310/metadata?useSSL=false&characterEncoding=utf-8", "root", "123456", plugins);
+        DBSource mainsource = new DBSource(App.DB_MAIN,
+                PropKit.use("config.properties").get(App.DB_MAIN_URL),
+                PropKit.use("config.properties").get(App.DB_MAIN_USERNAME),
+                PropKit.use("config.properties").get(App.DB_MAIN_PASSWORD),
+                plugins);
         //        DBSource dbsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
     }
 

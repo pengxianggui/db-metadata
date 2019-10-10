@@ -541,6 +541,128 @@
             }
           ],
           "chnname": "测试表"
+        },
+        {
+          "title": "meta_component",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "cn",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "中文名称"
+            },
+            {
+              "name": "en",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "英文名称"
+            },
+            {
+              "name": "code",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "组件编码"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置信息"
+            },
+            {
+              "name": "version",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "版本信息"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "组件注册表"
         }
       ],
       "graphCanvas": {
@@ -1076,6 +1198,16 @@
           "driver_class_name": "com.mysql.jdbc.Driver",
           "url": "jdbc:mysql://192.168.1.93:3310/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
           "password": "123456",
+          "username": "root"
+        }
+      },
+      {
+        "name": "metadata",
+        "defaultDB": false,
+        "properties": {
+          "driver_class_name": "com.mysql.jdbc.Driver",
+          "url": "jdbc:mysql://localhost:3309/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
+          "password": "gongwei911",
           "username": "root"
         }
       }

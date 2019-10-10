@@ -6,7 +6,5 @@ public interface Component {
 
     String code();
 
-    String config();
-
     String type();
 }

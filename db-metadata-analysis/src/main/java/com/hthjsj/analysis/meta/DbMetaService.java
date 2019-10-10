@@ -27,6 +27,12 @@ import java.util.List;
 public class DbMetaService {
 
 
+//    public List<String> tableNames(){
+//        DbService dbService = Aop.get(MysqlService.class);
+//        return dbService.showTables(App.DB_MAIN).stream().map(Table::getTableName).collect(Collectors.toList());
+//    }
+
+
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
         Table t = dbService.getTable(schema, table);
@@ -37,6 +43,9 @@ public class DbMetaService {
     }
 
     public IMetaObject findByCode(String code) {
+        if (StrKit.isBlank(code)) {
+            throw new MetaOperateException(String.format("无效的元对象Code:%s", code));
+        }
         Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", code);
         List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", code);
         IMetaObject IMetaObject = new MetaObject(moRecord.getColumns());
