@@ -3,6 +3,9 @@
         <h2>{{metaData.component_name}}: </h2>
         <component :is="metaData.component_name" v-model="value" :meta-data="metaData"></component>
         值为：{{value}}
+        <toggle-panel>
+            <json-box v-model="metaData"></json-box>
+        </toggle-panel>
     </div>
 </template>
 
@@ -19,6 +22,8 @@
                 metaData: {
                     component_name: 'JsonBox',
                     ui_config: {
+                        mode: 'code',
+                        modes: ['code', 'tree', 'text', 'view', 'form']
                     }
                 },
             }

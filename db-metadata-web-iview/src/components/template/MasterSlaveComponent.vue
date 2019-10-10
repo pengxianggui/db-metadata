@@ -3,7 +3,7 @@
         <el-row class="el-card">
             <el-col :span="24">
                 搜索表单模型： {{searchModel}}
-                <search-bar v-if="masterSearchMetadata.length > 0" :meta-data="masterSearchMetadata"
+                <search-bar :meta-data="masterSearchMetadata"
                             :search-model.sync="searchModel" @search="masterSearch"></search-bar>
             </el-col>
             <el-col :span="24">
@@ -42,7 +42,7 @@
         name: "MasterSlaveComponent",
         data() {
             return {
-                masterSearchMetadata: [],
+                masterSearchMetadata: {}, // 搜索条的元数据
                 masterMetadata: {}, // 主表元对象
                 slaveMetadata: {}, // 子表元对象
                 masterFieldMetadata: [], // 主表元字段
@@ -68,7 +68,10 @@
         },
         methods: {
             getMasterSearchMetadata () {
-                return mockData.masterSearchBarMetadata
+                return {
+                    component_name: 'search-bar',
+                    ui_config: mockData.masterSearchBarMetadata
+                }
             },
             getMasterMetadata () {
                 return mockData.masterMetadata

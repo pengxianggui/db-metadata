@@ -1,12 +1,11 @@
 <template>
     <el-input v-model="currValue"
-              v-bind="options"
+              v-bind="metaData.ui_config"
               @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
               @clear="$emit('clear', $event)"
-              v-bind:style="options.style"
               type="password"
     ></el-input>
 </template>
@@ -18,10 +17,12 @@
             value: {
               type: String
             },
-            options: {
+            metaData: {
                 type: Object,
                 default: function () {
-                    return {}
+                    return {
+                        ui_config: {}
+                    }
                 }
             }
         },

@@ -24,7 +24,12 @@
                 type: [Object, String]
             },
             metaData: {
-                type: Object
+                type: Object,
+                default: function () {
+                    return {
+                        ui_config: {}
+                    }
+                }
             }
         },
         computed: {

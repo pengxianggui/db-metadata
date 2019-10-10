@@ -1,5 +1,5 @@
 <template>
-    <vue-json-editor v-model="currValue"></vue-json-editor>
+    <vue-json-editor v-model="currValue" :modes="metaData.ui_config.modes||modes" :mode="metaData.ui_config.mode||mode"></vue-json-editor>
 </template>
 
 <script>
@@ -8,12 +8,28 @@
         components: {
             vueJsonEditor
         },
+        data () {
+          return {
+              modes: ["tree", "code", 'text'] // all : ["tree", "code", "form", "text", "view"];
+          }
+        },
         props: {
             value: {
                 type: Object
             },
             metaData: {
-                type: Object
+                type: Object,
+                default: function () {
+                    return {
+                        ui_config: {}
+                    }
+                }
+            },
+            mode: {
+                type: String,
+                default: function () {
+                    return 'code'
+                }
             }
         },
         methods: {

@@ -1,6 +1,6 @@
 <template>
     <el-switch v-model="currValue"
-               :options="options"
+               :options="metaData.ui_config"
                @change="$emit('change', $event)"></el-switch>
 </template>
 
@@ -11,10 +11,12 @@
             value: {
                 type: Boolean
             },
-            options: {
+            metaData: {
                 type: Object,
                 default: function () {
-                    return {}
+                    return {
+                        ui_config: {}
+                    }
                 }
             }
         },

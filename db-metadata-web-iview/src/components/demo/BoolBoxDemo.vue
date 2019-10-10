@@ -1,9 +1,12 @@
 <template>
     <div>
-        <h2>{{componentName}}: </h2>
-        <component :is="componentName" v-model="boolVal" :options="options"></component>
+        <h2>{{metaData.component_name}}: </h2>
+        <component :is="metaData.component_name" v-model="value" :meta-data="metaData"></component>
         <br>
-        值为: {{boolVal}}
+        值为: {{value}}
+        <toggle-panel>
+            <json-box v-model="metaData" mode="code"></json-box>
+        </toggle-panel>
     </div>
 </template>
 
@@ -12,10 +15,12 @@
         name: "bool-box-demo",
         data () {
             return {
-                componentName: 'BoolBox',
-                boolVal: true,
-                options: {
-                    label: '确定？'
+                value: true,
+                metaData: {
+                    component_name: 'BoolBox',
+                    ui_config: {
+                        label: '打开'
+                    }
                 }
             }
         }

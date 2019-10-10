@@ -10,7 +10,7 @@ const masterSearchBarMetadata = [
         "db_type": "varchar",
         "db_type_length": "32",
         "java_type": "String",
-        "component_type": "TextBox",
+        "component_name": "TextBox",
         "ui_config": {
             "placeholder": "请输入查询关键词",
             "clearable": false,
@@ -27,8 +27,8 @@ const masterSearchBarMetadata = [
         "db_type": "varchar",
         "db_type_length": "64",
         "java_type": "String",
-        "component_type": "TextBox",
-        "config": {
+        "component_name": "TextBox",
+        "ui_config": {
             "placeholder": "请输入查询关键词",
             "clearable": false,
             "show_label": true, // 显示内容为cn||en
@@ -46,6 +46,7 @@ const masterSearchBarMetadata = [
     }
 ]
 
+// 主表元对象
 const masterMetadata = {
     "id": "1",
     "code": "meta_object_code",
@@ -53,12 +54,13 @@ const masterMetadata = {
     "table_name": "meta_object",
     "schema_name": "db_metadata",
     "primarys": "id",
-    "config": {
+    "ui_config": {
         "default_order": "id desc",
         "size": "small",
     }
 }
 
+// 主表元字段
 const masterFieldMetadata = [
     {
         "id": "1",
@@ -70,30 +72,9 @@ const masterFieldMetadata = [
         "db_type": "varchar",
         "db_type_length": "32",
         "java_type": "String",
-        "config": {
-            "editable": false, // 像这类关乎业务的配置提到config级别下
-            "sortable": true,
+        "ui_config": {
+            "sortable": false,
             "showable": true,
-            // options: {  // 字段表单单控件options配置
-            //     "required": false,
-            //     // "placeholder": "",
-            //     // "clearable": true,
-            //     "show_label": true, // 显示内容为cn||en
-            //     // "disabled": false,
-            //     "readonly": true,
-            //     // "style": {
-            //     //     "width": "200px"
-            //     // },
-            //     // ... 配置内容可以直接与element ui 相同, 其它需要手动实现
-            // },
-            // search_options: {   // 搜索框单控件配置
-            //     "searchable": true,
-            //     "placeholder": "请输入查询关键词",
-            //     "clearable": false,
-            //     "show_label": true, // 显示内容为cn||en
-            //     "size": "mini",
-            //     // ...
-            // }
         }
     }, {
         "id": "2",
@@ -105,57 +86,14 @@ const masterFieldMetadata = [
         "db_type": "varchar",
         "db_type_length": "64",
         "java_type": "String",
-        "config": {
-            "editable": true, // 像这类关乎业务的配置提到config级别下
+        "ui_config": {
             "sortable": true,
             "showable": true,
-            // options: {  // 字段表单单控件options配置
-            //     "required": true,
-            //     "placeholder": "请输入对象编码",
-            //     "clearable": true,
-            //     "show_label": true, // 显示内容为cn||en
-            //     "disabled": false,
-            //     "readonly": false,
-            //     "style": {
-            //         "width": "200px",
-            //         // "border": "1px solid red"
-            //     },
-            //     "rules": [{
-            //         "pattern": "/^[a-z]|[A-Z]*$/",
-            //         "message": "只能包含纯字母",
-            //         "trigger": "blur"
-            //     }, {
-            //         "required": true,
-            //         "message": "对象编码不能为空",
-            //         "trigger": "blur"
-            //     }],
-            //     // ... 配置内容可以直接与element ui 相同, 其它需要手动实现
-            // },
-            // search_options: {   // 搜索框单控件配置
-            //     "searchable": true,
-            //     "placeholder": "请输入查询关键词",
-            //     "clearable": false,
-            //     "show_label": true, // 显示内容为cn||en
-            //     // "size": "medium",
-            //     "style": {
-            //         // "width": "100px",
-            //         // "border": "1px solid red"
-            //     },
-            //     // "rules": [{
-            //     //     "pattern": "^[A-Za-z]+$",
-            //     //     "message": "只能包含纯字母",
-            //     //     "trigger": "blur"
-            //     // }, {
-            //     //     "required": true,
-            //     //     "message": "对象编码不能为空",
-            //     //     "trigger": "blur"
-            //     // }],
-            //     // ...
-            // }
         }
     }
 ]
 
+// 子表元对象
 const slaveMetadata = {
     "id": "1",
     "code": "meta_field_code",
@@ -163,12 +101,13 @@ const slaveMetadata = {
     "table_name": "meta_field",
     "schema_name": "db_metadata",
     "primarys": "id",
-    "config": {
+    "ui_config": {
         "default_order": "id desc",
         "size": "mini",
     }
 }
 
+// 子表元字段
 const slaveFieldMetadata = [
     {
         "id": "1",
@@ -180,30 +119,9 @@ const slaveFieldMetadata = [
         "db_type": "varchar",
         "db_type_length": "32",
         "java_type": "String",
-        "config": {
-            "form_type": "INPUT",
-            "editable": false, // 像这类关乎业务的配置提到config级别下
+        "ui_config": {
             "sortable": true,
             "showable": true,
-            options: {  // 字段表单单控件options配置
-                "required": false,
-                // "placeholder": "",
-                // "clearable": true,
-                "show_label": true, // 显示内容为cn||en
-                // "disabled": false,
-                "readonly": true,
-                // "style": {
-                //     "width": "200px"
-                // },
-                // ... 配置内容可以直接与element ui 相同, 其它需要手动实现
-            },
-            search_options: {   // 搜索框单控件配置
-                "searchable": true,
-                "placeholder": "请输入查询关键词",
-                "clearable": true,
-                "show_label": true, // 显示内容为cn||en
-                // ...
-            }
         }
     }
 ]

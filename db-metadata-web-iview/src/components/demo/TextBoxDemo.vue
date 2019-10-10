@@ -2,7 +2,10 @@
     <div>
         <h2>{{metaData.component_name}}: </h2>
         <component :is="metaData.component_name" v-model="value" :meta-data="metaData"></component>
-        值为: {{value}}
+        <label>值为：</label><code>{{value}}</code>
+        <toggle-panel>
+            <json-box v-model="metaData" mode="code"></json-box>
+        </toggle-panel>
     </div>
 </template>
 

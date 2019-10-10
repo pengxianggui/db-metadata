@@ -17,7 +17,12 @@
                 type: String
             },
             metaData: {
-              type: Object
+                type: Object,
+                default: function () {
+                    return {
+                        ui_config: {}
+                    }
+                }
             },
             // options: {
             //     type: Object,

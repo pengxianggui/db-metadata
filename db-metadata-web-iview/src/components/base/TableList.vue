@@ -16,16 +16,16 @@
                         max-height="400"
                         highlight-current-row
                         @row-click="choseRow"
-                        :size="metaData.config.size"
+                        :size="metaData.ui_config.size"
                         :default-sort = "{prop: 'id', order: 'descending'}"
                         @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column v-for="(metaField, index) in fieldMetaData"
-                                     v-if="metaField.config.showable"
+                                     v-if="metaField.ui_config.showable"
                                      :key="metaField.id + index"
                                      :prop="metaField.en"
                                      :label="metaField.cn"
-                                     :sortable="metaField.config.sortable"
+                                     :sortable="metaField.ui_config.sortable"
                                      show-overflow-tooltip
                                 ></el-table-column>
                 </el-table>
@@ -39,7 +39,7 @@
                                :current-page.sync="paginationModel.currentPage"
                                :page-sizes="pageCountRange"
                                :total="paginationModel.totalNum"
-                               :small="('mini').indexOf(metaData.config.size) >= 0"
+                               :small="('mini').indexOf(metaData.ui_config.size) >= 0"
                 ></el-pagination>
             </el-col>
         </el-row>
