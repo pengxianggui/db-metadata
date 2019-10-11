@@ -12,16 +12,14 @@ import com.jfinal.render.RenderFactory;
  * <p> @author konbluesky </p>
  */
 public class ErrorJsonRenderFactory extends RenderFactory {
-    @Override
-    public Render getErrorRender(int errorCode, String view) {
+
+    @Override public Render getErrorRender(int errorCode, String view) {
         return _getRender(errorCode);
     }
 
-    @Override
-    public Render getErrorRender(int errorCode) {
+    @Override public Render getErrorRender(int errorCode) {
         return _getRender(errorCode);
     }
-
 
     private Render _getRender(int errorCode) {
         Ret ret = Ret.fail();

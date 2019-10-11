@@ -11,9 +11,9 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 final public class Widgets {
-    
+
     private final List<FrontWidget> pluginList = new ArrayList<FrontWidget>();
-    
+
     public Widgets add(FrontWidget plugin) {
         if (plugin == null) {
             throw new IllegalArgumentException("plugin can not be null");
@@ -21,10 +21,9 @@ final public class Widgets {
         pluginList.add(plugin);
         return this;
     }
-    
+
     public List<FrontWidget> getPluginList() {
         return pluginList;
     }
-    
 }
 

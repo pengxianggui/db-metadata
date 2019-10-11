@@ -9,9 +9,7 @@ package com.hthjsj.web.component;
  * <p> @author konbluesky </p>
  */
 public interface FrontWidget {
-
-//    void init();
-//
-//    Object render();
-
+    //    void init();
+    //
+    //    Object render();
 }

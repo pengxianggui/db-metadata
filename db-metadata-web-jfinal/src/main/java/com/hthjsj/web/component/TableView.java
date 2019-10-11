@@ -20,10 +20,15 @@ import java.util.Map;
 public class TableView extends ViewComponent {
 
     final String cn = "表格控件";
+
     final String en = "TableView";
 
     private Kv globalConfig = Kv.create();
+
     private Kv metaObjectConfig = Kv.create();
+
+    public TableView() {
+    }
 
     public TableView(MetaObject metaObject) {
         /**
@@ -32,7 +37,6 @@ public class TableView extends ViewComponent {
          */
         Record record = Aop.get(ComponentService.class).load(code());
         globalConfig.putAll(JSON.parseObject(record.getStr("config"), Map.class));
-
         metaObjectConfig.set("metaObjCode", metaObject.code());
     }
 
@@ -40,35 +44,27 @@ public class TableView extends ViewComponent {
         globalConfig.set(key, value);
     }
 
-
-    @Override
-    public String config() {
-        return render().toJson();
+    @Override public String config() {
+        return renderMeta().toJson();
     }
 
-    @Override
-    public void config(String config) {
-
+    @Override public void config(String config) {
     }
 
-    public Kv render() {
+    public Kv renderMeta() {
         globalConfig.putAll(metaObjectConfig);
         return globalConfig;
     }
 
-    @Override
-    public String name() {
+    @Override public String name() {
         return cn;
     }
 
-    @Override
-    public String code() {
+    @Override public String code() {
         return en;
     }
 
-    @Override
-    public String type() {
+    @Override public String type() {
         return this.getClass().getSimpleName();
     }
-
 }

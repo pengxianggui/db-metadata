@@ -10,8 +10,6 @@ public class ComponentController extends Controller {
          * component Type
          *
          */
-
-
         /**
          * return
          * {
@@ -26,12 +24,10 @@ public class ComponentController extends Controller {
      * set Component config
      */
     public void config() {
-
         /**
          * object code
          * component Type config string;
          */
-
     }
 
     /**
@@ -41,8 +37,6 @@ public class ComponentController extends Controller {
         /**
          * component Type
          */
-
-
         /**
          * return
          * {
@@ -55,5 +49,4 @@ public class ComponentController extends Controller {
          * }
          */
     }
-
 }

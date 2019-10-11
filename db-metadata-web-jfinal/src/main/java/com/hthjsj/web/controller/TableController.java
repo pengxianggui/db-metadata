@@ -26,7 +26,6 @@ public class TableController extends Controller {
         DbMetaService dbMetaService = Aop.get(DbMetaService.class);
         MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
         TableView tableView = new TableView(metaObject);
-        renderJson(tableView);
+        renderJson(tableView.config());
     }
-
 }

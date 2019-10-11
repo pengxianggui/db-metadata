@@ -10,8 +10,8 @@ import com.jfinal.json.Json;
  * <p> @author konbluesky </p>
  */
 public class CrackFastJsonFactory extends FastJsonFactory {
-    @Override
-    public Json getJson() {
+
+    @Override public Json getJson() {
         return new RefSkipFastJson();
     }
 }

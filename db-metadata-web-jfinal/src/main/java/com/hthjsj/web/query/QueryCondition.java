@@ -9,7 +9,6 @@ package com.hthjsj.web.query;
  * <p> @author konbluesky </p>
  */
 public class QueryCondition {
-
     /**
      * 普通值过滤
      * 数值 : key=value
@@ -25,8 +24,6 @@ public class QueryCondition {
      * 字符 : key = "1","2","3","4"
      *
      */
-
-
     /**
      *
      * lt （less than）               小于
@@ -37,6 +34,4 @@ public class QueryCondition {
      * gt （greater than）            大于
      *
      */
-
-
 }

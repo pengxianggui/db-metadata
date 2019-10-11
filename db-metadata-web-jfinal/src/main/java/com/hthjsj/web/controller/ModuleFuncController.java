@@ -7,13 +7,9 @@ import com.jfinal.core.Controller;
  */
 public class ModuleFuncController extends Controller {
 
-
     public void load() {
-
     }
 
-
     public void config() {
-
     }
 }

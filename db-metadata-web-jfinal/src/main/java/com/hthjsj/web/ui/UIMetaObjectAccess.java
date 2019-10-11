@@ -9,8 +9,8 @@ package com.hthjsj.web.ui;
  * <p> @author konbluesky </p>
  */
 interface UIMetaObjectAccess {
-    
+
     boolean isSingle();
-    
+
     boolean isShowRowNum();
 }

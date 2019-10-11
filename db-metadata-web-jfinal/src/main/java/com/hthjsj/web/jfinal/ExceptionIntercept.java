@@ -17,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ExceptionIntercept implements Interceptor {
-    @Override
-    public void intercept(Invocation inv) {
+
+    @Override public void intercept(Invocation inv) {
         Controller controller = inv.getController();
         try {
             inv.invoke();
@@ -27,12 +27,9 @@ public class ExceptionIntercept implements Interceptor {
             Ret ret = Ret.fail();
             if (JFinal.me().getConstants().getDevMode()) {
                 ret.set("request_uri", inv.getController().getRequest().getRequestURI());
-//                ret.set("ex_msg", Throwables.getStackTraceAsString(e));
+                //                ret.set("ex_msg", Throwables.getStackTraceAsString(e));
             }
-            controller.renderJson(ret
-                    .set("code", 500)
-                    .set("msg", e.getMessage()));
+            controller.renderJson(ret.set("code", 500).set("msg", e.getMessage()));
         }
-
     }
 }
