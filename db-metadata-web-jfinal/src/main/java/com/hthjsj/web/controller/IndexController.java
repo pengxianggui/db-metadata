@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 
 /**
  * <p> Class title: </p>
@@ -13,6 +14,9 @@ import com.jfinal.core.Controller;
 public class IndexController extends Controller {
 
     public void index() {
-        renderJson("Hello world");
+
+        //        JFinal.me().getAllActionKeys()
+
+        renderJson(JFinal.me().getAllActionKeys());
     }
 }

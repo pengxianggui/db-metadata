@@ -153,8 +153,7 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
 
         @Override
         public Object save() {
-            DbMetaService dbMetaService = Aop.get(DbMetaService.class);
-            dbMetaService.saveMetaObject(metaObject, true);
+            Aop.get(DbMetaService.class).saveMetaObject(metaObject, true);
             return metaObject.dataMap().get(metaObject.primaryKey());
         }
 

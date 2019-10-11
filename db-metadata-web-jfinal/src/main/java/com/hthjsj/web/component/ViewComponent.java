@@ -1,6 +1,8 @@
-package com.hthjsj.analysis.meta.ui;
+package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.meta.Component;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author konbluesky
@@ -11,15 +13,11 @@ public abstract class ViewComponent implements Component {
 
     protected String cn;
 
+    @Setter
+    @Getter
+    private Behavior showBehavior;
+
     public abstract String config();
 
     public abstract void config(String config);
-    /**
-     * 渲染组件需要的元数据
-     *
-     * @return
-     */
-    //    public abstract String renderMeta();
-    //    public abstract String mergeConfig(String newConfig);
-    //    public abstract void loadConfig();
 }

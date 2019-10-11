@@ -2,7 +2,6 @@ package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.analysis.meta.ui.ViewComponent;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Record;
@@ -28,16 +27,20 @@ public class TableView extends ViewComponent {
     private Kv metaObjectConfig = Kv.create();
 
     public TableView() {
+        setShowBehavior(new TableViewDefaultBehavior());
     }
 
     public TableView(MetaObject metaObject) {
+        this();
         /**
          * 1. 初始化全局配置 from db;
          * 2. 允许实例层级覆盖配置
          */
         Record record = Aop.get(ComponentService.class).load(code());
         globalConfig.putAll(JSON.parseObject(record.getStr("config"), Map.class));
+
         metaObjectConfig.set("metaObjCode", metaObject.code());
+        metaObjectConfig.set("fields", metaObject.fields());
     }
 
     public void setGlobal(Object key, Object value) {
@@ -51,11 +54,15 @@ public class TableView extends ViewComponent {
 
     @Override
     public void config(String config) {
+
     }
 
     public Kv renderMeta() {
-        globalConfig.putAll(metaObjectConfig);
-        return globalConfig;
+        Kv kv = Kv.create();
+        kv.putAll(globalConfig);
+        kv.putAll(metaObjectConfig);
+        kv.putAll(getShowBehavior().getBehaviorRuleData());
+        return kv;
     }
 
     @Override
@@ -71,5 +78,17 @@ public class TableView extends ViewComponent {
     @Override
     public String type() {
         return this.getClass().getSimpleName();
+    }
+
+    class TableViewDefaultBehavior extends Behavior {
+
+        public TableViewDefaultBehavior() {
+            behaviorRuleData.set("singleSelected", true);
+            behaviorRuleData.set("showRowNum", true);
+        }
+
+        public void load(Kv kv) {
+            behaviorRuleData.putAll(kv);
+        }
     }
 }
