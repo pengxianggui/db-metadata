@@ -30,5 +30,4 @@ public interface IMetaConfig {
 
     @JSONField(serialize = false)
     <T> T getItem(Object key);
-
 }

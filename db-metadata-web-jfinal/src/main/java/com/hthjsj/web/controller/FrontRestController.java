@@ -11,43 +11,51 @@ import com.jfinal.kit.Ret;
  */
 public abstract class FrontRestController extends Controller implements FrontRest {
 
-    @Override public Ret index() {
+    @Override
+    public Ret index() {
         list();
         //        renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret toAdd() {
+    @Override
+    public Ret toAdd() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret doAdd() {
+    @Override
+    public Ret doAdd() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret toUpdate() {
+    @Override
+    public Ret toUpdate() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret doUpdate() {
+    @Override
+    public Ret doUpdate() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret detail() {
+    @Override
+    public Ret detail() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret delete() {
+    @Override
+    public Ret delete() {
         renderJson(faildMsgInfo());
         return null;
     }
 
-    @Override public Ret list() {
+    @Override
+    public Ret list() {
         renderJson(Ret.fail("msg", ""));
         return null;
     }

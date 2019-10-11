@@ -9,6 +9,6 @@ package com.hthjsj.analysis.meta.validate;
  * <p> @author konbluesky </p>
  */
 public interface Validator<V> {
-    
+
     boolean verify(V value);
 }

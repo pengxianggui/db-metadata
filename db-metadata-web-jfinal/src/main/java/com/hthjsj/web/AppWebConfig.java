@@ -23,14 +23,16 @@ public class AppWebConfig extends JFinalConfig {
         UndertowServer.start(AppWebConfig.class, 8888, true);
     }
 
-    @Override public void configConstant(Constants me) {
+    @Override
+    public void configConstant(Constants me) {
         loadPropertyFile("config.properties");
         me.setDevMode(getPropertyToBoolean("devMode", false));
         me.setJsonFactory(new CrackFastJsonFactory());
         me.setRenderFactory(new ErrorJsonRenderFactory());
     }
 
-    @Override public void configRoute(Routes me) {
+    @Override
+    public void configRoute(Routes me) {
         me.setMappingSuperClass(true);
         me.add("/", IndexController.class);
         me.add("/db", DBController.class);
@@ -39,18 +41,22 @@ public class AppWebConfig extends JFinalConfig {
         me.add("/table", TableController.class);
     }
 
-    @Override public void configEngine(Engine me) {
+    @Override
+    public void configEngine(Engine me) {
     }
 
-    @Override public void configPlugin(Plugins me) {
+    @Override
+    public void configPlugin(Plugins me) {
         AnalysisConfig analysisConfig = new AnalysisConfig();
         analysisConfig.getPlugins().forEach(p -> me.add(p));
     }
 
-    @Override public void configInterceptor(Interceptors me) {
+    @Override
+    public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
     }
 
-    @Override public void configHandler(Handlers me) {
+    @Override
+    public void configHandler(Handlers me) {
     }
 }

@@ -18,8 +18,11 @@ import java.util.Map;
 public class MetaObject implements IMetaObject {
 
     List<IMetaField> _primarys = new ArrayList<>();
+
     List<IMetaField> fields = new ArrayList<>();
+
     Record record = new Record();
+
     IMetaConfig metaConfig;
 
     public MetaObject() {
@@ -140,5 +143,4 @@ public class MetaObject implements IMetaObject {
     public void dataMap(Map<String, Object> data) {
         record.setColumns(data);
     }
-
 }

@@ -9,11 +9,10 @@ package com.hthjsj.analysis.meta;
  * <p> @author konbluesky </p>
  */
 public interface Storage {
-    
+
     Object save();
-    
+
     boolean update();
-    
+
     boolean delete();
-    
 }

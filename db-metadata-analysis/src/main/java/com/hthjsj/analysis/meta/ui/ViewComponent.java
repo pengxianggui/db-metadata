@@ -8,21 +8,18 @@ import com.hthjsj.analysis.meta.Component;
 public abstract class ViewComponent implements Component {
 
     protected String en;
+
     protected String cn;
 
     public abstract String config();
 
     public abstract void config(String config);
-
     /**
      * 渲染组件需要的元数据
      *
      * @return
      */
-//    public abstract String renderMeta();
-
-//    public abstract String mergeConfig(String newConfig);
-
-//    public abstract void loadConfig();
-
+    //    public abstract String renderMeta();
+    //    public abstract String mergeConfig(String newConfig);
+    //    public abstract void loadConfig();
 }

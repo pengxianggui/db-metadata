@@ -78,6 +78,5 @@ public interface IMetaField {
     void config(String config);
 
     void config(IMetaConfig config);
-
 }
 

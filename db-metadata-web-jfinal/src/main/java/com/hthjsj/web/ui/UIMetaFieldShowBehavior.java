@@ -17,23 +17,33 @@ interface UIMetaFieldShowBehavior {
      *
      * @return
      */
-    @JSONField(name = "showType") String showType();
+    @JSONField(name = "showType")
+    String showType();
 
-    @JSONField(name = "showType") void showType(String value);
+    @JSONField(name = "showType")
+    void showType(String value);
 
-    @JSONField(name = "placeHolder") String placeHolder();
+    @JSONField(name = "placeHolder")
+    String placeHolder();
 
-    @JSONField(name = "placeHolder") void placeHolder(String value);
+    @JSONField(name = "placeHolder")
+    void placeHolder(String value);
 
-    @JSONField(name = "validator") String validator();
+    @JSONField(name = "validator")
+    String validator();
 
-    @JSONField(name = "validator") void validator(String value);
+    @JSONField(name = "validator")
+    void validator(String value);
 
-    @JSONField(name = "defaultVal") String defaultVal();
+    @JSONField(name = "defaultVal")
+    String defaultVal();
 
-    @JSONField(name = "defaultVal") void defaultVal(String value);
+    @JSONField(name = "defaultVal")
+    void defaultVal(String value);
 
-    @JSONField(name = "formatter") String formatter();
+    @JSONField(name = "formatter")
+    String formatter();
 
-    @JSONField(name = "formatter") void formatter(String value);
+    @JSONField(name = "formatter")
+    void formatter(String value);
 }

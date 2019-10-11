@@ -13,35 +13,43 @@ import com.jfinal.kit.Ret;
  */
 public class WidgetRestContoller extends FrontRestController {
 
-    @Override public Ret index() {
+    @Override
+    public Ret index() {
         return null;
     }
 
-    @Override public Ret toAdd() {
+    @Override
+    public Ret toAdd() {
         return null;
     }
 
-    @Override public Ret doAdd() {
+    @Override
+    public Ret doAdd() {
         return null;
     }
 
-    @Override public Ret toUpdate() {
+    @Override
+    public Ret toUpdate() {
         return null;
     }
 
-    @Override public Ret doUpdate() {
+    @Override
+    public Ret doUpdate() {
         return null;
     }
 
-    @Override public Ret detail() {
+    @Override
+    public Ret detail() {
         return null;
     }
 
-    @Override public Ret delete() {
+    @Override
+    public Ret delete() {
         return null;
     }
 
-    @Override public Ret list() {
+    @Override
+    public Ret list() {
         return null;
     }
 }

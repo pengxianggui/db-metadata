@@ -12,7 +12,8 @@ import com.jfinal.json.FastJson;
  */
 public class RefSkipFastJson extends FastJson {
 
-    @Override public String toJson(Object object) {
+    @Override
+    public String toJson(Object object) {
         // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
         String dp = datePattern != null ? datePattern : getDefaultDatePattern();
         if (dp == null) {

@@ -18,9 +18,10 @@ import java.util.Map;
 public class MetaObjectDBAdapter implements IMetaObject, Storage {
 
     Record record;
-    IMetaObject metaObject;
-    Storage storage;
 
+    IMetaObject metaObject;
+
+    Storage storage;
 
     public MetaObjectDBAdapter(MetaObject object) {
         this.metaObject = object;

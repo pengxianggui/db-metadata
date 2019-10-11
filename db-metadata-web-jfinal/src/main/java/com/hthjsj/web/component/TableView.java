@@ -44,11 +44,13 @@ public class TableView extends ViewComponent {
         globalConfig.set(key, value);
     }
 
-    @Override public String config() {
+    @Override
+    public String config() {
         return renderMeta().toJson();
     }
 
-    @Override public void config(String config) {
+    @Override
+    public void config(String config) {
     }
 
     public Kv renderMeta() {
@@ -56,15 +58,18 @@ public class TableView extends ViewComponent {
         return globalConfig;
     }
 
-    @Override public String name() {
+    @Override
+    public String name() {
         return cn;
     }
 
-    @Override public String code() {
+    @Override
+    public String code() {
         return en;
     }
 
-    @Override public String type() {
+    @Override
+    public String type() {
         return this.getClass().getSimpleName();
     }
 }

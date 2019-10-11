@@ -11,7 +11,8 @@ import com.jfinal.json.Json;
  */
 public class CrackFastJsonFactory extends FastJsonFactory {
 
-    @Override public Json getJson() {
+    @Override
+    public Json getJson() {
         return new RefSkipFastJson();
     }
 }

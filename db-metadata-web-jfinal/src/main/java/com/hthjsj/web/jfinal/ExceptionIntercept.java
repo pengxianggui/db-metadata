@@ -18,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExceptionIntercept implements Interceptor {
 
-    @Override public void intercept(Invocation inv) {
+    @Override
+    public void intercept(Invocation inv) {
         Controller controller = inv.getController();
         try {
             inv.invoke();

@@ -21,7 +21,8 @@ public class DBController extends FrontRestController {
      *  @return
      * </pre>
      */
-    @Override public Ret list() {
+    @Override
+    public Ret list() {
         String schemaName = getPara(0, "metadata");
         MysqlService dbService = Aop.get(MysqlService.class);
         renderJson(Ret.ok("data", dbService.showTables(schemaName)));

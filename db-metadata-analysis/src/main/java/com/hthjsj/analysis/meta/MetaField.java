@@ -16,6 +16,7 @@ import java.util.Map;
 public class MetaField implements IMetaField {
 
     Record record = new Record();
+
     IMetaConfig metaFieldConfig;
 
     public MetaField(Map<String, Object> fieldMap) {
@@ -23,7 +24,6 @@ public class MetaField implements IMetaField {
     }
 
     public MetaField() {
-
     }
 
     @Override

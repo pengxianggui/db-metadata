@@ -9,9 +9,8 @@ package com.hthjsj.analysis.meta.ext;
  * <p> @author konbluesky </p>
  */
 public interface ExtImportExport {
-    
+
     void toExport();
-    
+
     void toImport();
-    
 }

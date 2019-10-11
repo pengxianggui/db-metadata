@@ -25,20 +25,15 @@ import java.util.List;
 @Slf4j
 @Before(Tx.class)
 public class DbMetaService {
-
-
-//    public List<String> tableNames(){
-//        DbService dbService = Aop.get(MysqlService.class);
-//        return dbService.showTables(App.DB_MAIN).stream().map(Table::getTableName).collect(Collectors.toList());
-//    }
-
+    //    public List<String> tableNames(){
+    //        DbService dbService = Aop.get(MysqlService.class);
+    //        return dbService.showTables(App.DB_MAIN).stream().map(Table::getTableName).collect(Collectors.toList());
+    //    }
 
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
         Table t = dbService.getTable(schema, table);
-
         MetaObjectAssembly<Table, IMetaObject> dbMetaObjectAssembly = new MetaObjectMysqlAssembly();
-
         return dbMetaObjectAssembly.assembly(t);
     }
 
@@ -57,7 +52,6 @@ public class DbMetaService {
     }
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
-
         if (((MetaConfigFactory.MetaObjectConfig) metaObject.config()).isUUIDPrimary()) {
             metaObject.dataMap().put("id", StrKit.getRandomUUID());
         }
@@ -74,24 +68,18 @@ public class DbMetaService {
         return moSaved;
     }
 
-
     public boolean updateMetaObject(IMetaObject metaObject) {
-
         boolean moUpdated = Db.use(App.DB_MAIN).update("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
-
         List<Record> updateRecords = new ArrayList<>();
         metaObject.fields().forEach((re) -> {
             updateRecords.add(new Record().setColumns(re.dataMap()));
         });
         Db.use(App.DB_MAIN).batchUpdate("meta_field", updateRecords, 50);
-
         return moUpdated;
     }
-
 
     public void deleteMetaObject(MetaObject metaObject) {
         Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", metaObject.code());
         Db.use(App.DB_MAIN).delete("delete from meta_field where object_code=?", metaObject.code());
     }
-
 }

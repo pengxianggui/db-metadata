@@ -66,6 +66,5 @@ public interface IMetaObject {
     Map<String, Object> dataMap();
 
     void dataMap(Map<String, Object> data);
-
 }
 

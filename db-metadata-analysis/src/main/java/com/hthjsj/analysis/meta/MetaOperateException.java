@@ -8,6 +8,7 @@ package com.hthjsj.analysis.meta;
  * <p> @author konbluesky </p>
  */
 public class MetaOperateException extends RuntimeException {
+
     public MetaOperateException() {
     }
 

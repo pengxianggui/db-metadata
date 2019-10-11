@@ -13,11 +13,13 @@ import com.jfinal.render.RenderFactory;
  */
 public class ErrorJsonRenderFactory extends RenderFactory {
 
-    @Override public Render getErrorRender(int errorCode, String view) {
+    @Override
+    public Render getErrorRender(int errorCode, String view) {
         return _getRender(errorCode);
     }
 
-    @Override public Render getErrorRender(int errorCode) {
+    @Override
+    public Render getErrorRender(int errorCode) {
         return _getRender(errorCode);
     }
 

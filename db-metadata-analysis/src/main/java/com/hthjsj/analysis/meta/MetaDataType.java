@@ -28,18 +28,16 @@ public class MetaDataType {
     /**
      * 参考：http://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html INT UNSIGNED 这里强制指定为 Integer 因为大部分人不知道应该为Long
      */
-    @SuppressWarnings("serial")
-    private final static Map<String, Class> map = new HashMap<String, Class>() {
+    @SuppressWarnings("serial") private final static Map<String, Class> map = new HashMap<String, Class>() {
+
         {
             // MySQL
             put("BIT", Boolean.class);
             put("TEXT", String.class);
-
             put("DATE", java.util.Date.class);
             put("DATETIME", DateTime.class);
             put("TIMESTAMP", java.sql.Timestamp.class);
             put("TIME", java.sql.Time.class);
-
             put("TINYINT", Integer.class);
             put("SMALLINT", Integer.class);
             put("MEDIUMINT", Integer.class);
@@ -53,7 +51,6 @@ public class MetaDataType {
             put("FLOAT", Float.class);
             put("DOUBLE", Double.class);
             put("DECIMAL", BigDecimal.class);
-
             put("CHAR", String.class);
             put("BINARY", Byte[].class);
             put("VARBINARY", Byte[].class);
@@ -65,6 +62,8 @@ public class MetaDataType {
             put("JSON", String.class);
         }
     };
+
+    private static DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static Class getType(String dataType) {
         return map.get(dataType);
@@ -81,19 +80,14 @@ public class MetaDataType {
         }
         String typeName = field.dbType();
         Integer size = field.dbTypeLength().intValue();
-
         Class clazz = getType(typeName);
-
         // DB类型特殊转换规则
         if (typeName.equalsIgnoreCase("TINYINT") && size == 1) {
             clazz = Boolean.class;
         }
-
         o = cast(o.toString(), clazz);
         return o;
     }
-
-    private static DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static Object cast(String s, Class c) {
         if (s == null) {
@@ -104,7 +98,6 @@ public class MetaDataType {
             // empty string only cast to string.class
             return null;
         }
-
         if (c == Integer.class) {
             return Integer.parseInt(s);
         }
@@ -161,12 +154,7 @@ public class MetaDataType {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return s;
-    }
-
-    class DateTime extends java.util.Date {
-
     }
 
     public static void main(String[] args) {
@@ -192,4 +180,7 @@ public class MetaDataType {
         }
     }
 
+    class DateTime extends java.util.Date {
+
+    }
 }
