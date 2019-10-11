@@ -8,8 +8,6 @@ import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/10/10 </p>
  * <p> @Project : db-meta-serve</p>
  *

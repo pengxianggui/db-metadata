@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.Ret;
 
 /**
@@ -14,7 +15,6 @@ public abstract class FrontRestController extends Controller implements FrontRes
     @Override
     public Ret index() {
         list();
-        //        renderJson(faildMsgInfo());
         return null;
     }
 
@@ -56,13 +56,15 @@ public abstract class FrontRestController extends Controller implements FrontRes
 
     @Override
     public Ret list() {
-        renderJson(Ret.fail("msg", ""));
+        renderJson(faildMsgInfo());
         return null;
     }
 
     Ret faildMsgInfo() {
         Ret ret = Ret.fail();
-        ret.set("request_uri", getRequest().getRequestURI());
+        if (JFinal.me().getConstants().getDevMode()) {
+            ret.set("request_uri", getRequest().getRequestURI());
+        }
         ret.set("msg", "not implementation!");
         return ret;
     }
