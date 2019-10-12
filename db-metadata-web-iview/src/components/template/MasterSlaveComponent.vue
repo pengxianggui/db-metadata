@@ -3,31 +3,30 @@
         <el-row class="el-card">
             <el-col :span="24">
                 搜索表单模型： {{searchModel}}
-                <search-bar :meta-data="masterSearchMetadata"
+                <search-bar :meta-data="searchMeta"
                             :search-model.sync="searchModel" @search="masterSearch"></search-bar>
             </el-col>
             <el-col :span="24">
-                勾选数据：{{choseMasterData}}
+<!--                勾选数据：{{choseMasterData}}-->
                 <br>
-                当前激活行：{{activeMasterData}}
-                <table-list :meta-data="masterMetadata" :field-meta-data="masterFieldMetadata" :data="masterData"
+<!--                当前激活行：{{activeMasterData}}-->
+                <table-list :meta-data="masterMeta" :field-meta-data="masterFieldMeta" :data="masterData"
                     :chose-data.sync="choseMasterData" :active-data.sync="activeMasterData"
                     :sort-model.sync="sortModel" :pagination-model.sync="paginationModel"
                     :operation-data="operationData">
                 </table-list>
-<!--                {{paginationModel}}-->
+                排序数据模型: {{sortModel}}
+                <br>
+                分页数据模型: {{paginationModel}}
+                <br>
             </el-col>
         </el-row>
         <el-row>
-<!--            <el-col :span="24">-->
-<!--                &lt;!&ndash;                {{searchModel}}&ndash;&gt;-->
-<!--                <search-bar v-if="searchItems.length > 0" :form-items="searchItems"-->
-<!--                            :search-model.sync="searchModel" @search="search" :options="masterMetadata.config"></search-bar>-->
-<!--            </el-col>-->
             <el-col :span="24">
-                根据{{activeMasterData}}获取子表数据
-                <table-list :meta-data="slaveMetadata" :field-meta-data="slaveFieldMetadata" :data="slaveData"
-                    :chose-data.sync="choseSlaveData" :active-data.sync="activeSlaveData"></table-list>
+<!--                根据{{activeMasterData}}获取子表数据-->
+                <table-list :meta-data="slaveMeta" :field-meta-data="slaveFieldMeta" :data="slaveData"
+                    :chose-data.sync="choseSlaveData" :active-data.sync="activeSlaveData"
+                    :sort-model.sync="sortModel"></table-list>
             </el-col>
         </el-row>
     </el-container>
@@ -37,19 +36,17 @@
     import mockData from '@/mockdata.js'
     import SearchBar from '@/components/base/SearchBar'
     import TableList from '@/components/base/TableList'
-    import {DEFAULT} from '@/constant'
     export default {
         name: "MasterSlaveComponent",
         data() {
             return {
-                masterSearchMetadata: {}, // 搜索条的元数据
-                masterMetadata: {}, // 主表元对象
-                slaveMetadata: {}, // 子表元对象
-                masterFieldMetadata: [], // 主表元字段
-                slaveFieldMetadata: [], // 子表元字段
-                searchItems: [], // 搜索字段元数据
-                masterData: [], // 主表实际数据
-                slaveData: [], // 子表实际数据
+                searchMeta: {}, // 搜索条的元数据
+                masterMeta: {}, // 主表元对象
+                slaveMeta: {}, // 子表元对象
+                masterFieldMeta: [], // 主表元字段
+                slaveFieldMeta: [], // 子表元字段
+                masterData: [], // 主表业务数据
+                slaveData: [], // 子表业务数据
                 choseMasterData: [], // TableList中选中的数据
                 choseSlaveData: [], // TableList中选中的数据
                 activeMasterData: {}, // 主表中当前激活的行
@@ -57,41 +54,44 @@
 
                 /* 搜索、排序、分页数据, 作为参数获取真实数据 */
                 searchModel: {}, // 搜索表单模型
-                sortModel: [DEFAULT.sort], // 排序数据模型
+                sortModel: {
+                    prop: null,
+                    order: null // ascending, descending
+                }, // 排序数据模型
                 paginationModel: { // 分页数据模型
-                    pageNum: DEFAULT.pagination.pageNum, // 每页数量
-                    totalNum: 0, // 总数
-                    currentPage: 1 // 当前页码
+                    pageSize: null, // 每页数量
+                    currentPage: null, // 默认显示第几页
+                    total: null // 总数, 被实际页数覆盖
                 },
                 operationData: {} // 用于构成操作面板，绑定函数 todo 操作条的动态实现还需要进一步思考
             }
         },
         methods: {
-            getMasterSearchMetadata () {
+            getSearchMeta () {
                 return {
                     component_name: 'search-bar',
                     ui_config: mockData.masterSearchBarMetadata
                 }
             },
-            getMasterMetadata () {
+            getMasterMeta () {
                 return mockData.masterMetadata
             },
-            getMasterFieldMetadata () {
+            getMasterFieldMeta () {
                 return mockData.masterFieldMetadata
             },
-            getSlaveMetadata () {
+            getSlaveMeta () {
                 return mockData.slaveMetadata
             },
-            getSlaveFieldMetadata() {
+            getSlaveFieldMeta() {
                 return mockData.slaveFieldMetadata
             },
             getMasterData() { // ajax http请求的实际执行处
-                // todo request {table: masterMetadata.table_name, schema: masterMetadata.schema_name, condition: parse from params}
+                let data = mockData.masterData
+                this.paginationModel.total = mockData.masterData.length
+                // todo request {table: masterMeta.table_name, schema: masterMeta.schema_name, condition: parse from params}
                 console.log('searchModel: ' + JSON.stringify(this.searchModel))
                 console.log('sortModel: ' + JSON.stringify(this.sortModel))
                 console.log('paginationModel: ' + JSON.stringify(this.paginationModel))
-                let data = mockData.masterData
-                this.paginationModel.totalNum = mockData.masterData.length
                 return data
             },
             getSlaveData() {
@@ -106,11 +106,11 @@
         },
         created () {
             // 获取元数据
-            this.masterSearchMetadata = this.getMasterSearchMetadata()
-            this.masterMetadata = this.getMasterMetadata()
-            this.masterFieldMetadata = this.getMasterFieldMetadata()
-            this.slaveMetadata = this.getSlaveMetadata()
-            this.slaveFieldMetadata = this.getSlaveFieldMetadata()
+            this.searchMeta = this.getSearchMeta()
+            this.masterMeta = this.getMasterMeta()
+            this.masterFieldMeta = this.getMasterFieldMeta()
+            this.slaveMeta = this.getSlaveMeta()
+            this.slaveFieldMeta = this.getSlaveFieldMeta()
         },
         mounted () {
             // 获取业务数据

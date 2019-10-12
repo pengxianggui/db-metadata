@@ -13,11 +13,10 @@
                         :data="data"
                         border
                         stripe
-                        max-height="400"
                         highlight-current-row
+                        v-bind="metaData.ui_config.table"
                         @row-click="choseRow"
-                        :size="metaData.ui_config.size"
-                        :default-sort = "{prop: 'id', order: 'descending'}"
+                        @sort-change="sortChange"
                         @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column v-for="(metaField, index) in fieldMetaData"
@@ -25,8 +24,8 @@
                                      :key="metaField.id + index"
                                      :prop="metaField.en"
                                      :label="metaField.cn"
-                                     :sortable="metaField.ui_config.sortable"
                                      show-overflow-tooltip
+                                     v-bind="metaField.ui_config"
                                 ></el-table-column>
                 </el-table>
             </el-col>
@@ -34,12 +33,11 @@
         <el-row v-if="paginationModel">
             <el-col>
                 <!-- pagination bar -->
-                <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                               :page-size.sync="paginationModel.pageNum"
+                <el-pagination background
+                               :page-size.sync="paginationModel.pageSize"
                                :current-page.sync="paginationModel.currentPage"
-                               :page-sizes="pageCountRange"
-                               :total="paginationModel.totalNum"
-                               :small="('mini').indexOf(metaData.ui_config.size) >= 0"
+                               :total="paginationModel.total"
+                               v-bind="metaData.ui_config.pagination"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -47,7 +45,7 @@
 </template>
 
 <script>
-    import {DICT} from '@/constant'
+    import {DEFAULT} from '@/constant'
     export default {
         name: "TableList",
         props: {
@@ -77,7 +75,7 @@
             // 用于构建上层的数据查询, sort如果只对当前页进行排序，就无需构建查询参数。看取舍
             sortModel: {
                 required: false,
-                type: Array
+                type: Object
             },
             paginationModel: {
                 required: false,
@@ -87,7 +85,6 @@
         data() {
             return {
                 multipleSelection: [],
-                pageCountRange: DICT.PAGE_NUM_AREA
             }
         },
         methods: {
@@ -105,7 +102,39 @@
                     }
                 }
                 this.$refs.table.toggleRowSelection(row, selected)
+            },
+            sortChange(param) {
+                this.sortModel.prop = param.prop
+                this.sortModel.order = param.order
+            },
+            initConf() {
+                // data effective check
+                this.metaData.ui_config = this.metaData.ui_config || {}
+                this.metaData.ui_config.table = this.metaData.ui_config.table || {}
+                this.metaData.ui_config.pagination = this.metaData.ui_config.pagination || {}
+
+                // merge options
+                let defaultConf = this.getDefaultTableConf()
+                this.merge(this.metaData.ui_config.table, defaultConf.table)
+                this.merge(this.metaData.ui_config.pagination, defaultConf.pagination)
+            },
+            initModel() { // 将配置中的指定的模型数据回朔到model中
+                if (this.paginationModel) {
+                    this.paginationModel.pageSize = this.metaData.ui_config.pagination['page-size']
+                    this.paginationModel.currentPage = this.metaData.ui_config.pagination['current-page']
+                }
+                if (this.sortModel) {
+                    this.$emit('update:sort-model', this.metaData.ui_config.table['default-sort'])
+                    // this.sortModel = new Array(this.metaData.ui_config.table['default-sort']);
+                }
+            },
+            getDefaultTableConf () {
+                return DEFAULT.tableList
             }
+        },
+        created() {
+            this.initConf()
+            this.initModel()
         }
     }
 </script>

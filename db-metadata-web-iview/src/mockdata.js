@@ -1,5 +1,8 @@
+// 搜索过滤
 
 // 主表搜索条元数据
+import DICT from "./constant/dict";
+
 const masterSearchBarMetadata = [
     {
         "id": "1",
@@ -32,17 +35,18 @@ const masterSearchBarMetadata = [
             "placeholder": "请输入查询关键词",
             "clearable": false,
             "show_label": true, // 显示内容为cn||en
-            "size": "small" // mini, small, medium
+            "size": "small", // mini, small, medium
+            "rules": [] // 预置几种常见的rule，提供正则输入。 默认内容：msg: 格式不匹配; trigger: blur，预留pattern给用户定制。
         },
-        "rules": [{
-            "pattern": /\w+$/,
-            "message": "只能包含字母数字和下划线",
-            "trigger": "blur"
-        }, {
-            "required": true,
-            "message": "对象编码不能为空",
-            "trigger": "blur"
-        }],
+        // "rules": [{
+        //     "pattern": /\w+$/,
+        //     "message": "只能包含字母数字和下划线",
+        //     "trigger": "blur"
+        // }, {
+        //     "required": true,
+        //     "message": "对象编码不能为空",
+        //     "trigger": "blur"
+        // }],
     }
 ]
 
@@ -55,8 +59,17 @@ const masterMetadata = {
     "schema_name": "db_metadata",
     "primarys": "id",
     "ui_config": {
-        "default_order": "id desc",
-        "size": "small",
+        "table": {
+            "default-sort": {prop: 'id', order: 'ascending'}, // descending, ascending
+            "size": "small",
+            // ...
+        },
+        "pagination": {
+            // ...
+            "page-size": DICT.PAGE_NUM_AREA[0],
+            "page-sizes": DICT.PAGE_NUM_AREA,
+            "current-page": 1,
+        }
     }
 }
 
@@ -73,7 +86,7 @@ const masterFieldMetadata = [
         "db_type_length": "32",
         "java_type": "String",
         "ui_config": {
-            "sortable": false,
+            "sortable": true,
             "showable": true,
         }
     }, {
@@ -102,7 +115,7 @@ const slaveMetadata = {
     "schema_name": "db_metadata",
     "primarys": "id",
     "ui_config": {
-        "default_order": "id desc",
+        "default_sort": {prop: 'id', order: 'descending'},
         "size": "mini",
     }
 }
@@ -127,43 +140,43 @@ const slaveFieldMetadata = [
 ]
 
 const masterData = [{
-    id: "1",
+    id: 1,
     object_code: "meta_object_code"
 }, {
-    id: "2",
+    id: 2,
     object_code: "meta_field_code"
 }, {
-    id: "3",
+    id: 3,
     object_code: "test3"
 }, {
-    id: "4",
+    id: 4,
     object_code: "test4"
 }, {
-    id: "5",
+    id: 5,
     object_code: "test5"
 }, {
-    id: "6",
+    id: 6,
     object_code: "test6"
 }, {
-    id: "7",
+    id: 7,
     object_code: "test7"
 }, {
-    id: "8",
+    id: 8,
     object_code: "test8"
 }, {
-    id: "9",
+    id: 9,
     object_code: "test9"
 }, {
-    id: "10",
+    id: 10,
     object_code: "test10"
 }, {
-    id: "11",
+    id: 11,
     object_code: "test11"
 }, {
-    id: "12",
+    id: 12,
     object_code: "test12"
 }, {
-    id: "13",
+    id: 13,
     object_code: "test13"
 }]
 

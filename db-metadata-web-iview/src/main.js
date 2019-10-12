@@ -5,10 +5,19 @@ import App from './App.vue'
 import router from './router'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import utils from '@/utils'
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
+// 全局混入, 谨慎扩展
+Vue.mixin({
+    created() {
+    },
+    methods: {
+        merge: utils.merge
+    }
+});
 
 // 注册原子业务组件
 const requireComponent = require.context(
