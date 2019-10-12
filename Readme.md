@@ -11,7 +11,7 @@
 
 ## 抽象概念
 
-- 组件
+- 组件(Component)
     > 每个组件需要有一套默认的全局的配置;
     - 数据展示
         - 表格组件(依赖元对象)
@@ -93,3 +93,4 @@ https://docs.sencha.com/extjs/6.2.0
 - [ ] 配置比对
 - [ ] 4个基础字段的传递
 - [ ] 注释生成https://blog.csdn.net/10km/article/details/78252586
+- [ ] 

@@ -1,8 +1,12 @@
 package com.hthjsj.web.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Ret;
+
+import java.util.Arrays;
 
 /**
  * <p> @Date : 2019/10/9 </p>
@@ -67,5 +71,11 @@ public abstract class FrontRestController extends Controller implements FrontRes
         }
         ret.set("msg", "not implementation!");
         return ret;
+    }
+
+    void renderJson(Object data, String... excludes) {
+        SimplePropertyPreFilter simplePropertyPreFilter = new SimplePropertyPreFilter();
+        simplePropertyPreFilter.getExcludes().addAll(Arrays.asList(excludes));
+        renderJson(JSON.toJSONString(data, simplePropertyPreFilter));
     }
 }

@@ -25,7 +25,7 @@ public class MetaController extends FrontRestController {
      */
     @Override
     public Ret index() {
-        String metaObjectCode = getPara(0);
+        String metaObjectCode = getPara(0, getPara("objectCode"));
         DbMetaService dbMetaService = Aop.get(DbMetaService.class);
         IMetaObject metaObject = dbMetaService.findByCode(metaObjectCode);
         renderJson(Ret.ok("data", metaObject));

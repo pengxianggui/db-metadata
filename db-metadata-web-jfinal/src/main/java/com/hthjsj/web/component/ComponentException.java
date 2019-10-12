@@ -1,5 +1,7 @@
 package com.hthjsj.web.component;
 
+import com.hthjsj.analysis.MetaAnalysisException;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -8,9 +10,13 @@ package com.hthjsj.web.component;
  *
  * <p> @author konbluesky </p>
  */
-public class ComponentException extends RuntimeException {
+public class ComponentException extends MetaAnalysisException {
 
     public ComponentException() {
+    }
+
+    public ComponentException(String messageTmpl, String... args) {
+        super(messageTmpl, args);
     }
 
     public ComponentException(String message) {

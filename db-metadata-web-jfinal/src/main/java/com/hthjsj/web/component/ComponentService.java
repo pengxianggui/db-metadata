@@ -17,14 +17,27 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 @Before(Tx.class)
 public class ComponentService {
 
-    public Record load(String code) {
-        if (StrKit.isBlank(code)) {
-            throw new ComponentException(String.format("无效的组件Code:%s", code));
+    public Record load(String componentCode) {
+        if (StrKit.isBlank(componentCode)) {
+            throw new ComponentException("必须指定组件 Code:%s", componentCode);
         }
-        Record record = Db.findFirst("select * from meta_component where code=?", code);
+        Record record = Db.findFirst("select * from meta_component where code=?", componentCode);
         if (record == null) {
-            throw new ComponentException(String.format("无效的组件Code:%s", code));
+            throw new ComponentException("未找到Code[%s]的组件", componentCode);
         }
         return record;
+    }
+
+    public Record load(String componentCode, String objectCode) {
+        return Db.findFirst("select * from meta_component where comp_code=? and object_code", componentCode, objectCode);
+    }
+
+    public boolean newComponentInstance(ViewComponent component, String objectCode) {
+        Record record = new Record();
+        record.set("id", StrKit.getRandomUUID());
+        record.set("comp_code", component.code());
+        record.set("object_code", objectCode);
+        record.set("config", component.config());
+        return Db.save("meta_component_instance", record);
     }
 }

@@ -47,7 +47,7 @@ public class AppWebConfig extends JFinalConfig {
 
     @Override
     public void configPlugin(Plugins me) {
-        AnalysisConfig analysisConfig = new AnalysisConfig();
+        AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.getPlugins().forEach(p -> me.add(p));
     }
 
