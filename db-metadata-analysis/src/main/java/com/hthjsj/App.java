@@ -14,20 +14,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class App {
 
+    public static final String CONFIG_NAME = "config.properties";
+
     public static final String DB_MAIN = "metadata";
+
     public static final String DB_MAIN_URL = "main.jdbc.url";
+
     public static final String DB_MAIN_USERNAME = "main.jdbc.username";
+
     public static final String DB_MAIN_PASSWORD = "main.jdbc.password";
+
     public static void main(String[] args) {
 
-        AnalysisConfig analysisConfig = new AnalysisConfig();
+        AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.start();
 
-//        Table table = new MysqlService().getTable("metadata", "meta_field");
-//        System.out.println(JSON.toJSON(table));
-//
-//        IMetaObject IMetaObject = new DbMetaService().findByCode("sys_meta_object");
-//        System.out.println(JSON.toJSONString(IMetaObject));
+        //        Table table = new MysqlService().getTable("metadata", "meta_field");
+        //        System.out.println(JSON.toJSON(table));
+        //
+        //        IMetaObject IMetaObject = new DbMetaService().findByCode("sys_meta_object");
+        //        System.out.println(JSON.toJSONString(IMetaObject));
         DbMetaService dbMetaService = Aop.get(DbMetaService.class);
         MetaObject metaObject = (MetaObject) dbMetaService.importFromTable("metadata", "meta_object");
         System.out.println(JSON.toJSONString(metaObject, SerializerFeature.DisableCircularReferenceDetect));
@@ -43,6 +49,4 @@ public class App {
         });
         dbMetaService.updateMetaObject(metaObject);
     }
-
-
 }

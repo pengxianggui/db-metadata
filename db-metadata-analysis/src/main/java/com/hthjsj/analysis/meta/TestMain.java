@@ -19,9 +19,9 @@ public class TestMain {
 
     public static void main(String[] args) throws ParseException {
         //        testDateend();
-        System.out.println(String.class.getSimpleName());
-        System.out.println(String.class.getTypeName());
-        System.out.println(String.format("%d%d%d", 11, 23, 4));
+        //        System.out.println(String.class.getSimpleName());
+        //        System.out.println(String.class.getTypeName());
+        //        System.out.println(String.format("%d%d%d", 11, 23, 4));
     }
 
     public static void testJsonSerilizble() {

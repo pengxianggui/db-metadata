@@ -4,12 +4,15 @@ import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Plugins;
+import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,19 +25,55 @@ import java.util.List;
  */
 public class AnalysisConfig {
 
-    Plugins plugins = new Plugins();
+    public static final String PREFIX_BIZ_DB = "biz.db";
+
+    public static final String SUFFIX_BIZ_URL = ".jdbc.url";
+
+    public static final String SUFFIX_BIZ_USERNAME = ".jdbc.username";
+
+    public static final String SUFFIX_BIZ_PASSWORD = ".jdbc.password";
+
+    private static final AnalysisConfig me = new AnalysisConfig();
+
+    List<DBSource> dbSources = new ArrayList<>();
+
+    private Plugins plugins = new Plugins();
+
+    private AnalysisConfig() {
+
+        //init main database resource
+        DBSource mainSource = new DBSource(App.DB_MAIN, getProp().get(App.DB_MAIN_URL),
+                                           getProp().get(App.DB_MAIN_USERNAME), getProp().get(App.DB_MAIN_PASSWORD),
+                                           plugins);
+        dbSources.add(mainSource);
+
+        //init business database resource
+        String dbs = getProp().get(PREFIX_BIZ_DB);
+        if (StrKit.notBlank(dbs)) {
+            for (String dbName : dbs.split(",")) {
+                String url = getProp().get(dbName + SUFFIX_BIZ_URL);
+                String username = getProp().get(dbName + SUFFIX_BIZ_USERNAME);
+                String password = getProp().get(dbName + SUFFIX_BIZ_PASSWORD);
+                if (StrKit.isBlank(url) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
+                    throw new RuntimeException(
+                            String.format("业务数据库配置信息有误\n\t[dbname:\"%s\",url:\"%s\",user:\"%s\",pwd:\"%s\"]", dbName,
+                                          url, username, password));
+                }
+                dbSources.add(new DBSource(dbName, url, username, password, plugins));
+            }
+        }
+    }
+
+    public static AnalysisConfig me() {
+        return me;
+    }
 
     public List<IPlugin> getPlugins() {
         return plugins.getPluginList();
     }
 
-    public AnalysisConfig() {
-        DBSource mainsource = new DBSource(App.DB_MAIN,
-                PropKit.use("config.properties").get(App.DB_MAIN_URL),
-                PropKit.use("config.properties").get(App.DB_MAIN_USERNAME),
-                PropKit.use("config.properties").get(App.DB_MAIN_PASSWORD),
-                plugins);
-        //        DBSource dbsource = new DBSource("metadata", "jdbc:mysql://localhost:3309/eova?useSSL=false", "root", "gongwei911", plugins);
+    public Prop getProp() {
+        return PropKit.use(App.CONFIG_NAME);
     }
 
     public void start() {
@@ -48,7 +87,6 @@ public class AnalysisConfig {
         String configName();
 
         void init(Plugins me);
-
     }
 
     class DBSource implements DbSouceConfig {
@@ -92,5 +130,4 @@ public class AnalysisConfig {
             me.add(dp_info).add(arp_info);
         }
     }
-
 }
