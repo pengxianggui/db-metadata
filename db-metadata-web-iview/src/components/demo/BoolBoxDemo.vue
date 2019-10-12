@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h2>{{metaData.component_name}}: </h2>
-        <component :is="metaData.component_name" v-model="value" :meta-data="metaData"></component>
+        <h2>{{meta.component_name}}: </h2>
+        <component :is="meta.component_name" v-model="value" :meta="meta"></component>
         <br>
         值为: {{value}}
         <toggle-panel>
-            <json-box v-model="metaData" mode="code"></json-box>
+            <json-box v-model="meta" mode="code"></json-box>
         </toggle-panel>
     </div>
 </template>
@@ -16,10 +16,10 @@
         data () {
             return {
                 value: true,
-                metaData: {
+                meta: {
                     component_name: 'BoolBox',
                     ui_config: {
-                        label: '打开'
+                        label: '包邮'
                     }
                 }
             }

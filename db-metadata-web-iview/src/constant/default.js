@@ -1,7 +1,7 @@
 import DICT from './dict'
 // 最小业务组件的默认UI配置
 const DEFAULT = {
-    tableList: { // TableList的默认ui_config
+    TableList: { // TableList的默认ui_config
         table: {
             "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
             "size": 'medium',
@@ -14,14 +14,22 @@ const DEFAULT = {
             "layout": "total, sizes, prev, pager, next, jumper"
         }
     },
-    pagination: {
-        pageNum: DICT.PAGE_NUM_AREA[0],
-        totalNum: 1, // 总数, 被实际页数覆盖
-        currentPage: 1 // 默认显示第一页
+    BoolBox: {
     },
-    upload: {
-        url: '/upload',
-        drag: true,
+    TextBox: {
+        placeholder: "请输入内容..",
+        clearable: true
+    },
+    PassBox: {
+        placeholder: "请输入密码..",
+        clearable: true
+    },
+    ImgBox: {
+        action: '/upload',
+        drag: false,
+        "list-type": "picture-card",
+        "auto-upload": false,
+        accept: "image"
     }
 }
 

@@ -114,7 +114,7 @@
                 this.metaData.ui_config.pagination = this.metaData.ui_config.pagination || {}
 
                 // merge options
-                let defaultConf = this.getDefaultTableConf()
+                let defaultConf = this.getDefaultConf()
                 this.merge(this.metaData.ui_config.table, defaultConf.table)
                 this.merge(this.metaData.ui_config.pagination, defaultConf.pagination)
             },
@@ -128,8 +128,8 @@
                     // this.sortModel = new Array(this.metaData.ui_config.table['default-sort']);
                 }
             },
-            getDefaultTableConf () {
-                return DEFAULT.tableList
+            getDefaultConf () {
+                return DEFAULT.TableList
             }
         },
         created() {
