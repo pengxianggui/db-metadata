@@ -11,10 +11,12 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 public interface DbService {
-    
+
+    List<String> showSchema();
+
     List<Table> showTables(String schema);
-    
+
     Table getTable(String schema, String tableName);
-    
+
     List<Column> getColumns(String schema, String tableName);
 }

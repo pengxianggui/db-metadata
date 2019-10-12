@@ -1,5 +1,7 @@
 package com.hthjsj.analysis.meta;
 
+import com.hthjsj.analysis.MetaAnalysisException;
+
 /**
  * 元操作
  * <p> @Date : 2019/10/10 </p>
@@ -7,9 +9,13 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaOperateException extends RuntimeException {
+public class MetaOperateException extends MetaAnalysisException {
 
     public MetaOperateException() {
+    }
+
+    public MetaOperateException(String messageTmpl, String... args) {
+        super(messageTmpl, args);
     }
 
     public MetaOperateException(String message) {

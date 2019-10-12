@@ -3,6 +3,7 @@ package com.hthjsj;
 import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.wall.WallFilter;
+import com.hthjsj.analysis.MetaAnalysisException;
 import com.jfinal.config.Plugins;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -35,7 +36,7 @@ public class AnalysisConfig {
 
     private static final AnalysisConfig me = new AnalysisConfig();
 
-    List<DBSource> dbSources = new ArrayList<>();
+    private List<DBSource> dbSources = new ArrayList<>();
 
     private Plugins plugins = new Plugins();
 
@@ -55,9 +56,8 @@ public class AnalysisConfig {
                 String username = getProp().get(dbName + SUFFIX_BIZ_USERNAME);
                 String password = getProp().get(dbName + SUFFIX_BIZ_PASSWORD);
                 if (StrKit.isBlank(url) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
-                    throw new RuntimeException(
-                            String.format("业务数据库配置信息有误\n\t[dbname:\"%s\",url:\"%s\",user:\"%s\",pwd:\"%s\"]", dbName,
-                                          url, username, password));
+                    throw new MetaAnalysisException("业务数据库配置信息有误\n\t[dbname:\"%s\",url:\"%s\",user:\"%s\",pwd:\"%s\"]", dbName, url, username,
+                                                    password);
                 }
                 dbSources.add(new DBSource(dbName, url, username, password, plugins));
             }
@@ -70,6 +70,10 @@ public class AnalysisConfig {
 
     public List<IPlugin> getPlugins() {
         return plugins.getPluginList();
+    }
+
+    public List<DBSource> getDbSources() {
+        return dbSources;
     }
 
     public Prop getProp() {
@@ -89,7 +93,7 @@ public class AnalysisConfig {
         void init(Plugins me);
     }
 
-    class DBSource implements DbSouceConfig {
+    public class DBSource implements DbSouceConfig {
 
         String configName, url, username, password;
 
