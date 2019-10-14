@@ -34,7 +34,6 @@
             initData () {
                 let _this = this
                 _this.searchForm = {}
-                console.log(_this.items)
                 _this.metaData.ui_config.forEach(item => {
                     Vue.set(_this.searchModel, item.en, null) // 这种赋值方法, 双向绑定才生效
                     if (item.rules){

@@ -76,7 +76,17 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <file-box-demo></file-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <search-bar-demo></search-bar-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <form-tmpl-demo></form-tmpl-demo>
             </el-col>
         </el-row>
     </div>

@@ -1,6 +1,5 @@
 <template>
     <div class="toggle-panel">
-        {{meta}}
         <div class="toggle-button" @click="toggle">
             {{open ? meta.ui_config.olabel: meta.ui_config.clabel}}
         </div>

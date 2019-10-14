@@ -12,16 +12,24 @@
 <script>
     export default {
         name: "text-box-demo",
-        data () {
+        data() {
             return {
                 value: '',
                 meta: {
-                    component_name: 'TextBox',
-                    ui_config: {
-                        label: '姓名',
-                        autocomplete: 'OFF'
+                    "id": "1",
+                    "object_code": "meta_object_code",
+                    "is_primary": "true",
+                    "en": "id",
+                    "cn": "ID",
+                    "order_num": 1,
+                    "component_name": "TextBox",
+                    "ui_config": {
+                        "show_label": true,
+                        // label: '姓名',
+                        // autocomplete: 'OFF'
+                        // ...
                     }
-                },
+                }
             }
         }
     }

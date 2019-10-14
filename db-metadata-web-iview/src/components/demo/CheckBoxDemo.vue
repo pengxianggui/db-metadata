@@ -20,7 +20,9 @@
                     component_name: 'CheckBox',
                     label: 'name',
                     value: 'value', // 可省略, value不指定时, 则选取的值即为整个item对象
+                    // other options
                     ui_config: {
+                        // other options
                     },
                     options: [{
                         'name': '航天恒嘉',

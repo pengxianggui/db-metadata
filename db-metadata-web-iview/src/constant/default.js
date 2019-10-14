@@ -1,5 +1,5 @@
 import DICT from './dict'
-// 最小业务组件的默认UI配置
+// 组件的默认UI配置
 const DEFAULT = {
     TableList: { // TableList的默认ui_config
         table: {
@@ -50,16 +50,26 @@ const DEFAULT = {
         modes: ['code', 'tree', 'text', 'view', 'form']
     },
     ImgBox: {
-        action: '/upload',
+        action: '/upload/img',
         drag: false,
         "list-type": "picture-card",
         "auto-upload": false,
         accept: "image"
     },
+    FileBox: {
+        action: "/upload/file",
+        limit: 5,
+        tip: "上传文件限制不超过2M",
+        "auto-upload": false
+    },
     ZTogglePanel: {
         "default-open": false,
         olabel: "收起",
         clabel: "展开"
+    },
+    FormTmpl: {
+        "label-width": "80px",
+        // ...
     }
 }
 

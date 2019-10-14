@@ -1,8 +1,8 @@
-// 搜索过滤
-
-// 主表搜索条元数据
 import DICT from "./constant/dict";
 
+// ##################### MasterSlaveTableTmpl
+
+// 主表搜索meta
 const masterSearchBarMetadata = [
     {
         "id": "1",
@@ -180,11 +180,52 @@ const masterData = [{
     object_code: "test13"
 }]
 
+
+// ######################## FormTmpl
+const formMeta = {
+    "id": "1",
+    "code": "meta_object_code",
+    "name": "元对象",
+    "table_name": "meta_object",
+    "schema_name": "db_metadata",
+    "primarys": "id",
+    "columns": [
+        {
+            "id": "1",
+            "object_code": "meta_object_code",
+            "is_primary": "true",
+            "en": "id",
+            "cn": "ID",
+            "order_num": 1,
+            "component_name": "TextBox",
+            "ui_config": {
+                "show_label": true,
+                // ...
+            }
+        }, {
+            "id": "2",
+            "object_code": "meta_object_code",
+            "is_primary": "false",
+            "en": "object_code",
+            "cn": "对象编码",
+            "order_num": 2,
+            "component_name": "TextBox",
+            "ui_config": {
+                "show_label": true
+                // ...
+            }
+        }
+    ]
+}
+
+
+// export
 export default {
     masterSearchBarMetadata,
     masterMetadata,
     masterFieldMetadata,
     slaveMetadata,
     slaveFieldMetadata,
-    masterData
+    masterData,
+    formMeta
 }

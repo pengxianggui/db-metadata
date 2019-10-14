@@ -37,7 +37,7 @@
     import SearchBar from '@/components/feature/SearchBar'
     import TableList from '@/components/feature/TableList'
     export default {
-        name: "MasterSlaveComponent",
+        name: "master-slave-table-tmpl",
         data() {
             return {
                 searchMeta: {}, // 搜索条的元数据

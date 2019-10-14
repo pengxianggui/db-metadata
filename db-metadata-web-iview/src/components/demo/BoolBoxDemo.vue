@@ -18,8 +18,10 @@
                 value: true,
                 meta: {
                     component_name: 'BoolBox',
+                    // other options
                     ui_config: {
-                        label: '包邮'
+                        label: '包邮',
+                        // other options
                     }
                 }
             }
