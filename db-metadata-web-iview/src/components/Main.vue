@@ -21,22 +21,32 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <bool-box-demo></bool-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
                 <text-area-box-demo></text-area-box-demo>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
-                <drop-down-box-demo></drop-down-box-demo>
+                <bool-box-demo></bool-box-demo>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
-                <json-box-demo></json-box-demo>
+                <num-box-demo></num-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <radio-box-demo></radio-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <check-box-demo></check-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <drop-down-box-demo></drop-down-box-demo>
             </el-col>
         </el-row>
         <el-row>
@@ -56,17 +66,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <num-box-demo></num-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <radio-box-demo></radio-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <check-box-demo></check-box-demo>
+                <json-box-demo></json-box-demo>
             </el-col>
         </el-row>
         <el-row>

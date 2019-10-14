@@ -36,7 +36,7 @@
             },
             initConf: function () {
                 this.meta.ui_config = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf()
+                let defaultConf = this.getDefaultConf() || {}
                 this.merge(this.meta.ui_config, defaultConf)
             }
         },

@@ -34,8 +34,8 @@
 
 <script>
     import mockData from '@/mockdata.js'
-    import SearchBar from '@/components/base/SearchBar'
-    import TableList from '@/components/base/TableList'
+    import SearchBar from '@/components/feature/SearchBar'
+    import TableList from '@/components/feature/TableList'
     export default {
         name: "MasterSlaveComponent",
         data() {
@@ -118,6 +118,12 @@
         },
         watch: {
             paginationModel: {
+                handler: function () {
+                    this.masterSearch()
+                },
+                deep: true
+            },
+            sortModel: {
                 handler: function () {
                     this.masterSearch()
                 },

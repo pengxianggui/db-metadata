@@ -2,9 +2,9 @@
     <div>
         <h2>{{meta.component_name}}: </h2>
         <component :is="meta.component_name" :meta="meta"></component>
-        <toggle-panel>
+        <z-toggle-panel>
             <json-box v-model="meta"></json-box>
-        </toggle-panel>
+        </z-toggle-panel>
     </div>
 </template>
 

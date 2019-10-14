@@ -1,6 +1,6 @@
 <template>
     <el-input v-model="currValue"
-              v-bind="metaData.ui_config"
+              v-bind="meta.ui_config"
               @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
@@ -11,13 +11,14 @@
 </template>
 
 <script>
+    import {DEFAULT} from '@/constant'
     export default {
         name: "pass-box",
         props: {
             value: {
               type: String
             },
-            metaData: {
+            meta: {
                 type: Object,
                 default: function () {
                     return {
@@ -29,6 +30,19 @@
         data () {
             return {
             }
+        },
+        methods: {
+            getDefaultConf: function() {
+                return DEFAULT.PassBox
+            },
+            initConf: function () {
+                this.meta.ui_config = this.meta.ui_config || {}
+                let defaultConf = this.getDefaultConf() || {}
+                this.merge(this.meta.ui_config, defaultConf)
+            }
+        },
+        created() {
+            this.initConf()
         },
         computed: {
             currValue: {

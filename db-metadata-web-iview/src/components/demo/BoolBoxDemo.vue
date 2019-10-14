@@ -4,9 +4,9 @@
         <component :is="meta.component_name" v-model="value" :meta="meta"></component>
         <br>
         值为: {{value}}
-        <toggle-panel>
+        <z-toggle-panel>
             <json-box v-model="meta" mode="code"></json-box>
-        </toggle-panel>
+        </z-toggle-panel>
     </div>
 </template>
 

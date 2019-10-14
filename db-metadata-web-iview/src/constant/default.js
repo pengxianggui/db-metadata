@@ -24,12 +24,42 @@ const DEFAULT = {
         placeholder: "请输入密码..",
         clearable: true
     },
+    TextAreaBox: {
+        placeholder: "请输入文本内容.."
+    },
+    DropDownBox: {
+
+    },
+    TimeBox: {
+        "value-format": "HH:mm:ss"
+    },
+    DateBox: {
+        "value-format": "yyyy-MM-dd"
+    },
+    DateTimeBox: {
+        "value-format": "yyyy-MM-dd HH:mm:ss"
+    },
+    NumBox: {
+        placeholder: '输入数字..',
+    },
+    RadioBox: {
+
+    },
+    JsonBox: {
+        mode: 'code',
+        modes: ['code', 'tree', 'text', 'view', 'form']
+    },
     ImgBox: {
         action: '/upload',
         drag: false,
         "list-type": "picture-card",
         "auto-upload": false,
         accept: "image"
+    },
+    ZTogglePanel: {
+        "default-open": false,
+        olabel: "收起",
+        clabel: "展开"
     }
 }
 

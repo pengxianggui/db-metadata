@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h2>{{metaData.component_name}}: </h2>
-        <component :is="metaData.component_name" v-model="value" :meta-data="metaData"></component>
+        <h2>{{meta.component_name}}: </h2>
+        <component :is="meta.component_name" v-model="value" :meta="meta"></component>
         值为：{{value}}
-        <toggle-panel>
-            <json-box v-model="metaData"></json-box>
-        </toggle-panel>
+        <z-toggle-panel>
+            <json-box v-model="meta"></json-box>
+        </z-toggle-panel>
     </div>
 </template>
 
@@ -19,11 +19,10 @@
                 value: {
                     'name': '张三'
                 },
-                metaData: {
+                meta: {
                     component_name: 'JsonBox',
                     ui_config: {
                         mode: 'code',
-                        modes: ['code', 'tree', 'text', 'view', 'form']
                     }
                 },
             }

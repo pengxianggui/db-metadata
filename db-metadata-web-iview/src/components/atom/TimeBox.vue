@@ -1,15 +1,16 @@
 <template>
     <el-time-picker
             v-model="currValue"
-            v-bind="metaData.ui_config">
+            v-bind="meta.ui_config">
     </el-time-picker>
 </template>
 
 <script>
+    import {DEFAULT} from '@/constant'
     export default {
         name: "time-box",
         props: {
-            metaData: {
+            meta: {
                 type: Object,
                 default: function () {
                     return {
@@ -25,12 +26,21 @@
             return {
             }
         },
-        created () {
-            if (!this.metaData.ui_config['value-format']  || this.metaData.ui_config['value-format'] !== 'Date') {
-                this.metaData.ui_config['value-format'] = 'HH:mm:ss'
-            } else {
-                delete this.metaData.ui_config['value-format']
+        methods: {
+            getDefaultConf: function() {
+                return DEFAULT.TimeBox
+            },
+            initConf: function () {
+                this.meta.ui_config = this.meta.ui_config || {}
+                let defaultConf = this.getDefaultConf() || {}
+                this.merge(this.meta.ui_config, defaultConf)
+                if (this.meta.ui_config['value-format'].toLowerCase() === 'date') {
+                    delete this.meta.ui_config['value-format']
+                }
             }
+        },
+        created () {
+            this.initConf()
         },
         computed: {
             currValue: {

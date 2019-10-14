@@ -5,14 +5,14 @@
         <component :is="metaData.component_name"
                    :search-model.sync="searchModel" :meta-data="metaData" @search="search"></component>
         <b>值为:</b> {{searchModel}}
-        <toggle-panel>
+        <z-toggle-panel>
             <json-box v-model="metaData" mode="code"></json-box>
-        </toggle-panel>
+        </z-toggle-panel>
     </div>
 </template>
 
 <script>
-    import SearchBar from '@/components/base/SearchBar'
+    import SearchBar from '@/components/feature/SearchBar'
 
     export default {
         name: "search-bar-demo",

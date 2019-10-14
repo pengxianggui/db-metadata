@@ -2,16 +2,17 @@
     <el-date-picker
             v-model="currValue"
             type="datetime"
-            v-bind="metaData.ui_config"
+            v-bind="meta.ui_config"
             >
     </el-date-picker>
 </template>
 
 <script>
+    import {DEFAULT} from '@/constant'
     export default {
         name: "date-time-box",
         props: {
-            metaData: {
+            meta: {
                 type: Object,
                 default: function () {
                     return {
@@ -26,12 +27,21 @@
         data () {
             return {}
         },
-        created () {
-            if (!this.metaData.ui_config['value-format'] || this.metaData.ui_config['value-format'] !== 'Date') {
-                this.metaData.ui_config['value-format'] = 'yyyy-MM-dd HH:mm:ss'
-            } else {
-                delete this.metaData.ui_config['value-format']
+        methods: {
+            getDefaultConf: function() {
+                return DEFAULT.DateTimeBox
+            },
+            initConf: function () {
+                this.meta.ui_config = this.meta.ui_config || {}
+                let defaultConf = this.getDefaultConf() || {}
+                this.merge(this.meta.ui_config, defaultConf)
+                if (this.meta.ui_config['value-format'].toLowerCase() === 'date') {
+                    delete this.meta.ui_config['value-format']
+                }
             }
+        },
+        created () {
+            this.initConf()
         },
         computed: {
             currValue: {
