@@ -1,5 +1,7 @@
 package com.hthjsj.web.component;
 
+import com.hthjsj.analysis.meta.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,9 @@ import java.util.List;
  */
 final public class Widgets {
 
-    private final List<FrontWidget> pluginList = new ArrayList<FrontWidget>();
+    private final List<Component> pluginList = new ArrayList<Component>();
 
-    public Widgets add(FrontWidget plugin) {
+    public Widgets add(Component plugin) {
         if (plugin == null) {
             throw new IllegalArgumentException("plugin can not be null");
         }
@@ -22,7 +24,7 @@ final public class Widgets {
         return this;
     }
 
-    public List<FrontWidget> getPluginList() {
+    public List<Component> getPluginList() {
         return pluginList;
     }
 }

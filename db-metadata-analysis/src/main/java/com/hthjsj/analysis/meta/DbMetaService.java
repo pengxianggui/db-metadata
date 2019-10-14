@@ -25,10 +25,6 @@ import java.util.List;
 @Slf4j
 @Before(Tx.class)
 public class DbMetaService {
-    //    public List<String> tableNames(){
-    //        DbService dbService = Aop.get(MysqlService.class);
-    //        return dbService.showTables(App.DB_MAIN).stream().map(Table::getTableName).collect(Collectors.toList());
-    //    }
 
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
@@ -82,4 +78,10 @@ public class DbMetaService {
         Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", metaObject.code());
         Db.use(App.DB_MAIN).delete("delete from meta_field where object_code=?", metaObject.code());
     }
+
+    public void findList() {
+
+    }
+
+
 }

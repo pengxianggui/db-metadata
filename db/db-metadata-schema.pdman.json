@@ -663,6 +663,122 @@
             }
           ],
           "chnname": "组件注册表"
+        },
+        {
+          "title": "meta_component_instance",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "comp_code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "组件code"
+            },
+            {
+              "name": "object_code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "元对象"
+            },
+            {
+              "name": "label",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "描述"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "组件配置关系表"
         }
       ],
       "graphCanvas": {
