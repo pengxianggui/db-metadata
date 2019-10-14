@@ -23,6 +23,11 @@ import com.jfinal.plugin.activerecord.Record;
  */
 public class TableController extends FrontRestController {
 
+    @Override
+    public void api() {
+        renderJson("hehehehehehe");
+    }
+
     /**
      * param : objectCode
      */
@@ -39,12 +44,12 @@ public class TableController extends FrontRestController {
     public Ret list() {
         /**
          * 1. query data by metaObject
-         *  1.1 query all data paging
-         *  1.2 query data by fields
-         *  1.3 allow some conditions
+         *  [x] 1.1 query all data paging
+         *  [x] 1.2 query data by fields
+         *  [x-] 1.3 allow some conditions
          * 2. sort
          * 3. set fields or excludes fields
-         * 4. paging
+         * [x] 4. paging
          * 5. escape fields value
          */
 
@@ -57,19 +62,12 @@ public class TableController extends FrontRestController {
         String[] fields = fieldss.length() > 0 ? fieldss.split(",") : new String[0];
         String[] excludeFields = excludeFieldss.split(",");
 
-        //resolve other params
-
-
-
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
-        SqlParaExt sqlPara = queryCondition.resolve(this, metaObject, fields, excludeFields);
+        SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFrom() + sqlPara.getSqlExceptSelect(), sqlPara.getPara());
+
         renderJson(Ret.ok("data", result.getList()));
         return null;
     }
-    /**
-     * ef=id,name,config&f=config 会滤出全部列
-     *
-     */
 }

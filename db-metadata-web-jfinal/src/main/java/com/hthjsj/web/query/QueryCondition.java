@@ -3,13 +3,13 @@ package com.hthjsj.web.query;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.jfinal.SqlParaExt;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * <p> Class title: 查询条件 构造器</p>
@@ -42,15 +42,15 @@ public class QueryCondition {
     public final static String NIN = "nin";
 
 
-
     /**
      * 普通值过滤
      * 数值 : key=value
      * 字符 : key=value ( %like% )
+     * 日期 : key=2019-10-10  ->
      *
      * 连续区间过滤
      * 日期 : key_start={} & key_end={}
-     * 数值 : key_lt={} & key_eq={}
+     * [ok] 数值 : key_lt={} & key_eq={}
      * 字符 :
      *
      * 非连续区间过滤
@@ -83,11 +83,15 @@ public class QueryCondition {
     /**
      * 解析逻辑
      * 非连续-> 连续-> 普通
+     * <p>
+     * FIXME :
+     * http://url?ef=id,name,config&f=config 会滤出全部列
      */
-    public SqlParaExt resolve(Controller c, MetaObject metaObject, String[] fields, String[] efields) {
+    public SqlParaExt resolve(Map<String, String[]> params, MetaObject metaObject, String[] fields, String[] efields) {
         Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
+        Kv c = Kv.create().set(params);
         Kv conds = Kv.create();
         Iterator<IMetaField> mfiter = metaFields.iterator();
 
@@ -116,44 +120,57 @@ public class QueryCondition {
         for (IMetaField field : metaFields) {
             String fieldCode = field.en();
             conds.set(PREFIX_COL(fieldCode), fieldCode);
-
-            String value = c.getPara(fieldCode, c.getPara(EQ(fieldCode)));
+            // = & equals
+            String value = StrKit.isBlank(c.getStr(fieldCode)) ? c.getStr(EQ(fieldCode)) : c.getStr(fieldCode);
             if (StrKit.notBlank(value)) {
                 conds.set(EQ_SQL(fieldCode), value);
             }
-
-            value = c.getPara(LT(fieldCode));
+            // less than
+            value = c.getStr(LT(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(LT_SQL(fieldCode), value);
             }
-
-            value = c.getPara(GT(fieldCode));
+            // greater than
+            value = c.getStr(GT(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(GT_SQL(fieldCode), value);
             }
-
-            value = c.getPara(LE(fieldCode));
+            // less than or equal to
+            value = c.getStr(LE(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(LE_SQL(fieldCode), value);
             }
-
-            value = c.getPara(GE(fieldCode));
+            // greater than or equal to
+            value = c.getStr(GE(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(GE_SQL(fieldCode), value);
             }
-
-            value = c.getPara(NE(fieldCode));
+            // not equals
+            value = c.getStr(NE(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(NE_SQL(fieldCode), value);
             }
-
-            String[] values = c.getParaValues(IN(fieldCode));
+            // in(?,?)
+            String[] values = toStrs(c.getAs(IN(fieldCode)));//request中获取的是"a,b,c"所以需要toStrs下
             if (values != null && values.length > 0) {
                 conds.set(IN_SQL(fieldCode, values), values);
+            }
+
+            // not in(?,?)
+            values = toStrs(c.getAs(NIN(fieldCode)));//request中获取的是"a,b,c"所以需要toStrs下
+            if (values != null && values.length > 0) {
+                conds.set(NIN_SQL(fieldCode, values), values);
             }
         }
 
         return buildExceptSelect(conds, sqlParaExt, metaObject.tableName());
+    }
+
+    private String[] toStrs(String[] s) {
+        if (s != null && s.length > 0) {
+            return s[0].split(",");
+        }
+        return null;
     }
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
@@ -161,13 +178,25 @@ public class QueryCondition {
         StringBuilder sqlSelect = new StringBuilder("select *");
         Iterator iter = kv.keySet().iterator();
         while (iter.hasNext()) {
-            Object key = iter.next();
-            if (((String) key).startsWith(PREFIX_COL)) {
+            String key = (String) iter.next();
+            // 构建selector
+            if (key.startsWith(PREFIX_COL)) {
                 sqlSelect.append(",").append(kv.get(key)).append(" ");
-            } else {
-                sqlExceptSelect.append(" and ").append(key).append(" ");
-                sqlParaExt.addPara(kv.get(key));
+                continue;
             }
+
+            //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
+            if (key.indexOf("in(") >= 0) {
+                String[] vals = kv.getAs(key);//这时的getAs取出来的是String[]数据;
+                sqlExceptSelect.append(" and ").append(key).append(" ");
+                for (int i = 0; i < vals.length; i++) {
+                    sqlParaExt.addPara(vals[i]);
+                }
+                continue;
+            }
+            //其他逻辑
+            sqlExceptSelect.append(" and ").append(key).append(" ");
+            sqlParaExt.addPara(kv.get(key));
         }
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         sqlParaExt.setFrom(" from " + tableName);
@@ -230,7 +259,9 @@ public class QueryCondition {
     private String IN_SQL(String key, String[] values) {
         StringBuilder sb = new StringBuilder();
         for (String v : values) {
-            sb.append(",?");
+            if (StrKit.notBlank(v)) {
+                sb.append(",?");
+            }
         }
         String s = sb.toString().replaceFirst("(,)", "");
         return key + " in(" + s + ") ";
@@ -243,7 +274,9 @@ public class QueryCondition {
     private String NIN_SQL(String key, String[] values) {
         StringBuilder sb = new StringBuilder();
         for (String v : values) {
-            sb.append(",?");
+            if (StrKit.notBlank(v)) {
+                sb.append(",?");
+            }
         }
         String s = sb.toString().replaceFirst("(,)", "");
         return key + " not in(" + s + ") ";

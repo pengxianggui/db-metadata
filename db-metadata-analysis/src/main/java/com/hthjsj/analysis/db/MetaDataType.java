@@ -4,7 +4,9 @@
  * Licensed under the GPL license: http://www.gnu.org/licenses/gpl.txt
  * To use it on other terms please contact us at 1623736450@qq.com
  */
-package com.hthjsj.analysis.meta;
+package com.hthjsj.analysis.db;
+
+import com.hthjsj.analysis.meta.MetaField;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -180,7 +182,5 @@ public class MetaDataType {
         }
     }
 
-    class DateTime extends java.util.Date {
 
-    }
 }

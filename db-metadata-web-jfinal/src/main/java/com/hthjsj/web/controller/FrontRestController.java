@@ -16,6 +16,10 @@ import java.util.Arrays;
  */
 public abstract class FrontRestController extends Controller implements FrontRest {
 
+    public void api() {
+        renderJson(JFinal.me().getAllActionKeys());
+    }
+
     @Override
     public Ret index() {
         list();
