@@ -24,11 +24,13 @@ module.exports = {
         host: '0.0.0.0',
         port: 8080,
         https: false,
-        proxy: {
-            '/api': {
-                target: 'http://192.168.110.67:8888',
-                changeOrigin: true
-            }
-        }
+        sockHost: 'localhost',
+        // proxy: 'http://192.168.110.67:8888'
+        // proxy: {
+            // '/': {
+            //     target: 'http://192.168.110.67:8888/',
+            //     changeOrigin: true
+            // }
+        // }
     }
 }

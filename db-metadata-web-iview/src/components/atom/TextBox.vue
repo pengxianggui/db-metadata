@@ -1,6 +1,6 @@
 <template>
     <el-input v-model="currValue"
-              v-bind="meta.ui_config"
+              v-bind="meta.conf"
               @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
@@ -17,11 +17,13 @@
             value: {
                 type: String
             },
+            /*
+             * component meta.
+             */
             meta: {
                 type: Object,
                 default: function () {
                     return {
-                        ui_config: {}
                     }
                 }
             },
@@ -31,17 +33,17 @@
             }
         },
         methods: {
-            getDefaultConf: function() {
+            getDefaultMeta: function() {
                 return DEFAULT.TextBox
             },
-            initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.meta.ui_config, defaultConf)
+            initMeta: function () {
+                this.meta.conf = this.meta.conf || {}
+                let defaultMeta = this.getDefaultMeta() || {}
+                this.merge(this.meta, defaultMeta)
             }
         },
         created() {
-            this.initConf()
+            this.initMeta()
         },
         computed: {
             currValue: {

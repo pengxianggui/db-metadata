@@ -186,8 +186,6 @@ const formMeta = {
     "id": "1",
     "code": "meta_object_code",
     "name": "元对象",
-    "table_name": "meta_object",
-    "primarys": "id",
     "columns": [
         {
             "object_code": "meta_object_code",
@@ -197,6 +195,7 @@ const formMeta = {
             "order_num": 1,
             "component_name": "DropDownBox",
             "ui_config": {
+                "data-url": "/db/list",
                 "show_label": true,
                 rules: [{
                     required: true,

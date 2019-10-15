@@ -17,8 +17,11 @@ const DEFAULT = {
     BoolBox: {
     },
     TextBox: {
-        placeholder: "请输入内容..",
-        clearable: true
+        // custom ..
+        conf: {
+            placeholder: "请输入内容..",
+            clearable: true
+        }
     },
     PassBox: {
         placeholder: "请输入密码..",
@@ -28,7 +31,10 @@ const DEFAULT = {
         placeholder: "请输入文本内容.."
     },
     DropDownBox: {
-        "data-url": "/api/options" // todo filling
+        "data-url": "/api/options", // todo reset
+        "conf": {
+            clearable: true
+        }
     },
     TimeBox: {
         "value-format": "HH:mm:ss"

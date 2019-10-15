@@ -1,79 +1,124 @@
 <template>
     <el-select v-model="currValue"
-               v-bind="conf"
+               v-bind="meta.conf"
                @change="$emit('change', $event)"
                @remove-tag="$emit('remove-tag', $event)"
                @clear="$emit('clear', $event)"
                @blur="$emit('blur', $event)"
                @focus="$emit('focus', $event)">
-        <el-option v-for="item in options" :key="item[conf.value]" :label="item[conf.key]"
-            :value="item[conf.value] ? item[conf.value] : item">
-            {{item[conf.value]}}-{{item[conf.key]}}
-        </el-option>
+        <template v-if="!meta.group">
+            <el-option v-for="item in options" :key="item.value" :label="item.key"
+                       :value="item.value ? item.value : item">
+                {{item.key}}
+            </el-option>
+        </template>
+        <template v-else>
+            <el-option-group
+                    v-for="group in options"
+                    :key="group.label"
+                    :label="group.label">
+                <el-option v-for="item in group.options" :key="item.value" :label="item.key"
+                           :value="item.value ? item.value : item">
+                    {{item.key}}
+                </el-option>
+            </el-option-group>
+        </template>
     </el-select>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant'
+
     export default {
         name: "drop-down-box",
-        data () {
+        data() {
             return {
-                conf: {}
             }
         },
         props: {
             value: {
                 type: [Object, String]
             },
-            options: { // 选项数据(业务数据), 优先取传入值, 默认取服务端数据
-                required: false,
-                type: Array,
-                default: function () {
-                    return []
-                }
-            },
+            /*
+             * 选项数据(业务数据), 支持直接传入, 或者通过传入组件元数据, 在其中配置data_url参数, 从远端获取选项数据.
+             * eg:
+             * [{
+             *  key: 'xxx',
+             *  value: 'yyy',
+             *  disabled: false
+             * },
+             * ...],
+             * 若为选项组模式。
+             * eg: [{
+             *  label: "group1",
+             *  options: [{
+             *      key: "xxx",
+             *      value: "yyy"
+             *  }]
+             * }, {...}]
+             */
+            options: Array,
+            /* component meta
+             * eg:
+             * {
+             *  "data_url": "", // for options data
+             *  "group": false, // 是否选项组模式
+             *  "conf": {   // ui conf
+             *      "clearable": true,
+             *      "placeholder": "请下拉选择",
+             *      "..."
+             *  }
+             * }
+             */
             meta: {
                 type: Object,
                 default: function () {
-                    return {
-                        ui_config: {}
-                    }
+                    return {}
                 }
-            }
+            },
+            format: Function // format option data, and return formatted data, like: [{key: "xxx", value: "yyy"}, ...]
         },
         methods: {
-            getDefaultConf: function() {
+            getDefaultMeta: function () {
                 return DEFAULT.DropDownBox
             },
-            initConf: function () {
-                this.conf = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.conf, defaultConf)
+            initMeta: function () {
+                this.meta.conf = this.meta.conf || {}
+                let defaultMeta = this.getDefaultMeta() || {}
+                this.merge(this.meta, defaultMeta)
             },
             getOptions: function () {
-                // todo http request options data by meta.object_code、 meta.en
+                // http request options data by meta.data_url
                 let _this = this
                 this.$axios({
                     methods: 'GET',
-                    url: _this.conf['data-url'],
-                    data: {
-                    }
+                    url: _this.meta['data_url']
                 }).then(resp => {
-                    if (resp.state === 'ok') {
-                        // 成功
+                    // if provide format callback fn, execute callback fn
+                    if (_this.format) {
+                        _this.options = _this.format(resp)
                     } else {
-                        // 失败
+                        if (resp['state'] === 'ok') {
+                            _this.options = resp.data
+                        } else {
+                            _this.$message.error(resp['msg'])
+                        }
                     }
                 })
             },
             initOptions: function () {
-                if (this.options.length === 0) this.getOptions()
+                if (this.options) return
+                if (this.meta['data_url']) {
+                    this.getOptions()
+                    return
+                }
+                // todo throw tip
+                console.error("options or data_url in meta provide one at least!")
             }
         },
         created() {
             // init data
-            this.initConf()
+            this.initMeta()
             // init option data
             this.initOptions()
         },

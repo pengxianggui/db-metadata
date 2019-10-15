@@ -32,3 +32,13 @@ yarn run lint
 - [vue-form-making](http://tools.xiaoyaoji.cn/)
 
 - [form-design](https://github.com/vincentzyc/form-design)
+
+### 所有组件默认处理的响应数据格式为
+```
+{
+    state: String,
+    code: Number,
+    msg: String,
+    data: [Object, Array]
+}
+```
