@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
@@ -77,9 +78,32 @@ public abstract class FrontRestController extends Controller implements FrontRes
         return ret;
     }
 
-    void renderJson(Object data, String... excludes) {
-        SimplePropertyPreFilter simplePropertyPreFilter = new SimplePropertyPreFilter();
-        simplePropertyPreFilter.getExcludes().addAll(Arrays.asList(excludes));
-        renderJson(JSON.toJSONString(data, simplePropertyPreFilter));
+    /**
+     * 在序列化json时支持排除字段
+     * FIXME
+     * f=en&ef=en 时候 会序列化出columnNames,columnValues,columns字段
+     * 原因:f=en&ef=en 即指定又排除时,会触发Record的hashmap 序列化机制,所以序列化除了的Record自身的字段;
+     * 解决:在源头解决
+     *
+     * @param data
+     * @param excludes
+     */
+    void renderJsonExcludes(Object data, String... excludes) {
+        if (excludes != null && excludes.length > 0) {
+
+            SimplePropertyPreFilter simplePropertyPreFilter = new SimplePropertyPreFilter();
+            simplePropertyPreFilter.getExcludes().addAll(Arrays.asList(excludes));
+
+            renderJson(JSON.toJSONString(data,
+                                         simplePropertyPreFilter,
+                                         SerializerFeature.DisableCircularReferenceDetect,
+                                         SerializerFeature.WriteDateUseDateFormat,
+                                         SerializerFeature.WriteNullListAsEmpty,
+                                         SerializerFeature.WriteMapNullValue,
+                                         SerializerFeature.WriteNullStringAsEmpty,
+                                         SerializerFeature.WriteNonStringValueAsString));
+        } else {
+            renderJson(data);
+        }
     }
 }

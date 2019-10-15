@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.TableView;
@@ -56,19 +57,20 @@ public class TableController extends FrontRestController {
         String objectCode = getPara(0, getPara("objectCode"));
         Integer pageIndex = getInt("p", getInt("pageIndex", 1));
         Integer pageSize = getInt("s", getInt("pageSize", 20));
-        String fieldss = getPara("f") == null ? (getPara("fields") == null ? "" : getPara("fields")) : getPara("f");
-        String excludeFieldss = getPara("ef") == null ? (getPara("exfields") == null ? "" : getPara("exfields")) : getPara("ef");
 
-        String[] fields = fieldss.length() > 0 ? fieldss.split(",") : new String[0];
-        String[] excludeFields = excludeFieldss.split(",");
+        String includeFieldStr = getPara("f", getPara("fields", ""));
+        String excludeFieldStr = getPara("ef", getPara("exfields", ""));
+        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
+        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
+        String sort = getPara("st", getPara("sort", ""));
 
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
-        Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFrom() + sqlPara.getSqlExceptSelect(), sqlPara.getPara());
+        Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromExceptSelect(), sqlPara.getPara());
 
-        renderJson(Ret.ok("data", result.getList()));
+        renderJsonExcludes(Ret.ok("data", result.getList()), excludeFields);
         return null;
     }
 }

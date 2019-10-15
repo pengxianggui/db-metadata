@@ -1,11 +1,7 @@
 package com.hthjsj.web;
 
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.web.controller.ComponentController;
-import com.hthjsj.web.controller.DBController;
-import com.hthjsj.web.controller.MetaController;
-import com.hthjsj.web.controller.TableController;
-import com.hthjsj.web.jfinal.DevModeIntercept;
+import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
@@ -38,11 +34,12 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configRoute(Routes me) {
         me.setMappingSuperClass(true);
-        me.addInterceptor(new DevModeIntercept());
+        //        me.addInterceptor(new DevModeIntercept());
         me.add("/db", DBController.class);
         me.add("/meta", MetaController.class);
         me.add("/component", ComponentController.class);
         me.add("/table", TableController.class);
+        me.add("/dict", DictController.class);
     }
 
     @Override
@@ -58,6 +55,7 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
+        //        me.add(new FrontRestIntercept());
     }
 
     @Override

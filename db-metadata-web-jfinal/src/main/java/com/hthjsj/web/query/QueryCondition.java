@@ -152,7 +152,7 @@ public class QueryCondition {
                 conds.set(NE_SQL(fieldCode), value);
             }
             // in(?,?)
-            //request中获取的是"a,b,httpParams"所以需要toStrs下
+            //request中获取的是"a,b,httpParams"所以需要toStrs
             String[] values = getStrs(httpParams.get(IN(fieldCode)));
             if (values != null && values.length > 0) {
                 conds.set(IN_SQL(fieldCode, values), values);
@@ -185,7 +185,7 @@ public class QueryCondition {
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
         StringBuilder sqlExceptSelect = new StringBuilder();
-        StringBuilder sqlSelect = new StringBuilder("select *");
+        StringBuilder sqlSelect = new StringBuilder("select ");
         Iterator iter = kv.keySet().iterator();
         while (iter.hasNext()) {
             String key = (String) iter.next();
@@ -209,9 +209,10 @@ public class QueryCondition {
             sqlExceptSelect.append(" and ").append(key).append(" ");
             sqlParaExt.addPara(kv.get(key));
         }
-        sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
+        sqlParaExt.setSelect(sqlSelect.toString());
         sqlParaExt.setFrom(" from " + tableName);
         sqlParaExt.setSqlExceptSelect(" where 1=1 " + sqlExceptSelect.toString());
+        sqlParaExt.verify();
         return sqlParaExt;
     }
 
