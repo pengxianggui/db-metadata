@@ -185,7 +185,7 @@ public class QueryCondition {
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
         StringBuilder sqlExceptSelect = new StringBuilder();
-        StringBuilder sqlSelect = new StringBuilder("select ");
+        StringBuilder sqlSelect = new StringBuilder("select *");
         Iterator iter = kv.keySet().iterator();
         while (iter.hasNext()) {
             String key = (String) iter.next();
@@ -209,7 +209,7 @@ public class QueryCondition {
             sqlExceptSelect.append(" and ").append(key).append(" ");
             sqlParaExt.addPara(kv.get(key));
         }
-        sqlParaExt.setSelect(sqlSelect.toString());
+        sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         sqlParaExt.setFrom(" from " + tableName);
         sqlParaExt.setSqlExceptSelect(" where 1=1 " + sqlExceptSelect.toString());
         sqlParaExt.verify();
