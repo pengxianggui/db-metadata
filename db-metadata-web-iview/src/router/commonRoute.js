@@ -1,5 +1,6 @@
 import Main from '@/components/Main'
 import MasterSlaveTableTmpl from "../components/template/MasterSlaveTableTmpl";
+import MetaImport from "../components/meta/MetaImport";
 
 const commonRoute = [
     {
@@ -14,6 +15,10 @@ const commonRoute = [
         path: '/metadata',
         name: 'Metadata',
         component: MasterSlaveTableTmpl
+    },{
+        path: '/meta-import',
+        name: 'MetaImport',
+        component: MetaImport
     }
 ]
 export default commonRoute

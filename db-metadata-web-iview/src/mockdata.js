@@ -187,31 +187,63 @@ const formMeta = {
     "code": "meta_object_code",
     "name": "元对象",
     "table_name": "meta_object",
-    "schema_name": "db_metadata",
     "primarys": "id",
     "columns": [
         {
-            "id": "1",
             "object_code": "meta_object_code",
-            "is_primary": "true",
-            "en": "id",
-            "cn": "ID",
+            "is_primary": "false",
+            "en": "schema_name",
+            "cn": "数据源",
             "order_num": 1,
-            "component_name": "TextBox",
+            "component_name": "DropDownBox",
             "ui_config": {
                 "show_label": true,
+                rules: [{
+                    required: true,
+                }]
+                // ...
+            },
+        }, {
+            "object_code": "meta_object_code",
+            "is_primary": "false",
+            "en": "table_name",
+            "cn": "元数据表",
+            "order_num": 2,
+            "component_name": "DropDownBox",
+            "ui_config": {
+                "show_label": true,
+                filterable: true,
+                rules: [{
+                    required: true,
+                }]
                 // ...
             }
         }, {
-            "id": "2",
             "object_code": "meta_object_code",
             "is_primary": "false",
-            "en": "object_code",
-            "cn": "对象编码",
+            "en": "name",
+            "cn": "元数据对象",
             "order_num": 2,
             "component_name": "TextBox",
             "ui_config": {
-                "show_label": true
+                "show_label": true,
+                rules: [{
+                    required: true,
+                }]
+                // ...
+            }
+        }, {
+            "object_code": "meta_object_code",
+            "is_primary": "false",
+            "en": "code",
+            "cn": "元对象编码",
+            "order_num": 2,
+            "component_name": "TextBox",
+            "ui_config": {
+                "show_label": true,
+                rules: [{
+                    required: true,
+                }]
                 // ...
             }
         }

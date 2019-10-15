@@ -9,6 +9,7 @@ module.exports = {
     publicPath: '/',
     outputDir: 'dist',
     assetsDir: 'static',
+    indexPath: 'index.html',
     configureWebpack: {
         // provide the app's title in webpack's name field, so that
         // it can be accessed in index.html to inject the correct title.
@@ -19,4 +20,15 @@ module.exports = {
             }
         }
     },
+    devServer: {
+        host: '0.0.0.0',
+        port: 8080,
+        https: false,
+        proxy: {
+            '/api': {
+                target: 'http://192.168.110.67:8888',
+                changeOrigin: true
+            }
+        }
+    }
 }

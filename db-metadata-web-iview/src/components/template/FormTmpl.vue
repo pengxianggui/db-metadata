@@ -1,9 +1,13 @@
 <template>
-    <el-form ref="form" :model="formModel" v-bind="conf">
+    <el-form :ref="formName" :model="formModel" :rules="rules"  v-bind="conf">
         <el-form-item v-for="(item, index) in meta.columns" :key="item.en + index" :label="item.ui_config.show_label?item.cn:''" :prop="item.en">
             <component :is="item.component_name" v-model="formModel[item.en]" :meta="item"></component>
         </el-form-item>
         <el-form-item v-if="meta.columns.length > 0">
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">提交</el-button>
+                <el-button>取消</el-button>
+            </el-form-item>
             <!-- TODO 采用ButtonBox -->
         </el-form-item>
     </el-form>
@@ -18,9 +22,11 @@
         data () {
             return {
                 // form conf data
+                formName: 'form' + Math.random(),
                 conf: {},
                 meta: {},
-                formModel: {}
+                formModel: {},
+                rules: {}
             }
         },
         props: {
@@ -54,10 +60,30 @@
                 _this.formModel = {}
                 _this.meta.columns.forEach(item => {
                     Vue.set(_this.formModel, item.en, item.ui_config.value || null)
-                    if (item.rules){
+                    if (item.ui_config.rules){
                         Vue.set(_this.rules, item.en, item.ui_config.rules)
                     }
                 })
+            },
+            submit () {
+                let _this = this
+                this.$axios({
+                    methods: _this.conf.methods,
+                    // todo url should be recorrect
+                    url: _this.conf.action + "?object_code=" + this.meta.object_code,
+                    data: _this.formModel
+                })
+            },
+
+            onSubmit () {
+                let _this = this
+                this.$refs[this.formName].validate((valid) => {
+                    if (valid) {
+                         _this.submit() // submit
+                    } else {
+                        return false;
+                    }
+                });
             }
         },
         created() {

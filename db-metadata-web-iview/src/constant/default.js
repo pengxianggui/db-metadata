@@ -28,7 +28,7 @@ const DEFAULT = {
         placeholder: "请输入文本内容.."
     },
     DropDownBox: {
-
+        "data-url": "/api/options" // todo filling
     },
     TimeBox: {
         "value-format": "HH:mm:ss"
@@ -43,7 +43,10 @@ const DEFAULT = {
         placeholder: '输入数字..',
     },
     RadioBox: {
-
+        "data-url": "", // todo filling
+    },
+    CheckBox: {
+        "data-url": "" // todo filling
     },
     JsonBox: {
         mode: 'code',
@@ -68,7 +71,9 @@ const DEFAULT = {
         clabel: "展开"
     },
     FormTmpl: {
-        "label-width": "80px",
+        "label-width": "100px",
+        action: "/api/form", // todo filling
+        methods: 'POST'
         // ...
     }
 }

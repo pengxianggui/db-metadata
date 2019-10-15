@@ -1,9 +1,9 @@
 <template>
     <el-radio-group v-model="currValue">
-        <el-radio v-for="item in meta.options"
-                  :key="item[meta.value]"
-                  :label="item[meta.value]">
-            {{item[meta.label]}}
+        <el-radio v-for="item in options"
+                  :key="item[conf.value]"
+                  :label="item[conf.value]">
+            {{item[conf.key]}}
         </el-radio>
     </el-radio-group>
 </template>
@@ -13,11 +13,20 @@
     export default {
         name: "radio-box",
         data () {
-            return {}
+            return {
+                conf: {}
+            }
         },
         props: {
             value: {
                 type: [Object, String]
+            },
+            options: {
+                required: false,
+                type: Array,
+                default: function () {
+                    return []
+                }
             },
             meta: {
                 type: Object,
@@ -33,13 +42,32 @@
                 return DEFAULT.RadioBox
             },
             initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
+                this.conf = this.meta.ui_config || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.meta.ui_config, defaultConf)
+                this.merge(this.conf, defaultConf)
+            },
+            getOptions: function () {
+                this.$axios({
+                    methods: 'GET',
+                    url: '', // todo
+                    data: {
+
+                    }
+                }).then(resp => {
+                    if (resp.state === 'ok') {
+                        // 成功
+                    } else {
+                        // 失败
+                    }
+                })
+            },
+            initOptions: function () {
+                if (this.options.length === 0) this.getOptions()
             }
         },
         created() {
             this.initConf()
+            this.initOptions()
         },
         computed: {
             currValue: {
