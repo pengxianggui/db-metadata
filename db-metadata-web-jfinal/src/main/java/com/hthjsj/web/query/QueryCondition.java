@@ -87,11 +87,12 @@ public class QueryCondition {
      * FIXME :
      * http://url?ef=id,name,config&f=config 会滤出全部列
      */
-    public SqlParaExt resolve(Map<String, String[]> params, MetaObject metaObject, String[] fields, String[] efields) {
+    public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
+
+        //FIXME
         Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
-        Kv c = Kv.create().set(params);
         Kv conds = Kv.create();
         Iterator<IMetaField> mfiter = metaFields.iterator();
 
@@ -121,43 +122,44 @@ public class QueryCondition {
             String fieldCode = field.en();
             conds.set(PREFIX_COL(fieldCode), fieldCode);
             // = & equals
-            String value = StrKit.isBlank(c.getStr(fieldCode)) ? c.getStr(EQ(fieldCode)) : c.getStr(fieldCode);
+            String value = StrKit.isBlank(getFirst(httpParams.get(fieldCode))) ? getFirst(httpParams.get(EQ(fieldCode))) : getFirst(httpParams.get(fieldCode));
             if (StrKit.notBlank(value)) {
                 conds.set(EQ_SQL(fieldCode), value);
             }
             // less than
-            value = c.getStr(LT(fieldCode));
+            value = getFirst(httpParams.get(LT(fieldCode)));
             if (StrKit.notBlank(value)) {
                 conds.set(LT_SQL(fieldCode), value);
             }
             // greater than
-            value = c.getStr(GT(fieldCode));
+            value = getFirst(httpParams.get(GT(fieldCode)));
             if (StrKit.notBlank(value)) {
                 conds.set(GT_SQL(fieldCode), value);
             }
             // less than or equal to
-            value = c.getStr(LE(fieldCode));
+            value = getFirst(httpParams.get(LE(fieldCode)));
             if (StrKit.notBlank(value)) {
                 conds.set(LE_SQL(fieldCode), value);
             }
             // greater than or equal to
-            value = c.getStr(GE(fieldCode));
+            value = getFirst(httpParams.get(GE(fieldCode)));
             if (StrKit.notBlank(value)) {
                 conds.set(GE_SQL(fieldCode), value);
             }
             // not equals
-            value = c.getStr(NE(fieldCode));
+            value = getFirst(httpParams.get(NE(fieldCode)));
             if (StrKit.notBlank(value)) {
                 conds.set(NE_SQL(fieldCode), value);
             }
             // in(?,?)
-            String[] values = toStrs(c.getAs(IN(fieldCode)));//request中获取的是"a,b,c"所以需要toStrs下
+            //request中获取的是"a,b,httpParams"所以需要toStrs下
+            String[] values = getStrs(httpParams.get(IN(fieldCode)));
             if (values != null && values.length > 0) {
                 conds.set(IN_SQL(fieldCode, values), values);
             }
 
             // not in(?,?)
-            values = toStrs(c.getAs(NIN(fieldCode)));//request中获取的是"a,b,c"所以需要toStrs下
+            values = getStrs(httpParams.get(NIN(fieldCode)));
             if (values != null && values.length > 0) {
                 conds.set(NIN_SQL(fieldCode, values), values);
             }
@@ -166,12 +168,20 @@ public class QueryCondition {
         return buildExceptSelect(conds, sqlParaExt, metaObject.tableName());
     }
 
-    private String[] toStrs(String[] s) {
+    private String[] getStrs(String[] s) {
         if (s != null && s.length > 0) {
             return s[0].split(",");
         }
         return null;
     }
+
+    private String getFirst(String[] s) {
+        if (s != null && s.length > 0) {
+            return s[0];
+        }
+        return null;
+    }
+    
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
         StringBuilder sqlExceptSelect = new StringBuilder();
@@ -187,7 +197,8 @@ public class QueryCondition {
 
             //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
             if (key.indexOf("in(") >= 0) {
-                String[] vals = kv.getAs(key);//这时的getAs取出来的是String[]数据;
+                //这时的getAs取出来的是String[]数据;
+                String[] vals = kv.getAs(key);
                 sqlExceptSelect.append(" and ").append(key).append(" ");
                 for (int i = 0; i < vals.length; i++) {
                     sqlParaExt.addPara(vals[i]);

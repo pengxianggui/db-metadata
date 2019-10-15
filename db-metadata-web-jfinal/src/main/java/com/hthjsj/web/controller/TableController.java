@@ -62,6 +62,7 @@ public class TableController extends FrontRestController {
         String[] fields = fieldss.length() > 0 ? fieldss.split(",") : new String[0];
         String[] excludeFields = excludeFieldss.split(",");
 
+
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
