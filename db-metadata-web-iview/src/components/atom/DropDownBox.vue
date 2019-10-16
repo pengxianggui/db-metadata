@@ -128,7 +128,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             getOptions: function () {
                 // http request options data by meta.data_url
                 let _this = this
-                this.$axios({
+                _this.$axios({
                     methods: 'GET',
                     url: _this.meta['data_url']
                 }).then(resp => {

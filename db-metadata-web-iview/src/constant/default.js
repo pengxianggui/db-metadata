@@ -1,12 +1,40 @@
 import DICT from './dict'
 // 组件的默认UI配置
 const DEFAULT = {
-    TableList: { // TableList的默认ui_config
-        table: {
-            "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
+    // TableList: { // TableList的默认ui_config
+        // table: {
+        //     "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
+        //     "size": 'medium',
+        //     "max-height": 360
+        // },
+        // pagination: {
+        //     "page-size": DICT.PAGE_NUM_AREA[0],
+        //     "page-sizes": DICT.PAGE_NUM_AREA,
+        //     "current-page": 1,
+        //     "layout": "total, sizes, prev, pager, next, jumper"
+        // }
+    // },
+    TableList: {
+        table_name: "",
+        table_cn_name: "",
+        component_name: 'TableList',
+        data_url: "",
+        methods: "GET",
+        // ...
+        conf: {
+            "default-sort": {prop: 'username', order: 'descending'}, // descending, ascending
             "size": 'medium',
-            "max-height": 360
+            "max-height": 360,
         },
+        columns: [{
+            component_name: 'TextBox',
+            name: 'username',
+            label: '用户名',
+            conf: {
+                sortable: true,
+                // ...
+            }
+        }],
         pagination: {
             "page-size": DICT.PAGE_NUM_AREA[0],
             "page-sizes": DICT.PAGE_NUM_AREA,
@@ -14,6 +42,7 @@ const DEFAULT = {
             "layout": "total, sizes, prev, pager, next, jumper"
         }
     },
+
     BoolBox: {},
     TextBox: {
         // custom ..
@@ -77,7 +106,7 @@ const DEFAULT = {
     },
     FormTmpl: {
         form_name: "formName",
-        action: '', // form action (url)
+        action: '/save', // form action (url)
         methods: 'POST',
         conf: {
             "label-width": '80px',
@@ -107,6 +136,7 @@ const DEFAULT = {
                 label: '提交',
                 conf: {
                     // ... support conf of el-button
+                    type: "primary"
                 }
             },
             cancel: {

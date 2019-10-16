@@ -53,7 +53,6 @@
                     return this.value;
                 },
                 set: function(newValue) {
-                    console.log('sb')
                     this.$emit("input", newValue); // 通过 input 事件更新 model
                 }
             }

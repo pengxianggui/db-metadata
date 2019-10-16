@@ -8,11 +8,11 @@ import camelCase from 'lodash/camelCase'
 import utils from '@/utils'
 import axios from './axios'
 
+Vue.use(ElementUI);
+
 Vue.prototype.$axios = axios // 全局注册，使用方法为:this.$axios
 
 Vue.config.productionTip = false;
-
-Vue.use(ElementUI);
 // 全局混入, 谨慎扩展
 Vue.mixin({
     created() {

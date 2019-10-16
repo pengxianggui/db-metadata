@@ -1,3 +1,35 @@
+<!--
+# meta
+eg:
+{
+    table_name: "",
+    table_cn_name: "",
+    component_name: 'TableList',
+    data_url: "",
+    methods: "GET",
+    // ...
+    conf: {
+        "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
+        "size": 'medium',
+        "max-height": 360,
+    }
+    columns: [{
+        component_name: 'TextBox',
+        name: 'username',
+        label: '用户名',
+        conf: {
+            sortable: true,
+            // ...
+        }
+    }],
+    pagination: {
+        "page-size": DICT.PAGE_NUM_AREA[0],
+        "page-sizes": DICT.PAGE_NUM_AREA,
+        "current-page": 1,
+        "layout": "total, sizes, prev, pager, next, jumper"
+    }
+}
+-->
 <template>
     <el-container direction="vertical">
         <el-row>
@@ -9,23 +41,18 @@
         <el-row>
             <el-col :span="24">
                 <el-table
-                        ref="table"
+                        :ref="meta.table_name"
                         :data="data"
-                        border
-                        stripe
-                        highlight-current-row
-                        v-bind="metaData.ui_config.table"
+                        v-bind="meta.conf"
                         @row-click="choseRow"
                         @sort-change="sortChange"
                         @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column v-for="(metaField, index) in fieldMetaData"
-                                     v-if="metaField.ui_config.showable"
-                                     :key="metaField.id + index"
-                                     :prop="metaField.en"
-                                     :label="metaField.cn"
-                                     show-overflow-tooltip
-                                     v-bind="metaField.ui_config"
+                    <el-table-column v-for="(item, index) in meta.columns"
+                                     :key="item.name + index"
+                                     :prop="item.name"
+                                     :label="item.label"
+                                     v-bind="item.conf"
                                 ></el-table-column>
                 </el-table>
             </el-col>
@@ -37,7 +64,7 @@
                                :page-size.sync="paginationModel.pageSize"
                                :current-page.sync="paginationModel.currentPage"
                                :total="paginationModel.total"
-                               v-bind="metaData.ui_config.pagination"
+                               v-bind="meta.conf.pagination"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -49,42 +76,35 @@
     export default {
         name: "TableList",
         props: {
-            metaData: {
-                required: true,
-                type: Object
-            },
-            fieldMetaData: {
-                required: true,
-                type: Array
+            meta: {
+                type: Object,
+                default: function () {
+                    return {}
+                }
             },
             data: {
-                required: true,
-                type: Array,
-                default: () => []
+                required: false,
+                type: Array
             },
             // 选中的行： 用于批量操作，表现为勾选
             choseData: {
-                required: true,
                 type: Array
             },
             // 激活的一行： 用于对单行操作
             activeData: {
-                required: true,
                 type: Object
             },
-            // 用于构建上层的数据查询, sort如果只对当前页进行排序，就无需构建查询参数。看取舍
-            sortModel: {
-                required: false,
-                type: Object
-            },
-            paginationModel: {
-                required: false,
-                type: Object
-            }
         },
         data() {
             return {
                 multipleSelection: [],
+                sortModel: {
+                },
+                paginationModel: {
+                    pageSize: 10,
+                    currentPage: 1,
+                    total: null
+                }
             }
         },
         methods: {
@@ -107,34 +127,58 @@
                 this.sortModel.prop = param.prop
                 this.sortModel.order = param.order
             },
-            initConf() {
-                // data effective check
-                this.metaData.ui_config = this.metaData.ui_config || {}
-                this.metaData.ui_config.table = this.metaData.ui_config.table || {}
-                this.metaData.ui_config.pagination = this.metaData.ui_config.pagination || {}
+            initMeta() {
+                this.meta.conf = this.meta.conf || {}
+                this.meta.columns = this.meta.columns || []
+                this.meta.pagination = this.meta.pagination || {}
 
                 // merge options
-                let defaultConf = this.getDefaultConf()
-                this.merge(this.metaData.ui_config.table, defaultConf.table)
-                this.merge(this.metaData.ui_config.pagination, defaultConf.pagination)
+                let defaultMeta = this.getDefaultMeta()
+                this.merge(this.meta, defaultMeta)
             },
-            initModel() { // 将配置中的指定的模型数据回朔到model中
-                if (this.paginationModel) {
-                    this.paginationModel.pageSize = this.metaData.ui_config.pagination['page-size']
-                    this.paginationModel.currentPage = this.metaData.ui_config.pagination['current-page']
-                }
-                if (this.sortModel) {
-                    this.$emit('update:sort-model', this.metaData.ui_config.table['default-sort'])
-                    // this.sortModel = new Array(this.metaData.ui_config.table['default-sort']);
-                }
+            assemblyModel() {
+                // this.sortModel = this.meta.conf['sort_model']
+                // this.paginationModel = this.meta.pagination['model']
+                // if (this.paginationModel) {
+                //     this.paginationModel.pageSize = this.meta.ui_config.pagination['page-size']
+                //     this.paginationModel.currentPage = this.meta.ui_config.pagination['current-page']
+                // }
+                // if (this.sortModel) {
+                //     this.$emit('update:sort-model', this.meta.ui_config.table['default-sort'])
+                //     // this.sortModel = new Array(this.meta.ui_config.table['default-sort']);
+                // }
             },
-            getDefaultConf () {
+            getDefaultMeta () {
                 return DEFAULT.TableList
+            },
+            getData () {
+                let _this = this
+                this.$axios({
+                    methods: _this.meta.methods,
+                    url: _this.meta['data_url'], // filling paginationModel、 sortModel Params
+                }).then(resp => {
+                    if (resp['state'] === 'ok') {
+                        _this.data = resp.data
+                        _this.paginationModel.total = _this.data.length
+                    } else {
+                        _this.$message.error(resp['msg'])
+                    }
+                })
+            },
+            initData () { // init business data
+                if (this.data) {
+                    this.paginationModel.total = this.data.length
+                } else {
+                    this.getData()
+                }
             }
         },
         created() {
-            this.initConf()
-            this.initModel()
+            this.initMeta()
+            this.assemblyModel()
+        },
+        mounted() {
+            this.initData()
         }
     }
 </script>
