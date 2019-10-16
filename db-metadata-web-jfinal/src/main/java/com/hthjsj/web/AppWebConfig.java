@@ -42,6 +42,7 @@ public class AppWebConfig extends JFinalConfig {
         me.add("/meta", MetaController.class);
         me.add("/component", ComponentController.class);
         me.add("/table", TableController.class);
+        me.add("/form", FormController.class);
         me.add("/dict", DictController.class);
     }
 

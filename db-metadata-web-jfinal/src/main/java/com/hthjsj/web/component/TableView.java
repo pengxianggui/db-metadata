@@ -57,7 +57,8 @@ public class TableView extends ViewComponent {
 
     }
 
-    private Kv renderMeta() {
+    @Override
+    public Kv renderMeta() {
         Kv kv = Kv.create();
         kv.putAll(globalConfig);
         kv.putAll(metaObjectConfig);

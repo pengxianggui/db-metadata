@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/10/16 </p>
  * <p> @Project : db-meta-serve</p>
  *

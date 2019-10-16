@@ -1,20 +1,23 @@
-package com.hthjsj.web.component;
+package com.hthjsj.web.component.form;
 
+import com.hthjsj.analysis.meta.IMetaField;
 import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
- * <p> @Date : 2019/10/14 </p>
+ * <p> @Date : 2019/10/16 </p>
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
  */
-public class FormView extends ViewComponent {
+public class DropDown extends FormField {
 
-    final String cn = "表单视图";
+    private String cn;
 
-    final String en = "FormView";
+    private String en;
+
+    private IMetaField metaField;
 
     @Override
     public String name() {
@@ -32,16 +35,7 @@ public class FormView extends ViewComponent {
     }
 
     @Override
-    public String config() {
-        return null;
-    }
-
-    @Override
-    public void config(String config) {
-
-    }
-
     public Kv renderMeta() {
-        return null;
+        return Kv.create().set("cn", "fasdf").set("en", "djfalskdj");
     }
 }
