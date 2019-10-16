@@ -1,11 +1,14 @@
 package com.hthjsj.web;
 
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.jfinal.config.*;
+import com.jfinal.json.FastJsonRecordSerializer;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
 
@@ -50,6 +53,11 @@ public class AppWebConfig extends JFinalConfig {
     public void configPlugin(Plugins me) {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.getPlugins().forEach(p -> me.add(p));
+    }
+
+    @Override
+    public void onStart() {
+        SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
     }
 
     @Override

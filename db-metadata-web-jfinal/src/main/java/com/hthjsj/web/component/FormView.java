@@ -1,6 +1,6 @@
 package com.hthjsj.web.component;
 
-import com.hthjsj.analysis.meta.Component;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
@@ -10,7 +10,7 @@ import com.hthjsj.analysis.meta.Component;
  *
  * <p> @author konbluesky </p>
  */
-public class FormView implements Component {
+public class FormView extends ViewComponent {
 
     final String cn = "表单视图";
 
@@ -29,5 +29,19 @@ public class FormView implements Component {
     @Override
     public String type() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public String config() {
+        return null;
+    }
+
+    @Override
+    public void config(String config) {
+
+    }
+
+    public Kv renderMeta() {
+        return null;
     }
 }

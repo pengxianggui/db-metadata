@@ -9,9 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -27,8 +24,6 @@ public class SqlParaExt extends SqlPara {
     @Setter
     private String select;
 
-    private List<String> selectColumns;
-
     @Getter
     @Setter
     private String from;
@@ -36,9 +31,6 @@ public class SqlParaExt extends SqlPara {
     @Getter
     @Setter
     private String whereExcept;
-
-    //FIXME
-    private List<Map.Entry<String, Object>> whereColumns;
 
     public SqlParaExt() {
     }

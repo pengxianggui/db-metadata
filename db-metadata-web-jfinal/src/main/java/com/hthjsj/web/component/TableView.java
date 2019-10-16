@@ -57,23 +57,12 @@ public class TableView extends ViewComponent {
 
     }
 
-    @Override
-    public Kv renderMeta() {
+    private Kv renderMeta() {
         Kv kv = Kv.create();
         kv.putAll(globalConfig);
         kv.putAll(metaObjectConfig);
         kv.putAll(getShowBehavior().getBehaviorRuleData());
         return kv;
-    }
-
-    @Override
-    public String name() {
-        return cn;
-    }
-
-    @Override
-    public String code() {
-        return en;
     }
 
     @Override

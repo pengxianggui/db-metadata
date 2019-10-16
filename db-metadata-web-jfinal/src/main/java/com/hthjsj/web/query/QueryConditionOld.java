@@ -22,7 +22,8 @@ import java.util.Map;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class QueryCondition2 {
+@Deprecated
+public class QueryConditionOld {
 
     public final static String SEPARATOR = "_";
 
@@ -43,8 +44,6 @@ public class QueryCondition2 {
     public final static String IN = "in";
 
     public final static String NIN = "nin";
-
-    public final static String SORT = "sort";
 
 
     /**
@@ -72,17 +71,17 @@ public class QueryCondition2 {
      * ne （not equal to）            不等于
      */
     public static void main(String[] args) {
-        //        QueryCondition q = new QueryCondition();
-        //        String value = "1";
-        //        Kv kv = Kv.create();
-        //        kv.set(q.LT_SQL("username"), value);
-        //        kv.set(q.EQ_SQL("password"), 23);
-        //        String[] ins = new String[] { "11", "22" };
-        //        kv.set(q.IN_SQL("u", ins), ins);
-        //
-        //        System.out.println(kv.toJson());
-        //
-        //        System.out.println(q.buildExceptSelect(kv, new SqlParaExt(), "ta_name"));
+        QueryConditionOld q = new QueryConditionOld();
+        String value = "1";
+        Kv kv = Kv.create();
+        kv.set(q.LT_SQL("username"), value);
+        kv.set(q.EQ_SQL("password"), 23);
+        String[] ins = new String[] { "11", "22" };
+        kv.set(q.IN_SQL("u", ins), ins);
+
+        System.out.println(kv.toJson());
+
+        System.out.println(q.buildExceptSelect(kv, new SqlParaExt(), "ta_name"));
     }
 
     /**
@@ -130,30 +129,67 @@ public class QueryCondition2 {
         for (IMetaField field : metaFields) {
             String fieldCode = field.en();
             conds.set(PREFIX_COL(fieldCode), fieldCode);
-
-            //兼容逻辑
-            if (httpParams.get(field.en()) != null) {
-                String ruleKey = fieldCode + SEPARATOR + EQ;
-                conds.set(ruleKey, httpParams.get(field.en())[0]);
-                httpParams.put(ruleKey, httpParams.get(field.en()));
+            // = & equals
+            String value = StrKit.isBlank(getFirst(httpParams.get(fieldCode))) ? getFirst(httpParams.get(EQ(fieldCode))) : getFirst(httpParams.get(fieldCode));
+            if (StrKit.notBlank(value)) {
+                conds.set(EQ_SQL(fieldCode), value);
+            }
+            // less than
+            value = getFirst(httpParams.get(LT(fieldCode)));
+            if (StrKit.notBlank(value)) {
+                conds.set(LT_SQL(fieldCode), value);
+            }
+            // greater than
+            value = getFirst(httpParams.get(GT(fieldCode)));
+            if (StrKit.notBlank(value)) {
+                conds.set(GT_SQL(fieldCode), value);
+            }
+            // less than or equal to
+            value = getFirst(httpParams.get(LE(fieldCode)));
+            if (StrKit.notBlank(value)) {
+                conds.set(LE_SQL(fieldCode), value);
+            }
+            // greater than or equal to
+            value = getFirst(httpParams.get(GE(fieldCode)));
+            if (StrKit.notBlank(value)) {
+                conds.set(GE_SQL(fieldCode), value);
+            }
+            // not equals
+            value = getFirst(httpParams.get(NE(fieldCode)));
+            if (StrKit.notBlank(value)) {
+                conds.set(NE_SQL(fieldCode), value);
+            }
+            // in(?,?)
+            //request中获取的是"a,b,httpParams"所以需要toStrs
+            String[] values = getStrs(httpParams.get(IN(fieldCode)));
+            if (values != null && values.length > 0) {
+                conds.set(IN_SQL(fieldCode, values), values);
             }
 
-            for (QueryParses.ParseRule rule : QueryParses.me().getParseter()) {
-
-                String ruleKey = rule.key(fieldCode);
-                if (httpParams.get(ruleKey) != null) {
-                    String sqlKey = rule.toSql(httpParams, fieldCode);
-                    conds.set(sqlKey, rule.getValue(httpParams, fieldCode));
-                }
+            // not in(?,?)
+            values = getStrs(httpParams.get(NIN(fieldCode)));
+            if (values != null && values.length > 0) {
+                conds.set(NIN_SQL(fieldCode, values), values);
             }
         }
-
+        log.info("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
         return buildExceptSelect(conds, sqlParaExt, metaObject.tableName());
     }
 
-    private SqlParaExt buildSql(Kv kv, SqlParaExt sqlParaExt, MetaObject metaObject) {
+    private String[] getStrs(String[] s) {
+        if (s != null && s.length > 0) {
+            return s[0].split(",");
+        }
         return null;
     }
+
+    private String getFirst(String[] s) {
+        if (s != null && s.length > 0) {
+            return s[0];
+        }
+        return null;
+    }
+    
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
         StringBuilder sqlExceptSelect = new StringBuilder();
@@ -187,6 +223,84 @@ public class QueryCondition2 {
         sqlParaExt.verify();
         log.info(sqlParaExt.toString());
         return sqlParaExt;
+    }
+
+    private String LT(String key) {
+        return key + SEPARATOR + LT;
+    }
+
+    private String LT_SQL(String key) {
+        return key + " <? ";
+    }
+
+    private String GT(String key) {
+        return key + SEPARATOR + GT;
+    }
+
+    private String GT_SQL(String key) {
+        return key + " >? ";
+    }
+
+    private String LE(String key) {
+        return key + SEPARATOR + LE;
+    }
+
+    private String LE_SQL(String key) {
+        return key + " <=? ";
+    }
+
+    private String GE(String key) {
+        return key + SEPARATOR + GE;
+    }
+
+    private String GE_SQL(String key) {
+        return key + " >=? ";
+    }
+
+    private String EQ(String key) {
+        return key + SEPARATOR + EQ;
+    }
+
+    private String EQ_SQL(String key) {
+        return key + " =? ";
+    }
+
+    private String NE(String key) {
+        return key + SEPARATOR + NE;
+    }
+
+    private String NE_SQL(String key) {
+        return key + " <>? ";
+    }
+
+    private String IN(String key) {
+        return key + SEPARATOR + IN;
+    }
+
+    private String IN_SQL(String key, String[] values) {
+        StringBuilder sb = new StringBuilder();
+        for (String v : values) {
+            if (StrKit.notBlank(v)) {
+                sb.append(",?");
+            }
+        }
+        String s = sb.toString().replaceFirst("(,)", "");
+        return key + " in(" + s + ") ";
+    }
+
+    private String NIN(String key) {
+        return key + SEPARATOR + NIN;
+    }
+
+    private String NIN_SQL(String key, String[] values) {
+        StringBuilder sb = new StringBuilder();
+        for (String v : values) {
+            if (StrKit.notBlank(v)) {
+                sb.append(",?");
+            }
+        }
+        String s = sb.toString().replaceFirst("(,)", "");
+        return key + " not in(" + s + ") ";
     }
 
     private String PREFIX_COL(String key) {

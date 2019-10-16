@@ -1309,7 +1309,7 @@
     "dbs": [
       {
         "name": "metadata",
-        "defaultDB": true,
+        "defaultDB": false,
         "properties": {
           "driver_class_name": "com.mysql.jdbc.Driver",
           "url": "jdbc:mysql://192.168.1.93:3310/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
@@ -1319,7 +1319,7 @@
       },
       {
         "name": "metadata",
-        "defaultDB": false,
+        "defaultDB": true,
         "properties": {
           "driver_class_name": "com.mysql.jdbc.Driver",
           "url": "jdbc:mysql://localhost:3309/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",

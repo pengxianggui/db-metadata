@@ -1,10 +1,15 @@
 package com.hthjsj.web.query;
 
+import com.google.common.collect.Maps;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
+import com.hthjsj.web.query.sqls.MetaSQLBuilder;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,27 +24,10 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class QueryCondition {
 
-    public final static String SEPARATOR = "_";
-
     public static final String PREFIX_COL = "__COLUMN__";
-
-    public final static String LT = "lt";
-
-    public final static String LE = "le";
-
-    public final static String EQ = "eq";
-
-    public final static String NE = "ne";
-
-    public final static String GE = "ge";
-
-    public final static String GT = "gt";
-
-    public final static String IN = "in";
-
-    public final static String NIN = "nin";
 
 
     /**
@@ -58,38 +46,28 @@ public class QueryCondition {
      * 字符 : key_in = "1","2","3","4"
      *
      */
-    /**
-     * lt （less than）               小于
-     * gt （greater than）            大于
-     * le （less than or equal to）   小于等于
-     * ge （greater than or equal to）大于等于
-     * eq （equal to）                等于
-     * ne （not equal to）            不等于
-     */
-    public static void main(String[] args) {
-        QueryCondition q = new QueryCondition();
-        String value = "1";
-        Kv kv = Kv.create();
-        kv.set(q.LT_SQL("username"), value);
-        kv.set(q.EQ_SQL("password"), 23);
-        String[] ins = new String[] { "11", "22" };
-        kv.set(q.IN_SQL("u", ins), ins);
-
-        System.out.println(kv.toJson());
-
-        System.out.println(q.buildExceptSelect(kv, new SqlParaExt(), "ta_name"));
+    private Map<String, Object> toObjectFlat(Map<String, String[]> maps) {
+        Map<String, Object> result = Maps.newHashMap();
+        for (Map.Entry<String, String[]> e : maps.entrySet()) {
+            String[] values = e.getValue();
+            if (values.length == 1) {
+                result.put(e.getKey(), values[0]);
+            } else {
+                result.put(e.getKey(), values);
+            }
+        }
+        return result;
     }
 
     /**
-     * 解析逻辑
-     * 非连续-> 连续-> 普通
      * <p>
      * FIXME :
      * http://url?ef=id,name,config&f=config 会滤出全部列
+     * <p>
+     * 过滤字段 -> 根据解析规则 拆解 httpparams -> 构建SqlExtPara
      */
     public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
-
-        //FIXME
+        Map<String, Object> params = toObjectFlat(httpParams);
         Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
@@ -99,6 +77,10 @@ public class QueryCondition {
         //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
         Arrays.sort(fields);
         Arrays.sort(efields);
+        //相同集合直接返回
+        if (StrKit.notBlank(fields) && StrKit.notBlank(efields) && Arrays.equals(fields, efields)) {
+            throw new WebException("显示列数组与排除列数组相同,fields:[%s];efields[%s]", Arrays.toString(fields), Arrays.toString(efields));
+        }
         //过滤字段
         while (mfiter.hasNext()) {
             IMetaField metaField = mfiter.next();
@@ -121,69 +103,24 @@ public class QueryCondition {
         for (IMetaField field : metaFields) {
             String fieldCode = field.en();
             conds.set(PREFIX_COL(fieldCode), fieldCode);
-            // = & equals
-            String value = StrKit.isBlank(getFirst(httpParams.get(fieldCode))) ? getFirst(httpParams.get(EQ(fieldCode))) : getFirst(httpParams.get(fieldCode));
-            if (StrKit.notBlank(value)) {
-                conds.set(EQ_SQL(fieldCode), value);
-            }
-            // less than
-            value = getFirst(httpParams.get(LT(fieldCode)));
-            if (StrKit.notBlank(value)) {
-                conds.set(LT_SQL(fieldCode), value);
-            }
-            // greater than
-            value = getFirst(httpParams.get(GT(fieldCode)));
-            if (StrKit.notBlank(value)) {
-                conds.set(GT_SQL(fieldCode), value);
-            }
-            // less than or equal to
-            value = getFirst(httpParams.get(LE(fieldCode)));
-            if (StrKit.notBlank(value)) {
-                conds.set(LE_SQL(fieldCode), value);
-            }
-            // greater than or equal to
-            value = getFirst(httpParams.get(GE(fieldCode)));
-            if (StrKit.notBlank(value)) {
-                conds.set(GE_SQL(fieldCode), value);
-            }
-            // not equals
-            value = getFirst(httpParams.get(NE(fieldCode)));
-            if (StrKit.notBlank(value)) {
-                conds.set(NE_SQL(fieldCode), value);
-            }
-            // in(?,?)
-            //request中获取的是"a,b,httpParams"所以需要toStrs
-            String[] values = getStrs(httpParams.get(IN(fieldCode)));
-            if (values != null && values.length > 0) {
-                conds.set(IN_SQL(fieldCode, values), values);
-            }
 
-            // not in(?,?)
-            values = getStrs(httpParams.get(NIN(fieldCode)));
-            if (values != null && values.length > 0) {
-                conds.set(NIN_SQL(fieldCode, values), values);
+            for (Class<? extends MetaSQLBuilder> mClass : QueryParses.me().parseter) {
+                try {
+                    MetaSQLBuilder metaSQLBuilder = mClass.newInstance();
+                    metaSQLBuilder.init(field, params);
+                    conds.putAll(metaSQLBuilder.result());
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
-        return buildExceptSelect(conds, sqlParaExt, metaObject.tableName());
+        log.info("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
+        return buildExceptSelect(conds, sqlParaExt, metaObject);
     }
 
-    private String[] getStrs(String[] s) {
-        if (s != null && s.length > 0) {
-            return s[0].split(",");
-        }
-        return null;
-    }
-
-    private String getFirst(String[] s) {
-        if (s != null && s.length > 0) {
-            return s[0];
-        }
-        return null;
-    }
-    
-
-    private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
+    private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, IMetaObject metaObject) {
         StringBuilder sqlExceptSelect = new StringBuilder();
         StringBuilder sqlSelect = new StringBuilder("select *");
         Iterator iter = kv.keySet().iterator();
@@ -210,88 +147,11 @@ public class QueryCondition {
             sqlParaExt.addPara(kv.get(key));
         }
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
-        sqlParaExt.setFrom(" from " + tableName);
+        sqlParaExt.setFrom(" from " + metaObject.tableName());
         sqlParaExt.setWhereExcept(" where 1=1 " + sqlExceptSelect.toString());
         sqlParaExt.verify();
+        log.info(sqlParaExt.toString());
         return sqlParaExt;
-    }
-
-    private String LT(String key) {
-        return key + SEPARATOR + LT;
-    }
-
-    private String LT_SQL(String key) {
-        return key + " <? ";
-    }
-
-    private String GT(String key) {
-        return key + SEPARATOR + GT;
-    }
-
-    private String GT_SQL(String key) {
-        return key + " >? ";
-    }
-
-    private String LE(String key) {
-        return key + SEPARATOR + LE;
-    }
-
-    private String LE_SQL(String key) {
-        return key + " <=? ";
-    }
-
-    private String GE(String key) {
-        return key + SEPARATOR + GE;
-    }
-
-    private String GE_SQL(String key) {
-        return key + " >=? ";
-    }
-
-    private String EQ(String key) {
-        return key + SEPARATOR + EQ;
-    }
-
-    private String EQ_SQL(String key) {
-        return key + " =? ";
-    }
-
-    private String NE(String key) {
-        return key + SEPARATOR + NE;
-    }
-
-    private String NE_SQL(String key) {
-        return key + " <>? ";
-    }
-
-    private String IN(String key) {
-        return key + SEPARATOR + IN;
-    }
-
-    private String IN_SQL(String key, String[] values) {
-        StringBuilder sb = new StringBuilder();
-        for (String v : values) {
-            if (StrKit.notBlank(v)) {
-                sb.append(",?");
-            }
-        }
-        String s = sb.toString().replaceFirst("(,)", "");
-        return key + " in(" + s + ") ";
-    }
-
-    private String NIN(String key) {
-        return key + SEPARATOR + NIN;
-    }
-
-    private String NIN_SQL(String key, String[] values) {
-        StringBuilder sb = new StringBuilder();
-        for (String v : values) {
-            if (StrKit.notBlank(v)) {
-                sb.append(",?");
-            }
-        }
-        String s = sb.toString().replaceFirst("(,)", "");
-        return key + " not in(" + s + ") ";
     }
 
     private String PREFIX_COL(String key) {

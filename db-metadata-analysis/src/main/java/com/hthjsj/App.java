@@ -56,13 +56,13 @@ public class App {
 
             dbMetaService.saveMetaObject(adapter, true);
         }
-        {
-            MetaObject metaObject = (MetaObject) dbMetaService.importFromTable("metadata", "meta_component");
-            System.out.println(JSON.toJSONString(metaObject, SerializerFeature.DisableCircularReferenceDetect));
-            MetaObjectDBAdapter adapter = new MetaObjectDBAdapter(metaObject);
-
-
-            dbMetaService.saveMetaObject(adapter, true);
-        }
+        //        {
+        //            MetaObject metaObject = (MetaObject) dbMetaService.importFromTable("metadata", "meta_component");
+        //            System.out.println(JSON.toJSONString(metaObject, SerializerFeature.DisableCircularReferenceDetect));
+        //            MetaObjectDBAdapter adapter = new MetaObjectDBAdapter(metaObject);
+        //
+        //
+        //            dbMetaService.saveMetaObject(adapter, true);
+        //        }
     }
 }
