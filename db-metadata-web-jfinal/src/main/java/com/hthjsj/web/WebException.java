@@ -1,4 +1,4 @@
-package com.hthjsj.web.controller;
+package com.hthjsj.web;
 
 /**
  * <p> Class title: </p>
@@ -8,28 +8,28 @@ package com.hthjsj.web.controller;
  *
  * <p> @author konbluesky </p>
  */
-public class ControllerException extends RuntimeException {
+public class WebException extends RuntimeException {
 
-    public ControllerException() {
+    public WebException() {
     }
 
-    public ControllerException(String message) {
+    public WebException(String message) {
         super(message);
     }
 
-    public ControllerException(String messageTmpl, String... args) {
+    public WebException(String messageTmpl, String... args) {
         super(resolveString(messageTmpl, args));
     }
 
-    public ControllerException(String message, Throwable cause) {
+    public WebException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ControllerException(Throwable cause) {
+    public WebException(Throwable cause) {
         super(cause);
     }
 
-    public ControllerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public WebException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

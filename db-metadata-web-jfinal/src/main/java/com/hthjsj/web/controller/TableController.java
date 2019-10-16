@@ -6,6 +6,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
+import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -53,13 +54,13 @@ public class TableController extends FrontRestController {
          * [x] 4. paging
          * 5. escape fields value
          */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        Integer pageIndex = queryHelper.getPageIndex();
+        Integer pageSize = queryHelper.getPageSize();
 
-        String objectCode = getPara(0, getPara("objectCode"));
-        Integer pageIndex = getInt("p", getInt("pageIndex", 1));
-        Integer pageSize = getInt("s", getInt("pageSize", 20));
-
-        String includeFieldStr = getPara("f", getPara("fields", ""));
-        String excludeFieldStr = getPara("ef", getPara("exfields", ""));
+        String includeFieldStr = getPara("fs", getPara("fields", ""));
+        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
         String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
@@ -68,7 +69,7 @@ public class TableController extends FrontRestController {
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
-        Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromExceptSelect(), sqlPara.getPara());
+        Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         renderJsonExcludes(Ret.ok("data", result.getList()), excludeFields);
         return null;
