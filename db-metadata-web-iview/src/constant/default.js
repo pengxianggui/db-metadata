@@ -14,8 +14,7 @@ const DEFAULT = {
             "layout": "total, sizes, prev, pager, next, jumper"
         }
     },
-    BoolBox: {
-    },
+    BoolBox: {},
     TextBox: {
         // custom ..
         conf: {
@@ -55,7 +54,7 @@ const DEFAULT = {
         "data-url": "" // todo filling
     },
     JsonBox: {
-        mode: 'code',
+        mode: 'text',
         modes: ['code', 'tree', 'text', 'view', 'form']
     },
     ImgBox: {
@@ -77,10 +76,47 @@ const DEFAULT = {
         clabel: "展开"
     },
     FormTmpl: {
-        "label-width": "100px",
-        action: "/api/form", // todo filling
-        methods: 'POST'
-        // ...
+        form_name: "formName",
+        action: '', // form action (url)
+        methods: 'POST',
+        conf: {
+            "label-width": '80px',
+            size: 'medium', // medium|small|mini
+            model: {
+                username: '',
+                // ...
+            },
+            rules: {
+                username: [{required: true, message: '用户名必填', trigger: 'blur'}],
+                // ...
+            },
+            // ...
+        },
+        columns: [{
+            component_name: 'TextBox',
+            name: 'username',
+            label: '用户名',
+            conf: {
+                clearable: true,
+                placeholder: "请输入姓名..",
+                // ...
+            }
+        }],
+        btn: {
+            submit: {
+                label: '提交',
+                conf: {
+                    // ... support conf of el-button
+                }
+            },
+            cancel: {
+                label: '取消',
+                conf: {
+                    // ... support conf of el-button
+                }
+            }
+        }
+
     }
 }
 

@@ -1,7 +1,7 @@
 <template>
-    <el-input v-model="currValue"
+    <el-input v-model="nativeValue"
               v-bind="meta.conf"
-              @input="$emit('input', $event)"
+              @input="handleInput"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
@@ -33,6 +33,8 @@
             }
         },
         methods: {
+            handleInput: function () {
+            },
             getDefaultMeta: function() {
                 return DEFAULT.TextBox
             },
@@ -46,11 +48,12 @@
             this.initMeta()
         },
         computed: {
-            currValue: {
+            nativeValue: {
                 get: function() {
                     return this.value;
                 },
                 set: function(newValue) {
+                    console.log('sb')
                     this.$emit("input", newValue); // 通过 input 事件更新 model
                 }
             }

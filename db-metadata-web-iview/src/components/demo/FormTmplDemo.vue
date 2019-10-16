@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h2>{{meta.component_name}}: </h2>
-        <component :is="meta.component_name" :object-code="meta.object_code"></component>
+        <h2>{{model.meta.component_name}}: </h2>
+        <component :is="model.meta.component_name" :meta="model.meta"></component>
         <z-toggle-panel>
-            <json-box v-model="meta"></json-box>
+            <json-box v-model="model"></json-box>
         </z-toggle-panel>
     </div>
 </template>
@@ -14,9 +14,11 @@
         name: "form-tmpl-demo",
         data () {
             return {
-                meta: {
-                    component_name: 'form-tmpl',
-                    object_code: "meta_object_code",
+                model: {
+                    meta: {
+                        component_name: 'form-tmpl',
+                        form_name: 'demoForm'
+                    }
                 }
             }
         },

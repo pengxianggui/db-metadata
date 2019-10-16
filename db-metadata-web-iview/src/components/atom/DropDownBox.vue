@@ -1,3 +1,42 @@
+<!--
+# meta
+description: meta data
+eg:
+    {
+        "data_url": "", // for options data
+        "group": false, // 是否选项组模式
+        "conf": {   // ui conf
+            "clearable": true,
+            "placeholder": "请下拉选择",
+            "..."
+        }
+    }
+
+# options
+description: 选项数据(业务数据), 支持直接传入, 或者通过传入组件元数据, 在其中配置data_url参数, 从远端获取选项数据.
+eg:
+    [{
+        key: 'xxx',
+        value: 'yyy',
+        disabled: false
+    },
+    ...],
+若为选项组模式,
+eg:
+    [{
+     label: "group1",
+     options: [{
+         key: "xxx",
+         value: "yyy"
+     }]
+    }, {...}]
+
+# custom event
+## format
+type: Function,
+description: format option data, and return formatted data, like: [{key: "xxx", value: "yyy"}, ...]
+
+ -->
 <template>
     <el-select v-model="currValue"
                v-bind="meta.conf"
@@ -76,7 +115,6 @@
                     return {}
                 }
             },
-            format: Function // format option data, and return formatted data, like: [{key: "xxx", value: "yyy"}, ...]
         },
         methods: {
             getDefaultMeta: function () {
@@ -95,8 +133,8 @@
                     url: _this.meta['data_url']
                 }).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    if (_this.format) {
-                        _this.options = _this.format(resp)
+                    if (_this.$listeners.format) {
+                        _this.options = _this.$emit('format', resp)
                     } else {
                         if (resp['state'] === 'ok') {
                             _this.options = resp.data
