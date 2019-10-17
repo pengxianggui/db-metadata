@@ -128,8 +128,6 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             getOptions: function () {
                 // http request options data by meta.data_url
                 let _this = this
-                let options = _this.$emit(_this.meta.name + '_format', ['Main'])
-                return;
                 _this.$axios({
                     methods: 'GET',
                     url: _this.meta['data_url']
@@ -156,9 +154,10 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 console.error("options or data_url in meta provide one at least!")
             },
             renderMethods: function () {
-                if (!this.meta.methods || Object.keys(this.meta.methods).length <= 0) return
-                for (let methodName in this.meta.methods) {
-                    let fn = this.meta.methods[methodName]
+                // TODO
+                // if (!this.meta.methods || Object.keys(this.meta.methods).length <= 0) return
+                // for (let methodName in this.meta.methods) {
+                //     let fn = this.meta.methods[methodName]
                     // this.$on(methodName, function (data) {
                     //     let options = []
                     //     for (let j = 0; j < data.length; j++) {
@@ -169,7 +168,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     //     }
                     //     return options
                     // })
-                }
+                // }
             }
         },
         created() {

@@ -1,9 +1,9 @@
 <template>
     <div>
         <el-card>
-            <meta-import :meta="formMeta"></meta-import>
+            <meta-import :meta="formMeta" @submit="formSubmit"></meta-import>
         </el-card>
-        <table-list :meta="tableMeta"></table-list>
+        <table-list :meta="tableMeta" :data="tableData"></table-list>
     </div>
 </template>
 
@@ -41,7 +41,7 @@
                         label: '数据库',
                         conf: {
                             clearable: true,
-                            // placeholder: "请输入姓名..",
+                            placeholder: "请选择数据库..",
                             // ...
                         },
                         methods: {
@@ -88,7 +88,8 @@
                     // ...
                     ]
 
-                }
+                },
+                tableData: []
             }
         },
         props: {
@@ -101,6 +102,7 @@
         },
         methods: {
             getTableMeta() {
+                // TODO
                 this.$axios({
                     methods: "GET",
                     url: ''
@@ -114,6 +116,7 @@
                 })
             },
             getFormMeta() {
+                // TODO
                 this.$axios({
                     methods: "GET",
                     url: ''
@@ -125,6 +128,15 @@
                         this.$message.error(resp.msg)
                     }
                 })
+            },
+            formSubmit(formModel) {
+                // TODO 请求TableList的数据
+                this.$axios({
+                    methods: 'POST',
+                    url: '',
+                    data: formModel
+                }).then(resp => {
+                })
             }
         },
         components: {
@@ -134,6 +146,7 @@
         created() {
         },
         mounted() {
+            this.getFormMeta()
             this.getTableMeta()
 
         }

@@ -47,9 +47,19 @@ eg:
 -->
 <template>
     <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
-        <el-form-item v-for="(item, index) in meta.columns" :key="item.name + index"
-                      :label="item.label" :prop="item.name">
-            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
+        <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
+            {{schemaOptions}}
+<!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
+            <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()" :options.sync="schemaOptions"></drop-down-box>
+        </el-form-item>
+        <el-form-item :label="meta.columns[1].label" :prop="meta.columns[1].name">
+            <drop-down-box :meta="meta.columns[1]" v-model="model[meta.columns[1].name]" :options.sync="tableOptions"></drop-down-box>
+        </el-form-item>
+        <el-form-item :label="meta.columns[2].label" :prop="meta.columns[2].name">
+            <text-box :meta="meta.columns[2]" v-model="model[meta.columns[2].name]"></text-box>
+        </el-form-item>
+        <el-form-item :label="meta.columns[3].label" :prop="meta.columns[3].name">
+            <text-box :meta="meta.columns[3]" v-model="model[meta.columns[3].name]"></text-box>
         </el-form-item>
         <el-form-item>
             <el-button :id="meta.form_name + 'submit'" v-bind="meta.btn.submit.conf" @click="onSubmit"
@@ -69,56 +79,11 @@ eg:
         data() {
             return {
                 model: {},
-                // handlers: ['aaa', { action: '' }]
+                tableOptions: [],
+                schemaOptions: []
             }
         },
         props: {
-            /*
-             * meta component.
-             * eg:
-             * {
-             *  form_name: "formName",
-             *  action: '', // form action (url)
-             *  methods: 'POST',
-             *  conf: {
-             *      "label-width": '80px',
-             *      size: 'medium', // medium|small|mini
-             *      model: {
-             *          username: '',
-             *          // ...
-             *      },
-             *      rules: {
-             *          username: [{required: true, message: '用户名必填', trigger: 'blur'}, ...],
-             *          // ...
-             *      },
-             *      // ...
-             *  },
-             *  columns: [{
-             *      component_name: 'TextBox',
-             *      name: 'username',
-             *      label: '用户名',
-             *      conf: {
-             *          clearable: "true",
-             *          placeholder: "请输入姓名..",
-             *          // ...
-             *      }
-             *  }, ...],
-             *  btn: {
-             *      'submit': {
-             *          label: '提交',
-             *          conf: {
-             *              // ... support conf of el-button
-             *          }
-             *      },
-             *      'cancel': {
-             *          label: '取消',
-             *          conf: {
-             *              // ... support conf of el-button
-             *          }
-             *      }
-             *  }
-             * }
-             */
             meta: {
                 type: Object,
                 default: function () {
@@ -131,11 +96,11 @@ eg:
                 // this.model = this.meta.conf.model
                 let _this = this
                 _this.meta.columns.forEach(item => {
-                    Vue.set(_this.model, item.name, item.value || null) // 这种赋值方法, 双向绑定才生效
+                    Vue.set(_this.model, item.name, item.value || null)
                 })
             },
             assemblyMethods () {
-                // TODO
+                // todo
             },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
@@ -146,6 +111,32 @@ eg:
                 this.meta.btn = this.meta.btn || {}
                 let defaultMeta = this.getDefaultMeta() || {}
                 this.$merge(this.meta, defaultMeta)
+            },
+            loadSchema() {
+                let _this = this
+                _this.$axios({
+                    methods: 'GET',
+                    url: _this.meta.columns[0]['data_url']
+                }).then(resp => {
+                    if (resp.state === 'ok')
+                        _this.schemaOptions = resp.data
+                    else
+                        _this.$message.error(resp.msg)
+                })
+            },
+            loadTables() {
+                let _this = this
+                let value = _this.model[this.meta.columns[0].name]
+                // TODO 联动获取表名数据
+                _this.$axios({
+                    methods: 'GET',
+                    url: _this.meta.columns[0]['data_url'] + "?schema=" + value
+                }).then(resp => {
+                    if (resp.state === 'ok')
+                        _this.tableOptions = resp.data
+                    else
+                        _this.$message.error(resp.msg)
+                })
             },
             doSubmit() {
                 let _this = this
@@ -179,7 +170,7 @@ eg:
                 if (this.$listeners.cancel) {
                     this.$emit('cancel', event)
                 } else {
-                    // TODO
+                    // todo
                 }
             }
         },
@@ -190,6 +181,7 @@ eg:
         },
         mounted() {
             // request business data
+            this.loadSchema()
         }
     }
 </script>
