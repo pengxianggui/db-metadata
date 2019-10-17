@@ -1,9 +1,5 @@
 <template>
     <div>
-        <!--        <el-button @click="importMeta">导入元对象</el-button>-->
-        <!--        <el-dialog title="选择元对象" :visible.sync="dialogVisible">-->
-        <!--            <form-tmpl :meta="formMeta"></form-tmpl>-->
-        <!--        </el-dialog>-->
         <el-card>
             <form-tmpl :meta="formMeta"></form-tmpl>
         </el-card>
@@ -47,6 +43,18 @@
                             clearable: true,
                             // placeholder: "请输入姓名..",
                             // ...
+                        },
+                        methods: {
+                            format: function (data) {
+                                let options = []
+                                for (let item in data) {
+                                    options.push({
+                                        key: item,
+                                        value: item
+                                    })
+                                }
+                                return options
+                            }
                         }
                     }, {
                         component_name: 'DropDownBox',
@@ -92,9 +100,32 @@
             }
         },
         methods: {
-            // importMeta () {
-            //     this.dialogVisible = true
-            // }
+            getTableMeta() {
+                this.$axios({
+                    methods: "GET",
+                    url: ''
+                }).then(resp => {
+                    if (resp.state === 'ok') {
+                        this.tableMeta = resp.data
+                    } else {
+                        // error
+                        this.$message.error(resp.msg)
+                    }
+                })
+            },
+            getFormMeta() {
+                this.$axios({
+                    methods: "GET",
+                    url: ''
+                }).then(resp => {
+                    if (resp.state === 'ok') {
+                        this.formMeta = resp.data
+                    } else {
+                        // error
+                        this.$message.error(resp.msg)
+                    }
+                })
+            }
         },
         components: {
             TableList,
@@ -102,6 +133,10 @@
         },
         created() {
         },
+        mounted() {
+            this.getTableMeta()
+
+        }
 
     }
 </script>

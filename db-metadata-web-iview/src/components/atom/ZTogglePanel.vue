@@ -37,7 +37,7 @@
             initConf() {
                 this.meta.ui_config = this.meta.ui_config || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.meta.ui_config, defaultConf)
+                this.$merge(this.meta.ui_config, defaultConf)
                 this.open = this.meta.ui_config['default-open']
             }
         },

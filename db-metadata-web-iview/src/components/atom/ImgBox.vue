@@ -49,7 +49,7 @@
 
                 // merge options
                 let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.meta.ui_config, defaultConf)
+                this.$merge(this.meta.ui_config, defaultConf)
             }
         },
         created() {

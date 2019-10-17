@@ -44,7 +44,7 @@
             initConf: function () {
                 this.conf = this.meta.ui_config || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.conf, defaultConf)
+                this.$merge(this.conf, defaultConf)
             },
             getOptions: function () {
                 this.$axios({

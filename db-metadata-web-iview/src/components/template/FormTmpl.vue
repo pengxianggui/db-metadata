@@ -68,7 +68,8 @@ eg:
         name: "form-tmpl",
         data() {
             return {
-                model: {}
+                model: {},
+                // handlers: ['aaa', { action: '' }]
             }
         },
         props: {
@@ -133,6 +134,9 @@ eg:
                     Vue.set(_this.model, item.name, item.value || null) // 这种赋值方法, 双向绑定才生效
                 })
             },
+            assemblyMethods () {
+                // TODO
+            },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
             },
@@ -141,7 +145,7 @@ eg:
                 this.meta.columns = this.meta.columns || []
                 this.meta.btn = this.meta.btn || {}
                 let defaultMeta = this.getDefaultMeta() || {}
-                this.merge(this.meta, defaultMeta)
+                this.$merge(this.meta, defaultMeta)
             },
             doSubmit() {
                 let _this = this
@@ -182,6 +186,7 @@ eg:
         created() {
             this.initMeta()
             this.assemblyModel()
+            this.assemblyMethods()
         },
         mounted() {
             // request business data

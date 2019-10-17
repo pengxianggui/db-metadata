@@ -13,12 +13,13 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios // 全局注册，使用方法为:this.$axios
 
 Vue.config.productionTip = false;
+
 // 全局混入, 谨慎扩展
 Vue.mixin({
     created() {
     },
     methods: {
-        merge: utils.merge
+        $merge: utils.merge
     }
 });
 

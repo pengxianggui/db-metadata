@@ -41,7 +41,7 @@
             initMeta: function () {
                 this.meta.conf = this.meta.conf || {}
                 let defaultMeta = this.getDefaultMeta() || {}
-                this.merge(this.meta, defaultMeta)
+                this.$merge(this.meta, defaultMeta)
             }
         },
         created() {

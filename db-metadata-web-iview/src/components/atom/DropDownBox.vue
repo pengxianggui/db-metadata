@@ -123,18 +123,20 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             initMeta: function () {
                 this.meta.conf = this.meta.conf || {}
                 let defaultMeta = this.getDefaultMeta() || {}
-                this.merge(this.meta, defaultMeta)
+                this.$merge(this.meta, defaultMeta)
             },
             getOptions: function () {
                 // http request options data by meta.data_url
                 let _this = this
+                let options = _this.$emit(_this.meta.name + '_format', ['Main'])
+                return;
                 _this.$axios({
                     methods: 'GET',
                     url: _this.meta['data_url']
                 }).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    if (_this.$listeners.format) {
-                        _this.options = _this.$emit('format', resp)
+                    if (_this.$listeners[_this.meta.name + '_format']) {
+                        _this.options = _this.$emit(_this.meta.name + '_format', resp)
                     } else {
                         if (resp['state'] === 'ok') {
                             _this.options = resp.data
@@ -152,11 +154,31 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 }
                 // todo throw tip
                 console.error("options or data_url in meta provide one at least!")
+            },
+            renderMethods: function () {
+                if (!this.meta.methods || Object.keys(this.meta.methods).length <= 0) return
+                for (let methodName in this.meta.methods) {
+                    let fn = this.meta.methods[methodName]
+                    // this.$on(methodName, function (data) {
+                    //     let options = []
+                    //     for (let j = 0; j < data.length; j++) {
+                    //         options.push({
+                    //             key: data[j],
+                    //             value: data[j]
+                    //         })
+                    //     }
+                    //     return options
+                    // })
+                }
             }
         },
         created() {
             // init data
             this.initMeta()
+            // render method
+            this.renderMethods()
+        },
+        mounted() {
             // init option data
             this.initOptions()
         },

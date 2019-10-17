@@ -34,7 +34,7 @@
             initConf: function () {
                 this.meta.ui_config = this.meta.ui_config || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.merge(this.meta.ui_config, defaultConf)
+                this.$merge(this.meta.ui_config, defaultConf)
                 if (this.meta.ui_config['value-format'].toLowerCase() === 'date') {
                     delete this.meta.ui_config['value-format']
                 }

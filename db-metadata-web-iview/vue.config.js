@@ -27,10 +27,10 @@ module.exports = {
         sockHost: 'localhost',
         // proxy: 'http://192.168.110.67:8888'
         // proxy: {
-            // '/': {
-            //     target: 'http://192.168.110.67:8888/',
-            //     changeOrigin: true
-            // }
+        //     '/': {
+        //         target: 'http://192.168.108.118:8888/',
+        //         changeOrigin: true
+        //     }
         // }
     }
 }

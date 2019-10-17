@@ -134,7 +134,7 @@ eg:
 
                 // merge options
                 let defaultMeta = this.getDefaultMeta()
-                this.merge(this.meta, defaultMeta)
+                this.$merge(this.meta, defaultMeta)
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
