@@ -48,7 +48,6 @@ eg:
 <template>
     <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
         <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
-            {{schemaOptions}}
 <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
             <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()" :options.sync="schemaOptions"></drop-down-box>
         </el-form-item>
@@ -119,7 +118,10 @@ eg:
                     url: _this.meta.columns[0]['data_url']
                 }).then(resp => {
                     if (resp.state === 'ok')
-                        _this.schemaOptions = resp.data
+                        _this.schemaOptions = {
+                            key: resp.data,
+                            value: resp.data
+                    } // 根据数据转换key-value
                     else
                         _this.$message.error(resp.msg)
                 })

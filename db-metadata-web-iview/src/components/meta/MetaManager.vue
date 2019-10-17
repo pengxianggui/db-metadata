@@ -133,7 +133,7 @@
                 // TODO 请求TableList的数据
                 this.$axios({
                     methods: 'POST',
-                    url: '',
+                    url: '/tableList',
                     data: formModel
                 }).then(resp => {
                 })
