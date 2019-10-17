@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card>
-            <form-tmpl :meta="formMeta"></form-tmpl>
+            <meta-import :meta="formMeta"></meta-import>
         </el-card>
         <table-list :meta="tableMeta"></table-list>
     </div>
@@ -9,7 +9,7 @@
 
 <script>
     import TableList from '@/components/feature/TableList'
-    import FormTmpl from '@/components/template/FormTmpl'
+    import MetaImport from '@/components/meta/MetaImport'
     import mockData from '@/mockdata.js'
 
     export default {
@@ -129,7 +129,7 @@
         },
         components: {
             TableList,
-            FormTmpl
+            MetaImport
         },
         created() {
         },
