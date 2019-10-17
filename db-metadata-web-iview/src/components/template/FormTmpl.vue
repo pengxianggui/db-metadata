@@ -46,7 +46,7 @@ eg:
     }
 -->
 <template>
-    <el-form :ref="meta['form_name']" v-bind="meta.conf">
+    <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
         <el-form-item v-for="(item, index) in meta.columns" :key="item.name + index"
                       :label="item.label" :prop="item.name">
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
@@ -163,7 +163,7 @@ eg:
             },
             onSubmit(event) {
                 let _this = this
-                this.$refs[this.meta['form_name']].validate((valid) => {
+                _this.$refs[_this.meta['form_name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
                     } else {

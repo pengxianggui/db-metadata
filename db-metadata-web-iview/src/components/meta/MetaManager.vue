@@ -1,10 +1,12 @@
 <template>
     <div>
-<!--        <el-button @click="importMeta">导入元对象</el-button>-->
-<!--        <el-dialog title="选择元对象" :visible.sync="dialogVisible">-->
-<!--            <form-tmpl :meta="formMeta"></form-tmpl>-->
-<!--        </el-dialog>-->
-        <form-tmpl :meta="formMeta"></form-tmpl>
+        <!--        <el-button @click="importMeta">导入元对象</el-button>-->
+        <!--        <el-dialog title="选择元对象" :visible.sync="dialogVisible">-->
+        <!--            <form-tmpl :meta="formMeta"></form-tmpl>-->
+        <!--        </el-dialog>-->
+        <el-card>
+            <form-tmpl :meta="formMeta"></form-tmpl>
+        </el-card>
         <table-list :meta="tableMeta"></table-list>
     </div>
 </template>
@@ -13,9 +15,10 @@
     import TableList from '@/components/feature/TableList'
     import FormTmpl from '@/components/template/FormTmpl'
     import mockData from '@/mockdata.js'
+
     export default {
-        name: "table-tmpl",
-        data () {
+        name: "meta-manager",
+        data() {
             return {
                 // dialogVisible: false,
                 tableMeta: mockData.TableList,
@@ -45,17 +48,17 @@
                             // placeholder: "请输入姓名..",
                             // ...
                         }
-                    },{
+                    }, {
                         component_name: 'DropDownBox',
                         name: 'tableName',
                         label: '表名',
-                        data_url: '/xxx',
+                        data_url: '/meta/metaObject',
                         conf: {
                             clearable: true,
                             // placeholder: "请输入姓名..",
                             // ...
                         }
-                    },{
+                    }, {
                         component_name: 'TextBox',
                         name: 'objectName',
                         label: '对象名',
@@ -64,7 +67,7 @@
                             // placeholder: "请输入姓名..",
                             // ...
                         }
-                    },{
+                    }, {
                         component_name: 'TextBox',
                         name: 'objectCode',
                         label: '对象编码',
@@ -74,6 +77,7 @@
                             // ...
                         }
                     },
+                    // ...
                     ]
 
                 }

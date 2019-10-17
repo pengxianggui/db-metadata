@@ -64,7 +64,7 @@ eg:
                                :page-size.sync="paginationModel.pageSize"
                                :current-page.sync="paginationModel.currentPage"
                                :total="paginationModel.total"
-                               v-bind="meta.conf.pagination"
+                               v-bind="meta.pagination"
                 ></el-pagination>
             </el-col>
         </el-row>
