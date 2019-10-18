@@ -128,6 +128,7 @@ eg:
                 this.sortModel.order = param.order
             },
             initMeta() {
+                this.meta = this.meta || {}
                 this.meta.conf = this.meta.conf || {}
                 this.meta.columns = this.meta.columns || []
                 this.meta.pagination = this.meta.pagination || {}

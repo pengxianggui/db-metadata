@@ -3,7 +3,7 @@
         <el-card>
             <meta-import :meta="formMeta" @submit="formSubmit"></meta-import>
         </el-card>
-<!--        <table-list :meta="tableMeta" :data="tableData"></table-list>-->
+        <table-list :meta="tableMeta" :data="tableData"></table-list>
     </div>
 </template>
 
