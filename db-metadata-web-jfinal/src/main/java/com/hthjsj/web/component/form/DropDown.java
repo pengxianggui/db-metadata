@@ -13,29 +13,38 @@ import com.jfinal.kit.Kv;
  */
 public class DropDown extends FormField {
 
-    private String cn;
+    private String name;
 
-    private String en;
+    private String label;
 
     private IMetaField metaField;
 
+    public DropDown(String name, String label, String config) {
+        this.name = name;
+        this.label = label;
+    }
+
     @Override
     public String name() {
-        return cn;
+        return name;
     }
 
     @Override
     public String code() {
-        return en;
+        return label;
     }
 
     @Override
     public String type() {
-        return getClass().getSimpleName();
+        return "DropDownBox";
     }
 
     @Override
     public Kv renderMeta() {
-        return Kv.create().set("cn", "fasdf").set("en", "djfalskdj");
+        Kv kv = Kv.create();
+        kv.setIfNotBlank("name", name);
+        kv.setIfNotBlank("label", label);
+        kv.setIfNotBlank("component_name", type());
+        return kv;
     }
 }

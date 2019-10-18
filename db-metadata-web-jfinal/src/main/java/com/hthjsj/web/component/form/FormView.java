@@ -1,5 +1,6 @@
 package com.hthjsj.web.component.form;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.web.component.ViewComponent;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
@@ -25,11 +26,23 @@ public class FormView extends ViewComponent {
     @Getter
     List<FormField> fields = new ArrayList<>();
 
-    private Kv globalConfig = Kv.create();
+    private String formName;
+
+    private String action;
+
+    private String methods;
 
     private Kv metaObjectConfig = Kv.create();
 
     private Kv componentConfig = Kv.create();
+
+    public static FormView POST(String action, String formName) {
+        FormView formView = new FormView();
+        formView.methods = "POST";
+        formView.action = action;
+        formView.formName = formName;
+        return formView;
+    }
 
     @Override
     public String type() {
@@ -44,10 +57,13 @@ public class FormView extends ViewComponent {
     @Override
     public Kv renderMeta() {
         Kv kv = Kv.create();
-        kv.putAll(globalConfig);
         kv.putAll(metaObjectConfig);
         kv.putAll(componentConfig);
-        kv.put("fields", fields.stream().map((k) -> k.renderMeta()).collect(Collectors.toList()));
+        kv.setIfNotBlank("methods", methods);
+        kv.setIfNotBlank("form_name", formName);
+        kv.setIfNotBlank("action", action);
+        kv.set("columns", fields.stream().map((k) -> k.renderMeta()).collect(Collectors.toList()));
+        kv.set("btn", Lists.newArrayList(new Button("submit").renderMeta(), new Button("reset").renderMeta()));
         return kv;
     }
 

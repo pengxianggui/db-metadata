@@ -14,9 +14,9 @@ import com.jfinal.kit.Kv;
  */
 public class InputField extends FormField {
 
-    String cn;
+    String name;
 
-    String en;
+    String label;
 
     IMetaField metaField;
 
@@ -24,31 +24,37 @@ public class InputField extends FormField {
 
     public InputField(IMetaField metaField) {
         this.metaField = metaField;
-        cn = metaField.cn();
-        en = metaField.en();
+        name = metaField.cn();
+        label = metaField.en();
         metaFieldConfig = JSON.parseObject(metaField.config().getConfig(), Kv.class);
+    }
+
+    public InputField(String name, String label, String config) {
+        this.name = name;
+        this.label = label;
     }
 
     @Override
     public String name() {
-        return cn;
+        return name;
     }
 
     @Override
     public String code() {
-        return en;
+        return name;
     }
 
     @Override
     public String type() {
-        return getClass().getSimpleName();
+        return "InputBox";
     }
 
     @Override
     public Kv renderMeta() {
         Kv kv = Kv.create();
-        kv.put("cn", cn);
-        kv.put("en", en);
+        kv.set("component_name", type());
+        kv.set("name", name);
+        kv.set("label", label);
         return kv;
     }
 }

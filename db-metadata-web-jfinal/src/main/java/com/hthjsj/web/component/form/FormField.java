@@ -13,5 +13,20 @@ import com.jfinal.kit.Kv;
  */
 public abstract class FormField implements Component {
 
+    @Override
+    public String name() {
+        return null;
+    }
+
+    @Override
+    public String code() {
+        return null;
+    }
+
+    @Override
+    public String type() {
+        return getClass().getSimpleName();
+    }
+
     public abstract Kv renderMeta();
 }

@@ -1,10 +1,10 @@
 package com.hthjsj.web.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.component.form.InputField;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Ret;
 
@@ -35,14 +35,18 @@ public class MetaController extends FrontRestController {
         return null;
     }
 
+    /**
+     * 新增导入元数据动作
+     *
+     * @return
+     */
     @Override
     public Ret toAdd() {
-        FormView formView = new FormView();
-        formView.getFields().add(new DropDown());
-        renderJson(JSON.toJSONString(formView.renderMeta()));
-
-
-
+        FormView formView = FormView.POST("/meta/doAdd", "meta_add");
+        formView.getFields().add(new DropDown("schemaName", "数据源", "{}"));
+        formView.getFields().add(new InputField("objectName", "元对象名称", "{}"));
+        formView.getFields().add(new InputField("objectCode", "元对象编码", "{}"));
+        renderJson(Ret.ok("data", formView.renderMeta()));
         return null;
     }
 
