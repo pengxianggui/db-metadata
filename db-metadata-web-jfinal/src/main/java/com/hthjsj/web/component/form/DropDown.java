@@ -40,7 +40,7 @@ public class DropDown extends FormField {
     }
 
     public DropDown dataUrl(String url) {
-        renderMeta().setIfNotBlank("data_url", url);
+        toKv().setIfNotBlank("data_url", url);
         return this;
     }
 
@@ -52,12 +52,12 @@ public class DropDown extends FormField {
      * @return
      */
     public DropDown dependency(String dependency) {
-        renderMeta().setIfNotBlank("dep", dependency);
+        toKv().setIfNotBlank("dep", dependency);
         return this;
     }
 
     @Override
-    public Kv renderMeta() {
+    public Kv toKv() {
         Kv kv = Kv.create();
         kv.setIfNotBlank("name", name);
         kv.setIfNotBlank("label", label);

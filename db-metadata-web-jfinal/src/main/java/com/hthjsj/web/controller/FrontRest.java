@@ -1,7 +1,5 @@
 package com.hthjsj.web.controller;
 
-import com.jfinal.kit.Ret;
-
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -12,19 +10,19 @@ import com.jfinal.kit.Ret;
  */
 public interface FrontRest {
 
-    Ret index();
+    void index();
 
-    Ret toAdd();
+    void toAdd();
 
-    Ret doAdd();
+    void doAdd();
 
-    Ret toUpdate();
+    void toUpdate();
 
-    Ret doUpdate();
+    void doUpdate();
 
-    Ret detail();
+    void detail();
 
-    Ret delete();
+    void delete();
 
-    Ret list();
+    void list();
 }

@@ -22,51 +22,43 @@ public abstract class FrontRestController extends Controller implements FrontRes
     }
 
     @Override
-    public Ret index() {
+    public void index() {
         list();
-        return null;
     }
 
     @Override
-    public Ret toAdd() {
+    public void toAdd() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret doAdd() {
+    public void doAdd() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret toUpdate() {
+    public void toUpdate() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret doUpdate() {
+    public void doUpdate() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret detail() {
+    public void detail() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret delete() {
+    public void delete() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     @Override
-    public Ret list() {
+    public void list() {
         renderJson(faildMsgInfo());
-        return null;
     }
 
     Ret faildMsgInfo() {

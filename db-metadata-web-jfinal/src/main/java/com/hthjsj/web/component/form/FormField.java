@@ -1,7 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.meta.Component;
-import com.jfinal.kit.Kv;
+import com.hthjsj.web.component.ComponentRender;
 
 /**
  * <p> Class title: </p>
@@ -11,7 +11,7 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class FormField implements Component {
+public abstract class FormField implements Component, ComponentRender {
 
     @Override
     public String name() {
@@ -27,6 +27,4 @@ public abstract class FormField implements Component {
     public String type() {
         return getClass().getSimpleName();
     }
-
-    public abstract Kv renderMeta();
 }

@@ -1,10 +1,16 @@
 package com.hthjsj.web.component;
 
+import com.alibaba.fastjson.JSON;
+import com.hthjsj.web.ThreadLocalUserKit;
+import com.hthjsj.web.User;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * <p> Class title: </p>
@@ -32,12 +38,37 @@ public class ComponentService {
         return Db.findFirst("select * from meta_component where comp_code=? and object_code", componentCode, objectCode);
     }
 
-    public boolean newComponentInstance(ViewComponent component, String objectCode) {
+    public boolean newObjectConfig(ViewComponent component, String objectCode) {
+        Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT);
+        return Db.save("meta_component_instance", record);
+    }
+
+    public boolean newSpecificConfig(ViewComponent component, String specificCode) {
+        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC);
+        return Db.save("meta_component_instance", record);
+    }
+
+    public Map getSpecificConfig(String componentCode, String specificCode) {
+        String config = Db.queryStr("select * from meta_component_instance where comp_code=? and dest_object", componentCode, specificCode);
+        return JSON.parseObject(config, Map.class);
+    }
+
+    private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific) {
         Record record = new Record();
         record.set("id", StrKit.getRandomUUID());
         record.set("comp_code", component.code());
-        record.set("object_code", objectCode);
+        record.set("type", specific);
+        record.set("dest_object", specificCode);
         record.set("config", component.config());
-        return Db.save("meta_component_instance", record);
+        User u = ThreadLocalUserKit.getUser();
+        if (u != null) {
+            record.set("created_by", u.userId());
+            record.set("created_time", new Date());
+        }
+        return record;
+    }
+
+    enum INSTANCE {
+        META_OBJECT, META_FIELD, SPECIFIC,
     }
 }

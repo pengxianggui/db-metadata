@@ -1,7 +1,5 @@
 package com.hthjsj.web.controller;
 
-import com.jfinal.kit.Ret;
-
 /**
  * <p> @Date : 2019/10/16 </p>
  * <p> @Project : db-meta-serve</p>
@@ -11,7 +9,6 @@ import com.jfinal.kit.Ret;
 public class FormController extends FrontRestController {
 
     @Override
-    public Ret index() {
-        return null;
+    public void index() {
     }
 }

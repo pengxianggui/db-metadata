@@ -1,12 +1,12 @@
 package com.hthjsj.web.component;
 
-import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
-import com.jfinal.plugin.activerecord.Record;
+import lombok.Data;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p> Class title: 表格显示控件</p>
@@ -16,64 +16,81 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Data
 public class TableView extends ViewComponent {
 
-    final String cn = "表格控件";
+    private String name;
 
-    final String en = "TableView";
+    private String label;
 
     private Kv globalConfig = Kv.create();
 
     private Kv metaObjectConfig = Kv.create();
 
+    @Setter
+    @Accessors(chain = true)
+    private MetaObject metaObject;
+
     public TableView() {
         setShowBehavior(new TableViewDefaultBehavior());
     }
 
+    public TableView(String name, String label) {
+        this.name = name;
+        this.label = label;
+    }
     public TableView(MetaObject metaObject) {
         this();
+        if (metaObject == null) {
+            throw new ComponentException("metaObject==null,必须传入有效的metaObject");
+        }
+        this.metaObject = metaObject;
         /**
          * 1. 初始化全局配置 from db;
          * 2. 允许实例层级覆盖配置
          */
-        Record record = Aop.get(ComponentService.class).load(code());
-        globalConfig.putAll(JSON.parseObject(record.getStr("config"), Map.class));
+        //        Record record = Aop.get(ComponentService.class).load(type());
+        //        globalConfig.putAll(JSON.parseObject(record.getStr("config"), Map.class));
 
-        metaObjectConfig.set("metaObjCode", metaObject.code());
-        metaObjectConfig.set("fields", metaObject.fields());
-    }
-
-    public void setGlobal(Object key, Object value) {
-        globalConfig.set(key, value);
+        //        metaObjectConfig.set("metaObjCode", metaObject.code());
+        //        metaObjectConfig.set("fields", metaObject.fields());
     }
 
     @Override
     public String config() {
-        return renderMeta().toJson();
+        return toKv().toJson();
+    }
+
+    public TableView dataUrl(String url) {
+        toKv().setIfNotBlank("data_url", url);
+        return this;
     }
 
     @Override
-    public void config(String config) {
-
-    }
-
-    @Override
-    public Kv renderMeta() {
+    public Kv toKv() {
         Kv kv = Kv.create();
         kv.putAll(globalConfig);
         kv.putAll(metaObjectConfig);
-        kv.putAll(getShowBehavior().getBehaviorRuleData());
+        kv.setIfNotBlank("name", name);
+        kv.setIfNotBlank("label", label);
+        kv.setIfNotBlank("component_name", type());
+        kv.setIfNotBlank("conf", "");
+        kv.set("columns", metaObject.fields().stream().map(field -> {
+            return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", new Object());
+        }).collect(Collectors.toList()));
+        //                kv.putAll(getShowBehavior().getBehaviorRuleData());
         return kv;
     }
 
     @Override
     public String type() {
-        return this.getClass().getSimpleName();
+        return "TableList";
     }
 
     class TableViewDefaultBehavior extends Behavior {
 
         public TableViewDefaultBehavior() {
+            behaviorRuleData.set("selection", true);
             behaviorRuleData.set("singleSelected", true);
             behaviorRuleData.set("showRowNum", true);
         }

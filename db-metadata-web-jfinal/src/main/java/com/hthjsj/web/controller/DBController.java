@@ -14,14 +14,13 @@ import com.jfinal.kit.Ret;
 public class DBController extends FrontRestController {
 
     @Override
-    public Ret index() {
-        return list();
+    public void index() {
+        list();
     }
 
     @Override
-    public Ret list() {
+    public void list() {
         renderJson(Ret.ok("data", Aop.get(MysqlService.class).showSchema()));
-        return null;
     }
 
     /**

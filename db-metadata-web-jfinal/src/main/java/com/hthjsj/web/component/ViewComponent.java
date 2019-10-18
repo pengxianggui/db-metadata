@@ -1,14 +1,13 @@
 package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.meta.Component;
-import com.jfinal.kit.Kv;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author konbluesky
  */
-public abstract class ViewComponent implements Component {
+public abstract class ViewComponent implements Component, ComponentRender {
 
     protected String en;
 
@@ -28,9 +27,14 @@ public abstract class ViewComponent implements Component {
         return en;
     }
 
+    /**
+     * 用于获取Component最终的jsonString;
+     *
+     * @return
+     */
     public abstract String config();
 
-    public abstract void config(String config);
-
-    public abstract Kv renderMeta();
+    public void config(String config) {
+        throw new RuntimeException("not finished!");
+    }
 }

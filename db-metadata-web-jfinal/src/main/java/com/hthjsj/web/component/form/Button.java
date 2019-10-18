@@ -19,7 +19,7 @@ public class Button extends FormField {
     }
 
     @Override
-    public Kv renderMeta() {
+    public Kv toKv() {
         return Kv.create().set("label", label);
     }
 }

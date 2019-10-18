@@ -34,16 +34,16 @@ public class TableController extends FrontRestController {
      * param : objectCode
      */
     @Override
-    public Ret index() {
+    public void index() {
         String objectCode = getPara(0, getPara("objectCode"));
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
         TableView tableView = new TableView(metaObject);
-        renderJson(tableView.config());
-        return null;
+        renderJson(Ret.ok("data", tableView.toKv()));
+        
     }
 
     @Override
-    public Ret list() {
+    public void list() {
         /**
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -70,6 +70,5 @@ public class TableController extends FrontRestController {
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         renderJsonExcludes(Ret.ok("data", result.getList()), excludeFields);
-        return null;
     }
 }

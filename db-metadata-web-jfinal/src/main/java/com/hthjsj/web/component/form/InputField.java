@@ -1,6 +1,5 @@
 package com.hthjsj.web.component.form;
 
-import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.jfinal.kit.Kv;
 
@@ -26,7 +25,7 @@ public class InputField extends FormField {
         this.metaField = metaField;
         name = metaField.cn();
         label = metaField.en();
-        metaFieldConfig = JSON.parseObject(metaField.config().getConfig(), Kv.class);
+        metaFieldConfig = (Kv) metaField.config();
     }
 
     public InputField(String name, String label) {
@@ -50,7 +49,7 @@ public class InputField extends FormField {
     }
 
     @Override
-    public Kv renderMeta() {
+    public Kv toKv() {
         Kv kv = Kv.create();
         kv.set("component_name", type());
         kv.set("name", name);

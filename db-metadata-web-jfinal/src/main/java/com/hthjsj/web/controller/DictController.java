@@ -4,7 +4,6 @@ import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
-import com.jfinal.kit.Ret;
 
 /**
  * <p> Class title: </p>
@@ -17,14 +16,12 @@ import com.jfinal.kit.Ret;
 public class DictController extends FrontRestController {
 
     @Override
-    public Ret index() {
+    public void index() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
 
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
-
-        return null;
     }
 }
