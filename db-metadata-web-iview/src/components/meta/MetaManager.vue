@@ -96,7 +96,8 @@
                         {
                             "component_name": "DropDownBox",
                             "name": "schemaName",
-                            "label": "数据源"
+                            "label": "数据源",
+                            "data_url": "/db/list"
                         },
                         {
                             "component_name": "DropDownBox",
