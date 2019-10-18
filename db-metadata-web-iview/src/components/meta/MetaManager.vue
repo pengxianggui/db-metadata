@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card>
-            <meta-import :meta="formMeta" @submit="formSubmit"></meta-import>
+            <meta-import v-if="formMeta" :meta="formMeta" @submit="formSubmit"></meta-import>
         </el-card>
         <table-list :meta="tableMeta" :data="tableData"></table-list>
     </div>
@@ -90,34 +90,7 @@
 
                 },
                 tableMeta: null,
-                formMeta: {
-                    "methods": "POST",
-                    "columns": [
-                        {
-                            "component_name": "DropDownBox",
-                            "name": "schemaName",
-                            "label": "数据源",
-                            "data_url": "/db/list"
-                        },
-                        {
-                            "component_name": "DropDownBox",
-                            "name": "tableName",
-                            "label": "数据表名"
-                        },
-                        {
-                            "component_name": "TextBox",
-                            "name": "objectName",
-                            "label": "元对象名称"
-                        },
-                        {
-                            "component_name": "TextBox",
-                            "name": "objectCode",
-                            "label": "元对象编码"
-                        }
-                    ],
-                    "action": "/meta/doAdd",
-                    "form_name": "meta_add"
-                },
+                formMeta: null,
                 tableData: []
             }
         },
@@ -145,19 +118,18 @@
                 })
             },
             getFormMeta() {
-                // TODO
-                // let _this = this
-                // this.$axios({
-                //     methods: "GET",
-                //     url: '/meta/toAdd'
-                // }).then(resp => {
-                //     if (resp.state === 'ok') {
-                //         _this.formMeta = resp.data
-                //     } else {
-                //         // error
-                //         _this.$message.error(resp.msg)
-                //     }
-                // })
+                let _this = this
+                this.$axios({
+                    methods: "GET",
+                    url: '/meta/toAdd'
+                }).then(resp => {
+                    if (resp.state === 'ok') {
+                        _this.formMeta = resp.data
+                    } else {
+                        // error
+                        _this.$message.error(resp.msg)
+                    }
+                })
             },
             formSubmit(formModel) {
                 // TODO 请求TableList的数据
@@ -173,11 +145,16 @@
             TableList,
             MetaImport
         },
-        created() {
+        beforeCreate() {
         },
-        mounted() {
+        created() {
             this.getFormMeta()
             this.getTableMeta()
+        },
+        beforeMount () {
+
+        },
+        mounted() {
 
         }
 
