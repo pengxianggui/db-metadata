@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
+import com.hthjsj.web.jfinal.UserSettingIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.jfinal.config.*;
@@ -64,6 +65,7 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
+        me.add(new UserSettingIntercept());
         //        me.add(new FrontRestIntercept());
     }
 
