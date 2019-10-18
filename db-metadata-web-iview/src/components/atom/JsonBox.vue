@@ -1,5 +1,5 @@
 <template>
-    <vue-json-editor v-model="currValue" :modes="meta.ui_config.modes" :mode="meta.ui_config.mode"></vue-json-editor>
+    <vue-json-editor v-model="currValue" :modes="meta.conf.modes" :mode="meta.conf.mode"></vue-json-editor>
 </template>
 
 <script>
@@ -32,9 +32,9 @@
                 return DEFAULT.JsonBox
             },
             initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
+                this.meta.conf = this.meta.conf || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
+                this.$merge(this.meta.conf, defaultConf)
             }
         },
         created() {

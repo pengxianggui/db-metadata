@@ -61,7 +61,7 @@ const DEFAULT = {
         placeholder: "请输入文本内容.."
     },
     DropDownBox: {
-        "data-url": "/api/options", // todo reset
+        "data_url": "/api/options", // todo reset
         "conf": {
             clearable: true
         }
@@ -79,10 +79,10 @@ const DEFAULT = {
         placeholder: '输入数字..',
     },
     RadioBox: {
-        "data-url": "", // todo filling
+        "data_url": "", // todo filling
     },
     CheckBox: {
-        "data-url": "" // todo filling
+        "data_url": "" // todo filling
     },
     JsonBox: {
         mode: 'text',

@@ -3,6 +3,7 @@
 description: meta data
 eg:
     {
+        "name": "",
         "data_url": "", // for options data
         "group": false, // 是否选项组模式
         "conf": {   // ui conf
@@ -146,7 +147,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             },
             initOptions: function () {
                 if (this.options) return
-                if (this.meta['data_url']) {
+                if (this.meta.hasOwnProperty('data_url')) {
                     this.getOptions()
                     return
                 }
