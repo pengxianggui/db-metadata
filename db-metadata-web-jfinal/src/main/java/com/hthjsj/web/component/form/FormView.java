@@ -18,10 +18,6 @@ import java.util.stream.Collectors;
  */
 public class FormView extends ViewComponent {
 
-    protected String cn = "表单视图";
-
-    protected String en = "FormView";
-
     @Getter
     List<FormField> fields = new ArrayList<>();
 
@@ -44,8 +40,18 @@ public class FormView extends ViewComponent {
     }
 
     @Override
+    public String name() {
+        return "表单视图";
+    }
+
+    @Override
+    public String code() {
+        return "table";
+    }
+
+    @Override
     public String type() {
-        return getClass().getSimpleName();
+        return "TableList";
     }
 
     @Override

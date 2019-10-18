@@ -40,19 +40,19 @@ eg:
         <el-row>
             <el-col :span="24">
                 <el-table
-                        :ref="meta.table_name"
+                        :ref="innerMeta.name"
                         :data="data"
-                        v-bind="meta.conf"
+                        v-bind="innerMeta.conf"
                         @row-click="choseRow"
                         @sort-change="sortChange"
                         @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column v-for="(item, index) in meta.columns"
+                    <el-table-column v-for="(item, index) in innerMeta.columns"
                                      :key="item.name + index"
                                      :prop="item.name"
                                      :label="item.label"
                                      v-bind="item.conf"
-                                ></el-table-column>
+                    ></el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -63,7 +63,7 @@ eg:
                                :page-size.sync="paginationModel.pageSize"
                                :current-page.sync="paginationModel.currentPage"
                                :total="paginationModel.total"
-                               v-bind="meta.pagination"
+                               v-bind="innerMeta.pagination"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -72,6 +72,7 @@ eg:
 
 <script>
     import {DEFAULT} from '@/constant'
+
     export default {
         name: "TableList",
         props: {
@@ -96,9 +97,9 @@ eg:
         },
         data() {
             return {
+                innerMeta: {},
                 multipleSelection: [],
-                sortModel: {
-                },
+                sortModel: {},
                 paginationModel: {
                     pageSize: 10,
                     currentPage: 1,
@@ -107,34 +108,37 @@ eg:
             }
         },
         methods: {
-            handleSelectionChange (val) {
+            handleSelectionChange(val) {
                 this.$emit('update:chose-data', val)
             },
-            choseRow (row, col, event) {
-                let selected = true
-                this.$emit('update:active-data', row)
+            choseRow(row, col, event) {
+                let selected = true;
+                this.$emit('update:active-data', row);
                 for (let i = 0; i < this.$refs.table.selection.length; i++) {
-                    let choseItem = this.$refs.table.selection[i]
+                    let choseItem = this.$refs.table.selection[i];
                     if (row.id === choseItem.id) {
-                        selected = false
+                        selected = false;
                         break
                     }
                 }
                 this.$refs.table.toggleRowSelection(row, selected)
             },
             sortChange(param) {
-                this.sortModel.prop = param.prop
+                this.sortModel.prop = param.prop;
                 this.sortModel.order = param.order
             },
             initMeta() {
-                this.meta = this.meta || {}
-                this.meta.conf = this.meta.conf || {}
-                this.meta.columns = this.meta.columns || []
-                this.meta.pagination = this.meta.pagination || {}
+                // this.innerMeta = this.meta || {}
+                // this.innerMeta.conf = this.meta||this.meta.conf || {}
+                // this.innerMeta.columns = this.meta.columns || []
+                // this.innerMeta.pagination = this.meta.pagination || {}
 
                 // merge options
-                let defaultMeta = this.getDefaultMeta()
-                this.$merge(this.meta, defaultMeta)
+                let defaultMeta = this.getDefaultMeta();
+                this.$merge(this.innerMeta, defaultMeta);
+                console.log("1", this.innerMeta);
+                this.$merge(defaultMeta, this.meta);
+                console.log(this.meta);
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
@@ -148,24 +152,24 @@ eg:
                 //     // this.sortModel = new Array(this.meta.ui_config.table['default-sort']);
                 // }
             },
-            getDefaultMeta () {
+            getDefaultMeta() {
                 return DEFAULT.TableList
             },
-            getData () {
-                let _this = this
+            getData() {
+                let _this = this;
                 this.$axios({
-                    methods: _this.meta.methods,
+                    methods: "get",
                     url: _this.meta['data_url'], // filling paginationModel、 sortModel Params
                 }).then(resp => {
                     if (resp['state'] === 'ok') {
-                        _this.data = resp.data
+                        _this.data = resp.data;
                         _this.paginationModel.total = _this.data.length
                     } else {
                         _this.$message.error(resp['msg'])
                     }
                 })
             },
-            initData () { // init business data
+            initData() { // init business data
                 if (this.data) {
                     this.paginationModel.total = this.data.length
                 } else {
@@ -174,7 +178,7 @@ eg:
             }
         },
         created() {
-            this.initMeta()
+            this.initMeta();
             this.assemblyModel()
         },
         mounted() {

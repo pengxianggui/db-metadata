@@ -683,10 +683,16 @@
               "chnname": "组件code"
             },
             {
-              "name": "object_code",
+              "name": "type",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "元对象"
+              "chnname": "类型"
+            },
+            {
+              "name": "dest_object",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "目标对象"
             },
             {
               "name": "label",
@@ -1309,7 +1315,7 @@
     "dbs": [
       {
         "name": "metadata",
-        "defaultDB": false,
+        "defaultDB": true,
         "properties": {
           "driver_class_name": "com.mysql.jdbc.Driver",
           "url": "jdbc:mysql://192.168.1.93:3310/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
@@ -1319,7 +1325,7 @@
       },
       {
         "name": "metadata",
-        "defaultDB": true,
+        "defaultDB": false,
         "properties": {
           "driver_class_name": "com.mysql.jdbc.Driver",
           "url": "jdbc:mysql://localhost:3309/metadata?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",

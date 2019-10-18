@@ -2,6 +2,8 @@ package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.util.Map;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -23,7 +25,7 @@ public interface IMetaConfig {
     String getVersion();
 
     @JSONField(serialize = false)
-    String getConfig();
+    Map getConfig();
 
     @JSONField(serialize = false)
     void setItem(Object key, Object value);

@@ -60,6 +60,10 @@
 - 元对象
     > 新建元对象的时候,需要对元对象提供一套默认的ui配置信息;
     - 元对象和数据组件的展示是有机结合,结合后就是功能的配置
+    - 元对象的config 应保存与UI无关的配置(是否使用uuid生成主键,是否有前置后置逻辑,默认排序,记录筛选条件等等?)
+        ```
+        主要存放针对服务端的一些配置
+        ```
 - 关于配置的继承
 ```
 - 组件的全局UI配置<元对象的UI配置<功能的配置
@@ -87,10 +91,30 @@ https://docs.sencha.com/extjs/6.2.0
 
 
 `
-## 功能
+## 可以有的功能和思考
 
 - [ ] 异常管理
 - [ ] 配置比对
 - [ ] 4个基础字段的传递
 - [ ] 注释生成https://blog.csdn.net/10km/article/details/78252586
-- [ ] 
+- [ ] 打包部署
+    ```
+    1. vue -> run dist
+    2. copy to javaProject/resources/static/
+    3. package -> fatjar
+    ```
+- [ ] analysis 工程的打包(基于undertow的)
+- [ ] 围绕元对象的权限模块
+- [ ] Json 比较
+    ```
+    https://github.com/5SSS/vue-json-compare
+    ```
+- [ ] Json Editor
+    ```
+    https://github.com/yourtion/vue-json-ui-editor
+    ```
+- [ ] 集成方式 
+    - frame
+    - 生成.vue?
+- [ ] 元信息的缓存,component数据的缓存,减少数据拼装动作,提高查询效率 
+- [ ] 围绕元数据产生的复杂业务场景思考

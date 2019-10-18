@@ -3,7 +3,7 @@
         <el-card>
             <meta-import v-if="formMeta" :meta="formMeta" @submit="formSubmit"></meta-import>
         </el-card>
-        <table-list :meta="tableMeta" :data="tableData"></table-list>
+        <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
     </div>
 </template>
 
@@ -46,7 +46,7 @@
                         },
                         methods: {
                             format: function (data) {
-                                let options = []
+                                let options = [];
                                 for (let item in data) {
                                     options.push({
                                         key: item,
@@ -107,7 +107,7 @@
                 // TODO
                 this.$axios({
                     methods: "GET",
-                    url: ''
+                    url: '/meta/fields'
                 }).then(resp => {
                     if (resp.state === 'ok') {
                         this.tableMeta = resp.data
@@ -118,13 +118,27 @@
                 })
             },
             getFormMeta() {
-                let _this = this
+                let _this = this;
                 this.$axios({
                     methods: "GET",
                     url: '/meta/toAdd'
                 }).then(resp => {
                     if (resp.state === 'ok') {
                         _this.formMeta = resp.data
+                    } else {
+                        // error
+                        _this.$message.error(resp.msg)
+                    }
+                })
+            },
+            getTableData() {
+                let _this = this;
+                this.$axios({
+                    methods: "GET",
+                    url: '/table/list/meta_field'
+                }).then(resp => {
+                    if (resp.state === 'ok') {
+                        _this.tableData = resp.data
                     } else {
                         // error
                         _this.$message.error(resp.msg)
@@ -148,8 +162,9 @@
         beforeCreate() {
         },
         created() {
-            this.getFormMeta()
-            this.getTableMeta()
+            this.getFormMeta();
+            this.getTableMeta();
+            this.getTableData()
         },
         beforeMount () {
 

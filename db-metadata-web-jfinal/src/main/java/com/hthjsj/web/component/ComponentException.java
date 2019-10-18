@@ -3,8 +3,6 @@ package com.hthjsj.web.component;
 import com.hthjsj.analysis.MetaAnalysisException;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/10/10 </p>
  * <p> @Project : db-meta-serve</p>
  *

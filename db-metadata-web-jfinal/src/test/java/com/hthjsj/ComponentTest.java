@@ -1,5 +1,7 @@
 package com.hthjsj;
 
+import com.hthjsj.analysis.meta.DbMetaService;
+import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.component.TableView;
 import com.jfinal.aop.Aop;
@@ -21,19 +23,20 @@ public class ComponentTest {
     public static void main(String[] args) {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.start();
-        TableView tableView = new TableView();
+        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
+        TableView tableView = new TableView(metaObject);
         {
-            tableView.setGlobal("hahaa", "xixi");
+            //            tableView.setGlobal("hahaa", "xixi");
             Record record = new Record();
             record.set("id", new Date().getTime());
-            record.set("config", tableView.config());
-            record.set("en", tableView.code());
-            record.set("cn", tableView.name());
+            record.set("config", tableView.toKv().toJson());
+            record.set("en", tableView.type());
+            record.set("cn", tableView.type());
             Db.save("meta_component", "id", record);
         }
 
 
         ComponentService componentService = Aop.get(ComponentService.class);
-        componentService.newComponentInstance(tableView, "object_code_admin111");
+        componentService.newObjectConfig(tableView, "object_code_admin111");
     }
 }

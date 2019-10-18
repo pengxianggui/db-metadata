@@ -3,6 +3,8 @@ package com.hthjsj.analysis.meta;
 import com.alibaba.fastjson.JSON;
 import com.jfinal.kit.StrKit;
 
+import java.util.Map;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -71,8 +73,8 @@ public class MetaConfigFactory {
         }
 
         @Override
-        public String getConfig() {
-            return toJson();
+        public Map getConfig() {
+            return this;
         }
 
         @Override
@@ -121,8 +123,8 @@ public class MetaConfigFactory {
         }
 
         @Override
-        public String getConfig() {
-            return toJson();
+        public Map getConfig() {
+            return this;
         }
 
         @Override

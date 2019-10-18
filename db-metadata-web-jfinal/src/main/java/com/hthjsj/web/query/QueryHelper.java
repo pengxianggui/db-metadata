@@ -33,4 +33,8 @@ public class QueryHelper {
     public Integer getPageIndex() {
         return tp.getInt("p", tp.getInt("pageIndex", 1));
     }
+
+    public String getComponentCode() {
+        return tp.getPara("compCode", tp.getPara("componentCode"));
+    }
 }

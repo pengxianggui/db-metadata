@@ -15,8 +15,8 @@ const DEFAULT = {
         // }
     // },
     TableList: {
-        table_name: "",
-        table_cn_name: "",
+        name: "",
+        label: "",
         component_name: 'TableList',
         data_url: "",
         methods: "GET",
@@ -152,6 +152,6 @@ const DEFAULT = {
         }
 
     }
-}
+};
 
 export default DEFAULT

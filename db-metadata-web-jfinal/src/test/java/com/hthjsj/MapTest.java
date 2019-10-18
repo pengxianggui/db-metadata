@@ -1,7 +1,6 @@
 package com.hthjsj;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
@@ -19,20 +18,24 @@ public class MapTest {
 //        map.merge("lname", 1, (oldValue, newValue) -> oldValue + newValue);
 //        map.merge("count", 1, (oldValue, newValue) -> oldValue + newValue);
 
+        Kv kv = Kv.create();
+        kv.setIfNotBlank("one", null);
+        System.out.println(kv.toJson());
 
 
-        Map<String, Object> map1 = new HashMap<>();
 
-        map1.put("one", new String[] { "hi", "hihi", "ihih" });
-        map1.put("two", "sam");
-
-
-        Object o = map1.get("one");
-        if (o instanceof String[]) {
-            System.out.println("yes");
-        }
-        if (o instanceof String) {
-            System.out.println("he");
-        }
+        //        Map<String, Object> map1 = new HashMap<>();
+        //
+        //        map1.put("one", new String[] { "hi", "hihi", "ihih" });
+        //        map1.put("two", "sam");
+        //
+        //
+        //        Object o = map1.get("one");
+        //        if (o instanceof String[]) {
+        //            System.out.println("yes");
+        //        }
+        //        if (o instanceof String) {
+        //            System.out.println("he");
+        //        }
     }
 }

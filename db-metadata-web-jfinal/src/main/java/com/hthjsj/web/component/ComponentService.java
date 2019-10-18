@@ -34,8 +34,12 @@ public class ComponentService {
         return record;
     }
 
-    public Record load(String componentCode, String objectCode) {
-        return Db.findFirst("select * from meta_component where comp_code=? and object_code", componentCode, objectCode);
+    public Record loadObjectConfig(String componentCode, String destCode) {
+        return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
+    }
+
+    private Record loadConfig(String componentCode, String destCode, String type) {
+        return Db.findFirst("select config from meta_component_instance where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
     }
 
     public boolean newObjectConfig(ViewComponent component, String objectCode) {
@@ -56,8 +60,8 @@ public class ComponentService {
     private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific) {
         Record record = new Record();
         record.set("id", StrKit.getRandomUUID());
-        record.set("comp_code", component.code());
-        record.set("type", specific);
+        record.set("comp_code", component.type());
+        record.set("type", specific.toString());
         record.set("dest_object", specificCode);
         record.set("config", component.config());
         User u = ThreadLocalUserKit.getUser();

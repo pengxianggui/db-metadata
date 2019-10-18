@@ -83,6 +83,16 @@ public class TableView extends ViewComponent {
     }
 
     @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
+    public String code() {
+        return label;
+    }
+
+    @Override
     public String type() {
         return "TableList";
     }
