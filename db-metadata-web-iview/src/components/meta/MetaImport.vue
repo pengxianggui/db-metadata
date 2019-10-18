@@ -62,10 +62,10 @@ eg:
             <text-box :meta="meta.columns[3]" v-model="model[meta.columns[3].name]"></text-box>
         </el-form-item>
         <el-form-item>
-            <el-button :id="meta.form_name + 'submit'" v-bind="meta.btn.submit.conf" @click="onSubmit"
-                       v-text="meta.btn.submit.label"></el-button>
-            <el-button :id="meta.form_name + 'cancel'"  v-bind="meta.btn.cancel.conf" @click="onCancel"
-                       v-text="meta.btn.cancel.label"></el-button>
+            <el-button :id="meta.form_name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
+                       v-text="meta.btns.submit.label"></el-button>
+            <el-button :id="meta.form_name + 'cancel'"  v-bind="meta.btns.cancel.conf" @click="onCancel"
+                       v-text="meta.btns.cancel.label"></el-button>
         </el-form-item>
     </el-form>
     </div>
@@ -109,7 +109,7 @@ eg:
             initMeta() {
                 this.meta.conf = this.meta.conf || {}
                 this.meta.columns = this.meta.columns || []
-                this.meta.btn = this.meta.btn || {}
+                this.meta.btns = this.meta.btns || {}
                 let defaultMeta = this.getDefaultMeta() || {}
                 this.$merge(this.meta, defaultMeta)
             },
@@ -138,7 +138,7 @@ eg:
                 // TODO 联动获取表名数据
                 _this.$axios({
                     methods: 'GET',
-                    url: _this.meta.columns[0]['data_url'] + "?schema=" + value
+                    url: _this.meta.columns[1]['data_url'] + "?schema=" + value
                 }).then(resp => {
                     if (resp.state === 'ok')
                         _this.tableOptions = resp.data

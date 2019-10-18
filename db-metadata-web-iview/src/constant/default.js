@@ -133,7 +133,7 @@ const DEFAULT = {
             //     }
             // }
         ],
-        btn: {
+        btns: {
             submit: {
                 label: '提交',
                 conf: {
