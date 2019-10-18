@@ -2,11 +2,10 @@
 # meta
 eg:
 {
-    table_name: "",
-    table_cn_name: "",
+    name: "",
+    label: "",
     component_name: 'TableList',
     data_url: "",
-    methods: "GET",
     // ...
     conf: {
         "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
