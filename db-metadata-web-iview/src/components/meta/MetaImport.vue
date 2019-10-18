@@ -46,6 +46,8 @@ eg:
     }
 -->
 <template>
+    <div>
+        {{meta}}
     <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
         <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
 <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
@@ -67,6 +69,7 @@ eg:
                        v-text="meta.btn.cancel.label"></el-button>
         </el-form-item>
     </el-form>
+    </div>
 </template>
 
 <script>
@@ -105,6 +108,7 @@ eg:
                 return DEFAULT.FormTmpl
             },
             initMeta() {
+                debugger
                 this.meta.conf = this.meta.conf || {}
                 this.meta.columns = this.meta.columns || []
                 this.meta.btn = this.meta.btn || {}

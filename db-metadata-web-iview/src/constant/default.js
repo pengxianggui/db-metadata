@@ -121,16 +121,18 @@ const DEFAULT = {
             },
             // ...
         },
-        columns: [{
-            component_name: 'TextBox',
-            name: 'username',
-            label: '用户名',
-            conf: {
-                clearable: true,
-                placeholder: "请输入姓名..",
-                // ...
-            }
-        }],
+        columns: [
+            // {
+            //     component_name: 'TextBox',
+            //     name: 'username',
+            //     label: '用户名',
+            //     conf: {
+            //         clearable: true,
+            //         placeholder: "请输入姓名..",
+            //         // ...
+            //     }
+            // }
+        ],
         btn: {
             submit: {
                 label: '提交',
