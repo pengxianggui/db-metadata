@@ -29,7 +29,7 @@ public class InputField extends FormField {
         metaFieldConfig = JSON.parseObject(metaField.config().getConfig(), Kv.class);
     }
 
-    public InputField(String name, String label, String config) {
+    public InputField(String name, String label) {
         this.name = name;
         this.label = label;
     }
@@ -46,7 +46,7 @@ public class InputField extends FormField {
 
     @Override
     public String type() {
-        return "InputBox";
+        return "TextBox";
     }
 
     @Override

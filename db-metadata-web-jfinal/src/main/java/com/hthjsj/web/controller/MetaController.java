@@ -43,9 +43,10 @@ public class MetaController extends FrontRestController {
     @Override
     public Ret toAdd() {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
-        formView.getFields().add(new DropDown("schemaName", "数据源", "{}"));
-        formView.getFields().add(new InputField("objectName", "元对象名称", "{}"));
-        formView.getFields().add(new InputField("objectCode", "元对象编码", "{}"));
+        formView.getFields().add(new DropDown("schemaName", "数据源").dataUrl("/db/index"));
+        formView.getFields().add(new DropDown("tableName", "数据表名").dataUrl("/db/tables").dependency("schemaName"));
+        formView.getFields().add(new InputField("objectName", "元对象名称"));
+        formView.getFields().add(new InputField("objectCode", "元对象编码"));
         renderJson(Ret.ok("data", formView.renderMeta()));
         return null;
     }

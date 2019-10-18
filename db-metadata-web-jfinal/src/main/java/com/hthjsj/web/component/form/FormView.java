@@ -1,6 +1,5 @@
 package com.hthjsj.web.component.form;
 
-import com.google.common.collect.Lists;
 import com.hthjsj.web.component.ViewComponent;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
@@ -63,7 +62,7 @@ public class FormView extends ViewComponent {
         kv.setIfNotBlank("form_name", formName);
         kv.setIfNotBlank("action", action);
         kv.set("columns", fields.stream().map((k) -> k.renderMeta()).collect(Collectors.toList()));
-        kv.set("btn", Lists.newArrayList(new Button("submit").renderMeta(), new Button("reset").renderMeta()));
+        //        kv.set("btn", Lists.newArrayList(new Button("submit").renderMeta(), new Button("reset").renderMeta()));
         return kv;
     }
 

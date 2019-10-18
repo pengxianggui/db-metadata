@@ -19,7 +19,7 @@ public class DropDown extends FormField {
 
     private IMetaField metaField;
 
-    public DropDown(String name, String label, String config) {
+    public DropDown(String name, String label) {
         this.name = name;
         this.label = label;
     }
@@ -37,6 +37,23 @@ public class DropDown extends FormField {
     @Override
     public String type() {
         return "DropDownBox";
+    }
+
+    public DropDown dataUrl(String url) {
+        renderMeta().setIfNotBlank("data_url", url);
+        return this;
+    }
+
+    /**
+     * other field [name]
+     *
+     * @param dependency
+     *
+     * @return
+     */
+    public DropDown dependency(String dependency) {
+        renderMeta().setIfNotBlank("dep", dependency);
+        return this;
     }
 
     @Override
