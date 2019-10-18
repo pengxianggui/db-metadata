@@ -1,10 +1,14 @@
-const path = require('path')
+const path = require('path');
 function resolve(dir) {
     return path.join(__dirname, dir)
 }
 
-const name = "db-metadata-web-iview"
-
+const name = "db-metadata-web-iview";
+const serverProxy = {
+    target: 'http://192.168.108.118:8888',
+    pathRewrite: {'^/': ''},
+    changeOrigin: true
+};
 module.exports = {
     publicPath: '/',
     outputDir: 'dist',
@@ -26,11 +30,13 @@ module.exports = {
         https: false,
         sockHost: 'localhost',
         // proxy: 'http://192.168.110.67:8888'
-        // proxy: {
-        //     '/': {
-        //         target: 'http://192.168.108.118:8888/',
-        //         changeOrigin: true
-        //     }
-        // }
+        proxy: {
+            '^\/db\/': serverProxy,
+            '^\/meta\/': serverProxy,
+            '^\/component\/': serverProxy,
+            '^\/table\/': serverProxy,
+            '^\/form\/': serverProxy,
+            '^\/dict\/': serverProxy,
+        }
     }
-}
+};
