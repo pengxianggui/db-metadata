@@ -31,8 +31,9 @@
         },
         methods: {
             getTableMeta() {
+                let _this = this;
                 this.$axios.get('/meta/fields').then(resp => {
-                    this.tableMeta = resp.data
+                    _this.tableMeta = resp.data
                 }).catch(resp => {
                     _this.$message.error(resp.msg)
                 })
@@ -55,11 +56,9 @@
             },
             formSubmit(formModel) {
                 // TODO 请求TableList的数据
-                this.$axios({
-                    methods: 'POST',
-                    url: '/tableList',
-                    data: formModel
-                }).then(resp => {
+                this.$axios.post('/tableList', formModel
+                ).then(resp => {
+
                 })
             }
         },

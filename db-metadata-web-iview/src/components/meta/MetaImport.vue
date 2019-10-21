@@ -96,7 +96,6 @@ eg:
         },
         methods: {
             assemblyModel() {
-                // this.model = this.meta.conf.model
                 let _this = this;
                 _this.meta.columns.forEach(item => {
                     Vue.set(_this.model, item.name, item.value || null)
@@ -115,20 +114,16 @@ eg:
                 let _this = this;
                 if (!_this.meta.columns[0]['data_url'])
                     return;
-                _this.$axios({
-                    methods: 'GET',
-                    url: _this.meta.columns[0]['data_url']
-                }).then(resp => {
-                    if (resp.state === 'ok') {
-                        for (let i = 0; i < resp.data.length; i++) {
-                            let option = {
-                                key: resp.data[i],
-                                value: resp.data[i]
-                            };
-                            _this.schemaOptions.push(option)
-                        }
-                    } else
-                        _this.$message.error(resp.msg)
+                _this.$axios.get(_this.meta.columns[0]['data_url']).then(resp => {
+                    for (let i = 0; i < resp.data.length; i++) {
+                        let option = {
+                            key: resp.data[i],
+                            value: resp.data[i]
+                        };
+                        _this.schemaOptions.push(option)
+                    }
+                }).catch(res => {
+                    _this.$message.error(resp.msg)
                 })
             },
             loadTables() {
@@ -136,7 +131,13 @@ eg:
                 let url = _this.$complieString(_this["model"], _this.meta.columns[1]['data_url']);
                 // TODO 联动获取表名数据
                 _this.$axios.get(url).then(resp => {
-                    _this.tableOptions = resp.data
+                    for (let i = 0; i < resp.data.length; i++) {
+                        let option = {
+                            key: resp.data[i],
+                            value: resp.data[i]
+                        };
+                        _this.tableOptions.push(option)
+                    }
                 }).catch(resp => {
                     _this.$message.error(resp.msg)
                 })
