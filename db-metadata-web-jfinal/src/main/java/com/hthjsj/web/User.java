@@ -9,6 +9,5 @@ package com.hthjsj.web;
  * <p> @author konbluesky </p>
  */
 public interface User {
-
     String userId();
 }

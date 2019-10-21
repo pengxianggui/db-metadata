@@ -27,15 +27,15 @@ public class FormView extends ViewComponent {
 
     private String methods;
 
-    private Kv globalConfig = Kv.create();
+    private Kv meta = Kv.create();
 
-    private Kv metaObjectConfig = Kv.create();
+    private Kv conf = Kv.create();
 
-    public static FormView POST(String action, String formName) {
+    public static FormView POST(String action, String name) {
         FormView formView = new FormView();
         formView.methods = "POST";
         formView.action = action;
-        formView.formName = formName;
+        formView.formName = name;
         return formView;
     }
 
@@ -56,19 +56,16 @@ public class FormView extends ViewComponent {
 
     @Override
     public String config() {
-        return toKv().toJson();
+        return meta.toJson();
     }
 
     @Override
     public Kv toKv() {
-        Kv kv = Kv.create();
-        kv.putAll(globalConfig);
-        kv.putAll(metaObjectConfig);
-        kv.setIfNotBlank("methods", methods);
-        kv.setIfNotBlank("form_name", formName);
-        kv.setIfNotBlank("action", action);
-        kv.set("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
+        meta.setIfNotBlank("methods", methods);
+        meta.setIfNotBlank("form_name", formName);
+        meta.setIfNotBlank("action", action);
+        meta.set("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         //        kv.set("btn", Lists.newArrayList(new Button("submit").renderMeta(), new Button("reset").renderMeta()));
-        return kv;
+        return conf;
     }
 }

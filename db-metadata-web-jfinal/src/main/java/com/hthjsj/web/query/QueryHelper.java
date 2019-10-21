@@ -37,4 +37,8 @@ public class QueryHelper {
     public String getComponentCode() {
         return tp.getPara("compCode", tp.getPara("componentCode"));
     }
+
+    public String getComponentType() {
+        return tp.getPara("compType", tp.getPara("componentType"));
+    }
 }

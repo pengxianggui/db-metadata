@@ -1,11 +1,17 @@
 package com.hthjsj.web.controller;
 
 import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.component.Components;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Ret;
 
 public class ComponentController extends FrontRestController {
+
+    @Override
+    public void api() {
+        renderJson(Components.me());
+    }
 
     public void load() {
         /**
@@ -13,6 +19,9 @@ public class ComponentController extends FrontRestController {
          * component Type
          *
          */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCode = queryHelper.getComponentCode();
         /**
          * return
          * {
@@ -21,14 +30,19 @@ public class ComponentController extends FrontRestController {
          *  }
          * }
          */
+        renderJson(Ret.ok("data", Aop.get(ComponentService.class).loadObjectConfig(compCode, objectCode)));
     }
 
     @Override
     public void toAdd() {
-        QueryHelper queryHelper = new QueryHelper(this);
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
-        renderJson(Ret.ok("data", Aop.get(ComponentService.class).loadObjectConfig(compCode, objectCode)));
+
+    }
+
+    @Override
+    public void doAdd() {
+        /**
+         *
+         */
     }
 
     /**
@@ -48,6 +62,8 @@ public class ComponentController extends FrontRestController {
         /**
          * component Type
          */
+        String component = new QueryHelper(this).getComponentType();
+        renderJson(Ret.ok("data", Aop.get(ComponentService.class).loadDefault(component)));
         /**
          * return
          * {

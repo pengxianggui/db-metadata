@@ -36,9 +36,11 @@ public class TableView extends ViewComponent {
     }
 
     public TableView(String name, String label) {
+        this();
         this.name = name;
         this.label = label;
     }
+
     public TableView(MetaObject metaObject) {
         this();
         if (metaObject == null) {
@@ -58,28 +60,26 @@ public class TableView extends ViewComponent {
 
     @Override
     public String config() {
-        return toKv().toJson();
+        return globalConfig.toJson();
     }
 
     public TableView dataUrl(String url) {
-        toKv().setIfNotBlank("data_url", url);
+        globalConfig.setIfNotBlank("data_url", url);
         return this;
     }
 
     @Override
     public Kv toKv() {
-        Kv kv = Kv.create();
-        kv.putAll(globalConfig);
-        kv.putAll(metaObjectConfig);
-        kv.setIfNotBlank("name", name);
-        kv.setIfNotBlank("label", label);
-        kv.setIfNotBlank("component_name", type());
-        kv.setIfNotBlank("conf", "");
-        kv.set("columns", metaObject.fields().stream().map(field -> {
-            return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", new Object());
+        globalConfig.putAll(metaObjectConfig);
+        globalConfig.setIfNotBlank("name", name);
+        globalConfig.setIfNotBlank("label", label);
+        globalConfig.setIfNotBlank("component_name", type());
+        globalConfig.setIfNotBlank("conf", "");
+        globalConfig.set("columns", metaObject.fields().stream().map(field -> {
+            return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
         }).collect(Collectors.toList()));
         //                kv.putAll(getShowBehavior().getBehaviorRuleData());
-        return kv;
+        return globalConfig;
     }
 
     @Override
@@ -100,9 +100,10 @@ public class TableView extends ViewComponent {
     class TableViewDefaultBehavior extends Behavior {
 
         public TableViewDefaultBehavior() {
-            behaviorRuleData.set("selection", true);
-            behaviorRuleData.set("singleSelected", true);
-            behaviorRuleData.set("showRowNum", true);
+            behaviorRuleData.set("show-overflow-tooltip", true);
+            //            behaviorRuleData.set("selection", true);
+            //            behaviorRuleData.set("singleSelected", true);
+            //            behaviorRuleData.set("showRowNum", true);
         }
 
         public void load(Kv kv) {

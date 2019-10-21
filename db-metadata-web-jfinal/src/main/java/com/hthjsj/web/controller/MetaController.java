@@ -46,7 +46,7 @@ public class MetaController extends FrontRestController {
     public void toAdd() {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
         formView.getFields().add(new DropDown("schemaName", "数据源").dataUrl("/db/index"));
-        formView.getFields().add(new DropDown("tableName", "数据表名").dataUrl("/db/tables").dependency("schemaName"));
+        formView.getFields().add(new DropDown("tableName", "数据表名").dataUrl("/db/tables?schemaName={{schemaName}}").dependency("schemaName"));
         formView.getFields().add(new InputField("objectName", "元对象名称"));
         formView.getFields().add(new InputField("objectCode", "元对象编码"));
         renderJson(Ret.ok("data", formView.toKv()));
@@ -59,15 +59,14 @@ public class MetaController extends FrontRestController {
     public void fields() {
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_field");
         TableView tableView = new TableView("meta_fields_table", "元字段").setMetaObject(metaObject).dataUrl("/table/meta_field");
-        log.info(tableView.toKv().toJson());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
     @Override
     public void doAdd() {
+        String param = getPara("schemaName");
 
 
-
-
+        renderJson(Ret.ok("data", 1));
     }
 }

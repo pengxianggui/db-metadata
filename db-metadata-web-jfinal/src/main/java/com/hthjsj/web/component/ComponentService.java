@@ -23,7 +23,7 @@ import java.util.Map;
 @Before(Tx.class)
 public class ComponentService {
 
-    public Record load(String componentCode) {
+    public Record loadDefault(String componentCode) {
         if (StrKit.isBlank(componentCode)) {
             throw new ComponentException("必须指定组件 Code:%s", componentCode);
         }

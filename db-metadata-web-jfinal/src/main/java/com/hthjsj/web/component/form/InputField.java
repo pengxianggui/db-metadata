@@ -50,10 +50,9 @@ public class InputField extends FormField {
 
     @Override
     public Kv toKv() {
-        Kv kv = Kv.create();
-        kv.set("component_name", type());
-        kv.set("name", name);
-        kv.set("label", label);
-        return kv;
+        metaFieldConfig.set("component_name", type());
+        metaFieldConfig.set("name", name);
+        metaFieldConfig.set("label", label);
+        return metaFieldConfig;
     }
 }
