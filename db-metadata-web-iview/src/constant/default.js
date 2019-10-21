@@ -54,11 +54,15 @@ const DEFAULT = {
         }
     },
     PassBox: {
-        placeholder: "请输入密码..",
-        clearable: true
+        conf: {
+            placeholder: "请输入密码..",
+            clearable: true
+        }
     },
     TextAreaBox: {
-        placeholder: "请输入文本内容.."
+        conf: {
+            placeholder: "请输入文本内容.."
+        }
     },
     DropDownBox: {
         "data_url": "/api/options", // todo reset
@@ -67,44 +71,64 @@ const DEFAULT = {
         }
     },
     TimeBox: {
-        "value-format": "HH:mm:ss"
+        conf: {
+            "value-format": "HH:mm:ss"
+        }
     },
     DateBox: {
-        "value-format": "yyyy-MM-dd"
+        conf: {
+            "value-format": "yyyy-MM-dd"
+        }
     },
     DateTimeBox: {
-        "value-format": "yyyy-MM-dd HH:mm:ss"
+        conf: {
+            "value-format": "yyyy-MM-dd HH:mm:ss"
+        }
     },
     NumBox: {
-        placeholder: '输入数字..',
+        conf: {
+            placeholder: '输入数字..',
+        }
     },
     RadioBox: {
         "data_url": "", // todo filling
+        conf: {
+            // ...
+        }
     },
     CheckBox: {
-        "data_url": "" // todo filling
+        "data_url": "", // todo filling
+        conf: {
+            // ...
+        }
     },
     JsonBox: {
         mode: 'text',
-        modes: ['code', 'tree', 'text', 'view', 'form']
+        modes: ['code', 'tree', 'text', 'view', 'form'],
+        conf: {
+        }
     },
     ImgBox: {
-        action: '/upload/img',
-        drag: false,
-        "list-type": "picture-card",
-        "auto-upload": false,
-        accept: "image"
+        conf: {
+            action: '/upload/img',
+            drag: false,
+            "list-type": "picture-card",
+            "auto-upload": false,
+            accept: "image"
+        }
     },
     FileBox: {
-        action: "/upload/file",
-        limit: 5,
-        tip: "上传文件限制不超过2M",
-        "auto-upload": false
+        conf: {
+            action: "/upload/file",
+            limit: 5,
+            tip: "上传文件限制不超过2M",
+            "auto-upload": false
+        }
     },
     ZTogglePanel: {
         "default-open": false,
         olabel: "收起",
-        clabel: "展开"
+        clabel: "展开",
     },
     FormTmpl: {
         form_name: "formName",
