@@ -2,7 +2,7 @@
 # meta
 eg:
     {
-        form_name: "formName",
+        name: "formName",
         action: '/save', // form action (url)
         methods: 'POST',
         component_name: 'FormTmpl',
@@ -47,27 +47,29 @@ eg:
 -->
 <template>
     <div>
-    <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
-        <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
-<!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
-            <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()" :options.sync="schemaOptions"></drop-down-box>
-        </el-form-item>
-        <el-form-item :label="meta.columns[1].label" :prop="meta.columns[1].name">
-            <drop-down-box :meta="meta.columns[1]" v-model="model[meta.columns[1].name]" :options.sync="tableOptions"></drop-down-box>
-        </el-form-item>
-        <el-form-item :label="meta.columns[2].label" :prop="meta.columns[2].name">
-            <text-box :meta="meta.columns[2]" v-model="model[meta.columns[2].name]"></text-box>
-        </el-form-item>
-        <el-form-item :label="meta.columns[3].label" :prop="meta.columns[3].name">
-            <text-box :meta="meta.columns[3]" v-model="model[meta.columns[3].name]"></text-box>
-        </el-form-item>
-        <el-form-item>
-            <el-button :id="meta.form_name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
-                       v-text="meta.btns.submit.label"></el-button>
-            <el-button :id="meta.form_name + 'cancel'"  v-bind="meta.btns.cancel.conf" @click="onCancel"
-                       v-text="meta.btns.cancel.label"></el-button>
-        </el-form-item>
-    </el-form>
+        <el-form :ref="meta['name']" v-bind="meta.conf" :model="model">
+            <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
+                <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
+                <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()"
+                               :options.sync="schemaOptions"></drop-down-box>
+            </el-form-item>
+            <el-form-item :label="meta.columns[1].label" :prop="meta.columns[1].name">
+                <drop-down-box :meta="meta.columns[1]" v-model="model[meta.columns[1].name]"
+                               :options.sync="tableOptions"></drop-down-box>
+            </el-form-item>
+            <el-form-item :label="meta.columns[2].label" :prop="meta.columns[2].name">
+                <text-box :meta="meta.columns[2]" v-model="model[meta.columns[2].name]"></text-box>
+            </el-form-item>
+            <el-form-item :label="meta.columns[3].label" :prop="meta.columns[3].name">
+                <text-box :meta="meta.columns[3]" v-model="model[meta.columns[3].name]"></text-box>
+            </el-form-item>
+            <el-form-item>
+                <el-button :id="meta.name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
+                           v-text="meta.btns.submit.label"></el-button>
+                <el-button :id="meta.name + 'cancel'" v-bind="meta.btns.cancel.conf" @click="onCancel"
+                           v-text="meta.btns.cancel.label"></el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
@@ -93,28 +95,26 @@ eg:
             }
         },
         methods: {
-            assemblyModel () {
+            assemblyModel() {
                 // this.model = this.meta.conf.model
-                let _this = this
+                let _this = this;
                 _this.meta.columns.forEach(item => {
                     Vue.set(_this.model, item.name, item.value || null)
                 })
             },
-            assemblyMethods () {
+            assemblyMethods() {
                 // todo
             },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
             },
             initMeta() {
-                this.meta.conf = this.meta.conf || {}
-                this.meta.columns = this.meta.columns || []
-                this.meta.btns = this.meta.btns || {}
-                let defaultMeta = this.getDefaultMeta() || {}
-                this.$merge(this.meta, defaultMeta)
+                this.$merge(this.meta, this.getDefaultMeta())
             },
             loadSchema() {
-                let _this = this
+                let _this = this;
+                if (!_this.meta.columns[0]['data_url'])
+                    return;
                 _this.$axios({
                     methods: 'GET',
                     url: _this.meta.columns[0]['data_url']
@@ -124,49 +124,38 @@ eg:
                             let option = {
                                 key: resp.data[i],
                                 value: resp.data[i]
-                            }
+                            };
                             _this.schemaOptions.push(option)
                         }
-                    }
-                    else
+                    } else
                         _this.$message.error(resp.msg)
                 })
             },
             loadTables() {
-                let _this = this
-                let value = _this.model[this.meta.columns[0].name]
+                let _this = this;
+                let url = _this.$complieString(_this["model"], _this.meta.columns[1]['data_url']);
                 // TODO 联动获取表名数据
-                _this.$axios({
-                    methods: 'GET',
-                    url: _this.meta.columns[1]['data_url'] + "?schema=" + value
-                }).then(resp => {
-                    if (resp.state === 'ok')
-                        _this.tableOptions = resp.data
-                    else
-                        _this.$message.error(resp.msg)
+                _this.$axios.get(url).then(resp => {
+                    _this.tableOptions = resp.data
+                }).catch(resp => {
+                    _this.$message.error(resp.msg)
                 })
             },
             doSubmit() {
-                let _this = this
+                let _this = this;
                 if (_this.$listeners.submit) {
                     _this.$emit('submit', _this.model)
                 } else {
-                    this.$axios({
-                        methods: _this.meta.methods,
-                        url: _this.meta.action,
-                        data: _this.model
-                    }).then(resp => {
-                        if (resp['state'] === 'ok') {
-                            _this.options = resp.data
-                        } else {
-                            _this.$message.error(resp['msg'])
-                        }
+                    this.$axios.post(_this.meta.action, _this.model).then(resp => {
+                        _this.options = resp.data
+                    }).catch(resp => {
+                        _this.$message.error(resp.msg)
                     })
                 }
             },
             onSubmit(event) {
-                let _this = this
-                _this.$refs[_this.meta['form_name']].validate((valid) => {
+                let _this = this;
+                _this.$refs[_this.meta['name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
                     } else {
@@ -183,8 +172,8 @@ eg:
             }
         },
         created() {
-            this.initMeta()
-            this.assemblyModel()
+            this.initMeta();
+            this.assemblyModel();
             this.assemblyMethods()
         },
         mounted() {

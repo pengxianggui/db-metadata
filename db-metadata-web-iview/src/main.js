@@ -10,8 +10,9 @@ import axios from './axios'
 
 Vue.use(ElementUI);
 
-Vue.prototype.$axios = axios // 全局注册，使用方法为:this.$axios
-Vue.prototype.$merge = utils.merge
+Vue.prototype.$axios = axios; // 全局注册，使用方法为:this.$axios
+Vue.prototype.$merge = utils.merge;
+Vue.prototype.$complieString = utils.complieVarString;
 
 Vue.config.productionTip = false;
 
@@ -23,10 +24,10 @@ const requireComponent = require.context(
     false,
     // 匹配基础组件文件名的正则表达式
     /\w+\.(vue|js)$/
-)
+);
 requireComponent.keys().forEach(fileName => {
     // 获取组件配置
-    const componentConfig = requireComponent(fileName)
+    const componentConfig = requireComponent(fileName);
 
     // 获取组件的 PascalCase 命名
     const componentName = upperFirst(
@@ -37,7 +38,7 @@ requireComponent.keys().forEach(fileName => {
                 .pop()
                 .replace(/\.\w+$/, '')
         )
-    )
+    );
     // 全局注册组件
     Vue.component(
         componentName,
@@ -46,7 +47,7 @@ requireComponent.keys().forEach(fileName => {
         // 否则回退到使用模块的根。
         componentConfig.default || componentConfig
     )
-})
+});
 
 new Vue({
     router,

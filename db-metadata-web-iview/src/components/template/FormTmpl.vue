@@ -52,10 +52,10 @@ eg:
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
         </el-form-item>
         <el-form-item>
-            <el-button :id="meta.name + 'submit'" v-bind="meta.btn.submit.conf" @click="onSubmit"
-                       v-text="meta.btn.submit.label"></el-button>
-            <el-button :id="meta.name + 'cancel'"  v-bind="meta.btn.cancel.conf" @click="onCancel"
-                       v-text="meta.btn.cancel.label"></el-button>
+            <el-button :id="meta.name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
+                       v-text="meta.btns.submit.label"></el-button>
+            <el-button :id="meta.name + 'cancel'" v-bind="meta.btns.cancel.conf" @click="onCancel"
+                       v-text="meta.btns.cancel.label"></el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -103,7 +103,7 @@ eg:
              *          // ...
              *      }
              *  }, ...],
-             *  btn: {
+             *  btns: {
              *      'submit': {
              *          label: '提交',
              *          conf: {
@@ -129,7 +129,7 @@ eg:
         methods: {
             assemblyModel () {
                 // this.model = this.meta.conf.model
-                let _this = this
+                let _this = this;
                 _this.meta.columns.forEach(item => {
                     Vue.set(_this.model, item.name, item.value || null) // 这种赋值方法, 双向绑定才生效
                 })
@@ -141,14 +141,11 @@ eg:
                 return DEFAULT.FormTmpl
             },
             initMeta() {
-                this.meta.conf = this.meta.conf || {}
-                this.meta.columns = this.meta.columns || []
-                this.meta.btn = this.meta.btn || {}
-                let defaultMeta = this.getDefaultMeta() || {}
+                let defaultMeta = this.getDefaultMeta();
                 this.$merge(this.meta, defaultMeta)
             },
             doSubmit() {
-                let _this = this
+                let _this = this;
                 if (_this.$listeners.submit) {
                     _this.$emit('submit', _this.model)
                 } else {
@@ -166,7 +163,7 @@ eg:
                 }
             },
             onSubmit(event) {
-                let _this = this
+                let _this = this;
                 _this.$refs[_this.meta['name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
@@ -184,8 +181,8 @@ eg:
             }
         },
         created() {
-            this.initMeta()
-            this.assemblyModel()
+            this.initMeta();
+            this.assemblyModel();
             this.assemblyMethods()
         },
         mounted() {

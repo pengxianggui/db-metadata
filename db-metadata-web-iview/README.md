@@ -45,5 +45,17 @@ yarn run lint
 
 
 - [ ] 全局局部方法 约定;
+    - data() 中变量的格式统一约定
+       ```
+       如组件公共属性:name,label 
+       用来绑定form的数据对象使用model命名?
+       data() {
+            return {
+                model: {},
+                tableOptions: [],
+                schemaOptions: []
+            }
+        }
+       ```
 - [ ] 异步加载数据的组件,指定默认值
 - [ ] 表格中的批量编辑

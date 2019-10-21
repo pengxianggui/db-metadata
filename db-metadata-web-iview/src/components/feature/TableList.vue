@@ -151,16 +151,11 @@ eg:
             },
             getData() {
                 let _this = this;
-                this.$axios({
-                    methods: "get",
-                    url: _this.meta['data_url'], // filling paginationModel、 sortModel Params
-                }).then(resp => {
-                    if (resp['state'] === 'ok') {
-                        _this.data = resp.data;
-                        _this.paginationModel.total = _this.data.length
-                    } else {
-                        _this.$message.error(resp['msg'])
-                    }
+                this.$axios.get(_this.meta['data_url']).then(resp => {
+                    _this.data = resp.data;
+                    _this.paginationModel.total = _this.data.length
+                }).catch(resp => {
+                    _this.$message.error(resp['msg'])
                 })
             },
             initData() { // init business data

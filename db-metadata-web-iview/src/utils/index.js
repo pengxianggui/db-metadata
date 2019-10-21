@@ -1,3 +1,4 @@
 import {merge} from './merge.js'
+import {complieVarString} from './format'
 
-export default {merge}
+export default {merge, complieVarString}
