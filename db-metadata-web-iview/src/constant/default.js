@@ -24,7 +24,7 @@ const DEFAULT = {
         conf: {
             "default-sort": {prop: 'username', order: 'descending'}, // descending, ascending
             "size": 'medium',
-            "max-height": 360,
+            "max-height": 500,
         },
         columns: [
             // {
@@ -48,67 +48,91 @@ const DEFAULT = {
     BoolBox: {},
     TextBox: {
         // custom ..
+        name: '',
+        label: '',
         conf: {
             placeholder: "请输入内容..",
             clearable: true
         }
     },
     PassBox: {
+        name: '',
+        label: '',
         conf: {
             placeholder: "请输入密码..",
             clearable: true
         }
     },
     TextAreaBox: {
+        name: '',
+        label: '',
         conf: {
             placeholder: "请输入文本内容.."
         }
     },
     DropDownBox: {
+        name: '',
+        label: '',
         "data_url": "/api/options", // todo reset
         "conf": {
             clearable: true
         }
     },
     TimeBox: {
+        name: '',
+        label: '',
         conf: {
             "value-format": "HH:mm:ss"
         }
     },
     DateBox: {
+        name: '',
+        label: '',
         conf: {
             "value-format": "yyyy-MM-dd"
         }
     },
     DateTimeBox: {
+        name: '',
+        label: '',
         conf: {
             "value-format": "yyyy-MM-dd HH:mm:ss"
         }
     },
     NumBox: {
+        name: '',
+        label: '',
         conf: {
             placeholder: '输入数字..',
         }
     },
     RadioBox: {
+        name: '',
+        label: '',
         "data_url": "", // todo filling
         conf: {
             // ...
         }
     },
     CheckBox: {
+        name: '',
+        label: '',
         "data_url": "", // todo filling
         conf: {
             // ...
         }
     },
     JsonBox: {
+        name: '',
+        label: '',
         mode: 'text',
         modes: ['code', 'tree', 'text', 'view', 'form'],
         conf: {
         }
     },
     ImgBox: {
+        name: '',
+        label: '',
         conf: {
             action: '/upload/img',
             drag: false,
@@ -118,6 +142,8 @@ const DEFAULT = {
         }
     },
     FileBox: {
+        name: '',
+        label: '',
         conf: {
             action: "/upload/file",
             limit: 5,
@@ -126,16 +152,19 @@ const DEFAULT = {
         }
     },
     ZTogglePanel: {
+        name: '',
+        label: '',
         "default-open": false,
         olabel: "收起",
         clabel: "展开",
     },
     FormTmpl: {
-        form_name: "formName",
+        name: "formName",
+        label: '',
         action: '/save', // form action (url)
         methods: 'POST',
         conf: {
-            "label-width": '80px',
+            "label-width": '100px',
             size: 'medium', // medium|small|mini
             model: {
                 username: '',
@@ -174,7 +203,6 @@ const DEFAULT = {
                 }
             }
         }
-
     }
 };
 

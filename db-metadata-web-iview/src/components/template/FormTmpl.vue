@@ -2,7 +2,7 @@
 # meta
 eg:
     {
-        form_name: "formName",
+        name: "formName",
         action: '/save', // form action (url)
         methods: 'POST',
         component_name: 'FormTmpl',
@@ -46,15 +46,15 @@ eg:
     }
 -->
 <template>
-    <el-form :ref="meta['form_name']" v-bind="meta.conf" :model="model">
+    <el-form :ref="meta['name']" v-bind="meta.conf" :model="model">
         <el-form-item v-for="(item, index) in meta.columns" :key="item.name + index"
                       :label="item.label" :prop="item.name">
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
         </el-form-item>
         <el-form-item>
-            <el-button :id="meta.form_name + 'submit'" v-bind="meta.btn.submit.conf" @click="onSubmit"
+            <el-button :id="meta.name + 'submit'" v-bind="meta.btn.submit.conf" @click="onSubmit"
                        v-text="meta.btn.submit.label"></el-button>
-            <el-button :id="meta.form_name + 'cancel'"  v-bind="meta.btn.cancel.conf" @click="onCancel"
+            <el-button :id="meta.name + 'cancel'"  v-bind="meta.btn.cancel.conf" @click="onCancel"
                        v-text="meta.btn.cancel.label"></el-button>
         </el-form-item>
     </el-form>
@@ -167,7 +167,7 @@ eg:
             },
             onSubmit(event) {
                 let _this = this
-                _this.$refs[_this.meta['form_name']].validate((valid) => {
+                _this.$refs[_this.meta['name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
                     } else {

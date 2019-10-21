@@ -129,17 +129,10 @@ eg:
                 this.sortModel.order = param.order
             },
             initMeta() {
-                // this.innerMeta = this.meta || {}
-                // this.innerMeta.conf = this.meta||this.meta.conf || {}
-                // this.innerMeta.columns = this.meta.columns || []
-                // this.innerMeta.pagination = this.meta.pagination || {}
-
                 // merge options
                 let defaultMeta = this.getDefaultMeta();
                 this.$merge(this.innerMeta, defaultMeta);
-                console.log("1", this.innerMeta);
-                this.$merge(defaultMeta, this.meta);
-                console.log(this.meta);
+                this.$merge(this.innerMeta, this.meta);
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
