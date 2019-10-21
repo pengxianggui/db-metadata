@@ -114,14 +114,15 @@ eg:
             choseRow(row, col, event) {
                 let selected = true;
                 this.$emit('update:active-data', row);
-                for (let i = 0; i < this.$refs.table.selection.length; i++) {
-                    let choseItem = this.$refs.table.selection[i];
+                let tableRefName = this.innerMeta.name;
+                for (let i = 0; i < this.$refs[tableRefName].selection.length; i++) {
+                    let choseItem = this.$refs[tableRefName].selection[i];
                     if (row.id === choseItem.id) {
                         selected = false;
                         break
                     }
                 }
-                this.$refs.table.toggleRowSelection(row, selected)
+                this.$refs[tableRefName].toggleRowSelection(row, selected)
             },
             sortChange(param) {
                 this.sortModel.prop = param.prop;
