@@ -13,6 +13,10 @@ public class ComponentController extends FrontRestController {
         renderJson(Components.me());
     }
 
+    public void init() {
+        Components.me().init();
+        renderJson(Ret.ok());
+    }
     public void load() {
         /**
          * object Code

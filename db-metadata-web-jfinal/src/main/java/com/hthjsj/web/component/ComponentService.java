@@ -1,8 +1,10 @@
 package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.analysis.meta.Component;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
+import com.hthjsj.web.jfinal.SnowFlake;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -32,6 +34,22 @@ public class ComponentService {
             throw new ComponentException("未找到Code[%s]的组件", componentCode);
         }
         return record;
+    }
+
+    public void register(ComponentType type, Component component, Map<String, Object> config) {
+        Record record = new Record();
+        record.set("id", SnowFlake.me().nextId());
+        record.set("en", component.code());
+        record.set("cn", component.name());
+        record.set("config", JSON.toJSONString(config));
+        record.set("code", component.code());
+        record.set("version", 1);
+        User u = ThreadLocalUserKit.getUser();
+        if (u != null) {
+            record.set("created_by", u.userId());
+            record.set("created_time", new Date());
+        }
+        Db.save("meta_component", record);
     }
 
     public Record loadObjectConfig(String componentCode, String destCode) {

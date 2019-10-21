@@ -74,6 +74,7 @@ public class AppWebConfig extends JFinalConfig {
         Components.me().add(ComponentType.INPUTFIELD, InputField.class);
         Components.me().add(ComponentType.DROPDOWN, DropDown.class);
         Components.me().add(ComponentType.BUTTON, Button.class);
+        Components.me().init();
     }
 
     @Override

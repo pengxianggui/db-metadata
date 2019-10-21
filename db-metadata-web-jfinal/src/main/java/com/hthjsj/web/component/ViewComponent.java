@@ -19,6 +19,23 @@ public abstract class ViewComponent implements Component, ComponentRender {
      */
     public abstract String config();
 
+    @Override
+    public String name() {
+        return componentType().getName();
+    }
+
+    @Override
+    public String code() {
+        return componentType().getCode();
+    }
+
+    @Override
+    public String type() {
+        return componentType().getCode();
+    }
+
+    public abstract ComponentType componentType();
+
     public void config(String config) {
         throw new RuntimeException("not finished!");
     }

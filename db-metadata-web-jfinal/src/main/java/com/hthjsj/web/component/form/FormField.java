@@ -2,6 +2,7 @@ package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.meta.Component;
 import com.hthjsj.web.component.ComponentRender;
+import com.hthjsj.web.component.ComponentType;
 
 /**
  * <p> Class title: </p>
@@ -15,16 +16,18 @@ public abstract class FormField implements Component, ComponentRender {
 
     @Override
     public String name() {
-        return null;
+        return componentType().getName();
     }
 
     @Override
     public String code() {
-        return null;
+        return componentType().getCode();
     }
 
     @Override
     public String type() {
-        return getClass().getSimpleName();
+        return componentType().getCode();
     }
+
+    public abstract ComponentType componentType();
 }

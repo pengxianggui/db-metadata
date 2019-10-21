@@ -1,6 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.web.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -21,24 +22,12 @@ public class DropDown extends FormField {
 
     private Kv kv = Kv.create();
 
+    public DropDown() {
+    }
+
     public DropDown(String name, String label) {
         this.name = name;
         this.label = label;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public String code() {
-        return label;
-    }
-
-    @Override
-    public String type() {
-        return "DropDownBox";
     }
 
     public DropDown dataUrl(String url) {
@@ -64,5 +53,10 @@ public class DropDown extends FormField {
         kv.setIfNotBlank("label", label);
         kv.setIfNotBlank("component_name", type());
         return kv;
+    }
+
+    @Override
+    public ComponentType componentType() {
+        return ComponentType.DROPDOWN;
     }
 }

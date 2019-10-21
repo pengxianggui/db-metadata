@@ -1,6 +1,8 @@
 package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.meta.Component;
+import com.jfinal.aop.Aop;
+import com.jfinal.kit.Kv;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,20 @@ final public class Components {
 
     public List<Class<? extends Component>> getPluginList() {
         return pluginList;
+    }
+
+    public void init() {
+        for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
+            try {
+                ComponentType type = componentTypeClassEntry.getKey();
+                Component componentInstance = componentTypeClassEntry.getValue().newInstance();
+                Aop.get(ComponentService.class).register(type, componentInstance, Kv.create());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

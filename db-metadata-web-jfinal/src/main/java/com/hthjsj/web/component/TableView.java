@@ -63,6 +63,11 @@ public class TableView extends ViewComponent {
         return globalConfig.toJson();
     }
 
+    @Override
+    public ComponentType componentType() {
+        return ComponentType.TABLEVIEW;
+    }
+
     public TableView dataUrl(String url) {
         globalConfig.setIfNotBlank("data_url", url);
         return this;
@@ -75,26 +80,13 @@ public class TableView extends ViewComponent {
         globalConfig.setIfNotBlank("label", label);
         globalConfig.setIfNotBlank("component_name", type());
         globalConfig.setIfNotBlank("conf", "");
-        globalConfig.set("columns", metaObject.fields().stream().map(field -> {
-            return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
-        }).collect(Collectors.toList()));
+        if (metaObject != null) {
+            globalConfig.set("columns", metaObject.fields().stream().map(field -> {
+                return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
+            }).collect(Collectors.toList()));
+        }
         //                kv.putAll(getShowBehavior().getBehaviorRuleData());
         return globalConfig;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public String code() {
-        return label;
-    }
-
-    @Override
-    public String type() {
-        return "TableList";
     }
 
     class TableViewDefaultBehavior extends Behavior {

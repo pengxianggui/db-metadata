@@ -1,6 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.web.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -21,6 +22,9 @@ public class InputField extends FormField {
 
     Kv metaFieldConfig = Kv.create();
 
+    public InputField() {
+    }
+
     public InputField(IMetaField metaField) {
         this.metaField = metaField;
         name = metaField.cn();
@@ -34,18 +38,8 @@ public class InputField extends FormField {
     }
 
     @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public String code() {
-        return name;
-    }
-
-    @Override
-    public String type() {
-        return "TextBox";
+    public ComponentType componentType() {
+        return ComponentType.INPUTFIELD;
     }
 
     @Override

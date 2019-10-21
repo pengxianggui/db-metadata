@@ -1,5 +1,6 @@
 package com.hthjsj.web.component.form;
 
+import com.hthjsj.web.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -14,6 +15,9 @@ public class Button extends FormField {
 
     String label;
 
+    public Button() {
+    }
+
     public Button(String label) {
         this.label = label;
     }
@@ -21,5 +25,10 @@ public class Button extends FormField {
     @Override
     public Kv toKv() {
         return Kv.create().set("label", label);
+    }
+
+    @Override
+    public ComponentType componentType() {
+        return ComponentType.BUTTON;
     }
 }

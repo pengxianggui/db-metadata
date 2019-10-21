@@ -1,5 +1,7 @@
 package com.hthjsj.web.component;
 
+import lombok.Getter;
+
 /**
  * <p> @Date : 2019/10/21 </p>
  * <p> @Project : db-meta-serve</p>
@@ -7,10 +9,13 @@ package com.hthjsj.web.component;
  * <p> @author konbluesky </p>
  */
 public enum ComponentType {
-    TABLEVIEW("tableview", "TableList"), FORMVIEW("", ""), BUTTON("", ""), DROPDOWN("", ""), INPUTFIELD("", "");
+    TABLEVIEW("tableview", "TableList"), FORMVIEW("formview", "FormTmpl"), BUTTON("button", "Button"), DROPDOWN("dropdown", "DropDownBox"), INPUTFIELD("inputfield",
+                                                                                                                                                       "TextBox");
 
+    @Getter
     String name;
 
+    @Getter
     String code;
 
     ComponentType(String name, String code) {
