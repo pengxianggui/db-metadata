@@ -51,7 +51,6 @@ eg:
                                      :key="item.name + index"
                                      :prop="item.name"
                                      :label="item.label"
-                                     v-bind="item.conf"
                     ></el-table-column>
                 </el-table>
             </el-col>
