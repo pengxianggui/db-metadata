@@ -165,15 +165,6 @@ eg:
                     this.getData()
                 }
             },
-            getTableData() {
-                let _this = this;
-                this.$axios.get(_this.innerMeta['data_url']).then(resp => {
-                    _this.data = resp.data;
-                }).catch(resp => {
-                    debugger
-                    _this.$message.error(resp.toString())
-                })
-            },
         },
         created() {
             this.initMeta();
@@ -181,7 +172,6 @@ eg:
         },
         mounted() {
             this.initData();
-            this.getTableData();
         }
     }
 </script>
