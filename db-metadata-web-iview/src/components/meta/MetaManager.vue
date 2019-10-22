@@ -1,11 +1,14 @@
 <template>
-    <div>
+    <el-container direction="vertical">
+        <el-button-group>
+            <el-button @click="visible=true">导入元数据</el-button>
+<!--            其他默认操作 -->
+        </el-button-group>
+        <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel"></meta-import>
         </el-dialog>
-        <el-button @click="visible=true">导入元数据</el-button>
-        <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
-    </div>
+    </el-container>
 </template>
 
 <script>
@@ -56,7 +59,7 @@
                     _this.$message.error(resp.msg)
                 })
             },
-            formCancel () {
+            formCancel() {
                 this.visible = false
             },
             formSubmit(formModel) {

@@ -4,8 +4,6 @@ eg:
     {
         name: "formName",
         action: '/save', // form action (url)
-        methods: 'POST',
-        component_name: 'FormTmpl',
         conf: {
             "label-width": '80px',
             size: 'medium', // medium|small|mini
@@ -29,7 +27,7 @@ eg:
                 // ...
             }
         }],
-        btn: {
+        btns: {
             submit: {
                 label: '提交',
                 conf: {
@@ -49,7 +47,6 @@ eg:
     <div>
         <el-form :ref="meta['name']" v-bind="meta.conf" :model="model">
             <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
-                <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
                 <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()"
                                :options.sync="schemaOptions"></drop-down-box>
             </el-form-item>
@@ -102,7 +99,7 @@ eg:
                 })
             },
             assemblyMethods() {
-                // todo
+                // TODO
             },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
@@ -112,23 +109,25 @@ eg:
             },
             loadSchema() {
                 let _this = this;
-                if (!_this.meta.columns[0]['data_url'])
+                let schemaItem = _this.meta.columns[0];
+                if (!schemaItem.hasOwnProperty('data_url') || !schemaItem['data_url'])
                     return;
-                _this.$axios.get(_this.meta.columns[0]['data_url']).then(resp => {
+                _this.$axios.get(schemaItem['data_url']).then(resp => {
                     for (let i = 0; i < resp.data.length; i++) {
+                        // schema data like : ['Main', 'Slave', ...]
                         let option = {
                             key: resp.data[i],
                             value: resp.data[i]
                         };
                         _this.schemaOptions.push(option)
                     }
-                }).catch(res => {
-                    _this.$message.error(resp.msg)
+                }).catch(resp => {
+                    _this.$message({message: resp, type: 'error'})
                 })
             },
             loadTables() {
                 let _this = this;
-                let url = _this.$complieString(_this["model"], _this.meta.columns[1]['data_url']);
+                let url = _this.$complieString(_this['model'], _this.meta.columns[1]['data_url']);
                 // TODO 联动获取表名数据
                 _this.$axios.get(url).then(resp => {
                     for (let i = 0; i < resp.data.length; i++) {
@@ -168,7 +167,7 @@ eg:
                 if (this.$listeners.cancel) {
                     this.$emit('cancel', event)
                 } else {
-                    // todo
+                    // TODO default cancel behavior
                 }
             }
         },
