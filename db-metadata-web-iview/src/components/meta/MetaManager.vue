@@ -6,7 +6,7 @@
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
-            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel"></meta-import>
+            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" :submit="formSubmit"></meta-import>
         </el-dialog>
     </el-container>
 </template>
