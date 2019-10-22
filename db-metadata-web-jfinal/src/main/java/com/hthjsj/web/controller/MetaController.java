@@ -67,7 +67,6 @@ public class MetaController extends FrontRestController {
     public void fields() {
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_field");
         TableView tableView = ComponentFactory.createTableView("meta_fields_table", "元字段", metaObject);
-        tableView.dataUrl("/table/meta_field");
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 

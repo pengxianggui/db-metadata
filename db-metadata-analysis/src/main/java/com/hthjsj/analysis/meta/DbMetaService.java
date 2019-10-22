@@ -56,6 +56,8 @@ public class DbMetaService {
             List<Record> updateRecords = new ArrayList<>();
             metaObject.fields().forEach((re) -> {
                 re.dataMap().put("id", SnowFlake.me().nextId());
+                //TODO independent setting
+                re.objectCode(metaObject.code());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = Db.use(App.DB_MAIN).batchSave("meta_field", updateRecords, 50);
