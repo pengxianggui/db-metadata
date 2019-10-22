@@ -6,7 +6,7 @@
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
-            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" :submit="formSubmit"></meta-import>
+            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
     </el-container>
 </template>
@@ -64,8 +64,13 @@
                 this.visible = false
             },
             formSubmit(formModel) {
-                // TODO 请求TableList的数据
-                this.getTableData(formModel)
+                let _this = this;
+                this.$axios.post(_this.tableMeta.action, formModel).then(resp => {
+                    _this.$message({type: 'success', message: resp.msg || '操作成功'})
+                    _this.getTableData(formModel)
+                }).catch(resp => {
+                    _this.$message.error(resp.toString())
+                })
             }
         },
         components: {

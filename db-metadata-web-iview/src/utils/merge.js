@@ -24,8 +24,6 @@ export function merge(opt1, opt2, deep) {
             }
         }
     }
-    debugger
     // deep merge
     deepMerge(opt1, opt2)
-    debugger
 }
