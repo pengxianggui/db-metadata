@@ -110,24 +110,24 @@ eg:
                 this.$merge(this.innerMeta, defaultMeta);
                 this.$merge(this.innerMeta, this.meta);
             },
-            loadSchema() {
-                let _this = this;
-                let schemaItem = _this.innerMeta.columns[0];
-                if (!schemaItem.hasOwnProperty('data_url') || !schemaItem['data_url'])
-                    return;
-                _this.$axios.get(schemaItem['data_url']).then(resp => {
-                    for (let i = 0; i < resp.data.length; i++) {
-                        // schema data like : ['Main', 'Slave', ...]
-                        let option = {
-                            key: resp.data[i],
-                            value: resp.data[i]
-                        };
-                        _this.schemaOptions.push(option)
-                    }
-                }).catch(resp => {
-                    _this.$message({message: resp, type: 'error'})
-                })
-            },
+            // loadSchema() {
+            //     let _this = this;
+            //     let schemaItem = _this.innerMeta.columns[0];
+            //     if (!schemaItem.hasOwnProperty('data_url') || !schemaItem['data_url'])
+            //         return;
+            //     _this.$axios.get(schemaItem['data_url']).then(resp => {
+            //         for (let i = 0; i < resp.data.length; i++) {
+            //             // schema data like : ['Main', 'Slave', ...]
+            //             let option = {
+            //                 key: resp.data[i],
+            //                 value: resp.data[i]
+            //             };
+            //             _this.schemaOptions.push(option)
+            //         }
+            //     }).catch(resp => {
+            //         _this.$message({message: resp, type: 'error'})
+            //     })
+            // },
             loadTables() {
                 let _this = this;
                 let url = _this.$complieString(_this['model'], _this.innerMeta.columns[1]['data_url']);

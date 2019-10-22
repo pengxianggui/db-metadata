@@ -1,6 +1,6 @@
 <template>
     <el-input v-model="nativeValue"
-              v-bind="meta.conf"
+              v-bind="innerMeta.conf"
               @input="handleInput"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
@@ -30,6 +30,7 @@
         },
         data () {
             return {
+                innerMeta: {}
             }
         },
         methods: {
@@ -39,9 +40,9 @@
                 return DEFAULT.TextBox
             },
             initMeta: function () {
-                this.meta.conf = this.meta.conf || {}
-                let defaultMeta = this.getDefaultMeta() || {}
-                this.$merge(this.meta, defaultMeta)
+                let defaultMeta = this.getDefaultMeta();
+                this.$merge(this.innerMeta, defaultMeta);
+                this.$merge(this.innerMeta, this.meta);
             }
         },
         created() {

@@ -47,14 +47,14 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                @blur="$emit('blur', $event)"
                @focus="$emit('focus', $event)">
         <template v-if="!innerMeta.group">
-            <el-option v-for="item in options" :key="item.value" :label="item.key"
+            <el-option v-for="item in innerOptions" :key="item.value" :label="item.key"
                        :value="item.value ? item.value : item">
                 {{item.key}}
             </el-option>
         </template>
         <template v-else>
             <el-option-group
-                    v-for="group in options"
+                    v-for="group in innerOptions"
                     :key="group.label"
                     :label="group.label">
                 <el-option v-for="item in group.options" :key="item.value" :label="item.key"
@@ -74,7 +74,8 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         name: "drop-down-box",
         data() {
             return {
-                innerMeta: {}
+                innerMeta: {},
+                innerOptions: []
             }
         },
         props: {
@@ -103,13 +104,15 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 let _this = this;
                 _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    _this.options = utils.converKv1(resp.data)
+                    _this.innerOptions = utils.converKv1(resp.data)
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
             },
             initOptions: function () {
-                if (this.options) return
+                // deep copy to innerOptions
+                this.innerOptions = this.options;
+                if (this.innerOptions) return
                 if (this.innerMeta.hasOwnProperty('data_url')) {
                     this.getOptions()
                     return
