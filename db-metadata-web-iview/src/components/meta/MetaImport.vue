@@ -150,7 +150,7 @@ eg:
                     _this.$emit('submit', _this.model)
                 } else {
                     this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
-                        // TODO 表单提交后的默认行为
+                        _this.$message.success(resp.msg)
                     }).catch(resp => {
                         _this.$message.error(resp.toString())
                     })
