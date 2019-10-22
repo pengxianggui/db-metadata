@@ -53,6 +53,13 @@ public class MetaController extends FrontRestController {
         renderJson(Ret.ok("data", formView.toKv()));
     }
 
+    public void objs() {
+        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
+        TableView tableView = ComponentFactory.createTableView("meta_object_table", "元对象", metaObject);
+        tableView.dataUrl("/table/meta_object");
+        renderJson(Ret.ok("data", tableView.toKv()));
+    }
+
     /**
      * mock metas 数据
      * Fixme
@@ -66,9 +73,16 @@ public class MetaController extends FrontRestController {
 
     @Override
     public void doAdd() {
-        String param = getPara("schemaName");
+        String schemaName = getPara("schemaName");
+        String tableName = getPara("tableName");
+        String objectName = getPara("objectName");
+        String objectCode = getPara("objectCode");
+        DbMetaService dbMetaService = Aop.get(DbMetaService.class);
+        MetaObject metaObject = (MetaObject) dbMetaService.importFromTable(schemaName, tableName);
+        metaObject.name(objectName);
+        metaObject.code(objectCode);
+        boolean status = dbMetaService.saveMetaObject(metaObject, true);
 
-
-        renderJson(Ret.ok("data", 1));
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 }

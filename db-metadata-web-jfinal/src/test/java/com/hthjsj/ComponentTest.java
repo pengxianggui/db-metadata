@@ -6,6 +6,7 @@ import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.component.TableView;
 import com.jfinal.aop.Aop;
+import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -26,6 +27,15 @@ public class ComponentTest {
         analysisConfig.start();
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
         TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+        //        init(metaObject);
+        ComponentService componentService = Aop.get(ComponentService.class);
+        Kv kv = componentService.loadFieldsConfigMap(tableView.type(), "object_code_admin111");
+        System.out.println(kv.toJson());
+
+    }
+
+    public static void init(MetaObject metaObject) {
+        TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         {
             //            tableView.setGlobal("hahaa", "xixi");
             Record record = new Record();
@@ -35,9 +45,11 @@ public class ComponentTest {
             record.set("cn", tableView.type());
             Db.save("meta_component", "id", record);
         }
-
-
         ComponentService componentService = Aop.get(ComponentService.class);
         componentService.newObjectConfig(tableView, "object_code_admin111");
+        componentService.newFieldConfig(tableView, "object_code_admin111", "one1");
+        componentService.newFieldConfig(tableView, "object_code_admin111", "one2");
+        componentService.newFieldConfig(tableView, "object_code_admin111", "one3");
+        componentService.newFieldConfig(tableView, "object_code_admin111", "one4");
     }
 }

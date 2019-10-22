@@ -1,8 +1,6 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.analysis.meta.Component;
-import com.hthjsj.web.component.ComponentRender;
-import com.hthjsj.web.component.ComponentType;
+import com.hthjsj.web.component.ViewComponent;
 
 /**
  * <p> Class title: </p>
@@ -12,22 +10,15 @@ import com.hthjsj.web.component.ComponentType;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class FormField implements Component, ComponentRender {
+public abstract class FormField extends ViewComponent {
 
     @Override
-    public String name() {
-        return componentType().getName();
+    public String config() {
+        return null;
     }
 
     @Override
-    public String code() {
-        return componentType().getCode();
+    public void config(String config) {
+        super.config(config);
     }
-
-    @Override
-    public String type() {
-        return componentType().getCode();
-    }
-
-    public abstract ComponentType componentType();
 }

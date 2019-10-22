@@ -2,7 +2,9 @@ package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +15,21 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class ComponentFactory {
 
     public static TableView createTableView(String name, String label, MetaObject metaObject) {
         TableView tableView = new TableView(name, label);
+        Kv ComponentTableViewConfig = Kv.create().set(Aop.get(ComponentService.class).loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
+        log.info("ComponentTableViewConfig:{}", ComponentTableViewConfig.toJson());
+        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
+        log.info("fieldsConfig:{}", fieldsConfig.toJson());
         tableView.setInject(new ViewDataInject() {
 
             @Override
             public void inject(Kv meta, Kv conf) {
                 if (metaObject != null) {
+                    meta.set("conf", ComponentTableViewConfig);
                     List<Kv> fs = new ArrayList<>();
                     for (IMetaField field : metaObject.fields()) {
                         fs.add(itemInject().inject(meta, conf, field));
@@ -36,7 +44,9 @@ public class ComponentFactory {
 
                     @Override
                     public Kv inject(Kv meta, Kv conf, IMetaField field) {
-                        return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn());
+                        Kv kv = Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn());
+                        kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
+                        return kv;
                     }
                 };
             }

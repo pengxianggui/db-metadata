@@ -19,26 +19,26 @@ public class QueryHelper {
     }
 
     public String getObjectCode() {
-        return tp.getPara(0, tp.getPara("objectCode"));
+        return tp.getPara(0, tp.getPara("objectCode".toLowerCase()));
     }
 
     public String getFieldCode() {
-        return tp.getPara("f", tp.getPara("objectField"));
+        return tp.getPara("f", tp.getPara("objectField".toLowerCase()));
     }
 
     public Integer getPageSize() {
-        return tp.getInt("s", tp.getInt("pageSize", 20));
+        return tp.getInt("s", tp.getInt("pageSize".toLowerCase(), 20));
     }
 
     public Integer getPageIndex() {
-        return tp.getInt("p", tp.getInt("pageIndex", 1));
+        return tp.getInt("p", tp.getInt("pageIndex".toLowerCase(), 1));
     }
 
     public String getComponentCode() {
-        return tp.getPara("compCode", tp.getPara("componentCode"));
+        return tp.getPara("compCode".toLowerCase(), tp.getPara("componentCode".toLowerCase()));
     }
 
     public String getComponentType() {
-        return tp.getPara("compType", tp.getPara("componentType"));
+        return tp.getPara("compType".toLowerCase(), tp.getPara("componentType".toLowerCase()));
     }
 }

@@ -22,6 +22,8 @@ import java.util.List;
 @Data
 public class TableView extends ViewComponent {
 
+    List<Kv> fields = new ArrayList<>(0);
+
     @Setter(AccessLevel.PACKAGE)
     @Accessors(chain = true)
     private String name;
@@ -38,10 +40,7 @@ public class TableView extends ViewComponent {
 
     private Kv conf = Kv.create();
 
-    List<Kv> fields = new ArrayList<>(0);
-
     public TableView() {
-        //        setShowBehavior(new TableViewDefaultBehavior());
     }
 
     public TableView(String name, String label) {
@@ -72,12 +71,6 @@ public class TableView extends ViewComponent {
         meta.setIfNotBlank("component_name", type());
         meta.setIfNotBlank("conf", "");
         getInject().inject(meta, conf);
-        //        if (metaObject != null) {
-        //            meta.set("columns", metaObject.fields().stream().map(field -> {
-        //                return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
-        //            }).collect(Collectors.toList()));
-        //        }
-        //                kv.putAll(getShowBehavior().getBehaviorRuleData());
         return meta;
     }
 
@@ -90,18 +83,4 @@ public class TableView extends ViewComponent {
         JSONObject jsonObject;
         //        jsonObject.putIfAbsent()
     }
-    //
-    //    class TableViewDefaultBehavior extends Behavior {
-    //
-    //        public TableViewDefaultBehavior() {
-    //            behaviorRuleData.set("show-overflow-tooltip", true);
-    //            //            behaviorRuleData.set("selection", true);
-    //            //            behaviorRuleData.set("singleSelected", true);
-    //            //            behaviorRuleData.set("showRowNum", true);
-    //        }
-    //
-    //        public void load(Kv kv) {
-    //            behaviorRuleData.putAll(kv);
-    //        }
-    //    }
 }

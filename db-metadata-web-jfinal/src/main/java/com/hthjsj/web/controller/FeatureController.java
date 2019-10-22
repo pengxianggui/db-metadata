@@ -5,7 +5,7 @@ import com.jfinal.core.Controller;
 /**
  * 功能
  */
-public class ModuleFuncController extends Controller {
+public class FeatureController extends Controller {
 
     public void load() {
     }

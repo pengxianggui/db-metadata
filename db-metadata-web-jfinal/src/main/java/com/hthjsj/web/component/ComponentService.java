@@ -6,12 +6,14 @@ import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
 import com.hthjsj.web.jfinal.SnowFlake;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,8 +58,26 @@ public class ComponentService {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
     }
 
+    public List<Record> loadFieldsConfig(String componentCode, String destCode) {
+        return Db.find("select * from meta_component_instance where comp_code=? and dest_object like concat(?,'%') and type=?",
+                       componentCode,
+                       destCode,
+                       INSTANCE.META_FIELD.toString());
+    }
+
+    public Kv loadFieldsConfigMap(String componentCode, String destCode) {
+        Kv kv = Kv.create();
+        List<Record> fields = loadFieldsConfig(componentCode, destCode);
+        for (Record record : fields) {
+            String s = record.getStr("dest_object").split("\\.")[1];
+            kv.set(s, record.getStr("config"));
+        }
+        return kv;
+    }
+
     private Record loadConfig(String componentCode, String destCode, String type) {
-        return Db.findFirst("select config from meta_component_instance where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
+        Record record = Db.findFirst("select config from meta_component_instance where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
+        return record == null ? new Record() : record;
     }
 
     public boolean newObjectConfig(ViewComponent component, String objectCode) {
@@ -75,11 +95,6 @@ public class ComponentService {
     public boolean newSpecificConfig(ViewComponent component, String specificCode) {
         Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC);
         return Db.save("meta_component_instance", record);
-    }
-
-    public Map getSpecificConfig(String componentCode, String specificCode) {
-        String config = Db.queryStr("select * from meta_component_instance where comp_code=? and dest_object", componentCode, specificCode);
-        return JSON.parseObject(config, Map.class);
     }
 
     private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific) {
