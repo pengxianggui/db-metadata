@@ -39,10 +39,10 @@ public class ComponentService {
     public void register(ComponentType type, Component component, Map<String, Object> config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
-        record.set("en", component.code());
-        record.set("cn", component.name());
+        record.set("en", type.getCode());
+        record.set("cn", type.getName());
         record.set("config", JSON.toJSONString(config));
-        record.set("code", component.code());
+        record.set("code", type.getCode());
         record.set("version", 1);
         User u = ThreadLocalUserKit.getUser();
         if (u != null) {

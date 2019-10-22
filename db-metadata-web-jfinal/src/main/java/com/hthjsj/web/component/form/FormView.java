@@ -57,6 +57,6 @@ public class FormView extends ViewComponent {
         meta.setIfNotBlank("action", action);
         meta.set("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         //        kv.set("btn", Lists.newArrayList(new Button("submit").renderMeta(), new Button("reset").renderMeta()));
-        return conf;
+        return meta;
     }
 }
