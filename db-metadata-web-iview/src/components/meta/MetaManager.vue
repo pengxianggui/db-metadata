@@ -1,8 +1,9 @@
 <template>
     <div>
-        <el-card>
-            <meta-import v-if="formMeta" :meta="formMeta"></meta-import>
-        </el-card>
+        <el-dialog title="导入元数据" :visible.sync="visible">
+            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel"></meta-import>
+        </el-dialog>
+        <el-button @click="visible=true">导入元数据</el-button>
         <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
     </div>
 </template>
@@ -16,6 +17,7 @@
         name: "meta-manager",
         data() {
             return {
+                visible: false,
                 tableMeta: null,
                 formMeta: null,
                 tableData: []
@@ -45,7 +47,7 @@
                 }).catch(resp => {
                     _this.$message.error(resp.msg)
                 })
-        },
+            },
             getTableData() {
                 let _this = this;
                 this.$axios.get('/table/list/meta_field').then(resp => {
@@ -53,6 +55,9 @@
                 }).catch(resp => {
                     _this.$message.error(resp.msg)
                 })
+            },
+            formCancel () {
+                this.visible = false
             },
             formSubmit(formModel) {
                 // TODO 请求TableList的数据
@@ -73,7 +78,7 @@
             this.getTableMeta();
             this.getTableData()
         },
-        beforeMount () {
+        beforeMount() {
 
         },
         mounted() {
