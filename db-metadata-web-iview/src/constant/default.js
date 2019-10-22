@@ -73,7 +73,6 @@ const DEFAULT = {
     DropDownBox: {
         name: '',
         label: '',
-        "data_url": "/api/options", // todo reset
         "conf": {
             clearable: true
         }

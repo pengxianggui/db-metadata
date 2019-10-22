@@ -54,7 +54,8 @@
             getTableData(params) {
                 let _this = this;
                 this.$axios.get('/table/list/' + params['objectCode']).then(resp => {
-                    _this.tableData = resp.data
+                    _this.tableData = resp.data;
+                    _this.visible = false;
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
