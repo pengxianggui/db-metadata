@@ -164,11 +164,20 @@ eg:
                 } else {
                     this.getData()
                 }
-            }
+            },
+            getTableData() {
+                let _this = this;
+                this.$axios.get(_this.innerMeta['data_url']).then(resp => {
+                    _this.data = resp.data;
+                }).catch(resp => {
+                    _this.$message.error(resp.toString())
+                })
+            },
         },
         created() {
             this.initMeta();
-            this.assemblyModel()
+            this.assemblyModel();
+            this.getTableData();
         },
         mounted() {
             this.initData()

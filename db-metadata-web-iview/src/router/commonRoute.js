@@ -2,6 +2,7 @@ import Main from '@/components/Main'
 import MasterSlaveTableTmpl from "../components/template/MasterSlaveTableTmpl";
 import MetaManager from "../components/meta/MetaManager";
 import MetaConf from "../components/meta/MetaConf";
+import MetaObject from "../components/meta/MetaObject";
 
 const commonRoute = [
     {
@@ -20,6 +21,10 @@ const commonRoute = [
         path: '/meta-manager',
         name: 'MetaManager',
         component: MetaManager
+    },{
+        path: '/meta-object',
+        name: 'meta-object',
+        component: MetaObject
     },{
         path: '/meta-conf',
         name: 'MetaConf',
