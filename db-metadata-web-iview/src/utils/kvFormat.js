@@ -4,7 +4,7 @@
  * data like : ['Main', 'Slave', ...]
  * @param data
  */
-const converKv1 = function (data) {
+export function converKv1 (data) {
     let arr = [];
     for (let i = 0; i < data.length; i++) {
         let item = {
@@ -16,11 +16,10 @@ const converKv1 = function (data) {
     return arr;
 }
 
-const converKv2 = function (data) {
-    // ...
-}
-
-export default {
-    converKv1,
-    converKv2
-}
+// const converKv2 = function (data) {
+//     // ...
+// }
+// export default {
+//     converKv1,
+//     converKv2
+// }

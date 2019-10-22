@@ -68,7 +68,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
 
 <script>
     import {DEFAULT} from '@/constant'
-    import {KvFormat} from '@/utils'
+    import utils from '@/utils'
 
     export default {
         name: "drop-down-box",
@@ -103,7 +103,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 let _this = this;
                 _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    _this.options = KvFormat.converKv1(resp.data)
+                    _this.options = utils.converKv1(resp.data)
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })

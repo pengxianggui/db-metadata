@@ -1,5 +1,5 @@
 import {merge} from './merge.js'
 import {complieVarString} from './format'
-import KvFormat from './kvFormat'
+import {convertKv1} from './kvFormat'
 
-export default {merge, complieVarString, KvFormat}
+export default {merge, complieVarString, convertKv1}
