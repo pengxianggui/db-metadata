@@ -3,12 +3,12 @@ package com.hthjsj.web.controller;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.InputField;
-import com.jfinal.aop.Aop;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ public class MetaController extends FrontRestController {
     @Override
     public void index() {
         String metaObjectCode = getPara(0, getPara("objectCode"));
-        IMetaObject metaObject = Aop.get(DbMetaService.class).findByCode(metaObjectCode);
+        IMetaObject metaObject = ServiceManager.dbMetaService().findByCode(metaObjectCode);
         renderJson(Ret.ok("data", metaObject));
     }
 
@@ -54,7 +54,7 @@ public class MetaController extends FrontRestController {
     }
 
     public void objs() {
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode("meta_object");
         TableView tableView = ComponentFactory.createTableView("meta_object_table", "元对象", metaObject);
         tableView.dataUrl("/table/list/meta_object");
         renderJson(Ret.ok("data", tableView.toKv()));
@@ -65,7 +65,7 @@ public class MetaController extends FrontRestController {
      * Fixme
      */
     public void fields() {
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_field");
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode("meta_field");
         TableView tableView = ComponentFactory.createTableView("meta_fields_table", "元字段", metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -76,7 +76,7 @@ public class MetaController extends FrontRestController {
         String tableName = getPara("tableName");
         String objectName = getPara("objectName");
         String objectCode = getPara("objectCode");
-        DbMetaService dbMetaService = Aop.get(DbMetaService.class);
+        DbMetaService dbMetaService = ServiceManager.dbMetaService();
         MetaObject metaObject = (MetaObject) dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
