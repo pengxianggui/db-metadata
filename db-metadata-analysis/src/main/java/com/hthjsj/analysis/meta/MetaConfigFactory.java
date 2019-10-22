@@ -86,6 +86,11 @@ public class MetaConfigFactory {
         public <T> T getItem(Object key) {
             return getAs(key);
         }
+
+        @Override
+        public String toString() {
+            return toJson();
+        }
     }
 
     public static class MetaObjectConfig extends MetaData implements IMetaConfig {
@@ -104,7 +109,7 @@ public class MetaConfigFactory {
         }
 
         public boolean isUUIDPrimary() {
-            return getBoolean("isUUIDPrimary");
+            return Boolean.parseBoolean(getStr("isUUIDPrimary"));
         }
 
         @Override
@@ -135,6 +140,11 @@ public class MetaConfigFactory {
         @Override
         public <T> T getItem(Object key) {
             return getAs(key);
+        }
+
+        @Override
+        public String toString() {
+            return toJson();
         }
     }
 }

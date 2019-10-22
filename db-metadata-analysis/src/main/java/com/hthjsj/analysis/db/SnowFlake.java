@@ -1,4 +1,4 @@
-package com.hthjsj.web.jfinal;
+package com.hthjsj.analysis.db;
 
 /**
  * <p> @Date : 2019/10/21 </p>

@@ -49,13 +49,13 @@ public class DbMetaService {
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
         if (((MetaConfigFactory.MetaObjectConfig) metaObject.config()).isUUIDPrimary()) {
-            metaObject.dataMap().put("id", StrKit.getRandomUUID());
+            metaObject.dataMap().put("id", SnowFlake.me().nextId());
         }
         boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", new Record().setColumns(metaObject.dataMap()));
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
             metaObject.fields().forEach((re) -> {
-                re.dataMap().put("id", StrKit.getRandomUUID());
+                re.dataMap().put("id", SnowFlake.me().nextId());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = Db.use(App.DB_MAIN).batchSave("meta_field", updateRecords, 50);

@@ -1,10 +1,10 @@
 package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.Component;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
-import com.hthjsj.web.jfinal.SnowFlake;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -99,7 +99,7 @@ public class ComponentService {
 
     private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific) {
         Record record = new Record();
-        record.set("id", StrKit.getRandomUUID());
+        record.set("id", SnowFlake.me().nextId());
         record.set("comp_code", component.type());
         record.set("type", specific.toString());
         record.set("dest_object", specificCode);

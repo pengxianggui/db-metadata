@@ -1,5 +1,6 @@
 package com.hthjsj.analysis.meta;
 
+import com.alibaba.fastjson.JSON;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class MetaObject implements IMetaObject {
     @Override
     public void config(IMetaConfig config) {
         this.metaConfig = config;
-        record.set("config", metaConfig.getConfig());
+        record.set("config", JSON.toJSONString(metaConfig.getConfig()));
     }
 
     @Override

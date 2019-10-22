@@ -1,6 +1,9 @@
 package com.hthjsj.analysis.db;
 
-import com.hthjsj.analysis.meta.*;
+import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaConfigFactory;
+import com.hthjsj.analysis.meta.MetaField;
+import com.hthjsj.analysis.meta.MetaObject;
 
 /**
  * <p> Class title: </p>
@@ -22,7 +25,8 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
         metaObject.name(table.getTableComment().trim());
         metaObject.tableName(table.getTableName().toLowerCase());
         metaObject.schemaName(table.getTableSchema().toLowerCase());
-        metaObject.config(MetaConfigFactory.createV1ObjectConfig(metaObject.code(), "true"));
+        //TODO config 使用string ,jdbc驱动不支持set jsonobject
+        metaObject.config(MetaConfigFactory.createV1ObjectConfig(metaObject.code(), "true").toJson());
 
         for (int i = 0; i < table.getColumns().size(); i++) {
             Column column = table.getColumns().get(i);
@@ -45,7 +49,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
                     column.getColumnDefault(),
                     column.getIsNullable());
 
-            mf.config(fieldConfig);
+            mf.config(fieldConfig.toJson());
 
             if (PRIMARY.equals(column.getColumnKey())) {
                 mf.isPrimary(true);

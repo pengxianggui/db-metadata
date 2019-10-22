@@ -690,7 +690,7 @@
             },
             {
               "name": "dest_object",
-              "type": "DefaultString",
+              "type": "ShortString",
               "remark": "",
               "chnname": "目标对象"
             },
