@@ -45,26 +45,26 @@ eg:
 -->
 <template>
     <div>
-        <el-form :ref="meta['name']" v-bind="meta.conf" :model="model">
-            <el-form-item :label="meta.columns[0].label" :prop="meta.columns[0].name">
-                <drop-down-box :meta="meta.columns[0]" v-model="model[meta.columns[0].name]" @change="loadTables()"
+        <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
+            <el-form-item :label="innerMeta.columns[0].label" :prop="innerMeta.columns[0].name">
+                <drop-down-box :meta="innerMeta.columns[0]" v-model="model[innerMeta.columns[0].name]" @change="loadTables()"
                                :options.sync="schemaOptions"></drop-down-box>
             </el-form-item>
-            <el-form-item :label="meta.columns[1].label" :prop="meta.columns[1].name">
-                <drop-down-box :meta="meta.columns[1]" v-model="model[meta.columns[1].name]"
+            <el-form-item :label="innerMeta.columns[1].label" :prop="innerMeta.columns[1].name">
+                <drop-down-box :meta="innerMeta.columns[1]" v-model="model[innerMeta.columns[1].name]"
                                :options.sync="tableOptions"></drop-down-box>
             </el-form-item>
-            <el-form-item :label="meta.columns[2].label" :prop="meta.columns[2].name">
-                <text-box :meta="meta.columns[2]" v-model="model[meta.columns[2].name]"></text-box>
+            <el-form-item :label="innerMeta.columns[2].label" :prop="innerMeta.columns[2].name">
+                <text-box :meta="innerMeta.columns[2]" v-model="model[innerMeta.columns[2].name]"></text-box>
             </el-form-item>
-            <el-form-item :label="meta.columns[3].label" :prop="meta.columns[3].name">
-                <text-box :meta="meta.columns[3]" v-model="model[meta.columns[3].name]"></text-box>
+            <el-form-item :label="innerMeta.columns[3].label" :prop="innerMeta.columns[3].name">
+                <text-box :meta="innerMeta.columns[3]" v-model="model[innerMeta.columns[3].name]"></text-box>
             </el-form-item>
             <el-form-item>
-                <el-button :id="meta.name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
-                           v-text="meta.btns.submit.label"></el-button>
-                <el-button :id="meta.name + 'cancel'" v-bind="meta.btns.cancel.conf" @click="onCancel"
-                           v-text="meta.btns.cancel.label"></el-button>
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns.submit.conf" @click="onSubmit"
+                           v-text="innerMeta.btns.submit.label"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns.cancel.conf" @click="onCancel"
+                           v-text="innerMeta.btns.cancel.label"></el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -78,6 +78,7 @@ eg:
         name: "meta-import",
         data() {
             return {
+                innerMeta: {},
                 model: {},
                 tableOptions: [],
                 schemaOptions: []
@@ -94,7 +95,7 @@ eg:
         methods: {
             assemblyModel() {
                 let _this = this;
-                _this.meta.columns.forEach(item => {
+                _this.innerMeta.columns.forEach(item => {
                     Vue.set(_this.model, item.name, item.value || null)
                 })
             },
@@ -105,11 +106,13 @@ eg:
                 return DEFAULT.FormTmpl
             },
             initMeta() {
-                this.$merge(this.meta, this.getDefaultMeta())
+                let defaultMeta = this.getDefaultMeta();
+                this.$merge(this.innerMeta, defaultMeta);
+                this.$merge(this.innerMeta, this.meta);
             },
             loadSchema() {
                 let _this = this;
-                let schemaItem = _this.meta.columns[0];
+                let schemaItem = _this.innerMeta.columns[0];
                 if (!schemaItem.hasOwnProperty('data_url') || !schemaItem['data_url'])
                     return;
                 _this.$axios.get(schemaItem['data_url']).then(resp => {
@@ -127,7 +130,7 @@ eg:
             },
             loadTables() {
                 let _this = this;
-                let url = _this.$complieString(_this['model'], _this.meta.columns[1]['data_url']);
+                let url = _this.$complieString(_this['model'], _this.innerMeta.columns[1]['data_url']);
                 // TODO 联动获取表名数据
                 _this.$axios.get(url).then(resp => {
                     for (let i = 0; i < resp.data.length; i++) {
@@ -146,7 +149,7 @@ eg:
                 if (_this.$listeners.submit) {
                     _this.$emit('submit', _this.model)
                 } else {
-                    this.$axios.post(_this.meta.action, _this.model).then(resp => {
+                    this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
                         _this.options = resp.data
                     }).catch(resp => {
                         _this.$message.error(resp.msg)
@@ -155,7 +158,7 @@ eg:
             },
             onSubmit(event) {
                 let _this = this;
-                _this.$refs[_this.meta['name']].validate((valid) => {
+                _this.$refs[_this.innerMeta['name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
                     } else {

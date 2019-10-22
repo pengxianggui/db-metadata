@@ -151,7 +151,7 @@ eg:
             },
             getData() {
                 let _this = this;
-                this.$axios.get(_this.meta['data_url']).then(resp => {
+                this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     _this.data = resp.data;
                     _this.paginationModel.total = _this.data.length
                 }).catch(resp => {
