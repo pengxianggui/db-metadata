@@ -1,9 +1,8 @@
 package com.hthjsj.web.controller;
 
-import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.aop.Aop;
 
 /**
  * <p> Class title: </p>
@@ -22,6 +21,6 @@ public class DictController extends FrontRestController {
         String fieldCode = queryHelper.getFieldCode();
 
 
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
     }
 }

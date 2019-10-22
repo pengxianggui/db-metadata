@@ -1,14 +1,13 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Splitter;
-import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.aop.Aop;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -37,7 +36,7 @@ public class TableController extends FrontRestController {
     @Override
     public void index() {
         String objectCode = getPara(0, getPara("objectCode"));
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
         TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -64,7 +63,7 @@ public class TableController extends FrontRestController {
         String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
