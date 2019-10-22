@@ -51,9 +51,9 @@
                     _this.$message.error(resp.toString())
                 })
             },
-            getTableData() {
+            getTableData(params) {
                 let _this = this;
-                this.$axios.get('/table/list/meta_field').then(resp => {
+                this.$axios.get('/table/list/' + params['objectCode']).then(resp => {
                     _this.tableData = resp.data
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
@@ -64,10 +64,7 @@
             },
             formSubmit(formModel) {
                 // TODO 请求TableList的数据
-                this.$axios.post('/tableList', formModel
-                ).then(resp => {
-
-                })
+                this.getTableData(formModel)
             }
         },
         components: {
@@ -79,7 +76,6 @@
         created() {
             this.getFormMeta();
             this.getTableMeta();
-            this.getTableData()
         },
         beforeMount() {
 

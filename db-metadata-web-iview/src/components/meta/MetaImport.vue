@@ -47,8 +47,8 @@ eg:
     <div>
         <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="innerMeta.columns[0].label" :prop="innerMeta.columns[0].name">
-                <drop-down-box :meta="innerMeta.columns[0]" v-model="model[innerMeta.columns[0].name]" @change="loadTables()"
-                               :options.sync="schemaOptions"></drop-down-box>
+                <drop-down-box :meta="innerMeta.columns[0]" v-model="model[innerMeta.columns[0].name]"
+                               @change="loadTables()"></drop-down-box>
             </el-form-item>
             <el-form-item :label="innerMeta.columns[1].label" :prop="innerMeta.columns[1].name">
                 <drop-down-box :meta="innerMeta.columns[1]" v-model="model[innerMeta.columns[1].name]"
@@ -181,7 +181,6 @@ eg:
         },
         mounted() {
             // request business data
-            this.loadSchema()
         }
     }
 </script>
