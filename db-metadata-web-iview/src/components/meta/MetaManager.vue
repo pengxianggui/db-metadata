@@ -1,13 +1,16 @@
 <template>
     <el-container direction="vertical">
         <el-button-group>
-            <el-button @click="visible=true">导入元数据</el-button>
+            <el-button @click="visible=true">选择元对象</el-button>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
+        <el-button-group style="float: right">
+            <el-button @click="saveMeta">导入元数据</el-button>
+        </el-button-group>
     </el-container>
 </template>
 
@@ -65,12 +68,15 @@
             },
             formSubmit(formModel) {
                 let _this = this;
-                this.$axios.post(_this.tableMeta.action, formModel).then(resp => {
+                this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'})
                     _this.getTableData(formModel)
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
+            },
+            saveMeta () {
+                // TODO save meta data
             }
         },
         components: {
