@@ -1,16 +1,17 @@
 <template>
     <el-container direction="vertical">
         <el-button-group>
-            <el-button @click="visible=true">选择元对象</el-button>
+            <el-button type="primary" plain @click="visible=true">选择元对象</el-button>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
-        <el-button-group style="float: right">
-            <el-button @click="saveMeta">导入元数据</el-button>
-        </el-button-group>
+        <div style="display: flex">
+            <span style="flex: 1"></span>
+            <el-button type="primary" @click="saveMeta">导入元数据</el-button>
+        </div>
     </el-container>
 </template>
 
@@ -72,7 +73,7 @@
                     _this.$message({type: 'success', message: resp.msg || '操作成功'})
                     _this.getTableData(formModel)
                 }).catch(resp => {
-                    _this.$message.error(resp.toString())
+                    _this.$message({type: 'error', message: resp.msg})
                 })
             },
             saveMeta () {
