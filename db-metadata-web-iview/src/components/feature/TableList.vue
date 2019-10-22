@@ -170,6 +170,7 @@ eg:
                 this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     _this.data = resp.data;
                 }).catch(resp => {
+                    debugger
                     _this.$message.error(resp.toString())
                 })
             },
@@ -177,10 +178,10 @@ eg:
         created() {
             this.initMeta();
             this.assemblyModel();
-            this.getTableData();
         },
         mounted() {
-            this.initData()
+            this.initData();
+            this.getTableData();
         }
     }
 </script>
