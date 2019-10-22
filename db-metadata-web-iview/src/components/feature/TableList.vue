@@ -48,6 +48,7 @@ eg:
                         @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column v-for="(item, index) in innerMeta.columns"
+                                     v-bind="item.conf"
                                      :key="item.name + index"
                                      :prop="item.name"
                                      :label="item.label"
@@ -150,6 +151,7 @@ eg:
             },
             getData() {
                 let _this = this;
+                debugger
                 this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     _this.data = resp.data;
                     _this.paginationModel.total = _this.data.length
@@ -158,6 +160,7 @@ eg:
                 })
             },
             initData() { // init business data
+                debugger
                 if (this.data) {
                     this.paginationModel.total = this.data.length
                 } else {

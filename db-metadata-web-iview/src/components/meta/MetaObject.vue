@@ -1,15 +1,20 @@
 <template>
-    <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
+    <div>
+        <template v-if="tableMeta">
+            <table-list :meta="tableMeta"></table-list>
+        </template>
+    </div>
 </template>
 
 <script>
     import TableList from '@/components/feature/TableList'
+
     export default {
         name: "meta-object",
         data() {
             return {
-                tableMeta: {},
-                tableData: []
+                tableMeta: null,
+                // tableData: null
             }
         },
         methods: {
@@ -34,7 +39,7 @@
             this.getTableMeta()
         },
         mounted() {
-            this.getTableData()
+            // this.getTableData()
         },
         components: {
             TableList
