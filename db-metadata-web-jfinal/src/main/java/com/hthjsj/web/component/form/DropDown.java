@@ -1,6 +1,5 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.component.ComponentType;
 import com.jfinal.kit.Kv;
 
@@ -17,8 +16,6 @@ public class DropDown extends FormField {
     private String name;
 
     private String label;
-
-    private IMetaField metaField;
 
     private Kv kv = Kv.create();
 

@@ -3,6 +3,7 @@ package com.hthjsj.web.controller;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
@@ -58,7 +59,8 @@ public class MetaController extends FrontRestController {
      */
     public void fields() {
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_field");
-        TableView tableView = new TableView("meta_fields_table", "元字段").setMetaObject(metaObject).dataUrl("/table/meta_field");
+        TableView tableView = ComponentFactory.createTableView("meta_fields_table", "元字段", metaObject);
+        tableView.dataUrl("/table/meta_field");
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 

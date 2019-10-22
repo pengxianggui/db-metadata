@@ -1,12 +1,15 @@
 package com.hthjsj.web.component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.jfinal.kit.Kv;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p> Class title: 表格显示控件</p>
@@ -19,20 +22,26 @@ import java.util.stream.Collectors;
 @Data
 public class TableView extends ViewComponent {
 
+    @Setter(AccessLevel.PACKAGE)
+    @Accessors(chain = true)
     private String name;
 
+    @Setter(AccessLevel.PACKAGE)
+    @Accessors(chain = true)
     private String label;
 
-    private Kv globalConfig = Kv.create();
-
-    private Kv metaObjectConfig = Kv.create();
-
-    @Setter
+    @Setter(AccessLevel.PACKAGE)
     @Accessors(chain = true)
     private MetaObject metaObject;
 
+    private Kv meta = Kv.create();
+
+    private Kv conf = Kv.create();
+
+    List<Kv> fields = new ArrayList<>(0);
+
     public TableView() {
-        setShowBehavior(new TableViewDefaultBehavior());
+        //        setShowBehavior(new TableViewDefaultBehavior());
     }
 
     public TableView(String name, String label) {
@@ -41,26 +50,9 @@ public class TableView extends ViewComponent {
         this.label = label;
     }
 
-    public TableView(MetaObject metaObject) {
-        this();
-        if (metaObject == null) {
-            throw new ComponentException("metaObject==null,必须传入有效的metaObject");
-        }
-        this.metaObject = metaObject;
-        /**
-         * 1. 初始化全局配置 from db;
-         * 2. 允许实例层级覆盖配置
-         */
-        //        Record record = Aop.get(ComponentService.class).load(type());
-        //        globalConfig.putAll(JSON.parseObject(record.getStr("config"), Map.class));
-
-        //        metaObjectConfig.set("metaObjCode", metaObject.code());
-        //        metaObjectConfig.set("fields", metaObject.fields());
-    }
-
     @Override
     public String config() {
-        return globalConfig.toJson();
+        return meta.toJson();
     }
 
     @Override
@@ -69,37 +61,47 @@ public class TableView extends ViewComponent {
     }
 
     public TableView dataUrl(String url) {
-        globalConfig.setIfNotBlank("data_url", url);
+        meta.setIfNotBlank("data_url", url);
         return this;
     }
 
     @Override
     public Kv toKv() {
-        globalConfig.putAll(metaObjectConfig);
-        globalConfig.setIfNotBlank("name", name);
-        globalConfig.setIfNotBlank("label", label);
-        globalConfig.setIfNotBlank("component_name", type());
-        globalConfig.setIfNotBlank("conf", "");
-        if (metaObject != null) {
-            globalConfig.set("columns", metaObject.fields().stream().map(field -> {
-                return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
-            }).collect(Collectors.toList()));
-        }
+        meta.setIfNotBlank("name", name);
+        meta.setIfNotBlank("label", label);
+        meta.setIfNotBlank("component_name", type());
+        meta.setIfNotBlank("conf", "");
+        getInject().inject(meta, conf);
+        //        if (metaObject != null) {
+        //            meta.set("columns", metaObject.fields().stream().map(field -> {
+        //                return Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn()).set("conf", getShowBehavior().getBehaviorRuleData());
+        //            }).collect(Collectors.toList()));
+        //        }
         //                kv.putAll(getShowBehavior().getBehaviorRuleData());
-        return globalConfig;
+        return meta;
     }
 
-    class TableViewDefaultBehavior extends Behavior {
-
-        public TableViewDefaultBehavior() {
-            behaviorRuleData.set("show-overflow-tooltip", true);
-            //            behaviorRuleData.set("selection", true);
-            //            behaviorRuleData.set("singleSelected", true);
-            //            behaviorRuleData.set("showRowNum", true);
-        }
-
-        public void load(Kv kv) {
-            behaviorRuleData.putAll(kv);
-        }
+    /**
+     * 将容器层的config下垂
+     *
+     * @param config
+     */
+    private void configPushDown(Kv config) {
+        JSONObject jsonObject;
+        //        jsonObject.putIfAbsent()
     }
+    //
+    //    class TableViewDefaultBehavior extends Behavior {
+    //
+    //        public TableViewDefaultBehavior() {
+    //            behaviorRuleData.set("show-overflow-tooltip", true);
+    //            //            behaviorRuleData.set("selection", true);
+    //            //            behaviorRuleData.set("singleSelected", true);
+    //            //            behaviorRuleData.set("showRowNum", true);
+    //        }
+    //
+    //        public void load(Kv kv) {
+    //            behaviorRuleData.putAll(kv);
+    //        }
+    //    }
 }

@@ -65,6 +65,13 @@ public class ComponentService {
         return Db.save("meta_component_instance", record);
     }
 
+    public boolean newFieldConfig(ViewComponent component, String objectCode, String fieldCode) {
+        // objectCode.name
+        String dest_code = objectCode + "." + fieldCode;
+        Record record = getRecord(component, dest_code, INSTANCE.META_FIELD);
+        return Db.save("meta_component_instance", record);
+    }
+
     public boolean newSpecificConfig(ViewComponent component, String specificCode) {
         Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC);
         return Db.save("meta_component_instance", record);
@@ -91,6 +98,8 @@ public class ComponentService {
     }
 
     enum INSTANCE {
-        META_OBJECT, META_FIELD, SPECIFIC,
+        META_OBJECT,
+        META_FIELD,
+        SPECIFIC,
     }
 }

@@ -9,8 +9,11 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 public enum ComponentType {
-    TABLEVIEW("tableview", "TableList"), FORMVIEW("formview", "FormTmpl"), BUTTON("button", "Button"), DROPDOWN("dropdown", "DropDownBox"), INPUTFIELD("inputfield",
-                                                                                                                                                       "TextBox");
+    TABLEVIEW("tableview", "TableList"),
+    FORMVIEW("formview", "FormTmpl"),
+    BUTTON("button", "Button"),
+    DROPDOWN("dropdown", "DropDownBox"),
+    INPUTFIELD("inputfield", "TextBox");
 
     @Getter
     String name;

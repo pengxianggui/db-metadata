@@ -3,6 +3,7 @@ package com.hthjsj.web.controller;
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
@@ -37,9 +38,8 @@ public class TableController extends FrontRestController {
     public void index() {
         String objectCode = getPara(0, getPara("objectCode"));
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode(objectCode);
-        TableView tableView = new TableView(metaObject);
+        TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
-        
     }
 
     @Override

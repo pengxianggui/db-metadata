@@ -2,6 +2,7 @@ package com.hthjsj;
 
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.component.TableView;
 import com.jfinal.aop.Aop;
@@ -24,7 +25,7 @@ public class ComponentTest {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.start();
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
-        TableView tableView = new TableView(metaObject);
+        TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         {
             //            tableView.setGlobal("hahaa", "xixi");
             Record record = new Record();
