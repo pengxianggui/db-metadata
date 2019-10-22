@@ -160,7 +160,6 @@ eg:
                 })
             },
             initData() { // init business data
-                debugger
                 if (this.data) {
                     this.paginationModel.total = this.data.length
                 } else {
