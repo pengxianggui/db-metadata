@@ -40,7 +40,7 @@
                 this.$axios.get('/meta/fields').then(resp => {
                     _this.tableMeta = resp.data
                 }).catch(resp => {
-                    _this.$message.error(resp.msg)
+                    _this.$message.error(resp.toString())
                 })
             },
             getFormMeta() {
@@ -48,7 +48,7 @@
                 this.$axios.get('/meta/toAdd').then(resp => {
                     _this.formMeta = resp.data
                 }).catch(resp => {
-                    _this.$message.error(resp.msg)
+                    _this.$message.error(resp.toString())
                 })
             },
             getTableData() {
@@ -56,7 +56,7 @@
                 this.$axios.get('/table/list/meta_field').then(resp => {
                     _this.tableData = resp.data
                 }).catch(resp => {
-                    _this.$message.error(resp.msg)
+                    _this.$message.error(resp.toString())
                 })
             },
             formCancel() {

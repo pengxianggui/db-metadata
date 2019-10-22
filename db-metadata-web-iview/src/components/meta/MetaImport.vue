@@ -141,7 +141,7 @@ eg:
                         _this.tableOptions.push(option)
                     }
                 }).catch(resp => {
-                    _this.$message.error(resp.msg)
+                    _this.$message.error(resp.toString())
                 })
             },
             doSubmit() {
@@ -152,7 +152,7 @@ eg:
                     this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
                         _this.options = resp.data
                     }).catch(resp => {
-                        _this.$message.error(resp.msg)
+                        _this.$message.error(resp.toString())
                     })
                 }
             },

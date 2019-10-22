@@ -155,7 +155,7 @@ eg:
                     _this.data = resp.data;
                     _this.paginationModel.total = _this.data.length
                 }).catch(resp => {
-                    _this.$message.error(resp['msg'])
+                    _this.$message.error(resp.toString())
                 })
             },
             initData() { // init business data

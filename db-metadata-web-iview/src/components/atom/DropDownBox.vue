@@ -40,13 +40,13 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
  -->
 <template>
     <el-select v-model="currValue"
-               v-bind="meta.conf"
+               v-bind="innerMeta.conf"
                @change="$emit('change', $event)"
                @remove-tag="$emit('remove-tag', $event)"
                @clear="$emit('clear', $event)"
                @blur="$emit('blur', $event)"
                @focus="$emit('focus', $event)">
-        <template v-if="!meta.group">
+        <template v-if="!innerMeta.group">
             <el-option v-for="item in options" :key="item.value" :label="item.key"
                        :value="item.value ? item.value : item">
                 {{item.key}}
@@ -73,43 +73,14 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         name: "drop-down-box",
         data() {
             return {
+                innerMeta: {}
             }
         },
         props: {
             value: {
                 type: [Object, String]
             },
-            /*
-             * 选项数据(业务数据), 支持直接传入, 或者通过传入组件元数据, 在其中配置data_url参数, 从远端获取选项数据.
-             * eg:
-             * [{
-             *  key: 'xxx',
-             *  value: 'yyy',
-             *  disabled: false
-             * },
-             * ...],
-             * 若为选项组模式。
-             * eg: [{
-             *  label: "group1",
-             *  options: [{
-             *      key: "xxx",
-             *      value: "yyy"
-             *  }]
-             * }, {...}]
-             */
             options: Array,
-            /* component meta
-             * eg:
-             * {
-             *  "data_url": "", // for options data
-             *  "group": false, // 是否选项组模式
-             *  "conf": {   // ui conf
-             *      "clearable": true,
-             *      "placeholder": "请下拉选择",
-             *      "..."
-             *  }
-             * }
-             */
             meta: {
                 type: Object,
                 default: function () {
@@ -122,43 +93,40 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 return DEFAULT.DropDownBox
             },
             initMeta: function () {
-                this.meta.conf = this.meta.conf || {}
-                let defaultMeta = this.getDefaultMeta() || {}
-                this.$merge(this.meta, defaultMeta)
+                let defaultMeta = this.getDefaultMeta();
+                this.$merge(this.innerMeta, defaultMeta);
+                this.$merge(this.innerMeta, this.meta);
             },
             getOptions: function () {
                 // http request options data by meta.data_url
-                let _this = this
+                let _this = this;
                 _this.$axios({
                     methods: 'GET',
-                    url: _this.meta['data_url']
+                    url: _this.innerMeta['data_url']
                 }).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    if (_this.$listeners[_this.meta.name + '_format']) {
-                        _this.options = _this.$emit(_this.meta.name + '_format', resp)
+                    if (_this.$listeners[_this.innerMeta.name + '_format']) {
+                        _this.options = _this.$emit(_this.innerMeta.name + '_format', resp)
                     } else {
-                        if (resp['state'] === 'ok') {
-                            _this.options = resp.data
-                        } else {
-                            _this.$message.error(resp['msg'])
-                        }
+                        _this.options = resp.data
                     }
+                }).catch(resp => {
+                    _this.$message.error(resp.toString())
                 })
             },
             initOptions: function () {
                 if (this.options) return
-                if (this.meta.hasOwnProperty('data_url')) {
+                if (this.innerMeta.hasOwnProperty('data_url')) {
                     this.getOptions()
                     return
                 }
-                // todo throw tip
                 console.error("options or data_url in meta provide one at least!")
             },
             renderMethods: function () {
                 // TODO
-                // if (!this.meta.methods || Object.keys(this.meta.methods).length <= 0) return
-                // for (let methodName in this.meta.methods) {
-                //     let fn = this.meta.methods[methodName]
+                // if (!this.innerMeta.methods || Object.keys(this.innerMeta.methods).length <= 0) return
+                // for (let methodName in this.innerMeta.methods) {
+                //     let fn = this.innerMeta.methods[methodName]
                     // this.$on(methodName, function (data) {
                     //     let options = []
                     //     for (let j = 0; j < data.length; j++) {
@@ -173,7 +141,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             }
         },
         created() {
-            // init data
+            // init meta
             this.initMeta()
             // render method
             this.renderMethods()
