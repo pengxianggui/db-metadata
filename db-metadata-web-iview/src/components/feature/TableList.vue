@@ -144,8 +144,8 @@ eg:
                             return h("el-checkbox", {
                                 on: {
                                     input: (value) => {
-                                        item.conf.showable = value
-                                        _this.getData()
+                                        item.conf.showable = value;
+                                        if (value) _this.getData()
                                     }
                                 },
                                 props: {
