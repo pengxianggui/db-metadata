@@ -7,7 +7,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.sqls.MetaSQLBuilder;
-import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,22 +29,20 @@ public class QueryCondition {
 
     public static final String PREFIX_COL = "__COLUMN__";
 
-
     /**
      * 普通值过滤
      * 数值 : key=value
      * 字符 : key=value ( %like% )
      * 日期 : key=2019-10-10  ->
-     *
+     * <p>
      * 连续区间过滤
      * 日期 : key_start={} & key_end={}
      * [ok] 数值 : key_lt={} & key_eq={}
      * 字符 :
-     *
+     * <p>
      * 非连续区间过滤
      * 数值 : key_in = 1,3,4,5,6
      * 字符 : key_in = "1","2","3","4"
-     *
      */
     private Map<String, Object> toObjectFlat(Map<String, String[]> maps) {
         Map<String, Object> result = Maps.newHashMap();
@@ -71,7 +69,7 @@ public class QueryCondition {
         Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
-        Kv conds = Kv.create();
+        Okv conds = Okv.create();
         Iterator<IMetaField> mfiter = metaFields.iterator();
 
         //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
@@ -120,7 +118,7 @@ public class QueryCondition {
         return buildExceptSelect(conds, sqlParaExt, metaObject);
     }
 
-    private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, IMetaObject metaObject) {
+    private SqlParaExt buildExceptSelect(Okv kv, SqlParaExt sqlParaExt, IMetaObject metaObject) {
         StringBuilder sqlExceptSelect = new StringBuilder();
         StringBuilder sqlSelect = new StringBuilder("select *");
         Iterator iter = kv.keySet().iterator();
@@ -140,6 +138,12 @@ public class QueryCondition {
                 for (int i = 0; i < vals.length; i++) {
                     sqlParaExt.addPara(vals[i]);
                 }
+                continue;
+            }
+
+            if (key.indexOf("order by") >= 0) {
+                String v = kv.getAs(key);
+                sqlParaExt.setOrderBy(key + v);
                 continue;
             }
             //其他逻辑

@@ -2,6 +2,7 @@ package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class ComponentFactory {
 
     public static TableView createTableView(String name, String label, MetaObject metaObject) {
         TableView tableView = new TableView(name, label);
-        Kv ComponentTableViewConfig = Kv.create().set(Aop.get(ComponentService.class).loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
+        Kv ComponentTableViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
         log.info("ComponentTableViewConfig:{}", ComponentTableViewConfig.toJson());
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
