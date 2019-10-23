@@ -34,25 +34,29 @@ eg:
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
-                <!-- -->
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
                 <el-table
-                        :ref="innerMeta.name"
-                        :data="data"
-                        v-bind="innerMeta.conf"
-                        @row-click="choseRow"
-                        @sort-change="sortChange"
-                        @selection-change="handleSelectionChange">
+                    :id="innerMeta.name"
+                    :ref="innerMeta.name"
+                    :data="data"
+                    v-bind="innerMeta.conf"
+                    @row-click="choseRow"
+                    @sort-change="sortChange"
+                    @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column v-for="(item, index) in innerMeta.columns"
                                      v-bind="item.conf"
                                      :key="item.name + index"
                                      :prop="item.name"
                                      :label="item.label"
+                                     v-if="item.conf.showable"
                     ></el-table-column>
+                    <el-table-column label="操作" width="80" :render-header="renderHeader"
+                                     :filters="columnsOptions" :filtered-value="showColumns"></el-table-column>
+<!--                    <el-table-column :render-header="renderHeader1"></el-table-column>-->
                 </el-table>
             </el-col>
         </el-row>
@@ -104,12 +108,80 @@ eg:
                     pageSize: 10,
                     currentPage: 1,
                     total: null
-                }
+                },
+                columnsOptions: [],
+                showColumns: []
             }
         },
         methods: {
             handleSelectionChange(val) {
                 this.$emit('update:chose-data', val)
+            },
+            renderHeader(h) {
+                debugger
+                let _this = this;
+                let group = document.getElementsByClassName("el-checkbox-group el-table-filter__checkbox-group");
+                let filterButtoms = document.getElementsByClassName("el-table-filter__bottom");
+                if (filterButtoms.length != 0) {
+                    for (let i = 0; i < filterButtoms.length; i++) {
+                        filterButtoms[i].style.display == 'none';
+                    }
+                }
+                if (group.length != 0) {
+                    for (let i = 0; i < group.length; i++) {
+                        let checkBoxs = group[i].getElementsByClassName("el-checkbox__label")
+                        for (let j = 0; j < checkBoxs.length; j++) {
+                            let item = checkBoxs[j];
+                            item.setAttribute("index", j);
+                            item.onclick = function () {
+                                let index = this.getAttribute('index');
+                                let name = _this.innerMeta.columns[index].name;
+                                let showable = _this.innerMeta.columns[index].conf.showable;
+                                _this.innerMeta.columns[index].conf.showable = !showable;
+                                if (showable) {
+                                    delete _this.showColumns[index]
+                                } else {
+                                    _this.showColumns[index] = name
+                                }
+                            }
+                        }
+                    }
+                }
+                return h("span", {domProps: {innerHTML: `操作`}});
+            },
+            renderHeader1(h) {
+                return h('span', {}, [
+
+                    /*
+                        <span>操作</span>
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="click">
+                          <el-checkbox-group v-model="showColumns">
+                            <el-checkbox label="复选框 A"></el-checkbox>
+                            <el-checkbox label="复选框 B"></el-checkbox>
+                            <el-checkbox label="复选框 C"></el-checkbox>
+                            <el-checkbox label="禁用" disabled></el-checkbox>
+                            <el-checkbox label="选中且禁用" disabled></el-checkbox>
+                          </el-checkbox-group>
+                          <i slot="reference" class="el-icon-question"></el-button>
+                        </el-popover>
+                     */
+
+                    h('span', {}, '操作'),
+                    h('el-popover', {
+                        style: 'width: 100px; color: red',
+                        props: {
+                            placement: 'bottom-end',
+                            minWidth: '20',
+                            trigger: 'click'
+                        }
+                    }, [
+                        h('el-checkbox-group', {}, '按钮'),
+                        h('i', {slot: 'reference', class: 'el-icon-question'}, '')
+                    ])
+                ])
             },
             choseRow(row, col, event) {
                 let selected = true;
@@ -130,9 +202,27 @@ eg:
             },
             initMeta() {
                 // merge options
+                let _this = this;
                 let defaultMeta = this.getDefaultMeta();
-                this.$merge(this.innerMeta, defaultMeta);
-                this.$merge(this.innerMeta, this.meta);
+                _this.$merge(_this.innerMeta, defaultMeta);
+                _this.$merge(_this.innerMeta, _this.meta);
+
+                // 初始化columnsOptions和showColumns
+                _this.innerMeta.columns
+                    .forEach(item => {
+                        if (!item.conf.hasOwnProperty('showable')) { // default: showable: true
+                            _this.$set(item.conf, 'showable', true)
+                        }
+                    });
+                let temp = []
+                _this.columnsOptions = _this.innerMeta.columns.map(item => {
+                    if (item.conf.showable) temp.push(item.name);
+                    return {
+                        text: item.label,
+                        value: item.name
+                    }
+                });
+                _this.showColumns = temp;
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
@@ -151,7 +241,6 @@ eg:
             },
             getData() {
                 let _this = this;
-                debugger
                 this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     _this.data = resp.data;
                     _this.paginationModel.total = _this.data.length
@@ -177,6 +266,9 @@ eg:
     }
 </script>
 
-<style scoped>
-
+<style>
+    /*将下面的重置和筛选隐藏掉。*/
+    div.el-table-filter div.el-table-filter__bottom {
+        display: none !important;
+    }
 </style>
