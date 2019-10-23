@@ -33,12 +33,16 @@ public class DbMetaService {
         return dbMetaObjectAssembly.assembly(t);
     }
 
-    public IMetaObject findByCode(String code) {
-        if (StrKit.isBlank(code)) {
-            throw new MetaOperateException(String.format("无效的元对象Code:%s", code));
+    public boolean isExists(String objectCode) {
+        return Db.queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
+    }
+
+    public IMetaObject findByCode(String objectCode) {
+        if (StrKit.isBlank(objectCode)) {
+            throw new MetaOperateException(String.format("无效的元对象Code:%s", objectCode));
         }
-        Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", code);
-        List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", code);
+        Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", objectCode);
         IMetaObject IMetaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {
             MetaField defaultMetaField = new MetaField(metafield.getColumns());
@@ -80,10 +84,4 @@ public class DbMetaService {
         Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", metaObject.code());
         Db.use(App.DB_MAIN).delete("delete from meta_field where object_code=?", metaObject.code());
     }
-
-    public void findList() {
-
-    }
-
-
 }

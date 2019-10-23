@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
@@ -77,6 +78,7 @@ public class MetaController extends FrontRestController {
         String objectName = getPara("objectName");
         String objectCode = getPara("objectCode");
         DbMetaService dbMetaService = ServiceManager.dbMetaService();
+        Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
         MetaObject metaObject = (MetaObject) dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
