@@ -54,7 +54,7 @@ eg:
                                      :label="item.label"
                                      v-if="item.conf.showable"
                     ></el-table-column>
-                    <el-table-column :render-header="renderHeader" width="150">
+                    <el-table-column :render-header="renderHeader" width="180">
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf.size" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                             <el-button :size="innerMeta.conf.size" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -136,7 +136,8 @@ eg:
                     h('el-popover', {//el-select实现下拉框
                         props: {
                             placement: 'bottom-end',
-                            trigger: 'click'
+                            trigger: 'hover',
+                            width: '100',
                         }
                     }, [
                         h('i', {slot: 'reference', class: 'el-icon-caret-bottom', style: {cursor: 'pointer'}}, ''),
@@ -244,4 +245,7 @@ eg:
 </script>
 
 <style>
+    .el-popover {
+        min-width: 50px;
+    }
 </style>

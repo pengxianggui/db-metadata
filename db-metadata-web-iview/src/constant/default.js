@@ -10,7 +10,7 @@ const DEFAULT = {
         // ...
         conf: {
             "default-sort": {prop: 'username', order: 'descending'}, // descending, ascending
-            "size": 'small', // medium, small, mini
+            "size": 'medium', // medium, small, mini
             "max-height": 500,
         },
         columns: [
