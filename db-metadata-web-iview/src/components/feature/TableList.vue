@@ -31,6 +31,10 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
+        <br>
+        <br>
+        <br>
+        {{showColumns}}
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
@@ -47,6 +51,7 @@ eg:
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column :render-header="renderHeader1"></el-table-column>
                     <el-table-column v-for="(item, index) in innerMeta.columns"
                                      v-bind="item.conf"
                                      :key="item.name + index"
@@ -54,9 +59,7 @@ eg:
                                      :label="item.label"
                                      v-if="item.conf.showable"
                     ></el-table-column>
-                    <el-table-column label="操作" width="80" :render-header="renderHeader"
-                                     :filters="columnsOptions" :filtered-value="showColumns"></el-table-column>
-<!--                    <el-table-column :render-header="renderHeader1"></el-table-column>-->
+
                 </el-table>
             </el-col>
         </el-row>
@@ -109,7 +112,6 @@ eg:
                     currentPage: 1,
                     total: null
                 },
-                columnsOptions: [],
                 showColumns: []
             }
         },
@@ -127,61 +129,88 @@ eg:
                         filterButtoms[i].style.display == 'none';
                     }
                 }
-                if (group.length != 0) {
-                    for (let i = 0; i < group.length; i++) {
-                        let checkBoxs = group[i].getElementsByClassName("el-checkbox__label")
-                        for (let j = 0; j < checkBoxs.length; j++) {
-                            let item = checkBoxs[j];
-                            item.setAttribute("index", j);
-                            item.onclick = function () {
-                                let index = this.getAttribute('index');
-                                let name = _this.innerMeta.columns[index].name;
-                                let showable = _this.innerMeta.columns[index].conf.showable;
-                                _this.innerMeta.columns[index].conf.showable = !showable;
-                                if (showable) {
-                                    delete _this.showColumns[index]
-                                } else {
-                                    _this.showColumns[index] = name
-                                }
-                            }
-                        }
-                    }
-                }
+                // if (group.length != 0) {
+                //     for (let i = 0; i < group.length; i++) {
+                //         let checkBoxs = group[i].getElementsByClassName("el-checkbox__label")
+                //         for (let j = 0; j < checkBoxs.length; j++) {
+                //             let item = checkBoxs[j];
+                //             item.setAttribute("index", j);
+                //             item.onclick = function () {
+                //                 let index = this.getAttribute('index');
+                //                 let name = _this.innerMeta.columns[index].name;
+                //                 let showable = _this.innerMeta.columns[index].conf.showable;
+                //                 _this.innerMeta.columns[index].conf.showable = !showable;
+                //                 if (showable) {
+                //                     delete _this.showColumns[index]
+                //                 } else {
+                //                     _this.showColumns[index] = name
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
                 return h("span", {domProps: {innerHTML: `操作`}});
             },
             renderHeader1(h) {
-                return h('span', {}, [
+                let _this = this;
 
-                    /*
-                        <span>操作</span>
-                        <el-popover
-                          placement="right"
-                          width="400"
-                          trigger="click">
-                          <el-checkbox-group v-model="showColumns">
-                            <el-checkbox label="复选框 A"></el-checkbox>
-                            <el-checkbox label="复选框 B"></el-checkbox>
-                            <el-checkbox label="复选框 C"></el-checkbox>
-                            <el-checkbox label="禁用" disabled></el-checkbox>
-                            <el-checkbox label="选中且禁用" disabled></el-checkbox>
-                          </el-checkbox-group>
-                          <i slot="reference" class="el-icon-question"></el-button>
-                        </el-popover>
-                     */
+                /*
 
-                    h('span', {}, '操作'),
-                    h('el-popover', {
-                        style: 'width: 100px; color: red',
+                    <span>操作</span>
+                    <el-popover
+                      placement="right"
+                      width="400"
+                      trigger="click">
+                      <el-checkbox-group v-model="showColumns">
+                        <el-checkbox label="复选框 A"></el-checkbox>
+                        <el-checkbox label="复选框 B"></el-checkbox>
+                        <el-checkbox label="复选框 C"></el-checkbox>
+                        <el-checkbox label="禁用" disabled></el-checkbox>
+                        <el-checkbox label="选中且禁用" disabled></el-checkbox>
+                      </el-checkbox-group>
+                      <i slot="reference" class="el-icon-question"></el-button>
+                    </el-popover>
+
+                */
+
+                return h('span', {
+                    style: {
+                    },
+                }, [
+                    h("span", {
+                        style: {}
+                    }, "操作"),
+                    h('el-popover', {//el-select实现下拉框
                         props: {
                             placement: 'bottom-end',
-                            minWidth: '20',
                             trigger: 'click'
                         }
                     }, [
-                        h('el-checkbox-group', {}, '按钮'),
-                        h('i', {slot: 'reference', class: 'el-icon-question'}, '')
-                    ])
-                ])
+                        //下拉框里面填充选项，通过filters遍历map，为每一个选项赋值。
+                        h('i', {slot: 'reference', class: 'el-icon-question'}, ''),
+                        h('el-checkbox-group', {
+                            on: {
+                                input: (value) => {
+                                    _this.showColumns = value
+                                    // TODO
+                                }
+                            },
+                            style: {
+                            },
+                            props: {
+                                value: _this.showColumns
+                            }
+                        }, [
+                            _this.innerMeta.columns.map(item => {
+                                return h("el-checkbox", {
+                                    props: {
+                                        key: item.name,
+                                        label: item.name
+                                    }
+                                }, item.label)
+                            })
+                        ])
+                    ])])
             },
             choseRow(row, col, event) {
                 let selected = true;
@@ -207,22 +236,14 @@ eg:
                 _this.$merge(_this.innerMeta, defaultMeta);
                 _this.$merge(_this.innerMeta, _this.meta);
 
-                // 初始化columnsOptions和showColumns
+                // showColumns init
                 _this.innerMeta.columns
                     .forEach(item => {
                         if (!item.conf.hasOwnProperty('showable')) { // default: showable: true
                             _this.$set(item.conf, 'showable', true)
                         }
+                        if (item.conf.showable) _this.showColumns.push(item.name);
                     });
-                let temp = []
-                _this.columnsOptions = _this.innerMeta.columns.map(item => {
-                    if (item.conf.showable) temp.push(item.name);
-                    return {
-                        text: item.label,
-                        value: item.name
-                    }
-                });
-                _this.showColumns = temp;
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
