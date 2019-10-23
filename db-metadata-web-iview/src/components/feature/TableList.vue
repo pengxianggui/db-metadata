@@ -31,10 +31,6 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
-        <br>
-        <br>
-        <br>
-        {{showColumns}}
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
@@ -51,7 +47,6 @@ eg:
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column :render-header="renderHeader1"></el-table-column>
                     <el-table-column v-for="(item, index) in innerMeta.columns"
                                      v-bind="item.conf"
                                      :key="item.name + index"
@@ -59,7 +54,12 @@ eg:
                                      :label="item.label"
                                      v-if="item.conf.showable"
                     ></el-table-column>
-
+                    <el-table-column :render-header="renderHeader" width="150">
+                        <template slot-scope="scope">
+                            <el-button :size="innerMeta.conf.size" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button :size="innerMeta.conf.size" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -112,70 +112,22 @@ eg:
                     currentPage: 1,
                     total: null
                 },
-                showColumns: []
             }
         },
         methods: {
             handleSelectionChange(val) {
                 this.$emit('update:chose-data', val)
             },
-            renderHeader(h) {
-                debugger
-                let _this = this;
-                let group = document.getElementsByClassName("el-checkbox-group el-table-filter__checkbox-group");
-                let filterButtoms = document.getElementsByClassName("el-table-filter__bottom");
-                if (filterButtoms.length != 0) {
-                    for (let i = 0; i < filterButtoms.length; i++) {
-                        filterButtoms[i].style.display == 'none';
-                    }
-                }
-                // if (group.length != 0) {
-                //     for (let i = 0; i < group.length; i++) {
-                //         let checkBoxs = group[i].getElementsByClassName("el-checkbox__label")
-                //         for (let j = 0; j < checkBoxs.length; j++) {
-                //             let item = checkBoxs[j];
-                //             item.setAttribute("index", j);
-                //             item.onclick = function () {
-                //                 let index = this.getAttribute('index');
-                //                 let name = _this.innerMeta.columns[index].name;
-                //                 let showable = _this.innerMeta.columns[index].conf.showable;
-                //                 _this.innerMeta.columns[index].conf.showable = !showable;
-                //                 if (showable) {
-                //                     delete _this.showColumns[index]
-                //                 } else {
-                //                     _this.showColumns[index] = name
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-                return h("span", {domProps: {innerHTML: `操作`}});
+            handleEdit(index, row) {
+                // TODO
             },
-            renderHeader1(h) {
+            handleDelete(index, row) {
+                // TODO
+            },
+            renderHeader(h) {
                 let _this = this;
-
-                /*
-
-                    <span>操作</span>
-                    <el-popover
-                      placement="right"
-                      width="400"
-                      trigger="click">
-                      <el-checkbox-group v-model="showColumns">
-                        <el-checkbox label="复选框 A"></el-checkbox>
-                        <el-checkbox label="复选框 B"></el-checkbox>
-                        <el-checkbox label="复选框 C"></el-checkbox>
-                        <el-checkbox label="禁用" disabled></el-checkbox>
-                        <el-checkbox label="选中且禁用" disabled></el-checkbox>
-                      </el-checkbox-group>
-                      <i slot="reference" class="el-icon-question"></el-button>
-                    </el-popover>
-
-                */
-
                 return h('span', {
-                    style: {
-                    },
+                    style: {},
                 }, [
                     h("span", {
                         style: {}
@@ -186,30 +138,25 @@ eg:
                             trigger: 'click'
                         }
                     }, [
-                        //下拉框里面填充选项，通过filters遍历map，为每一个选项赋值。
-                        h('i', {slot: 'reference', class: 'el-icon-question'}, ''),
-                        h('el-checkbox-group', {
-                            on: {
-                                input: (value) => {
-                                    _this.showColumns = value
-                                    // TODO
-                                }
-                            },
-                            style: {
-                            },
-                            props: {
-                                value: _this.showColumns
-                            }
-                        }, [
-                            _this.innerMeta.columns.map(item => {
-                                return h("el-checkbox", {
-                                    props: {
-                                        key: item.name,
-                                        label: item.name
+                        h('i', {slot: 'reference', class: 'el-icon-caret-bottom', style: {cursor: 'pointer'}}, ''),
+                        _this.innerMeta.columns.map(item => {
+                            return h("el-checkbox", {
+                                on: {
+                                    input: (value) => {
+                                        item.conf.showable = value
+                                        _this.getData()
                                     }
-                                }, item.label)
-                            })
-                        ])
+                                },
+                                props: {
+                                    key: item.name,
+                                    label: item.name,
+                                    value: item.conf.showable
+                                },
+                                style: {
+                                    display: 'block'
+                                }
+                            }, item.label)
+                        })
                     ])])
             },
             choseRow(row, col, event) {
@@ -237,13 +184,11 @@ eg:
                 _this.$merge(_this.innerMeta, _this.meta);
 
                 // showColumns init
-                _this.innerMeta.columns
-                    .forEach(item => {
-                        if (!item.conf.hasOwnProperty('showable')) { // default: showable: true
-                            _this.$set(item.conf, 'showable', true)
-                        }
-                        if (item.conf.showable) _this.showColumns.push(item.name);
-                    });
+                _this.innerMeta.columns.forEach(item => {
+                    if (!item.conf.hasOwnProperty('showable')) { // default: showable: true
+                        _this.$set(item.conf, 'showable', true)
+                    }
+                });
             },
             assemblyModel() {
                 // this.sortModel = this.meta.conf['sort_model']
@@ -262,11 +207,12 @@ eg:
             },
             getData() {
                 let _this = this;
-                this.$axios.get(_this.innerMeta['data_url']).then(resp => {
+                let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
+                this.$axios.get(_this.innerMeta['data_url'] + '?fs=' + columnNames.join(',')).then(resp => {
                     _this.data = resp.data;
                     _this.paginationModel.total = _this.data.length
                 }).catch(resp => {
-                    _this.$message.error(resp.toString())
+                    _this.$message({type: 'error', message: resp})
                 })
             },
             initData() { // init business data
