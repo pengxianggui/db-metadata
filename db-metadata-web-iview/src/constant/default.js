@@ -5,7 +5,6 @@ const DEFAULT = {
         name: "",
         label: "",
         component_name: 'TableList',
-        data_url: "",
         methods: "GET",
         // ...
         conf: {

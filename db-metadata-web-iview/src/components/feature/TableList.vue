@@ -207,8 +207,12 @@ eg:
             getDefaultMeta() {
                 return DEFAULT.TableList
             },
-            getData() {
+            getData() { // 内部根据data_url获取业务数据
                 let _this = this;
+                if (!_this.innerMeta.hasOwnProperty('data_url')) {
+                    console.error('lack data_url attribute');
+                    return;
+                }
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
                 let url = this.$complieString(_this['paginationModel'], _this.innerMeta['data_url']);
                 this.$axios.get(url + '?fs=' + columnNames.join(',')).then(resp => {

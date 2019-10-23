@@ -1,5 +1,7 @@
 import {merge} from './merge.js'
 import {complieVarString} from './format'
-import {converKv1} from './kvFormat'
+import * as kvFormat from './kvFormat'
 
-export default {merge, complieVarString, converKv1}
+console.log(kvFormat.converKv1(['aaa']));
+
+export default {merge, complieVarString, kvFormat}

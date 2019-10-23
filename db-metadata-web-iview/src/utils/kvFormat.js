@@ -19,7 +19,7 @@ export function converKv1 (data) {
 // const converKv2 = function (data) {
 //     // ...
 // }
+//
 // export default {
 //     converKv1,
-//     converKv2
 // }

@@ -104,7 +104,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 let _this = this;
                 _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    _this.innerOptions = utils.converKv1(resp.data)
+                    _this.innerOptions = utils.kvFormat.converKv1(resp.data)
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
