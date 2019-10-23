@@ -31,6 +31,8 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
+<!--        {{innerMeta}}-->
+<!--        <json-box v-model="innerMeta"></json-box>-->
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
@@ -56,8 +58,11 @@ eg:
                     ></el-table-column>
                     <el-table-column :render-header="renderHeader" width="180">
                         <template slot-scope="scope">
-                            <el-button :size="innerMeta.conf.size" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                            <el-button :size="innerMeta.conf.size" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            <el-button :size="innerMeta.conf.size" @click="handleEdit(scope.$index, scope.row)">编辑
+                            </el-button>
+                            <el-button :size="innerMeta.conf.size" type="danger"
+                                       @click="handleDelete(scope.$index, scope.row)">删除
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -146,6 +151,7 @@ eg:
                                 on: {
                                     input: (value) => {
                                         item.conf.showable = value;
+                                        _this.$forceUpdate();
                                         if (value) _this.getData()
                                     }
                                 },
@@ -153,9 +159,6 @@ eg:
                                     key: item.name,
                                     label: item.name,
                                     value: item.conf.showable
-                                },
-                                style: {
-                                    display: 'block'
                                 }
                             }, item.label)
                         })
@@ -193,16 +196,6 @@ eg:
                 });
             },
             assemblyModel() {
-                // this.sortModel = this.meta.conf['sort_model']
-                // this.paginationModel = this.meta.pagination['model']
-                // if (this.paginationModel) {
-                //     this.paginationModel.pageSize = this.meta.ui_config.pagination['page-size']
-                //     this.paginationModel.currentPage = this.meta.ui_config.pagination['current-page']
-                // }
-                // if (this.sortModel) {
-                //     this.$emit('update:sort-model', this.meta.ui_config.table['default-sort'])
-                //     // this.sortModel = new Array(this.meta.ui_config.table['default-sort']);
-                // }
             },
             getDefaultMeta() {
                 return DEFAULT.TableList

@@ -52,72 +52,49 @@ const masterSearchBarMetadata = [
 
 // 主表元对象
 const masterMetadata = {
-    "id": "1",
-    "code": "meta_object_code",
-    "name": "元对象",
-    "table_name": "meta_object",
-    "schema_name": "db_metadata",
-    "primarys": "id",
-    "ui_config": {
-        "table": {
-            "default-sort": {prop: 'id', order: 'ascending'}, // descending, ascending
-            "size": "small",
-            // ...
-        },
-        "pagination": {
-            // ...
-            "page-size": DICT.PAGE_NUM_AREA[0],
-            "page-sizes": DICT.PAGE_NUM_AREA,
-            "current-page": 1,
-        }
-    }
+    id: "1",
+    name: "object_code",
+    label: '元对象',
+    primarys: "id",
+    component_name: 'TableList',
+    methods: "GET",
+    conf: {
+        "default-sort": {prop: 'id', order: 'ascending'}, // descending, ascending
+        "size": "small"
+    },
+    columns: [{component_name: "TextBox", name: "id", conf: {}, label: "主键"},
+        {component_name: "TextBox", name: "code", conf: {}, label: "对象编码"},
+        {component_name: "TextBox", name: "name", conf: {}, label: "对象名"},
+        {component_name: "TextBox", name: "table_name", conf: {}, label: "表名"},
+        {component_name: "TextBox", name: "schema_name", conf: {}, label: "库名"},
+        {component_name: "TextBox", name: "primarys", conf: {}, label: "主键组"},
+        {component_name: "TextBox", name: "config", conf: {}, label: "配置"},
+        {component_name: "TextBox", name: "created_by", conf: {}, label: "创建人"},
+        {component_name: "TextBox", name: "created_time", conf: {}, label: "创建时间"},
+        {component_name: "TextBox", name: "updated_by", conf: {}, label: "更新人"},
+        {component_name: "TextBox", name: "updated_time", conf: {}, label: "更新时间"},
+        {component_name: "TextBox", name: "remark", conf: {}, label: "备注"}]
 }
-
-// 主表元字段
-const masterFieldMetadata = [
-    {
-        "id": "1",
-        "object_code": "meta_object_code",
-        "is_primary": "true",
-        "en": "id",
-        "cn": "ID",
-        "order_num": 1,
-        "db_type": "varchar",
-        "db_type_length": "32",
-        "java_type": "String",
-        "ui_config": {
-            "sortable": true,
-            "showable": true,
-        }
-    }, {
-        "id": "2",
-        "object_code": "meta_object_code",
-        "is_primary": "false",
-        "en": "object_code",
-        "cn": "对象编码",
-        "order_num": 2,
-        "db_type": "varchar",
-        "db_type_length": "64",
-        "java_type": "String",
-        "ui_config": {
-            "sortable": true,
-            "showable": true,
-        }
-    }
-]
 
 // 子表元对象
 const slaveMetadata = {
     "id": "1",
-    "code": "meta_field_code",
-    "name": "元字段",
-    "table_name": "meta_field",
-    "schema_name": "db_metadata",
-    "primarys": "id",
-    "ui_config": {
+    "name": "meta_field",
+    "label": "元字段",
+    "conf": {
         "default_sort": {prop: 'id', order: 'descending'},
         "size": "mini",
-    }
+    },
+    columns: [{component_name: "TextBox", name: "id", conf: {}, label: "主键"},
+        {component_name: "TextBox", name: "code", conf: {}, label: "对象编码"},
+        {component_name: "TextBox", name: "name", conf: {}, label: "对象名"},
+        {component_name: "TextBox", name: "table_name", conf: {}, label: "字段名"},
+        {component_name: "TextBox", name: "config", conf: {}, label: "配置"},
+        {component_name: "TextBox", name: "created_by", conf: {}, label: "创建人"},
+        {component_name: "TextBox", name: "created_time", conf: {}, label: "创建时间"},
+        {component_name: "TextBox", name: "updated_by", conf: {}, label: "更新人"},
+        {component_name: "TextBox", name: "updated_time", conf: {}, label: "更新时间"},
+        {component_name: "TextBox", name: "remark", conf: {}, label: "备注"}]
 }
 
 // 子表元字段
@@ -254,7 +231,6 @@ const formMeta = {
 export default {
     masterSearchBarMetadata,
     masterMetadata,
-    masterFieldMetadata,
     slaveMetadata,
     slaveFieldMetadata,
     masterData,
