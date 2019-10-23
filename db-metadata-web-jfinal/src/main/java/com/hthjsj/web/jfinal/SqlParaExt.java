@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.parser.ParserException;
 import com.alibaba.druid.util.JdbcConstants;
 import com.hthjsj.web.WebException;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.SqlPara;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,9 @@ public class SqlParaExt extends SqlPara {
     @Setter
     private String whereExcept;
 
+    @Setter
+    private String orderBy;
+
     public SqlParaExt() {
     }
 
@@ -42,12 +46,16 @@ public class SqlParaExt extends SqlPara {
     }
 
     public String getFromWhere() {
-        return from + whereExcept;
+        return getFrom() + getWhereExcept() + getOrderBy();
+    }
+
+    public String getOrderBy() {
+        return StrKit.isBlank(orderBy) ? "" : orderBy;
     }
 
     @Override
     public String getSql() {
-        return getSelect() + getFromWhere();
+        return getSelect() + getFromWhere() + getOrderBy();
     }
 
     /**

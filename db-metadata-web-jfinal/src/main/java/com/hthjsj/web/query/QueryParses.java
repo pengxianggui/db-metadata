@@ -3,6 +3,7 @@ package com.hthjsj.web.query;
 import com.hthjsj.web.query.sqls.EasyCondition;
 import com.hthjsj.web.query.sqls.FieldEquals;
 import com.hthjsj.web.query.sqls.MetaSQLBuilder;
+import com.hthjsj.web.query.sqls.SortCondition;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -32,5 +33,6 @@ public class QueryParses {
     private void init() {
         parseter.add(EasyCondition.class);
         parseter.add(FieldEquals.class);
+        parseter.add(SortCondition.class);
     }
 }
