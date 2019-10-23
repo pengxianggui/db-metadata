@@ -41,7 +41,7 @@ eg:
                 <el-table
                     :id="innerMeta.name"
                     :ref="innerMeta.name"
-                    :data="data"
+                    :data="innerData"
                     v-bind="innerMeta.conf"
                     @row-click="choseRow"
                     @sort-change="sortChange"
@@ -105,6 +105,7 @@ eg:
         data() {
             return {
                 innerMeta: {},
+                innerData: [],
                 multipleSelection: [],
                 sortModel: {},
                 paginationModel: {
@@ -208,9 +209,10 @@ eg:
             getData() {
                 let _this = this;
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
-                this.$axios.get(_this.innerMeta['data_url'] + '?fs=' + columnNames.join(',')).then(resp => {
-                    _this.data = resp.data;
-                    _this.paginationModel.total = _this.data.length
+                let url = this.$complieString(_this['paginationModel'], _this.innerMeta['data_url']);
+                this.$axios.get(url + '?fs=' + columnNames.join(',')).then(resp => {
+                    _this.innerData = resp.data;
+                    _this.paginationModel.total = _this.innerData.length
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp})
                 })
@@ -223,6 +225,14 @@ eg:
                 }
             },
         },
+        watch: {
+            paginationModel: {
+                handler: function () {
+                    this.getData()
+                },
+                deep: true
+            }
+        },
         created() {
             this.initMeta();
             this.assemblyModel();
@@ -234,8 +244,4 @@ eg:
 </script>
 
 <style>
-    /*将下面的重置和筛选隐藏掉。*/
-    div.el-table-filter div.el-table-filter__bottom {
-        display: none !important;
-    }
 </style>
