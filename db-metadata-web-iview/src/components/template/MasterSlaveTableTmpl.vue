@@ -2,14 +2,10 @@
     <el-container direction="vertical">
         <el-row class="el-card">
             <el-col :span="24">
-                搜索表单模型： {{searchModel}}
                 <search-bar :meta-data="searchMeta"
                             :search-model.sync="searchModel" @search="masterSearch"></search-bar>
             </el-col>
             <el-col :span="24">
-<!--                勾选数据：{{choseMasterData}}-->
-                <br>
-<!--                当前激活行：{{activeMasterData}}-->
                 <table-list :meta="masterMeta" :data="masterData" :chose-data.sync="choseMasterData"
                             :active-data.sync="activeMasterData">
                 </table-list>
@@ -17,7 +13,6 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-<!--                根据{{activeMasterData}}获取子表数据-->
                 <table-list :meta="slaveMeta" :data="slaveData" :chose-data.sync="choseSlaveData"
                             :active-data.sync="activeSlaveData"></table-list>
             </el-col>
