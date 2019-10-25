@@ -72,7 +72,8 @@
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'})
                     // _this.getTableData(formModel)
-                    _this.tableMeta['data_url'] = '/table/list/' + formModel['objectCode']
+                    _this.tableMeta['data_url'] = '/table/list/' + formModel['objectCode'];
+                    _this.tableMeta['name'] = formModel['objectCode']
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})
                 })

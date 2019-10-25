@@ -5,7 +5,8 @@ function resolve(dir) {
 
 const name = "db-metadata-web-iview";
 const serverProxy = {
-    target: 'http://192.168.108.118:8888',
+    target: 'http://localhost:8888',
+    // target: 'http://192.168.110.67:8888',
     pathRewrite: {'^/': ''},
     changeOrigin: true
 };

@@ -31,6 +31,7 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
+        {{meta}}
 <!--        {{innerMeta}}-->
 <!--        <json-box v-model="innerMeta"></json-box>-->
         <el-row>
@@ -201,7 +202,7 @@ eg:
             getDefaultMeta() {
                 return DEFAULT.TableList
             },
-            getData() { // 内部根据data_url获取业务数据
+            getData() {
                 let _this = this;
                 if (!_this.innerMeta.hasOwnProperty('data_url')) {
                     console.error('lack data_url attribute');
@@ -237,7 +238,16 @@ eg:
                 },
                 deep: true
             },
-
+            // dataUrl (n, o) {
+            //     this.innerMeta['data_url'] = n;
+            //     this.getData()
+            // },
+            // 'meta.data_url': {
+            //     handler: function (n, o) {
+            //         console.log('sssssss')
+            //     },
+            //     deep: true
+            // }
         },
         created() {
             this.initMeta();
@@ -247,7 +257,14 @@ eg:
             this.initData();
             this.$watch('meta.data_url', function (n, o) {
                 console.log('changed...')
+            }, {
+                deep: true
             })
+        },
+        computed: {
+            // dataUrl() {
+            //     return this.meta['data_url']
+            // }
         }
     }
 </script>
