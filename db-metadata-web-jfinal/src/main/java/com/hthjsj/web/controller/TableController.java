@@ -68,6 +68,6 @@ public class TableController extends FrontRestController {
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
-        renderJsonExcludes(Ret.ok("data", result.getList()), excludeFields);
+        renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
     }
 }

@@ -1,23 +1,35 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.query.QueryHelper;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.plugin.activerecord.Record;
+
+import java.util.List;
 
 public class ComponentController extends FrontRestController {
 
-    public ComponentController() {
-    }
-
     @Override
     public void api() {
-        renderJson(Components.me());
+        renderJson(Components.me().getRegistry());
     }
 
     public void init() {
         Components.me().init();
         renderJson(Ret.ok());
+    }
+
+    @Override
+    public void list() {
+        List<Record> components = ServiceManager.componentService().listComponents();
+        List<Kv> results = Lists.newArrayList();
+        components.forEach(r -> {
+            results.add(Kv.create().set("key", r.getStr("en")).set("value", r.getStr("cn")));
+        });
+        renderJson(Ret.ok("data", results));
     }
 
     public void load() {

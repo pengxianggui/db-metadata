@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
 import java.util.Arrays;
@@ -97,5 +98,9 @@ public abstract class FrontRestController extends Controller implements FrontRes
         } else {
             renderJson(data);
         }
+    }
+
+    Kv toPage(int total, int index, int size) {
+        return Kv.by("total", total).set("index", index).set("size", size);
     }
 }
