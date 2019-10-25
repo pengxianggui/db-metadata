@@ -9,11 +9,11 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 public enum ComponentType {
-    TABLEVIEW("tableview", "TableList"),
-    FORMVIEW("formview", "FormTmpl"),
-    BUTTON("button", "Button"),
-    DROPDOWN("dropdown", "DropDownBox"),
-    INPUTFIELD("inputfield", "TextBox");
+    TABLEVIEW("tableview", "表格组件", "TableList"),
+    FORMVIEW("formview", "表单组件", "FormTmpl"),
+    BUTTON("button", "按钮组件", "Button"),
+    DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
+    INPUTFIELD("inputfield", "输入框组件", "TextBox");
 
     @Getter
     String name;
@@ -21,8 +21,12 @@ public enum ComponentType {
     @Getter
     String code;
 
-    ComponentType(String name, String code) {
+    @Getter
+    String cn;
+
+    ComponentType(String name, String cn, String code) {
         this.name = name;
+        this.cn = cn;
         this.code = code;
     }
 }

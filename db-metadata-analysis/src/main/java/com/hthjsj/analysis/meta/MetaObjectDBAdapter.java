@@ -130,6 +130,11 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     }
 
     @Override
+    public boolean isSystem() {
+        return metaObject.isSystem();
+    }
+
+    @Override
     public void config(String config) {
         metaObject.config(config);
     }

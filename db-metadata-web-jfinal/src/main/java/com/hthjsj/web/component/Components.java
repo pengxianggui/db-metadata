@@ -33,8 +33,8 @@ final public class Components {
         return this;
     }
 
-    public List<Class<? extends Component>> getPluginList() {
-        return pluginList;
+    public Map<ComponentType, Class<? extends Component>> getRegistry() {
+        return registry;
     }
 
     public void init() {

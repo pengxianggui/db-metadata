@@ -11,7 +11,7 @@
                 </table-list>
             </el-col>
         </el-row>
-        <el-row>
+        <el-row class="el-card" style="margin-top: 10px">
             <el-col :span="24">
                 <table-list :meta="slaveMeta" :data="slaveData" :chose-data.sync="choseSlaveData"
                             :active-data.sync="activeSlaveData"></table-list>
@@ -24,6 +24,7 @@
     import mockData from '@/mockdata.js'
     import SearchBar from '@/components/feature/SearchBar'
     import TableList from '@/components/feature/TableList'
+
     export default {
         name: "master-slave-table-tmpl",
         data() {
@@ -63,9 +64,9 @@
                 return mockData.slaveFieldMetadata
             },
             getMasterData() { // ajax http请求的实际执行处
-                let data = mockData.masterData
+                let data = mockData.masterData;
                 // todo request {table: masterMeta.table_name, schema: masterMeta.schema_name, condition: parse from params}
-                console.log('searchModel: ' + JSON.stringify(this.searchModel))
+                console.log('searchModel: ' + JSON.stringify(this.searchModel));
                 return data
             },
             getSlaveData() {
@@ -92,8 +93,8 @@
         },
         created () {
             // 获取元数据
-            this.searchMeta = this.getSearchMeta()
-            this.masterMeta = this.getMasterMeta()
+            this.searchMeta = this.getSearchMeta();
+            this.masterMeta = this.getMasterMeta();
             // this.masterFieldMeta = this.getMasterFieldMeta()
             this.slaveMeta = this.getSlaveMeta()
             // this.slaveFieldMeta = this.getSlaveFieldMeta()

@@ -125,6 +125,11 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
+    public boolean isSystem() {
+        return record.getBoolean("is_sys");
+    }
+
+    @Override
     public void config(String config) {
         record.set("config", config);
     }

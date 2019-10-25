@@ -102,19 +102,21 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             getOptions: function () {
                 // http request options data by meta.data_url
                 let _this = this;
-                _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
-                    // if provide format callback fn, execute callback fn
-                    _this.innerOptions = utils.kvFormat.converKv1(resp.data)
-                }).catch(resp => {
-                    _this.$message.error(resp.toString())
-                })
+                if (_this.innerMeta['data_url']) {
+                    _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
+                        // if provide format callback fn, execute callback fn
+                        _this.innerOptions = utils.kvFormat.converKv1(resp.data)
+                    }).catch(resp => {
+                        _this.$message.error(resp.toString())
+                    })
+                }
             },
             initOptions: function () {
                 // deep copy to innerOptions
                 this.innerOptions = this.options;
-                if (this.innerOptions) return
+                if (this.innerOptions) return;
                 if (this.innerMeta.hasOwnProperty('data_url')) {
-                    this.getOptions()
+                    this.getOptions();
                     return
                 }
                 console.error("options or data_url in meta provide one at least!")
@@ -139,7 +141,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         },
         created() {
             // init meta
-            this.initMeta()
+            this.initMeta();
             // render method
             this.renderMethods()
         },

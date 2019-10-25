@@ -10,6 +10,7 @@ import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.InputField;
+import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,5 +86,14 @@ public class MetaController extends FrontRestController {
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
 
         renderJson(status ? Ret.ok() : Ret.fail());
+    }
+
+    @Override
+    public void delete() {
+        String objectCode = new QueryHelper(this).getObjectCode();
+        DbMetaService dbMetaService = ServiceManager.dbMetaService();
+        MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
+        Preconditions.checkArgument(metaObject.isSystem(), "该对象属于系统元对象,不能删除");
+        renderJson(dbMetaService.deleteMetaObject(metaObject) ? Ret.ok() : Ret.fail());
     }
 }

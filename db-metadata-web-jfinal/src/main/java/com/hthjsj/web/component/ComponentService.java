@@ -38,20 +38,26 @@ public class ComponentService {
         return record;
     }
 
+    public List<Record> listComponents() {
+        return Db.findAll("meta_component");
+    }
+
     public void register(ComponentType type, Component component, Map<String, Object> config) {
-        Record record = new Record();
-        record.set("id", SnowFlake.me().nextId());
-        record.set("en", type.getCode());
-        record.set("cn", type.getName());
-        record.set("config", JSON.toJSONString(config));
-        record.set("code", type.getCode());
-        record.set("version", 1);
-        User u = ThreadLocalUserKit.getUser();
-        if (u != null) {
-            record.set("created_by", u.userId());
-            record.set("created_time", new Date());
+        if (Db.queryInt("select count(1) from meta_component where code=?", type.getCode()) == 0) {
+            Record record = new Record();
+            record.set("id", SnowFlake.me().nextId());
+            record.set("en", type.getCode());
+            record.set("cn", type.getCn());
+            record.set("config", JSON.toJSONString(config));
+            record.set("code", type.getCode());
+            record.set("version", 1);
+            User u = ThreadLocalUserKit.getUser();
+            if (u != null) {
+                record.set("created_by", u.userId());
+                record.set("created_time", new Date());
+            }
+            Db.save("meta_component", record);
         }
-        Db.save("meta_component", record);
     }
 
     public Record loadObjectConfig(String componentCode, String destCode) {

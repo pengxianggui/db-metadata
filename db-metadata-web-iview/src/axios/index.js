@@ -15,18 +15,21 @@ axios.interceptors.request.use(config => {
         return config
     },
     err => {
+        console.error("err:", err);
         return Promise.reject(err)
     });
 // 响应拦截器
 axios.interceptors.response.use(res => {
     if (res.data && res.data.state !== "ok") {
         res.msg = res.data.msg;
+        console.error("res.msg:", res.msg, "res", res);
         return Promise.reject(res)
     }
     return res.data
 }, err => {
     // Vue.prototype.$message.error(err)
     err.msg = err.toString();
+    console.error("err:", err);
     return Promise.reject(err)
 });
 
