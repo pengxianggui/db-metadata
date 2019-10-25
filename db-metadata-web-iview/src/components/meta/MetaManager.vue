@@ -4,7 +4,7 @@
             <el-button type="primary" plain @click="visible=true">选择元对象</el-button>
 <!--            其他默认操作 -->
         </el-button-group>
-        <table-list :meta="tableMeta" v-if="tableMeta" :data="tableData"></table-list>
+        <table-list :meta="tableMeta" v-if="tableMeta" :data.sync="tableData"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
@@ -71,7 +71,8 @@
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'})
-                    _this.getTableData(formModel)
+                    // _this.getTableData(formModel)
+                    _this.tableMeta['data_url'] = '/table/list/' + formModel['objectCode']
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})
                 })
