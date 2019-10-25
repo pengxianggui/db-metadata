@@ -58,7 +58,8 @@ eg:
                     ></el-table-column>
                     <el-table-column :render-header="renderHeader" width="180">
                         <template slot-scope="scope">
-                            <el-button :size="innerMeta.conf.size" @click="handleEdit(scope.$index, scope.row)">编辑
+                            <el-button :size="innerMeta.conf.size"
+                                       @click="handleEdit(scope.$index, scope.row)">编辑
                             </el-button>
                             <el-button :size="innerMeta.conf.size" type="danger"
                                        @click="handleDelete(scope.$index, scope.row)">删除
@@ -207,17 +208,23 @@ eg:
                     return;
                 }
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
-                let url = this.$complieString(_this['paginationModel'], _this.innerMeta['data_url']);
-                this.$axios.get(url + '?fs=' + columnNames.join(',')).then(resp => {
+                let url = _this.innerMeta['data_url'];
+                this.$axios.get(url + '?fs=' + columnNames.join(',')
+                    + '&p=' + _this.paginationModel.currentPage
+                    + '&s=' + _this.paginationModel.pageSize)
+                .then(resp => {
                     _this.innerData = resp.data;
-                    _this.paginationModel.total = _this.innerData.length
+                    _this.paginationModel.total = resp['page'].total;
+                    _this.paginationModel.pageSize = resp['page'].size;
+                    _this.paginationModel.currentPage = resp['page'].index;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp})
                 })
             },
             initData() { // init business data
                 if (this.data) {
-                    this.paginationModel.total = this.data.length
+                    // this.paginationModel.total = this.data.length; // TODO 改成业务数据中附带的total
+
                 } else {
                     this.getData()
                 }
@@ -229,7 +236,8 @@ eg:
                     this.getData()
                 },
                 deep: true
-            }
+            },
+
         },
         created() {
             this.initMeta();
@@ -237,6 +245,9 @@ eg:
         },
         mounted() {
             this.initData();
+            this.$watch('meta.data_url', function (n, o) {
+                console.log('changed...')
+            })
         }
     }
 </script>
