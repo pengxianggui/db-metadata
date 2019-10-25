@@ -6,6 +6,7 @@ const DEFAULT = {
         label: "",
         component_name: 'TableList',
         methods: "GET",
+        data_url: '',
         // ...
         conf: {
             "default-sort": {prop: 'username', order: 'descending'}, // descending, ascending
