@@ -47,6 +47,13 @@
               "chnname": "主键组"
             },
             {
+              "name": "is_sys",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "系统模块",
+              "defaultValue": "0"
+            },
+            {
               "name": "config",
               "type": "LongText",
               "remark": "",

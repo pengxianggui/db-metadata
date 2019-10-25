@@ -59,3 +59,7 @@ yarn run lint
        ```
 - [ ] 异步加载数据的组件,指定默认值
 - [ ] 表格中的批量编辑
+
+##### 其他资料
+
+- vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js
