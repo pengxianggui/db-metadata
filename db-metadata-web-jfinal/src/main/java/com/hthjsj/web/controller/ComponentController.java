@@ -6,6 +6,7 @@ import com.hthjsj.web.component.Components;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
@@ -42,15 +43,19 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
+
         /**
          * return
          * {
          *  config:{
-         *
          *  }
          * }
          */
-        renderJson(Ret.ok("data", ServiceManager.componentService().loadObjectConfig(compCode, objectCode)));
+        if (StrKit.notBlank(objectCode, compCode)) {
+            renderJson(Ret.ok("data", ServiceManager.componentService().loadObjectConfig(compCode, objectCode)));
+        } else {
+            renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode)));
+        }
     }
 
     @Override
