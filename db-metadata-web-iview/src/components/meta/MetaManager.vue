@@ -1,10 +1,12 @@
 <template>
     <el-container direction="vertical">
         <el-button-group>
-            <el-button type="primary" plain @click="visible=true">选择元对象</el-button>
+            <el-button type="primary" plain @click="visible=true">导入元对象</el-button>
+            <drop-down-box v-model="metaObj" :meta="objMeta"
+                           @change="tableMeta.data_url = '/table/list/' + metaObj"></drop-down-box>
 <!--            其他默认操作 -->
         </el-button-group>
-        <table-list :meta="tableMeta" v-if="tableMeta" :data.sync="tableData"></table-list>
+        <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
         <el-dialog title="导入元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
@@ -18,7 +20,6 @@
 <script>
     import TableList from '@/components/feature/TableList'
     import MetaImport from '@/components/meta/MetaImport'
-    // import mockData from '@/mockdata.js'
 
     export default {
         name: "meta-manager",
@@ -27,7 +28,28 @@
                 visible: false,
                 tableMeta: null,
                 formMeta: null,
-                tableData: []
+                objMeta: {
+                    "name": "meta",
+                    "data_url": "/table/list/meta_object",
+                    "group": false,
+                    "conf": {
+                        clearable: true,
+                        filterable: true
+                    },
+                    behavior: {
+                        format: function (params) {
+                            let kvs = [];
+                            for (let i = 0; i < params.length; i++) {
+                                kvs.push({
+                                    key: params[i].code,
+                                    value: params[i].code
+                                })
+                            }
+                            return kvs;
+                        }
+                    }
+                },
+                metaObj: null, // 元对象
             }
         },
         props: {
@@ -55,15 +77,6 @@
                     _this.$message.error(resp.toString())
                 })
             },
-            getTableData(params) {
-                let _this = this;
-                this.$axios.get('/table/list/' + params['objectCode']).then(resp => {
-                    _this.tableData = resp.data;
-                    _this.visible = false;
-                }).catch(resp => {
-                    _this.$message.error(resp.toString())
-                })
-            },
             formCancel() {
                 this.visible = false
             },
@@ -73,7 +86,7 @@
                     _this.$message({type: 'success', message: resp.msg || '操作成功'})
                     // _this.getTableData(formModel)
                     _this.tableMeta['data_url'] = '/table/list/' + formModel['objectCode'];
-                    _this.tableMeta['name'] = formModel['objectCode']
+                    _this.visible = false;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})
                 })

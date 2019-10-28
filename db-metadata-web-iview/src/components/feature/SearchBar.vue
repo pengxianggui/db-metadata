@@ -1,9 +1,9 @@
 <template>
     <el-form :inline="true" :rules="rules" :model="searchModel" :ref="formName" class="demo-form-inline">
-        <el-form-item v-for="(item, index) in metaData.ui_config" :key="item.en + index" :label="item.ui_config.show_label?item.cn:''" :prop="item.en">
+        <el-form-item v-for="(item, index) in innerMeta.conf" :key="item.en + index" :label="item.conf.show_label?item.cn:''" :prop="item.en">
             <component :is="item.component_name" v-model="searchModel[item.en]" :meta-data="item"></component>
         </el-form-item>
-        <el-form-item v-if="metaData.ui_config.length > 0">
+        <el-form-item v-if="innerMeta.conf.length > 0">
             <el-button type="primary" @click="search(formName)">查询</el-button>
         </el-form-item>
     </el-form>
@@ -15,13 +15,14 @@
         name: "search-bar",
         data() {
             return {
+                innerMeta: {},
                 formName: 'form' + Math.random(),
                 rules: {},
                 items: []
             }
         },
         props: {
-            metaData: {
+            meta: {
                 required: true,
                 type: Object
             },
@@ -31,11 +32,14 @@
             }
         },
         methods: {
+            initMeta () {
+                this.$merge(this.innerMeta, this.meta);
+            },
             initData () {
                 let _this = this
                 _this.searchForm = {}
-                _this.metaData.ui_config.forEach(item => {
-                    Vue.set(_this.searchModel, item.en, null) // 这种赋值方法, 双向绑定才生效
+                _this.innerMeta.conf.forEach(item => {
+                    Vue.set(_this.searchModel, item.en, null); // 这种赋值方法, 双向绑定才生效
                     if (item.rules){
                         Vue.set(_this.rules, item.en, item.rules)
                     }
@@ -61,6 +65,9 @@
                     }
                 });
             }
+        },
+        created() {
+            this.initMeta();
         },
         mounted() {
             this.initData()

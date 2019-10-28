@@ -31,9 +31,6 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
-        {{meta}}
-<!--        {{innerMeta}}-->
-<!--        <json-box v-model="innerMeta"></json-box>-->
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
@@ -215,9 +212,9 @@ eg:
                     + '&s=' + _this.paginationModel.pageSize)
                 .then(resp => {
                     _this.innerData = resp.data;
-                    _this.paginationModel.total = resp['page'].total;
-                    _this.paginationModel.pageSize = resp['page'].size;
-                    _this.paginationModel.currentPage = resp['page'].index;
+                    _this.paginationModel.total = resp['page'].total - 0;
+                    _this.paginationModel.pageSize = resp['page'].size - 0;
+                    _this.paginationModel.currentPage = resp['page'].index - 0;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp})
                 })
@@ -225,7 +222,6 @@ eg:
             initData() { // init business data
                 if (this.data) {
                     // this.paginationModel.total = this.data.length; // TODO 改成业务数据中附带的total
-
                 } else {
                     this.getData()
                 }
@@ -238,16 +234,14 @@ eg:
                 },
                 deep: true
             },
-            // dataUrl (n, o) {
-            //     this.innerMeta['data_url'] = n;
-            //     this.getData()
-            // },
-            // 'meta.data_url': {
-            //     handler: function (n, o) {
-            //         console.log('sssssss')
-            //     },
-            //     deep: true
-            // }
+            'meta.data_url': { // watch meta.data_url, if changed, refresh business data
+                handler: function (n, o) {
+                    if (n === o) return;
+                    this.innerMeta['data_url'] = n;
+                    this.getData()
+                },
+                deep: true
+            }
         },
         created() {
             this.initMeta();
@@ -255,16 +249,6 @@ eg:
         },
         mounted() {
             this.initData();
-            this.$watch('meta.data_url', function (n, o) {
-                console.log('changed...')
-            }, {
-                deep: true
-            })
-        },
-        computed: {
-            // dataUrl() {
-            //     return this.meta['data_url']
-            // }
         }
     }
 </script>
