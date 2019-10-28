@@ -154,7 +154,7 @@ public class QueryCondition {
             }
             //正常 where 逻辑
             if (key.startsWith(MetaSQLBuilder.SQL_PREFIX)) {
-                sqlExceptSelect.append(" and ").append(key).append(" ");
+                sqlExceptSelect.append(" and ").append(key.replaceFirst(MetaSQLBuilder.SQL_PREFIX, "")).append(" ");
                 sqlParaExt.addPara(kv.get(key));
             }
         }
