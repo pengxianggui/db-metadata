@@ -19,7 +19,7 @@ public class FieldEquals extends MetaSQLBuilder {
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
         value = new HashMap<>(1);
         if (httpParams.get(metaField.en()) != null) {
-            value.put(metaField.en() + "=?", httpParams.get(metaField.en()));
+            value.put(SQL_PREFIX + metaField.en() + "=?", httpParams.get(metaField.en()));
         }
     }
 

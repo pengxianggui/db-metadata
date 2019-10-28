@@ -63,6 +63,12 @@ public class QueryCondition {
      * http://url?ef=id,name,config&f=config 会滤出全部列
      * <p>
      * 过滤字段 -> 根据解析规则 拆解 httpparams -> 构建SqlExtPara
+     * Map 结构
+     * id=?,v_id
+     * name>=?,v_name
+     * <p>
+     * Call:
+     * Db.find(select * from tableA where id=? and name >=?,new String[]{v_id,v_name})
      */
     public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
         Map<String, Object> params = toObjectFlat(httpParams);
@@ -108,9 +114,9 @@ public class QueryCondition {
                     metaSQLBuilder.init(field, params);
                     conds.putAll(metaSQLBuilder.result());
                 } catch (InstantiationException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -146,9 +152,11 @@ public class QueryCondition {
                 sqlParaExt.setOrderBy(key + v);
                 continue;
             }
-            //其他逻辑
-            sqlExceptSelect.append(" and ").append(key).append(" ");
-            sqlParaExt.addPara(kv.get(key));
+            //正常 where 逻辑
+            if (key.startsWith(MetaSQLBuilder.SQL_PREFIX)) {
+                sqlExceptSelect.append(" and ").append(key).append(" ");
+                sqlParaExt.addPara(kv.get(key));
+            }
         }
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         sqlParaExt.setFrom(" from " + metaObject.tableName());
