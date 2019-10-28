@@ -3,7 +3,7 @@
         <el-button-group>
             <el-button type="primary" plain @click="visible=true">导入元对象</el-button>
             <drop-down-box v-model="metaObj" :meta="objMeta"
-                           @change="tableMeta.data_url = '/table/list/' + metaObj"></drop-down-box>
+                           @change="tableMeta.data_url = tableUrl + '&object_code=' + metaObj"></drop-down-box>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
@@ -28,6 +28,7 @@
                 visible: false,
                 tableMeta: null,
                 formMeta: null,
+                tableUrl: '/table/list?objectCode=meta_field',
                 objMeta: {
                     "name": "meta",
                     "data_url": "/table/list/meta_object",
@@ -64,7 +65,8 @@
             getTableMeta() {
                 let _this = this;
                 this.$axios.get('/meta/fields').then(resp => {
-                    _this.tableMeta = resp.data
+                    _this.tableMeta = resp.data;
+                    _this.tableMeta['data_url'] = _this.tableUrl; //  TODO 集中参数处理
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
@@ -83,9 +85,9 @@
             formSubmit(formModel) {
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
-                    _this.$message({type: 'success', message: resp.msg || '操作成功'})
+                    _this.$message({type: 'success', message: resp.msg || '操作成功'});
                     // _this.getTableData(formModel)
-                    _this.tableMeta['data_url'] = '/table/list/' + formModel['objectCode'];
+                    _this.tableMeta['data_url'] = _this.tableMeta['data_url'] + '&object_code=' + formModel['objectCode'];
                     _this.visible = false;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})

@@ -105,6 +105,10 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 if (_this.innerMeta['data_url']) {
                     _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
                         // if provide format callback fn, execute callback fn
+                        if (_this.innerMeta.behavior && _this.innerMeta.behavior['format']) {
+                            _this.innerOptions = _this.executeBehavior('format', resp.data);
+                            return;
+                        }
                         _this.innerOptions = utils.kvFormat.converKv1(resp.data)
                     }).catch(resp => {
                         _this.$message.error(resp.toString())
@@ -120,6 +124,13 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     return
                 }
                 console.error("options or data_url in meta provide one at least!")
+            },
+            executeBehavior (name, params) {
+                if (this.innerMeta.behavior && this.innerMeta.behavior[name]) {
+                    return this.innerMeta.behavior[name](params)
+                } else {
+                    console.error('${name} was not yet defined!')
+                }
             },
             renderMethods: function () {
                 // TODO

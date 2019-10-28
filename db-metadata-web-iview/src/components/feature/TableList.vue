@@ -207,7 +207,7 @@ eg:
                 }
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
                 let url = _this.innerMeta['data_url'];
-                this.$axios.get(url + '?fs=' + columnNames.join(',')
+                this.$axios.get(url + '&fs=' + columnNames.join(',')
                     + '&p=' + _this.paginationModel.currentPage
                     + '&s=' + _this.paginationModel.pageSize)
                 .then(resp => {
