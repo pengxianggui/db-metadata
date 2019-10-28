@@ -110,6 +110,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                             return;
                         }
                         _this.innerOptions = utils.kvFormat.converKv1(resp.data)
+                        // _this.innerOptions = resp.data;
                     }).catch(resp => {
                         _this.$message.error(resp.toString())
                     })

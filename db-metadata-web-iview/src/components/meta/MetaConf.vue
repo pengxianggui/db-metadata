@@ -24,30 +24,45 @@
         data() {
             let objectMeta = {
                 "name": "meta",
-                "data_url": "", // todo reset
+                "data_url": "/table/list?objectCode=meta_object&fs=code", // todo reset
                 "group": false,
+                "label": "key",
+                "value": "value",
                 "conf": {
                     clearable: true
+                },
+                behavior: {
+                    format: function (resp) {
+                        let data = resp.data;
+                        let arr = [];
+                        for (let i = 0; i < data.length; i++) {
+                            arr.push({
+                                key: data[i].code,
+                                value: data[i].code
+                            })
+                        }
+                        return arr;
+                    }
                 }
-            }
+            };
             let componentMeta = {
                 "name": "component",
-                "data_url": "", // todo reset
+                "data_url": "/component/list", // todo reset
                 "group": false,
                 "conf": {
                     clearable: true
                 }
-            }
+            };
             let confMeta = {
                 "name": "conf",
                 "conf": {
                     mode: 'code',
                 }
-            }
+            };
 
-            this.$merge(objectMeta, DEFAULT.DropDownBox)
-            this.$merge(componentMeta, DEFAULT.DropDownBox)
-            this.$merge(confMeta, DEFAULT.JsonBox)
+            this.$merge(objectMeta, DEFAULT.DropDownBox);
+            this.$merge(componentMeta, DEFAULT.DropDownBox);
+            this.$merge(confMeta, DEFAULT.JsonBox);
 
             return {
                 objectMeta: objectMeta,
@@ -62,7 +77,7 @@
         },
         methods: {
             onSubmit: function () {
-                let _this = this
+                let _this = this;
                 this.$axios({
                     method: 'POST',
                     url: '', // todo
