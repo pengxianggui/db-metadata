@@ -55,9 +55,11 @@ public class ComponentController extends FrontRestController {
          * }
          */
         if (StrKit.notBlank(objectCode, compCode)) {
-            renderJson(Ret.ok("data", ServiceManager.componentService().loadObjectConfig(compCode, objectCode)));
+            String ss = ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config");
+            renderJson(Ret.ok("data", JSON.parseObject(ss, Kv.class)));
         } else {
-            renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode)));
+            String ss = ServiceManager.componentService().loadDefault(compCode).getStr("config");
+            renderJson(Ret.ok("data", JSON.parseObject(ss, Kv.class)));
         }
     }
 
