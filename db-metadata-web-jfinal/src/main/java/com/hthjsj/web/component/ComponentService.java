@@ -42,7 +42,7 @@ public class ComponentService {
             register(ComponentType.V(componentCode), config);
         }
         defaultRecord.set("config", JSON.toJSONString(config));
-        Db.save("meta_component", defaultRecord);
+        Db.update("meta_component", defaultRecord);
     }
 
     public List<Record> listComponents() {

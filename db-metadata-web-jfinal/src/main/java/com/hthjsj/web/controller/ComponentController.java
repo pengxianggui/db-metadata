@@ -76,7 +76,7 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-        String configString = getPara("config", "{}");
+        String configString = getPara("conf", "{}");
 
         Kv config = JSON.parseObject(configString, Kv.class);
 
