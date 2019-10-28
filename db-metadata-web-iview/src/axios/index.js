@@ -9,11 +9,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.request.use(config => {
         // config.headers.languagetype = 'CN' // 举例，加上一个公共头部
         // config.data = Qs.stringify(config.data) // 处理数据，可不写
-        if (config.method.toLowerCase() === 'get') {
-            config.data = qs.stringify(config.data, {
-                strictNullHandling: true
-            })
-        }
         if (config.method.toLowerCase() === 'post') {
             config.data = qs.stringify(config.data)
         }

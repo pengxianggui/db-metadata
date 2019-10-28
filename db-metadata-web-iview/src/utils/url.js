@@ -1,3 +1,4 @@
+import qs from 'qs'
 /**
  * compile url with params, eg:
  * url : /table/list?object_code=?
@@ -19,12 +20,9 @@ export function compile(url, params) {
  * @return /xx/yy?param1=111&param2=222
  */
 export function splice(url, paramsMap) {
-    let paramArr = [];
-    for (let key in paramsMap) {
-        paramArr.push('key=' + paramsMap[key])
-    }
+    let params = qs.stringify(paramsMap);
     if (url.indexOf('?') !== -1) {
-        return url + '&' + paramArr.join('&')
+        return url + '&' + params;
     }
-    return url + '?' + paramArr.join('&')
+    return url + '?' + params;
 }

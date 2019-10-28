@@ -79,7 +79,7 @@
                 this.$axios({
                     method: 'get',
                     url: 'component/load',
-                    data: {
+                    params: {
                         objectCode: _this.confModel.objectCode,
                         componentCode: _this.confModel.componentCode
                     }
