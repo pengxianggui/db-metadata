@@ -20,6 +20,7 @@
 <script>
     import TableList from '@/components/feature/TableList'
     import MetaImport from '@/components/meta/MetaImport'
+    import utils from '@/utils'
 
     export default {
         name: "meta-manager",
@@ -82,12 +83,16 @@
             formCancel() {
                 this.visible = false
             },
+            emitUrl(url, params) {
+                return utils.URLKit.compile(url, params);
+            },
             formSubmit(formModel) {
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'});
                     // _this.getTableData(formModel)
                     _this.tableMeta['data_url'] = _this.tableMeta['data_url'] + '&object_code=' + formModel['objectCode'];
+                    // _this.emitUrl(_this.tableMeta['data_url'], {object_code: formModel['objectCode']});
                     _this.visible = false;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})

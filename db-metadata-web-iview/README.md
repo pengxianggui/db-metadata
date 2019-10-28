@@ -63,3 +63,8 @@ yarn run lint
 ##### 其他资料
 
 - vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js
+
+
+
+##### TODO
+ -[ ] meta-Manager 默认不加载
