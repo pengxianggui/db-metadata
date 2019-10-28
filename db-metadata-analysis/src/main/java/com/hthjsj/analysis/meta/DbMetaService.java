@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019-08-22 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -80,9 +78,8 @@ public class DbMetaService {
         return moUpdated;
     }
 
-    public boolean deleteMetaObject(MetaObject metaObject) {
-        return Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", metaObject.code()) > 0 && Db.use(App.DB_MAIN).delete(
-                "delete from meta_field where object_code=?",
-                metaObject.code()) > 0;
+    public boolean deleteMetaObject(String objectCode) {
+        return Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", objectCode) > 0 && Db.use(App.DB_MAIN).delete(
+                "delete from meta_field where object_code=?", objectCode) > 0;
     }
 }

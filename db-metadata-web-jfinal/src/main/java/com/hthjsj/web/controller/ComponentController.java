@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -25,9 +24,10 @@ public class ComponentController extends FrontRestController {
     @Override
     public void list() {
         List<Record> components = ServiceManager.componentService().listComponents();
-        List<Kv> results = Lists.newArrayList();
+        List<String> results = Lists.newArrayList();
         components.forEach(r -> {
-            results.add(Kv.create().set("key", r.getStr("en")).set("value", r.getStr("cn")));
+            //            results.add(Kv.create().set("key", r.getStr("en")).set("value", r.getStr("cn")));
+            results.add(r.getStr("code"));
         });
         renderJson(Ret.ok("data", results));
     }

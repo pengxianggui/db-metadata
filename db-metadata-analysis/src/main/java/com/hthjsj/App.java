@@ -39,7 +39,7 @@ public class App {
             MetaObjectDBAdapter adapter = new MetaObjectDBAdapter(metaObject);
 
 
-            dbMetaService.deleteMetaObject(metaObject);
+            dbMetaService.deleteMetaObject(metaObject.code());
             dbMetaService.saveMetaObject(adapter, true);
             //            AtomicInteger i = new AtomicInteger();
             //            metaObject.fields().forEach((field) -> {
