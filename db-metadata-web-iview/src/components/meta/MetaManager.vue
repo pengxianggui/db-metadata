@@ -1,13 +1,13 @@
 <template>
     <el-container direction="vertical">
         <el-button-group>
-            <el-button type="primary" plain @click="visible=true">导入元对象</el-button>
+            <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
             <drop-down-box v-model="metaObj" :meta="objMeta"
                            @change="metaObjChange()"></drop-down-box>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
-        <el-dialog title="导入元数据" :visible.sync="visible">
+        <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
         </el-dialog>
         <div style="display: flex">
@@ -66,7 +66,7 @@
                 let _this = this;
                 this.$axios.get('/meta/fields').then(resp => {
                     _this.tableMeta = resp.data;
-                    _this.tableMeta['data_url'] = _this.tableUrl; //  TODO 集中参数处理
+                    _this.tableMeta['data_url'] = _this.tableUrl + "&object_code=''"; //  TODO 集中参数处理
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
@@ -92,7 +92,7 @@
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'});
-                    _this.tableMeta['data_url'] = _this.tableMeta['data_url'] + '&object_code=' + formModel['objectCode'];
+                    _this.tableMeta['data_url'] = _this.tableUrl + '&object_code=' + formModel['objectCode'];
                     _this.visible = false;
                     _this.metaObj = formModel['objectCode'];
                 }).catch(resp => {
