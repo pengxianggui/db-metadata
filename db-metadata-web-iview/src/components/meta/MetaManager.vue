@@ -3,7 +3,7 @@
         <el-button-group>
             <el-button type="primary" plain @click="visible=true">导入元对象</el-button>
             <drop-down-box v-model="metaObj" :meta="objMeta"
-                           @change="tableMeta.data_url = tableUrl + '&object_code=' + metaObj"></drop-down-box>
+                           @change="metaObjChange()"></drop-down-box>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
@@ -85,6 +85,9 @@
             // emitUrl(url, params) {
             //     return utils.URLKit.compile(url, params);
             // },
+            refreshTableData() {
+                this.tableMeta.data_url = this.tableUrl + '&object_code=' + this.metaObj;
+            },
             formSubmit(formModel) {
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
@@ -98,6 +101,9 @@
             },
             saveMeta () {
                 // TODO save meta data
+            },
+            metaObjChange() {
+                this.refreshTableData();
             }
         },
         components: {

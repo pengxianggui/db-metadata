@@ -1,13 +1,13 @@
 <template>
     <el-form :model="confModel" label-width="80px">
         <el-form-item label="组件">
-            <drop-down-box v-model="confModel.componentName" :meta="componentMeta"></drop-down-box>
+            <drop-down-box v-model="confModel.componentCode" :meta="componentMeta" @change="loadConf"></drop-down-box>
         </el-form-item>
         <el-form-item label="元对象">
-            <drop-down-box v-model="confModel.metaObject" :meta="objectMeta"></drop-down-box>
+            <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></drop-down-box>
         </el-form-item>
         <el-form-item label="Meta-Conf">
-            <json-box v-model="confModel.metaConf" :meta="confMeta"></json-box>
+            <json-box v-model="confModel.conf" :meta="confMeta"></json-box>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -66,13 +66,22 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
-                    metaObject: null,
-                    componentName: null,
-                    metaConf: null
+                    objectCode: null,
+                    componentCode: null,
+                    conf: null
                 }
             }
         },
         methods: {
+            loadConf: function() {
+                let _this = this;
+                this.$axios.get('component/load?componentCode=' + _this.confModel.componentCode
+                        + "&objectCode=" + _this.confModel.objectCode).then(resp => {
+                    _this.confModel.conf = resp.data
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
             onSubmit: function () {
                 let _this = this;
                 this.$axios({
