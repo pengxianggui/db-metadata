@@ -1,10 +1,10 @@
 <template>
-    <el-form :model="confModel">
-        <el-form-item label="元对象">
-            <drop-down-box v-model="confModel.metaObject" :meta="objectMeta"></drop-down-box>
-        </el-form-item>
+    <el-form :model="confModel" label-width="80px">
         <el-form-item label="组件">
             <drop-down-box v-model="confModel.componentName" :meta="componentMeta"></drop-down-box>
+        </el-form-item>
+        <el-form-item label="元对象">
+            <drop-down-box v-model="confModel.metaObject" :meta="objectMeta"></drop-down-box>
         </el-form-item>
         <el-form-item label="Meta-Conf">
             <json-box v-model="confModel.metaConf" :meta="confMeta"></json-box>
@@ -24,16 +24,13 @@
         data() {
             let objectMeta = {
                 "name": "meta",
-                "data_url": "/table/list?objectCode=meta_object&fs=code", // todo reset
+                "data_url": "/table/list?objectCode=meta_object&fs=code",
                 "group": false,
-                "label": "key",
-                "value": "value",
                 "conf": {
                     clearable: true
                 },
                 behavior: {
-                    format: function (resp) {
-                        let data = resp.data;
+                    format: function (data) {
                         let arr = [];
                         for (let i = 0; i < data.length; i++) {
                             arr.push({
@@ -47,7 +44,7 @@
             };
             let componentMeta = {
                 "name": "component",
-                "data_url": "/component/list", // todo reset
+                "data_url": "/component/list",
                 "group": false,
                 "conf": {
                     clearable: true

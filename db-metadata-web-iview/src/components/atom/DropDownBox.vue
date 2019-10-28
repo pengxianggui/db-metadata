@@ -68,7 +68,6 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
 
 <script>
     import {DEFAULT} from '@/constant'
-    import utils from '@/utils'
 
     export default {
         name: "drop-down-box",
@@ -107,10 +106,9 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                         // if provide format callback fn, execute callback fn
                         if (_this.innerMeta.behavior && _this.innerMeta.behavior['format']) {
                             _this.innerOptions = _this.executeBehavior('format', resp.data);
-                            return;
+                        } else { // default [{key: key1, value: value1}, ..]
+                            _this.innerOptions = resp.data;
                         }
-                        _this.innerOptions = utils.kvFormat.converKv1(resp.data)
-                        // _this.innerOptions = resp.data;
                     }).catch(resp => {
                         _this.$message.error(resp.toString())
                     })
@@ -133,33 +131,24 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     console.error('${name} was not yet defined!')
                 }
             },
-            renderMethods: function () {
-                // TODO
-                // if (!this.innerMeta.methods || Object.keys(this.innerMeta.methods).length <= 0) return
-                // for (let methodName in this.innerMeta.methods) {
-                //     let fn = this.innerMeta.methods[methodName]
-                    // this.$on(methodName, function (data) {
-                    //     let options = []
-                    //     for (let j = 0; j < data.length; j++) {
-                    //         options.push({
-                    //             key: data[j],
-                    //             value: data[j]
-                    //         })
-                    //     }
-                    //     return options
-                    // })
-                // }
-            }
         },
         created() {
             // init meta
             this.initMeta();
-            // render method
-            this.renderMethods()
         },
         mounted() {
             // init option data
             this.initOptions()
+        },
+        watch: {
+            'meta.data_url': {
+                handler: function (n, o) {
+                    if (n === o) return;
+                    this.innerMeta['data_url'] = n;
+                    this.getOptions();
+                },
+                deep: true
+            }
         },
         computed: {
             currValue: {

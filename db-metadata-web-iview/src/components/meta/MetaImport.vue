@@ -46,19 +46,19 @@ eg:
 <template>
     <div>
         <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
-            <el-form-item :label="innerMeta.columns[0].label" :prop="innerMeta.columns[0].name">
-                <drop-down-box :meta="innerMeta.columns[0]" v-model="model[innerMeta.columns[0].name]"
-                               @change="loadTables()"></drop-down-box>
+            <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
+                <drop-down-box :meta="schemaMeta" v-model="model[schemaMeta.name]"
+                               @change="refreshTables()"></drop-down-box>
             </el-form-item>
-            <el-form-item :label="innerMeta.columns[1].label" :prop="innerMeta.columns[1].name">
-                <drop-down-box :meta="innerMeta.columns[1]" v-model="model[innerMeta.columns[1].name]"
-                               :options.sync="tableOptions"></drop-down-box>
+            <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
+                <drop-down-box :meta="tableMeta" v-model="model[tableMeta.name]"
+                               :options="tableOptions"></drop-down-box>
             </el-form-item>
-            <el-form-item :label="innerMeta.columns[2].label" :prop="innerMeta.columns[2].name">
-                <text-box :meta="innerMeta.columns[2]" v-model="model[innerMeta.columns[2].name]"></text-box>
+            <el-form-item :label="objectMeta.label" :prop="objectMeta.name">
+                <text-box :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>
             </el-form-item>
-            <el-form-item :label="innerMeta.columns[3].label" :prop="innerMeta.columns[3].name">
-                <text-box :meta="innerMeta.columns[3]" v-model="model[innerMeta.columns[3].name]"></text-box>
+            <el-form-item :label="codeMeta.label" :prop="codeMeta.name">
+                <text-box :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
                 <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns.submit.conf" @click="onSubmit"
@@ -79,6 +79,10 @@ eg:
         data() {
             return {
                 innerMeta: {},
+                schemaMeta: {},
+                tableMeta: {},
+                objectMeta: {},
+                codeMeta: {},
                 model: {},
                 tableOptions: [],
                 schemaOptions: []
@@ -99,9 +103,6 @@ eg:
                     Vue.set(_this.model, item.name, item.value || null)
                 })
             },
-            assemblyMethods() {
-                // TODO
-            },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
             },
@@ -109,40 +110,15 @@ eg:
                 let defaultMeta = this.getDefaultMeta();
                 this.$merge(this.innerMeta, defaultMeta);
                 this.$merge(this.innerMeta, this.meta);
+                this.schemaMeta = this.innerMeta.columns[0];
+                this.tableMeta = this.innerMeta.columns[1];
+                this.objectMeta = this.innerMeta.columns[2];
+                this.codeMeta = this.innerMeta.columns[3];
             },
-            // loadSchema() {
-            //     let _this = this;
-            //     let schemaItem = _this.innerMeta.columns[0];
-            //     if (!schemaItem.hasOwnProperty('data_url') || !schemaItem['data_url'])
-            //         return;
-            //     _this.$axios.get(schemaItem['data_url']).then(resp => {
-            //         for (let i = 0; i < resp.data.length; i++) {
-            //             // schema data like : ['Main', 'Slave', ...]
-            //             let option = {
-            //                 key: resp.data[i],
-            //                 value: resp.data[i]
-            //             };
-            //             _this.schemaOptions.push(option)
-            //         }
-            //     }).catch(resp => {
-            //         _this.$message({message: resp, type: 'error'})
-            //     })
-            // },
-            loadTables() {
+            refreshTables() {
                 let _this = this;
-                let url = _this.$complieString(_this['model'], _this.innerMeta.columns[1]['data_url']);
-                // TODO 联动获取表名数据
-                _this.$axios.get(url).then(resp => {
-                    for (let i = 0; i < resp.data.length; i++) {
-                        let option = {
-                            key: resp.data[i],
-                            value: resp.data[i]
-                        };
-                        _this.tableOptions.push(option)
-                    }
-                }).catch(resp => {
-                    _this.$message.error(resp.toString())
-                })
+                let url = _this.$complieString(_this['model'], _this.tableMeta['data_url']);
+                _this.tableMeta['data_url'] = url;
             },
             doSubmit() {
                 let _this = this;
@@ -177,7 +153,6 @@ eg:
         created() {
             this.initMeta();
             this.assemblyModel();
-            this.assemblyMethods()
         },
         mounted() {
             // request business data
