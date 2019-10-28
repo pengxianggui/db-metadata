@@ -27,7 +27,7 @@ public class ComponentController extends FrontRestController {
         List<Record> components = ServiceManager.componentService().listComponents();
         List<Kv> results = Lists.newArrayList();
         components.forEach(r -> {
-            results.add(Kv.create().set("key", r.getStr("en")).set("value", r.getStr("cn")));
+            results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
             //            results.add(r.getStr("code"));
         });
         renderJson(Ret.ok("data", results));
