@@ -25,7 +25,12 @@ public class DBController extends FrontRestController {
 
     @Override
     public void list() {
-        renderJson(Ret.ok("data", Aop.get(MysqlService.class).showSchema()));
+        List<String> schemas = Aop.get(MysqlService.class).showSchema();
+        List<Kv> results = Lists.newArrayList();
+        for (String s : schemas) {
+            results.add(Kv.by("key", s).set("value", s));
+        }
+        renderJson(Ret.ok("data", results));
     }
 
     /**
