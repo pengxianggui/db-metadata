@@ -17,8 +17,4 @@ public abstract class FormField extends ViewComponent {
         return null;
     }
 
-    @Override
-    public void config(String config) {
-        super.config(config);
-    }
 }

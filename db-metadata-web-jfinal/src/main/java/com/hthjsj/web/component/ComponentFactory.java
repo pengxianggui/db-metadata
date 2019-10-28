@@ -3,6 +3,8 @@ package com.hthjsj.web.component;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.form.Button;
+import com.hthjsj.web.component.form.FormView;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -53,5 +55,26 @@ public class ComponentFactory {
             }
         });
         return tableView;
+    }
+
+    public static ViewComponent createViewComponent(String typeString) {
+        ComponentType type = ComponentType.V(typeString);
+        ViewComponent component = null;
+        switch (type) {
+        case BUTTON:
+            component = new Button();
+            break;
+        case DROPDOWN:
+        case FORMVIEW:
+            component = new FormView();
+            break;
+        case TABLEVIEW:
+            component = new TableView();
+            break;
+        case INPUTFIELD:
+        default:
+            break;
+        }
+        return component;
     }
 }

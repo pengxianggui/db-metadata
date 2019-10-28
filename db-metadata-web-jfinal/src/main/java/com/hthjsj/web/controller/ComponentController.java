@@ -1,8 +1,11 @@
 package com.hthjsj.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.Components;
+import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -66,8 +69,31 @@ public class ComponentController extends FrontRestController {
     @Override
     public void doAdd() {
         /**
+         * object Code
+         * component Type
          *
          */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCode = queryHelper.getComponentCode();
+        String configString = getPara("config", "{}");
+
+        Kv config = JSON.parseObject(configString, Kv.class);
+
+        /**
+         * return
+         * {
+         *  config:{}
+         * }
+         */
+        if (StrKit.notBlank(objectCode, compCode)) {
+            ViewComponent component = ComponentFactory.createViewComponent(compCode);
+            ServiceManager.componentService().newObjectConfig(component, objectCode, config);
+            renderJson(Ret.ok());
+        } else {
+            ServiceManager.componentService().newDefault(compCode, config);
+            renderJson(Ret.ok());
+        }
     }
 
     /**

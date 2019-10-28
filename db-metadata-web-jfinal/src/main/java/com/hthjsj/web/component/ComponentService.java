@@ -2,7 +2,6 @@ package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.db.SnowFlake;
-import com.hthjsj.analysis.meta.Component;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
 import com.jfinal.aop.Before;
@@ -14,7 +13,6 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p> Class title: </p>
@@ -38,11 +36,20 @@ public class ComponentService {
         return record;
     }
 
+    public void newDefault(String componentCode, Kv config) {
+        Record defaultRecord = Db.findFirst("select * from meta_component where code=?", componentCode);
+        if (defaultRecord == null) {
+            register(ComponentType.V(componentCode), config);
+        }
+        defaultRecord.set("config", JSON.toJSONString(config));
+        Db.save("meta_component", defaultRecord);
+    }
+
     public List<Record> listComponents() {
         return Db.findAll("meta_component");
     }
 
-    public void register(ComponentType type, Component component, Map<String, Object> config) {
+    public void register(ComponentType type, Kv config) {
         if (Db.queryInt("select count(1) from meta_component where code=?", type.getCode()) == 0) {
             Record record = new Record();
             record.set("id", SnowFlake.me().nextId());
@@ -86,30 +93,30 @@ public class ComponentService {
         return record == null ? new Record() : record;
     }
 
-    public boolean newObjectConfig(ViewComponent component, String objectCode) {
-        Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT);
+    public boolean newObjectConfig(ViewComponent component, String objectCode, Kv config) {
+        Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT, config);
         return Db.save("meta_component_instance", record);
     }
 
     public boolean newFieldConfig(ViewComponent component, String objectCode, String fieldCode) {
         // objectCode.name
         String dest_code = objectCode + "." + fieldCode;
-        Record record = getRecord(component, dest_code, INSTANCE.META_FIELD);
+        Record record = getRecord(component, dest_code, INSTANCE.META_FIELD, Kv.create());
         return Db.save("meta_component_instance", record);
     }
 
     public boolean newSpecificConfig(ViewComponent component, String specificCode) {
-        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC);
+        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC, Kv.create());
         return Db.save("meta_component_instance", record);
     }
 
-    private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific) {
+    private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
         record.set("comp_code", component.type());
         record.set("type", specific.toString());
         record.set("dest_object", specificCode);
-        record.set("config", component.config());
+        record.set("config", config.toJson());
         User u = ThreadLocalUserKit.getUser();
         if (u != null) {
             record.set("created_by", u.userId());

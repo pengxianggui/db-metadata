@@ -42,7 +42,7 @@ final public class Components {
             try {
                 ComponentType type = componentTypeClassEntry.getKey();
                 Component componentInstance = componentTypeClassEntry.getValue().newInstance();
-                Aop.get(ComponentService.class).register(type, componentInstance, Kv.create());
+                Aop.get(ComponentService.class).register(type, Kv.create());
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

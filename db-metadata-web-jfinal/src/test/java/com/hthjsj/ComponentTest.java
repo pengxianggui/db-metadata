@@ -31,7 +31,6 @@ public class ComponentTest {
         ComponentService componentService = Aop.get(ComponentService.class);
         Kv kv = componentService.loadFieldsConfigMap(tableView.type(), "object_code_admin111");
         System.out.println(kv.toJson());
-
     }
 
     public static void init(MetaObject metaObject) {
@@ -46,7 +45,7 @@ public class ComponentTest {
             Db.save("meta_component", "id", record);
         }
         ComponentService componentService = Aop.get(ComponentService.class);
-        componentService.newObjectConfig(tableView, "object_code_admin111");
+        componentService.newObjectConfig(tableView, "object_code_admin111", Kv.create());
         componentService.newFieldConfig(tableView, "object_code_admin111", "one1");
         componentService.newFieldConfig(tableView, "object_code_admin111", "one2");
         componentService.newFieldConfig(tableView, "object_code_admin111", "one3");

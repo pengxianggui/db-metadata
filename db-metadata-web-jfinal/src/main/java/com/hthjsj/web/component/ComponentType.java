@@ -13,8 +13,8 @@ public enum ComponentType {
     FORMVIEW("formview", "表单组件", "FormTmpl"),
     BUTTON("button", "按钮组件", "Button"),
     DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
-    INPUTFIELD("inputfield", "输入框组件", "TextBox");
-
+    INPUTFIELD("inputfield", "输入框组件", "TextBox"),
+    UNKNOWN("unknow", "未知控件", "unknow");
     @Getter
     String name;
 
@@ -28,5 +28,14 @@ public enum ComponentType {
         this.name = name;
         this.cn = cn;
         this.code = code;
+    }
+
+    static ComponentType V(String s) {
+        for (ComponentType t : ComponentType.values()) {
+            if (s.equalsIgnoreCase(t.code.toLowerCase()) || s.equalsIgnoreCase(t.name.toLowerCase()) || s.equalsIgnoreCase(t.cn.toLowerCase())) {
+                return t;
+            }
+        }
+        return UNKNOWN;
     }
 }

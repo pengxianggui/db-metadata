@@ -35,7 +35,4 @@ public abstract class ViewComponent implements Component, ComponentRender {
 
     public abstract ComponentType componentType();
 
-    public void config(String config) {
-        throw new RuntimeException("not finished!");
-    }
 }
