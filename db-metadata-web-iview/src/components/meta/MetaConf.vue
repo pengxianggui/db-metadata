@@ -75,8 +75,15 @@
         methods: {
             loadConf: function() {
                 let _this = this;
-                this.$axios.get('component/load?componentCode=' + _this.confModel.componentCode
-                        + "&objectCode=" + _this.confModel.objectCode).then(resp => {
+                if (!_this.confModel.componentCode) return;
+                this.$axios({
+                    method: 'get',
+                    url: 'component/load',
+                    data: {
+                        objectCode: _this.confModel.objectCode,
+                        componentCode: _this.confModel.componentCode
+                    }
+                }).then(resp => {
                     _this.confModel.conf = resp.data
                 }).catch(err => {
                     console.log(err)
@@ -87,7 +94,11 @@
                 this.$axios({
                     method: 'POST',
                     url: 'component/doAdd',
-                    data: _this.confModel
+                    data: {
+                        componentCode: _this.confModel.componentCode,
+                        objectCode: _this.confModel.objectCode,
+                        conf: JSON.stringify(_this.confModel.conf)
+                    }
                 })
             },
             onCancel: function () {
