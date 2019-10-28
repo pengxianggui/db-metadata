@@ -84,7 +84,12 @@
                         componentCode: _this.confModel.componentCode
                     }
                 }).then(resp => {
-                    _this.confModel.conf = resp.data
+                    if (resp.data) {
+                        let conf = resp.data.replace(/\\/g, "");
+                        _this.confModel.conf = JSON.parse(conf);
+                    } else {
+                        _this.confModel.conf = {}
+                    }
                 }).catch(err => {
                     console.log(err)
                 })
