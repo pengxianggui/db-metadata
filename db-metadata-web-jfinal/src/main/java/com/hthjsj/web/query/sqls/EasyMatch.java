@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class EasyCondition extends MetaSQLBuilder {
+public class EasyMatch extends MetaSQLBuilder {
 
     /**
      * lt （less than）               小于

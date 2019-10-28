@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class FieldEquals extends MetaSQLBuilder {
+public class FieldEqualsMatch extends MetaSQLBuilder {
 
     Map<String, Object> value;
 

@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class SortCondition extends MetaSQLBuilder {
+public class SortMatch extends MetaSQLBuilder {
 
     Map<String, Object> values = new HashMap<>();
 
