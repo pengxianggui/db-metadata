@@ -86,7 +86,7 @@
                 let _this = this;
                 this.$axios({
                     method: 'POST',
-                    url: '', // todo
+                    url: 'component/doAdd',
                     data: _this.confModel
                 })
             },

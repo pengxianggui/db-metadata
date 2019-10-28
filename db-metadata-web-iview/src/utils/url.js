@@ -11,3 +11,20 @@ export function compile(url, params) {
 
     return url;
 }
+
+/**
+ * 拼接url
+ * @param url /xx/yy
+ * @param paramsMap {'param1': 111, 'param2': 222}
+ * @return /xx/yy?param1=111&param2=222
+ */
+export function splice(url, paramsMap) {
+    let paramArr = [];
+    for (let key in paramsMap) {
+        paramArr.push('key=' + paramsMap[key])
+    }
+    if (url.indexOf('?') !== -1) {
+        return url + '&' + paramArr.join('&')
+    }
+    return url + '?' + paramArr.join('&')
+}

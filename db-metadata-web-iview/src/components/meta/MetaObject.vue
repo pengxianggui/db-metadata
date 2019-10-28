@@ -26,14 +26,6 @@
                     _this.$message.error(resp.toString())
                 })
             },
-            getTableData() {
-                let _this = this;
-                this.$axios.get('/table/list/meta_object').then(resp => {
-                    _this.tableData = resp.data;
-                }).catch(resp => {
-                    _this.$message.error(resp.toString())
-                })
-            },
         },
         created() {
             this.getTableMeta()

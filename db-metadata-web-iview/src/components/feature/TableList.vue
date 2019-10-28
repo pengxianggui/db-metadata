@@ -83,6 +83,7 @@ eg:
 
 <script>
     import {DEFAULT} from '@/constant'
+    import utils from '@/utils'
 
     export default {
         name: "TableList",
@@ -206,11 +207,13 @@ eg:
                     return;
                 }
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
-                let url = _this.innerMeta['data_url'];
-                this.$axios.get(url + '&fs=' + columnNames.join(',')
-                    + '&p=' + _this.paginationModel.currentPage
-                    + '&s=' + _this.paginationModel.pageSize)
-                .then(resp => {
+                let url = utils.URLKit.splice(_this.innerMeta['data_url'], {
+                    'fs': columnNames.join(','),
+                    'p': _this.paginationModel.currentPage,
+                    's': _this.paginationModel.pageSize
+                });
+
+                this.$axios.get(url).then(resp => {
                     _this.innerData = resp.data;
                     _this.paginationModel.total = resp['page'].total - 0;
                     _this.paginationModel.pageSize = resp['page'].size - 0;
