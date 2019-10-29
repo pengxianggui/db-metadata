@@ -1,9 +1,3 @@
-import Main from '@/components/Main'
-import MasterSlaveTableTmpl from "../components/template/MasterSlaveTableTmpl";
-import MetaManager from "../components/meta/MetaManager";
-import MetaConf from "../components/meta/MetaConf";
-import MetaObject from "../components/meta/MetaObject";
-import DemoMain from "../components/demo/DemoMain";
 
 const commonRoute = [
     {
@@ -13,31 +7,31 @@ const commonRoute = [
     }, {
         path: '/main',
         name: 'main',
-        component: Main,
+        component: () => import('@/components/Main'),
         redirect: '/main/meta-data',
         children: [
             {
                 path: 'meta-data',
                 name: 'Metadata',
-                component: MasterSlaveTableTmpl
-            },{
+                component: () => import('@/components/template/MasterSlaveTableTmpl')
+            }, {
                 path: 'meta-manager',
                 name: 'MetaManager',
-                component: MetaManager
-            },{
+                component: () => import('@/components/meta/MetaManager')
+            }, {
                 path: 'meta-object',
                 name: 'MetaObject',
-                component: MetaObject
-            },{
+                component: () => import('@/components/meta/MetaObject')
+            }, {
                 path: 'meta-conf',
                 name: 'MetaConf',
-                component: MetaConf
-            },{
+                component: () => import('@/components/meta/MetaConf')
+            }, {
                 path: 'demo',
                 name: 'Demo',
-                component: DemoMain
+                component: () => import('@/components/demo/DemoMain')
             }
         ]
     },
-]
+];
 export default commonRoute
