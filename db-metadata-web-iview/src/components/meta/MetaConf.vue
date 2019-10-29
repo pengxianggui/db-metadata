@@ -20,8 +20,8 @@
                 <el-aside v-if="fields.length > 0" width="200px" style="max-height: 600px; overflow: auto;">
                     <ul class="fields-ul">
                         <li v-for="(item, index) in fields" :key="index" v-bind:class="{'active':activeFieldIndex === index }" @click="choseField(item, index)">
-                            <span v-text="index"></span>-
-                            <span v-text="item.field_code"></span>
+                            <span v-text="index"></span>.
+                            <span v-text="item['field_code']"></span>
                         </li>
                     </ul>
                 </el-aside>
@@ -191,8 +191,8 @@
     .fields-ul li {
         min-height: 30px;
         line-height: 30px;
-        padding: 3px 0;
-        border-bottom: 1px solid #d8d8d8;
+        padding: 3px 2px;
+        border-bottom: 1px solid #e6e6e6;
         cursor: pointer;
     }
     .fields-ul li:hover {
