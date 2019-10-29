@@ -4,16 +4,11 @@
             <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
             <drop-down-box v-model="metaObj" :meta="objMeta"
                            @change="refreshTableDataUrl()"></drop-down-box>
-<!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
         <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
-        <div style="display: flex">
-            <span style="flex: 1"></span>
-            <el-button type="primary" @click="saveMeta">导入元数据</el-button>
-        </div>
     </el-container>
 </template>
 
@@ -62,7 +57,7 @@
                     _this.tableMeta = resp.data;
                     _this.tableMeta['data_url'] = _this.tableUrl + "&object_code=''";
                 }).catch(resp => {
-                    _this.$message.error(resp.toString())
+                    _this.$message({type: 'error', message: resp.msg})
                 })
             },
             getFormMeta() {
@@ -70,7 +65,7 @@
                 this.$axios.get('/meta/toAdd').then(resp => {
                     _this.formMeta = resp.data
                 }).catch(resp => {
-                    _this.$message.error(resp.toString())
+                    _this.$message({type: 'error', message: resp.msg})
                 })
             },
             refreshTableDataUrl() {
@@ -87,23 +82,14 @@
                     _this.$message({type: 'error', message: resp.msg})
                 })
             },
-            saveMeta () {
-                // TODO save meta data
-            }
         },
         components: {
             TableList,
             MetaImport
         },
-        beforeCreate() {
-        },
         created() {
             this.getFormMeta();
             this.getTableMeta();
-        },
-        beforeMount() {
-        },
-        mounted() {
         }
     }
 </script>
