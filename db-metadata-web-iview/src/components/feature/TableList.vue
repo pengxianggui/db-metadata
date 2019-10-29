@@ -196,7 +196,7 @@ eg:
                     return;
                 }
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf['showable']).map(column => column.name);
-                let url = utils.URLKit.splice(_this.innerMeta['data_url'], {
+                let url = utils.splice(_this.innerMeta['data_url'], {
                     'fs': columnNames.join(','),
                     'p': _this.paginationModel.currentPage,
                     's': _this.paginationModel.pageSize

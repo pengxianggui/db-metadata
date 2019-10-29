@@ -1,7 +1,6 @@
 import {merge} from './merge.js'
-import {complieVarString} from './format'
 import * as kvFormat from './kvFormat'
 import * as common from './common'
-import * as URLKit from './url'
+import {complieVarString, splice} from './url'
 
-export default {common, merge, complieVarString, kvFormat, URLKit}
+export default {common, merge, complieVarString, splice, kvFormat}
