@@ -2,7 +2,7 @@
     <el-container direction="vertical">
         <el-row class="el-card">
             <el-col :span="24">
-                <search-bar :meta-data="searchMeta"
+                <search-bar :meta="searchMeta"
                             :search-model.sync="searchModel" @search="masterSearch"></search-bar>
             </el-col>
             <el-col :span="24">
@@ -48,7 +48,7 @@
             getSearchMeta () {
                 return {
                     component_name: 'search-bar',
-                    ui_config: mockData.masterSearchBarMetadata
+                    conf: mockData.masterSearchBarMetadata
                 }
             },
             getMasterMeta () {

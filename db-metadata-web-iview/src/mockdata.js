@@ -14,7 +14,7 @@ const masterSearchBarMetadata = [
         "db_type_length": "32",
         "java_type": "String",
         "component_name": "TextBox",
-        "ui_config": {
+        "conf": {
             "placeholder": "请输入查询关键词",
             "clearable": false,
             "show_label": true, // 显示内容为cn||en
@@ -31,7 +31,7 @@ const masterSearchBarMetadata = [
         "db_type_length": "64",
         "java_type": "String",
         "component_name": "TextBox",
-        "ui_config": {
+        "conf": {
             "placeholder": "请输入查询关键词",
             "clearable": false,
             "show_label": true, // 显示内容为cn||en

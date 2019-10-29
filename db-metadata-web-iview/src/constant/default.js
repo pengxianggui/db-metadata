@@ -4,23 +4,23 @@ const DEFAULT = {
     TableList: {
         name: "",
         label: "",
-        component_name: 'TableList',
+        component_name: "TableList",
         methods: "GET",
-        data_url: '/xxx',
+        data_url: "/table/list", // required
         // ...
         conf: {
-            "default-sort": {prop: 'username', order: 'descending'}, // descending, ascending
+            "default-sort": {prop: "id", order: "descending"}, // descending, ascending
             "highlight-current-row": true,
-            "size": 'medium', // medium, small, mini
+            "size": "medium", // medium, small, mini
             // "max-height": 500,
         },
         columns: [
             // {
-            //     component_name: 'TextBox',
-            //     name: 'username',
-            //     label: '用户名',
+            //     component_name: "TextBox",
+            //     name: 'id',
+            //     label: 'ID',
             //     conf: {
-            //         sortable: true,
+            //         "sortable": true,
             //         // ...
             //     }
             // }
@@ -36,129 +36,128 @@ const DEFAULT = {
     BoolBox: {},
     TextBox: {
         // custom ..
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            placeholder: "请输入内容..",
-            clearable: true
+            "placeholder": "请输入内容..",
+            "clearable": true
         }
     },
     PassBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            placeholder: "请输入密码..",
-            clearable: true
+            "placeholder": "请输入密码..",
+            "clearable": true
         }
     },
     TextAreaBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            placeholder: "请输入文本内容.."
+            "placeholder": "请输入文本内容.."
         }
     },
     DropDownBox: {
-        name: '',
-        label: '',
-        "conf": {
-            clearable: true
+        name: "",
+        label: "",
+        conf: {
+            "clearable": true
         }
     },
     TimeBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
             "value-format": "HH:mm:ss"
         }
     },
     DateBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
             "value-format": "yyyy-MM-dd"
         }
     },
     DateTimeBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
             "value-format": "yyyy-MM-dd HH:mm:ss"
         }
     },
     NumBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            placeholder: '输入数字..',
+            "placeholder": '输入数字..',
         }
     },
     RadioBox: {
-        name: '',
-        label: '',
-        "data_url": "", // todo filling
+        name: "",
+        label: "",
+        data_url: "", // todo filling
         conf: {
             // ...
         }
     },
     CheckBox: {
-        name: '',
-        label: '',
-        "data_url": "", // todo filling
+        name: "",
+        label: "",
+        data_url: "", // todo filling
         conf: {
             // ...
         }
     },
     JsonBox: {
-        name: '',
-        label: '',
-        mode: 'text',
-        modes: ['code', 'tree', 'text', 'view', 'form'],
+        name: "",
+        label: "",
+        mode: "text",
+        modes: ["code", "tree", "text", "view", "form"],
         conf: {
         }
     },
     ImgBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            action: '/upload/img',
-            drag: false,
+            "action": "/upload/img",
+            "drag": false,
             "list-type": "picture-card",
             "auto-upload": false,
-            accept: "image"
+            "accept": "image"
         }
     },
     FileBox: {
-        name: '',
-        label: '',
+        name: "",
+        label: "",
         conf: {
-            action: "/upload/file",
-            limit: 5,
-            tip: "上传文件限制不超过2M",
+            "action": "/upload/file",
+            "limit": 5,
+            "tip": "上传文件限制不超过2M",
             "auto-upload": false
         }
     },
     ZTogglePanel: {
-        name: '',
-        label: '',
-        "default-open": false,
+        name: "",
+        label: "",
+        default_open: false,
         olabel: "收起",
         clabel: "展开",
     },
     FormTmpl: {
         name: "formName",
-        label: '',
-        action: '/save', // form action (url)
-        methods: 'POST',
+        label: "",
+        action: "/save", // form action (url)
         conf: {
             "label-width": '100px',
-            size: 'medium', // medium|small|mini
-            model: {
-                username: '',
+            "size": 'medium', // medium|small|mini
+            "model": {
+                "id": "",
                 // ...
             },
-            rules: {
-                username: [{required: true, message: '用户名必填', trigger: 'blur'}],
+            "rules": {
+                // "id": [{required: true, message: "必填字段", trigger: "blur"}],
                 // ...
             },
             // ...
@@ -166,21 +165,21 @@ const DEFAULT = {
         columns: [
             // {
             //     component_name: 'TextBox',
-            //     name: 'username',
-            //     label: '用户名',
+            //     name: 'id',
+            //     label: 'ID',
             //     conf: {
             //         clearable: true,
-            //         placeholder: "请输入姓名..",
+            //         placeholder: "请输入..",
             //         // ...
             //     }
             // }
         ],
         btns: {
-            submit: {
-                label: '提交',
-                conf: {
+            "submit": {
+                "label": '提交',
+                "conf": {
                     // ... support conf of el-button
-                    type: "primary"
+                    "type": "primary"
                 }
             },
             cancel: {

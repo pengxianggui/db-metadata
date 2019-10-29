@@ -67,4 +67,11 @@ yarn run lint
 
 
 ##### TODO
- -[ ] meta-Manager 默认不加载
+ -[x] meta-Manager 默认不加载
+ -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
+ -[ ] 组件中的变量初始值统一(null, {}等)
+ -[ ] 组件中各个属性先后位置尽量统一
+ -[ ] 不同组件中相同功能的属性命名尽量统一
+ -[ ] const、let 分时适用
+ -[ ] 对象属性调用方式, 应当形成规约: obj.a OR obj['a']
+ -[ ] this泛用

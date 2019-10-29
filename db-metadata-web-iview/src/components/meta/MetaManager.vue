@@ -3,12 +3,12 @@
         <el-button-group>
             <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
             <drop-down-box v-model="metaObj" :meta="objMeta"
-                           @change="metaObjChange()"></drop-down-box>
+                           @change="refreshTableDataUrl()"></drop-down-box>
 <!--            其他默认操作 -->
         </el-button-group>
         <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
         <el-dialog title="创建元数据" :visible.sync="visible">
-            <meta-import v-if="formMeta" :meta="formMeta" @cancel="formCancel" @submit="formSubmit"></meta-import>
+            <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
         <div style="display: flex">
             <span style="flex: 1"></span>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import {DEFAULT} from '@/constant'
     import TableList from '@/components/feature/TableList'
     import MetaImport from '@/components/meta/MetaImport'
 
@@ -29,16 +30,16 @@
                 tableMeta: null,
                 formMeta: null,
                 tableUrl: '/table/list?objectCode=meta_field',
-                objMeta: {
+                objMeta: { // 下拉选元对象
                     "name": "meta",
                     "data_url": "/table/list/meta_object",
                     "group": false,
                     "conf": {
-                        clearable: true,
-                        filterable: true
+                        'clearable': true,
+                        'filterable': true
                     },
-                    behavior: {
-                        format: function (params) {
+                    'behavior': {
+                        'format': function (params) {
                             let kvs = [];
                             for (let i = 0; i < params.length; i++) {
                                 kvs.push({
@@ -53,20 +54,13 @@
                 metaObj: null, // 元对象
             }
         },
-        props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
-        },
         methods: {
             getTableMeta() {
                 let _this = this;
                 this.$axios.get('/meta/fields').then(resp => {
+                    _this.$merge(resp.data, DEFAULT.TableList); // 确保 resp.data 中 含有data_url 属性
                     _this.tableMeta = resp.data;
-                    _this.tableMeta['data_url'] = _this.tableUrl + "&object_code=''"; //  TODO 集中参数处理
+                    _this.tableMeta['data_url'] = _this.tableUrl + "&object_code=''";
                 }).catch(resp => {
                     _this.$message.error(resp.toString())
                 })
@@ -79,31 +73,22 @@
                     _this.$message.error(resp.toString())
                 })
             },
-            formCancel() {
-                this.visible = false
-            },
-            // emitUrl(url, params) {
-            //     return utils.URLKit.compile(url, params);
-            // },
-            refreshTableData() {
-                this.tableMeta.data_url = this.tableUrl + '&object_code=' + this.metaObj;
+            refreshTableDataUrl() {
+                this.tableMeta['data_url']= this.tableUrl + '&object_code=' + this.metaObj;
             },
             formSubmit(formModel) {
                 let _this = this;
                 this.$axios.post(_this.formMeta.action, formModel).then(resp => {
                     _this.$message({type: 'success', message: resp.msg || '操作成功'});
-                    _this.tableMeta['data_url'] = _this.tableUrl + '&object_code=' + formModel['objectCode'];
-                    _this.visible = false;
                     _this.metaObj = formModel['objectCode'];
+                    _this.refreshTableDataUrl();
+                    _this.visible = false;
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp.msg})
                 })
             },
             saveMeta () {
                 // TODO save meta data
-            },
-            metaObjChange() {
-                this.refreshTableData();
             }
         },
         components: {
@@ -117,12 +102,9 @@
             this.getTableMeta();
         },
         beforeMount() {
-
         },
         mounted() {
-
         }
-
     }
 </script>
 

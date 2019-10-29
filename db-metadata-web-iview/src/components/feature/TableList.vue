@@ -1,5 +1,5 @@
 <!--
-# meta
+# meta required
 eg:
 {
     name: "",
@@ -87,11 +87,23 @@ eg:
 
     export default {
         name: "TableList",
+        data() {
+            return {
+                innerMeta: {},
+                innerData: [],
+                sortModel: {}, // {prop: , order}
+                paginationModel: {
+                    pageSize: 10,
+                    currentPage: 1,
+                    total: null
+                },
+            }
+        },
         props: {
             meta: {
                 type: Object,
                 default: function () {
-                    return {}
+                    return {};
                 }
             },
             data: {
@@ -99,26 +111,9 @@ eg:
                 type: Array
             },
             // 选中的行： 用于批量操作，表现为勾选
-            choseData: {
-                type: Array
-            },
+            choseData: Array,
             // 激活的一行： 用于对单行操作
-            activeData: {
-                type: Object
-            },
-        },
-        data() {
-            return {
-                innerMeta: {},
-                innerData: [],
-                multipleSelection: [],
-                sortModel: {},
-                paginationModel: {
-                    pageSize: 10,
-                    currentPage: 1,
-                    total: null
-                },
-            }
+            activeData: Object,
         },
         methods: {
             handleSelectionChange(val) {
@@ -184,21 +179,15 @@ eg:
             initMeta() {
                 // merge options
                 let _this = this;
-                let defaultMeta = this.getDefaultMeta();
-                _this.$merge(_this.innerMeta, defaultMeta);
+                _this.$merge(_this.innerMeta, DEFAULT.TableList);
                 _this.$merge(_this.innerMeta, _this.meta);
 
                 // showColumns init
                 _this.innerMeta.columns.forEach(item => {
-                    if (!item.conf.hasOwnProperty('showable')) { // default: showable: true
-                        _this.$set(item.conf, 'showable', true)
+                    if (!item['conf'].hasOwnProperty('showable')) { // default: showable: true
+                        _this.$set(item['conf'], 'showable', true)
                     }
                 });
-            },
-            assemblyModel() {
-            },
-            getDefaultMeta() {
-                return DEFAULT.TableList
             },
             getData() {
                 let _this = this;
@@ -206,7 +195,7 @@ eg:
                     console.error('lack data_url attribute');
                     return;
                 }
-                let columnNames = _this.innerMeta.columns.filter(column => column.conf.showable).map(column => column.name);
+                let columnNames = _this.innerMeta.columns.filter(column => column.conf['showable']).map(column => column.name);
                 let url = utils.URLKit.splice(_this.innerMeta['data_url'], {
                     'fs': columnNames.join(','),
                     'p': _this.paginationModel.currentPage,
@@ -230,6 +219,12 @@ eg:
                 }
             },
         },
+        created() {
+            this.initMeta();
+        },
+        mounted() {
+            this.initData();
+        },
         watch: {
             paginationModel: {
                 handler: function () {
@@ -245,13 +240,6 @@ eg:
                 },
                 deep: true
             }
-        },
-        created() {
-            this.initMeta();
-            this.assemblyModel();
-        },
-        mounted() {
-            this.initData();
         }
     }
 </script>
