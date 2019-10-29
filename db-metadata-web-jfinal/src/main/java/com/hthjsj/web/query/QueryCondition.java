@@ -11,10 +11,7 @@ import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p> Class title: 查询条件 构造器</p>
@@ -72,12 +69,35 @@ public class QueryCondition {
      */
     public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
         Map<String, Object> params = toObjectFlat(httpParams);
-        Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
         Okv conds = Okv.create();
-        Iterator<IMetaField> mfiter = metaFields.iterator();
 
+        buildSelect(sqlParaExt, fields, efields, metaObject.fields());
+
+        for (IMetaField field : metaObject.fields()) {
+
+            for (Class<? extends MetaSQLBuilder> mClass : QueryParses.me().parseter) {
+                try {
+                    MetaSQLBuilder metaSQLBuilder = mClass.newInstance();
+                    metaSQLBuilder.init(field, params);
+                    conds.putAll(metaSQLBuilder.result());
+                } catch (InstantiationException e) {
+                    log.error(e.getMessage(), e);
+                } catch (IllegalAccessException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+
+        log.info("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
+        return buildExceptSelect(conds, sqlParaExt, metaObject);
+    }
+
+    public void buildSelect(SqlParaExt sqlParaExt, String[] fields, String[] efields, Collection<IMetaField> metaFields) {
+        Collection<IMetaField> iMetaFields = new ArrayList<>(metaFields);
+        Iterator<IMetaField> mfiter = iMetaFields.iterator();
+        Okv kv = Okv.create();
         //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
         Arrays.sort(fields);
         Arrays.sort(efields);
@@ -85,6 +105,8 @@ public class QueryCondition {
         if (StrKit.notBlank(fields) && StrKit.notBlank(efields) && Arrays.equals(fields, efields)) {
             throw new WebException("显示列数组与排除列数组相同,fields:[%s];efields[%s]", Arrays.toString(fields), Arrays.toString(efields));
         }
+
+        StringBuilder sqlSelect = new StringBuilder("select *");
         //过滤字段
         while (mfiter.hasNext()) {
             IMetaField metaField = mfiter.next();
@@ -102,39 +124,18 @@ public class QueryCondition {
                     continue;
                 }
             }
+            sqlSelect.append(",").append(metaField.en()).append(" ");
         }
 
-        for (IMetaField field : metaFields) {
-            String fieldCode = field.en();
-            conds.set(PREFIX_COL(fieldCode), fieldCode);
-
-            for (Class<? extends MetaSQLBuilder> mClass : QueryParses.me().parseter) {
-                try {
-                    MetaSQLBuilder metaSQLBuilder = mClass.newInstance();
-                    metaSQLBuilder.init(field, params);
-                    conds.putAll(metaSQLBuilder.result());
-                } catch (InstantiationException e) {
-                    log.error(e.getMessage(), e);
-                } catch (IllegalAccessException e) {
-                    log.error(e.getMessage(), e);
-                }
-            }
-        }
-        log.info("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
-        return buildExceptSelect(conds, sqlParaExt, metaObject);
+        sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
+        log.info("select sql:{}", sqlParaExt.getSelect());
     }
 
     private SqlParaExt buildExceptSelect(Okv kv, SqlParaExt sqlParaExt, IMetaObject metaObject) {
         StringBuilder sqlExceptSelect = new StringBuilder();
-        StringBuilder sqlSelect = new StringBuilder("select *");
         Iterator iter = kv.keySet().iterator();
         while (iter.hasNext()) {
             String key = (String) iter.next();
-            // 构建selector
-            if (key.startsWith(PREFIX_COL)) {
-                sqlSelect.append(",").append(kv.get(key)).append(" ");
-                continue;
-            }
 
             //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
             if (key.indexOf("in(") >= 0) {
@@ -158,15 +159,10 @@ public class QueryCondition {
                 sqlParaExt.addPara(kv.get(key));
             }
         }
-        sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         sqlParaExt.setFrom(" from " + metaObject.tableName());
         sqlParaExt.setWhereExcept(" where 1=1 " + sqlExceptSelect.toString());
         sqlParaExt.verify();
-        log.info(sqlParaExt.toString());
+        log.info("from sql:{}", sqlParaExt.getFromWhere());
         return sqlParaExt;
-    }
-
-    private String PREFIX_COL(String key) {
-        return PREFIX_COL + key;
     }
 }

@@ -27,7 +27,13 @@ public class ComponentTest {
         analysisConfig.start();
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
         TableView tableView = ComponentFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+
+        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create(), false);
         //        init(metaObject);
+        //        loadFieldsConfigMap(tableView);
+    }
+
+    public static void loadFieldsConfigMap(TableView tableView) {
         ComponentService componentService = Aop.get(ComponentService.class);
         Kv kv = componentService.loadFieldsConfigMap(tableView.type(), "object_code_admin111");
         System.out.println(kv.toJson());
@@ -45,10 +51,11 @@ public class ComponentTest {
             Db.save("meta_component", "id", record);
         }
         ComponentService componentService = Aop.get(ComponentService.class);
-        componentService.newObjectConfig(tableView, "object_code_admin111", Kv.create());
-        componentService.newFieldConfig(tableView, "object_code_admin111", "one1");
-        componentService.newFieldConfig(tableView, "object_code_admin111", "one2");
-        componentService.newFieldConfig(tableView, "object_code_admin111", "one3");
-        componentService.newFieldConfig(tableView, "object_code_admin111", "one4");
+        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create(), false);
+        //        componentService.newObjectConfig(tableView, "object_code_admin111", Kv.create());
+        //        componentService.newFieldConfig(tableView, "object_code_admin111", "one1", Kv.create());
+        //        componentService.newFieldConfig(tableView, "object_code_admin111", "one2", Kv.create());
+        //        componentService.newFieldConfig(tableView, "object_code_admin111", "one3", Kv.create());
+        //        componentService.newFieldConfig(tableView, "object_code_admin111", "one4", Kv.create());
     }
 }
