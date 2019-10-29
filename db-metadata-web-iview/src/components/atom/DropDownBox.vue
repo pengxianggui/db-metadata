@@ -32,9 +32,8 @@ eg:
      }]
     }, {...}]
 
-# custom event
-## format
-type: Function,
+# custom behavior
+## format: Function,
 description: format option data, and return formatted data, like: [{key: "xxx", value: "yyy"}, ...]
 
  -->
@@ -90,12 +89,8 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             },
         },
         methods: {
-            getDefaultMeta: function () {
-                return DEFAULT.DropDownBox
-            },
             initMeta: function () {
-                let defaultMeta = this.getDefaultMeta();
-                this.$merge(this.innerMeta, defaultMeta);
+                this.$merge(this.innerMeta, DEFAULT.DropDownBox);
                 this.$merge(this.innerMeta, this.meta);
             },
             getOptions: function () {
@@ -110,7 +105,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                             _this.innerOptions = resp.data;
                         }
                     }).catch(resp => {
-                        _this.$message.error(resp.toString())
+                        _this.$message({type: 'error', message: resp})
                     })
                 }
             },
