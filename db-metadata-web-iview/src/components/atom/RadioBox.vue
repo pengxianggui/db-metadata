@@ -2,7 +2,8 @@
     <el-radio-group v-model="currValue">
         <el-radio v-for="item in options"
                   :key="item[conf.value]"
-                  :label="item[conf.value]">
+                  :label="item[conf.value]"
+                  v-bind="innerMeta.conf">
             {{item[conf.key]}}
         </el-radio>
     </el-radio-group>
@@ -14,7 +15,8 @@
         name: "radio-box",
         data () {
             return {
-                conf: {}
+                conf: {},
+                innerMeta: {},
             }
         },
         props: {
@@ -31,20 +33,14 @@
             meta: {
                 type: Object,
                 default: function () {
-                    return {
-                        ui_config: {}
-                    }
+                    return {}
                 }
             }
         },
         methods: {
-            getDefaultConf: function() {
-                return DEFAULT.RadioBox
-            },
-            initConf: function () {
-                this.conf = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.conf, defaultConf)
+            initMeta: function () {
+                this.$merge(this.innerMeta, DEFAULT.RadioBox);
+                this.$merge(this.innerMeta, this.meta);
             },
             getOptions: function () {
                 this.$axios({
@@ -66,8 +62,8 @@
             }
         },
         created() {
-            this.initConf()
-            this.initOptions()
+            this.initMeta();
+            this.initOptions();
         },
         computed: {
             currValue: {

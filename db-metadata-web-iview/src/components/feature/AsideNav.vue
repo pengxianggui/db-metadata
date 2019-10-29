@@ -4,7 +4,7 @@
         <!--            <el-radio-button :label="false">展开</el-radio-button>-->
         <!--            <el-radio-button :label="true">收起</el-radio-button>-->
         <!--        </el-radio-group>-->
-        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" router
+        <el-menu default-active="meta-data" class="el-menu-vertical-demo" :router="true" active-text-color
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
             <el-menu-item index="meta-data">
                 <i class="el-icon-menu"></i>

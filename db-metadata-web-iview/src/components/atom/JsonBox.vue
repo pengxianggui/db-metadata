@@ -34,7 +34,7 @@
             initConf: function () {
                 this.meta.conf = this.meta.conf || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.conf, defaultConf)
+                this.$merge(this.meta, defaultConf)
             }
         },
         created() {

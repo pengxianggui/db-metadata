@@ -1,11 +1,11 @@
 <template>
-    <el-container>
+    <el-container style="display: flex; flex-direction: column; height: 100%;">
         <el-header>Header 占坑</el-header>
-        <el-container>
+        <el-container style="flex: 1; overflow: auto;">
             <el-aside width="200px">
                 <aside-nav></aside-nav>
             </el-aside>
-            <el-main>
+            <el-main style="height: auto; overflow: auto;">
                 <router-view></router-view>
             </el-main>
         </el-container>

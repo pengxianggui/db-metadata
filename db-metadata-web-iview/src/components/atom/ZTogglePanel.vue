@@ -1,7 +1,7 @@
 <template>
     <div class="toggle-panel">
         <div class="toggle-button" @click="toggle">
-            {{open ? meta.ui_config.olabel: meta.ui_config.clabel}}
+            {{open ? meta.conf.olabel: meta.conf.clabel}}
         </div>
         <slot v-if="open"></slot>
     </div>
@@ -20,10 +20,7 @@
             meta: {
                 type: Object,
                 default: function () {
-                    return {
-                        ui_config: {
-                        }
-                    }
+                    return DEFAULT.ZTogglePanel;
                 }
             },
         },
@@ -35,10 +32,10 @@
                 return DEFAULT.ZTogglePanel
             },
             initConf() {
-                this.meta.ui_config = this.meta.ui_config || {}
+                this.meta.conf = this.meta.conf || {}
                 let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
-                this.open = this.meta.ui_config['default-open']
+                this.$merge(this.meta.conf, defaultConf)
+                this.open = this.meta.conf['default_open']
             }
         },
         created() {

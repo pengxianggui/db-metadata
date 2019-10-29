@@ -61,6 +61,7 @@ const DEFAULT = {
     DropDownBox: {
         name: "",
         label: "",
+        group: false,
         conf: {
             "clearable": true
         }
