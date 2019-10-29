@@ -69,56 +69,9 @@ eg:
         data() {
             return {
                 model: {},
-                // handlers: ['aaa', { action: '' }]
             }
         },
         props: {
-            /*
-             * meta component.
-             * eg:
-             * {
-             *  form_name: "formName",
-             *  action: '', // form action (url)
-             *  methods: 'POST',
-             *  conf: {
-             *      "label-width": '80px',
-             *      size: 'medium', // medium|small|mini
-             *      model: {
-             *          username: '',
-             *          // ...
-             *      },
-             *      rules: {
-             *          username: [{required: true, message: '用户名必填', trigger: 'blur'}, ...],
-             *          // ...
-             *      },
-             *      // ...
-             *  },
-             *  columns: [{
-             *      component_name: 'TextBox',
-             *      name: 'username',
-             *      label: '用户名',
-             *      conf: {
-             *          clearable: "true",
-             *          placeholder: "请输入姓名..",
-             *          // ...
-             *      }
-             *  }, ...],
-             *  btns: {
-             *      'submit': {
-             *          label: '提交',
-             *          conf: {
-             *              // ... support conf of el-button
-             *          }
-             *      },
-             *      'cancel': {
-             *          label: '取消',
-             *          conf: {
-             *              // ... support conf of el-button
-             *          }
-             *      }
-             *  }
-             * }
-             */
             meta: {
                 type: Object,
                 default: function () {
@@ -128,14 +81,10 @@ eg:
         },
         methods: {
             assemblyModel () {
-                // this.model = this.meta.conf.model
                 let _this = this;
                 _this.meta.columns.forEach(item => {
                     Vue.set(_this.model, item.name, item.value || null) // 这种赋值方法, 双向绑定才生效
                 })
-            },
-            assemblyMethods () {
-                // TODO
             },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
@@ -157,7 +106,7 @@ eg:
                         if (resp['state'] === 'ok') {
                             _this.options = resp.data
                         } else {
-                            _this.$message.error(resp['msg'])
+                            _this.$message({type: 'error', message: resp.msg})
                         }
                     })
                 }
@@ -175,8 +124,6 @@ eg:
             onCancel: function (event) {
                 if (this.$listeners.cancel) {
                     this.$emit('cancel', event)
-                } else {
-                    // TODO
                 }
             }
         },
@@ -184,9 +131,6 @@ eg:
             this.initMeta();
             this.assemblyModel();
             this.assemblyMethods()
-        },
-        mounted() {
-            // request business data
         }
     }
 </script>
