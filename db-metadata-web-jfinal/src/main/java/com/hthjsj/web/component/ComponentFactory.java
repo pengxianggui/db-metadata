@@ -6,7 +6,7 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.Button;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.ui.AccessBehavior;
+import com.hthjsj.web.component.form.InputField;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +29,10 @@ public class ComponentFactory {
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
-        tableView.setInject(new ViewDataInject() {
+        tableView.setInject(new ViewDataInject<TableView>() {
 
             @Override
-            public void inject(Kv meta, Kv conf) {
+            public void inject(TableView component, Kv meta, Kv conf) {
                 if (metaObject != null) {
                     meta.set("conf", tableViewConfig);
                     List<Kv> fs = new ArrayList<>();
@@ -53,17 +53,7 @@ public class ComponentFactory {
                         kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
                         return kv;
                     }
-
-                    @Override
-                    public AccessBehavior getBehavior() {
-                        return null;
-                    }
                 };
-            }
-
-            @Override
-            public AccessBehavior getBehavior() {
-                return null;
             }
         });
         return tableView;
@@ -75,17 +65,19 @@ public class ComponentFactory {
         log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(formView.type(), formView.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
-
-        formView.setInject(new ViewDataInject() {
+        formView.setInject(new ViewDataInject<FormView>() {
 
             @Override
-            public void inject(Kv meta, Kv conf) {
+            public void inject(FormView component, Kv meta, Kv conf) {
                 if (metaObject != null) {
+
                     meta.setIfNotNull("conf", formViewConfig);
 
-                    metaObject.fields().forEach(f -> {
+                    if (component.getFields().isEmpty()) {
+                        metaObject.fields().forEach(f -> {
 
-                    });
+                        });
+                    }
                 }
             }
 
@@ -93,16 +85,7 @@ public class ComponentFactory {
             public FieldDataInject itemInject() {
                 return null;
             }
-
-            @Override
-            public AccessBehavior getBehavior() {
-                return null;
-            }
         });
-
-
-
-
         return null;
     }
 
@@ -123,6 +106,8 @@ public class ComponentFactory {
             component = new TableView();
             break;
         case INPUTFIELD:
+            component = new InputField();
+            break;
         default:
             break;
         }
