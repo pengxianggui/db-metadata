@@ -56,6 +56,7 @@ public class MetaFormView extends FormView {
         meta.setIfNotBlank("methods", methods);
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("action", action);
+        meta.setIfNotBlank("component_name", type());
         meta.setIfNotNull("columns", fields.stream().map(f -> f.toKv()).collect(Collectors.toList()));
         getInject().inject(this, meta, conf, getFieldInject());
         return meta;
