@@ -96,7 +96,7 @@ public class ComponentService {
     public Record loadFieldConfig(String componentCode, String destCode, String fieldCode) {
         List<Record> records = loadFieldsConfig(componentCode, destCode);
         for (Record record : records) {
-            if (fieldCode.endsWith(record.getStr("dest_object"))) {
+            if (record.getStr("dest_object").endsWith(fieldCode)) {
                 return record;
             }
         }
