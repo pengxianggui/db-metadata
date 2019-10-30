@@ -26,6 +26,10 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">Demo</span>
             </el-menu-item>
+            <el-menu-item index="meta-form">
+                <i class="el-icon-menu"></i>
+                <span slot="title">form</span>
+            </el-menu-item>
             <!--            <el-submenu index="1">-->
             <!--                <template slot="title">-->
             <!--                    <i class="el-icon-location"></i>-->

@@ -3,8 +3,6 @@ package com.hthjsj.web.component.form;
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.component.FieldDataInject;
-import com.hthjsj.web.component.ViewDataInject;
 import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 
@@ -35,29 +33,21 @@ public class MetaFormView extends FormView {
         name = metaObject.name();
         action = "/form/doAdd";
 
+        meta.setIfNotBlank("conf", objectConfig.getStr("config"));
         //2. foreach init fields
 
         Kv config = null;
         for (IMetaField metaField : metaObject.fields()) {
             config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
             FormField formField = FormFieldFactory.createDropDown(metaField, config);
-            AccessBehavior accessBehavior = formField.getAccessBehavior();
-            if (accessBehavior.isAdd()) {
-                fields.add(formField);
-            }
+            //            AccessBehavior accessBehavior = formField.getAccessBehavior();
+            //            if (accessBehavior.isAdd()) {
+            //                fields.add(formField);
+            //            }
+
+            fields.add(formField);
         }
-        setInject(new ViewDataInject<MetaFormView>() {
 
-            @Override
-            public void inject(MetaFormView component, Kv meta, Kv conf) {
-
-            }
-
-            @Override
-            public FieldDataInject itemInject() {
-                return null;
-            }
-        });
     }
 
     @Override
@@ -65,7 +55,7 @@ public class MetaFormView extends FormView {
         meta.setIfNotBlank("methods", methods);
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("action", action);
-
+        meta.setIfNotNull("columns", fields.)
         getInject().inject(this, meta, conf);
         return meta;
     }

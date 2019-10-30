@@ -57,9 +57,9 @@ public class ComponentFactory {
     }
 
     public static FormView createFormView(MetaObject metaObject) {
-        Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.code, ComponentType.FORMVIEW.code).getColumns());
+        Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.code, metaObject.code()).getColumns());
         log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
-        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(ComponentType.FORMVIEW.code, ComponentType.FORMVIEW.code);
+        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(ComponentType.FORMVIEW.code, metaObject.code());
         MetaFormView formView = new MetaFormView(metaObject, formViewConfig, fieldsConfig);
         return formView;
     }

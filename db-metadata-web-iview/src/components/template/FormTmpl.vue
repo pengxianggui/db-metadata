@@ -130,7 +130,6 @@ eg:
         created() {
             this.initMeta();
             this.assemblyModel();
-            this.assemblyMethods()
         }
     }
 </script>

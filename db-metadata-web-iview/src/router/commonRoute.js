@@ -30,6 +30,10 @@ const commonRoute = [
                 path: 'demo',
                 name: 'Demo',
                 component: () => import('@/components/demo/DemoMain')
+            }, {
+                path: 'meta-form',
+                name: 'MetaForm',
+                component: () => import('@/components/meta/MetaForm')
             }
         ]
     },
