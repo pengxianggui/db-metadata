@@ -78,11 +78,6 @@ eg:
         name: "meta-import",
         data() {
             return {
-                innerMeta: {},
-                schemaMeta: {},
-                tableMeta: {},
-                objectMeta: {},
-                codeMeta: {},
                 model: {},
                 tableOptions: [],
                 schemaOptions: []
@@ -105,15 +100,6 @@ eg:
             },
             getDefaultMeta() {
                 return DEFAULT.FormTmpl
-            },
-            initMeta() {
-                let defaultMeta = this.getDefaultMeta();
-                this.$merge(this.innerMeta, defaultMeta);
-                this.$merge(this.innerMeta, this.meta);
-                this.schemaMeta = this.innerMeta.columns[0];
-                this.tableMeta = this.innerMeta.columns[1];
-                this.objectMeta = this.innerMeta.columns[2];
-                this.codeMeta = this.innerMeta.columns[3];
             },
             refreshTables() {
                 let _this = this;
@@ -146,16 +132,37 @@ eg:
                 if (this.$listeners.cancel) {
                     this.$emit('cancel', event)
                 } else {
-                    // TODO default cancel behavior
+                    //default cancel behavior
                 }
             }
         },
         created() {
-            this.initMeta();
             this.assemblyModel();
         },
         mounted() {
             // request business data
+        },
+        computed: {
+            innerMeta: {
+                get: function () {
+                    return this.$merge(this.meta, DEFAULT.FormTmpl);
+                },
+                set: function (n) {
+                    return this.$emit("update:meta", n)
+                }
+            },
+            schemaMeta: function() {
+                return this.innerMeta.columns[0]
+            },
+            tableMeta: function() {
+                return this.innerMeta.columns[1]
+            },
+            objectMeta: function() {
+                return this.innerMeta.columns[2]
+            },
+            codeMeta: function() {
+                return this.innerMeta.columns[3]
+            },
         }
     }
 </script>
