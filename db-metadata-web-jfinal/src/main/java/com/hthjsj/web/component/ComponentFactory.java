@@ -3,10 +3,7 @@ package com.hthjsj.web.component;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.form.Button;
-import com.hthjsj.web.component.form.DropDown;
-import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.component.form.InputField;
+import com.hthjsj.web.component.form.*;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -60,33 +57,11 @@ public class ComponentFactory {
     }
 
     public static FormView createFormView(MetaObject metaObject) {
-        FormView formView = new FormView();
-        Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(formView.type(), formView.code()).getColumns());
+        Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.code, ComponentType.FORMVIEW.code).getColumns());
         log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
-        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(formView.type(), formView.code());
-        log.info("fieldsConfig:{}", fieldsConfig.toJson());
-        formView.setInject(new ViewDataInject<FormView>() {
-
-            @Override
-            public void inject(FormView component, Kv meta, Kv conf) {
-                if (metaObject != null) {
-
-                    meta.setIfNotNull("conf", formViewConfig);
-
-                    if (component.getFields().isEmpty()) {
-                        metaObject.fields().forEach(f -> {
-
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public FieldDataInject itemInject() {
-                return null;
-            }
-        });
-        return null;
+        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(ComponentType.FORMVIEW.code, ComponentType.FORMVIEW.code);
+        MetaFormView formView = new MetaFormView(metaObject, formViewConfig, fieldsConfig);
+        return formView;
     }
 
     public static ViewComponent createViewComponent(String typeString) {

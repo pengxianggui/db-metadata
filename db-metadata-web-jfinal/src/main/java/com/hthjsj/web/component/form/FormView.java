@@ -22,15 +22,15 @@ public class FormView extends ViewComponent {
     @Getter
     List<FormField> fields = new ArrayList<>();
 
-    private String name;
+    protected String name;
 
-    private String action;
+    protected String action;
 
-    private String methods;
+    protected String methods;
 
-    private Kv meta = Kv.create();
+    protected Kv meta = Kv.create();
 
-    private Kv conf = Kv.create();
+    protected Kv conf = Kv.create();
 
     public static FormView POST(String action, String name) {
         FormView formView = new FormView();
