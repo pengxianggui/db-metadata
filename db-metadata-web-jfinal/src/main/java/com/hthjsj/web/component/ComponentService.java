@@ -79,6 +79,15 @@ public class ComponentService {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
     }
 
+    public Kv loadFieldsConfigMap(String componentCode, String destCode) {
+        Kv kv = Kv.create();
+        List<Record> fields = loadFieldsConfig(componentCode, destCode);
+        for (Record record : fields) {
+            String s = record.getStr("dest_object").split("\\.")[1];
+            kv.set(s, record.getStr("config"));
+        }
+        return kv;
+    }
     public List<Record> loadFieldsConfig(String componentCode, String destCode) {
         return Db.find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
                        componentCode,
@@ -91,15 +100,6 @@ public class ComponentService {
         return records.stream().filter(r -> fieldCode.endsWith(r.getStr("dest_object"))).findAny().get();
     }
 
-    public Kv loadFieldsConfigMap(String componentCode, String destCode) {
-        Kv kv = Kv.create();
-        List<Record> fields = loadFieldsConfig(componentCode, destCode);
-        for (Record record : fields) {
-            String s = record.getStr("dest_object").split("\\.")[1];
-            kv.set(s, record.getStr("config"));
-        }
-        return kv;
-    }
 
     private Record loadConfig(String componentCode, String destCode, String type) {
         Record record = Db.findFirst("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
