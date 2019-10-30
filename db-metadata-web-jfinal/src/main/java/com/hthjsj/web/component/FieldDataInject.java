@@ -1,5 +1,6 @@
 package com.hthjsj.web.component;
 
+import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 
 /**
@@ -11,4 +12,6 @@ import com.jfinal.kit.Kv;
 public interface FieldDataInject<F> {
 
     Kv inject(Kv meta, Kv conf, F field);
+
+    AccessBehavior getBehavior();
 }

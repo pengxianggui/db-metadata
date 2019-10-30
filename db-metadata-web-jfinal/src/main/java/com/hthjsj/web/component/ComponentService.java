@@ -1,9 +1,7 @@
 package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Lists;
 import com.hthjsj.analysis.db.SnowFlake;
-import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
@@ -14,7 +12,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -118,15 +115,16 @@ public class ComponentService {
          */
         boolean oc = newObjectConfig(component, object.code(), config);
 
-        Collection<IMetaField> fields = object.fields();
-
-        List<Record> fieldRecords = Lists.newArrayList();
-        fields.forEach(f -> {
-            Kv fkv = JSON.parseObject(config.getStr(f.fieldCode()), Kv.class);
-            fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
-        });
-
-        Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
+        //FIXME revert
+        //        Collection<IMetaField> fields = object.fields();
+        //
+        //        List<Record> fieldRecords = Lists.newArrayList();
+        //        fields.forEach(f -> {
+        //            Kv fkv = JSON.parseObject(config.getStr(f.fieldCode()), Kv.class);
+        //            fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
+        //        });
+        //
+        //        Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
     }
