@@ -53,9 +53,9 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         </template>
         <template v-else>
             <el-option-group
-                    v-for="group in innerOptions"
-                    :key="group.label"
-                    :label="group.label">
+                v-for="group in innerOptions"
+                :key="group.label"
+                :label="group.label">
                 <el-option v-for="item in group.options" :key="item.value" :label="item.key"
                            :value="item.value ? item.value : item">
                     {{item.key}}
@@ -72,7 +72,6 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         name: "drop-down-box",
         data() {
             return {
-                innerMeta: {},
                 innerOptions: []
             }
         },
@@ -89,37 +88,37 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             },
         },
         methods: {
-            initMeta: function () {
-                this.$merge(this.innerMeta, DEFAULT.DropDownBox);
-                this.$merge(this.innerMeta, this.meta);
-            },
             getOptions: function () {
                 // http request options data by meta.data_url
-                let _this = this;
-                if (_this.innerMeta['data_url']) {
-                    _this.$axios.get(_this.innerMeta['data_url']).then(resp => {
+                let _this = this, url = _this.innerMeta['data_url'];
+                if (url) {
+                    _this.$axios.get(url).then(resp => {
                         // if provide format callback fn, execute callback fn
+                        let options;
                         if (_this.innerMeta.behavior && _this.innerMeta.behavior['format']) {
-                            _this.innerOptions = _this.executeBehavior('format', resp.data);
+                            options = _this.executeBehavior('format', resp.data);
                         } else { // default [{key: key1, value: value1}, ..]
-                            _this.innerOptions = resp.data;
+                            options = resp.data;
                         }
+                        _this.innerOptions = options;
+                        _this.$emit('update:options', options);
                     }).catch(resp => {
                         _this.$message({type: 'error', message: resp})
                     })
                 }
             },
             initOptions: function () {
-                // deep copy to innerOptions
-                this.innerOptions = this.options;
-                if (this.innerOptions) return;
+                if (this.options !== undefined) { // 父组件定义了options
+                    this.innerOptions = this.options;
+                    return;
+                }
                 if (this.innerMeta.hasOwnProperty('data_url')) {
                     this.getOptions();
                     return
                 }
                 console.error("options or data_url in meta provide one at least!")
             },
-            executeBehavior (name, params) {
+            executeBehavior(name, params) {
                 if (this.innerMeta.behavior && this.innerMeta.behavior[name]) {
                     return this.innerMeta.behavior[name](params)
                 } else {
@@ -128,15 +127,13 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             },
         },
         created() {
-            // init meta
-            this.initMeta();
         },
         mounted() {
             // init option data
             this.initOptions()
         },
         watch: {
-            'meta.data_url': {
+            'innerMeta.data_url': {
                 handler: function (n, o) {
                     if (n === o) return;
                     this.innerMeta['data_url'] = n;
@@ -148,10 +145,18 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         computed: {
             currValue: {
                 get: function () {
-                    return this.value
+                    return this.value;
                 },
-                set: function (newValue) {
-                    return this.$emit("input", newValue); // 通过 input 事件更新 model
+                set: function (n) {
+                    return this.$emit("input", n); // 通过 input 事件更新 model
+                }
+            },
+            innerMeta: {
+                get: function () {
+                    return this.$merge(this.meta, DEFAULT.DropDownBox);
+                },
+                set: function (n) {
+                    return this.$emit("update:meta", n)
                 }
             }
         }

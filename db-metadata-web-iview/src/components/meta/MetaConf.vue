@@ -59,7 +59,6 @@
                 group: false,
                 conf: {
                     "filterable": true,
-                    "clearable": true
                 }
             };
             let objectMeta = {

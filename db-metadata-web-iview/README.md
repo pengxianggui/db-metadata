@@ -1,6 +1,6 @@
 # db-metadata-web-iview
 
-## Project setup
+### Project setup
 ```
 yarn install
 ```
@@ -60,13 +60,46 @@ yarn run lint
 - [ ] 异步加载数据的组件,指定默认值
 - [ ] 表格中的批量编辑
 
-##### 其他资料
+### 概念
+- 元组件： 支持传入组件元数据, 构建组件内部业务逻辑, 传入不同组件元数据, 组件表现不同；
+    
+    ```
+    核心概念： 组件元数据(meta), 该属性从父组件单向流入, 用于初始化组件。若未传入, 
+    内部会采用该组件默认的全局元数据。如果元组件是肉体, meta就是灵魂, 只有给元组件
+    注入特定的meta,才会产生有实际含义的组件。
+    
+    一个meta一般是这样的(以TableList的为例):
+    {
+        name: "book",
+        label: "书籍",
+        data_url: "/book/list",
+        component_name: "TableList",
+        conf: {
+            // 一般是UI配置, 支持element ELTable的所有配置
+            "default-sort": {prop: "id", order: "descending"},
+            "max-height": 500,
+        },
+        columns: [
+            {
+                name: "id",
+                label: "ID",
+                component_name: "TextBox",
+                conf: {
+                    // 支持element ELInput的UI配置
+                }
+            },
+            ...
+        ],
+        behavior: { // 行为配置因具体元组件支持不同而不同
+            xxx: function(data) {
+            }
+        }
+    }
+    ```
+    
+- 业务组件: 特定功能下的业务组件；
 
-- vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js
-
-
-
-##### TODO
+### TODO
  -[x] meta-Manager 默认不加载
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[ ] 组件中的变量初始值统一(null, {}等)
@@ -75,3 +108,9 @@ yarn run lint
  -[ ] const、let 分时适用
  -[ ] 对象属性调用方式, 应当形成规约: obj.a OR obj['a']
  -[ ] this泛用
+ 
+ 
+ 
+### 其他资料
+
+- vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js
