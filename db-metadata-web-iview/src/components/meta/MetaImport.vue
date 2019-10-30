@@ -72,7 +72,6 @@ eg:
 
 <script>
     import {DEFAULT} from '@/constant'
-    import Vue from 'vue'
 
     export default {
         name: "meta-import",
@@ -95,7 +94,7 @@ eg:
             assemblyModel() {
                 let _this = this;
                 _this.innerMeta.columns.forEach(item => {
-                    Vue.set(_this.model, item.name, item.value || null)
+                    _this.$set(_this.model, item.name, item.value || null)
                 })
             },
             getDefaultMeta() {

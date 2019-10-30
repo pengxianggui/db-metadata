@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import Vue from 'vue'
     export default {
         name: "search-bar",
         data() {
@@ -36,26 +35,15 @@
                 this.$merge(this.innerMeta, this.meta);
             },
             initData () {
-                let _this = this
-                _this.searchForm = {}
+                let _this = this;
+                _this.searchForm = {};
                 _this.innerMeta.conf.forEach(item => {
-                    Vue.set(_this.searchModel, item.en, null); // 这种赋值方法, 双向绑定才生效
+                    _this.$set(_this.searchModel, item.en, null); // 这种赋值方法, 双向绑定才生效
                     if (item.rules){
-                        Vue.set(_this.rules, item.en, item.rules)
+                        _this.$set(_this.rules, item.en, item.rules)
                     }
-                })
-                // _this.emit()
+                });
             },
-            // emit () {
-            //     let params= {}
-            //     if (typeof this.searchForm === 'object') {
-            //         let keys = Object.keys(this.searchForm)
-            //         keys.forEach(key => {
-            //             params[key] = this.searchForm[key]
-            //         })
-            //     }
-            //     this.$emit('update:search-model', params)
-            // },
             search (form) {
                 this.$refs[form].validate((valid) => {
                     if (valid) {

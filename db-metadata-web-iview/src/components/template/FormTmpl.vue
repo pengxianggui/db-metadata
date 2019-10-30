@@ -46,29 +46,27 @@ eg:
     }
 -->
 <template>
-    <el-form :ref="meta['name']" v-bind="meta.conf" :model="model">
-        <el-form-item v-for="(item, index) in meta.columns" :key="item.name + index"
+    <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
+        <el-form-item v-for="(item, index) in innerMeta.columns" :key="item.name + index"
                       :label="item.label" :prop="item.name">
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
         </el-form-item>
         <el-form-item>
-            <el-button :id="meta.name + 'submit'" v-bind="meta.btns.submit.conf" @click="onSubmit"
-                       v-text="meta.btns.submit.label"></el-button>
-            <el-button :id="meta.name + 'cancel'" v-bind="meta.btns.cancel.conf" @click="onCancel"
-                       v-text="meta.btns.cancel.label"></el-button>
+            <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns.submit.conf" @click="onSubmit"
+                       v-text="innerMeta.btns.submit.label"></el-button>
+            <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns.cancel.conf" @click="onCancel"
+                       v-text="innerMeta.btns.cancel.label"></el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant'
-    import Vue from 'vue'
 
     export default {
-        name: "form-tmpl",
+        name: "FormTmpl",
         data() {
             return {
-                model: {},
             }
         },
         props: {
@@ -77,32 +75,27 @@ eg:
                 default: function () {
                     return {}
                 }
-            }
+            },
+            value: {
+                type: Object,
+                default: function () {
+                    return {}
+                }
+            },
         },
         methods: {
             assemblyModel () {
                 let _this = this;
-                _this.meta.columns.forEach(item => {
-                    Vue.set(_this.model, item.name, item.value || null) // 这种赋值方法, 双向绑定才生效
+                _this.innerMeta.columns.forEach(item => {
+                    _this.$set(_this.model, item.name, item.value || null);
                 })
-            },
-            getDefaultMeta() {
-                return DEFAULT.FormTmpl
-            },
-            initMeta() {
-                let defaultMeta = this.getDefaultMeta();
-                this.$merge(this.meta, defaultMeta)
             },
             doSubmit() {
                 let _this = this;
                 if (_this.$listeners.submit) {
                     _this.$emit('submit', _this.model)
                 } else {
-                    this.$axios({
-                        methods: _this.meta.methods,
-                        url: _this.meta.action,
-                        data: _this.model
-                    }).then(resp => {
+                    this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
                         if (resp['state'] === 'ok') {
                             _this.options = resp.data
                         } else {
@@ -113,7 +106,7 @@ eg:
             },
             onSubmit(event) {
                 let _this = this;
-                _this.$refs[_this.meta['name']].validate((valid) => {
+                _this.$refs[_this.innerMeta['name']].validate((valid) => {
                     if (valid) {
                         _this.doSubmit(event) // submit
                     } else {
@@ -128,8 +121,25 @@ eg:
             }
         },
         created() {
-            this.initMeta();
             this.assemblyModel();
+        },
+        computed: {
+            innerMeta: {
+                get: function () {
+                    return this.$merge(this.meta, DEFAULT.FormTmpl);
+                },
+                set: function (n) {
+                    return this.$emit("update:meta", n)
+                }
+            },
+            model: {
+                get: function () {
+                    return this.value;
+                },
+                set: function (n) {
+                    return this.$emit('input', n)
+                }
+            }
         }
     }
 </script>

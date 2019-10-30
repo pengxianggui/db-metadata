@@ -9,81 +9,81 @@
 </style>
 <template>
     <div>
-        <el-row>
-            <el-col :span="24">
-                <text-box-demo></text-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <pass-box-demo></pass-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <text-area-box-demo></text-area-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <bool-box-demo></bool-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <num-box-demo></num-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <radio-box-demo></radio-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <check-box-demo></check-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <drop-down-box-demo></drop-down-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <time-box-demo></time-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <date-box-demo></date-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <date-time-box-demo></date-time-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <json-box-demo></json-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <img-box-demo></img-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <file-box-demo></file-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <search-bar-demo></search-bar-demo>
-            </el-col>
-        </el-row>
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <text-box-demo></text-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <pass-box-demo></pass-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <text-area-box-demo></text-area-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <bool-box-demo></bool-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <num-box-demo></num-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <radio-box-demo></radio-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <check-box-demo></check-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <drop-down-box-demo></drop-down-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <time-box-demo></time-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <date-box-demo></date-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <date-time-box-demo></date-time-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <json-box-demo></json-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <img-box-demo></img-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <file-box-demo></file-box-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--            <el-col :span="24">-->
+<!--                <search-bar-demo></search-bar-demo>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
         <el-row>
             <el-col :span="24">
                 <form-tmpl-demo></form-tmpl-demo>

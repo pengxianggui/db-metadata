@@ -17,13 +17,35 @@
                 model: {
                     meta: {
                         component_name: 'form-tmpl',
-                        form_name: 'demoForm'
+                        name: 'demoForm',
+                        label: '测试表单',
+                        action: '/demo/save',
+                        conf: {},
+                        columns: [
+                            {
+                                name: 'username',
+                                label: '姓名',
+                                component_name: 'TextBox',
+                                conf: {}
+                            }
+                        ]
                     }
                 }
             }
         },
+        methods: {
+            getFormMeta () {
+                this.$axios.get("/form/toAdd/test_table").then(resp => {
+                    this.model.meta = resp.data;
+                }).catch(err => {
+                })
+            }
+        },
+        created() {
+            this.getFormMeta();
+        },
         components: {
-            "form-tmpl": FormTmpl
+            FormTmpl
         }
     }
 </script>
