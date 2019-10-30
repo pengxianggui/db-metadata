@@ -35,7 +35,7 @@ public class MetaFormView extends FormView {
         name = metaObject.name();
         action = "/form/doAdd";
 
-        meta.setIfNotBlank("conf", objectConfig.getStr("config"));
+        meta.set("conf", JSON.parseObject(objectConfig.getStr("config")));
         //2. foreach init fields
 
         Kv config = null;
