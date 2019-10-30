@@ -1,9 +1,6 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.web.component.ViewComponent;
-import com.hthjsj.web.ui.AccessBehavior;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <p> Class title: </p>
@@ -14,10 +11,6 @@ import lombok.Setter;
  * <p> @author konbluesky </p>
  */
 public abstract class FormField extends ViewComponent {
-
-    @Getter
-    @Setter
-    AccessBehavior accessBehavior;
 
     @Override
     public String config() {

@@ -3,7 +3,6 @@ package com.hthjsj.web.controller;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.ComponentFactory;
-import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
@@ -27,7 +26,6 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         DbMetaService dbMetaService = Aop.get(DbMetaService.class);
-        ComponentService componentService = Aop.get(ComponentService.class);
 
         MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
 

@@ -30,7 +30,7 @@ public enum ComponentType {
         this.code = code;
     }
 
-    static ComponentType V(String s) {
+    public static ComponentType V(String s) {
         for (ComponentType t : ComponentType.values()) {
             if (s.equalsIgnoreCase(t.code.toLowerCase()) || s.equalsIgnoreCase(t.name.toLowerCase()) || s.equalsIgnoreCase(t.cn.toLowerCase())) {
                 return t;
