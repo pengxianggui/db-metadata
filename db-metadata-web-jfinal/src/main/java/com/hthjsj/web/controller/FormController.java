@@ -2,7 +2,7 @@ package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.component.ComponentFactory;
+import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
@@ -29,7 +29,7 @@ public class FormController extends FrontRestController {
 
         MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
 
-        FormView formView = ComponentFactory.createFormView(metaObject);
+        FormView formView = ViewFactory.createFormView(metaObject);
 
         renderJson(Ret.ok("data", formView.toKv()));
     }

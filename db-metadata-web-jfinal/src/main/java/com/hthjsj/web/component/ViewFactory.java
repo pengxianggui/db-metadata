@@ -18,15 +18,18 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class ComponentFactory {
+public class ViewFactory {
 
     public static TableView createTableView(String name, String label, MetaObject metaObject) {
         TableView tableView = new TableView(name, label);
+
         Kv tableViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
+
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
-        tableView.setInject(new ViewInject<TableView>() {
+
+        tableView.setViewInject(new ViewInject<TableView>() {
 
             @Override
             public void inject(TableView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
@@ -40,6 +43,7 @@ public class ComponentFactory {
                 }
             }
         });
+
         tableView.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override

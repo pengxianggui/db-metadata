@@ -47,7 +47,7 @@ public class DropDown extends FormField {
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
-        getInject().inject(this, meta, conf, getFieldInject());
+        getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 

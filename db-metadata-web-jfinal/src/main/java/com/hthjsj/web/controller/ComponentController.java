@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewComponent;
+import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -83,7 +83,7 @@ public class ComponentController extends FrontRestController {
 
         Kv config = JSON.parseObject(configString, Kv.class);
 
-        ViewComponent component = ComponentFactory.createViewComponent(compCode);
+        ViewComponent component = ViewFactory.createViewComponent(compCode);
         if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
             ServiceManager.componentService().newFieldConfig(component, objectCode, fieldCode, config);
             renderJson(Ret.ok());

@@ -42,10 +42,10 @@ public class MetaFormView extends FormView {
         for (IMetaField metaField : metaObject.fields()) {
             config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
             FormField formField = FormFieldFactory.createFormField(metaField, config);
-            //            AccessBehavior accessBehavior = formField.getAccessBehavior();
-            //            if (accessBehavior.isAdd()) {
-            //                fields.add(formField);
-            //            }
+            AccessBehavior accessBehavior = formField.getAccessBehavior();
+            if (accessBehavior.isAdd()) {
+                fields.add(formField);
+            }
 
             fields.add(formField);
         }
@@ -58,7 +58,7 @@ public class MetaFormView extends FormView {
         meta.setIfNotBlank("action", action);
         meta.setIfNotBlank("component_name", type());
         meta.setIfNotNull("columns", fields.stream().map(f -> f.toKv()).collect(Collectors.toList()));
-        getInject().inject(this, meta, conf, getFieldInject());
+        getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 }

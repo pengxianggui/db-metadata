@@ -5,8 +5,8 @@ import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.TableView;
+import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.InputField;
@@ -57,7 +57,7 @@ public class MetaController extends FrontRestController {
 
     public void objs() {
         MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode("meta_object");
-        TableView tableView = ComponentFactory.createTableView("meta_object_table", "元对象", metaObject);
+        TableView tableView = ViewFactory.createTableView("meta_object_table", "元对象", metaObject);
         tableView.dataUrl("/table/list/meta_object");
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -68,7 +68,7 @@ public class MetaController extends FrontRestController {
      */
     public void fields() {
         MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode("meta_field");
-        TableView tableView = ComponentFactory.createTableView("meta_fields_table", "元字段", metaObject);
+        TableView tableView = ViewFactory.createTableView("meta_fields_table", "元字段", metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 

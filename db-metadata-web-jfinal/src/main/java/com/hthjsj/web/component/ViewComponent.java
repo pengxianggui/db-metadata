@@ -13,7 +13,7 @@ public abstract class ViewComponent implements Component, ComponentRender {
 
     @Getter
     @Setter
-    ViewInject inject = new ViewInject.DefaultViewInject();
+    ViewInject viewInject = new ViewInject.DefaultViewInject();
 
     @Getter
     @Setter
