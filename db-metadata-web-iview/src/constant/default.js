@@ -14,17 +14,7 @@ const DEFAULT = {
             "size": "medium", // medium, small, mini
             // "max-height": 500,
         },
-        columns: [
-            // {
-            //     component_name: "TextBox",
-            //     name: 'id',
-            //     label: 'ID',
-            //     conf: {
-            //         "sortable": true,
-            //         // ...
-            //     }
-            // }
-        ],
+        columns: [],
         pagination: {
             "page-size": DICT.PAGE_NUM_AREA[0],
             "page-sizes": DICT.PAGE_NUM_AREA,

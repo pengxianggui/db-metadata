@@ -107,7 +107,8 @@ yarn run lint
  -[ ] 不同组件中相同功能的属性命名尽量统一
  -[ ] const、let 分时适用
  -[ ] 对象属性调用方式, 应当形成规约: obj.a OR obj['a']
- -[ ] this泛用
+ -[ ] this泛用优化
+ -[ ] MetaConf界面优化-每个field单独一个JsonBox编辑框, 可单独编辑, 也可整体上传
  
  
  

@@ -165,15 +165,23 @@
                     _this.$message({type: 'error', message: '必须选定一个组件'});
                     return;
                 }
+                let params = {
+                    componentCode: _this.confModel.componentCode,
+                    objectCode: _this.confModel.objectCode,
+                    fieldCode: _this.confModel.fieldCode,
+                    conf: JSON.stringify(_this.confModel.conf)
+                };
+
+                let fieldCode = _this.confModel.fieldCode;
+                if (fieldCode) {
+                    let conf = {};
+                    conf[fieldCode] = _this.confModel.conf;
+                    params.conf = JSON.stringify(conf);
+                }
                 this.$axios({
                     method: 'POST',
                     url: 'component/doAdd',
-                    data: {
-                        componentCode: _this.confModel.componentCode,
-                        objectCode: _this.confModel.objectCode,
-                        fieldCode: _this.confModel.fieldCode,
-                        conf: JSON.stringify(_this.confModel.conf)
-                    }
+                    data: params
                 })
             },
             onCancel: function () {

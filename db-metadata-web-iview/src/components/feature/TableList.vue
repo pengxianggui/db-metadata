@@ -67,13 +67,13 @@ eg:
                 </el-table>
             </el-col>
         </el-row>
-        <el-row v-if="paginationModel">
+        <el-row v-if="pageModel">
             <el-col>
                 <!-- pagination bar -->
                 <el-pagination background
-                               :page-size.sync="paginationModel.pageSize"
-                               :current-page.sync="paginationModel.currentPage"
-                               :total="paginationModel.total"
+                               :page-size.sync="pageModel.size"
+                               :current-page.sync="pageModel.index"
+                               :total="pageModel.total"
                                v-bind="innerMeta.pagination"
                 ></el-pagination>
             </el-col>
@@ -89,12 +89,12 @@ eg:
         name: "TableList",
         data() {
             return {
-                innerMeta: {},
+                // innerMeta: {},
                 innerData: [],
                 sortModel: {}, // {prop: , order}
-                paginationModel: {
-                    pageSize: 10,
-                    currentPage: 1,
+                pageModel: {
+                    size: 10,
+                    index: 1,
                     total: null
                 },
             }
@@ -110,6 +110,17 @@ eg:
                 required: false,
                 type: Array
             },
+            page: {
+                type: Object,
+                validate: function (val) {
+                    if (!val.hasOwnProperty('total')
+                        || !val.hasOwnProperty('size')
+                        || !val.hasOwnProperty('index')) {
+                        return false;
+                    }
+                    return true;
+                }
+            },
             // 选中的行： 用于批量操作，表现为勾选
             choseData: Array,
             // 激活的一行： 用于对单行操作
@@ -120,10 +131,10 @@ eg:
                 this.$emit('update:chose-data', val)
             },
             handleEdit(index, row) {
-                // TODO
+                // pxg_todo
             },
             handleDelete(index, row) {
-                // TODO
+                // pxg_todo
             },
             renderHeader(h) {
                 let _this = this;
@@ -176,18 +187,10 @@ eg:
                 this.sortModel.prop = param.prop;
                 this.sortModel.order = param.order
             },
-            initMeta() {
-                // merge options
-                let _this = this;
-                _this.$merge(_this.innerMeta, DEFAULT.TableList);
-                _this.$merge(_this.innerMeta, _this.meta);
-
-                // showColumns init
-                _this.innerMeta.columns.forEach(item => {
-                    if (!item['conf'].hasOwnProperty('showable')) { // default: showable: true
-                        _this.$set(item['conf'], 'showable', true)
-                    }
-                });
+            setPage(total, index, size) {
+                this.pageModel.total = total;
+                this.pageModel.index = index;
+                this.pageModel.size = size;
             },
             getData() {
                 let _this = this;
@@ -198,47 +201,65 @@ eg:
                 let columnNames = _this.innerMeta.columns.filter(column => column.conf['showable']).map(column => column.name);
                 let url = utils.splice(_this.innerMeta['data_url'], {
                     'fs': columnNames.join(','),
-                    'p': _this.paginationModel.currentPage,
-                    's': _this.paginationModel.pageSize
+                    'p': _this.pageModel.index,
+                    's': _this.pageModel.size
                 });
 
                 this.$axios.get(url).then(resp => {
                     _this.innerData = resp.data;
-                    _this.paginationModel.total = resp['page'].total - 0;
-                    _this.paginationModel.pageSize = resp['page'].size - 0;
-                    _this.paginationModel.currentPage = resp['page'].index - 0;
+                    _this.$emit("update:data", resp.data);
+                    _this.setPage(resp['page']['total'] - 0, resp['page']['index'] - 0, resp['page']['size'] - 0);
                 }).catch(resp => {
                     _this.$message({type: 'error', message: resp})
                 })
             },
             initData() { // init business data
                 if (this.data) {
-                    // this.paginationModel.total = this.data.length; // TODO 改成业务数据中附带的total
+                    this.innerData = this.data;
+                    let page = this.page;
+                    if (page) {
+                        this.setPage(page['total'],page['index'],page['size'])
+                    }
                 } else {
                     this.getData()
                 }
             },
         },
         created() {
-            this.initMeta();
         },
         mounted() {
             this.initData();
         },
         watch: {
-            paginationModel: {
+            pageModel: {
                 handler: function () {
                     this.getData()
                 },
                 deep: true
             },
-            'meta.data_url': { // watch meta.data_url, if changed, refresh business data
+            'innerMeta.data_url': { // watch innerMeta.data_url, if changed, refresh business data
                 handler: function (n, o) {
                     if (n === o) return;
-                    this.innerMeta['data_url'] = n;
                     this.getData()
                 },
                 deep: true
+            }
+        },
+        computed: {
+            innerMeta: {
+                get: function () {
+                    if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
+                        this.meta.columns.forEach(item => {
+                            if (!item['conf'].hasOwnProperty('showable')) { // default true
+                                item['conf'].showable = true;
+                            }
+                        });
+                    }
+                    return this.$merge(this.meta, DEFAULT.TableList);
+                },
+                set: function (n) {
+                    return this.$emit("update:meta", n)
+                }
             }
         }
     }
