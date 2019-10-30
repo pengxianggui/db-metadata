@@ -86,6 +86,11 @@ public class ComponentService {
                        INSTANCE.META_FIELD.toString());
     }
 
+    public Record loadFieldConfig(String componentCode, String destCode, String fieldCode) {
+        List<Record> records = loadFieldsConfig(componentCode, destCode);
+        return records.stream().filter(r -> fieldCode.endsWith(r.getStr("dest_object"))).findAny().get();
+    }
+
     public Kv loadFieldsConfigMap(String componentCode, String destCode) {
         Kv kv = Kv.create();
         List<Record> fields = loadFieldsConfig(componentCode, destCode);
@@ -124,6 +129,12 @@ public class ComponentService {
         Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
+    }
+
+    public boolean newFieldConfig(ViewComponent component, String objectCode, String fieldCode, Kv config) {
+        Kv fkv = JSON.parseObject(config.getStr(fieldCode), Kv.class);
+        Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
+        return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
 
     private Record getFieldConfigRecord(ViewComponent component, String objectCode, String fieldCode, Kv config) {

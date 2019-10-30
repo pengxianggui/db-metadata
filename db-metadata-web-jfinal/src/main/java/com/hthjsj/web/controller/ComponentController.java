@@ -2,6 +2,7 @@ package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentFactory;
 import com.hthjsj.web.component.Components;
@@ -46,7 +47,7 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-
+        String fieldCode = getPara("fieldCode", "");
         /**
          * return
          * {
@@ -54,7 +55,9 @@ public class ComponentController extends FrontRestController {
          *  }
          * }
          */
-        if (StrKit.notBlank(objectCode, compCode)) {
+        if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
+            renderJson(Ret.ok("data", ServiceManager.componentService().loadFieldConfig(compCode, objectCode, fieldCode).getStr("config")));
+        } else if (StrKit.notBlank(objectCode, compCode)) {
             renderJson(Ret.ok("data", ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config")));
         } else {
             renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode).getStr("config")));
@@ -78,17 +81,19 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
         String configString = getPara("conf", "{}");
 
+
+        //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
+        String fieldCode = getPara("fieldCode", "");
+
+
         Kv config = JSON.parseObject(configString, Kv.class);
 
-        /**
-         * return
-         * {
-         *  config:{}
-         * }
-         */
-        if (StrKit.notBlank(objectCode, compCode)) {
-            ViewComponent component = ComponentFactory.createViewComponent(compCode);
-            ServiceManager.componentService().newObjectConfig(component, objectCode, config);
+        ViewComponent component = ComponentFactory.createViewComponent(compCode);
+        if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
+            ServiceManager.componentService().newFieldConfig(component, objectCode, fieldCode, config);
+        } else if (StrKit.notBlank(objectCode, compCode)) {
+            MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+            ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
             renderJson(Ret.ok());
         } else {
             ServiceManager.componentService().newDefault(compCode, config);

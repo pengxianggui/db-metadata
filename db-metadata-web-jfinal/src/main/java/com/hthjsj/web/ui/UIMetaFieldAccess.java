@@ -27,6 +27,11 @@ interface UIMetaFieldAccess {
 
     void isDisable(boolean value);
 
+    /**
+     * isAdd/isUpdate 控制sql生成逻辑
+     *
+     * @return
+     */
     @JSONField(name = "isAdd")
     boolean isAdd();
 
@@ -37,20 +42,21 @@ interface UIMetaFieldAccess {
 
     void isUpdate(boolean value);
 
-    @JSONField(name = "isEdit")
-    boolean isEdit();
-
-    void isEdit(boolean value);
-
+    /**
+     * addStatus/updateStatus 控制展示行为
+     * 正常/隐藏/只读/禁用
+     * 100/50/30/10
+     * @return
+     */
     @JSONField(name = "addStatus")
-    String addStatus();
+    int addStatus();
 
-    void addStatus(String value);
+    void addStatus(int value);
 
     @JSONField(name = "updateStatus")
-    String updateStatus();
+    int updateStatus();
 
-    void updateStatus(String value);
+    void updateStatus(int value);
 
     @JSONField(name = "isRequired")
     boolean isRequired();

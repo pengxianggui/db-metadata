@@ -57,14 +57,31 @@ public class ComponentFactory {
         return tableView;
     }
 
-    public static FormView createFormView() {
+    public static FormView createFormView(MetaObject metaObject) {
         FormView formView = new FormView();
         Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(formView.type(), formView.code()).getColumns());
         log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(formView.type(), formView.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
 
+        formView.setInject(new ViewDataInject() {
 
+            @Override
+            public void inject(Kv meta, Kv conf) {
+                if (metaObject != null) {
+                    meta.setIfNotNull("conf", formViewConfig);
+
+                    metaObject.fields().forEach(f -> {
+
+                    });
+                }
+            }
+
+            @Override
+            public FieldDataInject itemInject() {
+                return null;
+            }
+        });
 
 
 

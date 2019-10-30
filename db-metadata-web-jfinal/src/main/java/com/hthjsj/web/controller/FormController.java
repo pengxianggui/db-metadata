@@ -1,9 +1,13 @@
 package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.DbMetaService;
-import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.component.ComponentFactory;
+import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
+import com.jfinal.kit.Ret;
 
 /**
  * <p> @Date : 2019/10/16 </p>
@@ -22,6 +26,13 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        IMetaObject metaObject = Aop.get(DbMetaService.class).findByCode(objectCode);
+        DbMetaService dbMetaService = Aop.get(DbMetaService.class);
+        ComponentService componentService = Aop.get(ComponentService.class);
+
+        MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
+
+        FormView formView = ComponentFactory.createFormView(metaObject);
+
+        renderJson(Ret.ok("data", formView.toKv()));
     }
 }

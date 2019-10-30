@@ -137,9 +137,4 @@ public class MetaField implements IMetaField {
         record.set("config", config);
     }
 
-    @Override
-    public void config(IMetaConfig config) {
-        metaFieldConfig = config;
-        record.set("config", config.getConfig());
-    }
 }
