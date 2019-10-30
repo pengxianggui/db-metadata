@@ -1,6 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.web.component.ViewComponent;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
@@ -11,6 +12,10 @@ import com.hthjsj.web.component.ViewComponent;
  * <p> @author konbluesky </p>
  */
 public abstract class FormField extends ViewComponent {
+
+    protected Kv meta = Kv.create();
+
+    protected Kv conf = Kv.create();
 
     @Override
     public String config() {

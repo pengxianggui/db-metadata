@@ -26,31 +26,27 @@ public class ComponentFactory {
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
         Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
         log.info("fieldsConfig:{}", fieldsConfig.toJson());
-        tableView.setInject(new ViewDataInject<TableView>() {
+        tableView.setInject(new ViewInject<TableView>() {
 
             @Override
-            public void inject(TableView component, Kv meta, Kv conf) {
+            public void inject(TableView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
                 if (metaObject != null) {
                     meta.set("conf", tableViewConfig);
                     List<Kv> fs = new ArrayList<>();
                     for (IMetaField field : metaObject.fields()) {
-                        fs.add(itemInject().inject(meta, conf, field));
+                        fs.add(fieldInject.inject(meta, conf, field));
                     }
                     meta.set("columns", fs);
                 }
             }
+        });
+        tableView.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public FieldDataInject itemInject() {
-                return new FieldDataInject<IMetaField>() {
-
-                    @Override
-                    public Kv inject(Kv meta, Kv conf, IMetaField field) {
-                        Kv kv = Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn());
-                        kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
-                        return kv;
-                    }
-                };
+            public Kv inject(Kv meta, Kv conf, IMetaField field) {
+                Kv kv = Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn());
+                kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
+                return kv;
             }
         });
         return tableView;

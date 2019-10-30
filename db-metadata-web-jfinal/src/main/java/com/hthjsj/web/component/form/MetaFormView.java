@@ -6,6 +6,8 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 
+import java.util.stream.Collectors;
+
 /**
  * <p> @Date : 2019/10/30 </p>
  * <p> @Project : db-meta-serve</p>
@@ -39,7 +41,7 @@ public class MetaFormView extends FormView {
         Kv config = null;
         for (IMetaField metaField : metaObject.fields()) {
             config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
-            FormField formField = FormFieldFactory.createDropDown(metaField, config);
+            FormField formField = FormFieldFactory.createFormField(metaField, config);
             //            AccessBehavior accessBehavior = formField.getAccessBehavior();
             //            if (accessBehavior.isAdd()) {
             //                fields.add(formField);
@@ -47,7 +49,6 @@ public class MetaFormView extends FormView {
 
             fields.add(formField);
         }
-
     }
 
     @Override
@@ -55,8 +56,8 @@ public class MetaFormView extends FormView {
         meta.setIfNotBlank("methods", methods);
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("action", action);
-        meta.setIfNotNull("columns", fields.)
-        getInject().inject(this, meta, conf);
+        meta.setIfNotNull("columns", fields.stream().map(f -> f.toKv()).collect(Collectors.toList()));
+        getInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 }

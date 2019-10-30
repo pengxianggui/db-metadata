@@ -19,9 +19,6 @@ import java.util.stream.Collectors;
  */
 public class FormView extends ViewComponent {
 
-    @Getter
-    List<FormField> fields = new ArrayList<>();
-
     protected String name;
 
     protected String action;
@@ -31,6 +28,9 @@ public class FormView extends ViewComponent {
     protected Kv meta = Kv.create();
 
     protected Kv conf = Kv.create();
+
+    @Getter
+    List<FormField> fields = new ArrayList<>();
 
     public static FormView POST(String action, String name) {
         FormView formView = new FormView();
@@ -56,7 +56,7 @@ public class FormView extends ViewComponent {
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("action", action);
         meta.set("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-        getInject().inject(this, meta, conf);
+        getInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 }

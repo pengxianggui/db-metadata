@@ -70,7 +70,7 @@ public class TableView extends ViewComponent {
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
         meta.setIfNotBlank("conf", "");
-        getInject().inject(this, meta, conf);
+        getInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 

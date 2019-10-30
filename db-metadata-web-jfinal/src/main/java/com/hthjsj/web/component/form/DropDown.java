@@ -17,8 +17,6 @@ public class DropDown extends FormField {
 
     private String label;
 
-    private Kv meta = Kv.create();
-
     public DropDown() {
     }
 
@@ -49,6 +47,7 @@ public class DropDown extends FormField {
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
+        getInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 
