@@ -17,7 +17,7 @@ public class DropDown extends FormField {
 
     private String label;
 
-    private Kv kv = Kv.create();
+    private Kv meta = Kv.create();
 
     public DropDown() {
     }
@@ -28,7 +28,7 @@ public class DropDown extends FormField {
     }
 
     public DropDown dataUrl(String url) {
-        kv.setIfNotBlank("data_url", url);
+        meta.setIfNotBlank("data_url", url);
         return this;
     }
 
@@ -40,16 +40,16 @@ public class DropDown extends FormField {
      * @return
      */
     public DropDown dependency(String dependency) {
-        kv.setIfNotBlank("dep", dependency);
+        meta.setIfNotBlank("dep", dependency);
         return this;
     }
 
     @Override
     public Kv toKv() {
-        kv.setIfNotBlank("name", name);
-        kv.setIfNotBlank("label", label);
-        kv.setIfNotBlank("component_name", type());
-        return kv;
+        meta.setIfNotBlank("name", name);
+        meta.setIfNotBlank("label", label);
+        meta.setIfNotBlank("component_name", type());
+        return meta;
     }
 
     @Override

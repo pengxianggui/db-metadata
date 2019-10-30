@@ -1,7 +1,7 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.component.ComponentType;
+import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 
 /**
@@ -18,23 +18,17 @@ public class InputField extends FormField {
 
     String label;
 
-    IMetaField metaField;
+    Kv meta = Kv.create();
 
-    Kv metaFieldConfig = Kv.create();
+    Kv conf = Kv.create();
 
     public InputField() {
-    }
-
-    public InputField(IMetaField metaField) {
-        this.metaField = metaField;
-        name = metaField.cn();
-        label = metaField.en();
-        metaFieldConfig = (Kv) metaField.config();
     }
 
     public InputField(String name, String label) {
         this.name = name;
         this.label = label;
+        setAccessBehavior(new AccessBehavior.DefaultAccessBehavior(conf));
     }
 
     @Override
@@ -44,9 +38,9 @@ public class InputField extends FormField {
 
     @Override
     public Kv toKv() {
-        metaFieldConfig.set("component_name", type());
-        metaFieldConfig.set("name", name);
-        metaFieldConfig.set("label", label);
-        return metaFieldConfig;
+        meta.set("component_name", type());
+        meta.set("name", name);
+        meta.set("label", label);
+        return meta;
     }
 }

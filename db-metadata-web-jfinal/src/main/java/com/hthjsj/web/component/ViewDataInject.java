@@ -1,5 +1,6 @@
 package com.hthjsj.web.component;
 
+import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 
 /**
@@ -14,6 +15,8 @@ public interface ViewDataInject {
 
     FieldDataInject itemInject();
 
+    AccessBehavior getBehavior();
+
     class DefaultViewDataInject implements ViewDataInject {
 
         @Override
@@ -23,6 +26,11 @@ public interface ViewDataInject {
 
         @Override
         public FieldDataInject itemInject() {
+            return null;
+        }
+
+        @Override
+        public AccessBehavior getBehavior() {
             return null;
         }
     }

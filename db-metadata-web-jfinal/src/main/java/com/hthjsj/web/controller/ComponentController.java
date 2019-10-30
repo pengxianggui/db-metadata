@@ -65,11 +65,6 @@ public class ComponentController extends FrontRestController {
     }
 
     @Override
-    public void toAdd() {
-
-    }
-
-    @Override
     public void doAdd() {
         /**
          * object Code
@@ -99,37 +94,5 @@ public class ComponentController extends FrontRestController {
             ServiceManager.componentService().newDefault(compCode, config);
             renderJson(Ret.ok());
         }
-    }
-
-    /**
-     * set Component config
-     */
-    public void config() {
-        /**
-         * object code
-         * component Type config string;
-         */
-    }
-
-    /**
-     * The component config default value;
-     */
-    public void tmpl() {
-        /**
-         * component Type
-         */
-        String component = new QueryHelper(this).getComponentType();
-        renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(component)));
-        /**
-         * return
-         * {
-         *    field 1:"",
-         *    field 2:"",
-         *    field 3:"",
-         *    field 4:"",
-         *    field 5:"",
-         *    base :""
-         * }
-         */
     }
 }

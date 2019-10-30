@@ -4,7 +4,9 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.Button;
+import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +53,17 @@ public class ComponentFactory {
                         kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
                         return kv;
                     }
+
+                    @Override
+                    public AccessBehavior getBehavior() {
+                        return null;
+                    }
                 };
+            }
+
+            @Override
+            public AccessBehavior getBehavior() {
+                return null;
             }
         });
         return tableView;
@@ -81,6 +93,11 @@ public class ComponentFactory {
             public FieldDataInject itemInject() {
                 return null;
             }
+
+            @Override
+            public AccessBehavior getBehavior() {
+                return null;
+            }
         });
 
 
@@ -97,6 +114,8 @@ public class ComponentFactory {
             component = new Button();
             break;
         case DROPDOWN:
+            component = new DropDown();
+            break;
         case FORMVIEW:
             component = new FormView();
             break;
