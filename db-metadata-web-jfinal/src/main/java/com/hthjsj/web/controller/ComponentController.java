@@ -86,6 +86,7 @@ public class ComponentController extends FrontRestController {
         ViewComponent component = ComponentFactory.createViewComponent(compCode);
         if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
             ServiceManager.componentService().newFieldConfig(component, objectCode, fieldCode, config);
+            renderJson(Ret.ok());
         } else if (StrKit.notBlank(objectCode, compCode)) {
             MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
             ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
