@@ -14,7 +14,7 @@ import com.jfinal.kit.Kv;
 public class FormFieldFactory {
 
     static DropDown createDropDown(IMetaField metaField, Kv instanceFieldConfig) {
-        DropDown dropDown = new DropDown(metaField.cn(), metaField.en());
+        DropDown dropDown = new DropDown(metaField.fieldCode(), metaField.cn());
 
         dropDown.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
@@ -29,7 +29,7 @@ public class FormFieldFactory {
     }
 
     static InputField createInputField(IMetaField metaField, Kv instanceFieldConfig) {
-        InputField inputField = new InputField(metaField.cn(), metaField.en());
+        InputField inputField = new InputField(metaField.fieldCode(), metaField.cn());
         inputField.setFieldInject(new FieldInject.DefaultFieldInject() {
 
             @Override
