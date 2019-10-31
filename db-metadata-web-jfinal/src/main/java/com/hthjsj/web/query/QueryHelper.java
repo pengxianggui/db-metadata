@@ -19,7 +19,11 @@ public class QueryHelper {
     }
 
     public String getObjectCode() {
-        return tp.getPara(0, tp.getPara("objectCode"));
+        return getObjectCode("");
+    }
+
+    public String getObjectCode(String defaultCode) {
+        return tp.getPara(0, tp.getPara("objectCode", defaultCode));
     }
 
     public String getFieldCode() {
