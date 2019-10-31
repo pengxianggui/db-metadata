@@ -56,6 +56,48 @@ public class FormFieldFactory {
         return radioBox;
     }
 
+    static NumberBox createNumberBox(IMetaField metaField, Kv instanceFieldConfig) {
+        NumberBox numberBox = new NumberBox(metaField.fieldCode(), metaField.cn());
+        numberBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
+                return kv;
+            }
+        });
+        return numberBox;
+    }
+
+    static BoolBox createBoolBox(IMetaField metaField, Kv instanceFieldConfig) {
+        BoolBox boolBox = new BoolBox(metaField.fieldCode(), metaField.cn());
+        boolBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
+                return kv;
+            }
+        });
+        return boolBox;
+    }
+
+    static TextAreaBox createTextAreaBox(IMetaField metaField, Kv instanceFieldConfig) {
+        TextAreaBox textAreaBox = new TextAreaBox(metaField.fieldCode(), metaField.cn());
+        textAreaBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
+                return kv;
+            }
+        });
+        return textAreaBox;
+    }
+
     static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
         switch (type) {
@@ -65,6 +107,12 @@ public class FormFieldFactory {
             return createDropDown(metaField, instanceFieldConfig);
         case RADIOBOX:
             return createRadioBox(metaField, instanceFieldConfig);
+        case NUMBERBOX:
+            return createNumberBox(metaField, instanceFieldConfig);
+        case BOOLBOX:
+            return createBoolBox(metaField, instanceFieldConfig);
+        case TEXTAREABOX:
+            return createTextAreaBox(metaField, instanceFieldConfig);
         default:
             break;
         }

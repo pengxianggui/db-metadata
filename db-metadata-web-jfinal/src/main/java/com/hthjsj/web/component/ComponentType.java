@@ -15,6 +15,9 @@ public enum ComponentType {
     DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
     TEXTBOX("textbox", "输入框组件", "TextBox"),
     RADIOBOX("radiobox", "单选框", "RadioBox"),
+    NUMBERBOX("numberbox", "数值框", "NumBox"),
+    BOOLBOX("boolbox", "布尔框", "BoolBox"),
+    TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter
