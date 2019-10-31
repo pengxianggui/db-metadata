@@ -98,6 +98,34 @@ public class FormFieldFactory {
         return textAreaBox;
     }
 
+    static DateBox createDateBox(IMetaField metaField, Kv instanceFieldConfig) {
+        DateBox dateBox = new DateBox(metaField.fieldCode(), metaField.cn());
+        dateBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
+                return kv;
+            }
+        });
+        return dateBox;
+    }
+
+    static TimeBox createTimeBox(IMetaField metaField, Kv instanceFieldConfig) {
+        TimeBox timeBox = new TimeBox(metaField.fieldCode(), metaField.cn());
+        timeBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
+                return kv;
+            }
+        });
+        return timeBox;
+    }
+
     static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
         switch (type) {
@@ -113,6 +141,10 @@ public class FormFieldFactory {
             return createBoolBox(metaField, instanceFieldConfig);
         case TEXTAREABOX:
             return createTextAreaBox(metaField, instanceFieldConfig);
+        case DATEBOX:
+            return createDateBox(metaField, instanceFieldConfig);
+        case TIMEBOX:
+            return createTimeBox(metaField, instanceFieldConfig);
         default:
             break;
         }

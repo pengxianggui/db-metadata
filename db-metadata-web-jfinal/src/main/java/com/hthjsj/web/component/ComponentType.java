@@ -18,6 +18,8 @@ public enum ComponentType {
     NUMBERBOX("numberbox", "数值框", "NumBox"),
     BOOLBOX("boolbox", "布尔框", "BoolBox"),
     TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
+    DATEBOX("datebox", "日期框", "DateBox"),
+    TIMEBOX("timebox", "时间框", "TimeBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter
