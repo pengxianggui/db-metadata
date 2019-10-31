@@ -29,7 +29,7 @@ public class TextBox extends FormField {
 
     @Override
     public Kv toKv() {
-
+        getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }
 }

@@ -37,8 +37,4 @@ public abstract class FormField extends ViewComponent {
         return null;
     }
 
-    @Override
-    public Kv toKv() {
-        return meta;
-    }
 }

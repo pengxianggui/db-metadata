@@ -20,8 +20,8 @@ public class FormFieldFactory {
 
             @Override
             public Kv inject(Kv meta, Kv conf) {
-                Kv kv = Kv.create();
-                kv.set("conf", instanceFieldConfig.getOrDefault(metaField.en(), new Object()));
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
                 return kv;
             }
         });
@@ -30,12 +30,12 @@ public class FormFieldFactory {
 
     static TextBox createInputField(IMetaField metaField, Kv instanceFieldConfig) {
         TextBox textBox = new TextBox(metaField.fieldCode(), metaField.cn());
-        textBox.setFieldInject(new FieldInject.DefaultFieldInject() {
+        textBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
             public Kv inject(Kv meta, Kv conf) {
-                Kv kv = Kv.create();
-                kv.set("conf", instanceFieldConfig.getOrDefault(metaField.en(), new Object()));
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
                 return kv;
             }
         });
@@ -44,12 +44,12 @@ public class FormFieldFactory {
 
     static RadioBox createRadioBox(IMetaField metaField, Kv instanceFieldConfig) {
         RadioBox radioBox = new RadioBox(metaField.fieldCode(), metaField.cn());
-        radioBox.setFieldInject(new FieldInject.DefaultFieldInject() {
+        radioBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
             public Kv inject(Kv meta, Kv conf) {
-                Kv kv = Kv.create();
-                kv.set("conf", instanceFieldConfig.getOrDefault(metaField.en(), new Object()));
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.putAll(meta);
                 return kv;
             }
         });
