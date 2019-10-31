@@ -13,8 +13,10 @@ public enum ComponentType {
     FORMVIEW("formview", "表单组件", "FormTmpl"),
     BUTTON("button", "按钮组件", "Button"),
     DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
-    INPUTFIELD("inputfield", "输入框组件", "TextBox"),
+    TEXTBOX("textbox", "输入框组件", "TextBox"),
+    RADIOBOX("radiobox", "单选框", "RadioBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
+
     @Getter
     String name;
 

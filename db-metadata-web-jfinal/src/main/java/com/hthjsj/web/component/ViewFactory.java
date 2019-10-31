@@ -72,7 +72,7 @@ public class ViewFactory {
             component = new Button();
             break;
         case DROPDOWN:
-            component = new DropDown();
+            component = new DropDownBox();
             break;
         case FORMVIEW:
             component = new FormView();
@@ -80,7 +80,7 @@ public class ViewFactory {
         case TABLEVIEW:
             component = new TableView();
             break;
-        case INPUTFIELD:
+        case TEXTBOX:
             component = new TextBox();
             break;
         default:

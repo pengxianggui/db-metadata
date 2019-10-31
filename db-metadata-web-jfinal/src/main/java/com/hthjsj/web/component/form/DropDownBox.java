@@ -11,16 +11,16 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public class DropDown extends FormField {
+public class DropDownBox extends FormField {
 
-    public DropDown() {
+    public DropDownBox() {
     }
 
-    public DropDown(String name, String label) {
+    public DropDownBox(String name, String label) {
         super(name, label);
     }
 
-    public DropDown dataUrl(String url) {
+    public DropDownBox dataUrl(String url) {
         meta.setIfNotBlank("data_url", url);
         return this;
     }
@@ -32,7 +32,7 @@ public class DropDown extends FormField {
      *
      * @return
      */
-    public DropDown dependency(String dependency) {
+    public DropDownBox dependency(String dependency) {
         meta.setIfNotBlank("dep", dependency);
         return this;
     }

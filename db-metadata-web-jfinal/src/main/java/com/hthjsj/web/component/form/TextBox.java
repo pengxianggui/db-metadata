@@ -24,7 +24,7 @@ public class TextBox extends FormField {
 
     @Override
     public ComponentType componentType() {
-        return ComponentType.INPUTFIELD;
+        return ComponentType.TEXTBOX;
     }
 
     @Override

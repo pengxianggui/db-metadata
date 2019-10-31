@@ -23,12 +23,9 @@ import java.util.Map;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class FormDataBuilder {
+public class DataBuilder {
 
-    /**
-     *
-     */
-    public static MetaData build(Map<String, String[]> httpParams, MetaObject metaObject) {
+    public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject) {
         Kv params = Kv.create().set(Utils.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
 
@@ -45,6 +42,7 @@ public class FormDataBuilder {
                     continue;
                 }
 
+                //转值
                 castedValue = MetaDataTypeConvert.cast(value, dbType);
                 if (StrKit.notBlank(value)) {
                     formData.set(metaField.fieldCode(), castedValue);

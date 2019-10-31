@@ -6,7 +6,7 @@ import com.hthjsj.web.component.ComponentType;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.form.Button;
-import com.hthjsj.web.component.form.DropDown;
+import com.hthjsj.web.component.form.DropDownBox;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.controller.*;
@@ -71,8 +71,8 @@ public class AppWebConfig extends JFinalConfig {
         //component register
         Components.me().add(ComponentType.TABLEVIEW, TableView.class);
         Components.me().add(ComponentType.FORMVIEW, FormView.class);
-        Components.me().add(ComponentType.INPUTFIELD, TextBox.class);
-        Components.me().add(ComponentType.DROPDOWN, DropDown.class);
+        Components.me().add(ComponentType.TEXTBOX, TextBox.class);
+        Components.me().add(ComponentType.DROPDOWN, DropDownBox.class);
         Components.me().add(ComponentType.BUTTON, Button.class);
         Components.me().init();
     }
