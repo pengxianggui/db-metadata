@@ -29,7 +29,7 @@ eg:
                 // ...
             }
         }],
-        btn: {
+        btns: {
             submit: {
                 label: '提交',
                 conf: {
@@ -67,6 +67,7 @@ eg:
         name: "FormTmpl",
         data() {
             return {
+                model: {}
             }
         },
         props: {
@@ -75,40 +76,29 @@ eg:
                 default: function () {
                     return {}
                 }
-            },
-            value: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            },
+            }
         },
         methods: {
-            assemblyModel () {
-                let _this = this;
-                _this.innerMeta.columns.forEach(item => {
-                    _this.$set(_this.model, item.name, item.value || null);
-                })
-            },
-            doSubmit() {
-                let _this = this;
-                if (_this.$listeners.submit) {
-                    _this.$emit('submit', _this.model)
+            doSubmit(ev) {
+                const fn = 'submit';
+                const params = this.model;
+                const action = this.innerMeta['action'];
+
+                if (this.$listeners.hasOwnProperty(fn)) {
+                    this.$emit(fn, params)
                 } else {
-                    this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
-                        if (resp['state'] === 'ok') {
-                            _this.options = resp.data
-                        } else {
-                            _this.$message({type: 'error', message: resp.msg})
-                        }
+                    this.$axios.post(action, params).then(resp => {
+                        // pxg_todo default callback
+                    }).catch(err => {
+                        this.$message({type: 'error', message: err})
                     })
                 }
             },
-            onSubmit(event) {
-                let _this = this;
-                _this.$refs[_this.innerMeta['name']].validate((valid) => {
+            onSubmit(ev) {
+                const refName = this.innerMeta['name'];
+                this.$refs[refName].validate((valid) => {
                     if (valid) {
-                        _this.doSubmit(event) // submit
+                        this.doSubmit(ev) // do submit
                     } else {
                         return false;
                     }
@@ -116,29 +106,31 @@ eg:
             },
             onCancel: function (event) {
                 if (this.$listeners.cancel) {
-                    this.$emit('cancel', event)
-                }
-            }
-        },
-        created() {
-            this.assemblyModel();
-        },
-        computed: {
-            innerMeta: {
-                get: function () {
-                    return this.$merge(this.meta, DEFAULT.FormTmpl);
-                },
-                set: function (n) {
-                    return this.$emit("update:meta", n)
+                    this.$emit('cancel', event);
+                    return;
                 }
             },
-            model: {
-                get: function () {
-                    return this.value;
-                },
-                set: function (n) {
-                    return this.$emit('input', n)
-                }
+            assemblyModel(columns) {
+                let keys = Object.keys(this.model);
+                let names = [];
+                columns.forEach(item => {
+                    names.push(item['name']);
+                    if (keys.indexOf(item['name']) === -1) {
+                        this.$set(this.model, item['name'], item['value'] || null);
+                    }
+                });
+                keys.forEach(key => {
+                    if (names.indexOf(key) === -1) {
+                        this.$delete(this.model, key);
+                    }
+                })
+            }
+        },
+        computed: {
+            innerMeta () {
+                let meta = this.$merge(this.meta, DEFAULT.FormTmpl);
+                this.assemblyModel(meta['columns']);
+                return meta;
             }
         }
     }

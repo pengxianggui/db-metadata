@@ -44,11 +44,11 @@
 <!--                <check-box-demo></check-box-demo>-->
 <!--            </el-col>-->
 <!--        </el-row>-->
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <drop-down-box-demo></drop-down-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+            <el-col :span="24">
+                <drop-down-box-demo></drop-down-box-demo>
+            </el-col>
+        </el-row>
 <!--        <el-row>-->
 <!--            <el-col :span="24">-->
 <!--                <time-box-demo></time-box-demo>-->

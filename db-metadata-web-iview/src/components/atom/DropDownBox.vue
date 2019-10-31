@@ -90,20 +90,23 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
         methods: {
             getOptions: function () {
                 // http request options data by meta.data_url
-                let _this = this, url = _this.innerMeta['data_url'];
+                let url = this.innerMeta['data_url'];
                 if (url) {
-                    _this.$axios.get(url).then(resp => {
+                    this.$axios.get(url).then(resp => {
                         // if provide format callback fn, execute callback fn
                         let options;
-                        if (_this.innerMeta.behavior && _this.innerMeta.behavior['format']) {
-                            options = _this.executeBehavior('format', resp.data);
+
+                        if (this.innerMeta.hasOwnProperty('behavior')
+                            && this.innerMeta['behavior'].hasOwnProperty('format')) {
+                            options = this.executeBehavior('format', resp.data);
                         } else { // default [{key: key1, value: value1}, ..]
                             options = resp.data;
                         }
-                        _this.innerOptions = options;
-                        _this.$emit('update:options', options);
+
+                        this.innerOptions = options;
+                        this.$emit('update:options', options);
                     }).catch(resp => {
-                        _this.$message({type: 'error', message: resp})
+                        this.$message({type: 'error', message: resp})
                     })
                 }
             },
@@ -138,8 +141,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     if (n === o) return;
                     this.innerMeta['data_url'] = n;
                     this.getOptions();
-                },
-                deep: true
+                }
             }
         },
         computed: {
@@ -151,13 +153,8 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     return this.$emit("input", n); // 通过 input 事件更新 model
                 }
             },
-            innerMeta: {
-                get: function () {
-                    return this.$merge(this.meta, DEFAULT.DropDownBox);
-                },
-                set: function (n) {
-                    return this.$emit("update:meta", n)
-                }
+            innerMeta() {
+                return this.$merge(this.meta, DEFAULT.DropDownBox);
             }
         }
     }

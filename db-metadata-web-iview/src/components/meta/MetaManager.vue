@@ -5,7 +5,7 @@
             <drop-down-box v-model="metaObj" :meta="objMeta"
                            @change="refreshTableDataUrl()"></drop-down-box>
         </el-button-group>
-        <table-list :meta="tableMeta" v-if="tableMeta"></table-list>
+        <table-list :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']"></table-list>
         <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
@@ -22,8 +22,8 @@
         data() {
             return {
                 visible: false,
-                tableMeta: null,
-                formMeta: null,
+                tableMeta: {},
+                formMeta: {},
                 tableUrl: '/table/list?objectCode=meta_field',
                 objMeta: { // 下拉选元对象
                     "name": "meta",

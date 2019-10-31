@@ -101,9 +101,8 @@ eg:
                 return DEFAULT.FormTmpl
             },
             refreshTables() {
-                let _this = this;
-                let url = _this.$complieString(_this['model'], _this.tableMeta['data_url']);
-                _this.tableMeta['data_url'] = url;
+                let url = this.$complieString(this.model, this.tableMeta['data_url']);
+                this.tableMeta['data_url'] = url;
             },
             doSubmit() {
                 let _this = this;
@@ -142,25 +141,20 @@ eg:
             // request business data
         },
         computed: {
-            innerMeta: {
-                get: function () {
-                    return this.$merge(this.meta, DEFAULT.FormTmpl);
-                },
-                set: function (n) {
-                    return this.$emit("update:meta", n)
-                }
+            innerMeta() {
+                return this.$merge(this.meta, DEFAULT.FormTmpl);
             },
             schemaMeta: function() {
-                return this.innerMeta.columns[0]
+                return this.meta.columns[0]
             },
             tableMeta: function() {
-                return this.innerMeta.columns[1]
+                return this.meta.columns[1]
             },
             objectMeta: function() {
-                return this.innerMeta.columns[2]
+                return this.meta.columns[2]
             },
             codeMeta: function() {
-                return this.innerMeta.columns[3]
+                return this.meta.columns[3]
             },
         }
     }

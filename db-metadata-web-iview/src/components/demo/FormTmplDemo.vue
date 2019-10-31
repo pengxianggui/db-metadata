@@ -3,7 +3,7 @@
         <h2>{{model.meta.component_name}}: </h2>
         <component :is="model.meta.component_name" :meta="model.meta"></component>
         <z-toggle-panel>
-            <json-box v-model="model"></json-box>
+            <json-box v-model="model.meta"></json-box>
         </z-toggle-panel>
     </div>
 </template>

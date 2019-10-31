@@ -75,6 +75,8 @@ eg:
                                :current-page.sync="pageModel.index"
                                :total="pageModel.total"
                                v-bind="innerMeta.pagination"
+                               @size-change="sizeChange"
+                               @current-change="indexChange"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -89,13 +91,12 @@ eg:
         name: "TableList",
         data() {
             return {
-                // innerMeta: {},
                 innerData: [],
-                sortModel: {}, // {prop: , order}
+                sortModel: {}, // {prop: , order: }
                 pageModel: {
                     size: 10,
                     index: 1,
-                    total: null
+                    total: 0
                 },
             }
         },
@@ -106,10 +107,7 @@ eg:
                     return {};
                 }
             },
-            data: {
-                required: false,
-                type: Array
-            },
+            data: Array,
             page: {
                 type: Object,
                 validate: function (val) {
@@ -174,7 +172,8 @@ eg:
                 let selected = true;
                 this.$emit('update:active-data', row);
                 let tableRefName = this.innerMeta.name;
-                for (let i = 0; i < this.$refs[tableRefName].selection.length; i++) {
+
+                for (let i = 0; i < this.$refs[tableRefName].selection.length; i++) { // cancel chose judge
                     let choseItem = this.$refs[tableRefName].selection[i];
                     if (row.id === choseItem.id) {
                         selected = false;
@@ -184,82 +183,79 @@ eg:
                 this.$refs[tableRefName].toggleRowSelection(row, selected)
             },
             sortChange(param) {
-                this.sortModel.prop = param.prop;
-                this.sortModel.order = param.order
+                this.sortModel['prop'] = param['prop'];
+                this.sortModel['order'] = param['order'];
+            },
+            sizeChange() {
+                this.pageModel['index'] = 1; // jump to page one
+                this.getData();
+            },
+            indexChange() {
+                this.getData();
             },
             setPage(total, index, size) {
-                this.pageModel.total = total;
-                this.pageModel.index = index;
-                this.pageModel.size = size;
+                this.pageModel['total'] = total;
+                this.pageModel['index'] = index;
+                this.pageModel['size'] = size;
             },
             getData() {
-                let _this = this;
-                if (!_this.innerMeta.hasOwnProperty('data_url')) {
+                if (!this.innerMeta.hasOwnProperty('data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
-                let columnNames = _this.innerMeta.columns.filter(column => column.conf['showable']).map(column => column.name);
-                let url = utils.splice(_this.innerMeta['data_url'], {
+
+                let columnNames = (this.innerMeta['columns'] || [])
+                    .filter(column => column['conf']['showable']).map(column => column['name']);
+
+                let url = utils.splice(this.innerMeta['data_url'], {
                     'fs': columnNames.join(','),
-                    'p': _this.pageModel.index,
-                    's': _this.pageModel.size
+                    'p': this.pageModel['index'],
+                    's': this.pageModel['size']
                 });
 
                 this.$axios.get(url).then(resp => {
-                    _this.innerData = resp.data;
-                    _this.$emit("update:data", resp.data);
-                    _this.setPage(resp['page']['total'] - 0, resp['page']['index'] - 0, resp['page']['size'] - 0);
+                    this.innerData = resp.data;
+                    this.$emit("update:data", resp.data);
+                    if (resp.hasOwnProperty('page')) {
+                        this.setPage(resp['page']['total'] - 0, resp['page']['index'] - 0, resp['page']['size'] - 0);
+                    }
                 }).catch(resp => {
-                    _this.$message({type: 'error', message: resp})
+                    this.$message({type: 'error', message: resp})
                 })
             },
             initData() { // init business data
-                if (this.data) {
+                let page = this.page;
+                if (typeof page !== 'undefined') {
+                    this.setPage(page['total'],page['index'],page['size'])
+                }
+                if (typeof this.data !== 'undefined') {
                     this.innerData = this.data;
-                    let page = this.page;
-                    if (page) {
-                        this.setPage(page['total'],page['index'],page['size'])
-                    }
                 } else {
                     this.getData()
                 }
             },
         },
-        created() {
-        },
         mounted() {
             this.initData();
         },
         watch: {
-            pageModel: {
-                handler: function () {
-                    this.getData()
-                },
-                deep: true
-            },
             'innerMeta.data_url': { // watch innerMeta.data_url, if changed, refresh business data
                 handler: function (n, o) {
                     if (n === o) return;
                     this.getData()
-                },
-                deep: true
+                }
             }
         },
         computed: {
-            innerMeta: {
-                get: function () {
-                    if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
-                        this.meta.columns.forEach(item => {
-                            if (!item['conf'].hasOwnProperty('showable')) { // default true
-                                item['conf'].showable = true;
-                            }
-                        });
-                    }
-                    return this.$merge(this.meta, DEFAULT.TableList);
-                },
-                set: function (n) {
-                    return this.$emit("update:meta", n)
+            innerMeta() {
+                if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
+                    this.meta.columns.forEach(item => {
+                        if (!item['conf'].hasOwnProperty('showable')) { // default true
+                            item['conf'].showable = true;
+                        }
+                    });
                 }
+                return this.$merge(this.meta, DEFAULT.TableList);
             }
         }
     }
