@@ -18,7 +18,7 @@
                 value: null,
                 meta: {
                     component_name: 'DateTimeBox',
-                    ui_config: {
+                    conf: {
                         "clearable": true,
                         // "value-format": "Date",
                         // set more

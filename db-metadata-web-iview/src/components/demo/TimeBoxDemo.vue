@@ -18,7 +18,7 @@
                 value: null,
                 meta: {
                     component_name: 'TimeBox',
-                    ui_config: {
+                    conf: {
                         placeholder: '输入时间..',
                         // 'value-format': 'Date' // 传入Date则表明值格式为原Date日期格式
                     }
