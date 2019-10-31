@@ -15,12 +15,11 @@
         name: "radio-box-demo",
         data () {
             return {
-                value: '1',
+                value: null,
                 meta: {
                     component_name: 'RadioBox',
                     conf: {
                     },
-
                 },
                 options: [{
                     'key': '航天恒嘉',

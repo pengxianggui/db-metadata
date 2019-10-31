@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <form-tmpl-demo></form-tmpl-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <text-box-demo></text-box-demo>
             </el-col>
         </el-row>
@@ -24,11 +29,11 @@
                 <text-area-box-demo></text-area-box-demo>
             </el-col>
         </el-row>
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <bool-box-demo></bool-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+            <el-col :span="24">
+                <bool-box-demo></bool-box-demo>
+            </el-col>
+        </el-row>
         <el-row>
             <el-col :span="24">
                 <num-box-demo></num-box-demo>
@@ -84,11 +89,6 @@
 <!--                <search-bar-demo></search-bar-demo>-->
 <!--            </el-col>-->
 <!--        </el-row>-->
-        <el-row>
-            <el-col :span="24">
-                <form-tmpl-demo></form-tmpl-demo>
-            </el-col>
-        </el-row>
     </div>
 </template>
 <script>

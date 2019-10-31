@@ -4,29 +4,29 @@
         <!--            <el-radio-button :label="false">展开</el-radio-button>-->
         <!--            <el-radio-button :label="true">收起</el-radio-button>-->
         <!--        </el-radio-group>-->
-        <el-menu default-active="meta-data" class="el-menu-vertical-demo" :router="true" active-text-color
+        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true" active-text-color
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-            <el-menu-item index="meta-data">
+            <el-menu-item index="/main/meta-data">
                 <i class="el-icon-menu"></i>
                 <span slot="title">MetaData</span>
             </el-menu-item>
-            <el-menu-item index="meta-object">
+            <el-menu-item index="/main/meta-object">
                 <i class="el-icon-menu"></i>
                 <span slot="title">MetaObject</span>
             </el-menu-item>
-            <el-menu-item index="meta-conf">
+            <el-menu-item index="/main/meta-conf">
                 <i class="el-icon-menu"></i>
                 <span slot="title">MetaConf</span>
             </el-menu-item>
-            <el-menu-item index="meta-manager">
+            <el-menu-item index="/main/meta-manager">
                 <i class="el-icon-menu"></i>
                 <span slot="title">MetaManager</span>
             </el-menu-item>
-            <el-menu-item index="demo">
+            <el-menu-item index="/main/demo">
                 <i class="el-icon-menu"></i>
                 <span slot="title">Demo</span>
             </el-menu-item>
-            <el-menu-item index="meta-form">
+            <el-menu-item index="/main/meta-form">
                 <i class="el-icon-menu"></i>
                 <span slot="title">form</span>
             </el-menu-item>

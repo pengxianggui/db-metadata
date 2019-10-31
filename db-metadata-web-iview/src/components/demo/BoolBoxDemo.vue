@@ -19,7 +19,7 @@
                 meta: {
                     component_name: 'BoolBox',
                     // other options
-                    ui_config: {
+                    conf: {
                         label: '包邮',
                         // other options
                     }
