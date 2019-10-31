@@ -31,9 +31,9 @@ const commonRoute = [
                 name: 'Demo',
                 component: () => import('@/components/demo/DemoMain')
             }, {
-                path: 'meta-form',
-                name: 'MetaForm',
-                component: () => import('@/components/meta/MetaForm')
+                path: 'table-data',
+                name: 'TableData',
+                component: () => import('@/components/meta/TableData')
             }
         ]
     },

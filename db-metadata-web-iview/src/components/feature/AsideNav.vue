@@ -26,9 +26,9 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">Demo</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-form">
+            <el-menu-item index="/main/table-data">
                 <i class="el-icon-menu"></i>
-                <span slot="title">form</span>
+                <span slot="title">TableData</span>
             </el-menu-item>
             <!--            <el-submenu index="1">-->
             <!--                <template slot="title">-->
