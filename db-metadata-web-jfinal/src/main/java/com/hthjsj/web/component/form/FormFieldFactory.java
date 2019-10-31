@@ -25,7 +25,7 @@ public class FormFieldFactory {
                 return kv;
             }
         });
-        return new DropDown();
+        return dropDown;
     }
 
     static TextBox createInputField(IMetaField metaField, Kv instanceFieldConfig) {
