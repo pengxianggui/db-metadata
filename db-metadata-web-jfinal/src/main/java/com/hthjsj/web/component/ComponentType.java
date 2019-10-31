@@ -20,6 +20,7 @@ public enum ComponentType {
     TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
     DATEBOX("datebox", "日期框", "DateBox"),
     TIMEBOX("timebox", "时间框", "TimeBox"),
+    DATETIMEBOX("datetimebox", "日期时间框", "DateTimeBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter
