@@ -18,7 +18,7 @@
                 value: null,
                 meta: {
                     component_name: 'NumBox',
-                    ui_config: {
+                    conf: {
                         placeholder: '输入数字..',
                     }
                 },

@@ -17,7 +17,7 @@
                 value: '',
                 meta: {
                     component_name: 'TextAreaBox',
-                    ui_config: {
+                    conf: {
                         label: '内容',
                         placeholder: '请输入内容',
                         autocomplete: 'OFF'

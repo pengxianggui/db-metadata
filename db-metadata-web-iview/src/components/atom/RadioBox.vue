@@ -1,80 +1,62 @@
 <template>
-    <el-radio-group v-model="currValue">
-        <el-radio v-for="item in options"
-                  :key="item[conf.value]"
-                  :label="item[conf.value]"
+    <el-radio-group v-model="nativeValue">
+        <el-radio v-for="item in innerOptions"
+                  :key="item.key"
+                  :label="item.value"
                   v-bind="innerMeta.conf">
-            {{item[conf.key]}}
+            {{item.key}}
         </el-radio>
     </el-radio-group>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+    import Val from './value-mixins'
+
     export default {
-        name: "radio-box",
+        mixins: [Meta(DEFAULT.RadioBox), Val],
+        name: "RadioBox",
         data () {
             return {
-                conf: {},
-                innerMeta: {},
+                innerOptions: []
             }
         },
         props: {
             value: {
                 type: [Object, String]
             },
-            options: {
-                required: false,
-                type: Array,
-                default: function () {
-                    return []
-                }
-            },
-            meta: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
+            options: Array,
         },
         methods: {
-            initMeta: function () {
-                this.$merge(this.innerMeta, DEFAULT.RadioBox);
-                this.$merge(this.innerMeta, this.meta);
-            },
             getOptions: function () {
-                this.$axios({
-                    methods: 'GET',
-                    url: '', // todo
-                    data: {
-
-                    }
-                }).then(resp => {
-                    if (resp.state === 'ok') {
-                        // 成功
-                    } else {
-                        // 失败
-                    }
-                })
+                let url = this.innerMeta['data_url'];
+                if (url) {
+                    this.$axios.get(url).then(resp => {
+                        // if provide format callback fn, execute callback fn
+                        let format = this.getBehavior('format');
+                        this.innerOptions = format ? format(resp.data) : resp.data;
+                        this.$emit('update:options', this.innerOptions);
+                    }).catch(resp => {
+                        this.$message({type: 'error', message: resp})
+                    })
+                }
             },
             initOptions: function () {
-                if (this.options.length === 0) this.getOptions()
-            }
+                if (this.options !== undefined) { // 父组件定义了options
+                    this.innerOptions = this.options;
+                    return;
+                }
+                if (this.innerMeta.hasOwnProperty('data_url')) {
+                    this.getOptions();
+                    return
+                }
+                console.error("options or data_url in meta provide one at least!")
+            },
         },
-        created() {
-            this.initMeta();
+        mounted() {
             this.initOptions();
         },
-        computed: {
-            currValue: {
-                get: function () {
-                    return this.value
-                },
-                set: function (newValue) {
-                    return this.$emit("input", newValue); // 通过 input 事件更新 model
-                }
-            }
-        }
     }
 </script>
 

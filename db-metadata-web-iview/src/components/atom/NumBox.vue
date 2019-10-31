@@ -1,53 +1,19 @@
 <template>
-    <el-input-number v-model="currValue" @change="handleChange"></el-input-number>
+    <el-input-number v-model="nativeValue" @change="$emit('change', $event)" v-bind="innerMeta['conf']"></el-input-number>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+    import Val from './value-mixins'
+
     export default {
-        name: "num-box",
+        mixins: [Meta(DEFAULT.NumBox), Val],
+        name: "NumBox",
         props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {
-                        ui_config: {}
-                    }
-                }
-            },
             value: {
                 type: [Number]
             },
-        },
-        data () {
-            return {
-            }
-        },
-        methods: {
-            handleChange: function () {
-
-            },
-            getDefaultConf: function() {
-                return DEFAULT.NumBox
-            },
-            initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
-            }
-        },
-        created () {
-            this.initConf()
-        },
-        computed: {
-            currValue: {
-                get: function () {
-                    return this.value
-                },
-                set: function (newValue) {
-                    this.$emit("input", newValue)
-                }
-            }
         }
     }
 </script>

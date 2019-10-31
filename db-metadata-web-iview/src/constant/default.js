@@ -87,6 +87,7 @@ const DEFAULT = {
     RadioBox: {
         name: "",
         label: "",
+        group: false,
         data_url: "", // todo filling
         conf: {
             // ...

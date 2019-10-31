@@ -1,56 +1,61 @@
 <template>
-    <el-checkbox-group v-model="currValue">
-        <el-checkbox v-for="item in meta.options"
-                     :key="item[meta.value]"
-                     :label="item[meta.value]">
-            {{item[meta.label]}}
+    <el-checkbox-group v-model="nativeValue">
+        <el-checkbox v-for="item in innerOptions"
+                     :key="item.key"
+                     :label="item.value">
+            {{item.key}}
         </el-checkbox>
     </el-checkbox-group>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+    import Val from './value-mixins'
+
     export default {
-        name: "check-box",
+        mixins: [Meta(DEFAULT.CheckBox), Val],
+        name: "CheckBox",
         data () {
-            return {}
+            return {
+                innerOptions: {}
+            }
         },
         props: {
             value: {
                 type: [Array]
             },
-            meta: {
-                type: Object,
-                default: function () {
-                    return {
-                        ui_config: {}
-                    }
-                }
-            }
+            options: Array,
         },
         methods: {
-            getDefaultConf: function() {
-                return DEFAULT.CheckBox
-            },
-            initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
-            }
-        },
-        created() {
-            this.initConf()
-        },
-        computed: {
-            currValue: {
-                get: function () {
-                    return this.value
-                },
-                set: function (newValue) {
-                    return this.$emit("input", newValue); // 通过 input 事件更新 model
+            getOptions: function () {
+                let url = this.innerMeta['data_url'];
+                if (url) {
+                    this.$axios.get(url).then(resp => {
+                        // if provide format callback fn, execute callback fn
+                        let format = this.getBehavior('format');
+                        this.innerOptions = format ? format(resp.data) : resp.data;
+                        this.$emit('update:options', this.innerOptions);
+                    }).catch(resp => {
+                        this.$message({type: 'error', message: resp})
+                    })
                 }
-            }
-        }
+            },
+            initOptions: function () {
+                if (this.options !== undefined) { // 父组件定义了options
+                    this.innerOptions = this.options;
+                    return;
+                }
+                if (this.innerMeta.hasOwnProperty('data_url')) {
+                    this.getOptions();
+                    return
+                }
+                console.error("options or data_url in meta provide one at least!")
+            },
+        },
+        mounted() {
+            this.initOptions();
+        },
     }
 </script>
 

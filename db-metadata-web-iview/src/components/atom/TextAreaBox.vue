@@ -1,7 +1,7 @@
 <template>
     <el-input type="textarea"
-              v-model="currValue"
-              v-bind="meta.ui_config"
+              v-model="nativeValue"
+              v-bind="innerMeta.conf"
               @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
@@ -12,48 +12,21 @@
 
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+    import Val from './value-mixins'
+
     export default {
-        name: "text-area-box",
+        mixins: [Meta(DEFAULT.TextAreaBox), Val],
+        name: "TextAreaBox",
         props: {
             value: {
                 type: String
-            },
-            meta: {
-                type: Object,
-                default: function () {
-                    return {
-                        ui_config: {}
-                    }
-                }
             }
         },
         data () {
             return {
             }
         },
-        methods: {
-            getDefaultConf: function() {
-                return DEFAULT.TextAreaBox
-            },
-            initConf: function () {
-                this.meta.ui_config = this.meta.ui_config || {}
-                let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
-            }
-        },
-        created() {
-            this.initConf()
-        },
-        computed: {
-            currValue: {
-                get: function() {
-                    return this.value;
-                },
-                set: function(newValue) {
-                    this.$emit("input", newValue); // 通过 input 事件更新 model
-                }
-            }
-        }
     }
 </script>
 

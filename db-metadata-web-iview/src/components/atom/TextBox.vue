@@ -20,12 +20,7 @@
             value: {
                 type: String
             },
-        },
-        data () {
-            return {}
-        },
-        methods: {},
-        computed: {}
+        }
     }
 </script>
 

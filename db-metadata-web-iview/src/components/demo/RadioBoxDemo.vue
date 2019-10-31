@@ -18,9 +18,7 @@
                 value: '1',
                 meta: {
                     component_name: 'RadioBox',
-                    ui_config: {
-                        key: 'key',
-                        value: 'value', // 可省略, value不指定时, 则选取的值即为整个item对象
+                    conf: {
                     },
 
                 },
