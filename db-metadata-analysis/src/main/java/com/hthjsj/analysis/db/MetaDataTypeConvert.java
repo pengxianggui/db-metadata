@@ -6,7 +6,9 @@
  */
 package com.hthjsj.analysis.db;
 
+import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.meta.MetaField;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,12 +27,14 @@ import java.util.Map;
  * @author Jieven
  */
 @SuppressWarnings("rawtypes")
+@Slf4j
 public class MetaDataTypeConvert {
 
     /**
      * 参考：http://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html INT UNSIGNED 这里强制指定为 Integer 因为大部分人不知道应该为Long
      */
-    @SuppressWarnings("serial") private final static Map<String, Class> map = new HashMap<String, Class>() {
+    @SuppressWarnings("serial")
+    private final static Map<String, Class> map = new HashMap<String, Class>() {
 
         {
             // MySQL
@@ -96,48 +100,54 @@ public class MetaDataTypeConvert {
             return null;
         }
         s = s.trim();
-        if (s.length() == 0 && c != String.class) {
-            // empty string only cast to string.class
-            return null;
-        }
-        if (c == Integer.class) {
-            return Integer.parseInt(s);
-        }
-        if (c == Long.class) {
-            return Long.parseLong(s);
-        }
-        if (c == Float.class) {
-            return Float.parseFloat(s);
-        }
-        if (c == Double.class) {
-            return Double.parseDouble(s);
-        }
-        if (c == Boolean.class) {
-            boolean f = false;
-            try {
-                Integer.parseInt(s);
-                f = true;
-            } catch (Exception e) {
-                f = false;
+        try {
+            if (s.length() == 0 && c != String.class) {
+                // empty string only cast to string.class
+                return null;
             }
-            if (f) {
-                if (s.equals("1")) {
-                    s = "true";
-                } else {
-                    s = "false";
+            if (c == Integer.class) {
+                return Integer.parseInt(s);
+            }
+            if (c == Long.class) {
+                return Long.parseLong(s);
+            }
+            if (c == Float.class) {
+                return Float.parseFloat(s);
+            }
+            if (c == Double.class) {
+                return Double.parseDouble(s);
+            }
+            if (c == Boolean.class) {
+                boolean f = false;
+                try {
+                    Integer.parseInt(s);
+                    f = true;
+                } catch (Exception e) {
+                    f = false;
                 }
+                if (f) {
+                    if (s.equals("1")) {
+                        s = "true";
+                    } else {
+                        s = "false";
+                    }
+                }
+                return Boolean.parseBoolean(s);
             }
-            return Boolean.parseBoolean(s);
+            if (c == BigInteger.class) {
+                return BigInteger.valueOf(Long.parseLong(s));
+            }
+            if (c == BigDecimal.class) {
+                return BigDecimal.valueOf(Double.parseDouble(s));
+            }
+            if (c == Byte[].class) {
+                return s.getBytes();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new MetaDataTypeConvertException("parse failed [%s]->[%s]", s, c.getSimpleName());
         }
-        if (c == BigInteger.class) {
-            return BigInteger.valueOf(Long.parseLong(s));
-        }
-        if (c == BigDecimal.class) {
-            return BigDecimal.valueOf(Double.parseDouble(s));
-        }
-        if (c == Byte[].class) {
-            return s.getBytes();
-        }
+
         try {
             if (c == Timestamp.class) {
                 long time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s).getTime();
@@ -153,7 +163,8 @@ public class MetaDataTypeConvert {
                 return new SimpleDateFormat("HH:mm:ss").parse(s);
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
+            throw new MetaDataTypeConvertException("Date parse failed [%s]->[%s]", s, c.getSimpleName());
         }
         return s;
     }
@@ -166,6 +177,11 @@ public class MetaDataTypeConvert {
         }
         {
             Object s = cast("2016-10-08 10:20:20", DateTime.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("10:20:20", DateTime.class);
             System.out.println(s);
             System.out.println(s.getClass());
         }
@@ -216,5 +232,10 @@ public class MetaDataTypeConvert {
         }
     }
 
+    public static class MetaDataTypeConvertException extends MetaAnalysisException {
 
+        public MetaDataTypeConvertException(String messageTmpl, String... args) {
+            super(messageTmpl, args);
+        }
+    }
 }
