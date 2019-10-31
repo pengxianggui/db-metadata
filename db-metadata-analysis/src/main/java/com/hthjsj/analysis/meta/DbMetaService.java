@@ -4,6 +4,7 @@ import com.hthjsj.App;
 import com.hthjsj.analysis.db.*;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -81,5 +82,9 @@ public class DbMetaService {
     public boolean deleteMetaObject(String objectCode) {
         return Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", objectCode) > 0 && Db.use(App.DB_MAIN).delete(
                 "delete from meta_field where object_code=?", objectCode) > 0;
+    }
+
+    public boolean saveData(MetaObject object, Kv data) {
+        return false;
     }
 }

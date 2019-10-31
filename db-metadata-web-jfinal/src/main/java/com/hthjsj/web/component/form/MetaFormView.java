@@ -43,9 +43,9 @@ public class MetaFormView extends FormView {
             config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
             FormField formField = FormFieldFactory.createFormField(metaField, config);
             AccessBehavior accessBehavior = formField.getAccessBehavior();
-            if (accessBehavior.isAdd()) {
-                fields.add(formField);
-            }
+            //            if (accessBehavior.isAdd()) {
+            //                fields.add(formField);
+            //            }
 
             fields.add(formField);
         }

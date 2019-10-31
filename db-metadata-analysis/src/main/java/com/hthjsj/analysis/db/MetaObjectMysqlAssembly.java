@@ -39,7 +39,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
             mf.dbType(column.getDataType().toLowerCase());
             mf.dbTypeLength(column.getCharacterMaximumLength());
-            mf.javaType(MetaDataType.getTypeName(column.getDataType().toUpperCase()));
+            mf.javaType(MetaDataTypeConvert.getTypeName(column.getDataType().toUpperCase()));
 
             mf.orderNum(i);
 

@@ -1,9 +1,9 @@
 package com.hthjsj.web.query;
 
-import com.google.common.collect.Maps;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.Utils;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.sqls.MetaSQLBuilder;
@@ -27,34 +27,6 @@ public class QueryCondition {
     public static final String PREFIX_COL = "__COLUMN__";
 
     /**
-     * 普通值过滤
-     * 数值 : key=value
-     * 字符 : key=value ( %like% )
-     * 日期 : key=2019-10-10  ->
-     * <p>
-     * 连续区间过滤
-     * 日期 : key_start={} & key_end={}
-     * [ok] 数值 : key_lt={} & key_eq={}
-     * 字符 :
-     * <p>
-     * 非连续区间过滤
-     * 数值 : key_in = 1,3,4,5,6
-     * 字符 : key_in = "1","2","3","4"
-     */
-    private Map<String, Object> toObjectFlat(Map<String, String[]> maps) {
-        Map<String, Object> result = Maps.newHashMap();
-        for (Map.Entry<String, String[]> e : maps.entrySet()) {
-            String[] values = e.getValue();
-            if (values.length == 1) {
-                result.put(e.getKey(), values[0]);
-            } else {
-                result.put(e.getKey(), values);
-            }
-        }
-        return result;
-    }
-
-    /**
      * <p>
      * FIXME :
      * http://url?ef=id,name,config&f=config 会滤出全部列
@@ -68,7 +40,7 @@ public class QueryCondition {
      * Db.find(select * from tableA where id=? and name >=?,new String[]{v_id,v_name})
      */
     public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
-        Map<String, Object> params = toObjectFlat(httpParams);
+        Map<String, Object> params = Utils.toObjectFlat(httpParams);
         SqlParaExt sqlParaExt = new SqlParaExt();
 
         Okv conds = Okv.create();

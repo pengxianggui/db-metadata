@@ -13,16 +13,11 @@ import com.jfinal.kit.Kv;
  */
 public class DropDown extends FormField {
 
-    private String name;
-
-    private String label;
-
     public DropDown() {
     }
 
     public DropDown(String name, String label) {
-        this.name = name;
-        this.label = label;
+        super(name, label);
     }
 
     public DropDown dataUrl(String url) {
@@ -44,9 +39,6 @@ public class DropDown extends FormField {
 
     @Override
     public Kv toKv() {
-        meta.setIfNotBlank("name", name);
-        meta.setIfNotBlank("label", label);
-        meta.setIfNotBlank("component_name", type());
         getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }

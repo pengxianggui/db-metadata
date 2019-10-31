@@ -2,10 +2,13 @@ package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.query.FormDataBuilder;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.aop.Aop;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
 /**
@@ -32,5 +35,18 @@ public class FormController extends FrontRestController {
         FormView formView = ViewFactory.createFormView(metaObject);
 
         renderJson(Ret.ok("data", formView.toKv()));
+    }
+
+    @Override
+    public void doAdd() {
+
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+
+        Kv metadata = FormDataBuilder.build(getRequest().getParameterMap(), metaObject, null);
+        System.out.println(metadata.toJson());
+        renderJson(Ret.ok());
     }
 }

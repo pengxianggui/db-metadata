@@ -28,9 +28,9 @@ public class FormFieldFactory {
         return new DropDown();
     }
 
-    static InputField createInputField(IMetaField metaField, Kv instanceFieldConfig) {
-        InputField inputField = new InputField(metaField.fieldCode(), metaField.cn());
-        inputField.setFieldInject(new FieldInject.DefaultFieldInject() {
+    static TextBox createInputField(IMetaField metaField, Kv instanceFieldConfig) {
+        TextBox textBox = new TextBox(metaField.fieldCode(), metaField.cn());
+        textBox.setFieldInject(new FieldInject.DefaultFieldInject() {
 
             @Override
             public Kv inject(Kv meta, Kv conf) {
@@ -39,7 +39,7 @@ public class FormFieldFactory {
                 return kv;
             }
         });
-        return inputField;
+        return textBox;
     }
 
     static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {

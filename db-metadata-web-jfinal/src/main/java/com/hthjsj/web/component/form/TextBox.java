@@ -12,22 +12,13 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public class InputField extends FormField {
+public class TextBox extends FormField {
 
-    String name;
-
-    String label;
-
-    Kv meta = Kv.create();
-
-    Kv conf = Kv.create();
-
-    public InputField() {
+    public TextBox() {
     }
 
-    public InputField(String name, String label) {
-        this.name = name;
-        this.label = label;
+    public TextBox(String name, String label) {
+        super(name, label);
         setAccessBehavior(new AccessBehavior.DefaultAccessBehavior(conf));
     }
 
@@ -38,9 +29,7 @@ public class InputField extends FormField {
 
     @Override
     public Kv toKv() {
-        meta.set("component_name", type());
-        meta.set("name", name);
-        meta.set("label", label);
+
         return meta;
     }
 }

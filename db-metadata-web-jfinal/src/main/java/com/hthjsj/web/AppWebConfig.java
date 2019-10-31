@@ -8,7 +8,7 @@ import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.form.Button;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.component.form.InputField;
+import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.UserSettingIntercept;
@@ -71,7 +71,7 @@ public class AppWebConfig extends JFinalConfig {
         //component register
         Components.me().add(ComponentType.TABLEVIEW, TableView.class);
         Components.me().add(ComponentType.FORMVIEW, FormView.class);
-        Components.me().add(ComponentType.INPUTFIELD, InputField.class);
+        Components.me().add(ComponentType.INPUTFIELD, TextBox.class);
         Components.me().add(ComponentType.DROPDOWN, DropDown.class);
         Components.me().add(ComponentType.BUTTON, Button.class);
         Components.me().init();

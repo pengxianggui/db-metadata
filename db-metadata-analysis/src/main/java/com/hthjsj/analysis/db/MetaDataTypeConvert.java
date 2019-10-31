@@ -25,7 +25,7 @@ import java.util.Map;
  * @author Jieven
  */
 @SuppressWarnings("rawtypes")
-public class MetaDataType {
+public class MetaDataTypeConvert {
 
     /**
      * 参考：http://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html INT UNSIGNED 这里强制指定为 Integer 因为大部分人不知道应该为Long
@@ -118,7 +118,6 @@ public class MetaDataType {
                 Integer.parseInt(s);
                 f = true;
             } catch (Exception e) {
-                e.printStackTrace();
                 f = false;
             }
             if (f) {
@@ -177,6 +176,41 @@ public class MetaDataType {
         }
         {
             Object s = cast("2016-10-08 10:20:20", Timestamp.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("true", Boolean.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("false", Boolean.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("1", Boolean.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("0", Boolean.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("2.311", Float.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("111100111.311", Float.class);
+            System.out.println(s);
+            System.out.println(s.getClass());
+        }
+        {
+            Object s = cast("111100111.311", BigDecimal.class);
             System.out.println(s);
             System.out.println(s.getClass());
         }

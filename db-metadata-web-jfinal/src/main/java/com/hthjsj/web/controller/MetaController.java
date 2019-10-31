@@ -9,7 +9,7 @@ import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.DropDown;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.component.form.InputField;
+import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
@@ -50,8 +50,8 @@ public class MetaController extends FrontRestController {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
         formView.getFields().add(new DropDown("schemaName", "数据源").dataUrl("/db/index"));
         formView.getFields().add(new DropDown("tableName", "数据表名").dataUrl("/db/tables?schemaName={{schemaName}}").dependency("schemaName"));
-        formView.getFields().add(new InputField("objectName", "元对象名称"));
-        formView.getFields().add(new InputField("objectCode", "元对象编码"));
+        formView.getFields().add(new TextBox("objectName", "元对象名称"));
+        formView.getFields().add(new TextBox("objectCode", "元对象编码"));
         renderJson(Ret.ok("data", formView.toKv()));
     }
 

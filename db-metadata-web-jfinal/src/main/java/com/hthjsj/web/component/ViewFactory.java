@@ -81,7 +81,7 @@ public class ViewFactory {
             component = new TableView();
             break;
         case INPUTFIELD:
-            component = new InputField();
+            component = new TextBox();
             break;
         default:
             break;
