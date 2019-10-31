@@ -182,6 +182,10 @@
                     method: 'POST',
                     url: 'component/doAdd',
                     data: params
+                }).then(resp => {
+                    this.$message({type: "success", message: "保存成功"});
+                }).catch(err => {
+                    this.$message({type: "error", message: "保存成功"});
                 })
             },
             onCancel: function () {
