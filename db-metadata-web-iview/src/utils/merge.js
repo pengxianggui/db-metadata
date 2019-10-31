@@ -35,7 +35,7 @@ export function merge1(opt1, opt2, deep) {
 
 /**
  * merge 策略2: 将opt2 merge到opt1, 对于opt1已有的key-value, 保持不变, 对于opt2中新的key-value, 追加到opt1中。传入
- * deep值表示是否深度执行merge逻辑(不传入则为true). 函数将更改opt1的值, 同时返回opt1。
+ * deep值表示是否深度执行merge逻辑(不传入则为true). 函数将更改opt1的值, 同时返回一个merge后的新对象。
  * @param opt1
  * @param opt2
  * @param deep
@@ -65,5 +65,5 @@ export function merge(opt1, opt2, deep) {
 
     // deep merge
     deepMerge(opt1, opt2);
-    return opt1;
+    return common.deepCopy(opt1);
 }
