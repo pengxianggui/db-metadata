@@ -17,7 +17,7 @@
                 value: '',
                 meta: {
                     component_name: 'PassBox',
-                    ui_config: {
+                    conf: {
                         label: '密码',
                         placeholder: '请输入密码',
                         autocomplete: 'NO'

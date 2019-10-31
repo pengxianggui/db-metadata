@@ -19,11 +19,11 @@
                 <text-box-demo></text-box-demo>
             </el-col>
         </el-row>
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <pass-box-demo></pass-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+            <el-col :span="24">
+                <pass-box-demo></pass-box-demo>
+            </el-col>
+        </el-row>
         <el-row>
             <el-col :span="24">
                 <text-area-box-demo></text-area-box-demo>
@@ -59,11 +59,11 @@
 <!--                <time-box-demo></time-box-demo>-->
 <!--            </el-col>-->
 <!--        </el-row>-->
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <date-box-demo></date-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+            <el-col :span="24">
+                <date-box-demo></date-box-demo>
+            </el-col>
+        </el-row>
 <!--        <el-row>-->
 <!--            <el-col :span="24">-->
 <!--                <date-time-box-demo></date-time-box-demo>-->

@@ -18,7 +18,7 @@
                 value: null,
                 meta: {
                     component_name: 'DateBox',
-                    ui_config: {
+                    conf: {
                         "clearable": true,
                         'placeholder': '输入日期..',
                         // "value-format": 'Date'
