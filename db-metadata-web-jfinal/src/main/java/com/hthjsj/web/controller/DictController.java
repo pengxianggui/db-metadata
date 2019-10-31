@@ -29,7 +29,7 @@ public class DictController extends FrontRestController {
         MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
     }
 
-    public void dict() {
+    public void sex() {
         List<Kv> options = Lists.newArrayList();
         options.add(Kv.by("key", "男").set("value", "1"));
         options.add(Kv.by("key", "女").set("value", "2"));
