@@ -2,10 +2,10 @@
     <el-container direction="vertical">
         <el-button-group>
             <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
-            <drop-down-box v-model="metaObj" :meta="objMeta"
-                           @change="refreshTableDataUrl()"></drop-down-box>
+            <drop-down-box :ref="objMeta['name']" v-model="metaObj" :meta="objMeta"
+                           @change="refreshTableData()"></drop-down-box>
         </el-button-group>
-        <table-list :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']"></table-list>
+        <table-list :ref="tableMeta['name']" :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']"></table-list>
         <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
@@ -51,35 +51,37 @@
         },
         methods: {
             getTableMeta() {
-                let _this = this;
                 this.$axios.get('/meta/fields').then(resp => {
-                    _this.$merge(resp.data, DEFAULT.TableList); // 确保 resp.data 中 含有data_url 属性
-                    _this.tableMeta = resp.data;
-                    _this.tableMeta['data_url'] = _this.tableUrl + "&object_code=''";
+                    this.$merge(resp.data, DEFAULT.TableList); // 确保 resp.data 中 含有data_url 属性
+                    this.tableMeta = resp.data;
+                    this.tableMeta['data_url'] = this.tableUrl + "&object_code=''";
                 }).catch(resp => {
-                    _this.$message({type: 'error', message: resp.msg})
+                    this.$message({type: 'error', message: resp.msg})
                 })
             },
             getFormMeta() {
-                let _this = this;
                 this.$axios.get('/meta/toAdd').then(resp => {
-                    _this.formMeta = resp.data
+                    this.formMeta = resp.data
                 }).catch(resp => {
-                    _this.$message({type: 'error', message: resp.msg})
+                    this.$message({type: 'error', message: resp.msg})
                 })
             },
-            refreshTableDataUrl() {
+            refreshTableData() {
                 this.tableMeta['data_url']= this.tableUrl + '&object_code=' + this.metaObj;
             },
+            updateSon() {
+                this.refreshTableData();
+                this.$refs[this.objMeta.name].getOptions();
+            },
             formSubmit(formModel) {
-                let _this = this;
-                this.$axios.post(_this.formMeta.action, formModel).then(resp => {
-                    _this.$message({type: 'success', message: resp.msg || '操作成功'});
-                    _this.metaObj = formModel['objectCode'];
-                    _this.refreshTableDataUrl();
-                    _this.visible = false;
+                this.$axios.post(this.formMeta.action, formModel).then(resp => {
+                    this.$message({type: 'success', message: resp.msg || '操作成功'});
+                    this.metaObj = formModel['objectCode'];
+                    this.visible = false;
+
+                    this.updateSon();
                 }).catch(resp => {
-                    _this.$message({type: 'error', message: resp.msg})
+                    this.$message({type: 'error', message: resp.msg})
                 })
             },
         },

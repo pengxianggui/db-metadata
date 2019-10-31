@@ -1,7 +1,9 @@
 <template>
     <div>
         <h2>{{model.meta.component_name}}: </h2>
-        <component :is="model.meta.component_name" v-model="model.value" :meta="model.meta" :options.sync="model.options"></component>
+        <el-button @click="refreshOptions">刷新options</el-button>
+        <component :is="model.meta.component_name" v-model="model.value" :ref="model.meta.name"
+                   :meta="model.meta" :options.sync="model.options"></component>
         值为: {{model.value}}
         <z-toggle-panel>
             <json-box v-model="model"></json-box>
@@ -15,8 +17,9 @@
         data() {
             return {
                 model: {
-                    value: '1',
+                    value: null,
                     meta: {
+                        name: "DropDownBoxDemo",
                         component_name: 'DropDownBox',
                         group: true,
                         conf: {}
@@ -40,6 +43,12 @@
                 }
             }
         },
+        methods: {
+            refreshOptions() {
+                let son = this.$refs[this.model.meta.name];
+                son.getOptions();
+            }
+        }
     }
 </script>
 

@@ -9,11 +9,11 @@
 </style>
 <template>
     <div>
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <text-box-demo></text-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+            <el-col :span="24">
+                <text-box-demo></text-box-demo>
+            </el-col>
+        </el-row>
 <!--        <el-row>-->
 <!--            <el-col :span="24">-->
 <!--                <pass-box-demo></pass-box-demo>-->

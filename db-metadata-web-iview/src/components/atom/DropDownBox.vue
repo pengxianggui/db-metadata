@@ -38,7 +38,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
 
  -->
 <template>
-    <el-select v-model="currValue"
+    <el-select v-model="nativeValue"
                v-bind="innerMeta.conf"
                @change="$emit('change', $event)"
                @remove-tag="$emit('remove-tag', $event)"
@@ -67,9 +67,12 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
 
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+    import Val from './value-mixins'
 
     export default {
-        name: "drop-down-box",
+        mixins: [Meta(DEFAULT.DropDownBox), Val],
+        name: "DropDownBox",
         data() {
             return {
                 innerOptions: []
@@ -80,31 +83,17 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 type: [Object, String]
             },
             options: Array,
-            meta: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            },
         },
         methods: {
             getOptions: function () {
-                // http request options data by meta.data_url
+                // http request options data by innerMeta.data_url
                 let url = this.innerMeta['data_url'];
                 if (url) {
                     this.$axios.get(url).then(resp => {
                         // if provide format callback fn, execute callback fn
-                        let options;
-
-                        if (this.innerMeta.hasOwnProperty('behavior')
-                            && this.innerMeta['behavior'].hasOwnProperty('format')) {
-                            options = this.executeBehavior('format', resp.data);
-                        } else { // default [{key: key1, value: value1}, ..]
-                            options = resp.data;
-                        }
-
-                        this.innerOptions = options;
-                        this.$emit('update:options', options);
+                        let format = this.getBehavior('format');
+                        this.innerOptions = format ? format(resp.data) : resp.data;
+                        this.$emit('update:options', this.innerOptions);
                     }).catch(resp => {
                         this.$message({type: 'error', message: resp})
                     })
@@ -120,13 +109,6 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                     return
                 }
                 console.error("options or data_url in meta provide one at least!")
-            },
-            executeBehavior(name, params) {
-                if (this.innerMeta.behavior && this.innerMeta.behavior[name]) {
-                    return this.innerMeta.behavior[name](params)
-                } else {
-                    console.error('${name} was not yet defined!')
-                }
             },
         },
         created() {
@@ -144,19 +126,7 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 }
             }
         },
-        computed: {
-            currValue: {
-                get: function () {
-                    return this.value;
-                },
-                set: function (n) {
-                    return this.$emit("input", n); // 通过 input 事件更新 model
-                }
-            },
-            innerMeta() {
-                return this.$merge(this.meta, DEFAULT.DropDownBox);
-            }
-        }
+        computed: {}
     }
 </script>
 
