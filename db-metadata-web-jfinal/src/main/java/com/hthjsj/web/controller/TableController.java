@@ -3,8 +3,6 @@ package com.hthjsj.web.controller;
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.TableView;
-import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
 import com.hthjsj.web.query.QueryHelper;
@@ -24,17 +22,6 @@ import com.jfinal.plugin.activerecord.Record;
  * <p> @author konbluesky </p>
  */
 public class TableController extends FrontRestController {
-
-    /**
-     * param : objectCode
-     */
-    @Override
-    public void index() {
-        String objectCode = getPara(0, getPara("objectCode"));
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
-        renderJson(Ret.ok("data", tableView.toKv()));
-    }
 
     @Override
     public void list() {

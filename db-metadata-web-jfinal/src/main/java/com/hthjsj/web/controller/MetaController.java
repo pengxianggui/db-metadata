@@ -69,7 +69,7 @@ public class MetaController extends FrontRestController {
     public void fields() {
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.createTableView("meta_fields_table", "元字段", metaObject);
+        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
