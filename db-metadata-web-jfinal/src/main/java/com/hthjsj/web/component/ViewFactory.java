@@ -22,6 +22,8 @@ public class ViewFactory {
 
     public static TableView createTableView(String name, String label, MetaObject metaObject) {
         TableView tableView = new TableView(name, label);
+        //TODO bad small code
+        tableView.dataUrl("/table/list/" + metaObject.code());
 
         Kv tableViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());

@@ -25,11 +25,6 @@ import com.jfinal.plugin.activerecord.Record;
  */
 public class TableController extends FrontRestController {
 
-    @Override
-    public void api() {
-        renderJson("hehehehehehe");
-    }
-
     /**
      * param : objectCode
      */
