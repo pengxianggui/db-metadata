@@ -5,7 +5,6 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.*;
-import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,11 +25,8 @@ public class ViewFactory {
         //TODO bad small code
         tableView.dataUrl("/table/list/" + metaObject.code());
 
-        Kv tableViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(tableView.type(), metaObject.code()).getColumns());
+        Kv tableViewConfig = ServiceManager.componentService().loadObjectFlatConfig(tableView.type(), metaObject.code());
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
-
-        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(tableView.type(), metaObject.code());
-        log.info("fieldsConfig:{}", fieldsConfig.toJson());
 
         tableView.setViewInject(new ViewInject<TableView>() {
 
@@ -51,7 +47,7 @@ public class ViewFactory {
 
             @Override
             public Kv inject(Kv meta, Kv conf, IMetaField field) {
-                Kv kv = JSON.parseObject(fieldsConfig.getStr("config"), Kv.class);
+                Kv kv = JSON.parseObject(tableViewConfig.getStr(field.fieldCode()), Kv.class);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
@@ -60,10 +56,9 @@ public class ViewFactory {
     }
 
     public static FormView createFormView(MetaObject metaObject) {
-        Kv formViewConfig = Kv.create().set(ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.code, metaObject.code()).getColumns());
+        Kv formViewConfig = ServiceManager.componentService().loadObjectFlatConfig(ComponentType.FORMVIEW.code, metaObject.code());
         log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
-        Kv fieldsConfig = Aop.get(ComponentService.class).loadFieldsConfigMap(ComponentType.FORMVIEW.code, metaObject.code());
-        MetaFormView formView = new MetaFormView(metaObject, formViewConfig, fieldsConfig);
+        MetaFormView formView = new MetaFormView(metaObject, formViewConfig);
         return formView;
     }
 

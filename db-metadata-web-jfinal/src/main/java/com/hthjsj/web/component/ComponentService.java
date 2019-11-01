@@ -80,6 +80,13 @@ public class ComponentService {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
     }
 
+    public Kv loadObjectFlatConfig(String componentCode, String destCode) {
+        Record objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
+        Kv objConf = Kv.by(destCode, objectConfig);
+        objConf.set(loadFieldsConfigMap(componentCode, destCode));
+        return objConf;
+    }
+
     public Kv loadFieldsConfigMap(String componentCode, String destCode) {
         Kv kv = Kv.create();
         List<Record> fields = loadFieldsConfig(componentCode, destCode);
@@ -95,16 +102,6 @@ public class ComponentService {
                        componentCode,
                        destCode,
                        INSTANCE.META_FIELD.toString());
-    }
-
-    public Record loadFieldConfig(String componentCode, String destCode, String fieldCode) {
-        List<Record> records = loadFieldsConfig(componentCode, destCode);
-        for (Record record : records) {
-            if (record.getStr("dest_object").endsWith(fieldCode)) {
-                return record;
-            }
-        }
-        return new Record();
     }
 
     private Record loadConfig(String componentCode, String destCode, String type) {

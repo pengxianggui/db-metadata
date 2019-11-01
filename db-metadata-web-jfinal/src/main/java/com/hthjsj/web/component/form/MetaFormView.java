@@ -20,12 +20,9 @@ public class MetaFormView extends FormView {
 
     Kv objectConfig;
 
-    Kv fieldsConfig;
-
-    public MetaFormView(MetaObject object, Kv objectConfig, Kv fieldsConfig) {
+    public MetaFormView(MetaObject object, Kv objectConfig) {
         this.metaObject = object;
         this.objectConfig = objectConfig;
-        this.fieldsConfig = fieldsConfig;
         setAccessBehavior(new AccessBehavior.DefaultAccessBehavior(objectConfig));
         init();
     }
@@ -43,7 +40,7 @@ public class MetaFormView extends FormView {
         //2. foreach init fields
         Kv config = null;
         for (IMetaField metaField : metaObject.fields()) {
-            config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
+            config = JSON.parseObject(objectConfig.getStr(metaField.fieldCode()), Kv.class);
             FormField formField = FormFieldFactory.createFormField(metaField, config);
             //            AccessBehavior accessBehavior = formField.getAccessBehavior();
             //            if (accessBehavior.isAdd()) {
