@@ -15,7 +15,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <h2 align="center">{{code}}</h2>
+                <h2 align="center">{{objectOrCompCode}}</h2>
                 <el-form-item>
                     <json-box v-model="confModel.conf" :meta="confMeta"></json-box>
                 </el-form-item>
@@ -107,18 +107,19 @@
         },
         methods: {
             loadConf: function () {
-                let _this = this;
-                if (!_this.confModel.componentCode) return;
+                const {componentCode, objectCode} = this.confModel;
+
+                if (!componentCode) return;
                 this.$axios({
                     method: 'get',
                     url: 'component/load',
                     params: {
-                        objectCode: _this.confModel.objectCode,
-                        componentCode: _this.confModel.componentCode
+                        objectCode: objectCode,
+                        componentCode: componentCode
                     }
                 }).then(resp => {
                     let data = resp.data;
-                    let confKey = this.code;
+                    let confKey = this.objectOrCompCode;
                     let confVal = data[confKey].replace(/\\/g, "");
                     this.confModel.conf = JSON.parse(confVal);
 
@@ -142,7 +143,7 @@
                     objectCode: this.confModel['objectCode']
                 };
 
-                let confKey = this.code;
+                let confKey = this.objectOrCompCode;
                 params[confKey] = this.confModel['conf'];
 
                 for (let fConfKey in this.confModel['fConf']) {
@@ -164,7 +165,7 @@
             }
         },
         computed: {
-            code() {
+            objectOrCompCode() {
                 return this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode']
             }
         }
