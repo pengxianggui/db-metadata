@@ -138,7 +138,8 @@
                     return;
                 }
                 let params = {
-                    componentCode: this.confModel['componentCode']
+                    componentCode: this.confModel['componentCode'],
+                    objectCode: this.confModel['objectCode']
                 };
 
                 let confKey = this.code;
@@ -159,7 +160,7 @@
                 })
             },
             onCancel: function () {
-                // todo
+                // pxg_todo
             }
         },
         computed: {
