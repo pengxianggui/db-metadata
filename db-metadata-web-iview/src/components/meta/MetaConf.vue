@@ -116,16 +116,14 @@
                     }
                 }).then(resp => {
                     let data = resp.data;
-                    // let componentConf = data[this.confModel.componentCode].replace(/\\/g, "");
-                    let tableConf = data[this.confModel.objectCode].replace(/\\/g, "");
-                    let fieldsConf = data['fields'];
-                    // this.confModel.conf = JSON.parse(componentConf);
-                    if (this.confModel.objectCode) {
-                        this.confModel.conf = JSON.parse(tableConf);
-                    }
-                    for(let key in fieldsConf) {
-                        let conf = fieldsConf[key].replace(/\\/g, "");
-                        this.$set(this.confModel.fConf, key,  JSON.parse(conf));
+                    let confKey = this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode'];
+                    let confVal = data[confKey].replace(/\\/g, "");
+                    this.confModel.conf = JSON.parse(confVal);
+
+                    let fConf = data['fields'];
+                    for(let fConfKey in fConf) {
+                        let fConfVal = fConf[fConfKey].replace(/\\/g, "");
+                        this.$set(this.confModel.fConf, fConfKey,  JSON.parse(fConfVal));
                     }
                 }).catch(err => {
                     console.log(err)
@@ -135,23 +133,20 @@
                 this.loadConf();
             },
             onSubmit: function () {
-                let _this = this;
-                if (!_this.confModel.componentCode) {
-                    _this.$message({type: 'error', message: '必须选定一个组件'});
+                if (!this.confModel.componentCode) {
+                    this.$message({type: 'error', message: '必须选定一个组件'});
                     return;
                 }
                 let params = {
-                    componentCode: _this.confModel.componentCode,
-                    objectCode: _this.confModel.objectCode,
-                    conf: JSON.stringify(_this.confModel.conf)
+                    componentCode: this.confModel['componentCode'],
+                    objectCode: this.confModel['objectCode'],
+                    conf: {}
                 };
 
-                let fieldCode = _this.confModel.fieldCode;
-                if (fieldCode) {
-                    let conf = {};
-                    conf[fieldCode] = _this.confModel.conf;
-                    params.conf = JSON.stringify(conf);
-                }
+                let key = this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode'];
+                params.conf[key] =this.confModel['conf'];
+                params.conf['fields'] = this.confModel['fConf'];
+
                 this.$axios({
                     method: 'POST',
                     url: 'component/doAdd',
