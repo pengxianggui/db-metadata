@@ -89,8 +89,9 @@ eg:
                 } else {
                     this.$axios.post(action, params).then(resp => {
                         // pxg_todo default callback
+                        this.$message({type: 'success', message: '保存成功'});
                     }).catch(err => {
-                        this.$message({type: 'error', message: err})
+                        this.$message({type: 'error', message: err});
                     })
                 }
             },
