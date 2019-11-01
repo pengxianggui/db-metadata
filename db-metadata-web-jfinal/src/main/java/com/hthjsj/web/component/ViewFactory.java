@@ -57,7 +57,7 @@ public class ViewFactory {
 
     public static FormView createFormView(MetaObject metaObject) {
         Kv formViewConfig = ServiceManager.componentService().loadObjectFlatConfig(ComponentType.FORMVIEW.code, metaObject.code());
-        log.info("ComponentTableViewConfig:{}", formViewConfig.toJson());
+        log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
         MetaFormView formView = new MetaFormView(metaObject, formViewConfig);
         return formView;
     }

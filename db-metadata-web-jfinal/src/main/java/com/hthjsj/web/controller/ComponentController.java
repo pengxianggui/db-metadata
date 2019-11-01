@@ -50,6 +50,30 @@ public class ComponentController extends FrontRestController {
 
         Kv objectConfig = Kv.by(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
         objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
+
+        /**
+         * {
+         *   "data": {
+         *     "test_table": "{\"component_name\":\"FormTmpl\",\"name\":\"test_table_form\",\"conf\":{\"size\":\"medium\",\"label-width\":\"100px\"},\"label\":\"测试表\"}",
+         *     "fields": {
+         *       "col_int": "{\"component_name\":\"NumBox\",\"name\":\"col_int\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列1\"}",
+         *       "created_time": "{\"component_name\":\"DateTimeBox\",\"name\":\"col_created_time\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列9\"}",
+         *       "updated_time": "{\"component_name\":\"DateTimeBox\",\"name\":\"col_updated_time\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列11\"}",
+         *       "col_nor_str": "{\"component_name\":\"DropDownBox\",\"name\":\"col_nor_str\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列7\"}",
+         *       "col_time": "{\"component_name\":\"DateTimeBox\",\"name\":\"col_time\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列5\"}",
+         *       "remark": "{\"component_name\":\"TextAreaBox\",\"name\":\"remark\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列12\"}",
+         *       "created_by": "{\"component_name\":\"TextBox\",\"name\":\"col_created_by\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列8\"}",
+         *       "col_date": "{\"component_name\":\"DateBox\",\"name\":\"col_date\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列5\"}",
+         *       "col_bool": "{\"component_name\":\"RadioBox\",\"name\":\"col_bool\",\"data_url\":\"/dict/sex\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列3\"}",
+         *       "col_decimal": "{\"component_name\":\"TextBox\",\"name\":\"col_decimal\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列6\"}",
+         *       "updated_by": "{\"component_name\":\"TextBox\",\"name\":\"col_updated_by\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列10\"}",
+         *       "col_bigint": "{\"component_name\":\"TextBox\",\"name\":\"col_bigint\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列2\"}",
+         *       "id": "{\"component_name\":\"TextBox\",\"name\":\"id\",\"conf\":{\"disabled\":\"true\",\"clearable\":\"true\"},\"label\":\"ID\"}"
+         *     }
+         *   },
+         *   "state": "ok"
+         * }
+         */
         renderJson(Ret.ok("data", objectConfig));
     }
 
@@ -66,22 +90,11 @@ public class ComponentController extends FrontRestController {
         String configString = getPara("conf", "{}");
 
         //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
-        String fieldCode = getPara("fieldCode", "");
-
         Kv config = JSON.parseObject(configString, Kv.class);
-
         ViewComponent component = ViewFactory.createViewComponent(compCode);
-        if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
-            ServiceManager.componentService().newFieldConfig(component, objectCode, fieldCode, config);
-            renderJson(Ret.ok());
-        } else if (StrKit.notBlank(objectCode, compCode)) {
-            MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
-            ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
-            renderJson(Ret.ok());
-        } else {
-            ServiceManager.componentService().newDefault(compCode, config);
-            renderJson(Ret.ok());
-        }
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
+        renderJson(Ret.ok());
     }
 
     @Override
