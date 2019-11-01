@@ -98,8 +98,12 @@ public class ComponentController extends FrontRestController {
         //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
         Kv config = JSON.parseObject(configString, Kv.class);
         ViewComponent component = ViewFactory.createViewComponent(compCode);
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
-        ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
+        if (StrKit.notBlank(compCode, objectCode)) {
+            MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+            ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
+        } else {
+            ServiceManager.componentService().newDefault(compCode, JSON.parseObject(config.getStr(compCode), Kv.class));
+        }
         renderJson(Ret.ok());
     }
 
