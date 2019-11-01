@@ -50,8 +50,8 @@ public class ViewFactory {
 
             @Override
             public Kv inject(Kv meta, Kv conf, IMetaField field) {
-                Kv kv = Kv.create().set("component_name", "TextBox").set("name", field.en()).set("label", field.cn());
-                kv.set("conf", fieldsConfig.getOrDefault(field.en(), new Object()));
+                Kv kv = Kv.create().set(fieldsConfig);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
