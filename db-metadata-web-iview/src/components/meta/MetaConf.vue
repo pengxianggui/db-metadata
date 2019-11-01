@@ -1,51 +1,46 @@
 <template>
     <el-form :model="confModel" label-width="80px" class="demo-form-inline" style="height: 100%">
-        <el-container style="display: flex; height: 100%">
-            <el-header>
-                <el-row :gutter="12">
-                    <el-col :span="6">
-                        <el-form-item label="组件">
-                            <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
-                                           @change="loadConf"></drop-down-box>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="元对象">
-                            <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="changeObject"></drop-down-box>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-header>
-            <el-container style="flex: 1;">
-                <el-aside v-if="fields.length > 0" width="200px" style="max-height: 600px; overflow: auto;">
-                    <ul class="fields-ul">
-                        <li v-for="(item, index) in fields" :key="index" v-bind:class="{'active':activeFieldIndex === index }" @click="choseField(item, index)">
-                            <span v-text="index"></span>.
-                            <span v-text="item['field_code']"></span>
-                        </li>
-                    </ul>
-                </el-aside>
-                <el-container>
-                    <el-main>
-                        <el-form-item label="Meta-Conf">
-                            <json-box v-model="confModel.conf" :meta="confMeta" style="height: 600px;"></json-box>
-                        </el-form-item>
-                    </el-main>
-                    <el-footer>
-                        <el-form-item>
-                            <el-button type="primary" @click="onSubmit">提交</el-button>
-                            <el-button @click="onCancel">取消</el-button>
-                        </el-form-item>
-                    </el-footer>
-                </el-container>
-            </el-container>
-        </el-container>
+        <el-row :gutter="12">
+            <el-col :span="6">
+                <el-form-item label="组件">
+                    <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
+                                   @change="loadConf"></drop-down-box>
+                </el-form-item>
+            </el-col>
+            <el-col :span="6">
+                <el-form-item label="元对象">
+                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="changeObject"></drop-down-box>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-form-item :label="confModel.objectCode ? confModel.objectCode : confModel.componentCode">
+                    <json-box v-model="confModel.conf" :meta="confMeta"></json-box>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
+            <el-col>
+                <h3>{{index}}.{{key}}</h3>
+                <el-form-item label="conf">
+                    <json-box v-model="confModel.fConf[key]" :meta="confMeta"></json-box>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                    <el-button @click="onCancel">取消</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
     </el-form>
 </template>
 
 <script>
     import {DEFAULT} from '@/constant';
-    import utils from '@/utils';
     import DropDownBox from "../atom/DropDownBox";
 
     export default {
@@ -103,8 +98,8 @@
                 confModel: {
                     componentCode: null,
                     objectCode: null,
-                    fieldCode: null,
-                    conf: null
+                    conf: {},
+                    fConf: {}
                 }
             }
         },
@@ -117,46 +112,26 @@
                     url: 'component/load',
                     params: {
                         objectCode: _this.confModel.objectCode,
-                        componentCode: _this.confModel.componentCode,
-                        fieldCode: _this.confModel.fieldCode
+                        componentCode: _this.confModel.componentCode
                     }
                 }).then(resp => {
-                    if (resp.data) {
-                        let conf = resp.data.replace(/\\/g, "");
-                        _this.confModel.conf = JSON.parse(conf);
-                    } else {
-                        _this.confModel.conf = {}
+                    let data = resp.data;
+                    // let componentConf = data[this.confModel.componentCode].replace(/\\/g, "");
+                    let tableConf = data[this.confModel.objectCode].replace(/\\/g, "");
+                    let fieldsConf = data['fields'];
+                    // this.confModel.conf = JSON.parse(componentConf);
+                    if (this.confModel.objectCode) {
+                        this.confModel.conf = JSON.parse(tableConf);
+                    }
+                    for(let key in fieldsConf) {
+                        let conf = fieldsConf[key].replace(/\\/g, "");
+                        this.$set(this.confModel.fConf, key,  JSON.parse(conf));
                     }
                 }).catch(err => {
                     console.log(err)
                 })
             },
-            loadFields: function () {
-                if (!this.confModel.objectCode) {
-                    this.fields = [];
-                    this.activeFieldIndex = null;
-                    this.confModel.objectCode = null;
-                    this.confModel.fieldCode = null;
-                } else {
-                    this.$axios.get(utils.compile(this.fieldUrl, this.confModel)).then(resp => {
-                        this.fields = resp.data;
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                }
-            },
-            choseField: function(item, index) {
-                if (this.activeFieldIndex === index) {
-                    this.activeFieldIndex = null;
-                    this.confModel.fieldCode = null;
-                } else {
-                    this.activeFieldIndex = index;
-                    this.confModel.fieldCode = item['field_code'];
-                }
-                this.loadConf();
-            },
             changeObject: function () {
-                this.loadFields();
                 this.loadConf();
             },
             onSubmit: function () {
@@ -168,7 +143,6 @@
                 let params = {
                     componentCode: _this.confModel.componentCode,
                     objectCode: _this.confModel.objectCode,
-                    fieldCode: _this.confModel.fieldCode,
                     conf: JSON.stringify(_this.confModel.conf)
                 };
 
