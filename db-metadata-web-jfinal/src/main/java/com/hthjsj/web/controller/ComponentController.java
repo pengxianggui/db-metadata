@@ -50,7 +50,8 @@ public class ComponentController extends FrontRestController {
 
 
         if (StrKit.notBlank(objectCode, compCode)) {
-            Kv objectConfig = Kv.by(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
+            Kv objectConfig = Kv.create();
+            objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
             objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
             renderJson(Ret.ok("data", objectConfig));
         } else {
@@ -94,6 +95,9 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
         String configString = getPara("conf", "{}");
+
+
+
 
         //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
         Kv config = JSON.parseObject(configString, Kv.class);

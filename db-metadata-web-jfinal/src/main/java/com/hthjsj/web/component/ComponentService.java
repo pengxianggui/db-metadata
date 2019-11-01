@@ -122,7 +122,7 @@ public class ComponentService {
          * new objectConfig
          * foreach fieldsConfig
          */
-        boolean oc = newObjectConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
+        newObjectConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
 
         Collection<IMetaField> fields = object.fields();
 

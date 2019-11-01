@@ -1,5 +1,6 @@
 package com.hthjsj.web.query;
 
+import com.hthjsj.web.component.ComponentType;
 import com.jfinal.core.Controller;
 
 /**
@@ -42,7 +43,7 @@ public class QueryHelper {
         return tp.getPara("compCode", tp.getPara("componentCode"));
     }
 
-    public String getComponentType() {
-        return tp.getPara("compType", tp.getPara("componentType"));
+    public ComponentType getComponentType() {
+        return ComponentType.V(tp.getPara("compType", tp.getPara("componentType")));
     }
 }

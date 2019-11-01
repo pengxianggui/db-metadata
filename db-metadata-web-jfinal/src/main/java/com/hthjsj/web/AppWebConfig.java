@@ -11,6 +11,7 @@ import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
+import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.UserSettingIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
@@ -45,7 +46,7 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configRoute(Routes me) {
         me.setMappingSuperClass(true);
-        //        me.addInterceptor(new DevModeIntercept());
+        me.addInterceptor(new JsonParamIntercept());
         me.add("/db", DBController.class);
         me.add("/meta", MetaController.class);
         me.add("/component", ComponentController.class);
