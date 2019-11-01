@@ -9,21 +9,22 @@
             </el-col>
             <el-col :span="6">
                 <el-form-item label="元对象">
-                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="changeObject"></drop-down-box>
+                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></drop-down-box>
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col>
-                <el-form-item :label="confModel.objectCode ? confModel.objectCode : confModel.componentCode">
+                <h2 align="center">{{code}}</h2>
+                <el-form-item>
                     <json-box v-model="confModel.conf" :meta="confMeta"></json-box>
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
             <el-col>
-                <h3>{{index}}.{{key}}</h3>
-                <el-form-item label="conf">
+                <h4>{{index}}.{{key}}</h4>
+                <el-form-item>
                     <json-box v-model="confModel.fConf[key]" :meta="confMeta"></json-box>
                 </el-form-item>
             </el-col>
@@ -47,9 +48,10 @@
         name: "meta-conf",
         components: {DropDownBox},
         data() {
-            const fieldUrl = "/table/list/meta_field?object_code={objectCode}&fs=field_code&s=100"; // Temporary solution: set a large pageSize value
+            const fieldUrl = "/table/list/meta_field?object_code={objectCode}&fs=field_code&s=100"; // Temporary solution: set a large pageSize value. you know, for load all data
             let componentMeta = {
                 name: "component",
+                label: "组件",
                 data_url: "/component/list",
                 group: false,
                 conf: {
@@ -58,6 +60,7 @@
             };
             let objectMeta = {
                 name: "object",
+                label: "元对象",
                 data_url: "/table/list?objectCode=meta_object&fs=code",
                 group: false,
                 conf: {
@@ -79,6 +82,7 @@
             };
             let confMeta = {
                 name: "conf",
+                label: "配置",
                 conf: {
                     mode: 'code',
                 }
@@ -93,13 +97,11 @@
                 objectMeta: objectMeta,
                 componentMeta: componentMeta,
                 confMeta: confMeta,
-                fields: [],
-                activeFieldIndex: null,
                 confModel: {
                     componentCode: null,
                     objectCode: null,
-                    conf: {},
-                    fConf: {}
+                    conf: {}, // conf of component or metaObject
+                    fConf: {} // conf of fields
                 }
             }
         },
@@ -116,21 +118,19 @@
                     }
                 }).then(resp => {
                     let data = resp.data;
-                    let confKey = this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode'];
+                    let confKey = this.code;
                     let confVal = data[confKey].replace(/\\/g, "");
                     this.confModel.conf = JSON.parse(confVal);
 
                     let fConf = data['fields'];
-                    for(let fConfKey in fConf) {
+                    for (let fConfKey in fConf) {
                         let fConfVal = fConf[fConfKey].replace(/\\/g, "");
-                        this.$set(this.confModel.fConf, fConfKey,  JSON.parse(fConfVal));
+                        this.$set(this.confModel['fConf'], fConfKey, JSON.parse(fConfVal));
                     }
+                    // if (fConf)
                 }).catch(err => {
                     console.log(err)
                 })
-            },
-            changeObject: function () {
-                this.loadConf();
             },
             onSubmit: function () {
                 if (!this.confModel.componentCode) {
@@ -138,14 +138,15 @@
                     return;
                 }
                 let params = {
-                    componentCode: this.confModel['componentCode'],
-                    objectCode: this.confModel['objectCode'],
-                    conf: {}
+                    componentCode: this.confModel['componentCode']
                 };
 
-                let key = this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode'];
-                params.conf[key] =this.confModel['conf'];
-                params.conf['fields'] = this.confModel['fConf'];
+                let confKey = this.code;
+                params[confKey] = this.confModel['conf'];
+
+                for (let fConfKey in this.confModel['fConf']) {
+                    params[fConfKey] = this.confModel['fConf'][fConfKey];
+                }
 
                 this.$axios({
                     method: 'POST',
@@ -161,24 +162,13 @@
                 // todo
             }
         },
+        computed: {
+            code() {
+                return this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode']
+            }
+        }
     }
 </script>
 
 <style scoped>
-    .fields-ul {
-        list-style: none;
-    }
-    .fields-ul li {
-        min-height: 30px;
-        line-height: 30px;
-        padding: 3px 2px;
-        border-bottom: 1px solid #e6e6e6;
-        cursor: pointer;
-    }
-    .fields-ul li:hover {
-        background-color: #cadfff;
-    }
-    .fields-ul li.active {
-        background-color: aqua;
-    }
 </style>

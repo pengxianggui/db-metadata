@@ -125,6 +125,38 @@ yarn run lint
  -[ ] 表单(FormTmpl)
     -[ ] 表单布局
     -[ ] 更新/新增 模式下字段的不同属性配置, 可以设置两套配置(新增、编辑)
+
+ -[ ] Meta-Conf
+    -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
+        - 当前保存的格式为：
+        ```
+        {
+            // 组件
+            TableList: {},
+            // 元对象
+            test_table: {component_name: 'TableList', name: '', label: '', conf: {}},
+            // 下面是字段
+            id: {},
+            created_by: {},
+            // 其他字段 ...
+        }
+        ```
+        - 可以改为:
+        ```
+        {
+            component: {
+                TableList: {},
+            },
+            object: {
+                test_table: {}
+            },
+            field: {
+                id: {},
+                created_by: {},
+                // 其他字段 ...
+            }
+        }
+        ```
  
  
  
