@@ -50,6 +50,10 @@ public class ComponentService {
         Db.update(META_COMPONENT, defaultRecord);
     }
 
+    public boolean deleteDefault(String componentCode) {
+        return Db.delete("delete from " + META_COMPONENT + " where code=?", componentCode) > 0;
+    }
+
     public List<Record> listComponents() {
         return Db.findAll(META_COMPONENT);
     }
@@ -145,9 +149,33 @@ public class ComponentService {
         return getRecord(component, dest_code, INSTANCE.META_FIELD, config);
     }
 
-    public boolean newSpecificConfig(ViewComponent component, String specificCode) {
-        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC, Kv.create());
-        return Db.save(META_COMPONENT_INSTANCE, record);
+    //    public boolean newSpecificConfig(ViewComponent component, String specificCode) {
+    //        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC, Kv.create());
+    //        return Db.save(META_COMPONENT_INSTANCE, record);
+    //    }
+
+    public boolean deleteObjectConfig(String componentCode, String objectCode, boolean isSingle) {
+
+        Db.delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                  componentCode,
+                  INSTANCE.META_OBJECT.toString(),
+                  objectCode);
+
+        if (!isSingle) {
+            Db.delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object like concat(?,'%')",
+                      componentCode,
+                      INSTANCE.META_FIELD.toString(),
+                      objectCode);
+        }
+        return true;
+    }
+
+    public boolean deleteFieldConfig(String componentCode, String objectCode, String fieldCode) {
+        Db.delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                  componentCode,
+                  INSTANCE.META_FIELD.toString(),
+                  objectCode + "." + fieldCode);
+        return true;
     }
 
     private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific, Kv config) {

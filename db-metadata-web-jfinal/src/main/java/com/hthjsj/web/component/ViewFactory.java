@@ -1,5 +1,6 @@
 package com.hthjsj.web.component;
 
+import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
@@ -50,7 +51,7 @@ public class ViewFactory {
 
             @Override
             public Kv inject(Kv meta, Kv conf, IMetaField field) {
-                Kv kv = Kv.create().set(fieldsConfig);
+                Kv kv = JSON.parseObject(fieldsConfig.getStr("config"), Kv.class);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }

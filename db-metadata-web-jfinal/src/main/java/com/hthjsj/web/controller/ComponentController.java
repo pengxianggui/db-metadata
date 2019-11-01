@@ -76,10 +76,8 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
         String configString = getPara("conf", "{}");
 
-
         //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
         String fieldCode = getPara("fieldCode", "");
-
 
         Kv config = JSON.parseObject(configString, Kv.class);
 
@@ -93,6 +91,25 @@ public class ComponentController extends FrontRestController {
             renderJson(Ret.ok());
         } else {
             ServiceManager.componentService().newDefault(compCode, config);
+            renderJson(Ret.ok());
+        }
+    }
+
+    @Override
+    public void delete() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCode = queryHelper.getComponentCode();
+        String fieldCode = getPara("fieldCode", "");
+
+        if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
+            ServiceManager.componentService().deleteFieldConfig(compCode, objectCode, fieldCode);
+            renderJson(Ret.ok());
+        } else if (StrKit.notBlank(objectCode, compCode)) {
+            ServiceManager.componentService().deleteObjectConfig(compCode, objectCode, false);
+            renderJson(Ret.ok());
+        } else {
+            ServiceManager.componentService().deleteDefault(compCode);
             renderJson(Ret.ok());
         }
     }
