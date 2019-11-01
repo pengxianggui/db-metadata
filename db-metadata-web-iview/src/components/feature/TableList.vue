@@ -47,14 +47,27 @@ eg:
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column v-for="(item, index) in innerMeta.columns"
-                                     v-bind="item.conf"
-                                     :key="item.name + index"
-                                     :prop="item.name"
-                                     :label="item.label"
-                                     v-if="item.conf.showable"
-                    ></el-table-column>
-                    <el-table-column :render-header="renderHeader" width="180">
+                    <template v-for="(item, index) in innerMeta.columns">
+                        <el-table-column v-if="item.conf.showable"
+                                         v-bind="item.conf"
+                                         :key="item.name + index"
+                                         :prop="item.name"
+                                         :label="item.label">
+                        </el-table-column>
+                    </template>
+                    <el-table-column width="180">
+                        <template slot="header">
+                            <span>
+                                <span>操作</span>
+                                <el-popover placement="bottom-end" trigger="hover">
+                                    <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
+                                    <el-checkbox v-for="item in innerMeta.columns"
+                                                 :key="item['name']" :label="item['name']"
+                                                 v-model="item['conf']['showable']"
+                                                 @change="$forceUpdate(); getData()" style="display: block;"></el-checkbox>
+                                </el-popover>
+                            </span>
+                        </template>
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf.size"
                                        @click="handleEdit(scope.$index, scope.row)">编辑
@@ -133,40 +146,6 @@ eg:
             },
             handleDelete(index, row) {
                 // pxg_todo
-            },
-            renderHeader(h) {
-                let _this = this;
-                return h('span', {
-                    style: {},
-                }, [
-                    h("span", {
-                        style: {}
-                    }, "操作"),
-                    h('el-popover', {//el-select实现下拉框
-                        props: {
-                            placement: 'bottom-end',
-                            trigger: 'hover',
-                            width: '100',
-                        }
-                    }, [
-                        h('i', {slot: 'reference', class: 'el-icon-caret-bottom', style: {cursor: 'pointer'}}, ''),
-                        _this.innerMeta.columns.map(item => {
-                            return h("el-checkbox", {
-                                on: {
-                                    input: (value) => {
-                                        item.conf.showable = value;
-                                        _this.$forceUpdate();
-                                        if (value) _this.getData()
-                                    }
-                                },
-                                props: {
-                                    key: item.name,
-                                    label: item.name,
-                                    value: item.conf.showable
-                                }
-                            }, item.label)
-                        })
-                    ])])
             },
             choseRow(row, col, event) {
                 let selected = true;
