@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.Utils;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.component.ViewFactory;
@@ -94,13 +95,8 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-        String configString = getPara("conf", "{}");
 
-
-
-
-        //FIXME 属性配置,逐条保存,后期需改成 保存整个元对象配时级联保存属性配置
-        Kv config = JSON.parseObject(configString, Kv.class);
+        Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
         ViewComponent component = ViewFactory.createViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
