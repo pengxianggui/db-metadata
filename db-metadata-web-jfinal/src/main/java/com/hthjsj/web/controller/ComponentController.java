@@ -48,8 +48,15 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-        Kv objectConfig = Kv.by(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
-        objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
+
+        if (StrKit.notBlank(objectCode, compCode)) {
+            Kv objectConfig = Kv.by(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
+            objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
+            renderJson(Ret.ok("data", objectConfig));
+        } else {
+            renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode)));
+        }
+
 
         /**
          * {
@@ -74,7 +81,6 @@ public class ComponentController extends FrontRestController {
          *   "state": "ok"
          * }
          */
-        renderJson(Ret.ok("data", objectConfig));
     }
 
     @Override
