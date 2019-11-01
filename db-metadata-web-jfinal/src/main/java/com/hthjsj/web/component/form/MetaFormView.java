@@ -34,10 +34,13 @@ public class MetaFormView extends FormView {
         //1. init object
         name = metaObject.name();
         action = "/form/doAdd/" + metaObject.code();
+        meta.set("name", "fuck");
+        Kv kv = JSON.parseObject(objectConfig.getStr("config"), Kv.class);
 
-        meta.set("conf", JSON.parseObject(objectConfig.getStr("config")));
+        //https://blog.csdn.net/tangyaya8/article/details/91399650
+        kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+
         //2. foreach init fields
-
         Kv config = null;
         for (IMetaField metaField : metaObject.fields()) {
             config = JSON.parseObject(fieldsConfig.getStr(metaField.fieldCode()), Kv.class);
@@ -53,11 +56,11 @@ public class MetaFormView extends FormView {
 
     @Override
     public Kv toKv() {
-        meta.setIfNotBlank("methods", methods);
-        meta.setIfNotBlank("name", name);
-        meta.setIfNotBlank("action", action);
-        meta.setIfNotBlank("component_name", type());
-        meta.setIfNotNull("columns", fields.stream().map(f -> f.toKv()).collect(Collectors.toList()));
+        meta.putIfAbsent("methods", methods);
+        meta.putIfAbsent("name", name);
+        meta.putIfAbsent("action", action);
+        meta.putIfAbsent("component_name", type());
+        meta.putIfAbsent("columns", fields.stream().map(f -> f.toKv()).collect(Collectors.toList()));
         getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }

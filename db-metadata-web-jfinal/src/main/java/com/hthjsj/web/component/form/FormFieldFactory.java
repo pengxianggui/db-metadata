@@ -13,7 +13,7 @@ import com.jfinal.kit.Kv;
  */
 public class FormFieldFactory {
 
-    static DropDownBox createDropDown(IMetaField metaField, Kv instanceFieldConfig) {
+    static DropDownBox createDropDownBox(IMetaField metaField, Kv instanceFieldConfig) {
         DropDownBox dropDownBox = new DropDownBox(metaField.fieldCode(), metaField.cn());
 
         dropDownBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
@@ -21,21 +21,21 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
         return dropDownBox;
     }
 
-    static TextBox createInputField(IMetaField metaField, Kv instanceFieldConfig) {
+    static TextBox createTextBox(IMetaField metaField, Kv instanceFieldConfig) {
         TextBox textBox = new TextBox(metaField.fieldCode(), metaField.cn());
         textBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -49,7 +49,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -91,7 +91,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -119,7 +119,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -133,7 +133,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta, Kv conf) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -144,9 +144,9 @@ public class FormFieldFactory {
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
         switch (type) {
         case TEXTBOX:
-            return createInputField(metaField, instanceFieldConfig);
+            return createTextBox(metaField, instanceFieldConfig);
         case DROPDOWN:
-            return createDropDown(metaField, instanceFieldConfig);
+            return createDropDownBox(metaField, instanceFieldConfig);
         case RADIOBOX:
             return createRadioBox(metaField, instanceFieldConfig);
         case NUMBERBOX:
@@ -166,4 +166,18 @@ public class FormFieldFactory {
         }
         return null;
     }
+    //    class InstanceConfigFieldInject extends FieldInject.DefaultFieldInject{
+    //        Kv instanceFieldConfig;
+    //
+    //        public InstanceConfigFieldInject(Kv instanceFieldConfig) {
+    //            this.instanceFieldConfig = instanceFieldConfig;
+    //        }
+    //
+    //        @Override
+    //        public Kv inject(Kv meta, Kv conf) {
+    //            Kv kv = Kv.create().set(instanceFieldConfig);
+    //            kv.putAll(meta);
+    //            return kv;
+    //        }
+    //    }
 }
