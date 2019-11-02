@@ -2,8 +2,7 @@
     <el-container direction="vertical">
         <el-row class="el-card">
             <el-col :span="24">
-                <search-bar :meta="searchMeta"
-                            :search-model.sync="searchModel" @search="masterSearch"></search-bar>
+                <!-- FormTmpl -->
             </el-col>
             <el-col :span="24">
                 <table-list :meta="masterMeta" :data="masterData" :chose-data.sync="choseMasterData"
@@ -22,7 +21,6 @@
 
 <script>
     import mockData from '@/mockdata.js'
-    import SearchBar from '@/components/feature/SearchBar'
     import TableList from '@/components/feature/TableList'
 
     export default {
@@ -45,19 +43,13 @@
             }
         },
         methods: {
-            getSearchMeta () {
-                return {
-                    component_name: 'search-bar',
-                    conf: mockData.masterSearchBarMetadata
-                }
-            },
-            getMasterMeta () {
+            getMasterMeta() {
                 return mockData.masterMetadata
             },
-            getMasterFieldMeta () {
+            getMasterFieldMeta() {
                 return mockData.masterFieldMetadata
             },
-            getSlaveMeta () {
+            getSlaveMeta() {
                 return mockData.slaveMetadata
             },
             getSlaveFieldMeta() {
@@ -72,10 +64,10 @@
             getSlaveData() {
                 // todo 根据masterActiveData 获取slaveData
             },
-            masterSearch () {
+            masterSearch() {
                 this.masterData = this.getMasterData()
             },
-            slaveSearch () {
+            slaveSearch() {
                 this.slaveData = this.getSlaveData()
             }
         },
@@ -88,18 +80,16 @@
             }
         },
         components: {
-            SearchBar,
             TableList
         },
-        created () {
+        created() {
             // 获取元数据
-            this.searchMeta = this.getSearchMeta();
             this.masterMeta = this.getMasterMeta();
             // this.masterFieldMeta = this.getMasterFieldMeta()
             this.slaveMeta = this.getSlaveMeta()
             // this.slaveFieldMeta = this.getSlaveFieldMeta()
         },
-        mounted () {
+        mounted() {
             // 获取业务数据
             this.masterSearch({})
         },

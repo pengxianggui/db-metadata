@@ -14,9 +14,7 @@
         mixins: [Meta(DEFAULT.TimeBox), Val],
         name: "TimeBox",
         props: {
-            value: {
-                type: [Date, String]
-            },
+            value: [Date, String],
         },
     }
 </script>

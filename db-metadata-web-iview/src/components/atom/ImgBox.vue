@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-upload
-                v-bind="meta.ui_config"
+                v-bind="innerMeta.conf"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 accept="image">
@@ -14,7 +14,10 @@
 </template>
 <script>
     import {DEFAULT} from '@/constant'
+    import Meta from '../mixins/meta'
+
     export default {
+        mixins: [Meta(DEFAULT.ImgBox)],
         name: 'img-box',
         data() {
             return {
@@ -22,38 +25,14 @@
                 dialogVisible: false
             };
         },
-        props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {
-                        ui_config: DEFAULT.upload
-                    }
-                }
-            }
-        },
         methods: {
             handleRemove(file, fileList) {
-                // console.log(file, fileList);
+                return this.$confirm(`确定移除 ${ file.name }？`);
             },
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
-            },
-            getDefaultConf() {
-                return DEFAULT.ImgBox
-            },
-            initConf() {
-                // data effective check
-                this.meta.ui_config = this.meta.ui_config || {}
-
-                // merge options
-                let defaultConf = this.getDefaultConf() || {}
-                this.$merge(this.meta.ui_config, defaultConf)
             }
         },
-        created() {
-            this.initConf()
-        }
     }
 </script>

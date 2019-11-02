@@ -23,9 +23,7 @@
             }
         },
         props: {
-            value: {
-                type: [Object, String]
-            },
+            value: [Object, String],
             options: Array,
         },
         methods: {

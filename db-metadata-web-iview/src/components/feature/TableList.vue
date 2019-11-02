@@ -94,7 +94,7 @@ eg:
                                :total="pageModel.total"
                                v-bind="innerMeta.pagination"
                                @size-change="sizeChange"
-                               @current-change="indexChange"
+                               @current-change="getData"
                 ></el-pagination>
             </el-col>
         </el-row>
@@ -110,7 +110,10 @@ eg:
         data() {
             return {
                 innerData: [],
-                sortModel: {}, // {prop: , order: }
+                sortModel: {
+                    prop: null,
+                    order: null
+                }, // {prop: , order: }
                 pageModel: {
                     size: 10,
                     index: 1,
@@ -119,12 +122,12 @@ eg:
             }
         },
         props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {};
-                }
-            },
+            // meta: {
+            //     type: Object,
+            //     default: function () {
+            //         return {};
+            //     }
+            // },
             data: Array,
             page: {
                 type: Object,
@@ -155,10 +158,10 @@ eg:
             choseRow(row, col, event) {
                 let selected = true;
                 this.$emit('update:active-data', row);
-                let tableRefName = this.innerMeta.name;
+                let tableRefName = this.innerMeta['name'];
 
-                for (let i = 0; i < this.$refs[tableRefName].selection.length; i++) { // cancel chose judge
-                    let choseItem = this.$refs[tableRefName].selection[i];
+                for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
+                    let choseItem = this.$refs[tableRefName]['selection'][i];
                     if (row.id === choseItem.id) {
                         selected = false;
                         break
@@ -167,20 +170,24 @@ eg:
                 this.$refs[tableRefName].toggleRowSelection(row, selected)
             },
             sortChange(param) {
-                this.sortModel['prop'] = param['prop'];
-                this.sortModel['order'] = param['order'];
+                let { prop, order} = param;
+                this.sortModel = {
+                    prop: prop,
+                    order: order
+                };
+            },
+            setPage(index) {
+                this.pageModel['index'] = index;
             },
             sizeChange() {
-                this.pageModel['index'] = 1; // jump to page one
+                this.setPage(1); // jump to page one
                 this.getData();
             },
-            indexChange() {
-                this.getData();
-            },
-            setPage(total, index, size) {
-                this.pageModel['total'] = total;
-                this.pageModel['index'] = index;
-                this.pageModel['size'] = size;
+            setPageModel(page) {
+                const {total, index, size} = page;
+                this.pageModel['total'] = parseInt(total);
+                this.pageModel['index'] = parseInt(index);
+                this.pageModel['size'] = parseInt(size);
             },
             getData() {
                 if (!this.innerMeta.hasOwnProperty('data_url')) {
@@ -201,7 +208,7 @@ eg:
                     this.innerData = resp.data;
                     this.$emit("update:data", resp.data);
                     if (resp.hasOwnProperty('page')) {
-                        this.setPage(resp['page']['total'] - 0, resp['page']['index'] - 0, resp['page']['size'] - 0);
+                        this.setPageModel(resp['page']);
                     }
                 }).catch(resp => {
                     this.$message({type: 'error', message: resp})
@@ -209,14 +216,19 @@ eg:
             },
             initData() { // init business data
                 let page = this.page;
-                if (typeof page !== 'undefined') {
-                    this.setPage(page['total'],page['index'],page['size'])
+                let data = this.data;
+                if (page !== undefined) {
+                    this.setPageModel(page)
                 }
-                if (typeof this.data !== 'undefined') {
-                    this.innerData = this.data;
-                } else {
-                    this.getData()
+                if (data !== undefined) {
+                    this.innerData = data;
+                    return;
                 }
+                if (this.innerMeta.hasOwnProperty('data_url')) {
+                    this.getData();
+                    return;
+                }
+                console.error("data or data_url in meta provide one at least!")
             },
         },
         mounted() {
@@ -233,12 +245,12 @@ eg:
         computed: {
             innerMeta() {
                 if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
-                    this.meta.columns.forEach(item => {
+                    this.meta['columns'].forEach(item => {
                         if (!item.hasOwnProperty('conf')) {
                             item['conf'] = {}
                         }
                         if (!item['conf'].hasOwnProperty('showable')) { // default true
-                            item['conf'].showable = true;
+                            item['conf']['showable'] = true;
                         }
                     });
                 }

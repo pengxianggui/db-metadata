@@ -100,8 +100,9 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 }
             },
             initOptions: function () {
-                if (this.options !== undefined) { // 父组件定义了options
-                    this.innerOptions = this.options;
+                let options = this.options;
+                if (options !== undefined) { // 父组件定义了options
+                    this.innerOptions = options;
                     return;
                 }
                 if (this.innerMeta.hasOwnProperty('data_url')) {

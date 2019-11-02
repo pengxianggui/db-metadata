@@ -18,9 +18,7 @@
         mixins: [Meta(DEFAULT.PassBox), Val],
         name: "PassBox",
         props: {
-            value: {
-                type: String
-            },
+            value: String,
         }
     }
 </script>

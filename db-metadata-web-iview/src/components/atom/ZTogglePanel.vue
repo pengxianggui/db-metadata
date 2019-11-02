@@ -16,14 +16,6 @@
                 open: false
             }
         },
-        props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {};
-                }
-            },
-        },
         methods: {
             toggle() {
                 this.open = !this.open

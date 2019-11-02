@@ -1,5 +1,7 @@
 <template>
-    <el-input-number v-model="nativeValue" @change="$emit('change', $event)" v-bind="innerMeta['conf']"></el-input-number>
+    <el-input-number v-model="nativeValue"
+                     @change="$emit('change', $event)"
+                     v-bind="innerMeta['conf']"></el-input-number>
 </template>
 
 <script>
@@ -11,9 +13,7 @@
         mixins: [Meta(DEFAULT.NumBox), Val],
         name: "NumBox",
         props: {
-            value: {
-                type: [Number]
-            },
+            value: Number,
         }
     }
 </script>

@@ -134,7 +134,7 @@
                 })
             },
             onSubmit: function () {
-                if (!this.confModel.componentCode) {
+                if (!this.confModel['componentCode']) {
                     this.$message({type: 'error', message: '必须选定一个组件'});
                     return;
                 }

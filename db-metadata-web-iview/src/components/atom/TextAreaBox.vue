@@ -19,13 +19,7 @@
         mixins: [Meta(DEFAULT.TextAreaBox), Val],
         name: "TextAreaBox",
         props: {
-            value: {
-                type: String
-            }
-        },
-        data () {
-            return {
-            }
+            value: String,
         },
     }
 </script>

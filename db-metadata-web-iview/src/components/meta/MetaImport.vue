@@ -45,14 +45,13 @@ eg:
 -->
 <template>
     <div>
-        <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
+        <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
                 <drop-down-box :meta="schemaMeta" v-model="model[schemaMeta.name]"
                                @change="refreshTables()"></drop-down-box>
             </el-form-item>
             <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
-                <drop-down-box :meta="tableMeta" v-model="model[tableMeta.name]"
-                               :options="tableOptions"></drop-down-box>
+                <drop-down-box :meta="tableMeta" v-model="model[tableMeta.name]"></drop-down-box>
             </el-form-item>
             <el-form-item :label="objectMeta.label" :prop="objectMeta.name">
                 <text-box :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>
@@ -61,10 +60,10 @@ eg:
                 <text-box :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
-                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns.submit.conf" @click="onSubmit"
-                           v-text="innerMeta.btns.submit.label"></el-button>
-                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns.cancel.conf" @click="onCancel"
-                           v-text="innerMeta.btns.cancel.label"></el-button>
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
+                           v-text="innerMeta.btns['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']" @click="onCancel"
+                           v-text="innerMeta.btns['cancel']['label']"></el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -78,8 +77,6 @@ eg:
         data() {
             return {
                 model: {},
-                tableOptions: [],
-                schemaOptions: []
             }
         },
         props: {
@@ -92,35 +89,32 @@ eg:
         },
         methods: {
             assemblyModel() {
-                let _this = this;
-                _this.innerMeta.columns.forEach(item => {
-                    _this.$set(_this.model, item.name, item.value || null)
+                this.innerMeta['columns'].forEach(item => {
+                    this.$set(this.model, item.name, item.value || null)
                 })
-            },
-            getDefaultMeta() {
-                return DEFAULT.FormTmpl
             },
             refreshTables() {
                 let url = this.$complieString(this.model, this.tableMeta['data_url']);
                 this.tableMeta['data_url'] = url;
             },
             doSubmit() {
-                let _this = this;
-                if (_this.$listeners.submit) {
-                    _this.$emit('submit', _this.model)
+                const params = this.model;
+                if (this.$listeners.submit) {
+                    this.$emit('submit', params)
                 } else {
-                    this.$axios.post(_this.innerMeta.action, _this.model).then(resp => {
-                        _this.$message({type: 'success', message: resp.msg || '操作成功'})
-                    }).catch(resp => {
-                        _this.$message.error(resp.toString())
+                    const url = this.innerMeta.action;
+                    this.$axios.post(url, params).then(resp => {
+                        this.$message({type: 'success', message: resp.msg || '操作成功'})
+                    }).catch(err => {
+                        this.$message({type: 'error', message: err})
                     })
                 }
             },
             onSubmit(event) {
-                let _this = this;
-                _this.$refs[_this.innerMeta['name']].validate((valid) => {
+                const name = this.innerMeta['name'];
+                this.$refs[name].validate((valid) => {
                     if (valid) {
-                        _this.doSubmit(event) // submit
+                        this.doSubmit(event) // submit
                     } else {
                         return false;
                     }
@@ -145,16 +139,16 @@ eg:
                 return this.$merge(this.meta, DEFAULT.FormTmpl);
             },
             schemaMeta: function() {
-                return this.meta.columns[0]
+                return this.meta['columns'][0]
             },
             tableMeta: function() {
-                return this.meta.columns[1]
+                return this.meta['columns'][1]
             },
             objectMeta: function() {
-                return this.meta.columns[2]
+                return this.meta['columns'][2]
             },
             codeMeta: function() {
-                return this.meta.columns[3]
+                return this.meta['columns'][3]
             },
         }
     }

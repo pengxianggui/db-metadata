@@ -17,9 +17,7 @@
         mixins: [Meta(DEFAULT.TextBox), Val],
         name: "TextBox",
         props: {
-            value: {
-                type: String
-            },
+            value: String,
         }
     }
 </script>
