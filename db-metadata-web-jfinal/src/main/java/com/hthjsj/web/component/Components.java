@@ -1,11 +1,20 @@
 package com.hthjsj.web.component;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Joiner;
+import com.google.common.io.Files;
 import com.google.common.reflect.ClassPath;
 import com.hthjsj.analysis.meta.Component;
-import com.jfinal.aop.Aop;
+import com.hthjsj.web.ServiceManager;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.PathKit;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,11 +49,20 @@ final public class Components {
         return registry;
     }
 
+    /**
+     * 1. 自动scanPackage 进行注册
+     * 2. 自动依jsonTemplate.json 为准 进行组件配置更新
+     */
     public void init() {
         autoRegister();
+        Kv staticGolbalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
-            Aop.get(ComponentService.class).newDefault(type.code, Kv.create());
+            if (!ServiceManager.componentService().newDefault(type.code, Kv.create())) {
+                if (JFinal.me().getConstants().getDevMode()) {
+                    ServiceManager.componentService().updateDefault(type.code, JSON.parseObject(staticGolbalConfig.getStr(type.code), Kv.class));
+                }
+            }
         }
     }
 
@@ -63,6 +81,26 @@ final public class Components {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    public JSONObject loadTmplConfigFromFile() {
+        List<String> lines = null;
+        try {
+            lines = Files.readLines(new File(PathKit.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        String result = Joiner.on("").join(lines);
+        JSONObject jsonObject = JSON.parseObject(result);
+        for (ComponentType t : ComponentType.values()) {
+            if (jsonObject.get(t.getCode()) == null) {
+                log.warn("not find default component [{}] config: {}", t.getCode(), jsonObject.get(t.getCode()));
+            } else {
+                log.info("find default component [{}] config: {}", t.getCode(), jsonObject.get(t.getCode()));
+            }
+        }
+        return jsonObject;
     }
 }
 

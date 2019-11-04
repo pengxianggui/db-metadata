@@ -37,9 +37,7 @@ public class ComponentService {
         if (StrKit.isBlank(componentCode)) {
             throw new ComponentException("必须指定组件 Code:%s", componentCode);
         }
-        Record record = Db.findFirst("select * from " + META_COMPONENT + " where code=? and version=(select max(version) from meta_component where code=?)",
-                                     componentCode,
-                                     componentCode);
+        Record record = loadLatestComponentRecord(componentCode);
         if (record == null) {
             throw new ComponentException("未找到Code[%s]的组件", componentCode);
         }
@@ -57,15 +55,28 @@ public class ComponentService {
         return record;
     }
 
-    public void newDefault(String componentCode, Kv config) {
-        Record defaultRecord = Db.findFirst("select * from " + META_COMPONENT + " where code=?", componentCode);
+    public boolean newDefault(String componentCode, Kv config) {
+        Record defaultRecord = loadLatestComponentRecord(componentCode);
         if (defaultRecord == null) {
             Record record = getNewComponentRecord(ComponentType.V(componentCode), config);
-            Db.save(META_COMPONENT, record);
-            return;
+            return Db.save(META_COMPONENT, record);
         }
-        //        defaultRecord.set("config", JSON.toJSONString(config));
-        //        Db.update(META_COMPONENT, defaultRecord);
+        return false;
+    }
+
+    private Record loadLatestComponentRecord(String componentCode) {
+        return Db.findFirst("select * from " + META_COMPONENT + " where code=? and version=(select max(version) from meta_component where code=?)",
+                            componentCode,
+                            componentCode);
+    }
+
+    public void updateDefault(String componentCode, Kv config) {
+        Record defaultRecord = loadLatestComponentRecord(componentCode);
+        if (defaultRecord != null) {
+            defaultRecord.set("version", defaultRecord.getInt("version") + 1);
+            defaultRecord.set("config", JSON.toJSONString(config));
+            Db.update(META_COMPONENT, defaultRecord);
+        }
     }
 
     public boolean deleteDefault(String componentCode) {

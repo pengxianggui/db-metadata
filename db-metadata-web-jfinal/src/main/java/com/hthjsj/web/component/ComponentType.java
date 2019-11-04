@@ -9,18 +9,18 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 public enum ComponentType {
-    TABLEVIEW("tableview", "表格组件", "TableList"),
-    FORMVIEW("formview", "表单组件", "FormTmpl"),
-    BUTTON("button", "按钮组件", "Button"),
-    DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
-    TEXTBOX("textbox", "输入框组件", "TextBox"),
-    RADIOBOX("radiobox", "单选框", "RadioBox"),
-    NUMBERBOX("numberbox", "数值框", "NumBox"),
     BOOLBOX("boolbox", "布尔框", "BoolBox"),
-    TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
+    BUTTON("button", "按钮组件", "Button"),
     DATEBOX("datebox", "日期框", "DateBox"),
-    TIMEBOX("timebox", "时间框", "TimeBox"),
     DATETIMEBOX("datetimebox", "日期时间框", "DateTimeBox"),
+    DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
+    FORMVIEW("formview", "表单组件", "FormTmpl"),
+    NUMBERBOX("numberbox", "数值框", "NumBox"),
+    RADIOBOX("radiobox", "单选框", "RadioBox"),
+    TABLEVIEW("tableview", "表格组件", "TableList"),
+    TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
+    TEXTBOX("textbox", "输入框组件", "TextBox"),
+    TIMEBOX("timebox", "时间框", "TimeBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter
