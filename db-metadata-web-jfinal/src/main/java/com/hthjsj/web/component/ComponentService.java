@@ -37,7 +37,20 @@ public class ComponentService {
         if (StrKit.isBlank(componentCode)) {
             throw new ComponentException("必须指定组件 Code:%s", componentCode);
         }
-        Record record = Db.findFirst("select * from " + META_COMPONENT + " where code=?", componentCode);
+        Record record = Db.findFirst("select * from " + META_COMPONENT + " where code=? and version=(select max(version) from meta_component where code=?)",
+                                     componentCode,
+                                     componentCode);
+        if (record == null) {
+            throw new ComponentException("未找到Code[%s]的组件", componentCode);
+        }
+        return record;
+    }
+
+    public Record loadDefaultByVersion(String componentCode, int version) {
+        if (StrKit.isBlank(componentCode)) {
+            throw new ComponentException("必须指定组件 Code:%s", componentCode);
+        }
+        Record record = Db.findFirst("select * from " + META_COMPONENT + " where code=? and version=?", componentCode, version);
         if (record == null) {
             throw new ComponentException("未找到Code[%s]的组件", componentCode);
         }
@@ -47,10 +60,12 @@ public class ComponentService {
     public void newDefault(String componentCode, Kv config) {
         Record defaultRecord = Db.findFirst("select * from " + META_COMPONENT + " where code=?", componentCode);
         if (defaultRecord == null) {
-            register(ComponentType.V(componentCode), config);
+            Record record = getNewComponentRecord(ComponentType.V(componentCode), config);
+            Db.save(META_COMPONENT, record);
+            return;
         }
-        defaultRecord.set("config", JSON.toJSONString(config));
-        Db.update(META_COMPONENT, defaultRecord);
+        //        defaultRecord.set("config", JSON.toJSONString(config));
+        //        Db.update(META_COMPONENT, defaultRecord);
     }
 
     public boolean deleteDefault(String componentCode) {
@@ -61,22 +76,20 @@ public class ComponentService {
         return Db.findAll(META_COMPONENT);
     }
 
-    public void register(ComponentType type, Kv config) {
-        if (Db.queryInt("select count(1) from " + META_COMPONENT + " where code=?", type.getCode()) == 0) {
-            Record record = new Record();
-            record.set("id", SnowFlake.me().nextId());
-            record.set("en", type.getCode());
-            record.set("cn", type.getCn());
-            record.set("config", JSON.toJSONString(config));
-            record.set("code", type.getCode());
-            record.set("version", 1);
-            User u = ThreadLocalUserKit.getUser();
-            if (u != null) {
-                record.set("created_by", u.userId());
-                record.set("created_time", new Date());
-            }
-            Db.save(META_COMPONENT, record);
+    private Record getNewComponentRecord(ComponentType type, Kv config) {
+        Record record = new Record();
+        record.set("id", SnowFlake.me().nextId());
+        record.set("en", type.getCode());
+        record.set("cn", type.getCn());
+        record.set("config", JSON.toJSONString(config));
+        record.set("code", type.getCode());
+        record.set("version", 1);
+        User u = ThreadLocalUserKit.getUser();
+        if (u != null) {
+            record.set("created_by", u.userId());
+            record.set("created_time", new Date());
         }
+        return record;
     }
 
     public Record loadObjectConfig(String componentCode, String destCode) {

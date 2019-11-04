@@ -112,12 +112,8 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-        String fieldCode = getPara("fieldCode", "");
 
-        if (StrKit.notBlank(objectCode, compCode, fieldCode)) {
-            ServiceManager.componentService().deleteFieldConfig(compCode, objectCode, fieldCode);
-            renderJson(Ret.ok());
-        } else if (StrKit.notBlank(objectCode, compCode)) {
+        if (StrKit.notBlank(objectCode, compCode)) {
             ServiceManager.componentService().deleteObjectConfig(compCode, objectCode, false);
             renderJson(Ret.ok());
         } else {

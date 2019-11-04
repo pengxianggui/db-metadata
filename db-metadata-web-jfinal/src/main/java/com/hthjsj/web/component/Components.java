@@ -1,8 +1,10 @@
 package com.hthjsj.web.component;
 
+import com.google.common.reflect.ClassPath;
 import com.hthjsj.analysis.meta.Component;
 import com.jfinal.aop.Aop;
 import com.jfinal.kit.Kv;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 final public class Components {
 
     private static final Components me = new Components();
@@ -38,16 +41,27 @@ final public class Components {
     }
 
     public void init() {
+        autoRegister();
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
-            try {
-                ComponentType type = componentTypeClassEntry.getKey();
-                Component componentInstance = componentTypeClassEntry.getValue().newInstance();
-                Aop.get(ComponentService.class).register(type, Kv.create());
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            ComponentType type = componentTypeClassEntry.getKey();
+            Aop.get(ComponentService.class).newDefault(type.code, Kv.create());
+        }
+    }
+
+    /**
+     * 扫描 com.hthjsj.web.component 包下,根据ComponentType 进行注册;
+     */
+    private void autoRegister() {
+        try {
+            ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("com.hthjsj.web.component")) {
+                Class<?> clazz = classInfo.load();
+                if (ComponentType.V(clazz.getSimpleName()) != ComponentType.UNKNOWN) {
+                    registry.put(ComponentType.V(clazz.getSimpleName()), (Class<? extends Component>) clazz);
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 }

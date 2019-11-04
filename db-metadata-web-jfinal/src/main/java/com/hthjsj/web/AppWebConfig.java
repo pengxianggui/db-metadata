@@ -2,13 +2,7 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.web.component.ComponentType;
 import com.hthjsj.web.component.Components;
-import com.hthjsj.web.component.TableView;
-import com.hthjsj.web.component.form.Button;
-import com.hthjsj.web.component.form.DropDownBox;
-import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.controller.*;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
@@ -70,11 +64,6 @@ public class AppWebConfig extends JFinalConfig {
         SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
 
         //component register
-        Components.me().add(ComponentType.TABLEVIEW, TableView.class);
-        Components.me().add(ComponentType.FORMVIEW, FormView.class);
-        Components.me().add(ComponentType.TEXTBOX, TextBox.class);
-        Components.me().add(ComponentType.DROPDOWN, DropDownBox.class);
-        Components.me().add(ComponentType.BUTTON, Button.class);
         Components.me().init();
     }
 
