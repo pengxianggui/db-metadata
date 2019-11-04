@@ -201,6 +201,10 @@ public class ComponentService {
         return true;
     }
 
+    public boolean hasObjectConfig(String componentCode, String objectCode) {
+        return loadObjectConfig(componentCode, objectCode) != null;
+    }
+
     private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());

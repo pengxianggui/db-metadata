@@ -43,18 +43,21 @@ public class ComponentController extends FrontRestController {
         /**
          * object Code
          * component Type
-         *
          */
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
 
-        if (StrKit.notBlank(objectCode, compCode)) {
-            Kv objectConfig = Kv.create();
-            objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
-            objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
-            renderJson(Ret.ok("data", objectConfig));
+        if (StrKit.notBlank(compCode, objectCode)) {
+            if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
+                Kv objectConfig = Kv.create();
+                objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
+                objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
+                renderJson(Ret.ok("data", objectConfig));
+            } else {
+
+            }
         } else {
             renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode)));
         }
