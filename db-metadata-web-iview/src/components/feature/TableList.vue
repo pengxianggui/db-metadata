@@ -122,12 +122,12 @@ eg:
             }
         },
         props: {
-            // meta: {
-            //     type: Object,
-            //     default: function () {
-            //         return {};
-            //     }
-            // },
+            meta: {
+                type: Object,
+                default: function () {
+                    return {};
+                }
+            },
             data: Array,
             page: {
                 type: Object,
