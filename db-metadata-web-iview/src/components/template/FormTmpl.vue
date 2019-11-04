@@ -9,10 +9,6 @@ eg:
         conf: {
             "label-width": '80px',
             size: 'medium', // medium|small|mini
-            model: {
-                username: '',
-                // ...
-            },
             rules: {
                 username: [{required: true, message: '用户名必填', trigger: 'blur'}],
                 // ...
