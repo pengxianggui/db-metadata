@@ -83,8 +83,35 @@ public class ComponentService {
         return Db.delete("delete from " + META_COMPONENT + " where code=?", componentCode) > 0;
     }
 
-    public List<Record> listComponents() {
+    public List<Record> loadComponents() {
         return Db.findAll(META_COMPONENT);
+    }
+
+    /**
+     * <pre>
+     *     配置格式:load meta_component
+     *          [key]     [value]
+     *      TableList	 {"pagination":{"layout":"total, sizes, prev, pager, next, jumper","page-size":10,"current-page":1,"page-sizes":20},"methods":"GET","columns":[],"component_name":"TableList","name":"TableList","conf":{"size":"medium","default-sort":{"prop":"id","order":"descending"},"highlight-current-row":true},"label":"表格模板","data_url":"/table/list"}
+     *      DropDownBox	 {"component_name":"DropDownBox","name":"DropDownBox","conf":{"clearable":true},"label":"下拉框","group":false}
+     *      FormTmpl	 {"columns":[],"component_name":"FormTmpl","name":"FormTmpl","action":"/save","btns":{"cancel":{"conf":{},"label":"取消"},"submit":{"conf":{"type":"primary"},"label":"提交"}},"conf":{"size":"medium","rules":{},"label-width":"100px"},"label":"表单模板"}
+     *      TextBox	     {"component_name":"TextBox","name":"TextBox","conf":{"clearable":true,"placeholder":"请输入内容.."},"label":"文本框"}
+     *      RadioBox	 {"component_name":"RadioBox","name":"RadioBox","conf":{},"label":"单选框","data_url":"","group":false}
+     *      NumBox	     {"component_name":"NumBox","name":"NumBox","conf":{"controls":false,"placeholder":"请输入数值.."},"label":"数字框"}
+     *      TextAreaBox	 {"component_name":"TextAreaBox","name":"TextAreaBox","conf":{"clearable":true,"placeholder":"请输入文本内容.."},"label":"文本域"}
+     *      DateTimeBox	 {"component_name":"DateTimeBox","name":"DateTimeBox","conf":{"clearable":true,"value-format":"yyyy-MM-dd HH:mm:ss"},"label":"日期时间框"}
+     *      DateBox	     {"component_name":"DateBox","name":"DateBox","conf":{"clearable":true,"value-format":"yyyy-MM-dd"},"label":"日期框"}
+     *      BoolBox	     {"component_name":"BoolBox","name":"BoolBox","conf":{},"label":"布尔框"}
+     * </pre>
+     *
+     * @return
+     */
+    public Kv loadComponentsFlatMap() {
+        Kv kv = Kv.create();
+        List<Record> components = loadComponents();
+        components.forEach(record -> {
+            kv.set(record.getStr("code"), record.getStr("config"));
+        });
+        return kv;
     }
 
     private Record getNewComponentRecord(ComponentType type, Kv config) {
@@ -103,15 +130,25 @@ public class ComponentService {
         return record;
     }
 
-    public Record loadObjectConfig(String componentCode, String destCode) {
+    public String loadObjectConfig(String componentCode, String destCode) {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
     }
 
-    public Kv loadObjectFlatConfig(String componentCode, String destCode) {
-        Record objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
+    public Kv loadObjectConfigFlat(String componentCode, String destCode) {
+        //load single object config
+        String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
         Kv objConf = Kv.by(destCode, objectConfig);
+
+        //load fields config
         objConf.set(loadFieldsConfigMap(componentCode, destCode));
         return objConf;
+    }
+
+    public List<Record> loadFieldsConfig(String componentCode, String destCode) {
+        return Db.find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
+                       componentCode,
+                       destCode,
+                       INSTANCE.META_FIELD.toString());
     }
 
     public Kv loadFieldsConfigMap(String componentCode, String destCode) {
@@ -124,16 +161,8 @@ public class ComponentService {
         return kv;
     }
 
-    public List<Record> loadFieldsConfig(String componentCode, String destCode) {
-        return Db.find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
-                       componentCode,
-                       destCode,
-                       INSTANCE.META_FIELD.toString());
-    }
-
-    private Record loadConfig(String componentCode, String destCode, String type) {
-        Record record = Db.findFirst("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
-        return record == null ? new Record() : record;
+    private String loadConfig(String componentCode, String destCode, String type) {
+        return Db.queryStr("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
     }
 
     public boolean newObjectConfig(ViewComponent component, String objectCode, Kv config) {

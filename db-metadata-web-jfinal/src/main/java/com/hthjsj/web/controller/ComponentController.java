@@ -2,13 +2,17 @@ package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
+import com.hthjsj.web.component.ComponentType;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.ui.IViewAdapter;
+import com.hthjsj.web.ui.SmartAssemble;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -30,7 +34,7 @@ public class ComponentController extends FrontRestController {
 
     @Override
     public void list() {
-        List<Record> components = ServiceManager.componentService().listComponents();
+        List<Record> components = ServiceManager.componentService().loadComponents();
         List<Kv> results = Lists.newArrayList();
         components.forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
@@ -50,16 +54,24 @@ public class ComponentController extends FrontRestController {
 
 
         if (StrKit.notBlank(compCode, objectCode)) {
+            Kv objectConfig = Kv.create();
             if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
-                Kv objectConfig = Kv.create();
-                objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode).getStr("config"));
+                objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode));
                 objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
                 renderJson(Ret.ok("data", objectConfig));
             } else {
-
+                IMetaObject metaObject = ServiceManager.dbMetaService().findByCode(objectCode);
+                IViewAdapter<IMetaObject> metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.V(compCode));
+                objectConfig.set(objectCode, metaObjectIViewAdapter.instanceConfig());
+                Kv fields = Kv.create();
+                metaObjectIViewAdapter.fields().forEach(m -> {
+                    fields.set(m.getMeta().fieldCode(), m.instanceConfig());
+                });
+                objectConfig.set("fields", fields);
+                renderJson(Ret.ok("data", objectConfig));
             }
         } else {
-            renderJson(Ret.ok("data", ServiceManager.componentService().loadDefault(compCode)));
+            renderJson(Ret.ok("data", Kv.by(compCode, ServiceManager.componentService().loadDefault(compCode).getStr("config"))));
         }
 
 

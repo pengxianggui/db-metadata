@@ -50,11 +50,6 @@ public class TableView extends ViewComponent {
     }
 
     @Override
-    public String config() {
-        return meta.toJson();
-    }
-
-    @Override
     public ComponentType componentType() {
         return ComponentType.TABLEVIEW;
     }

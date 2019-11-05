@@ -32,9 +32,4 @@ public abstract class FormField extends ViewComponent {
         this.meta.set("label", label);
     }
 
-    @Override
-    public String config() {
-        return null;
-    }
-
 }

@@ -32,6 +32,7 @@ public class FormView extends ViewComponent {
     @Getter
     List<FormField> fields = new ArrayList<>();
 
+
     public static FormView POST(String action, String name) {
         FormView formView = new FormView();
         formView.methods = "POST";
@@ -41,22 +42,17 @@ public class FormView extends ViewComponent {
     }
 
     @Override
-    public String config() {
-        return meta.toJson();
-    }
-
-    @Override
     public ComponentType componentType() {
         return ComponentType.FORMVIEW;
     }
 
     @Override
     public Kv toKv() {
-        meta.setIfNotBlank("methods", methods);
-        meta.setIfNotBlank("name", name);
-        meta.setIfNotBlank("action", action);
-        meta.setIfNotBlank("component_name", type());
-        meta.set("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
+        meta.putIfAbsent("methods", methods);
+        meta.putIfAbsent("name", name);
+        meta.putIfAbsent("action", action);
+        meta.putIfAbsent("component_name", type());
+        meta.putIfAbsent("columns", fields.stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         getViewInject().inject(this, meta, conf, getFieldInject());
         return meta;
     }

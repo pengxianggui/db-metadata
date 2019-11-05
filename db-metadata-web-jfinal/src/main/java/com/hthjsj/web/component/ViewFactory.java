@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/10/21 </p>
@@ -25,7 +26,7 @@ public class ViewFactory {
         //TODO bad small code
         tableView.dataUrl("/table/list/" + metaObject.code());
 
-        Kv tableViewConfig = ServiceManager.componentService().loadObjectFlatConfig(tableView.type(), metaObject.code());
+        Kv tableViewConfig = ServiceManager.componentService().loadObjectConfigFlat(tableView.type(), metaObject.code());
         log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
 
         tableView.setViewInject(new ViewInject<TableView>() {
@@ -56,33 +57,51 @@ public class ViewFactory {
     }
 
     public static FormView createFormView(MetaObject metaObject) {
-        Kv formViewConfig = ServiceManager.componentService().loadObjectFlatConfig(ComponentType.FORMVIEW.code, metaObject.code());
+        Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.code, metaObject.code());
         log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
-        MetaFormView formView = new MetaFormView(metaObject, formViewConfig);
-        return formView;
+
+        FormView formView1 = FormView.POST("/form/doAdd", metaObject.name());
+        formView1.setViewInject(new ViewInject<FormView>() {
+
+            @Override
+            public void inject(FormView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
+                Kv kv = JSON.parseObject(formViewConfig.getStr(metaObject.code()), Kv.class);
+                //https://blog.csdn.net/tangyaya8/article/details/91399650
+                kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+                Kv config = null;
+                for (IMetaField metaField : metaObject.fields()) {
+                    config = JSON.parseObject(formViewConfig.getStr(metaField.fieldCode()), Kv.class);
+                    FormField formField = FormFieldFactory.createFormField(metaField, config);
+                    component.getFields().add(formField);
+                }
+                //overwrite columns
+                meta.set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
+            }
+        });
+        return formView1;
     }
 
     public static ViewComponent createViewComponent(String typeString) {
         ComponentType type = ComponentType.V(typeString);
         ViewComponent component = null;
         switch (type) {
-        case BUTTON:
-            component = new Button();
-            break;
-        case DROPDOWN:
-            component = new DropDownBox();
-            break;
-        case FORMVIEW:
-            component = new FormView();
-            break;
-        case TABLEVIEW:
-            component = new TableView();
-            break;
-        case TEXTBOX:
-            component = new TextBox();
-            break;
-        default:
-            break;
+            case BUTTON:
+                component = new Button();
+                break;
+            case DROPDOWN:
+                component = new DropDownBox();
+                break;
+            case FORMVIEW:
+                component = new FormView();
+                break;
+            case TABLEVIEW:
+                component = new TableView();
+                break;
+            case TEXTBOX:
+                component = new TextBox();
+                break;
+            default:
+                break;
         }
         return component;
     }

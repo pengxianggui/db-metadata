@@ -140,7 +140,38 @@ public class FormFieldFactory {
         return dateTimeBox;
     }
 
-    static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
+    /**
+     * <pre>
+     * 说明: 区别于createFormField 传入的配置 为全局
+     *
+     * instanceFieldConfig 数据格式
+     *         [key]        [value]
+     *      fieldCode -> meta_component.config
+     * </pre>
+     *
+     * @param metaField
+     * @param globalConfig
+     *
+     * @return
+     */
+    public static FormField createFormFieldDefault(IMetaField metaField, Kv globalConfig) {
+        return createFormField(metaField, globalConfig);
+    }
+
+    /**
+     * <pre>
+     * 说明:
+     * instanceFieldConfig 数据格式
+     *         [key]        [value]
+     *      fieldCode -> meta_component_instance.config
+     * </pre>
+     *
+     * @param metaField
+     * @param instanceFieldConfig
+     *
+     * @return
+     */
+    public static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
         switch (type) {
         case TEXTBOX:

@@ -29,13 +29,6 @@ public abstract class ViewComponent implements Component, ComponentRender {
     @Setter
     AccessBehavior accessBehavior;
 
-    /**
-     * 用于获取Component最终的jsonString;
-     *
-     * @return
-     */
-    public abstract String config();
-
     @Override
     public String name() {
         return componentType().getName();

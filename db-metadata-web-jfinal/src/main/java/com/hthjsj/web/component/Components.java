@@ -55,12 +55,12 @@ final public class Components {
      */
     public void init() {
         autoRegister();
-        Kv staticGolbalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
+        Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
             if (!ServiceManager.componentService().newDefault(type.code, Kv.create())) {
                 if (JFinal.me().getConstants().getDevMode()) {
-                    ServiceManager.componentService().updateDefault(type.code, JSON.parseObject(staticGolbalConfig.getStr(type.code), Kv.class));
+                    ServiceManager.componentService().updateDefault(type.code, JSON.parseObject(staticGlobalConfig.getStr(type.code), Kv.class));
                 }
             }
         }
