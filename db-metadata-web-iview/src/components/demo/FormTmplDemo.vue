@@ -9,7 +9,6 @@
 </template>
 
 <script>
-    import FormTmpl from '@/components/template/FormTmpl'
     export default {
         name: "form-tmpl-demo",
         data () {
@@ -44,9 +43,6 @@
         created() {
             this.getFormMeta();
         },
-        components: {
-            FormTmpl
-        }
     }
 </script>
 

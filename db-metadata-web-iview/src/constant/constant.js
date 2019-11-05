@@ -20,4 +20,10 @@ export const OPTION_PATH= "";
  * 删除接口
  * @type {string}
  */
-export const DELETE_URL = "/table/delete?objectCode={objectCode}&id={id}";
+export const TABLE_DATA_DELETE_URL = "/table/delete?objectCode={objectCode}&id={id}";
+
+/**
+ * 获取表单meta
+ * @type {string}
+ */
+export const FORM_META_URL = "/form/toAdd/{objectCode}";

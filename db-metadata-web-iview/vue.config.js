@@ -15,6 +15,7 @@ module.exports = {
     outputDir: 'dist',
     assetsDir: 'static',
     indexPath: 'index.html',
+    runtimeCompiler: true, // 运行时编译, 支持运行时动态template
     configureWebpack: {
         // provide the app's title in webpack's name field, so that
         // it can be accessed in index.html to inject the correct title.

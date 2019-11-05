@@ -3,13 +3,13 @@
         <el-row :gutter="12">
             <el-col :span="6">
                 <el-form-item label="组件">
-                    <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
-                                   @change="loadConf"></drop-down-box>
+                    <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
+                                   @change="loadConf"></DropDownBox>
                 </el-form-item>
             </el-col>
             <el-col :span="6">
                 <el-form-item label="元对象">
-                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></drop-down-box>
+                    <DropDownBox v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></DropDownBox>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -17,7 +17,7 @@
             <el-col>
                 <h2 align="center">{{objectOrCompCode}}</h2>
                 <el-form-item>
-                    <json-box v-model="confModel.conf" :meta="confMeta"></json-box>
+                    <JsonBox v-model="confModel.conf" :meta="confMeta"></JsonBox>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -25,7 +25,7 @@
             <el-col>
                 <h4>{{index}}.{{key}}</h4>
                 <el-form-item>
-                    <json-box v-model="confModel.fConf[key]" :meta="confMeta"></json-box>
+                    <JsonBox v-model="confModel.fConf[key]" :meta="confMeta"></JsonBox>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -42,11 +42,9 @@
 
 <script>
     import {DEFAULT} from '@/constant';
-    import DropDownBox from "../atom/DropDownBox";
 
     export default {
         name: "meta-conf",
-        components: {DropDownBox},
         data() {
             const fieldUrl = "/table/list/meta_field?object_code={objectCode}&fs=field_code&s=100"; // Temporary solution: set a large pageSize value. you know, for load all data
             let componentMeta = {

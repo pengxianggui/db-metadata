@@ -14,7 +14,6 @@
 
 <script>
     import {DEFAULT} from '@/constant'
-    import TableList from '@/components/feature/TableList'
     import MetaImport from '@/components/meta/MetaImport'
 
     export default {
@@ -86,7 +85,6 @@
             },
         },
         components: {
-            TableList,
             MetaImport
         },
         created() {

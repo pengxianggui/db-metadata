@@ -9,8 +9,8 @@
 
 <script>
     import {DEFAULT} from '@/constant'
-    import Meta from '../mixins/meta'
-    import Val from './value-mixins'
+    import Meta from './mixins/meta'
+    import Val from './form/value-mixins'
     export default {
         mixins: [Meta(DEFAULT.ZTogglePanel), Val],
         name: "z-toggle-panel",

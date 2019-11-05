@@ -17,17 +17,14 @@ Vue.prototype.$complieString = utils.complieVarString;
 Vue.config.productionTip = false;
 
 // 注册原子业务组件
-const requireComponent = require.context(
-    // 组件目录的相对路径
-    './components/atom',
-    // 是否查询其子目录
-    false,
-    // 匹配基础组件文件名的正则表达式
-    /\w+\.(vue|js)$/
+const atomComponent = require.context(
+    './components/core', // 组件目录的相对路径
+    true, // 是否查询其子目录
+    /\w+\.(vue)$/ // 匹配基础组件文件名的正则表达式
 );
-requireComponent.keys().forEach(fileName => {
+atomComponent.keys().forEach(fileName => {
     // 获取组件配置
-    const componentConfig = requireComponent(fileName);
+    const componentConfig = atomComponent(fileName);
 
     // 获取组件的 PascalCase 命名
     const componentName = upperFirst(

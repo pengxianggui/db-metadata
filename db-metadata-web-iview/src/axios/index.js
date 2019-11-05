@@ -4,10 +4,17 @@ import axios from 'axios'
 axios.defaults.baseURL = '/'; // 请求的默认域名
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
+
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
         // config.headers.languagetype = 'CN' // 举例，加上一个公共头部
         // config.data = Qs.stringify(config.data) // 处理数据，可不写
+        if (config.url.indexOf("{") > 0 || config.url.indexOf("}") > 0) { // 请求url中含有{或}表示有参数未填充, 取消请求
+            config.cancelToken =source.token;
+            source.cancel("request params not prepared, cancel this request..");
+        }
         return config
     },
     err => {

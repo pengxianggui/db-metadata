@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import AsideNav from '@/components/feature/AsideNav'
+    import AsideNav from '@/components/layout/AsideNav'
     export default {
         name: "Main",
         components: {

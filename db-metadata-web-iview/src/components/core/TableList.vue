@@ -81,7 +81,6 @@ eg:
                             </el-button>
                         </template>
                     </el-table-column>
-
                 </el-table>
             </el-col>
         </el-row>
@@ -98,13 +97,17 @@ eg:
                 ></el-pagination>
             </el-col>
         </el-row>
+        <el-dialog>
+<!--            <form-tmpl :meta="formMeta"></form-tmpl>-->
+        </el-dialog>
     </el-container>
 </template>
 
 <script>
     import DEFAULT from '@/constant/default'
-    import {DELETE_URL} from '@/constant/constant'
+    import {TABLE_DATA_DELETE_URL, FORM_META_URL} from '@/constant/constant'
     import utils from '@/utils'
+    import dialog from '@/constant/dialog'
 
     export default {
         name: "TableList",
@@ -153,8 +156,17 @@ eg:
             handleEdit(index, row, ev) {
                 ev.stopPropagation();
                 // pxg_todo /table/toAdd
-                this.render(h => {
-
+                let url = utils.compile(FORM_META_URL, {objectCode: this.innerMeta['objectCode']});
+                this.$axios.get(url).then(resp => {
+                    let formMeta = resp.data;
+                    dialog(formMeta, this);
+                }).catch(err => {
+                    dialog({
+                        component_name: 'FormTmpl',
+                        name: 'MetaObject',
+                        label: '元对象',
+                        columns: []
+                    }, this);
                 });
             },
             handleDelete(index, row, ev) {
@@ -164,7 +176,7 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = utils.compile(DELETE_URL, {objectCode: this.innerMeta['objectCode'], id: row.id});
+                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], id: row.id});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
                     }).catch(err => {

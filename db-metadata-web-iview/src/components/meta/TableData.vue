@@ -3,8 +3,6 @@
 </template>
 
 <script>
-    import TableList from '@/components/feature/TableList'
-
     export default {
         name: "TableData",
         data() {
@@ -22,9 +20,6 @@
                     this.$message({type: 'error', message: err})
                 })
             }
-        },
-        components: {
-            TableList
         },
         mounted() {
             this.getTableMeta();

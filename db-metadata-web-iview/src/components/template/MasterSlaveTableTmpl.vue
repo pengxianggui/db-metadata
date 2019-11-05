@@ -21,7 +21,6 @@
 
 <script>
     import mockData from '@/mockdata.js'
-    import TableList from '@/components/feature/TableList'
 
     export default {
         name: "master-slave-table-tmpl",
@@ -78,9 +77,6 @@
                 },
                 deep: true
             }
-        },
-        components: {
-            TableList
         },
         created() {
             // 获取元数据

@@ -1,5 +1,5 @@
-# Atom Component
-最小业务组件, 原子组件, 或称为带有业务属性的技术组件. 它是不可再分割的. 
+# Form Component
+表单组件. 
 - 非Z开头的为基于element-ui封装的
 - Z开头为自行封装的
 
