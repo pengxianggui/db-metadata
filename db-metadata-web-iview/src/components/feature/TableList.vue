@@ -74,10 +74,10 @@ eg:
                         </template>
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf.size"
-                                       @click="handleEdit(scope.$index, scope.row)">编辑
+                                       @click="handleEdit(scope.$index, scope.row, $event)">编辑
                             </el-button>
                             <el-button :size="innerMeta.conf.size" type="danger"
-                                       @click="handleDelete(scope.$index, scope.row)">删除
+                                       @click="handleDelete(scope.$index, scope.row, $event)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -102,7 +102,8 @@ eg:
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
+    import DEFAULT from '@/constant/default'
+    import {DELETE_URL} from '@/constant/constant'
     import utils from '@/utils'
 
     export default {
@@ -149,11 +150,29 @@ eg:
             handleSelectionChange(val) {
                 this.$emit('update:chose-data', val)
             },
-            handleEdit(index, row) {
-                // pxg_todo
+            handleEdit(index, row, ev) {
+                ev.stopPropagation();
+                // pxg_todo /table/toAdd
+                this.render(h => {
+
+                });
             },
-            handleDelete(index, row) {
-                // pxg_todo
+            handleDelete(index, row, ev) {
+                ev.stopPropagation();
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let deleteUrl = utils.compile(DELETE_URL, {objectCode: this.innerMeta['objectCode'], id: row.id});
+                    this.$axios.delete(deleteUrl).then(resp => {
+                        this.$message({type: 'success', message: '删除成功!'});
+                    }).catch(err => {
+                        this.$message({type: 'error', message: '删除失败！'});
+                    });
+                }).catch(() => {
+                    this.$message({type: 'info', message: '已取消删除'});
+                });
             },
             choseRow(row, col, event) {
                 let selected = true;

@@ -1,28 +1,6 @@
-import DICT from './dict'
+import {PAGE_NUM_AREA} from './constant'
 // 组件的默认UI配置
 const DEFAULT = {
-    TableList: {
-        name: "TableList",
-        label: "表格模板",
-        component_name: "TableList",
-        methods: "GET",
-        data_url: "/table/list", // required
-        // ...
-        conf: {
-            "default-sort": {prop: "id", order: "descending"}, // descending, ascending
-            "highlight-current-row": true,
-            "size": "medium", // medium, small, mini
-            // "max-height": 500,
-        },
-        columns: [], // 字段元数据
-        pagination: { // element ui配置
-            "page-size": DICT.PAGE_NUM_AREA[0],
-            "page-sizes": DICT.PAGE_NUM_AREA,
-            "current-page": 1,
-            "layout": "total, sizes, prev, pager, next, jumper"
-        }
-    },
-
     BoolBox: {
         name: "BoolBox",
         label: "布尔框",
@@ -201,7 +179,28 @@ const DEFAULT = {
                 }
             }
         }
-    }
+    },
+    TableList: {
+        name: "TableList",
+        label: "表格模板",
+        component_name: "TableList",
+        methods: "GET",
+        data_url: "/table/list", // required
+        // ...
+        conf: {
+            "default-sort": {prop: "id", order: "descending"}, // descending, ascending
+            "highlight-current-row": true,
+            "size": "medium", // medium, small, mini
+            // "max-height": 500,
+        },
+        columns: [], // 字段元数据
+        pagination: { // element ui配置
+            "page-size": PAGE_NUM_AREA[0],
+            "page-sizes": PAGE_NUM_AREA,
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next, jumper"
+        }
+    },
 };
 
 export default DEFAULT

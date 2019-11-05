@@ -1,4 +1,3 @@
-import DICT from "./constant/dict";
 
 // ##################### MasterSlaveTableTmpl
 

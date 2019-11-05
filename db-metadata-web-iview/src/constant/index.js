@@ -1,5 +1,4 @@
 import DEFAULT from './default'
-import DICT from './dict'
-import CONSTANT from './constant'
+import * as CONSTANT from './constant'
 
-export {DEFAULT, DICT, CONSTANT}
+export {DEFAULT, CONSTANT}
