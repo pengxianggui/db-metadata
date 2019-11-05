@@ -61,12 +61,13 @@ public class ComponentController extends FrontRestController {
                 renderJson(Ret.ok("data", objectConfig));
             } else {
                 IMetaObject metaObject = ServiceManager.dbMetaService().findByCode(objectCode);
+                //TODO bad small 此部分逻辑不应在Controller来做,前端统一接收JSONString 并集中处理;
                 IViewAdapter<IMetaObject> metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.V(compCode));
-                objectConfig.set(objectCode, metaObjectIViewAdapter.instanceConfig());
                 Kv fields = Kv.create();
                 metaObjectIViewAdapter.fields().forEach(m -> {
-                    fields.set(m.getMeta().fieldCode(), m.instanceConfig());
+                    fields.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
                 });
+                objectConfig.set(objectCode, metaObjectIViewAdapter.instanceConfig().toJson());
                 objectConfig.set("fields", fields);
                 renderJson(Ret.ok("data", objectConfig));
             }
