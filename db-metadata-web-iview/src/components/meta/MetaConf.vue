@@ -13,8 +13,8 @@
                 </el-form-item>
             </el-col>
             <el-col :span="6">
-                <el-form-item label="元对象">
-                    <el-button @click="deleteConf">删除</el-button>
+                <el-form-item>
+                    <el-button @click="deleteConf">删除配置</el-button>
                 </el-form-item>
             </el-col>
         </el-row>
