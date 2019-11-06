@@ -140,6 +140,20 @@ public class FormFieldFactory {
         return dateTimeBox;
     }
 
+    static JsonBox createJsonBox(IMetaField metaField, Kv instanceFieldConfig) {
+        JsonBox jsonBox = new JsonBox(metaField.fieldCode(), metaField.cn());
+        jsonBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta, Kv conf) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
+                return kv;
+            }
+        });
+        return jsonBox;
+    }
+
     /**
      * <pre>
      * 说明: 区别于createFormField 传入的配置 为全局
@@ -196,6 +210,8 @@ public class FormFieldFactory {
                 return createTimeBox(metaField, instanceFieldConfig);
             case DATETIMEBOX:
                 return createDateTimeBox(metaField, instanceFieldConfig);
+            case JSONBOX:
+                return createJsonBox(metaField, instanceFieldConfig);
             default:
                 break;
         }

@@ -62,7 +62,7 @@ public class SmartAssemble {
             Kv recommendConfig = recommendConfig(field);
             Kv fieldConfig = JSON.parseObject(globalConfig.getStr(recommendConfig.getStr("component_name")), Kv.class);
             recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
-            metaFields.add(new DefaultFieldViewAdapter(field, fieldConfig, FormFieldFactory.createFormField(field, fieldConfig)));
+            metaFields.add(new DefaultFieldViewAdapter(field, fieldConfig, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
         }
 
         return metaFields;
@@ -84,6 +84,23 @@ public class SmartAssemble {
                 builder.componentName(ComponentType.TEXTAREABOX.getCode());
                 builder.resizeable(true);
             }
+        }
+        if (metaField.dbType().isDate()) {
+            if (metaField.dbType().isDateTime()) {
+                builder.componentName(ComponentType.DATETIMEBOX.getCode());
+            }
+            if (metaField.dbType().isTime()) {
+                builder.componentName(ComponentType.TIMEBOX.getCode());
+            }
+            if (metaField.dbType().isDateOnly()) {
+                builder.componentName(ComponentType.DATEBOX.getCode());
+            }
+        }
+        if (metaField.dbType().isNumber()) {
+            builder.componentName(ComponentType.NUMBERBOX.getCode());
+        }
+        if (metaField.dbType().isJson()) {
+            builder.componentName(ComponentType.JSONBOX.getCode());
         }
         return builder.toKv();
     }

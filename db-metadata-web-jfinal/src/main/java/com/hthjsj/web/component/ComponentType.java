@@ -22,6 +22,7 @@ public enum ComponentType {
     TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
     TEXTBOX("textbox", "输入框组件", "TextBox"),
     TIMEBOX("timebox", "时间框", "TimeBox"),
+    JSONBOX("jsonbox", "Json框", "JsonBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter
