@@ -27,6 +27,38 @@ public class DBTypeJudge {
         return value.equalsIgnoreCase("text") || value.equalsIgnoreCase("mediumtext");
     }
 
+    public boolean isNumber() {
+        return isInt() || isBigInt();
+    }
+
+    public boolean isInt() {
+        return value.equalsIgnoreCase("int");
+    }
+
+    public boolean isBigInt() {
+        return value.equalsIgnoreCase("bigint");
+    }
+
+    public boolean isDate() {
+        return isDateOnly() || isDateTime() || isDateOnly() || isTime();
+    }
+
+    public boolean isDateOnly() {
+        return value.equalsIgnoreCase("date");
+    }
+
+    public boolean isDateTime() {
+        return value.equalsIgnoreCase("datetime");
+    }
+
+    public boolean isTime() {
+        return value.equalsIgnoreCase("timestamp");
+    }
+
+    public boolean isJson() {
+        return value.equalsIgnoreCase("json");
+    }
+
     public String rawData() {
         return value;
     }
