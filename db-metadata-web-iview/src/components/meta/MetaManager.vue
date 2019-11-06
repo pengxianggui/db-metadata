@@ -67,6 +67,7 @@
             },
             refreshTableData() {
                 this.tableMeta['data_url']= this.tableUrl + '&object_code=' + this.metaObj;
+                this.$refs[this.tableMeta['name']].getData();
             },
             updateSon() {
                 this.refreshTableData();

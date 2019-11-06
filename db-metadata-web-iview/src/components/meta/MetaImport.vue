@@ -47,17 +47,17 @@ eg:
     <div>
         <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
-                <drop-down-box :meta="schemaMeta" v-model="model[schemaMeta.name]"
+                <drop-down-box :ref="schemaMeta['name']" :meta="schemaMeta" v-model="model[schemaMeta.name]"
                                @change="refreshTables()"></drop-down-box>
             </el-form-item>
             <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
-                <drop-down-box :meta="tableMeta" v-model="model[tableMeta.name]"></drop-down-box>
+                <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]"></drop-down-box>
             </el-form-item>
             <el-form-item :label="objectMeta.label" :prop="objectMeta.name">
-                <text-box :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>
+                <text-box :ref="objectMeta['name']" :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>
             </el-form-item>
             <el-form-item :label="codeMeta.label" :prop="codeMeta.name">
-                <text-box :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
+                <text-box :ref="codeMeta['name']" :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
                 <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
@@ -96,6 +96,7 @@ eg:
             refreshTables() {
                 let url = this.$compile(this.tableMeta['data_url'], this.model);
                 this.tableMeta['data_url'] = url;
+                this.$refs[this.tableMeta['name']].getOptions();
             },
             doSubmit() {
                 const params = this.model;

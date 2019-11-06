@@ -118,15 +118,6 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
             // init option data
             this.initOptions()
         },
-        watch: {
-            'innerMeta.data_url': {
-                handler: function (n, o) {
-                    if (n === o) return;
-                    this.innerMeta['data_url'] = n;
-                    this.getOptions();
-                }
-            }
-        },
         computed: {}
     }
 </script>

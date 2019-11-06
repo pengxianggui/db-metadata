@@ -286,14 +286,6 @@ eg:
         mounted() {
             this.initData();
         },
-        watch: {
-            'innerMeta.data_url': { // watch innerMeta.data_url, if changed, refresh business data
-                handler: function (n, o) {
-                    if (n === o) return;
-                    this.getData()
-                }
-            }
-        },
         computed: {
             innerMeta() {
                 if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns

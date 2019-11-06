@@ -112,7 +112,15 @@
             loadConf: function () {
                 const {componentCode, objectCode} = this.confModel;
 
-                if (!componentCode) return;
+                if (!componentCode) {
+                    this.confModel['conf'] = {};
+                    this.confModel['fConf'] = {};
+                    return;
+                }
+                if (!objectCode) {
+                    this.confModel['fConf'] = {};
+                }
+
                 this.$axios({
                     method: 'get',
                     url: 'component/load',
