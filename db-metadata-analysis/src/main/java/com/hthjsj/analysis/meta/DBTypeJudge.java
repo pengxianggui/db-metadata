@@ -24,7 +24,7 @@ public class DBTypeJudge {
     }
 
     public boolean isBigText() {
-        return value.equalsIgnoreCase("text");
+        return value.equalsIgnoreCase("text") || value.equalsIgnoreCase("mediumtext");
     }
 
     public String rawData() {

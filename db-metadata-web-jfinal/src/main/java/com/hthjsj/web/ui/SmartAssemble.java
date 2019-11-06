@@ -56,16 +56,19 @@ public class SmartAssemble {
 
         List<IViewAdapter<IMetaField>> metaFields = Lists.newArrayList();
 
+        // 读取globalConfig中的配置
+        // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
-            ViewComponent component = recommendComponent(field);
-            Kv fieldConfig = JSON.parseObject(globalConfig.getStr(component.componentType().getCode()), Kv.class);
-            metaFields.add(new DefaultFieldViewAdapter(field, fieldConfig, component));
+            Kv recommendConfig = recommendConfig(field);
+            Kv fieldConfig = JSON.parseObject(globalConfig.getStr(recommendConfig.getStr("component_name")), Kv.class);
+            recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
+            metaFields.add(new DefaultFieldViewAdapter(field, fieldConfig, FormFieldFactory.createFormField(field, fieldConfig)));
         }
 
         return metaFields;
     }
 
-    private static ViewComponent recommendComponent(IMetaField metaField) {
+    private static Kv recommendConfig(IMetaField metaField) {
         /**
          * 分析元字段
          * 拼装instanceFieldConfig
@@ -82,7 +85,7 @@ public class SmartAssemble {
                 builder.resizeable(true);
             }
         }
-        return FormFieldFactory.createFormField(metaField, builder.toKv());
+        return builder.toKv();
     }
 
     static class DefaultObjectViewAdapter implements IViewAdapter<IMetaObject> {

@@ -15,11 +15,12 @@ public class AttributeBuilder {
         return new AttributeSteps();
     }
 
-    //    public static void main(String[] args) {
-    //        AttributeSteps builder = AttributeBuilder.newBuilder();
-    //        builder.clearable(true).disabled(true).maxlength(10).toKv();
-    //        System.out.println(builder.toKv());
-    //    }
+    //        public static void main(String[] args) {
+    //            AttributeSteps builder = AttributeBuilder.newBuilder();
+    //            builder.componentName("TextBox");
+    //            builder.clearable(true).disabled(true).maxlength(10).toKv();
+    //            System.out.println(builder.toKv());
+    //        }
 
     interface AttrCustomMeta {
 
@@ -63,31 +64,36 @@ public class AttributeBuilder {
 
         @Override
         public AttributeSteps disabled(boolean i) {
+            config.putIfAbsent("conf", Kv.create());
             config.set("disabled", i);
             return this;
         }
 
         @Override
         public AttributeSteps resizeable(boolean i) {
-            config.set("resize", i);
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("resize", i);
             return this;
         }
 
         @Override
         public AttributeSteps clearable(boolean i) {
-            config.set("clearable", i);
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("clearable", i);
             return this;
         }
 
         @Override
         public AttributeSteps maxlength(int i) {
-            config.set("maxlength", i);
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("maxlength", i);
             return this;
         }
 
         @Override
         public AttributeSteps minlength(int i) {
-            config.set("minlength", i);
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("minlength", i);
             return this;
         }
 
