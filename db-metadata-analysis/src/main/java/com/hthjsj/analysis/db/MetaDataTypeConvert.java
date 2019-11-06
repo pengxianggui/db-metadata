@@ -84,7 +84,7 @@ public class MetaDataTypeConvert {
         if (o == null) {
             return null;
         }
-        String typeName = field.dbType();
+        String typeName = field.dbType().rawData();
         Integer size = field.dbTypeLength().intValue();
         Class clazz = getType(typeName);
         // DB类型特殊转换规则

@@ -8,6 +8,7 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentType;
 import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.jfinal.kit.Kv;
 
@@ -72,9 +73,11 @@ public class SmartAssemble {
          * FormFieldFactory.createFormField 负责创建动作
          * TODO 等待完善初级智能分配规则,根据元字段属性 指定一些控件类型
          */
-        Kv instanceFieldConfig = Kv.create();
-        instanceFieldConfig.set("component_name", ComponentType.TEXTBOX);
-        return FormFieldFactory.createFormField(metaField, instanceFieldConfig);
+        AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
+        if (metaField.dbType().isText()) {
+            builder.componentName(ComponentType.TEXTBOX.getCode());
+        }
+        return FormFieldFactory.createFormField(metaField, builder.toKv());
     }
 
     static class DefaultObjectViewAdapter implements IViewAdapter<IMetaObject> {
@@ -90,7 +93,7 @@ public class SmartAssemble {
         public DefaultObjectViewAdapter(IMetaObject metaObject, ViewComponent viewComponent, Kv config, List<IViewAdapter<IMetaField>> fields) {
             this.metaObject = metaObject;
             this.viewComponent = viewComponent;
-            this.config = config;
+            this.config = config.set("name", metaObject.name()).set("label", metaObject.code());
             this.fields = fields;
         }
 
@@ -125,7 +128,7 @@ public class SmartAssemble {
 
         public DefaultFieldViewAdapter(IMetaField metaField, Kv config, ViewComponent viewComponent) {
             this.metaField = metaField;
-            this.config = config;
+            this.config = config.set("name", metaField.fieldCode()).set("label", metaField.cn());
             this.viewComponent = viewComponent;
         }
 

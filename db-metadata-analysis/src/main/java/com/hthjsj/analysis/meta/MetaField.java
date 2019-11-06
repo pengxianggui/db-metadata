@@ -67,8 +67,8 @@ public class MetaField implements IMetaField {
     }
 
     @Override
-    public String dbType() {
-        return record.getStr("db_type");
+    public DBTypeJudge dbType() {
+        return new DBTypeJudge(record.getStr("db_type"));
     }
 
     @Override
@@ -136,5 +136,4 @@ public class MetaField implements IMetaField {
     public void config(String config) {
         record.set("config", config);
     }
-
 }

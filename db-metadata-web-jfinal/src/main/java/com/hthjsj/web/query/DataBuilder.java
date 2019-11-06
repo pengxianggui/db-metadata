@@ -32,7 +32,7 @@ public class DataBuilder {
 
         for (IMetaField metaField : metaObject.fields()) {
 
-            Class dbType = MetaDataTypeConvert.getType(metaField.dbType().toUpperCase());
+            Class dbType = MetaDataTypeConvert.getType(metaField.dbType().rawData());
             String value = params.getStr(metaField.fieldCode());
             Object castedValue = null;
             try {
