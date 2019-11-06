@@ -84,6 +84,7 @@ eg:
                     this.$emit(fn, params);
                 } else {
                     let url = this.$compile(action, {objectCode: this.innerMeta['objectCode']});
+                    params['objectCode'] = this.innerMeta['objectCode'];
                     this.$axios.post(url, params).then(resp => {
                         this.$emit('ok', params); //  default callback
                         this.$message({type: 'success', message: '保存成功'});
