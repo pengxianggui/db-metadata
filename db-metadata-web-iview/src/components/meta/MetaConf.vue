@@ -137,7 +137,7 @@
                 })
             },
             deleteConf: function () {
-                let url = this.$compile('/component/delete/{objectCode}', {objectCode: this.confModel.objectCode});
+                let url = this.$compile('/component/delete/{objectCode}?componentCode={componentCode}', this.confModel);
                 this.$axios.delete(url).then(resp => {
                     this.$message({type: 'success', message: '操作成功'});
                 }).catch(err => {
