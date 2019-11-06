@@ -34,6 +34,7 @@ public class ViewFactory {
             @Override
             public void inject(TableView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
                 if (metaObject != null) {
+                    meta.putIfAbsent("objectCode", metaObject.code());
                     meta.set("conf", tableViewConfig);
                     List<Kv> fs = new ArrayList<>();
                     for (IMetaField field : metaObject.fields()) {
@@ -60,12 +61,15 @@ public class ViewFactory {
         Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.code, metaObject.code());
         log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
 
-        FormView formView1 = FormView.POST("/form/doAdd", metaObject.name());
-        formView1.setViewInject(new ViewInject<FormView>() {
+        FormView formView = FormView.POST("/form/doAdd", metaObject.name());
+        formView.setViewInject(new ViewInject<FormView>() {
 
             @Override
             public void inject(FormView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
+                meta.putIfAbsent("objectCode", metaObject.code());
+
                 Kv kv = JSON.parseObject(formViewConfig.getStr(metaObject.code()), Kv.class);
+
                 //https://blog.csdn.net/tangyaya8/article/details/91399650
                 kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
                 Kv config = null;
@@ -78,7 +82,7 @@ public class ViewFactory {
                 meta.set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
             }
         });
-        return formView1;
+        return formView;
     }
 
     public static ViewComponent createViewComponent(String typeString) {

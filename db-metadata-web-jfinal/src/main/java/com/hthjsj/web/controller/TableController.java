@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
@@ -10,6 +11,8 @@ import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+
+import java.util.List;
 
 /**
  * <pre>
@@ -51,5 +54,15 @@ public class TableController extends FrontRestController {
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
+    }
+
+    @Override
+    public void delete() {
+        String objectCode = getPara("objectCode");
+        String idss = getPara("ids");
+        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
+        Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
+        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        renderJson(Ret.ok("data", ServiceManager.dbMetaService().deleteData(metaObject, ids.toArray(new String[ids.size()]))));
     }
 }

@@ -107,6 +107,10 @@ public class DbMetaService {
         return status;
     }
 
+    public boolean deleteData(MetaObject object, String[] ids) {
+        return Db.deleteByIds(object.tableName(), object.primaryKey(), ids);
+    }
+
     /**
      * 对通过元对象save/update的的数据进行保存;
      *

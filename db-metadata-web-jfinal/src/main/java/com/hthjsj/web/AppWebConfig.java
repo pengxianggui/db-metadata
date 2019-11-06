@@ -16,8 +16,6 @@ import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019-08-22 </p>
  * <p> @Project : db-meta-serve</p>
  *
