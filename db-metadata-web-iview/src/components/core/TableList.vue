@@ -162,12 +162,12 @@ eg:
 
                 let url;
                 if (id) {
-                    url = utils.compile(FORM_META_EDIT_URL, {
+                    url = this.$compile(FORM_META_EDIT_URL, {
                         objectCode: this.innerMeta['objectCode'],
                         id: id
                     });
                 } else {
-                    url = utils.compile(FORM_META_ADD_URL, {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(FORM_META_ADD_URL, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
@@ -184,7 +184,7 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
+                    let deleteUrl = this.$compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
                         this.getData();

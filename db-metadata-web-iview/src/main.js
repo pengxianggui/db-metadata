@@ -13,7 +13,7 @@ Vue.use(ElementUI);
 
 Vue.prototype.$axios = axios; // 全局注册，使用方法为:this.$axios
 Vue.prototype.$merge = utils.merge;
-Vue.prototype.$complieString = utils.complieVarString;
+Vue.prototype.$complie = utils.complie;
 Vue.prototype.$dialog = dialog;
 
 Vue.config.productionTip = false;

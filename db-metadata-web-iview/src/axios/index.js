@@ -1,7 +1,9 @@
 import axios from 'axios'
+import caseAxios from './case'
+import {BASE_URL} from '../constant/constant'
 
 // import Qs from 'qs' // 用来处理参数，可不使用，若要使用，npm安装： npm install qs
-axios.defaults.baseURL = '/'; // 请求的默认域名
+axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
 const CancelToken = axios.CancelToken;
@@ -35,5 +37,13 @@ axios.interceptors.response.use(res => {
     console.error("err:", err);
     return Promise.reject(err)
 });
+
+// 特殊的get/post, case.js中定义有特殊逻辑需求的请求/响应拦截器
+axios.$caseGet = function (url, config) {
+    return caseAxios.get(url, config);
+};
+axios.$casePost = function (url, data, config) {
+    return caseAxios.post(url, data, config);
+};
 
 export default axios

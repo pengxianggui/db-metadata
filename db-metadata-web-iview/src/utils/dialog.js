@@ -7,12 +7,12 @@ import Vue from 'vue'
  * @param self 调用的组件this
  * @returns {{}}
  */
-export default function (meta, self) {
+export default function (meta, self, okFn, cancelFn) {
 
     let DialogTmpl = Vue.extend({
         template: `
             <el-dialog :visible.sync="visible">
-                <component :is="innerMeta.component_name" :meta="innerMeta"></component>
+                <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta"></component>
             </el-dialog>
         `,
         data() {

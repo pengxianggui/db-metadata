@@ -94,7 +94,7 @@ eg:
                 })
             },
             refreshTables() {
-                let url = this.$complieString(this.model, this.tableMeta['data_url']);
+                let url = this.$complie(this.tableMeta['data_url'], this.model);
                 this.tableMeta['data_url'] = url;
             },
             doSubmit() {

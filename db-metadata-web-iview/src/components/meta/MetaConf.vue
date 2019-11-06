@@ -12,6 +12,11 @@
                     <DropDownBox v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></DropDownBox>
                 </el-form-item>
             </el-col>
+            <el-col :span="6">
+                <el-form-item label="元对象">
+                    <el-button @click="deleteConf">删除</el-button>
+                </el-form-item>
+            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -129,6 +134,14 @@
                     // if (fConf)
                 }).catch(err => {
                     console.log(err)
+                })
+            },
+            deleteConf: function () {
+                let url = this.$compile('/component/delete/{objectCode}', {objectCode: this.confModel.objectCode});
+                this.$axios.delete(url).then(resp => {
+                    this.$message({type: 'success', message: '操作成功'});
+                }).catch(err => {
+                    this.$message({type: 'error', message: err});
                 })
             },
             onSubmit: function () {
