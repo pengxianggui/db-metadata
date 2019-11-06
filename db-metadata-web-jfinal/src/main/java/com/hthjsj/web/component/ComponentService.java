@@ -80,7 +80,7 @@ public class ComponentService {
     }
 
     public boolean deleteDefault(String componentCode) {
-        return Db.delete("delete from " + META_COMPONENT + " where code=?", componentCode) > 0;
+        return Db.update("update " + META_COMPONENT + "set config=? where code=?", Kv.create().toJson(), componentCode) > 0;
     }
 
     public List<Record> loadComponents() {
