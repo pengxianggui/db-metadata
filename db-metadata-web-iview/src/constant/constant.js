@@ -1,4 +1,10 @@
 /**
+ * axios baseURL
+ * @type {string}
+ */
+export const BASE_URL = '/';
+
+/**
  * 分页每页数量可选范围
  * @type {number[]}
  */
@@ -23,7 +29,13 @@ export const OPTION_PATH= "";
 export const TABLE_DATA_DELETE_URL = "/table/delete?objectCode={objectCode}&ids={ids}";
 
 /**
- * 获取表单meta
+ * form.toAdd
  * @type {string}
  */
-export const FORM_META_URL = "/form/toAdd/{objectCode}";
+export const FORM_META_ADD_URL = "/form/toAdd/{objectCode}";
+
+/**
+ * form.toUpdate
+ * @type {string}
+ */
+export const FORM_META_EDIT_URL = "/form/toAdd/{objectCode}?id={id}";

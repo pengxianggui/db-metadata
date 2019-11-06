@@ -34,6 +34,8 @@ eg:
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
+                <el-button @click="handleAdd">新增</el-button>
+                <el-button @click="handleBatchDelete">删除</el-button>
             </el-col>
         </el-row>
         <el-row>
@@ -74,10 +76,10 @@ eg:
                         </template>
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf.size"
-                                       @click="handleEdit(scope.$index, scope.row, $event)">编辑
+                                       @click="handleEdit(scope.row.id, $event)">编辑
                             </el-button>
                             <el-button :size="innerMeta.conf.size" type="danger"
-                                       @click="handleDelete(scope.$index, scope.row, $event)">删除
+                                       @click="handleDelete(scope.row.id, $event)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -105,7 +107,7 @@ eg:
 
 <script>
     import DEFAULT from '@/constant/default'
-    import {TABLE_DATA_DELETE_URL, FORM_META_URL} from '@/constant/constant'
+    import {TABLE_DATA_DELETE_URL, FORM_META_ADD_URL, FORM_META_EDIT_URL} from '@/constant/constant'
     import utils from '@/utils'
     import dialog from '@/constant/dialog'
 
@@ -114,6 +116,8 @@ eg:
         data() {
             return {
                 innerData: [],
+                innerChoseData: [],
+                innerActiveData: {},
                 sortModel: {
                     prop: null,
                     order: null
@@ -150,12 +154,22 @@ eg:
             activeData: Object,
         },
         methods: {
-            handleSelectionChange(val) {
-                this.$emit('update:chose-data', val)
+            handleSelectionChange(selection) {
+                this.innerChoseData = selection;
+                this.$emit('update:chose-data', selection);
             },
-            handleEdit(index, row, ev) {
-                ev.stopPropagation();
-                let url = utils.compile(FORM_META_URL, {objectCode: this.innerMeta['objectCode']});
+            handleEdit(id, ev) { // edit/add
+                if (ev) ev.stopPropagation();
+
+                let url;
+                if (id) {
+                    url = utils.compile(FORM_META_EDIT_URL, {
+                        objectCode: this.innerMeta['objectCode'],
+                        id: id
+                    });
+                } else {
+                    url = utils.compile(FORM_META_ADD_URL, {objectCode: this.innerMeta['objectCode']});
+                }
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
                     dialog(formMeta, this);
@@ -168,14 +182,15 @@ eg:
                     }, this);
                 });
             },
-            handleDelete(index, row, ev) {
-                ev.stopPropagation();
+            // 删除单行
+            handleDelete(ids, ev) {
+                if (ev) ev.stopPropagation();
                 this.$confirm('确定删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: row.id});
+                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
                     }).catch(err => {
@@ -185,8 +200,18 @@ eg:
                     this.$message({type: 'info', message: '已取消删除'});
                 });
             },
+            // 新增一行
+            handleAdd() {
+                this.handleEdit();
+            },
+            // 批量删除
+            handleBatchDelete() {
+                const idArr = this.innerChoseData.map(row => row.id);
+                this.handleDelete(idArr.join(','));
+            },
             choseRow(row, col, event) {
                 let selected = true;
+                this.innerActiveData = row;
                 this.$emit('update:active-data', row);
                 let tableRefName = this.innerMeta['name'];
 
@@ -285,7 +310,7 @@ eg:
                     });
                 }
                 return this.$merge(this.meta, DEFAULT.TableList);
-            }
+            },
         }
     }
 </script>
