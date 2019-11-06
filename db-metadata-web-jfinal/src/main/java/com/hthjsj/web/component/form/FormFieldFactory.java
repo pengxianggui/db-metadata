@@ -172,30 +172,35 @@ public class FormFieldFactory {
      * @return
      */
     public static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
+        //TODO bad small;
+        if (instanceFieldConfig == null) {
+            instanceFieldConfig = Kv.create();
+        }
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
         switch (type) {
-        case TEXTBOX:
-            return createTextBox(metaField, instanceFieldConfig);
-        case DROPDOWN:
-            return createDropDownBox(metaField, instanceFieldConfig);
-        case RADIOBOX:
-            return createRadioBox(metaField, instanceFieldConfig);
-        case NUMBERBOX:
-            return createNumberBox(metaField, instanceFieldConfig);
-        case BOOLBOX:
-            return createBoolBox(metaField, instanceFieldConfig);
-        case TEXTAREABOX:
-            return createTextAreaBox(metaField, instanceFieldConfig);
-        case DATEBOX:
-            return createDateBox(metaField, instanceFieldConfig);
-        case TIMEBOX:
-            return createTimeBox(metaField, instanceFieldConfig);
-        case DATETIMEBOX:
-            return createDateTimeBox(metaField, instanceFieldConfig);
-        default:
-            break;
+            case TEXTBOX:
+                return createTextBox(metaField, instanceFieldConfig);
+            case DROPDOWN:
+                return createDropDownBox(metaField, instanceFieldConfig);
+            case RADIOBOX:
+                return createRadioBox(metaField, instanceFieldConfig);
+            case NUMBERBOX:
+                return createNumberBox(metaField, instanceFieldConfig);
+            case BOOLBOX:
+                return createBoolBox(metaField, instanceFieldConfig);
+            case TEXTAREABOX:
+                return createTextAreaBox(metaField, instanceFieldConfig);
+            case DATEBOX:
+                return createDateBox(metaField, instanceFieldConfig);
+            case TIMEBOX:
+                return createTimeBox(metaField, instanceFieldConfig);
+            case DATETIMEBOX:
+                return createDateTimeBox(metaField, instanceFieldConfig);
+            default:
+                break;
         }
-        return null;
+        //if type == unknow  use TextBox
+        return createTextBox(metaField, instanceFieldConfig);
     }
     //    class InstanceConfigFieldInject extends FieldInject.DefaultFieldInject{
     //        Kv instanceFieldConfig;

@@ -69,7 +69,7 @@ public class ComponentController extends FrontRestController {
                 });
                 objectConfig.set(objectCode, metaObjectIViewAdapter.instanceConfig().toJson());
                 objectConfig.set("fields", fields);
-                renderJson(Ret.ok("data", objectConfig));
+                renderJson(Ret.ok("data", objectConfig).set("msg", "自动计算首次配置"));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, ServiceManager.componentService().loadDefault(compCode).getStr("config"))));

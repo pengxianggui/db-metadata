@@ -76,6 +76,11 @@ public class SmartAssemble {
         AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
         if (metaField.dbType().isText()) {
             builder.componentName(ComponentType.TEXTBOX.getCode());
+            builder.maxlength(metaField.dbTypeLength().intValue());
+            if (metaField.dbTypeLength() > 255L) {
+                builder.componentName(ComponentType.TEXTAREABOX.getCode());
+                builder.resizeable(true);
+            }
         }
         return FormFieldFactory.createFormField(metaField, builder.toKv());
     }

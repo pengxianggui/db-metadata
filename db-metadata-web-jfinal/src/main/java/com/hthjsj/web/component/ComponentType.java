@@ -1,5 +1,6 @@
 package com.hthjsj.web.component;
 
+import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 /**
@@ -39,6 +40,8 @@ public enum ComponentType {
     }
 
     public static ComponentType V(String s) {
+        if (StrKit.isBlank(s))
+            return UNKNOWN;
         for (ComponentType t : ComponentType.values()) {
             if (s.equalsIgnoreCase(t.code.toLowerCase()) || s.equalsIgnoreCase(t.name.toLowerCase()) || s.equalsIgnoreCase(t.cn.toLowerCase())) {
                 return t;

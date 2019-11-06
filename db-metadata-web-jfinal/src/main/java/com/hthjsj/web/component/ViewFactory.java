@@ -69,7 +69,6 @@ public class ViewFactory {
                 meta.putIfAbsent("objectCode", metaObject.code());
 
                 Kv kv = JSON.parseObject(formViewConfig.getStr(metaObject.code()), Kv.class);
-
                 //https://blog.csdn.net/tangyaya8/article/details/91399650
                 kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
                 Kv config = null;

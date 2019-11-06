@@ -2,6 +2,7 @@ package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -137,7 +138,8 @@ public class ComponentService {
     public Kv loadObjectConfigFlat(String componentCode, String destCode) {
         //load single object config
         String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
-        Kv objConf = Kv.by(destCode, objectConfig);
+        //ensure return avalible value, like "" , "{}"
+        Kv objConf = Kv.by(destCode, StrKit.isBlank(objectConfig) ? Maps.newHashMapWithExpectedSize(0) : objectConfig);
 
         //load fields config
         objConf.set(loadFieldsConfigMap(componentCode, destCode));
