@@ -107,7 +107,7 @@ eg:
 
 <script>
     import DEFAULT from '@/constant/default'
-    import {TABLE_DATA_DELETE_URL, FORM_META_ADD_URL, FORM_META_EDIT_URL} from '@/constant/constant'
+    import {TABLE_DELETE_URL, FORM_TO_ADD_URL, FORM_TO_EDIT_URL} from '@/constant/constant'
     import utils from '@/utils'
 
     export default {
@@ -162,16 +162,18 @@ eg:
 
                 let url;
                 if (id) {
-                    url = this.$compile(FORM_META_EDIT_URL, {
+                    url = this.$compile(FORM_TO_EDIT_URL, {
                         objectCode: this.innerMeta['objectCode'],
                         id: id
                     });
                 } else {
-                    url = this.$compile(FORM_META_ADD_URL, {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(FORM_TO_ADD_URL, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
-                    this.$dialog(formMeta, this);
+                    this.$dialog(formMeta).then(() => {
+                        this.getData(); // refresh
+                    });
                 }).catch(err => {
                     console.log(err);
                 });
@@ -184,7 +186,7 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = this.$compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
+                    let deleteUrl = this.$compile(TABLE_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
                         this.getData();

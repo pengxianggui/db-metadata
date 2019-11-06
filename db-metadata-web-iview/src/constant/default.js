@@ -140,7 +140,7 @@ const DEFAULT = {
         name: "FormTmpl",
         label: "表单模板",
         component_name: "FormTmpl",
-        action: "/save", // form action (url)
+        action: "/form/doAdd/{objectCode}", // form action (url)
         conf: {
             "label-width": '100px',
             "size": 'medium', // medium|small|mini

@@ -81,11 +81,11 @@ eg:
                 const action = this.innerMeta['action'];
 
                 if (this.$listeners.hasOwnProperty(fn)) {
-                    this.$emit(fn, params)
+                    this.$emit(fn, params);
                 } else {
-                    this.$axios.post(action, params).then(resp => {
-                        // pxg_todo default callback
-                        this.$emit('ok');
+                    let url = this.$compile(action, {objectCode: this.innerMeta['objectCode']});
+                    this.$axios.post(url, params).then(resp => {
+                        this.$emit('ok', params); //  default callback
                         this.$message({type: 'success', message: '保存成功'});
                     }).catch(err => {
                         this.$message({type: 'error', message: err});

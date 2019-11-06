@@ -103,6 +103,7 @@ yarn run lint
  -[x] meta-Manager 默认不加载
  -[ ] 每个需要meta的组件都需要传入objectCode, 在meta的一级属性上添加
  -[ ] 专门封装一个http请求, 对响应数据进行校验, 含有\\则reject, 或报错(axios/case.js)
+ -[ ] 对$message进行封装处理
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
  -[ ] 组件中各个属性先后位置尽量统一

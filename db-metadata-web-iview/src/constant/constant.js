@@ -32,10 +32,16 @@ export const TABLE_DATA_DELETE_URL = "/table/delete?objectCode={objectCode}&ids=
  * form.toAdd
  * @type {string}
  */
-export const FORM_META_ADD_URL = "/form/toAdd/{objectCode}";
+export const FORM_TO_ADD_URL = "/form/toAdd/{objectCode}";
+
+/**
+ * form.doAdd
+ * @type {string}
+ */
+export const FORM_DO_ADD_URL = "/form/toAdd/{objectCode}";
 
 /**
  * form.toUpdate
  * @type {string}
  */
-export const FORM_META_EDIT_URL = "/form/toAdd/{objectCode}?id={id}";
+export const FORM_TO_EDIT_URL = "/form/toAdd/{objectCode}?id={id}";
