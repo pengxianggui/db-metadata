@@ -5,7 +5,8 @@ import App from './App.vue'
 import router from './router'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
-import utils from '@/utils'
+import utils from './utils'
+import dialog from './utils/dialog'
 import axios from './axios'
 
 Vue.use(ElementUI);
@@ -13,6 +14,7 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios; // 全局注册，使用方法为:this.$axios
 Vue.prototype.$merge = utils.merge;
 Vue.prototype.$complieString = utils.complieVarString;
+Vue.prototype.$dialog = dialog;
 
 Vue.config.productionTip = false;
 

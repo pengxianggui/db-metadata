@@ -109,7 +109,6 @@ eg:
     import DEFAULT from '@/constant/default'
     import {TABLE_DATA_DELETE_URL, FORM_META_ADD_URL, FORM_META_EDIT_URL} from '@/constant/constant'
     import utils from '@/utils'
-    import dialog from '@/constant/dialog'
 
     export default {
         name: "TableList",
@@ -172,14 +171,9 @@ eg:
                 }
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
-                    dialog(formMeta, this);
+                    this.$dialog(formMeta, this);
                 }).catch(err => {
-                    dialog({
-                        component_name: 'FormTmpl',
-                        name: 'MetaObject',
-                        label: '元对象',
-                        columns: []
-                    }, this);
+                    console.log(err);
                 });
             },
             // 删除单行
@@ -193,6 +187,7 @@ eg:
                     let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
+                        this.getData();
                     }).catch(err => {
                         this.$message({type: 'error', message: '删除失败！'});
                     });

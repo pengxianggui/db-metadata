@@ -2,10 +2,9 @@ import Vue from 'vue'
 
 
 /**
- * pxg_todo 传入 component、 meta 和 调用组件对象本身(调用者this), 将渲染的视图组件 添加到dialog中
- * @param component
- * @param meta
- * @param self
+ * pxg_todo 传入 meta 和 调用组件对象本身(调用者this), 将渲染的视图组件 添加到dialog中
+ * @param meta 组件元对象
+ * @param self 调用的组件this
  * @returns {{}}
  */
 export default function (meta, self) {
