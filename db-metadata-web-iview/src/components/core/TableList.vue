@@ -155,7 +155,6 @@ eg:
             },
             handleEdit(index, row, ev) {
                 ev.stopPropagation();
-                // pxg_todo /table/toAdd
                 let url = utils.compile(FORM_META_URL, {objectCode: this.innerMeta['objectCode']});
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
@@ -176,7 +175,7 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], id: row.id});
+                    let deleteUrl = utils.compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: row.id});
                     this.$axios.delete(deleteUrl).then(resp => {
                         this.$message({type: 'success', message: '删除成功!'});
                     }).catch(err => {
