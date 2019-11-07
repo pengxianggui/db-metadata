@@ -5,6 +5,18 @@
 export const BASE_URL = '/';
 
 /**
+ * 统一默认的错误信息（当服务端不给msg时指定）
+ * @type {string}
+ */
+export const ERROR_MSG = '发生错误';
+
+/**
+ *统一默认的成功信息（当服务端不给msg时指定）
+ * @type {string}
+ */
+export const SUCCESS_MSG = '操作成功';
+
+/**
  * 分页每页数量可选范围
  * @type {number[]}
  */

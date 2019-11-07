@@ -54,15 +54,15 @@
                     this.$merge(resp.data, DEFAULT.TableList); // 确保 resp.data 中 含有data_url 属性
                     this.tableMeta = resp.data;
                     this.tableMeta['data_url'] = this.tableUrl + "&object_code=''";
-                }).catch(resp => {
-                    this.$message({type: 'error', message: resp.msg})
+                }).catch(err => {
+                    this.$message.error(err.msg);
                 })
             },
             getFormMeta() {
                 this.$axios.get('/meta/toAdd').then(resp => {
                     this.formMeta = resp.data
-                }).catch(resp => {
-                    this.$message({type: 'error', message: resp.msg})
+                }).catch(err => {
+                    this.$message.error(err.msg);
                 })
             },
             refreshTableData() {
@@ -75,13 +75,12 @@
             },
             formSubmit(formModel) {
                 this.$axios.post(this.formMeta.action, formModel).then(resp => {
-                    this.$message({type: 'success', message: resp.msg || '操作成功'});
+                    this.$message.success(resp.msg);
                     this.metaObj = formModel['objectCode'];
                     this.visible = false;
-
                     this.updateSon();
-                }).catch(resp => {
-                    this.$message({type: 'error', message: resp.msg})
+                }).catch(err => {
+                    this.$message.error(err.msg);
                 })
             },
         },

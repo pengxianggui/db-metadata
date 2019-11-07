@@ -17,7 +17,7 @@
                     this.tableMeta = resp.data;
                     // this.$refs[this.tableMeta['name']].getData();
                 }).catch(err => {
-                    this.$message({type: 'error', message: err})
+                    this.$message.error(err.msg);
                 })
             }
         },

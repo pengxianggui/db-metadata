@@ -36,9 +36,9 @@
                         let format = this.getBehavior('format');
                         this.innerOptions = format ? format(resp.data) : resp.data;
                         this.$emit('update:options', this.innerOptions);
-                    }).catch(resp => {
-                        this.$message({type: 'error', message: resp})
-                    })
+                    }).catch(err => {
+                        this.$message.error(err.msg);
+                    });
                 }
             },
             initOptions: function () {

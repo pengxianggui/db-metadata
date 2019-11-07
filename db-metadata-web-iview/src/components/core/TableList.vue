@@ -107,7 +107,7 @@ eg:
 
 <script>
     import DEFAULT from '@/constant/default'
-    import {TABLE_DELETE_URL, FORM_TO_ADD_URL, FORM_TO_EDIT_URL} from '@/constant/constant'
+    import {TABLE_DATA_DELETE_URL, FORM_TO_ADD_URL, FORM_TO_EDIT_URL} from '@/constant/constant'
     import utils from '@/utils'
 
     export default {
@@ -186,15 +186,13 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = this.$compile(TABLE_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
+                    let deleteUrl = this.$compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(deleteUrl).then(resp => {
-                        this.$message({type: 'success', message: '删除成功!'});
+                        this.$message.success(resp.msg);
                         this.getData();
                     }).catch(err => {
-                        this.$message({type: 'error', message: '删除失败！'});
+                        this.$message.error(err.msg);
                     });
-                }).catch(() => {
-                    this.$message({type: 'info', message: '已取消删除'});
                 });
             },
             // 新增一行
@@ -262,9 +260,9 @@ eg:
                     if (resp.hasOwnProperty('page')) {
                         this.setPageModel(resp['page']);
                     }
-                }).catch(resp => {
-                    this.$message({type: 'error', message: resp})
-                })
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                });
             },
             initData() { // init business data
                 let page = this.page;

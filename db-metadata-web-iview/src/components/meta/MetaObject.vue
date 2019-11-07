@@ -16,11 +16,13 @@
         },
         methods: {
             getTableMeta() {
-                this.$axios.get('/meta/objs').then(resp => {
+                const url = '/meta/objs';
+                this.$axios.get(url).then(resp => {
                     this.tableMeta = resp.data;
                     this.tableMeta['objectCode'] = 'meta_object';
-                }).catch(resp => {
-                    this.$message.error(resp.toString())
+                }).catch(err => {
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
+                    this.$message.error(err.msg)
                 })
             },
         },

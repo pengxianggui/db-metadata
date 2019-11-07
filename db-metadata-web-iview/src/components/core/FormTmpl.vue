@@ -87,9 +87,9 @@ eg:
                     params['objectCode'] = this.innerMeta['objectCode'];
                     this.$axios.post(url, params).then(resp => {
                         this.$emit('ok', params); //  default callback
-                        this.$message({type: 'success', message: '保存成功'});
+                        this.$message.success(resp.msg);
                     }).catch(err => {
-                        this.$message({type: 'error', message: err});
+                        this.$message.error(err.msg);
                     })
                 }
             },

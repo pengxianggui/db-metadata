@@ -94,8 +94,8 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                         let format = this.getBehavior('format');
                         this.innerOptions = format ? format(resp.data) : resp.data;
                         this.$emit('update:options', this.innerOptions);
-                    }).catch(resp => {
-                        this.$message({type: 'error', message: resp})
+                    }).catch(err => {
+                        this.$message.error(err.msg);
                     })
                 }
             },

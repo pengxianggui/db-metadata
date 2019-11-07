@@ -105,9 +105,9 @@ eg:
                 } else {
                     const url = this.innerMeta.action;
                     this.$axios.post(url, params).then(resp => {
-                        this.$message({type: 'success', message: resp.msg || '操作成功'})
+                        this.$message.success(resp.msg);
                     }).catch(err => {
-                        this.$message({type: 'error', message: err})
+                        this.$message.error(err.msg);
                     })
                 }
             },

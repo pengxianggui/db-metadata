@@ -111,6 +111,7 @@
         methods: {
             loadConf: function () {
                 const {componentCode, objectCode} = this.confModel;
+                const url = 'component/load';
 
                 if (!componentCode) {
                     this.confModel['conf'] = {};
@@ -123,7 +124,7 @@
 
                 this.$axios({
                     method: 'get',
-                    url: 'component/load',
+                    url: url,
                     params: {
                         objectCode: objectCode,
                         componentCode: componentCode
@@ -141,20 +142,21 @@
                     }
                     // if (fConf)
                 }).catch(err => {
-                    console.log(err)
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
+                    this.$message.error(err.msg)
                 })
             },
             deleteConf: function () {
                 let url = this.$compile('/component/delete/{objectCode}?componentCode={componentCode}', this.confModel);
                 this.$axios.delete(url).then(resp => {
-                    this.$message({type: 'success', message: '操作成功'});
+                    this.$message.success(resp.msg);
                 }).catch(err => {
-                    this.$message({type: 'error', message: err});
+                    this.$message.error(err.msg);
                 })
             },
             onSubmit: function () {
                 if (!this.confModel['componentCode']) {
-                    this.$message({type: 'error', message: '必须选定一个组件'});
+                    this.$message.alert('必须选定一个组件');
                     return;
                 }
                 let params = {
@@ -174,9 +176,9 @@
                     url: 'component/doAdd',
                     data: params
                 }).then(resp => {
-                    this.$message({type: "success", message: "保存成功"});
+                    this.$message.success(resp.msg);
                 }).catch(err => {
-                    this.$message({type: "error", message: "保存成功"});
+                    this.$message.error(err.msg);
                 })
             },
             onCancel: function () {
