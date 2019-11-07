@@ -1,6 +1,7 @@
 import axios from 'axios'
 import caseAxios from './case'
-import {BASE_URL, ERROR_MSG, SUCCESS_MSG} from '../constant/constant'
+import {BASE_URL} from '../constant/constant'
+import {s_format, e_format} from "./responseExchange";
 
 // import Qs from 'qs' // 用来处理参数，可不使用，若要使用，npm安装： npm install qs
 axios.defaults.baseURL = BASE_URL;
@@ -26,18 +27,12 @@ axios.interceptors.request.use(config => {
 
 // 响应拦截器
 axios.interceptors.response.use(res => {
-    let result = res.data;
-    const msg = result.msg;
-    result.msg = msg ? msg : SUCCESS_MSG;
-
-    if (result && result.state !== "ok") {
-        res.msg = msg || ERROR_MSG;
-        console.error("res.msg:", res.msg, "res", res);
-        return Promise.reject(res)
+    if (!s_format(res)) {
+        return Promise.reject(res.data);
     }
-    return Promise.resolve(result);
+    return Promise.resolve(res.data);
 }, err => {
-    err.msg = err.toString();
+    e_format(err);
     console.error("[ERROR] ", err);
     return Promise.reject(err)
 });
