@@ -1,6 +1,7 @@
-package com.hthjsj.web.component;
+package com.hthjsj.analysis.component;
 
 import com.jfinal.kit.StrKit;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
@@ -25,13 +26,13 @@ public enum ComponentType {
     JSONBOX("jsonbox", "Json框", "JsonBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
-    @Getter
+    @Getter(AccessLevel.PUBLIC)
     String name;
 
-    @Getter
+    @Getter(AccessLevel.PUBLIC)
     String code;
 
-    @Getter
+    @Getter(AccessLevel.PUBLIC)
     String cn;
 
     ComponentType(String name, String cn, String code) {

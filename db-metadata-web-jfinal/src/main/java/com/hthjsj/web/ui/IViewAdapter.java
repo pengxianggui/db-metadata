@@ -1,7 +1,7 @@
 package com.hthjsj.web.ui;
 
+import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.web.component.ViewComponent;
 import com.jfinal.kit.Kv;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface IViewAdapter<M> {
 
     Kv instanceConfig();
 
-    ViewComponent getComponent();
+    Component getComponent();
 
     List<IViewAdapter<IMetaField>> fields();
 }

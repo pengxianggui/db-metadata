@@ -1,6 +1,10 @@
 package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.component.FieldInject;
+import com.hthjsj.analysis.component.ViewInject;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
@@ -32,13 +36,13 @@ public class ViewFactory {
         tableView.setViewInject(new ViewInject<TableView>() {
 
             @Override
-            public void inject(TableView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
+            public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 if (metaObject != null) {
                     meta.putIfAbsent("objectCode", metaObject.code());
                     meta.set("conf", tableViewConfig);
                     List<Kv> fs = new ArrayList<>();
                     for (IMetaField field : metaObject.fields()) {
-                        fs.add(fieldInject.inject(meta, conf, field));
+                        fs.add(fieldInject.inject(meta, field));
                     }
                     meta.set("columns", fs);
                 }
@@ -48,7 +52,7 @@ public class ViewFactory {
         tableView.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf, IMetaField field) {
+            public Kv inject(Kv meta, IMetaField field) {
                 Kv kv = JSON.parseObject(tableViewConfig.getStr(field.fieldCode()), Kv.class);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -58,14 +62,14 @@ public class ViewFactory {
     }
 
     public static FormView createFormView(MetaObject metaObject) {
-        Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.code, metaObject.code());
+        Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
         log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
 
         FormView formView = FormView.POST("/form/doAdd", metaObject.name());
         formView.setViewInject(new ViewInject<FormView>() {
 
             @Override
-            public void inject(FormView component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
+            public void inject(FormView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 meta.putIfAbsent("objectCode", metaObject.code());
 
                 Kv kv = JSON.parseObject(formViewConfig.getStr(metaObject.code()), Kv.class);
@@ -84,24 +88,25 @@ public class ViewFactory {
         return formView;
     }
 
-    public static ViewComponent createViewComponent(String typeString) {
+    public static Component createViewComponent(String typeString) {
         ComponentType type = ComponentType.V(typeString);
-        ViewComponent component = null;
+        Component component = null;
+
         switch (type) {
             case BUTTON:
-                component = new Button();
+                component = new Button(type.getCn(), type.getCode());
                 break;
             case DROPDOWN:
-                component = new DropDownBox();
+                component = new DropDownBox(type.getCn(), type.getCode());
                 break;
             case FORMVIEW:
-                component = new FormView();
+                component = new FormView(type.getCn(), type.getCode());
                 break;
             case TABLEVIEW:
-                component = new TableView();
+                component = new TableView(type.getCn(), type.getCode());
                 break;
             case TEXTBOX:
-                component = new TextBox();
+                component = new TextBox(type.getCn(), type.getCode());
                 break;
             default:
                 break;

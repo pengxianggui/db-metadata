@@ -1,7 +1,5 @@
-package com.hthjsj.web.component;
+package com.hthjsj.analysis.component;
 
-import com.hthjsj.analysis.meta.Component;
-import com.hthjsj.web.ui.AccessBehavior;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +7,16 @@ import lombok.Setter;
 /**
  * @author konbluesky
  */
-public abstract class ViewComponent implements Component, ComponentRender {
+public abstract class Component {
+
+    protected Kv meta = Kv.create();
+
+    protected String name;
+
+    protected String label;
+
+    public Component() {
+    }
 
     @Getter
     @Setter
@@ -20,29 +27,38 @@ public abstract class ViewComponent implements Component, ComponentRender {
     FieldInject fieldInject = new FieldInject.DefaultFieldInject() {
 
         @Override
-        public Kv inject(Kv meta, Kv conf) {
-            return super.inject(meta, conf);
+        public Kv inject(Kv meta) {
+            return super.inject(meta);
         }
     };
 
-    @Getter
-    @Setter
-    AccessBehavior accessBehavior;
+    public Component(String name, String label) {
+        this.name = name;
+        this.label = label;
+    }
 
-    @Override
     public String name() {
         return componentType().getName();
     }
 
-    @Override
     public String code() {
         return componentType().getCode();
     }
 
-    @Override
     public String type() {
         return componentType().getCode();
     }
 
     public abstract ComponentType componentType();
+
+    public abstract ViewContainer getContainer();
+
+    /**
+     * 返回组件Kv数据,用来序列json用
+     *
+     * @return
+     */
+    public Kv toKv() {
+        return meta;
+    }
 }

@@ -1,7 +1,7 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.web.component.ViewComponent;
-import com.jfinal.kit.Kv;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ViewContainer;
 
 /**
  * <p> Class title: </p>
@@ -11,18 +11,7 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class FormField extends ViewComponent {
-
-    protected Kv meta = Kv.create();
-
-    protected Kv conf = Kv.create();
-
-    protected String name;
-
-    protected String label;
-
-    public FormField() {
-    }
+public abstract class FormField extends Component {
 
     public FormField(String name, String label) {
         this.name = name;
@@ -32,4 +21,8 @@ public abstract class FormField extends ViewComponent {
         this.meta.set("label", label);
     }
 
+    @Override
+    public ViewContainer getContainer() {
+        throw new UnsupportedOperationException("原子组件不支持此操作");
+    }
 }

@@ -1,4 +1,4 @@
-package com.hthjsj.web.component;
+package com.hthjsj.analysis.component;
 
 import com.jfinal.kit.Kv;
 
@@ -14,22 +14,20 @@ public interface FieldInject<F> {
      * 外部用
      *
      * @param meta
-     * @param conf
      * @param field
      *
      * @return
      */
-    Kv inject(Kv meta, Kv conf, F field);
+    Kv inject(Kv meta, F field);
 
     /**
      * 默认内部用
      *
      * @param meta
-     * @param conf
      *
      * @return
      */
-    Kv inject(Kv meta, Kv conf);
+    Kv inject(Kv meta);
 
     /**
      * 选择实现DefaultFieldInject的内部方法;
@@ -39,12 +37,12 @@ public interface FieldInject<F> {
     abstract class DefaultFieldInject<F> implements FieldInject<F> {
 
         @Override
-        public Kv inject(Kv meta, Kv conf, F field) {
+        public Kv inject(Kv meta, F field) {
             return Kv.create();
         }
 
         @Override
-        public Kv inject(Kv meta, Kv conf) {
+        public Kv inject(Kv meta) {
             return Kv.create();
         }
     }

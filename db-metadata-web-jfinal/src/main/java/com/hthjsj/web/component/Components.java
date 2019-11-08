@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.google.common.reflect.ClassPath;
-import com.hthjsj.analysis.meta.Component;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.ServiceManager;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
@@ -58,9 +59,9 @@ final public class Components {
         Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
-            if (!ServiceManager.componentService().newDefault(type.code, Kv.create())) {
+            if (!ServiceManager.componentService().newDefault(type.getCode(), Kv.create())) {
                 if (JFinal.me().getConstants().getDevMode()) {
-                    ServiceManager.componentService().updateDefault(type.code, JSON.parseObject(staticGlobalConfig.getStr(type.code), Kv.class));
+                    ServiceManager.componentService().updateDefault(type.getCode(), JSON.parseObject(staticGlobalConfig.getStr(type.getCode()), Kv.class));
                 }
             }
         }

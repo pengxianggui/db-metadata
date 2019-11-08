@@ -1,6 +1,5 @@
 package com.hthjsj.web.component.attr;
 
-import com.hthjsj.web.component.ComponentRender;
 import com.jfinal.kit.Kv;
 
 /**
@@ -49,8 +48,9 @@ public class AttributeBuilder {
         AttrRender build();
     }
 
-    interface AttrRender extends ComponentRender {
+    interface AttrRender {
 
+        Kv render();
     }
 
     public static class AttributeSteps implements AttrAbility, AttrMaxMinDefault, AttrRender, AttrCustomMeta {
@@ -58,7 +58,7 @@ public class AttributeBuilder {
         private Kv config = Kv.create();
 
         @Override
-        public Kv toKv() {
+        public Kv render() {
             return config;
         }
 

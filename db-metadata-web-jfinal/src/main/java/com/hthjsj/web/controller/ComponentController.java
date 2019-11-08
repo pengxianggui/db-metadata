@@ -2,13 +2,13 @@ package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
-import com.hthjsj.web.component.ComponentType;
 import com.hthjsj.web.component.Components;
-import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.IViewAdapter;
@@ -106,14 +106,13 @@ public class ComponentController extends FrontRestController {
         /**
          * object Code
          * component Type
-         *
          */
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
         Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
-        ViewComponent component = ViewFactory.createViewComponent(compCode);
+        Component component = ViewFactory.createViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
             ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);

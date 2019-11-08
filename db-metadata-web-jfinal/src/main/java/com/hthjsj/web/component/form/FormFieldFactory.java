@@ -1,8 +1,8 @@
 package com.hthjsj.web.component.form;
 
+import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.component.FieldInject;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.web.component.ComponentType;
-import com.hthjsj.web.component.FieldInject;
 import com.jfinal.kit.Kv;
 
 /**
@@ -19,7 +19,7 @@ public class FormFieldFactory {
         dropDownBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -33,7 +33,7 @@ public class FormFieldFactory {
         textBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -47,7 +47,7 @@ public class FormFieldFactory {
         radioBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -61,7 +61,7 @@ public class FormFieldFactory {
         numberBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.putAll(meta);
                 return kv;
@@ -75,7 +75,7 @@ public class FormFieldFactory {
         boolBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.putAll(meta);
                 return kv;
@@ -89,7 +89,7 @@ public class FormFieldFactory {
         textAreaBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -103,7 +103,7 @@ public class FormFieldFactory {
         dateBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.putAll(meta);
                 return kv;
@@ -117,7 +117,7 @@ public class FormFieldFactory {
         timeBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -131,7 +131,7 @@ public class FormFieldFactory {
         dateTimeBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -145,7 +145,7 @@ public class FormFieldFactory {
         jsonBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
 
             @Override
-            public Kv inject(Kv meta, Kv conf) {
+            public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
@@ -218,18 +218,4 @@ public class FormFieldFactory {
         //if type == unknow  use TextBox
         return createTextBox(metaField, instanceFieldConfig);
     }
-    //    class InstanceConfigFieldInject extends FieldInject.DefaultFieldInject{
-    //        Kv instanceFieldConfig;
-    //
-    //        public InstanceConfigFieldInject(Kv instanceFieldConfig) {
-    //            this.instanceFieldConfig = instanceFieldConfig;
-    //        }
-    //
-    //        @Override
-    //        public Kv inject(Kv meta, Kv conf) {
-    //            Kv kv = Kv.create().set(instanceFieldConfig);
-    //            kv.putAll(meta);
-    //            return kv;
-    //        }
-    //    }
 }

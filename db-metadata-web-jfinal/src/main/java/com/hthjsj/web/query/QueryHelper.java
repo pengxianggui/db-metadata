@@ -1,6 +1,6 @@
 package com.hthjsj.web.query;
 
-import com.hthjsj.web.component.ComponentType;
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.core.Controller;
 
 /**

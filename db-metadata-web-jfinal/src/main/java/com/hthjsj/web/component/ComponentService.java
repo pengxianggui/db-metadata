@@ -3,6 +3,8 @@ package com.hthjsj.web.component;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -167,12 +169,12 @@ public class ComponentService {
         return Db.queryStr("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
     }
 
-    public boolean newObjectConfig(ViewComponent component, String objectCode, Kv config) {
+    public boolean newObjectConfig(Component component, String objectCode, Kv config) {
         Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT, config);
         return Db.save(META_COMPONENT_INSTANCE, record);
     }
 
-    public boolean newObjectConfig(ViewComponent component, IMetaObject object, Kv config, boolean strict) {
+    public boolean newObjectConfig(Component component, IMetaObject object, Kv config, boolean strict) {
         /**
          * new objectConfig
          * foreach fieldsConfig
@@ -192,18 +194,18 @@ public class ComponentService {
         return true;
     }
 
-    public boolean newFieldConfig(ViewComponent component, String objectCode, String fieldCode, Kv config) {
+    public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
         Kv fkv = JSON.parseObject(config.getStr(fieldCode), Kv.class);
         Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
         return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
 
-    private Record getFieldConfigRecord(ViewComponent component, String objectCode, String fieldCode, Kv config) {
+    private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, Kv config) {
         String dest_code = objectCode + "." + fieldCode;
         return getRecord(component, dest_code, INSTANCE.META_FIELD, config);
     }
 
-    //    public boolean newSpecificConfig(ViewComponent component, String specificCode) {
+    //    public boolean newSpecificConfig(ViewContainer component, String specificCode) {
     //        Record record = getRecord(component, specificCode, INSTANCE.SPECIFIC, Kv.create());
     //        return Db.save(META_COMPONENT_INSTANCE, record);
     //    }
@@ -236,7 +238,7 @@ public class ComponentService {
         return loadObjectConfig(componentCode, objectCode) != null;
     }
 
-    private Record getRecord(ViewComponent component, String specificCode, INSTANCE specific, Kv config) {
+    private Record getRecord(Component component, String specificCode, INSTANCE specific, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
         record.set("comp_code", component.type());

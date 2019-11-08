@@ -1,6 +1,6 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.web.component.ComponentType;
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -12,9 +12,6 @@ import com.jfinal.kit.Kv;
  * <p> @author konbluesky </p>
  */
 public class DropDownBox extends FormField {
-
-    public DropDownBox() {
-    }
 
     public DropDownBox(String name, String label) {
         super(name, label);
@@ -39,7 +36,7 @@ public class DropDownBox extends FormField {
 
     @Override
     public Kv toKv() {
-        getViewInject().inject(this, meta, conf, getFieldInject());
+        getFieldInject().inject(meta);
         return meta;
     }
 

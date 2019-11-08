@@ -1,6 +1,6 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.web.component.ComponentType;
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -13,13 +13,8 @@ import com.jfinal.kit.Kv;
  */
 public class Button extends FormField {
 
-    String label;
-
-    public Button() {
-    }
-
-    public Button(String label) {
-        this.label = label;
+    public Button(String name, String label) {
+        super(name, label);
     }
 
     @Override

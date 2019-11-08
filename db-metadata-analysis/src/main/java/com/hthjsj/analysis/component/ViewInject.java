@@ -1,4 +1,4 @@
-package com.hthjsj.web.component;
+package com.hthjsj.analysis.component;
 
 import com.hthjsj.analysis.meta.IMetaField;
 import com.jfinal.kit.Kv;
@@ -11,13 +11,13 @@ import com.jfinal.kit.Kv;
  */
 public interface ViewInject<T> {
 
-    void inject(T component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject);
+    void inject(T component, Kv meta, FieldInject<IMetaField> fieldInject);
 
     class DefaultViewInject<T> implements ViewInject<T> {
 
         @Override
-        public void inject(T component, Kv meta, Kv conf, FieldInject<IMetaField> fieldInject) {
-            meta.set(fieldInject.inject(meta, conf));
+        public void inject(T component, Kv meta, FieldInject<IMetaField> fieldInject) {
+            meta.set(fieldInject.inject(meta));
         }
     }
 }

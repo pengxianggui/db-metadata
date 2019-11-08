@@ -1,7 +1,6 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.web.component.ComponentType;
-import com.hthjsj.web.ui.AccessBehavior;
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 /**
@@ -14,12 +13,8 @@ import com.jfinal.kit.Kv;
  */
 public class TextBox extends FormField {
 
-    public TextBox() {
-    }
-
     public TextBox(String name, String label) {
         super(name, label);
-        setAccessBehavior(new AccessBehavior.DefaultAccessBehavior(conf));
     }
 
     @Override
@@ -29,7 +24,7 @@ public class TextBox extends FormField {
 
     @Override
     public Kv toKv() {
-        getViewInject().inject(this, meta, conf, getFieldInject());
+        getFieldInject().inject(meta);
         return meta;
     }
 }

@@ -2,15 +2,16 @@ package com.hthjsj.web.ui;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.ComponentType;
-import com.hthjsj.web.component.ViewComponent;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.jfinal.kit.Kv;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class SmartAssemble {
 
     /**
@@ -37,7 +39,7 @@ public class SmartAssemble {
          * 分析元对象
          * 适配选择Component,进行构建IViewAdapter
          */
-        ViewComponent containerComponent = null;
+        Component containerComponent = null;
         switch (componentType) {
             case TABLEVIEW:
             case FORMVIEW:
@@ -77,8 +79,9 @@ public class SmartAssemble {
          * TODO 等待完善初级智能分配规则,根据元字段属性 指定一些控件类型
          */
         AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
+        //set default componentName is "TextBox"
+        builder.componentName(ComponentType.TEXTBOX.getCode());
         if (metaField.dbType().isText()) {
-            builder.componentName(ComponentType.TEXTBOX.getCode());
             builder.maxlength(metaField.dbTypeLength().intValue());
             if (metaField.dbTypeLength() > 255L) {
                 builder.componentName(ComponentType.TEXTAREABOX.getCode());
@@ -103,22 +106,23 @@ public class SmartAssemble {
             builder.componentName(ComponentType.JSONBOX.getCode());
         }
 
-        return builder.toKv();
+        log.debug("auto compute config : {}", builder.render().toJson());
+        return builder.render();
     }
 
     static class DefaultObjectViewAdapter implements IViewAdapter<IMetaObject> {
 
         IMetaObject metaObject;
 
-        ViewComponent viewComponent;
+        Component viewContainer;
 
         Kv config;
 
         List<IViewAdapter<IMetaField>> fields;
 
-        public DefaultObjectViewAdapter(IMetaObject metaObject, ViewComponent viewComponent, Kv config, List<IViewAdapter<IMetaField>> fields) {
+        public DefaultObjectViewAdapter(IMetaObject metaObject, Component viewContainer, Kv config, List<IViewAdapter<IMetaField>> fields) {
             this.metaObject = metaObject;
-            this.viewComponent = viewComponent;
+            this.viewContainer = viewContainer;
             this.config = config.set("name", metaObject.name()).set("label", metaObject.code());
             this.fields = fields;
         }
@@ -134,8 +138,8 @@ public class SmartAssemble {
         }
 
         @Override
-        public ViewComponent getComponent() {
-            return viewComponent;
+        public Component getComponent() {
+            return viewContainer;
         }
 
         @Override
@@ -150,12 +154,12 @@ public class SmartAssemble {
 
         Kv config;
 
-        ViewComponent viewComponent;
+        Component viewContainer;
 
-        public DefaultFieldViewAdapter(IMetaField metaField, Kv config, ViewComponent viewComponent) {
+        public DefaultFieldViewAdapter(IMetaField metaField, Kv config, Component viewContainer) {
             this.metaField = metaField;
             this.config = config.set("name", metaField.fieldCode()).set("label", metaField.cn());
-            this.viewComponent = viewComponent;
+            this.viewContainer = viewContainer;
         }
 
         @Override
@@ -169,8 +173,8 @@ public class SmartAssemble {
         }
 
         @Override
-        public ViewComponent getComponent() {
-            return viewComponent;
+        public Component getComponent() {
+            return viewContainer;
         }
 
         @Override
