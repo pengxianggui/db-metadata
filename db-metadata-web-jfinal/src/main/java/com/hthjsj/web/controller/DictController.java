@@ -26,7 +26,7 @@ public class DictController extends FrontRestController {
         String fieldCode = queryHelper.getFieldCode();
 
 
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
     }
 
     public void sex() {

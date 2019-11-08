@@ -15,7 +15,7 @@ public class ServiceManager {
     private ServiceManager() {
     }
 
-    public static DbMetaService dbMetaService() {
+    public static DbMetaService metaService() {
         return Aop.get(DbMetaService.class);
     }
 

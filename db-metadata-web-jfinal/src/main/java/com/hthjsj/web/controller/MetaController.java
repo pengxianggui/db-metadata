@@ -36,7 +36,7 @@ public class MetaController extends FrontRestController {
     @Override
     public void index() {
         String metaObjectCode = getPara(0, getPara("objectCode"));
-        IMetaObject metaObject = ServiceManager.dbMetaService().findByCode(metaObjectCode);
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(metaObjectCode);
         renderJson(Ret.ok("data", metaObject));
     }
 
@@ -56,7 +56,7 @@ public class MetaController extends FrontRestController {
     }
 
     public void objs() {
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode("meta_object");
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
         TableView tableView = ViewFactory.createTableView("meta_object_table", "元对象", metaObject);
         tableView.dataUrl("/table/list/meta_object");
         renderJson(Ret.ok("data", tableView.toKv()));
@@ -68,7 +68,7 @@ public class MetaController extends FrontRestController {
      */
     public void fields() {
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -79,7 +79,7 @@ public class MetaController extends FrontRestController {
         String tableName = getPara("tableName");
         String objectName = getPara("objectName");
         String objectCode = getPara("objectCode");
-        DbMetaService dbMetaService = ServiceManager.dbMetaService();
+        DbMetaService dbMetaService = ServiceManager.metaService();
         Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
         MetaObject metaObject = (MetaObject) dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
@@ -92,7 +92,7 @@ public class MetaController extends FrontRestController {
     @Override
     public void delete() {
         String objectCode = new QueryHelper(this).getObjectCode();
-        DbMetaService dbMetaService = ServiceManager.dbMetaService();
+        DbMetaService dbMetaService = ServiceManager.metaService();
         MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
         Preconditions.checkArgument(metaObject.isSystem(), "该对象属于系统元对象,不能删除");
         renderJson(dbMetaService.deleteMetaObject(metaObject.code()) ? Ret.ok() : Ret.fail());

@@ -27,12 +27,6 @@ import java.util.Map;
 @Before(Tx.class)
 public class DbMetaService {
 
-    void init() {
-
-
-
-    }
-
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
         Table t = dbService.getTable(schema, table);

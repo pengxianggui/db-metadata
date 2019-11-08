@@ -26,7 +26,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.createFormView(metaObject);
 
@@ -39,11 +39,11 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
 
         MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject);
 
-        boolean status = ServiceManager.dbMetaService().saveData(metaObject, metadata);
+        boolean status = ServiceManager.metaService().saveData(metaObject, metadata);
 
         renderJson(status ? Ret.ok() : Ret.fail());
     }
@@ -53,7 +53,7 @@ public class FormController extends FrontRestController {
 
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.createFormView(metaObject);
 

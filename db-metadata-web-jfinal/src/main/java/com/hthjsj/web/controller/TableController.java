@@ -48,7 +48,7 @@ public class TableController extends FrontRestController {
         String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
@@ -62,7 +62,7 @@ public class TableController extends FrontRestController {
         String idss = getPara("ids");
         List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
-        MetaObject metaObject = (MetaObject) ServiceManager.dbMetaService().findByCode(objectCode);
-        renderJson(Ret.ok("data", ServiceManager.dbMetaService().deleteData(metaObject, ids.toArray(new String[ids.size()]))));
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        renderJson(Ret.ok("data", ServiceManager.metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]))));
     }
 }

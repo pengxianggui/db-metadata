@@ -8,7 +8,9 @@ import com.hthjsj.analysis.component.ViewInject;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.component.form.*;
+import com.hthjsj.web.component.form.FormField;
+import com.hthjsj.web.component.form.FormFieldFactory;
+import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,21 +95,21 @@ public class ViewFactory {
         Component component = null;
 
         switch (type) {
-            case BUTTON:
-                component = new Button(type.getCn(), type.getCode());
-                break;
-            case DROPDOWN:
-                component = new DropDownBox(type.getCn(), type.getCode());
-                break;
+            //            case BUTTON:
+            //                component = new Button(type.getCn(), type.getCode());
+            //                break;
+            //            case DROPDOWN:
+            //                component = new DropDownBox(type.getCn(), type.getCode());
+            //                break;
             case FORMVIEW:
                 component = new FormView(type.getCn(), type.getCode());
                 break;
             case TABLEVIEW:
                 component = new TableView(type.getCn(), type.getCode());
                 break;
-            case TEXTBOX:
-                component = new TextBox(type.getCn(), type.getCode());
-                break;
+            //            case TEXTBOX:
+            //                component = new TextBox(type.getCn(), type.getCode());
+            //                break;
             default:
                 break;
         }
