@@ -210,6 +210,19 @@ public class ComponentService {
     //        return Db.save(META_COMPONENT_INSTANCE, record);
     //    }
 
+    /**
+     * 删除某元对象下所有关联配置信息
+     *
+     * @param objectCode
+     *
+     * @return
+     */
+    public boolean deleteObjectAll(String objectCode) {
+        Db.delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?", INSTANCE.META_OBJECT.toString(), objectCode);
+        Db.delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object like concat(?,'%')", INSTANCE.META_FIELD.toString(), objectCode);
+        return true;
+    }
+
     public boolean deleteObjectConfig(String componentCode, String objectCode, boolean isSingle) {
 
         Db.delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",

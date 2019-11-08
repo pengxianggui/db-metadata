@@ -95,6 +95,12 @@ public class MetaController extends FrontRestController {
         DbMetaService dbMetaService = ServiceManager.metaService();
         MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
         Preconditions.checkArgument(!metaObject.isSystem(), "该对象属于系统元对象,不能删除");
-        renderJson(dbMetaService.deleteMetaObject(metaObject.code()) ? Ret.ok() : Ret.fail());
+
+        log.info("删除元对象{}数据", metaObject.code());
+        dbMetaService.deleteMetaObject(metaObject.code());
+
+        log.info("删除元对象{}实例配置", metaObject.code());
+        ServiceManager.componentService().deleteObjectAll(objectCode);
+        renderJson(Ret.ok());
     }
 }
