@@ -40,9 +40,12 @@ public class DbMetaService {
 
     public IMetaObject findByCode(String objectCode) {
         if (StrKit.isBlank(objectCode)) {
-            throw new MetaOperateException(String.format("无效的元对象Code:%s", objectCode));
+            throw new MetaOperateException("必须指定元对象编码,当前元对象编码:%s", objectCode);
         }
         Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        if (moRecord == null) {
+            throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
+        }
         List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", objectCode);
         IMetaObject IMetaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {

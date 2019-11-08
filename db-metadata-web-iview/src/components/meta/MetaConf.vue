@@ -20,6 +20,14 @@
         </el-row>
         <el-row>
             <el-col>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                    <el-button @click="onCancel">取消</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
                 <h2 align="center">{{objectOrCompCode}}</h2>
                 <el-form-item>
                     <JsonBox v-model="confModel.conf" :meta="confMeta"></JsonBox>
