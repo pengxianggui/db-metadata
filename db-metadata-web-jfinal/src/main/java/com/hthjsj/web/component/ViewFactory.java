@@ -41,7 +41,9 @@ public class ViewFactory {
             public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 if (metaObject != null) {
                     meta.putIfAbsent("objectCode", metaObject.code());
-                    meta.set("conf", tableViewConfig);
+                    Kv kv = JSON.parseObject(tableViewConfig.getStr(metaObject.code()), Kv.class);
+                    kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+
                     List<Kv> fs = new ArrayList<>();
                     for (IMetaField field : metaObject.fields()) {
                         fs.add(fieldInject.inject(meta, field));

@@ -126,7 +126,7 @@ public class MetaObject implements IMetaObject {
 
     @Override
     public boolean isSystem() {
-        return record.getBoolean("is_sys");
+        return Boolean.parseBoolean(record.getStr("is_sys"));
     }
 
     @Override
