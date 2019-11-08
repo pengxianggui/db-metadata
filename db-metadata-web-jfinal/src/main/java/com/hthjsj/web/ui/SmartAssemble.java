@@ -102,6 +102,7 @@ public class SmartAssemble {
         if (metaField.dbType().isJson()) {
             builder.componentName(ComponentType.JSONBOX.getCode());
         }
+
         return builder.toKv();
     }
 

@@ -28,7 +28,7 @@ public class DBTypeJudge {
     }
 
     public boolean isNumber() {
-        return isInt() || isBigInt();
+        return isInt() || isBigInt() || isDecimal();
     }
 
     public boolean isInt() {
@@ -37,6 +37,10 @@ public class DBTypeJudge {
 
     public boolean isBigInt() {
         return value.equalsIgnoreCase("bigint");
+    }
+
+    public boolean isDecimal() {
+        return value.equalsIgnoreCase("decimal");
     }
 
     public boolean isDate() {
