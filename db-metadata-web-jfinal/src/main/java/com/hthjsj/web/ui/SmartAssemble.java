@@ -85,7 +85,7 @@ public class SmartAssemble {
             builder.maxlength(metaField.dbTypeLength().intValue());
             if (metaField.dbTypeLength() > 255L) {
                 builder.componentName(ComponentType.TEXTAREABOX.getCode());
-                builder.resizeable(true);
+                builder.resizeable("none");
             }
         }
         if (metaField.dbType().isDate()) {

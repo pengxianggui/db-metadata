@@ -34,7 +34,7 @@ public class AttributeBuilder {
 
         AttrAbility disabled(boolean i);
 
-        AttrAbility resizeable(boolean i);
+        AttrAbility resizeable(String i);
 
         AttrAbility clearable(boolean i);
     }
@@ -70,8 +70,9 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps resizeable(boolean i) {
+        public AttributeSteps resizeable(String i) {
             config.putIfAbsent("conf", Kv.create());
+            //            none, both, horizontal, vertical
             ((Kv) config.getAs("conf")).set("resize", i);
             return this;
         }
