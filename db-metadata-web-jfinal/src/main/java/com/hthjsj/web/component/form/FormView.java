@@ -36,6 +36,14 @@ public class FormView extends ViewContainer {
     }
 
     @Override
+    protected void renderCustomMeta(Kv meta) {
+        meta.putIfAbsent("methods", methods);
+        meta.putIfAbsent("name", name);
+        meta.putIfAbsent("action", action);
+        meta.putIfAbsent("component_name", type());
+    }
+
+    @Override
     public Kv toKv() {
         //        meta.putIfAbsent("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         //        getViewInject().inject(this, meta, getFieldInject());

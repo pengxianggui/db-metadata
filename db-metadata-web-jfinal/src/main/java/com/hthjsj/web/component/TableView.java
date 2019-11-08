@@ -31,12 +31,14 @@ public class TableView extends ViewContainer {
     }
 
     @Override
-    public Kv toKv() {
+    protected void renderCustomMeta(Kv meta) {
         meta.setIfNotBlank("name", name);
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
-        meta.setIfNotBlank("conf", "");
-        getViewInject().inject(this, meta, conf, getFieldInject());
-        return meta;
+    }
+
+    @Override
+    public Kv toKv() {
+        return super.toKv();
     }
 }

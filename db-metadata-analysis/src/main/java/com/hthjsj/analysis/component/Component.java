@@ -20,10 +20,6 @@ public abstract class Component {
 
     @Getter
     @Setter
-    ViewInject viewInject = new ViewInject.DefaultViewInject();
-
-    @Getter
-    @Setter
     FieldInject fieldInject = new FieldInject.DefaultFieldInject() {
 
         @Override
