@@ -78,10 +78,10 @@ eg:
                         </template>
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf.size"
-                                       @click="handleEdit(scope.row.id, $event)">编辑
+                                       @click="handleEdit(scope.$index, scope.row, $event)">编辑
                             </el-button>
                             <el-button :size="innerMeta.conf.size" type="danger"
-                                       @click="handleDelete(scope.row.id, $event)">删除
+                                       @click="handleDelete(scope.$index, scope.row, $event)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -159,9 +159,11 @@ eg:
                 this.innerChoseData = selection;
                 this.$emit('update:chose-data', selection);
             },
-            handleEdit(id, ev) { // edit/add
+            handleEdit(index, row, ev) { // edit/add
                 if (ev) ev.stopPropagation();
-
+                this.doEdit();
+            },
+            doEdit(id) {
                 let url;
                 if (id) {
                     url = this.$compile(FORM_TO_EDIT_URL, {
@@ -181,8 +183,12 @@ eg:
                 });
             },
             // 删除单行
-            handleDelete(ids, ev) {
+            handleDelete(index, row, ev) {
                 if (ev) ev.stopPropagation();
+                const id = row.id;
+                this.doDelete(id);
+            },
+            doDelete(ids) {
                 this.$confirm('确定删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -258,7 +264,7 @@ eg:
                     's': this.pageModel['size']
                 });
 
-                this.$axios.get(url).then(resp => {
+                this.$axios.safeGet(url).then(resp => {
                     this.innerData = resp.data;
                     this.$emit("update:data", resp.data);
                     if (resp.hasOwnProperty('page')) {
@@ -289,18 +295,23 @@ eg:
             this.initData();
         },
         computed: {
-            innerMeta() {
-                if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
-                    this.meta['columns'].forEach(item => {
-                        if (!item.hasOwnProperty('conf')) {
-                            item['conf'] = {}
-                        }
-                        if (!item['conf'].hasOwnProperty('showable')) { // default true
-                            item['conf']['showable'] = true;
-                        }
-                    });
+            innerMeta:{
+                get: function () {
+                    if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
+                        this.meta['columns'].forEach(item => {
+                            if (!item.hasOwnProperty('conf')) {
+                                item['conf'] = {}
+                            }
+                            if (!item['conf'].hasOwnProperty('showable')) { // default true
+                                item['conf']['showable'] = true;
+                            }
+                        });
+                    }
+                    return this.$merge(this.meta, DEFAULT.TableList);
+                },
+                set: function (val) {
+                    this.$emit('update:meta', val);
                 }
-                return this.$merge(this.meta, DEFAULT.TableList);
             },
         }
     }

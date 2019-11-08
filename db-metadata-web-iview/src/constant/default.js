@@ -186,7 +186,7 @@ const DEFAULT = {
         label: "表格模板",
         component_name: "TableList",
         methods: "GET",
-        data_url: "/table/list", // required
+        data_url: "/table/list/{objectCode}", // required
         delete_url: '',
         // ...
         conf: {

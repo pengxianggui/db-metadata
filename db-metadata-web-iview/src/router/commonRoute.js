@@ -21,7 +21,7 @@ const commonRoute = [
             }, {
                 path: 'meta-object',
                 name: 'MetaObject',
-                component: () => import('@/components/meta/MetaObject')
+                component: () => import('@/components/meta/MetaObject.js')
             }, {
                 path: 'meta-conf',
                 name: 'MetaConf',
