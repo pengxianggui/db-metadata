@@ -34,6 +34,10 @@ const commonRoute = [
                 path: 'table-data',
                 name: 'TableData',
                 component: () => import('@/components/meta/TableData')
+            }, {
+                path: 'change-log',
+                name: 'ChangeLog',
+                component: () => import('@/components/meta/ChangeLog')
             }
         ]
     },

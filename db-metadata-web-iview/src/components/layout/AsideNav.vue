@@ -22,6 +22,10 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">MetaManager</span>
             </el-menu-item>
+            <el-menu-item index="/main/change-log">
+                <i class="el-icon-menu"></i>
+                <span slot="title">ChangeLog</span>
+            </el-menu-item>
             <el-menu-item index="/main/demo">
                 <i class="el-icon-menu"></i>
                 <span slot="title">Demo</span>

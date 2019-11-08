@@ -161,7 +161,7 @@ eg:
             },
             handleEdit(index, row, ev) { // edit/add
                 if (ev) ev.stopPropagation();
-                this.doEdit();
+                this.doEdit(row.id);
             },
             doEdit(id) {
                 let url;

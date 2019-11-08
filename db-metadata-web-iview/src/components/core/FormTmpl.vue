@@ -109,26 +109,22 @@ eg:
                     return;
                 }
             },
-            assemblyModel(columns) {
-                let keys = Object.keys(this.model);
-                let names = [];
+            assemblyModel(meta) {
+                this.model = {};
+
+                let columns = meta['columns'];
+                let record = meta['record'] || {};
+
                 columns.forEach(item => {
-                    names.push(item['name']);
-                    if (keys.indexOf(item['name']) === -1) {
-                        this.$set(this.model, item['name'], item['value'] || null);
-                    }
+                    this.$set(this.model, item['name'], record[item.name] || null);
+
                 });
-                keys.forEach(key => {
-                    if (names.indexOf(key) === -1) {
-                        this.$delete(this.model, key);
-                    }
-                })
             }
         },
         computed: {
             innerMeta () {
                 let meta = this.$merge(this.meta, DEFAULT.FormTmpl);
-                this.assemblyModel(meta['columns']);
+                this.assemblyModel(meta);
                 return meta;
             }
         }
