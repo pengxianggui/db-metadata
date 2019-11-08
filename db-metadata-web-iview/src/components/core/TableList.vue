@@ -186,8 +186,10 @@ eg:
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let deleteUrl = this.$compile(TABLE_DATA_DELETE_URL, {objectCode: this.innerMeta['objectCode'], ids: ids});
-                    this.$axios.delete(deleteUrl).then(resp => {
+                    let beforeCompileUrl = this.innerMeta['delete_url'] || TABLE_DATA_DELETE_URL;
+                    let afterCompileUrl = this.$compile(beforeCompileUrl,
+                        {objectCode: this.innerMeta['objectCode'], ids: ids});
+                    this.$axios.delete(afterCompileUrl).then(resp => {
                         this.$message.success(resp.msg);
                         this.getData();
                     }).catch(err => {

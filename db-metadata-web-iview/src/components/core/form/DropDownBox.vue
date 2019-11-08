@@ -89,14 +89,14 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 // http request options data by innerMeta.data_url
                 let url = this.innerMeta['data_url'];
                 if (url) {
-                    this.$axios.get(url).then(resp => {
+                    this.$axios.$safeGet(url).then(resp => {
                         // if provide format callback fn, execute callback fn
                         let format = this.getBehavior('format');
                         this.innerOptions = format ? format(resp.data) : resp.data;
                         this.$emit('update:options', this.innerOptions);
                     }).catch(err => {
                         this.$message.error(err.msg);
-                    })
+                    });
                 }
             },
             initOptions: function () {

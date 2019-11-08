@@ -187,6 +187,7 @@ const DEFAULT = {
         component_name: "TableList",
         methods: "GET",
         data_url: "/table/list", // required
+        delete_url: '',
         // ...
         conf: {
             "default-sort": {prop: "id", order: "descending"}, // descending, ascending
