@@ -12,7 +12,7 @@
         },
         methods: {
             getTableMeta() {
-                this.$axios.get("/meta/fields/meta_component")
+                this.$axios.get("/meta/fields/test_table")
                 .then(resp => {
                     this.tableMeta = resp.data;
                     // this.$refs[this.tableMeta['name']].getData();

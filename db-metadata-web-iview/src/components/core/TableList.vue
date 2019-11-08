@@ -34,8 +34,10 @@ eg:
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
-                <el-button @click="handleAdd">新增</el-button>
-                <el-button @click="handleBatchDelete">删除</el-button>
+                <el-button-group>
+                    <el-button @click="handleAdd">新增</el-button>
+                    <el-button @click="handleBatchDelete">删除</el-button>
+                </el-button-group>
             </el-col>
         </el-row>
         <el-row>
