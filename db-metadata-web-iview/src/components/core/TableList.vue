@@ -207,7 +207,7 @@ eg:
             },
             // 新增一行
             handleAdd() {
-                this.handleEdit();
+                this.doEdit();
             },
             // 批量删除
             handleBatchDelete() {

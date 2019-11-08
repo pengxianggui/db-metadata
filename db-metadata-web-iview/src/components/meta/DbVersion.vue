@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "TableData",
+        name: "DbVersion",
         data() {
             return {
                 meta: null
@@ -12,7 +12,7 @@
         },
         methods: {
             getMeta() {
-                this.$axios.get("/meta/fields/test_table")
+                this.$axios.get("/meta/fields/PDMAN_DB_VERSION")
                 .then(resp => {
                     this.meta = resp.data;
                     // this.$refs[this.tableMeta['name']].getData();

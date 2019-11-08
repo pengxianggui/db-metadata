@@ -11,7 +11,7 @@ export default {
         }
     },
     methods: {
-        getChangeLogMeta() {
+        getMeta() {
             const url = '/meta/fields/change_log';
             this.$axios.get(url).then(resp => {
                 this.meta = resp.data;
@@ -23,7 +23,7 @@ export default {
         },
     },
     mounted() {
-        this.getChangeLogMeta()
+        this.getMeta()
     },
 }
 </script>

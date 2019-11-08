@@ -34,6 +34,14 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">TableData</span>
             </el-menu-item>
+            <el-menu-item index="/main/meta-config">
+                <i class="el-icon-menu"></i>
+                <span slot="title">MetaConfig</span>
+            </el-menu-item>
+            <el-menu-item index="/main/db-version">
+                <i class="el-icon-menu"></i>
+                <span slot="title">DbVersion</span>
+            </el-menu-item>
             <!--            <el-submenu index="1">-->
             <!--                <template slot="title">-->
             <!--                    <i class="el-icon-location"></i>-->

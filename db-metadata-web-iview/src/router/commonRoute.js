@@ -38,6 +38,14 @@ const commonRoute = [
                 path: 'change-log',
                 name: 'ChangeLog',
                 component: () => import('@/components/meta/ChangeLog')
+            }, {
+                path: 'meta-config',
+                name: 'MetaConfig',
+                component: () => import('@/components/meta/MetaConfig')
+            }, {
+                path: 'db-version',
+                name: 'DbVersion',
+                component: () => import('@/components/meta/DbVersion')
             }
         ]
     },
