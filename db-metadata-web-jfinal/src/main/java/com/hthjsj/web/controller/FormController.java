@@ -8,6 +8,7 @@ import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.query.DataBuilder;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
+import com.jfinal.plugin.activerecord.Record;
 
 /**
  * <p> @Date : 2019/10/16 </p>
@@ -41,7 +42,7 @@ public class FormController extends FrontRestController {
 
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
 
-        MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject);
+        MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         boolean status = ServiceManager.metaService().saveData(metaObject, metadata);
 
@@ -53,10 +54,30 @@ public class FormController extends FrontRestController {
 
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
+
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        String dataId = getPara(metaObject.primaryKey());
 
         FormView formView = ViewFactory.createFormView(metaObject);
 
-        renderJson(Ret.ok("data", formView.toKv()));
+        Record d = ServiceManager.metaService().findData(metaObject, dataId);
+
+        renderJson(Ret.ok("data", formView.toKv()).set("record", d));
+    }
+
+    @Override
+    public void doUpdate() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        String dataId = getPara(metaObject.primaryKey());
+
+
+        MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
+
+        boolean status = ServiceManager.metaService().updateData(metaObject, metadata);
+
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 }

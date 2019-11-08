@@ -93,6 +93,10 @@ public class DbMetaService {
         return status;
     }
 
+    public Record findData(MetaObject object, String id) {
+        return Db.findById(object.tableName(), id);
+    }
+
     public boolean updateData(MetaObject object, Kv data) {
         // TODO support single primaryKey;
         Record old = Db.use(App.DB_MAIN).findById(object.tableName(), data.get(object.primaryKey()));

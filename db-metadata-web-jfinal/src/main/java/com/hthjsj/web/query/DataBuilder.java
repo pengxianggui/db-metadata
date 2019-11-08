@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 public class DataBuilder {
 
-    public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject) {
+    public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject, boolean isInsert) {
         Kv params = Kv.create().set(Utils.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
 
@@ -37,7 +37,7 @@ public class DataBuilder {
             Object castedValue = null;
             try {
                 //主键处理
-                if (metaField.isPrimary()) {
+                if (metaField.isPrimary() && isInsert) {
                     formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
                     continue;
                 }
