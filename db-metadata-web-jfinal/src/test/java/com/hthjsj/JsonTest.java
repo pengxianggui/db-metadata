@@ -1,6 +1,7 @@
 package com.hthjsj;
 
 import com.alibaba.fastjson.JSON;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> Class title: </p>
@@ -26,6 +27,12 @@ public class JsonTest {
 
     public static void main(String[] args) {
 
+        Kv kv = Kv.create();
+        kv.set("one", 1);
+        kv.set("two", true);
+        kv.set("three", "fie");
+        System.out.println(kv.toJson());
+        System.out.println(JSON.toJSONString(kv));
         System.out.println(JSON.toJSONString(new User("tom", "hihi")));
     }
 }

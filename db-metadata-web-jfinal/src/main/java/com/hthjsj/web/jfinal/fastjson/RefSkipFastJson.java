@@ -29,9 +29,10 @@ public class RefSkipFastJson extends FastJson {
                                                    SerializerFeature.DisableCircularReferenceDetect,
                                                    SerializerFeature.WriteDateUseDateFormat,
                                                    SerializerFeature.WriteNullListAsEmpty,
-                                                   SerializerFeature.WriteMapNullValue,
-                                                   SerializerFeature.WriteNullStringAsEmpty,
-                                                   SerializerFeature.WriteNonStringValueAsString);
+                                                   SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+            //            SerializerFeature.WriteNonStringValueAsString
+            //            按照toString方式获取对象字面值
+            //            会导致 true -> "true"  ,1->"1"
         }
     }
 }
