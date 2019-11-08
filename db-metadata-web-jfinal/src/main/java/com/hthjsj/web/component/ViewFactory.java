@@ -63,11 +63,11 @@ public class ViewFactory {
         return tableView;
     }
 
-    public static FormView createFormView(MetaObject metaObject) {
+    public static FormView createFormView(String action, MetaObject metaObject) {
         Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
         log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
 
-        FormView formView = FormView.POST("/form/doAdd", metaObject.name());
+        FormView formView = FormView.POST(action, metaObject.name());
         formView.setViewInject(new ViewInject<FormView>() {
 
             @Override
