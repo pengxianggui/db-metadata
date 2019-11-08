@@ -1,10 +1,9 @@
 import axios from "axios";
-import {BASE_URL} from '../constant/constant'
+import config from './config'
 import {e_format, s_format} from "./responseExchange";
 
-let caseAxios = axios.create({
-    baseURL: BASE_URL
-});
+let caseAxios = axios.create(config);
+
 caseAxios.interceptors.response.use(res => {
     if (!s_format(res)) {
         return Promise.reject(res.data);
