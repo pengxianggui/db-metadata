@@ -24,6 +24,7 @@
   "BoolBox": {
     "name": "BoolBox",
     "label": "布尔框",
+    "inline": true,
     "component_name": "BoolBox",
     "conf": {}
   },
@@ -57,6 +58,7 @@
   "DropDownBox": {
     "name": "DropDownBox",
     "label": "下拉框",
+    "inline": true,
     "component_name": "DropDownBox",
     "group": false,
     "conf": {
@@ -66,6 +68,7 @@
   "TimeBox": {
     "name": "TimeBox",
     "label": "时间框",
+    "inline": true,
     "component_name": "TimeBox",
     "conf": {
       "value-format": "HH:mm:ss",
@@ -75,6 +78,7 @@
   "DateBox": {
     "name": "DateBox",
     "label": "日期框",
+    "inline": true,
     "component_name": "DateBox",
     "conf": {
       "value-format": "yyyy-MM-dd",
@@ -84,6 +88,7 @@
   "DateTimeBox": {
     "name": "DateTimeBox",
     "label": "日期时间框",
+    "inline": true,
     "component_name": "DateTimeBox",
     "conf": {
       "value-format": "yyyy-MM-dd HH:mm:ss",
@@ -93,6 +98,7 @@
   "NumBox": {
     "name": "NumBox",
     "label": "数字框",
+    "inline": true,
     "component_name": "NumBox",
     "conf": {
       "controls": false,
@@ -102,6 +108,7 @@
   "RadioBox": {
     "name": "RadioBox",
     "label": "单选框",
+    "inline": true,
     "component_name": "RadioBox",
     "group": false,
     "data_url": "",
@@ -110,6 +117,7 @@
   "CheckBox": {
     "name": "CheckBox",
     "label": "多选框",
+    "inline": true,
     "component_name": "CheckBox",
     "data_url": "",
     "conf": {}

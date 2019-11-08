@@ -19,4 +19,7 @@
     .el-card {
         padding: 10px;
     }
+    form .inline {
+        display: inline-block;
+    }
 </style>

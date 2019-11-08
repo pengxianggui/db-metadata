@@ -44,7 +44,7 @@ eg:
 <template>
     <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
         <el-form-item v-for="(item, index) in innerMeta.columns" :key="item.name + index"
-                      :label="item.label" :prop="item.name">
+                      :label="item.label" :prop="item.name" :class="{inline: item.inline}">
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
         </el-form-item>
         <el-form-item>

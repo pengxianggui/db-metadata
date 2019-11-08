@@ -81,11 +81,23 @@
       - 异步渲染的目标, 是希望meta数据就续前, 不影响组件的渲染, 等meta数据就绪后, 支持流入组件, 组件内部再根据meta进行重新构建组件并渲染  
       
         
- -[ ] 专门封装一个http请求, 对响应数据进行校验, 含有\\则reject, 或报错(axios/case.js)
- -[ ] 对$message进行封装处理
+ -[x] 专门封装一个http请求, 对响应数据进行校验, 含有\\则reject, 或报错(axios/case.js)
+ -[x] 对$message进行封装处理: element支持, 但需要对resp和err进行"msg"属性保障 处理(responseExchange.js)
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
  -[ ] 组件中各个属性先后位置尽量统一
+ 
+        1.name
+        2.mixins
+        3.props
+        4.data
+        5.methods
+        6.beforeCreated
+        7.created
+        8.beforeMounted
+        9.mounted
+        10.computed
+        
  -[ ] 不同组件中相同功能的属性命名尽量统一
  -[ ] const、let 分时适用
  -[x] 对象属性调用方式, 应当形成规约: obj.a OR obj['a']: 属性读取超过两级, 第二级后用['']方式读取

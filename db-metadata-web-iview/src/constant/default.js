@@ -158,6 +158,7 @@ const DEFAULT = {
         //     name: 'id',
         //     label: 'ID',
         //     component_name: 'TextBox',
+        //     inline: false,
         //     conf: {
         //         clearable: true,
         //         placeholder: "请输入..",
