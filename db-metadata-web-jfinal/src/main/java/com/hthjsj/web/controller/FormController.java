@@ -75,7 +75,7 @@ public class FormController extends FrontRestController {
 
 
         MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
-
+        metadata.set(metaObject.primaryKey(), dataId);
         boolean status = ServiceManager.metaService().updateData(metaObject, metadata);
 
         renderJson(status ? Ret.ok() : Ret.fail());

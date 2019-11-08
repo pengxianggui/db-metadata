@@ -33,7 +33,7 @@ public class TableController extends FrontRestController {
          *  [x] 1.1 query all data paging
          *  [x] 1.2 query data by fields
          *  [x-] 1.3 allow some conditions
-         * 2. sort
+         * [x] 2. sort
          * 3. set fields or excludes fields
          * [x] 4. paging
          * 5. escape fields value
