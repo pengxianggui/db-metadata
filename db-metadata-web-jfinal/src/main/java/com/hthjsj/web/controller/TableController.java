@@ -34,7 +34,7 @@ public class TableController extends FrontRestController {
          *  [x] 1.2 query data by fields
          *  [x-] 1.3 allow some conditions
          * [x] 2. sort
-         * 3. set fields or excludes fields
+         * [x] 3. set fields or excludes fields
          * [x] 4. paging
          * 5. escape fields value
          */
@@ -52,6 +52,16 @@ public class TableController extends FrontRestController {
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
+
+        /**
+         * escape field value;
+         * 1. 是否需要转义的规则;
+         *
+         *
+         */
+
+
+
 
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
     }

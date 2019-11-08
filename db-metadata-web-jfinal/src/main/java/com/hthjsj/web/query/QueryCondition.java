@@ -27,6 +27,22 @@ public class QueryCondition {
     public static final String PREFIX_COL = "__COLUMN__";
 
     /**
+     * 普通值过滤
+     * 数值 : key=value
+     * 字符 : key=value ( %like% )
+     * 日期 : key=2019-10-10  ->
+     * <p>
+     * 连续区间过滤
+     * 日期 : key_start={} & key_end={}
+     * [ok] 数值 : key_lt={} & key_eq={}
+     * 字符 :
+     * <p>
+     * 非连续区间过滤
+     * 数值 : key_in = 1,3,4,5,6
+     * 字符 : key_in = "1","2","3","4"
+     */
+
+    /**
      * <p>
      * FIXME :
      * http://url?ef=id,name,config&f=config 会滤出全部列

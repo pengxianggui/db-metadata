@@ -62,7 +62,7 @@ public class FormController extends FrontRestController {
 
         Record d = ServiceManager.metaService().findData(metaObject, dataId);
 
-        renderJson(Ret.ok("data", formView.toKv()).set("record", d));
+        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }
 
     @Override

@@ -39,17 +39,15 @@ public class ViewFactory {
 
             @Override
             public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
-                if (metaObject != null) {
-                    meta.putIfAbsent("objectCode", metaObject.code());
-                    Kv kv = JSON.parseObject(tableViewConfig.getStr(metaObject.code()), Kv.class);
-                    kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+                meta.putIfAbsent("objectCode", metaObject.code());
+                Kv kv = JSON.parseObject(tableViewConfig.getStr(metaObject.code()), Kv.class);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
 
-                    List<Kv> fs = new ArrayList<>();
-                    for (IMetaField field : metaObject.fields()) {
-                        fs.add(fieldInject.inject(meta, field));
-                    }
-                    meta.set("columns", fs);
+                List<Kv> fs = new ArrayList<>();
+                for (IMetaField field : metaObject.fields()) {
+                    fs.add(fieldInject.inject(meta, field));
                 }
+                meta.set("columns", fs);
             }
         });
 
@@ -79,9 +77,8 @@ public class ViewFactory {
                 Kv kv = JSON.parseObject(formViewConfig.getStr(metaObject.code()), Kv.class);
                 //https://blog.csdn.net/tangyaya8/article/details/91399650
                 kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
-                Kv config = null;
                 for (IMetaField metaField : metaObject.fields()) {
-                    config = JSON.parseObject(formViewConfig.getStr(metaField.fieldCode()), Kv.class);
+                    Kv config = JSON.parseObject(formViewConfig.getStr(metaField.fieldCode()), Kv.class);
                     FormField formField = FormFieldFactory.createFormField(metaField, config);
                     component.getFields().add(formField);
                 }
@@ -92,26 +89,24 @@ public class ViewFactory {
         return formView;
     }
 
+    /**
+     * 构建view容器
+     *
+     * @param typeString
+     *
+     * @return
+     */
     public static Component createViewComponent(String typeString) {
         ComponentType type = ComponentType.V(typeString);
         Component component = null;
 
         switch (type) {
-            //            case BUTTON:
-            //                component = new Button(type.getCn(), type.getCode());
-            //                break;
-            //            case DROPDOWN:
-            //                component = new DropDownBox(type.getCn(), type.getCode());
-            //                break;
             case FORMVIEW:
                 component = new FormView(type.getCn(), type.getCode());
                 break;
             case TABLEVIEW:
                 component = new TableView(type.getCn(), type.getCode());
                 break;
-            //            case TEXTBOX:
-            //                component = new TextBox(type.getCn(), type.getCode());
-            //                break;
             default:
                 break;
         }
