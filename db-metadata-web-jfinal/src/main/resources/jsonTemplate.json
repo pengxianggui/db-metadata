@@ -5,7 +5,7 @@
     "component_name": "TableList",
     "methods": "GET",
     "data_url": "/table/list",
-    "delete_url": "/meta/delete/{objectCode}",
+    "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
     "conf": {
       "default-sort": {
         "prop": "id",

@@ -87,16 +87,17 @@
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
  -[ ] 组件中各个属性先后位置尽量统一
  
-        1.name
-        2.mixins
-        3.props
-        4.data
-        5.methods
-        6.beforeCreated
-        7.created
-        8.beforeMounted
-        9.mounted
-        10.computed
+        name
+        mixins
+        props
+        data
+        methods
+        watch
+        beforeCreated
+        created
+        beforeMounted
+        mounted
+        computed
         
  -[ ] 不同组件中相同功能的属性命名尽量统一
  -[ ] const、let 分时适用

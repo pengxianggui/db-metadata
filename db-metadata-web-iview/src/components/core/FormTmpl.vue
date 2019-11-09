@@ -48,10 +48,10 @@ eg:
             <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
         </el-form-item>
         <el-form-item>
-            <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns.submit.conf" @click="onSubmit"
-                       v-text="innerMeta.btns.submit.label"></el-button>
-            <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns.cancel.conf" @click="onCancel"
-                       v-text="innerMeta.btns.cancel.label"></el-button>
+            <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
+                       v-text="innerMeta.btns['submit']['label']"></el-button>
+            <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']" @click="onCancel"
+                       v-text="innerMeta.btns['cancel']['label']"></el-button>
         </el-form-item>
     </el-form>
 </template>

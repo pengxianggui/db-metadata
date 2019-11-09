@@ -72,15 +72,16 @@ eg:
                                                  :key="item.name + '' + index"
                                                  :label="item.name"
                                                  v-model="item.conf['showable']"
-                                                 @change="$forceUpdate(); getData()" style="display: block;"></el-checkbox>
+                                                 @change="$forceUpdate(); getData()"
+                                                 style="display: block;"></el-checkbox>
                                 </el-popover>
                             </span>
                         </template>
                         <template slot-scope="scope">
-                            <el-button :size="innerMeta.conf.size"
+                            <el-button :size="innerMeta.conf['size']"
                                        @click="handleEdit(scope.$index, scope.row, $event)">编辑
                             </el-button>
-                            <el-button :size="innerMeta.conf.size" type="danger"
+                            <el-button :size="innerMeta.conf['size']" type="danger"
                                        @click="handleDelete(scope.$index, scope.row, $event)">删除
                             </el-button>
                         </template>
@@ -101,9 +102,6 @@ eg:
                 ></el-pagination>
             </el-col>
         </el-row>
-        <el-dialog>
-<!--            <form-tmpl :meta="formMeta"></form-tmpl>-->
-        </el-dialog>
     </el-container>
 </template>
 
@@ -212,7 +210,7 @@ eg:
             // 批量删除
             handleBatchDelete() {
                 const idArr = this.innerChoseData.map(row => row.id);
-                this.handleDelete(idArr.join(','));
+                this.doDelete(idArr.join(','));
             },
             choseRow(row, col, event) {
                 let selected = true;
@@ -230,7 +228,7 @@ eg:
                 this.$refs[tableRefName].toggleRowSelection(row, selected)
             },
             sortChange(param) {
-                let { prop, order} = param;
+                let {prop, order} = param;
                 this.sortModel = {
                     prop: prop,
                     order: order
@@ -291,28 +289,28 @@ eg:
                 console.error("data or data_url in meta provide one at least!")
             },
         },
+        watch: {
+            'innerMeta.data_url': function () {
+                this.getData();
+            }
+        },
         mounted() {
             this.initData();
         },
         computed: {
-            innerMeta:{
-                get: function () {
-                    if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
-                        this.meta['columns'].forEach(item => {
-                            if (!item.hasOwnProperty('conf')) {
-                                item['conf'] = {}
-                            }
-                            if (!item['conf'].hasOwnProperty('showable')) { // default true
-                                item['conf']['showable'] = true;
-                            }
-                        });
-                    }
-                    return this.$merge(this.meta, DEFAULT.TableList);
-                },
-                set: function (val) {
-                    this.$emit('update:meta', val);
+            innerMeta() {
+                if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
+                    this.meta['columns'].forEach(item => {
+                        if (!item.hasOwnProperty('conf')) {
+                            item['conf'] = {}
+                        }
+                        if (!item['conf'].hasOwnProperty('showable')) { // default true
+                            item['conf']['showable'] = true;
+                        }
+                    });
                 }
-            },
+                return this.$merge(this.meta, DEFAULT.TableList);
+            }
         }
     }
 </script>

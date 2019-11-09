@@ -12,27 +12,23 @@
             </el-menu-item>
             <el-menu-item index="/main/meta-object">
                 <i class="el-icon-menu"></i>
-                <span slot="title">MetaObject</span>
+                <span slot="title">元对象管理</span>
             </el-menu-item>
             <el-menu-item index="/main/meta-conf">
                 <i class="el-icon-menu"></i>
-                <span slot="title">MetaConf</span>
+                <span slot="title">元对象-组件配置</span>
             </el-menu-item>
             <el-menu-item index="/main/meta-manager">
                 <i class="el-icon-menu"></i>
-                <span slot="title">MetaManager</span>
+                <span slot="title">元字段管理</span>
             </el-menu-item>
             <el-menu-item index="/main/change-log">
                 <i class="el-icon-menu"></i>
                 <span slot="title">ChangeLog</span>
             </el-menu-item>
-            <el-menu-item index="/main/demo">
-                <i class="el-icon-menu"></i>
-                <span slot="title">Demo</span>
-            </el-menu-item>
             <el-menu-item index="/main/table-data">
                 <i class="el-icon-menu"></i>
-                <span slot="title">TableData</span>
+                <span slot="title">test_table</span>
             </el-menu-item>
             <el-menu-item index="/main/meta-config">
                 <i class="el-icon-menu"></i>
@@ -41,6 +37,10 @@
             <el-menu-item index="/main/db-version">
                 <i class="el-icon-menu"></i>
                 <span slot="title">DbVersion</span>
+            </el-menu-item>
+            <el-menu-item index="/main/demo">
+                <i class="el-icon-menu"></i>
+                <span slot="title">Demo</span>
             </el-menu-item>
             <!--            <el-submenu index="1">-->
             <!--                <template slot="title">-->
