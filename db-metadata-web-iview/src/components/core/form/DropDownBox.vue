@@ -112,6 +112,11 @@ description: format option data, and return formatted data, like: [{key: "xxx", 
                 console.error("options or data_url in meta provide one at least!")
             },
         },
+        watch: {
+            'innerMeta.data_url': function () {
+                this.getOptions();
+            }
+        },
         created() {
         },
         mounted() {
