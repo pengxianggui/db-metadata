@@ -2,7 +2,7 @@ import TableList from '@/components/core/TableList';
 
 export default {
     name: "meta-object",
-    mixins: [TableList],
+    extends: TableList,
     data() {
         return {
         }
@@ -11,8 +11,7 @@ export default {
         getTableMeta() {
             const url = '/meta/objs';
             this.$axios.get(url).then(resp => {
-                this.meta = resp.data;
-                this.getData();
+                this.$reverseMerge(this.meta, resp.data);
             }).catch(err => {
                 console.error('[ERROR] url: %s, msg: %s', url, err.msg);
                 this.$message.error(err.msg)
@@ -27,7 +26,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                const url = '/meta/delete/' + objectCode
+                const url = '/meta/delete/' + objectCode;
                 this.$axios.delete(url).then(resp => {
                     this.$message.success(resp.msg);
                     this.getData();
@@ -37,7 +36,7 @@ export default {
             });
         },
     },
-    mounted() {
+    created() {
         this.getTableMeta()
     },
 }
