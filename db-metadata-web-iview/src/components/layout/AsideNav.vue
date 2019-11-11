@@ -14,7 +14,7 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">元对象管理</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-conf">
+            <el-menu-item index="/main/meta-component-instance-conf">
                 <i class="el-icon-menu"></i>
                 <span slot="title">元对象-组件配置</span>
             </el-menu-item>

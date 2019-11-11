@@ -57,7 +57,7 @@
     import {DEFAULT} from '@/constant';
 
     export default {
-        name: "meta-conf",
+        name: "MetaComponentInstanceConf",
         data() {
             const fieldUrl = "/table/list/meta_field?object_code={objectCode}&fs=field_code&s=100"; // Temporary solution: set a large pageSize value. you know, for load all data
             let componentMeta = {
