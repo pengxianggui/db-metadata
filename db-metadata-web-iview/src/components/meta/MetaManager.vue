@@ -1,9 +1,10 @@
 <template>
     <el-container direction="vertical">
-        <el-button-group>
-            <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
+        <el-button-group style="display: flex;">
+            <span style="flex: 1"></span>
             <drop-down-box :ref="objMeta['name']" v-model="metaObj" :meta="objMeta"
                            @change="refreshTableData()"></drop-down-box>
+            <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
         </el-button-group>
         <table-list :ref="tableMeta['name']" :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']"></table-list>
         <el-dialog title="创建元数据" :visible.sync="visible">

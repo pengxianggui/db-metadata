@@ -62,7 +62,8 @@ eg:
                                          v-bind="item.conf"
                                          :key="item.name + '' + index"
                                          :prop="item.name"
-                                         :label="item.label || item.name">
+                                         :label="item.label || item.name"
+                                         show-overflow-tooltip>
                         </el-table-column>
                     </template>
 
