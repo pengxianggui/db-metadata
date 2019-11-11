@@ -60,7 +60,7 @@ eg:
                     <template v-for="(item, index) in innerMeta.columns">
                         <el-table-column v-if="item.conf['showable']"
                                          v-bind="item.conf"
-                                         :key="item.name + '' + index"
+                                         :key="item.name"
                                          :prop="item.name"
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
