@@ -30,8 +30,8 @@ eg:
 }
 -->
 <template>
-    <el-container direction="vertical">
-        <el-row style="margin: 5px 0;">
+    <el-container direction="vertical" class="el-card">
+        <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
                 <el-button-group>
@@ -43,14 +43,13 @@ eg:
         <el-row>
             <el-col :span="24">
                 <el-table
-                    :id="innerMeta.name"
-                    :ref="innerMeta.name"
-                    :data="innerData"
-                    v-bind="innerMeta.conf"
-                    border
-                    @row-click="choseRow"
-                    @sort-change="sortChange"
-                    @selection-change="handleSelectionChange">
+                        :id="innerMeta.name"
+                        :ref="innerMeta.name"
+                        :data="innerData"
+                        v-bind="innerMeta.conf"
+                        @row-click="choseRow"
+                        @sort-change="sortChange"
+                        @selection-change="handleSelectionChange">
 
                     <!-- muti select conf -->
                     <template v-if="innerMeta.multi_select">
@@ -113,7 +112,7 @@ eg:
 
 <script>
     import DEFAULT from '@/constant/default'
-    import {TABLE_DATA_DELETE_URL, FORM_TO_ADD_URL, FORM_TO_EDIT_URL} from '@/constant/constant'
+    import {FORM_TO_ADD_URL, FORM_TO_EDIT_URL, TABLE_DATA_DELETE_URL} from '@/constant/constant'
     import utils from '@/utils'
 
     export default {

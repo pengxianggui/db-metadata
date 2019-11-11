@@ -1,56 +1,58 @@
 <template>
-    <el-form :model="confModel" label-width="80px" class="demo-form-inline" style="height: 100%">
-        <el-row :gutter="12">
-            <el-col :span="6">
-                <el-form-item label="组件">
-                    <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
-                                   @change="loadConf"></DropDownBox>
-                </el-form-item>
-            </el-col>
-            <el-col :span="6">
-                <el-form-item label="元对象">
-                    <DropDownBox v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></DropDownBox>
-                </el-form-item>
-            </el-col>
-            <el-col :span="6">
-                <el-form-item>
-                    <el-button @click="deleteConf">删除配置</el-button>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">提交</el-button>
-                    <el-button @click="onCancel">取消</el-button>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <h2 align="center">{{objectOrCompCode}}</h2>
-                <el-form-item>
-                    <JsonBox v-model="confModel.conf" :meta="confMeta"></JsonBox>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
-            <el-col>
-                <h4>{{index}}.{{key}}</h4>
-                <el-form-item>
-                    <JsonBox v-model="confModel.fConf[key]" :meta="confMeta"></JsonBox>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">提交</el-button>
-                    <el-button @click="onCancel">取消</el-button>
-                </el-form-item>
-            </el-col>
-        </el-row>
-    </el-form>
+    <div class="el-card">
+        <el-form :model="confModel" label-width="80px" class="demo-form-inline" style="height: 100%">
+            <el-row :gutter="12">
+                <el-col :span="6">
+                    <el-form-item label="组件">
+                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
+                                     @change="loadConf"></DropDownBox>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="元对象">
+                        <DropDownBox v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></DropDownBox>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item>
+                        <el-button @click="deleteConf">删除配置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button @click="onCancel">取消</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col>
+                    <h2 align="center">{{objectOrCompCode}}</h2>
+                    <el-form-item>
+                        <JsonBox v-model="confModel.conf" :meta="confMeta"></JsonBox>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
+                <el-col>
+                    <h4>{{index}}.{{key}}</h4>
+                    <el-form-item>
+                        <JsonBox v-model="confModel.fConf[key]" :meta="confMeta"></JsonBox>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button @click="onCancel">取消</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
 </template>
 
 <script>
