@@ -189,6 +189,7 @@ const DEFAULT = {
         data_url: "/table/list/{objectCode}", // required
         delete_url: '/table/delete?objectCode={objectCode}&ids={ids}',
         // ...
+        multi_select: true, //多选
         conf: {
             "default-sort": {prop: "id", order: "descending"}, // descending, ascending
             "highlight-current-row": true,

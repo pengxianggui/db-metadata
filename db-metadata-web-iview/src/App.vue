@@ -22,4 +22,7 @@
     form .inline {
         display: inline-block;
     }
+    .el-popover {
+        min-width: 50px;
+    }
 </style>

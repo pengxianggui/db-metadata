@@ -51,7 +51,10 @@ eg:
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
 
-                    <el-table-column type="selection" width="55"></el-table-column>
+                    <!-- muti select conf -->
+                    <template v-if="innerMeta.multi_select">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                    </template>
 
                     <template v-for="(item, index) in innerMeta.columns">
                         <el-table-column v-if="item.conf['showable']"
@@ -86,6 +89,7 @@ eg:
                             </el-button>
                         </template>
                     </el-table-column>
+
                 </el-table>
             </el-col>
         </el-row>
@@ -154,8 +158,10 @@ eg:
         },
         methods: {
             handleSelectionChange(selection) {
-                this.innerChoseData = selection;
-                this.$emit('update:chose-data', selection);
+                if (this.innerMeta.multi_select) {
+                    this.innerChoseData = selection;
+                    this.$emit('update:chose-data', selection);
+                }
             },
             handleEdit(index, row, ev) { // edit/add
                 if (ev) ev.stopPropagation();
@@ -216,16 +222,18 @@ eg:
                 let selected = true;
                 this.innerActiveData = row;
                 this.$emit('update:active-data', row);
-                let tableRefName = this.innerMeta['name'];
 
-                for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
-                    let choseItem = this.$refs[tableRefName]['selection'][i];
-                    if (row.id === choseItem.id) {
-                        selected = false;
-                        break
+                if (this.innerMeta.multi_select) {
+                    let tableRefName = this.innerMeta['name'];
+                    for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
+                        let choseItem = this.$refs[tableRefName]['selection'][i];
+                        if (row.id === choseItem.id) {
+                            selected = false;
+                            break
+                        }
                     }
+                    this.$refs[tableRefName].toggleRowSelection(row, selected);
                 }
-                this.$refs[tableRefName].toggleRowSelection(row, selected)
             },
             sortChange(param) {
                 let {prop, order} = param;
@@ -315,8 +323,5 @@ eg:
     }
 </script>
 
-<style>
-    .el-popover {
-        min-width: 50px;
-    }
+<style scoped>
 </style>
