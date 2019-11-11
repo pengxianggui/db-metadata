@@ -101,7 +101,7 @@ public class DBController extends FrontRestController {
                 metaObjectIViewAdapter.fields().forEach(m -> {
                     metaConfig.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
                 });
-                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig, false);
+                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
 
                 //FormView
                 metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.FORMVIEW);
@@ -110,7 +110,7 @@ public class DBController extends FrontRestController {
                 metaObjectIViewAdapter.fields().forEach(m -> {
                     metaConfig.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
                 });
-                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig, false);
+                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
             }
         }
         renderJson(Ret.ok());

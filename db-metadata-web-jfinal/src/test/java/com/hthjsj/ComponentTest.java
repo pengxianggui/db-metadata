@@ -28,7 +28,7 @@ public class ComponentTest {
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
         TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
 
-        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create(), false);
+        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create());
         //        init(metaObject);
         //        loadFieldsConfigMap(tableView);
     }
@@ -51,7 +51,7 @@ public class ComponentTest {
             Db.save("meta_component", "id", record);
         }
         ComponentService componentService = Aop.get(ComponentService.class);
-        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create(), false);
+        Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create());
         //        componentService.newObjectConfig(tableView, "object_code_admin111", Kv.create());
         //        componentService.newFieldConfig(tableView, "object_code_admin111", "one1", Kv.create());
         //        componentService.newFieldConfig(tableView, "object_code_admin111", "one2", Kv.create());

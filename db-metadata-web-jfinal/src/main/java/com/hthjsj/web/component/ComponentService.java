@@ -169,17 +169,45 @@ public class ComponentService {
         return Db.queryStr("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?", componentCode, destCode, type);
     }
 
-    public boolean newObjectConfig(Component component, String objectCode, Kv config) {
+    public boolean newObjectSelfConfig(Component component, String objectCode, Kv config) {
         Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT, config);
         return Db.save(META_COMPONENT_INSTANCE, record);
     }
 
-    public boolean newObjectConfig(Component component, IMetaObject object, Kv config, boolean strict) {
+    public boolean newObjectConfig(Component component, IMetaObject object, Kv config) {
         /**
          * new objectConfig
          * foreach fieldsConfig
          */
-        newObjectConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
+        newObjectSelfConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
+
+        Collection<IMetaField> fields = object.fields();
+
+        List<Record> fieldRecords = Lists.newArrayList();
+        fields.forEach(f -> {
+            Kv fkv = JSON.parseObject(config.getStr(f.fieldCode()), Kv.class);
+            fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
+        });
+
+        Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
+
+        return true;
+    }
+
+    /**
+     * 先删除,再插入
+     *
+     * @param component
+     * @param object
+     * @param config
+     *
+     * @return
+     */
+    public boolean updateObjectConfig(Component component, IMetaObject object, Kv config) {
+
+        deleteObjectConfig(component.code(), object.code(), false);
+
+        newObjectSelfConfig(component, object.code(), config);
 
         Collection<IMetaField> fields = object.fields();
 

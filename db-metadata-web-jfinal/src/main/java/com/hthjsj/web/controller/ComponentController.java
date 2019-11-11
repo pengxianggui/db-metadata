@@ -119,7 +119,7 @@ public class ComponentController extends FrontRestController {
                 return;
             }
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-            ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
+            ServiceManager.componentService().newObjectConfig(component, metaObject, config);
         } else {
             ServiceManager.componentService().newDefault(compCode, JSON.parseObject(config.getStr(compCode), Kv.class));
         }
@@ -128,7 +128,23 @@ public class ComponentController extends FrontRestController {
 
     @Override
     public void doUpdate() {
-        super.doUpdate();
+        /**
+         * object Code
+         * component Type
+         */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCode = queryHelper.getComponentCode();
+
+        Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
+        Component component = ViewFactory.createViewComponent(compCode);
+        if (StrKit.notBlank(compCode, objectCode)) {
+            MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+            ServiceManager.componentService().updateObjectConfig(component, metaObject, config);
+        } else {
+            ServiceManager.componentService().updateDefault(compCode, JSON.parseObject(config.getStr(compCode), Kv.class));
+        }
+        renderJson(Ret.ok());
     }
 
     @Override
