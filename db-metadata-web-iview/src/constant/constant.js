@@ -20,7 +20,7 @@ export const SUCCESS_MSG = '操作成功';
  * 分页每页数量可选范围
  * @type {number[]}
  */
-export const PAGE_NUM_AREA = [10, 20, 50, 100, 200];
+export const PAGE_NUM_AREA = [1, 10, 20, 50, 100, 200];
 
 /**
  * 上传路径

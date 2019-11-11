@@ -1,6 +1,8 @@
 <template>
     <el-container style="display: flex; flex-direction: column; height: 100%;">
-        <el-header>Header 占坑</el-header>
+        <el-header>
+            <header-bar></header-bar>
+        </el-header>
         <el-container style="flex: 1; overflow: auto;">
             <el-aside width="200px">
                 <aside-nav></aside-nav>
@@ -14,10 +16,13 @@
 
 <script>
     import AsideNav from '@/components/layout/AsideNav'
+    import HeaderBar from '@/components/layout/HeaderBar'
+
     export default {
         name: "Main",
         components: {
-            AsideNav
+            AsideNav,
+            HeaderBar
         }
     }
 </script>

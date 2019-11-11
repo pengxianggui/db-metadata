@@ -8,7 +8,7 @@ const commonRoute = [
         path: '/main',
         name: 'main',
         component: () => import('@/components/Main'),
-        redirect: '/main/meta-data',
+        redirect: '/main/meta-object',
         children: [
             {
                 path: 'meta-data',
