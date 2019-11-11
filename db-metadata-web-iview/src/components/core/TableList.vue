@@ -217,7 +217,11 @@ eg:
             // 批量删除
             handleBatchDelete() {
                 const idArr = this.innerChoseData.map(row => row.id);
-                this.doDelete(idArr.join(','));
+                if (idArr.length > 0) {
+                    this.doDelete(idArr.join(','));
+                    return
+                }
+                this.$message.warning('请至少选择一项!');
             },
             choseRow(row, col, event) {
                 let selected = true;
