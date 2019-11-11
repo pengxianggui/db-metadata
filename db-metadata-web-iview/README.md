@@ -7,6 +7,97 @@
 
 - [form-design](https://github.com/vincentzyc/form-design)
 
+#### 表单组件元对象设计
+```json
+{
+        "name": "FormTmpl",
+        "label": "表单模板",
+        "component_name": "FormTmpl",
+        "action": "/form/doAdd/{objectCode}",
+        "conf": {
+            "label-width": "100px",
+            "size": "medium",
+            "disabled": false,
+            "rules": {
+                "name": [{"required": true, "message": "必填字段", "trigger": "blur"}]
+            }
+        },
+        "columns": [
+            {
+                "name": "id",
+                "label": "ID",
+                "component_name": "TextBox",
+                "inline": false,
+                "showable": true,
+                "index": 1,
+                "default_value": 1,
+    
+                "conf": {
+                    "clearable": true,
+                    "placeholder": "请输入..",
+                    "readonly": true,
+                    "disabled": false,
+                    "required": false
+                }
+            }
+        ],
+        "btns": {
+            "submit": {
+                "label": "提交",
+                "conf": {
+                    "type": "primary"
+                }
+            },
+            "cancel": {
+                "label": "取消",
+                "conf": {
+                }
+            }
+        }
+    }
+```
+
+### 表格设计
+
+#### 表格组件元对象设计
+```json
+{
+        "name": "TableList",
+        "label": "表格模板",
+        "component_name": "TableList",
+        "data_url": "/table/list/{objectCode}",
+        "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
+        "multi_select": true,
+        "editable": false,
+        "conf": {
+            "default-sort": {"prop": "id", "order": "descending"},
+            "highlight-current-row": true,
+            "size": "medium"
+        },
+        "columns": [
+            {
+                "name": "name",
+                "label": "label",
+                "component_name": "TextBox",
+                "editable": false,
+                "searchable": true,
+                "index": 1,
+                
+                "conf": {
+                    "width": "50",
+                    "sortable": true
+                }
+            }
+        ],
+        "pagination": {
+            "page-size": 10,
+            "page-sizes": [10, 20, 50, 100, 200],
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next, jumper"
+        }
+    }
+```
+
 ### 所有组件默认处理的响应数据格式为
 ```
 {

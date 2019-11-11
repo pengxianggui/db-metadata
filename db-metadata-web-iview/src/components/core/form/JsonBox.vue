@@ -1,7 +1,6 @@
 <template>
     <vue-json-editor v-model="nativeValue"
-                     :modes="innerMeta.conf['modes']"
-                     :mode="innerMeta.conf['mode']">
+                     v-bind="innerMeta.conf">
     </vue-json-editor>
 </template>
 

@@ -1,11 +1,12 @@
 {
   "TableList": {
+    "component_name": "TableList",
     "name": "TableList",
     "label": "表格模板",
-    "component_name": "TableList",
-    "methods": "GET",
-    "data_url": "/table/list",
+    "data_url": "/table/list/{objectCode}",
     "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
+    "multi_select": true,
+    "editable": false,
     "conf": {
       "default-sort": {
         "prop": "id",
@@ -23,124 +24,130 @@
     }
   },
   "BoolBox": {
+    "component_name": "BoolBox",
     "name": "BoolBox",
     "label": "布尔框",
+    "default_value": false,
     "inline": true,
-    "component_name": "BoolBox",
     "conf": {}
   },
   "TextBox": {
+    "component_name": "TextBox",
     "name": "TextBox",
     "label": "文本框",
-    "component_name": "TextBox",
+    "inline": false,
     "conf": {
       "placeholder": "请输入内容..",
       "clearable": true
     }
   },
   "PassBox": {
+    "component_name": "PassBox",
     "name": "PassBox",
     "label": "密码框",
-    "component_name": "PassBox",
+    "inline": false,
     "conf": {
       "placeholder": "请输入密码..",
       "clearable": true
     }
   },
   "TextAreaBox": {
+    "component_name": "TextAreaBox",
     "name": "TextAreaBox",
     "label": "文本域",
-    "component_name": "TextAreaBox",
+    "inline": false,
     "conf": {
-      "placeholder": "请输入文本内容..",
-      "clearable": true
+      "placeholder": "请输入文本内容.."
     }
   },
   "DropDownBox": {
+    "component_name": "DropDownBox",
     "name": "DropDownBox",
     "label": "下拉框",
     "inline": true,
-    "component_name": "DropDownBox",
     "group": false,
     "conf": {
       "clearable": true
     }
   },
   "TimeBox": {
+    "component_name": "TimeBox",
     "name": "TimeBox",
     "label": "时间框",
     "inline": true,
-    "component_name": "TimeBox",
     "conf": {
       "value-format": "HH:mm:ss",
       "clearable": true
     }
   },
   "DateBox": {
+    "component_name": "DateBox",
     "name": "DateBox",
     "label": "日期框",
     "inline": true,
-    "component_name": "DateBox",
     "conf": {
       "value-format": "yyyy-MM-dd",
       "clearable": true
     }
   },
   "DateTimeBox": {
+    "component_name": "DateTimeBox",
     "name": "DateTimeBox",
     "label": "日期时间框",
     "inline": true,
-    "component_name": "DateTimeBox",
     "conf": {
       "value-format": "yyyy-MM-dd HH:mm:ss",
       "clearable": true
     }
   },
   "NumBox": {
+    "component_name": "NumBox",
     "name": "NumBox",
     "label": "数字框",
     "inline": true,
-    "component_name": "NumBox",
+    "default_value": 0,
     "conf": {
       "controls": false,
       "placeholder": "请输入数值.."
     }
   },
   "RadioBox": {
+    "component_name": "RadioBox",
     "name": "RadioBox",
     "label": "单选框",
     "inline": true,
-    "component_name": "RadioBox",
-    "group": false,
-    "data_url": "",
+    "data_url": "/dict/yn",
     "conf": {}
   },
   "CheckBox": {
+    "component_name": "CheckBox",
     "name": "CheckBox",
     "label": "多选框",
     "inline": true,
-    "component_name": "CheckBox",
     "data_url": "/dict/yn",
     "conf": {}
   },
   "JsonBox": {
+    "component_name": "JsonBox",
     "name": "JsonBox",
     "label": "Json框",
-    "component_name": "JsonBox",
-    "mode": "text",
-    "modes": [
-      "code",
-      "tree",
-      "text",
-      "view",
-      "form"
-    ],
-    "conf": {}
+    "inline": false,
+    "conf": {
+      "mode": "code",
+      "modes": [
+        "code",
+        "tree",
+        "text",
+        "view",
+        "form"
+      ]
+    }
   },
   "ImgBox": {
+    "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
-    "component_name": "ImgBox",
+    "inline": false,
     "conf": {
       "action": "/upload/img",
       "drag": false,
@@ -150,8 +157,10 @@
     }
   },
   "FileBox": {
+    "component_name": "FileBox",
     "name": "FileBox",
     "label": "文件上传框",
+    "inline": false,
     "conf": {
       "action": "/upload/file",
       "limit": 5,
@@ -160,21 +169,23 @@
     }
   },
   "ZTogglePanel": {
+    "component_name": "ZTogglePanel",
     "name": "ZTogglePanel",
     "label": "收缩面板",
-    "component_name": "ZTogglePanel",
     "default_open": false,
     "olabel": "收起",
     "clabel": "展开"
   },
   "FormTmpl": {
+    "component_name": "FormTmpl",
     "name": "FormTmpl",
     "label": "表单模板",
-    "component_name": "FormTmpl",
-    "action": "/save",
+    "action": "/form/doAdd/{objectCode}",
     "conf": {
       "label-width": "100px",
       "size": "medium",
+      "disabled": false,
+      "inline": false,
       "rules": {}
     },
     "columns": [],

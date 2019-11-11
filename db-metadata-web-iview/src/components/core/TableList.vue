@@ -57,7 +57,7 @@ eg:
                     </template>
 
                     <template v-for="(item, index) in innerMeta.columns">
-                        <el-table-column v-if="item.conf['showable']"
+                        <el-table-column v-if="item.showable"
                                          v-bind="item.conf"
                                          :key="item.name"
                                          :prop="item.name"
@@ -75,7 +75,7 @@ eg:
                                     <el-checkbox v-for="(item, index) in innerMeta.columns"
                                                  :key="item.name + '' + index"
                                                  :label="item.name"
-                                                 v-model="item.conf['showable']"
+                                                 v-model="item.showable"
                                                  @change="$forceUpdate(); getData()"
                                                  style="display: block;"></el-checkbox>
                                 </el-popover>
@@ -310,11 +310,8 @@ eg:
             innerMeta() {
                 if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
                     this.meta['columns'].forEach(item => {
-                        if (!item.hasOwnProperty('conf')) {
-                            item['conf'] = {}
-                        }
-                        if (!item['conf'].hasOwnProperty('showable')) { // default true
-                            item['conf']['showable'] = true;
+                        if (!item.hasOwnProperty('showable')) { // default true
+                            item.showable = true;
                         }
                     });
                 }
