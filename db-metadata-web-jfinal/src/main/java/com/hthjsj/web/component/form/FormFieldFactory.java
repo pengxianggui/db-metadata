@@ -63,7 +63,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                meta.putAll(kv);
                 return kv;
             }
         });
@@ -77,7 +77,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                meta.putAll(kv);
                 return kv;
             }
         });
@@ -105,7 +105,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.putAll(meta);
+                meta.putAll(kv);
                 return kv;
             }
         });
