@@ -63,7 +63,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                meta.putAll(kv);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -77,7 +77,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                meta.putAll(kv);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
@@ -105,7 +105,7 @@ public class FormFieldFactory {
             @Override
             public Kv inject(Kv meta) {
                 Kv kv = Kv.create().set(instanceFieldConfig);
-                meta.putAll(kv);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
         });
