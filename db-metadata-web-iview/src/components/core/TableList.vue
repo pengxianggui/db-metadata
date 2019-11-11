@@ -31,12 +31,12 @@ eg:
 -->
 <template>
     <el-container direction="vertical">
-        <el-row>
+        <el-row style="margin: 5px 0;">
             <el-col :span="24">
                 <!-- operation bar -->
                 <el-button-group>
                     <el-button @click="handleAdd">新增</el-button>
-                    <el-button @click="handleBatchDelete">删除</el-button>
+                    <el-button @click="handleBatchDelete" type="danger">删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
@@ -47,6 +47,7 @@ eg:
                     :ref="innerMeta.name"
                     :data="innerData"
                     v-bind="innerMeta.conf"
+                    border
                     @row-click="choseRow"
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
