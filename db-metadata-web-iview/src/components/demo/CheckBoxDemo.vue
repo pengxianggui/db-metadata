@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{meta.component_name}}: </h2>
-        <component :is="meta.component_name" v-model="value" :meta="meta" :options="options"></component>
+        <component :is="meta.component_name" v-model="value" :meta="meta"></component>
         <br>
         值为: {{value}}
         <z-toggle-panel>
@@ -24,6 +24,14 @@
                         // other options
                     }
                 },
+                // meta: {
+                //     "component_name": "CheckBox",
+                //     "conf": {},
+                //     "data_url": "/dict/yn",
+                //     "inline": true,
+                //     "label": "系统模块",
+                //     "name": "is_sys"
+                // },
                 options: [{
                     'key': '航天恒嘉',
                     'value': '1'

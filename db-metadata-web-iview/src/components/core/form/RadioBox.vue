@@ -30,7 +30,7 @@
             getOptions: function () {
                 let url = this.innerMeta['data_url'];
                 if (url) {
-                    this.$axios.get(url).then(resp => {
+                    this.$axios.safeGet(url).then(resp => {
                         // if provide format callback fn, execute callback fn
                         let format = this.getBehavior('format');
                         this.innerOptions = format ? format(resp.data) : resp.data;
@@ -51,6 +51,11 @@
                 }
                 console.error("options or data_url in meta provide one at least!")
             },
+        },
+        watch: {
+            'innerMeta.data_url': function () {
+                this.getOptions();
+            }
         },
         mounted() {
             this.initOptions();
