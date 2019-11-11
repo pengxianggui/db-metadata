@@ -207,7 +207,7 @@ public class ComponentService {
 
         deleteObjectConfig(component.code(), object.code(), false);
 
-        newObjectSelfConfig(component, object.code(), config);
+        newObjectSelfConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
 
         Collection<IMetaField> fields = object.fields();
 

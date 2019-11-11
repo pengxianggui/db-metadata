@@ -59,7 +59,7 @@ final public class Components {
         Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
-            if (!ServiceManager.componentService().newDefault(type.getCode(), Kv.create())) {
+            if (!ServiceManager.componentService().newDefault(type.getCode(), JSON.parseObject(staticGlobalConfig.getStr(type.getCode()), Kv.class))) {
                 if (JFinal.me().getConstants().getDevMode()) {
                     ServiceManager.componentService().updateDefault(type.getCode(), JSON.parseObject(staticGlobalConfig.getStr(type.getCode()), Kv.class));
                 }

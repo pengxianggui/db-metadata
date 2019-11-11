@@ -23,6 +23,7 @@
                 <el-col>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="warning" @click="onUpdate">更新</el-button>
                         <el-button @click="onCancel">取消</el-button>
                     </el-form-item>
                 </el-col>
@@ -47,6 +48,7 @@
                 <el-col>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="warning" @click="onUpdate">更新</el-button>
                         <el-button @click="onCancel">取消</el-button>
                     </el-form-item>
                 </el-col>
@@ -190,6 +192,35 @@
                 }).catch(err => {
                     this.$message.error(err.msg);
                 })
+            },
+            onUpdate: function () {
+                if (!this.confModel['componentCode']) {
+                    this.$message.alert('必须选定一个组件');
+                    return;
+                }
+                let params = {
+                    componentCode: this.confModel['componentCode'],
+                    objectCode: this.confModel['objectCode']
+                };
+
+                let confKey = this.objectOrCompCode;
+                params[confKey] = this.confModel['conf'];
+
+                for (let fConfKey in this.confModel['fConf']) {
+                    params[fConfKey] = this.confModel['fConf'][fConfKey];
+                }
+
+                this.$axios({
+                    method: 'POST',
+                    url: 'component/doUpdate',
+                    data: params
+                }).then(resp => {
+                    this.$message.success(resp.msg);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                })
+
+
             },
             onCancel: function () {
                 // pxg_todo
