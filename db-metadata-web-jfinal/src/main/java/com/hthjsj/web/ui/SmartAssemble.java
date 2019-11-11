@@ -86,6 +86,7 @@ public class SmartAssemble {
             if (metaField.dbTypeLength() > 255L) {
                 builder.componentName(ComponentType.TEXTAREABOX.getCode());
                 builder.resizeable("none");
+                builder.showOverflowTooltip(true);
             }
         }
         if (metaField.dbType().isDate()) {
@@ -104,6 +105,7 @@ public class SmartAssemble {
         }
         if (metaField.dbType().isJson()) {
             builder.componentName(ComponentType.JSONBOX.getCode());
+            builder.showOverflowTooltip(true);
         }
 
         log.debug("auto compute config : {}", builder.render().toJson());

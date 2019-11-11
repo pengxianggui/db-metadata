@@ -154,6 +154,21 @@ public class FormFieldFactory {
         return jsonBox;
     }
 
+    static CheckBox createCheckBox(IMetaField metaField, Kv instanceFieldConfig) {
+        CheckBox checkBox = new CheckBox(metaField.fieldCode(), metaField.cn());
+        checkBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
+
+            @Override
+            public Kv inject(Kv meta) {
+                Kv kv = Kv.create().set(instanceFieldConfig);
+                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
+                return kv;
+            }
+        });
+        return checkBox;
+    }
+
+
     /**
      * <pre>
      * 说明: 区别于createFormField 传入的配置 为全局
@@ -194,6 +209,8 @@ public class FormFieldFactory {
         switch (type) {
             case TEXTBOX:
                 return createTextBox(metaField, instanceFieldConfig);
+            case CHECKBOX:
+                return createCheckBox(metaField, instanceFieldConfig);
             case DROPDOWN:
                 return createDropDownBox(metaField, instanceFieldConfig);
             case RADIOBOX:

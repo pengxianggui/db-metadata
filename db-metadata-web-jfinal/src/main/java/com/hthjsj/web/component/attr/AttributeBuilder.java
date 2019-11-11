@@ -48,12 +48,17 @@ public class AttributeBuilder {
         AttrRender build();
     }
 
+    interface TableAttr {
+
+        TableAttr showOverflowTooltip(boolean flag);
+    }
+
     interface AttrRender {
 
         Kv render();
     }
 
-    public static class AttributeSteps implements AttrAbility, AttrMaxMinDefault, AttrRender, AttrCustomMeta {
+    public static class AttributeSteps implements AttrAbility, AttrMaxMinDefault, AttrRender, AttrCustomMeta, TableAttr {
 
         private Kv config = Kv.create();
 
@@ -118,6 +123,13 @@ public class AttributeBuilder {
         @Override
         public AttrCustomMeta label(String label) {
             config.set("label", label);
+            return this;
+        }
+
+        @Override
+        public TableAttr showOverflowTooltip(boolean flag) {
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("show-overflow-tooltip", flag);
             return this;
         }
     }

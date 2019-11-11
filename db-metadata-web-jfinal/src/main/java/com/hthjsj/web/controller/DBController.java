@@ -12,8 +12,10 @@ import com.hthjsj.web.ui.IViewAdapter;
 import com.hthjsj.web.ui.SmartAssemble;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,12 +65,26 @@ public class DBController extends FrontRestController {
         renderJson(Ret.ok("data", results));
     }
 
+    public void truncate() {
+        String token = getPara(0, "");
+        StringBuilder sb = new StringBuilder();
+        sb.append("即将清除表:meta_component, meta_component_instance,meta_config,meta_field,meta_object");
+        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "请输入token,{}" + sb.toString());
+        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
+        log.info("清空meta相关表{}", sb.toString());
+        Db.delete("delete from meta_component");
+        Db.delete("delete from meta_component_instance");
+        Db.delete("delete from meta_config");
+        Db.delete("delete from meta_field");
+        Db.delete("delete from meta_object");
+        renderJson(Ret.ok("msg", sb.toString()));
+    }
+
     @Before(Tx.class)
     public void init() {
         String token = getPara(0, "");
         Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
-
-
+        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
         List<Table> tables = Aop.get(MysqlService.class).showTables("metadata");
 
         for (Table t : tables) {
