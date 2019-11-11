@@ -13,11 +13,15 @@
             initDb: function () {
                 this.$axios.get('/db/init/hello').then(resp => {
                     this.$message.success(resp.msg);
+                }).catch(err => {
+                    this.$message.error(err.msg);
                 })
             },
             cleanDb: function () {
                 this.$axios.get('/db/truncate/hello').then(resp => {
                     this.$message.success(resp.msg);
+                }).catch(err => {
+                    this.$message.error(err.msg);
                 })
             }
         }
