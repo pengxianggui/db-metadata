@@ -6,10 +6,10 @@
         <!--        </el-radio-group>-->
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true" active-text-color
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-            <el-menu-item index="/main/meta-data">
-                <i class="el-icon-menu"></i>
-                <span slot="title">MetaData</span>
-            </el-menu-item>
+<!--            <el-menu-item index="/main/meta-data">-->
+<!--                <i class="el-icon-menu"></i>-->
+<!--                <span slot="title">MetaData</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="/main/meta-object">
                 <i class="el-icon-menu"></i>
                 <span slot="title">元对象管理</span>
