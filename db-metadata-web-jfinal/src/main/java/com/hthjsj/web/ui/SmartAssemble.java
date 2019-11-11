@@ -82,7 +82,11 @@ public class SmartAssemble {
         //set default componentName is "TextBox"
         builder.componentName(ComponentType.TEXTBOX.getCode());
         if (metaField.dbType().isText()) {
-            builder.maxlength(metaField.dbTypeLength().intValue());
+            if (metaField.dbTypeLength() == 1L) {
+                builder.componentName(ComponentType.CHECKBOX.getCode());
+            } else {
+                builder.maxlength(metaField.dbTypeLength().intValue());
+            }
             if (metaField.dbTypeLength() > 255L) {
                 builder.componentName(ComponentType.TEXTAREABOX.getCode());
                 builder.resizeable("none");
@@ -107,7 +111,6 @@ public class SmartAssemble {
             builder.componentName(ComponentType.JSONBOX.getCode());
             builder.showOverflowTooltip(true);
         }
-
         log.debug("auto compute config : {}", builder.render().toJson());
         return builder.render();
     }

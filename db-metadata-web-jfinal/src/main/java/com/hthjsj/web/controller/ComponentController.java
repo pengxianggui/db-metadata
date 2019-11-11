@@ -127,6 +127,11 @@ public class ComponentController extends FrontRestController {
     }
 
     @Override
+    public void doUpdate() {
+        super.doUpdate();
+    }
+
+    @Override
     public void delete() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();

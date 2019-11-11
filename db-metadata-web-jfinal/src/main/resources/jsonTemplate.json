@@ -120,7 +120,7 @@
     "label": "多选框",
     "inline": true,
     "component_name": "CheckBox",
-    "data_url": "",
+    "data_url": "/dict/yn",
     "conf": {}
   },
   "JsonBox": {

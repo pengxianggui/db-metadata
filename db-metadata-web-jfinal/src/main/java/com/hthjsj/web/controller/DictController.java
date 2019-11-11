@@ -35,4 +35,14 @@ public class DictController extends FrontRestController {
         options.add(Kv.by("key", "女").set("value", "2"));
         renderJson(Ret.ok("data", options));
     }
+
+    /**
+     * yes or no
+     */
+    public void yn() {
+        List<Kv> options = Lists.newArrayList();
+        options.add(Kv.by("key", "是").set("value", "1"));
+        options.add(Kv.by("key", "否").set("value", "0"));
+        renderJson(Ret.ok("data", options));
+    }
 }
