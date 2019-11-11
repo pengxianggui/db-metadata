@@ -11,13 +11,17 @@ import Vue from 'vue'
  */
 export function merge(opt1, opt2, deep) {
     let self = this;
-    if (typeof opt1 !== 'object' || typeof opt2 !== 'object' || opt1 === null) {
-        console.error("typeof ${opt1} and ${opt2} must be 'object' and opt1 should not be null");
-        return {}
+
+    if (opt2 === null || typeof opt2 !== 'object') {
+        console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
+        return common.deepCopy(opt1);
     }
-    if (opt2 === null) {
-        return opt1;
+
+    if (opt1 === null || typeof opt1 !== 'object') {
+        console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
+        return common.deepCopy(opt2);
     }
+
     deep = (deep === undefined); // 默认deep模式
 
     let deepMerge = function (obj1, obj2) {
@@ -47,12 +51,17 @@ export function merge(opt1, opt2, deep) {
  */
 export function reverseMerge(opt1, opt2, deep) {
     let self = this;
-    if (typeof opt1 !== 'object' || typeof opt2 !== 'object') {
-        return {}
+
+    if (opt2 === null || typeof opt2 !== 'object') {
+        console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
+        return common.deepCopy(opt1);
     }
-    if (opt1 === null) {
-        return opt2 === null ? {} : opt2;
+
+    if (opt1 === null || typeof opt1 !== 'object') {
+        console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
+        return common.deepCopy(opt2);
     }
+
     deep = (deep === undefined); // 默认deep模式
 
     let deepMerge = function (obj1, obj2) {
