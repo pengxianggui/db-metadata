@@ -114,6 +114,10 @@ public class ComponentController extends FrontRestController {
         Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
+            if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
+                renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
+                return;
+            }
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().newObjectConfig(component, metaObject, config, false);
         } else {
