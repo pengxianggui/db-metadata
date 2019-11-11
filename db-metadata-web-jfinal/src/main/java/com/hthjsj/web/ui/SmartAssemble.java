@@ -83,7 +83,7 @@ public class SmartAssemble {
         builder.componentName(ComponentType.TEXTBOX.getCode());
         if (metaField.dbType().isText()) {
             if (metaField.dbTypeLength() == 1L) {
-                builder.componentName(ComponentType.CHECKBOX.getCode());
+                builder.componentName(ComponentType.BOOLBOX.getCode());
             } else {
                 builder.maxlength(metaField.dbTypeLength().intValue());
             }
