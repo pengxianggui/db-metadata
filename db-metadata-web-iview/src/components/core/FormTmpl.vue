@@ -3,7 +3,7 @@
         <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
             <template v-for="(item, index) in innerMeta.columns">
                 <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
-                              :label="item.label" :prop="item.name" :class="{inline: item.inline}">
+                              :label="item.label" :prop="item.name" :class="{inline: item.inline}" :rules="item.conf['rules']">
                     <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
                 </el-form-item>
             </template>
