@@ -143,7 +143,7 @@ eg:
             data: Array,
             page: {
                 type: Object,
-                validate: function (val) {
+                validator: function (val) {
                     if (!val.hasOwnProperty('total')
                         || !val.hasOwnProperty('size')
                         || !val.hasOwnProperty('index')) {

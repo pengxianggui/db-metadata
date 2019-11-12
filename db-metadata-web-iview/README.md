@@ -218,13 +218,13 @@
     
  -[ ] dialog
     -[ ] dialog 运行时实例配置
-    -[ ] dialog 全局配置
+    -[x] dialog 全局配置
   
  -[ ] JsonBox
-    -[ ] 传入值的JSON强限制, or 内部做兼容
+    -[x] 内部做兼容
     
  -[ ] BoolBox
-    -[ ] 1/0 的兼容处理
+    -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
