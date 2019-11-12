@@ -180,7 +180,9 @@ eg:
                 }
                 this.$axios.get(url).then(resp => {
                     let formMeta = resp.data;
-                    this.$dialog(formMeta).then(() => {
+                    this.$dialog(formMeta, {
+                        title: id ? '编辑' : '新增',
+                    }).then(() => {
                         this.getData(); // refresh
                     });
                 }).catch(err => {

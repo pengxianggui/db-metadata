@@ -1,6 +1,6 @@
 <template>
     <el-container direction="vertical">
-        <el-button-group style="display: flex;">
+        <el-button-group style="display: flex; margin: 5px 0;">
             <span style="flex: 1"></span>
             <drop-down-box :ref="objMeta['name']" v-model="metaObj" :meta="objMeta"
                            @change="refreshTableData()"></drop-down-box>

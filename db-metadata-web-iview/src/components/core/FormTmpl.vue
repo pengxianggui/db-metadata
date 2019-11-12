@@ -1,61 +1,20 @@
-<!--
-# meta
-eg:
-    {
-        name: "formName",
-        action: '/save', // form action (url)
-        methods: 'POST',
-        component_name: 'FormTmpl',
-        conf: {
-            "label-width": '80px',
-            size: 'medium', // medium|small|mini
-            rules: {
-                username: [{required: true, message: '用户名必填', trigger: 'blur'}],
-                // ...
-            },
-            // ...
-        },
-        columns: [{
-            component_name: 'TextBox',
-            name: 'username',
-            label: '用户名',
-            conf: {
-                clearable: true,
-                placeholder: "请输入姓名..",
-                // ...
-            }
-        }],
-        btns: {
-            submit: {
-                label: '提交',
-                conf: {
-                    // ... support conf of el-button
-                }
-            },
-            cancel: {
-                label: '取消',
-                conf: {
-                    // ... support conf of el-button
-                }
-            }
-        }
-    }
--->
 <template>
-    <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
-        <template v-for="(item, index) in innerMeta.columns">
-            <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
-                          :label="item.label" :prop="item.name" :class="{inline: item.inline}">
-                <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
+    <el-container direction="vertical">
+        <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
+            <template v-for="(item, index) in innerMeta.columns">
+                <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
+                              :label="item.label" :prop="item.name" :class="{inline: item.inline}">
+                    <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
+                </el-form-item>
+            </template>
+            <el-form-item>
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
+                           v-text="innerMeta.btns['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']" @click="onCancel"
+                           v-text="innerMeta.btns['cancel']['label']"></el-button>
             </el-form-item>
-        </template>
-        <el-form-item>
-            <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
-                       v-text="innerMeta.btns['submit']['label']"></el-button>
-            <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']" @click="onCancel"
-                       v-text="innerMeta.btns['cancel']['label']"></el-button>
-        </el-form-item>
-    </el-form>
+        </el-form>
+    </el-container>
 </template>
 
 <script>
@@ -65,7 +24,8 @@ eg:
         name: "FormTmpl",
         data() {
             return {
-                model: {}
+                model: {},
+                isEdit: false
             }
         },
         props: {
@@ -113,13 +73,12 @@ eg:
             },
             assemblyModel(meta) {
                 this.model = {};
-
                 let columns = meta.columns;
-                let record = meta.record || {};
+                let record = meta.hasOwnProperty('record') ? meta.record : {};
+                this.isEdit = record.hasOwnProperty('id') && (record.id != null);
 
                 columns.forEach(item => {
                     this.$set(this.model, item.name, record[item.name] || item.default_value);
-
                 });
             }
         },

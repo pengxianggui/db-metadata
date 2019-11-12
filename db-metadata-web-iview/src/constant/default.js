@@ -110,6 +110,7 @@ const DEFAULT = {
         "name": "JsonBox",
         "label": "Json框",
         "inline": false,
+        "default_value": {},
         "conf": {
             "mode": "code",
             "modes": [
@@ -153,6 +154,21 @@ const DEFAULT = {
         "default_open": false,
         "olabel": "收起",
         "clabel": "展开"
+    },
+    "DialogBox": {
+        "component_name": "DialogBox",
+        "name": "DialogBox",
+        "label": "弹出框",
+        "conf": {
+            "title": "标题",
+            "fullscreen": false,
+            "width": "50%",
+            "modal": true,
+            "lock-scroll": true,
+            "show-close": true,
+            "center": false,
+            "destroy-on-close": true
+        }
     },
     "FormTmpl": {
         "component_name": "FormTmpl",

@@ -19,7 +19,7 @@
             "size": "medium",
             "disabled": false,
             "rules": {
-                "name": [{"required": true, "message": "必填字段", "trigger": "blur"}]
+                "id": [{"required": true, "message": "必填字段", "trigger": "blur"}]
             }
         },
         "columns": [
@@ -36,8 +36,7 @@
                     "clearable": true,
                     "placeholder": "请输入..",
                     "readonly": true,
-                    "disabled": false,
-                    "required": false
+                    "disabled": false
                 }
             }
         ],
@@ -177,6 +176,7 @@
  -[x] 对$message进行封装处理: element支持, 但需要对resp和err进行"msg"属性保障 处理(responseExchange.js)
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
+ -[ ] 思考组件强干预的策略
  -[ ] 组件中各个属性先后位置尽量统一
  
         name
@@ -197,7 +197,7 @@
  -[x] this泛用优化: 箭头函数内部保留this作用域, 因此可以直接调用this;
  -[x] MetaConf界面优化-每个field单独一个JsonBox编辑框, 可单独编辑, 也可整体上传
     -[ ] 后期根据表单生产器可视化拖拽创建配置
- 
+
  -[ ] 表格(TableList)
     -[x] 字段值过长, 省略隐藏(...): 支持配置(element ui查询)
     -[x] 单行CRUD: 新增、查询、更新、删除
@@ -209,10 +209,22 @@
         
         需要思考
     -[x] 下拉设置列显隐功能 由renderHeader实现 =>(替换为) 插槽实现
+    -[ ] 区分表单编辑/新增模式
+    -[ ] 表格的操作条支持插槽扩展
         
  -[ ] 表单(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
     -[ ] 更新/新增 模式下字段的不同属性配置, 可以设置两套配置(新增、编辑)
+    
+ -[ ] dialog
+    -[ ] dialog 运行时实例配置
+    -[ ] dialog 全局配置
+  
+ -[ ] JsonBox
+    -[ ] 传入值的JSON强限制, or 内部做兼容
+    
+ -[ ] BoolBox
+    -[ ] 1/0 的兼容处理
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
