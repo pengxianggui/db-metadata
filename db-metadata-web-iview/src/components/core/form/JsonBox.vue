@@ -12,9 +12,13 @@
 
     let format = function (value) {
         try {
-            return JSON.parse(value);
+            if (typeof value == 'string') {
+                return JSON.parse(value);
+            } else { // object
+                return JSON.parse(JSON.stringify(value));
+            }
         } catch (e) {
-            console.warn('value is not legal, a empty object {} will be replaced');
+            console.error('value is not legal, a empty object {} will be replaced, value: %o', value);
             return {};
         }
     };

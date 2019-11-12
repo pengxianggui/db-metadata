@@ -221,10 +221,10 @@
     -[x] dialog 全局配置
   
  -[ ] JsonBox
-    -[x] 内部做兼容
+    -[x] 内部做兼容,支持Object, String(可转换为Object)
     
  -[ ] BoolBox
-    -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持
+    -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持, 保存时保留原值;
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
