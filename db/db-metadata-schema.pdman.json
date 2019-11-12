@@ -175,7 +175,7 @@
               "name": "is_primary",
               "type": "YesNo",
               "remark": "",
-              "chnname": "主键"
+              "chnname": "是否主键"
             },
             {
               "name": "en",

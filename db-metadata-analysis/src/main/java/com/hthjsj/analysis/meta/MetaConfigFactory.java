@@ -77,6 +77,33 @@ public class MetaConfigFactory {
             return this;
         }
 
+        /**
+         * 是否需要翻译
+         *
+         * @return
+         */
+        public boolean hasTranslation() {
+
+            /**
+             * 1. isFromDB
+             * 2. hasDataOpts
+             * 3. 指定数据源
+             */
+            return false;
+        }
+
+        public boolean isRequired() {
+            return isFalse("isNullable");
+        }
+
+        public String defaultVal() {
+            return getStr("defaultValue");
+        }
+
+        public boolean isMultiple() {
+            return isTrue("isMultiple");
+        }
+
         @Override
         public void setItem(Object key, Object value) {
             set(key, value);
@@ -109,7 +136,7 @@ public class MetaConfigFactory {
         }
 
         public boolean isUUIDPrimary() {
-            return Boolean.parseBoolean(getStr("isUUIDPrimary"));
+            return isTrue("isUUIDPrimary");
         }
 
         @Override

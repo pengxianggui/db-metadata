@@ -10,7 +10,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.ServiceManager;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
-import com.jfinal.kit.PathKit;
+import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -87,7 +87,7 @@ final public class Components {
     public JSONObject loadTmplConfigFromFile() {
         List<String> lines = null;
         try {
-            lines = Files.readLines(new File(PathKit.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
+            lines = Files.readLines(new File(PathKitExt.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

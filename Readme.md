@@ -125,7 +125,7 @@ https://docs.sencha.com/extjs/6.2.0
 - [Undertow 2.0 文档](http://undertow.io/undertow-docs/undertow-docs-2.0.0/index.html#bootstrapping-undertow)
 - [x] Json 序列化入库时 boolean 类型的值带""导致vue报错
     > 解决:SerializerFeature.WriteNonStringValueAsString 配置引起
-- [] 表单 tabIndex
-- [ ]mysql 数据库版本8.0 不兼容
+- [ ] 表单 tabIndex
+- [ ] mysql 数据库版本8.0 不兼容
 - [ ] 脏数据,错误数据处理与提示;
 
