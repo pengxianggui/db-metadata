@@ -91,8 +91,7 @@ public abstract class FrontRestController extends Controller implements FrontRes
                                          simplePropertyPreFilter,
                                          SerializerFeature.DisableCircularReferenceDetect,
                                          SerializerFeature.WriteDateUseDateFormat,
-                                         SerializerFeature.WriteNullListAsEmpty,
-                                         SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
+                                         SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
         } else {
             renderJson(data);
         }
