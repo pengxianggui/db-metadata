@@ -1,34 +1,3 @@
-<!--
-# meta required
-eg:
-{
-    name: "",
-    label: "",
-    component_name: 'TableList',
-    data_url: "",
-    // ...
-    conf: {
-        "default-sort": {prop: 'id', order: 'descending'}, // descending, ascending
-        "size": 'medium',
-        "max-height": 360,
-    }
-    columns: [{
-        component_name: 'TextBox',
-        name: 'username',
-        label: '用户名',
-        conf: {
-            sortable: true,
-            // ...
-        }
-    }],
-    pagination: {
-        "page-size": DICT.PAGE_NUM_AREA[0],
-        "page-sizes": DICT.PAGE_NUM_AREA,
-        "current-page": 1,
-        "layout": "total, sizes, prev, pager, next, jumper"
-    }
-}
--->
 <template>
     <el-container direction="vertical" class="el-card">
         <el-row>
