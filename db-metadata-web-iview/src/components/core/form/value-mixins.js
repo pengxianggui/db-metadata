@@ -20,6 +20,7 @@ export function Val(format) {
                     return this.value;
                 },
                 set: function (n) {
+                    if (n === '') n = null;
                     return this.$emit("input", n); // 通过 input 事件更新 model
                 }
             }
@@ -37,6 +38,7 @@ export default {
                 return this.value;
             },
             set: function (n) {
+                if (n === '') n = null;
                 return this.$emit("input", n); // 通过 input 事件更新 model
             }
         }

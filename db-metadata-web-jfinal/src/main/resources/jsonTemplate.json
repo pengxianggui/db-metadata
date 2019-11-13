@@ -191,6 +191,18 @@
       "destroy-on-close": true
     }
   },
+  "SearchPanel": {
+    "component_name": "SearchPanel",
+    "name": "SearchPanel",
+    "label": "搜索面板",
+    "conf": {
+      "label-width": "40px",
+      "size": "medium",
+      "disabled": false,
+      "inline": true
+    },
+    "columns": []
+  },
   "FormTmpl": {
     "component_name": "FormTmpl",
     "name": "FormTmpl",

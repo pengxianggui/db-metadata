@@ -224,6 +224,37 @@ const DEFAULT = {
             }
         }
     },
+    "SearchPanel": {
+        "component_name": "SearchPanel",
+        "name": "SearchPanel",
+        "label": "搜索面板",
+        "conf": {
+            "label-width": '40px',
+            "size": 'medium', // medium|small|mini
+            "disabled": false,
+            "inline": true,
+        },
+        "columns": [
+            // {
+            //     component_name: 'TextBox',
+            //     name: 'name',
+            //     label: '姓名',
+            //     index: 1,            // 排序号, 决定表格中列的先后顺序
+            //     conf: {
+            //         "inline": false
+            //     }
+            // },
+            // {
+            //     component_name: 'NumBox',
+            //     name: 'age',
+            //     label: '年龄',
+            //     index: 2,            // 排序号, 决定表格中列的先后顺序
+            //     conf: {
+            //         "inline": false
+            //     }
+            // }
+        ],
+    },
     "TableList": {
         "component_name": "TableList",
         "name": "TableList",

@@ -176,11 +176,13 @@
  -[x] 对$message进行封装处理: element支持, 但需要对resp和err进行"msg"属性保障 处理(responseExchange.js)
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
+ -[ ] 重复路由点击报错(NavigationDuplicated), element bug. 等待element(2.13). https://github.com/ElemeFE/element/pull/17269
  -[ ] 思考组件强干预的策略
  -[ ] 组件中各个属性先后位置尽量统一
  
         name
         mixins
+        component
         props
         data
         methods
@@ -208,12 +210,12 @@
         - 开页: TableList => FormTmpl
         
         需要思考
-    -[x] 下拉设置列显隐功能 由renderHeader实现 =>(替换为) 插槽实现
-    -[ ] 区分表单编辑/新增模式
-    -[ ] 表格的操作条支持插槽扩展
+    -[x] 下拉设置列显隐功能 由renderHeader实现 =>(替换为) 插槽实
+    -[x] 表格的操作条支持插槽扩展
         
  -[ ] 表单(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
+    -[x] 区分表单编辑/新增模式
     -[ ] 更新/新增 模式下字段的不同属性配置, 可以设置两套配置(新增、编辑)
     
  -[ ] dialog
@@ -225,6 +227,10 @@
     
  -[ ] BoolBox
     -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持, 保存时保留原值;
+    
+ -[ ] SearchPanel 搜索面板(简单)
+ 
+ -[ ] FindPanel 查找面板(复杂)
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
