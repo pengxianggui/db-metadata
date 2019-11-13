@@ -35,21 +35,23 @@ eg:
             <el-col :span="24">
                 <!-- operation bar -->
                 <el-button-group>
-                    <el-button @click="handleAdd">新增</el-button>
-                    <el-button @click="handleBatchDelete" type="danger">删除</el-button>
+                    <slot name="operation">
+                        <el-button @click="handleAdd">新增</el-button>
+                        <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
+                    </slot>
                 </el-button-group>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
                 <el-table
-                        :id="innerMeta.name"
-                        :ref="innerMeta.name"
-                        :data="innerData"
-                        v-bind="innerMeta.conf"
-                        @row-click="choseRow"
-                        @sort-change="sortChange"
-                        @selection-change="handleSelectionChange">
+                    :id="innerMeta.name"
+                    :ref="innerMeta.name"
+                    :data="innerData"
+                    v-bind="innerMeta.conf"
+                    @row-click="choseRow"
+                    @sort-change="sortChange"
+                    @selection-change="handleSelectionChange">
 
                     <!-- muti select conf -->
                     <template v-if="innerMeta.multi_select">
@@ -83,10 +85,10 @@ eg:
                         </template>
                         <template slot-scope="scope">
                             <el-button :size="innerMeta.conf['size']"
-                                       @click="handleEdit(scope.$index, scope.row, $event)">编辑
+                                       @click="handleEdit($event, scope.row, scope.$index)">编辑
                             </el-button>
                             <el-button :size="innerMeta.conf['size']" type="danger"
-                                       @click="handleDelete(scope.$index, scope.row, $event)">删除
+                                       @click="handleDelete($event, scope.row, scope.$index)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -97,14 +99,16 @@ eg:
         <el-row v-if="pageModel">
             <el-col>
                 <!-- pagination bar -->
-                <el-pagination background
-                               :page-size.sync="pageModel.size"
-                               :current-page.sync="pageModel.index"
-                               :total="pageModel.total"
-                               v-bind="innerMeta.pagination"
-                               @size-change="sizeChange"
-                               @current-change="getData"
-                ></el-pagination>
+                <slot name="pagination" v-bind:pageModel="pageModel">
+                    <el-pagination background
+                                   :page-size.sync="pageModel.size"
+                                   :current-page.sync="pageModel.index"
+                                   :total="pageModel.total"
+                                   v-bind="innerMeta.pagination"
+                                   @size-change="sizeChange"
+                                   @current-change="getData"
+                    ></el-pagination>
+                </slot>
             </el-col>
         </el-row>
     </el-container>
@@ -164,9 +168,9 @@ eg:
                     this.$emit('update:chose-data', selection);
                 }
             },
-            handleEdit(index, row, ev) { // edit/add
+            handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
-                this.doEdit(row.id);
+                this.doEdit(row.id, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(id) {
                 let url;
@@ -190,13 +194,30 @@ eg:
                 });
             },
             // 删除单行
-            handleDelete(index, row, ev) {
+            handleDelete(ev, row, index) {
                 if (ev) ev.stopPropagation();
                 const id = row.id;
-                this.doDelete(id);
+                this.doDelete(id, ev, row, index); // params ev,row,index is for convenient to override
             },
+            // 批量删除
+            handleBatchDelete(ev) {
+                const idArr = this.innerChoseData.map(row => row.id);
+                if (idArr.length > 0) {
+                    this.doDelete(idArr, ev);
+                    return
+                }
+                this.$message.warning('请至少选择一项!');
+            },
+            // default remove the assembly logic is based on id get on
             doDelete(ids) {
-                this.$confirm('确定删除?', '提示', {
+                let title = '确定删除此条记录?';
+                if (Array.isArray(ids)) {
+                    let size = ids.length;
+                    ids = ids.join(',');
+                    title = '确定删除选中的' + size + '条记录?';
+                }
+
+                this.$confirm(title, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -215,15 +236,6 @@ eg:
             // 新增一行
             handleAdd() {
                 this.doEdit();
-            },
-            // 批量删除
-            handleBatchDelete() {
-                const idArr = this.innerChoseData.map(row => row.id);
-                if (idArr.length > 0) {
-                    this.doDelete(idArr.join(','));
-                    return
-                }
-                this.$message.warning('请至少选择一项!');
             },
             choseRow(row, col, event) {
                 let selected = true;
