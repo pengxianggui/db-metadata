@@ -19,7 +19,7 @@ export function deepCopy(obj) {
     if (cons === RegExp)
         return obj;
 
-    copy = cons();
+    copy = new cons();
     for (let key in obj) {
         copy[key] = deepCopy(obj[key]);
     }

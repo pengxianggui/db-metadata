@@ -2,6 +2,13 @@
  * value mixins, for atom component which is Basic input component,
  * you should provide a property named value in props at first!
  */
+
+/**
+ * description as above
+ * @param format , the param is a function which is used to format the value
+ * @returns {{computed: {nativeValue: {set: (function(*=): this), get: computed.nativeValue.get}}}}
+ * @constructor
+ */
 export function Val(format) {
     return {
         computed: {
@@ -20,6 +27,9 @@ export function Val(format) {
     }
 }
 
+/**
+ * default export, while you needn't format the value
+ */
 export default {
     computed: {
         nativeValue: {
