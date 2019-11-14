@@ -108,7 +108,7 @@ public class ViewFactory {
                 component = new TableView(type.getCn(), type.getCode());
                 break;
             default:
-                break;
+                throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
         }
         return component;
     }
