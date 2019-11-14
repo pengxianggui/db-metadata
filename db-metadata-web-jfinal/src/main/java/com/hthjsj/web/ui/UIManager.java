@@ -1,7 +1,6 @@
 package com.hthjsj.web.ui;
 
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 
 /**
@@ -12,8 +11,8 @@ import com.hthjsj.analysis.meta.MetaObject;
  */
 public class UIManager {
 
-    public static MetaObjectViewAdapter getAuto(MetaObject metaObject, ComponentType componentType) {
-        return null;
+    public static MetaObjectViewAdapter getView(MetaObject metaObject, ComponentType componentType) {
+        return ViewAssembleFactory.fetchObjectAdapter(metaObject, componentType);
     }
 
     /**
@@ -24,7 +23,7 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedFrom(MetaObject metaObject) {
-        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.FORMVIEW);
+        return SmartAssembleFactory.analysisObject(metaObject, ComponentType.FORMVIEW);
     }
 
     /**
@@ -35,7 +34,7 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedTable(MetaObject metaObject) {
-        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.TABLEVIEW);
+        return SmartAssembleFactory.analysisObject(metaObject, ComponentType.TABLEVIEW);
     }
 
     /**
@@ -45,8 +44,8 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getForm(IMetaObject metaObject) {
-        return null;
+    public static MetaObjectViewAdapter getForm(MetaObject metaObject) {
+        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.FORMVIEW);
     }
 
     /**
@@ -56,7 +55,7 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getTable(IMetaObject metaObject) {
-        return null;
+    public static MetaObjectViewAdapter getTable(MetaObject metaObject) {
+        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 }

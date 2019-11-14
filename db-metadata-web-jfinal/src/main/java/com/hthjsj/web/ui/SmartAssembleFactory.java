@@ -1,12 +1,11 @@
 package com.hthjsj.web.ui;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
 import com.hthjsj.web.component.ViewFactory;
@@ -25,7 +24,7 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class SmartAssemble {
+public class SmartAssembleFactory {
 
     /**
      * 使用系统默认ComponentConfig 信息构建容器View组件
@@ -35,7 +34,7 @@ public class SmartAssemble {
      *
      * @return
      */
-    public static MetaObjectViewAdapter analysisObject(IMetaObject metaObject, ComponentType componentType) {
+    public static MetaObjectViewAdapter analysisObject(MetaObject metaObject, ComponentType componentType) {
 
         /**
          * 分析元对象
@@ -56,7 +55,7 @@ public class SmartAssemble {
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
             Kv recommendConfig = recommendConfig(field);
-            Kv fieldConfig = JSON.parseObject(globalConfig.getStr(recommendConfig.getStr("component_name")), Kv.class);
+            Kv fieldConfig = Utils.getKv(globalConfig, recommendConfig.getStr("component_name"));
             recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
             metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
         }
@@ -86,6 +85,8 @@ public class SmartAssemble {
                 builder.showOverflowTooltip(true);
             }
         }
+
+        //日期
         if (metaField.dbType().isDate()) {
             if (metaField.dbType().isDateTime()) {
                 builder.componentName(ComponentType.DATETIMEBOX.getCode());
@@ -97,15 +98,26 @@ public class SmartAssemble {
                 builder.componentName(ComponentType.DATEBOX.getCode());
             }
         }
+
+        //数值
         if (metaField.dbType().isNumber()) {
             builder.componentName(ComponentType.NUMBERBOX.getCode());
         }
+
+        //Json
         if (metaField.dbType().isJson()) {
             builder.componentName(ComponentType.JSONBOX.getCode());
             builder.showOverflowTooltip(true);
         }
         log.debug("auto compute config : {}", builder.render().toJson());
+
+        log.debug("analysis metafield config");
         FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
+        if (fieldConfigWrapper.hasTranslation()) {
+
+        }
+
+
         return builder.render();
     }
 }

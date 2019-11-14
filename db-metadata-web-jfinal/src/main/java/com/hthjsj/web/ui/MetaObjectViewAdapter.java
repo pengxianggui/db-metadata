@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * MetaObjectViewAdapter 同时持有metaObject,component,各层config
+ * 方便逻辑流转运算;
  * <p> @Date : 2019/11/13 </p>
  * <p> @Project : db-meta-serve</p>
  *

@@ -12,7 +12,7 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.RenderHelper;
-import com.hthjsj.web.ui.SmartAssemble;
+import com.hthjsj.web.ui.SmartAssembleFactory;
 import com.hthjsj.web.ui.ViewAssembleFactory;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -67,7 +67,7 @@ public class ComponentController extends FrontRestController {
                 renderJson(Ret.ok("data", objectConfig));
             } else {
                 MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.V(compCode));
+                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssembleFactory.analysisObject(metaObject, ComponentType.V(compCode));
                 renderJson(Ret.ok("data", RenderHelper.renderObjectViewAdapter(metaObjectViewAdapter).set("msg", "自动计算首次配置")));
             }
         } else {

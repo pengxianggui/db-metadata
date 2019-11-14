@@ -6,11 +6,12 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.RenderHelper;
-import com.hthjsj.web.ui.SmartAssemble;
+import com.hthjsj.web.ui.SmartAssembleFactory;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
 import com.jfinal.core.JFinal;
@@ -97,12 +98,12 @@ public class DBController extends FrontRestController {
                 Kv metaConfig = Kv.create();
 
                 //TableView
-                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.TABLEVIEW);
+                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssembleFactory.analysisObject((MetaObject) metaObject, ComponentType.TABLEVIEW);
                 metaConfig = RenderHelper.renderObjectViewAdapter(metaObjectIViewAdapter);
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
 
                 //FormView
-                metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.FORMVIEW);
+                metaObjectIViewAdapter = SmartAssembleFactory.analysisObject((MetaObject) metaObject, ComponentType.FORMVIEW);
                 metaConfig = RenderHelper.renderObjectViewAdapter(metaObjectIViewAdapter);
 
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
