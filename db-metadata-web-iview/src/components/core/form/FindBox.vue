@@ -1,16 +1,14 @@
 <template>
-    <div @click.stop>
-        <el-input v-model="nativeValue"
-                  v-bind="innerMeta.conf"
-                  :name="innerMeta.name"
-                  @blur="$emit('blur', $event)"
-                  @focus="$emit('focus', $event)"
-                  @change="$emit('change', $event)"
-                  @clear="handlerClear($event)"
-                  v-on:click.native="handlerClick($event)"
-                  suffix-icon="el-icon-search"
-        ></el-input>
-    </div>
+    <el-input v-model="nativeValue"
+              v-bind="innerMeta.conf"
+              :name="innerMeta.name"
+              @blur="$emit('blur', $event)"
+              @focus="$emit('focus', $event)"
+              @change="$emit('change', $event)"
+              @clear="handlerClear($event)"
+              v-on:click.native="handlerClick($event)"
+              suffix-icon="el-icon-search"
+    ></el-input>
 </template>
 
 <script>
@@ -26,6 +24,8 @@
         },
         methods: {
             handlerClick(ev) {
+                if (ev)
+                    ev.stopPropagation();
                 let url = this.innerMeta['data_url'];
                 if (!url) {
                     console.error('data_url is required property, and not nullable. meta: %o', this.innerMeta);

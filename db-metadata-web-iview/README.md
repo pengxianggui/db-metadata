@@ -176,6 +176,7 @@
  -[x] 对$message进行封装处理: element支持, 但需要对resp和err进行"msg"属性保障 处理(responseExchange.js)
  -[x] vue watch 看上去时生效, 时而不生效(data_url延迟)
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
+ -[ ] 创建一个Meta class, 对所有组件的prop: meta 进行强类型校验, 同时初始化meta(和全局默认meta进行merge)
  -[ ] 重复路由点击报错(NavigationDuplicated), element bug. 等待element(2.13). https://github.com/ElemeFE/element/pull/17269
  -[ ] 思考组件强干预的策略
  -[ ] 组件中各个属性先后位置尽量统一

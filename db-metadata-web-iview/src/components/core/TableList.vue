@@ -19,6 +19,7 @@
                     :data="innerData"
                     v-bind="innerMeta.conf"
                     @row-click="choseRow"
+                    @row-dblclick="$emit('row-dblclick', $event)"
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
 

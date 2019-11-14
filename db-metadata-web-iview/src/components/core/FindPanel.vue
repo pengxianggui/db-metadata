@@ -7,7 +7,8 @@
         </el-row>
         <el-row>
             <el-col>
-                <TableList :ref="tlMeta['name']" :meta="tlMeta" :active-data.sync="choseData">
+                <TableList :ref="tlMeta['name']" :meta="tlMeta" :active-data.sync="choseData"
+                    @row-dblclick="ok">
                     <template #operation-bar><span></span></template>
                     <template #buttons><span></span></template>
                 </TableList>
