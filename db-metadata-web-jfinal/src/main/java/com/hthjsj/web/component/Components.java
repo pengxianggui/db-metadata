@@ -8,6 +8,7 @@ import com.google.common.reflect.ClassPath;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.Utils;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.server.undertow.PathKitExt;
@@ -59,9 +60,9 @@ final public class Components {
         Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
-            if (!ServiceManager.componentService().newDefault(type.getCode(), JSON.parseObject(staticGlobalConfig.getStr(type.getCode()), Kv.class))) {
+            if (!ServiceManager.componentService().newDefault(type.getCode(), Utils.getKv(staticGlobalConfig, type.getCode()))) {
                 if (JFinal.me().getConstants().getDevMode()) {
-                    ServiceManager.componentService().updateDefault(type.getCode(), JSON.parseObject(staticGlobalConfig.getStr(type.getCode()), Kv.class));
+                    ServiceManager.componentService().updateDefault(type.getCode(), Utils.getKv(staticGlobalConfig, type.getCode()));
                 }
             }
         }

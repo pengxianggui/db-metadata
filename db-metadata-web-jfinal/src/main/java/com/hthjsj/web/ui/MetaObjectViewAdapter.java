@@ -1,9 +1,9 @@
 package com.hthjsj.web.ui;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.Utils;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 
@@ -49,7 +49,7 @@ public class MetaObjectViewAdapter {
         this.fields = fields;
 
         //init config
-        this.objectConfig = JSON.parseObject(metaObject.config(), Kv.class);
+        this.objectConfig = Utils.getKv(metaObject.config());
         this.globalComponentConfig = globalComponentConfig;
         //TODO 来源变更
         this.instanceConfig = component.toKv();

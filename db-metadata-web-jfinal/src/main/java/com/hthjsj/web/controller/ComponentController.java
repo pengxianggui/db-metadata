@@ -1,6 +1,5 @@
 package com.hthjsj.web.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
@@ -120,7 +119,7 @@ public class ComponentController extends FrontRestController {
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().newObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().newDefault(compCode, JSON.parseObject(config.getStr(compCode), Kv.class));
+            ServiceManager.componentService().newDefault(compCode, Utils.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }
@@ -141,7 +140,7 @@ public class ComponentController extends FrontRestController {
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().updateObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().updateDefault(compCode, JSON.parseObject(config.getStr(compCode), Kv.class));
+            ServiceManager.componentService().updateDefault(compCode, Utils.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }
@@ -159,5 +158,12 @@ public class ComponentController extends FrontRestController {
             ServiceManager.componentService().deleteDefault(compCode);
             renderJson(Ret.ok());
         }
+    }
+
+    /**
+     * 用于预览客户端配置好的组件实例;
+     */
+    public void preview() {
+
     }
 }

@@ -1,9 +1,9 @@
 package com.hthjsj.web.ui;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.web.Utils;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 
@@ -38,6 +38,6 @@ public class MetaFieldViewAdapter {
         //TODO instanceConfig的来源 要变更
         this.instanceConfig = component.toKv();
         this.componentGlobalConfig = Kv.create();
-        this.fieldConfig = JSON.parseObject(metaField.config(), Kv.class);
+        this.fieldConfig = Utils.getKv(metaField.config());
     }
 }

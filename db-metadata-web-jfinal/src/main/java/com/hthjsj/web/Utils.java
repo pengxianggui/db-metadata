@@ -38,4 +38,8 @@ public class Utils {
     public static Kv getKv(Kv kv, String key) {
         return JSON.parseObject(kv.getStr(key), Kv.class);
     }
+
+    public static Kv getKv(String json) {
+        return JSON.parseObject(json, Kv.class);
+    }
 }

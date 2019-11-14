@@ -201,7 +201,7 @@ public class ComponentService {
 
         List<Record> fieldRecords = Lists.newArrayList();
         object.fields().forEach(f -> {
-            Kv fkv = JSON.parseObject(instanceAllConfig.getStr(f.fieldCode()), Kv.class);
+            Kv fkv = Utils.getKv(instanceAllConfig, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 
@@ -211,7 +211,7 @@ public class ComponentService {
     }
 
     public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
-        Kv fkv = JSON.parseObject(config.getStr(fieldCode), Kv.class);
+        Kv fkv = Utils.getKv(config, fieldCode);
         Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
         return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
@@ -229,13 +229,13 @@ public class ComponentService {
 
         deleteObjectConfig(component.code(), object.code(), false);
 
-        newObjectSelfConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
+        newObjectSelfConfig(component, object.code(), Utils.getKv(config, object.code()));
 
         Collection<IMetaField> fields = object.fields();
 
         List<Record> fieldRecords = Lists.newArrayList();
         fields.forEach(f -> {
-            Kv fkv = JSON.parseObject(config.getStr(f.fieldCode()), Kv.class);
+            Kv fkv = Utils.getKv(config, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 
