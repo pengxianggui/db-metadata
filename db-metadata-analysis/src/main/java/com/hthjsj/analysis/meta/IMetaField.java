@@ -69,7 +69,7 @@ public interface IMetaField {
     void dbTypeLength(Long value);
 
     @JSONField(name = "config")
-    IMetaConfig config();
+    String config();
 
     Map<String, Object> dataMap();
 

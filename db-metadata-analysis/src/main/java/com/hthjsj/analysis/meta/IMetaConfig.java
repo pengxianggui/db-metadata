@@ -16,7 +16,6 @@ public interface IMetaConfig {
 
     String MODULE_OBJECT = "meta_object";
     String MODULE_FIELD = "meta_field";
-    String UI = "ui";
 
     String module();
 

@@ -96,7 +96,7 @@ public class ViewFactory {
      *
      * @return
      */
-    public static Component createViewComponent(String typeString) {
+    public static Component createEmptyViewComponent(String typeString) {
         ComponentType type = ComponentType.V(typeString);
         Component component = null;
 

@@ -120,8 +120,8 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
-    public IMetaConfig config() {
-        return new MetaConfigFactory.MetaObjectConfig(record.getStr("config"), code());
+    public String config() {
+        return record.getStr("config");
     }
 
     @Override

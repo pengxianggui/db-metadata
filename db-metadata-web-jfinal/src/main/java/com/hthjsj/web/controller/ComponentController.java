@@ -4,15 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
-import com.hthjsj.web.ui.IViewAdapter;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.RenderHelper;
 import com.hthjsj.web.ui.SmartAssemble;
+import com.hthjsj.web.ui.ViewAssembleFactory;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -25,6 +26,11 @@ public class ComponentController extends FrontRestController {
     @Override
     public void api() {
         renderJson(Components.me().getRegistry());
+    }
+
+    public void instance() {
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
+        renderJson(Ret.ok("data", ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.FORMVIEW)));
     }
 
     public void init() {
@@ -60,16 +66,9 @@ public class ComponentController extends FrontRestController {
                 objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
                 renderJson(Ret.ok("data", objectConfig));
             } else {
-                IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-                //TODO bad small 此部分逻辑不应在Controller来做,前端统一接收JSONString 并集中处理;
-                IViewAdapter<IMetaObject> metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.V(compCode));
-                Kv fields = Kv.create();
-                metaObjectIViewAdapter.fields().forEach(m -> {
-                    fields.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
-                });
-                objectConfig.set(objectCode, metaObjectIViewAdapter.instanceConfig().toJson());
-                objectConfig.set("fields", fields);
-                renderJson(Ret.ok("data", objectConfig).set("msg", "自动计算首次配置"));
+                MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.V(compCode));
+                renderJson(Ret.ok("data", RenderHelper.renderObjectViewAdapter(metaObjectViewAdapter).set("msg", "自动计算首次配置")));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, ServiceManager.componentService().loadDefault(compCode).getStr("config"))));
@@ -112,7 +111,7 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
 
         Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
-        Component component = ViewFactory.createViewComponent(compCode);
+        Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
                 renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
@@ -137,7 +136,7 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
 
         Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
-        Component component = ViewFactory.createViewComponent(compCode);
+        Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().updateObjectConfig(component, metaObject, config);

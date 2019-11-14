@@ -118,8 +118,8 @@ public class MetaField implements IMetaField {
     }
 
     @Override
-    public IMetaConfig config() {
-        return new MetaConfigFactory.MetaFieldConfig(record.getStr("config"), objectCode(), fieldCode());
+    public String config() {
+        return record.getStr("config");
     }
 
     @Override

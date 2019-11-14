@@ -125,7 +125,7 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     }
 
     @Override
-    public IMetaConfig config() {
+    public String config() {
         return metaObject.config();
     }
 

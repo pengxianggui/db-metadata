@@ -1,6 +1,8 @@
 package com.hthjsj.web;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import com.jfinal.kit.Kv;
 
 import java.util.Map;
 
@@ -31,5 +33,9 @@ public class Utils {
             }
         }
         return result;
+    }
+
+    public static Kv getKv(Kv kv, String key) {
+        return JSON.parseObject(kv.getStr(key), Kv.class);
     }
 }

@@ -168,7 +168,6 @@ public class FormFieldFactory {
         return checkBox;
     }
 
-
     /**
      * <pre>
      * 说明: 区别于createFormField 传入的配置 为全局
@@ -184,6 +183,7 @@ public class FormFieldFactory {
      * @return
      */
     public static FormField createFormFieldDefault(IMetaField metaField, Kv globalConfig) {
+        globalConfig.set("name", metaField.fieldCode()).set("label", metaField.cn());
         return createFormField(metaField, globalConfig);
     }
 

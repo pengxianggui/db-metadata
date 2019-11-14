@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.Utils;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
@@ -33,30 +35,22 @@ public class SmartAssemble {
      *
      * @return
      */
-    public static IViewAdapter<IMetaObject> analysisObject(IMetaObject metaObject, ComponentType componentType) {
+    public static MetaObjectViewAdapter analysisObject(IMetaObject metaObject, ComponentType componentType) {
 
         /**
          * 分析元对象
          * 适配选择Component,进行构建IViewAdapter
          */
-        Component containerComponent = null;
-        switch (componentType) {
-            case TABLEVIEW:
-            case FORMVIEW:
-            default:
-                containerComponent = ViewFactory.createViewComponent(componentType.getCode());
-                break;
-        }
+        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
         Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
-        Kv containerConfig = JSON.parseObject(globalAllConfig.getStr(componentType.getCode()), Kv.class);
-        List<IViewAdapter<IMetaField>> fields = analysisFields(metaObject.fields(), globalAllConfig);
-        IViewAdapter<IMetaObject> defaultObjectViewAdapter = new DefaultObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
-        return defaultObjectViewAdapter;
+        Kv containerConfig = Utils.getKv(globalAllConfig, componentType.getCode());
+        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalAllConfig);
+        return new MetaObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
     }
 
-    private static List<IViewAdapter<IMetaField>> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
+    private static List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
 
-        List<IViewAdapter<IMetaField>> metaFields = Lists.newArrayList();
+        List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         // 读取globalConfig中的配置
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
@@ -64,9 +58,8 @@ public class SmartAssemble {
             Kv recommendConfig = recommendConfig(field);
             Kv fieldConfig = JSON.parseObject(globalConfig.getStr(recommendConfig.getStr("component_name")), Kv.class);
             recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
-            metaFields.add(new DefaultFieldViewAdapter(field, fieldConfig, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
+            metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
         }
-
         return metaFields;
     }
 
@@ -112,79 +105,7 @@ public class SmartAssemble {
             builder.showOverflowTooltip(true);
         }
         log.debug("auto compute config : {}", builder.render().toJson());
+        FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
         return builder.render();
-    }
-
-    static class DefaultObjectViewAdapter implements IViewAdapter<IMetaObject> {
-
-        IMetaObject metaObject;
-
-        Component viewContainer;
-
-        Kv config;
-
-        List<IViewAdapter<IMetaField>> fields;
-
-        public DefaultObjectViewAdapter(IMetaObject metaObject, Component viewContainer, Kv config, List<IViewAdapter<IMetaField>> fields) {
-            this.metaObject = metaObject;
-            this.viewContainer = viewContainer;
-            this.config = config.set("name", metaObject.name()).set("label", metaObject.code());
-            this.fields = fields;
-        }
-
-        @Override
-        public IMetaObject getMeta() {
-            return metaObject;
-        }
-
-        @Override
-        public Kv instanceConfig() {
-            return config;
-        }
-
-        @Override
-        public Component getComponent() {
-            return viewContainer;
-        }
-
-        @Override
-        public List<IViewAdapter<IMetaField>> fields() {
-            return fields;
-        }
-    }
-
-    static class DefaultFieldViewAdapter implements IViewAdapter<IMetaField> {
-
-        IMetaField metaField;
-
-        Kv config;
-
-        Component viewContainer;
-
-        public DefaultFieldViewAdapter(IMetaField metaField, Kv config, Component viewContainer) {
-            this.metaField = metaField;
-            this.config = config.set("name", metaField.fieldCode()).set("label", metaField.cn());
-            this.viewContainer = viewContainer;
-        }
-
-        @Override
-        public IMetaField getMeta() {
-            return metaField;
-        }
-
-        @Override
-        public Kv instanceConfig() {
-            return config;
-        }
-
-        @Override
-        public Component getComponent() {
-            return viewContainer;
-        }
-
-        @Override
-        public List<IViewAdapter<IMetaField>> fields() {
-            return null;
-        }
     }
 }

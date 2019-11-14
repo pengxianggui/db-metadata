@@ -15,9 +15,6 @@ public abstract class Component {
 
     protected String label;
 
-    public Component() {
-    }
-
     @Getter
     @Setter
     FieldInject fieldInject = new FieldInject.DefaultFieldInject() {
@@ -27,6 +24,9 @@ public abstract class Component {
             return super.inject(meta);
         }
     };
+
+    public Component() {
+    }
 
     public Component(String name, String label) {
         this.name = name;

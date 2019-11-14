@@ -10,6 +10,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
+import com.hthjsj.web.Utils;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -137,6 +138,23 @@ public class ComponentService {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
     }
 
+    /**
+     * <pre>
+     *  加载某元对象与控件实例的配置信息
+     * FIXME: 元对象code与字段code 不能重复;
+     *
+     *          [key]               [value]
+     *      meta_object_abc_code	{"component_name":"BoolBox","name":"BoolBox","conf":{},"label":"布尔框"}
+     *      fieldCode1	            {"component_name":"DropDownBox","name":"DropDownBox","conf":{"clearable":true},"label":"下拉框","group":false}
+     *      fieldCode2	            {"columns":[],"component_name":"FormTmpl","name":"FormTmpl","action":"/save","btns":{"cancel":{"conf":{},"label":"取消"},"submit":{"conf":{"type":"primary"},"label":"提交"}},"conf":{"size":"medium","rules":{},"label-width":"100px"},"label":"表单模板"}
+     *      fieldCode3	            {"component_name":"TextBox","name":"TextBox","conf":{"clearable":true,"placeholder":"请输入内容.."},"label":"文本框"}
+     * </pre>
+     *
+     * @param componentCode
+     * @param destCode
+     *
+     * @return
+     */
     public Kv loadObjectConfigFlat(String componentCode, String destCode) {
         //load single object config
         String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
@@ -174,24 +192,28 @@ public class ComponentService {
         return Db.save(META_COMPONENT_INSTANCE, record);
     }
 
-    public boolean newObjectConfig(Component component, IMetaObject object, Kv config) {
+    public boolean newObjectConfig(Component component, IMetaObject object, Kv instanceAllConfig) {
         /**
          * new objectConfig
          * foreach fieldsConfig
          */
-        newObjectSelfConfig(component, object.code(), JSON.parseObject(config.getStr(object.code()), Kv.class));
-
-        Collection<IMetaField> fields = object.fields();
+        newObjectSelfConfig(component, object.code(), Utils.getKv(instanceAllConfig, object.code()));
 
         List<Record> fieldRecords = Lists.newArrayList();
-        fields.forEach(f -> {
-            Kv fkv = JSON.parseObject(config.getStr(f.fieldCode()), Kv.class);
+        object.fields().forEach(f -> {
+            Kv fkv = JSON.parseObject(instanceAllConfig.getStr(f.fieldCode()), Kv.class);
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 
         Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
+    }
+
+    public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
+        Kv fkv = JSON.parseObject(config.getStr(fieldCode), Kv.class);
+        Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
+        return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
 
     /**
@@ -220,12 +242,6 @@ public class ComponentService {
         Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
-    }
-
-    public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
-        Kv fkv = JSON.parseObject(config.getStr(fieldCode), Kv.class);
-        Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
-        return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
 
     private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, Kv config) {

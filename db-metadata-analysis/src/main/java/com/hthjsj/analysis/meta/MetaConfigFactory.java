@@ -44,6 +44,9 @@ public class MetaConfigFactory {
 
         public static final String VERSION_0_1 = "0.1";
 
+        public MetaFieldConfig() {
+        }
+
         public MetaFieldConfig(String config, String objectCode, String fieldCode) {
             if (!StrKit.isBlank(config)) {
                 set(JSON.parseObject(config));
@@ -75,33 +78,6 @@ public class MetaConfigFactory {
         @Override
         public Map getConfig() {
             return this;
-        }
-
-        /**
-         * 是否需要翻译
-         *
-         * @return
-         */
-        public boolean hasTranslation() {
-
-            /**
-             * 1. isFromDB
-             * 2. hasDataOpts
-             * 3. 指定数据源
-             */
-            return false;
-        }
-
-        public boolean isRequired() {
-            return isFalse("isNullable");
-        }
-
-        public String defaultVal() {
-            return getStr("defaultValue");
-        }
-
-        public boolean isMultiple() {
-            return isTrue("isMultiple");
         }
 
         @Override
@@ -136,7 +112,7 @@ public class MetaConfigFactory {
         }
 
         public boolean isUUIDPrimary() {
-            return isTrue("isUUIDPrimary");
+            return Boolean.parseBoolean(getStr("isUUIDPrimary"));
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.hthjsj;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.Kv;
 
 /**
@@ -31,8 +32,16 @@ public class JsonTest {
         kv.set("one", 1);
         kv.set("two", true);
         kv.set("three", "fie");
+        kv.set("four", new String[] { "dfadf", "fasdf", "ff" });
+
+
         System.out.println(kv.toJson());
+        JSONObject jsonObject = JSON.parseObject(kv.toJson());
+        System.out.println(jsonObject);
+        System.out.println(JSON.parseObject(kv.toJson(), Kv.class));
         System.out.println(JSON.toJSONString(kv));
         System.out.println(JSON.toJSONString(new User("tom", "hihi")));
+
+        System.out.println();
     }
 }

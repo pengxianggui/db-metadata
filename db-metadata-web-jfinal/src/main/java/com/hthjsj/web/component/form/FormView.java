@@ -42,11 +42,11 @@ public class FormView extends ViewContainer {
         meta.putIfAbsent("action", action);
         meta.putIfAbsent("component_name", type());
     }
-
-    @Override
-    public Kv toKv() {
-        //        meta.putIfAbsent("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-        //        getViewInject().inject(this, meta, getFieldInject());
-        return super.toKv();
-    }
+    //
+    //    @Override
+    //    public Kv toKv() {
+    //        //        meta.putIfAbsent("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
+    //        //        getViewInject().inject(this, meta, getFieldInject());
+    //        return super.toKv();
+    //    }
 }

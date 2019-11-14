@@ -8,7 +8,8 @@ import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
-import com.hthjsj.web.ui.IViewAdapter;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.RenderHelper;
 import com.hthjsj.web.ui.SmartAssemble;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
@@ -96,21 +97,15 @@ public class DBController extends FrontRestController {
                 Kv metaConfig = Kv.create();
 
                 //TableView
-                IViewAdapter<IMetaObject> metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.TABLEVIEW);
-                metaConfig.set(metaObject.code(), metaObjectIViewAdapter.instanceConfig().toJson());
-                metaObjectIViewAdapter.fields().forEach(m -> {
-                    metaConfig.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
-                });
-                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
+                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.TABLEVIEW);
+                metaConfig = RenderHelper.renderObjectViewAdapter(metaObjectIViewAdapter);
+                ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
 
                 //FormView
                 metaObjectIViewAdapter = SmartAssemble.analysisObject(metaObject, ComponentType.FORMVIEW);
-                metaConfig.clear();
-                metaConfig.set(metaObject.code(), metaObjectIViewAdapter.instanceConfig().toJson());
-                metaObjectIViewAdapter.fields().forEach(m -> {
-                    metaConfig.set(m.getMeta().fieldCode(), m.instanceConfig().toJson());
-                });
-                ServiceManager.componentService().newObjectConfig(ViewFactory.createViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
+                metaConfig = RenderHelper.renderObjectViewAdapter(metaObjectIViewAdapter);
+
+                ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
             }
         }
         renderJson(Ret.ok());
