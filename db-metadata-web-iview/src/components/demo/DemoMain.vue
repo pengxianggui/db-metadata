@@ -21,6 +21,11 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <find-box-demo></find-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <text-box-demo></text-box-demo>
             </el-col>
         </el-row>
@@ -32,11 +37,6 @@
         <el-row>
             <el-col :span="24">
                 <text-area-box-demo></text-area-box-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <bool-box-demo></bool-box-demo>
             </el-col>
         </el-row>
         <el-row>

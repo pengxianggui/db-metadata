@@ -228,5 +228,34 @@
         "conf": {}
       }
     }
+  },
+  "SearchPanel": {
+    "component_name": "SearchPanel",
+    "name": "SearchPanel",
+    "label": "搜索面板",
+    "conf": {
+      "label-width": "40px",
+      "size": "medium",
+      "disabled": false,
+      "inline": true
+    },
+    "columns": []
+  },
+  "FindBox": {
+    "component_name": "FindBox",
+    "name": "FindBox",
+    "label": "查找框",
+    "data_url": "/meta/fields/{objectCode}",
+    "conf": {
+      "clearable": true,
+      "placeholder": "戳我展开搜索面板.."
+    }
+  },
+  "FindPanel": {
+    "component_name": "FindPanel",
+    "name": "FindPanel",
+    "label": "查找面板",
+    "data_url": "/table/list/{objectCode}",
+    "columns": []
   }
 }

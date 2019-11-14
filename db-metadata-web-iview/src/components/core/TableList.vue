@@ -3,12 +3,12 @@
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
-                <el-button-group>
-                    <slot name="operation">
+                <slot name="operation-bar">
+                    <el-button-group>
                         <el-button @click="handleAdd">新增</el-button>
                         <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
-                    </slot>
-                </el-button-group>
+                    </el-button-group>
+                </slot>
             </el-col>
         </el-row>
         <el-row>
@@ -36,32 +36,34 @@
                                          show-overflow-tooltip>
                         </el-table-column>
                     </template>
-
-                    <el-table-column width="180">
-                        <template slot="header">
-                            <span>
-                                <span>操作</span>
-                                <el-popover placement="bottom-end" trigger="hover">
-                                    <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
-                                    <el-checkbox v-for="(item, index) in innerMeta.columns"
-                                                 :key="item.name + '' + index"
-                                                 :label="item.name"
-                                                 v-model="item.showable"
-                                                 @change="$forceUpdate(); getData()"
-                                                 style="display: block;"></el-checkbox>
-                                </el-popover>
-                            </span>
-                        </template>
-                        <template slot-scope="scope">
-                            <el-button :size="innerMeta.conf['size']"
-                                       @click="handleEdit($event, scope.row, scope.$index)">编辑
-                            </el-button>
-                            <el-button :size="innerMeta.conf['size']" type="danger"
-                                       @click="handleDelete($event, scope.row, scope.$index)">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-
+                    <slot name="operation-column">
+                        <el-table-column width="180">
+                            <template slot="header">
+                                <span>
+                                    <span>操作</span>
+                                    <el-popover placement="bottom-end" trigger="hover">
+                                        <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
+                                        <el-checkbox v-for="(item, index) in innerMeta.columns"
+                                                     :key="item.name + '' + index"
+                                                     :label="item.name"
+                                                     v-model="item.showable"
+                                                     @change="$forceUpdate(); getData()"
+                                                     style="display: block;"></el-checkbox>
+                                    </el-popover>
+                                </span>
+                            </template>
+                            <template slot-scope="scope">
+                                <slot name="buttons">
+                                    <el-button :size="innerMeta.conf['size']"
+                                               @click="handleEdit($event, scope.row, scope.$index)">编辑
+                                    </el-button>
+                                    <el-button :size="innerMeta.conf['size']" type="danger"
+                                               @click="handleDelete($event, scope.row, scope.$index)">删除
+                                    </el-button>
+                                </slot>
+                            </template>
+                        </el-table-column>
+                    </slot>
                 </el-table>
             </el-col>
         </el-row>
@@ -243,7 +245,7 @@
                 this.pageModel['index'] = parseInt(index);
                 this.pageModel['size'] = parseInt(size);
             },
-            getData() {
+            getData(params) {
                 if (!this.innerMeta.hasOwnProperty('data_url')) {
                     console.error('lack data_url attribute');
                     return;
@@ -258,7 +260,9 @@
                     's': this.pageModel['size']
                 });
 
-                this.$axios.safeGet(url).then(resp => {
+                this.$axios.safeGet(url, {
+                    params: params
+                }).then(resp => {
                     this.innerData = resp.data;
                     this.$emit("update:data", resp.data);
                     if (resp.hasOwnProperty('page')) {

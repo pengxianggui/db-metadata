@@ -170,6 +170,16 @@ const DEFAULT = {
             "destroy-on-close": true
         }
     },
+    "FindBox": {
+        "component_name": "FindBox",
+        "name": "FindBox",
+        "label": "查找框",
+        "data_url": "/meta/fields/{objectCode}", // 这个data_url响应的是FindPanel的meta, 也可以是TableList的meta
+        "conf": {
+            "clearable": true,
+            "placeholder": "戳我展开搜索面板.."
+        }
+    },
     "FormTmpl": {
         "component_name": "FormTmpl",
         "name": "FormTmpl",
@@ -196,7 +206,6 @@ const DEFAULT = {
         //
         //     inline: false,
         //     showable: true,  // 表单中是否隐藏此域
-        //     index: 1,        // 表单中字段先后顺序
         //     default_value: 1,// 默认值
         //
         //     conf: {
@@ -234,12 +243,11 @@ const DEFAULT = {
             "disabled": false,
             "inline": true,
         },
-        "columns": [
+        // "columns": [
             // {
             //     component_name: 'TextBox',
             //     name: 'name',
             //     label: '姓名',
-            //     index: 1,            // 排序号, 决定表格中列的先后顺序
             //     conf: {
             //         "inline": false
             //     }
@@ -248,12 +256,11 @@ const DEFAULT = {
             //     component_name: 'NumBox',
             //     name: 'age',
             //     label: '年龄',
-            //     index: 2,            // 排序号, 决定表格中列的先后顺序
             //     conf: {
             //         "inline": false
             //     }
             // }
-        ],
+        // ],
     },
     "TableList": {
         "component_name": "TableList",
@@ -269,21 +276,20 @@ const DEFAULT = {
             "size": "medium", // medium, small, mini
             // "max-height": 500,
         },
-        "columns": [
+        // "columns": [
             // {
             //     name: 'name',
             //     label: 'label',
             //     component_name: '',
             //     editable: false,     // 表格内可编辑
             //     searchable: true,    // 搜索面板支持该字段搜索
-            //     index: 1,            // 排序号, 决定表格中列的先后顺序
             //     conf: {
             //         width: '',
             //         sortable: true,  // 表格中可否根据此列进行排序
             //         //...
             //     }
             // }
-        ], // 字段元数据
+        // ], // 字段元数据
         "pagination": { // element ui配置
             "page-size": PAGE_NUM_AREA[0],
             "page-sizes": PAGE_NUM_AREA,
@@ -291,6 +297,35 @@ const DEFAULT = {
             "layout": "total, sizes, prev, pager, next, jumper"
         }
     },
+    "FindPanel": {
+        "component_name": "FindPanel",
+        "name": "FindPanel",
+        "label": "查找面板",
+        "data_url": "/table/list/{objectCode}",
+        // "columns": [// {
+            //     component_name: 'TextBox',
+            //     name: 'id',
+            //     label: 'ID',
+            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+            //     conf: {
+            //         width: '',
+            //         sortable: true,  // 表格中可否根据此列进行排序
+            //         //...
+            //     }
+            // },
+            // {
+            //     component_name: 'TextBox',
+            //     name: 'name',
+            //     label: '姓名',
+            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+            //     conf: {
+            //         width: '',
+            //         sortable: true,  // 表格中可否根据此列进行排序
+            //         //...
+            //     }
+            // }
+        // ]
+    }
 };
 
 export default DEFAULT

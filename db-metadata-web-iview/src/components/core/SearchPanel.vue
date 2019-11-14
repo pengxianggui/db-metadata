@@ -23,8 +23,6 @@
             handleSearch(model) {
                 this.$emit('search', model);
             }
-        },
-        created() {
         }
     }
 </script>

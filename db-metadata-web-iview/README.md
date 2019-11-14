@@ -229,8 +229,15 @@
     -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持, 保存时保留原值;
     
  -[ ] SearchPanel 搜索面板(简单)
+    -[x] 参见jsonTemplate.json或者default.js
+    
+ -[ ] FindBox 搜索框
+    -[x] 搜索框，参见jsonTemplate.json或者default.js
+    -[ ] 支持指定FindPanel回选字段
  
  -[ ] FindPanel 查找面板(复杂)
+    -[x] 参见jsonTemplate.json或者default.js
+    -[ ] 支持数组回选
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
