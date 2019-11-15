@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import {camelCaseTo} from '@/utils/common.js'
 import {
     Checkbox,
     Input,
@@ -12,24 +12,78 @@ import {
 } from 'element-ui'
 
 let mapping = {
-    "BoolBox": Checkbox,
-    "CheckBox": Checkbox,
-    "DateBox": DatePicker,
-    "DateTimeBox": DatePicker,
-    "DropDownBox": Select,
-    "FileBox": Upload,
-    "FindBox": Input,
-    "ImgBox":Upload,
-    "NumBox": InputNumber,
-    "PassBox": Input,
-    "RadioBox": Radio,
-    "TextAreaBox": Input,
-    "TextBox": Input,
-    "TimeBox": DatePicker,
-    "FindPanel": Table,
-    "FormTmpl": Form,
-    "SearchPanel": Form,
-    "TableList": Table,
+    "BoolBox": {
+        "ele": Checkbox,
+        "includes": []
+    },
+    "CheckBox": {
+        "ele": Checkbox,
+        "includes": []
+    },
+    "DateBox": {
+        "ele": DatePicker,
+        "includes": []
+    },
+    "DateTimeBox": {
+        "ele": DatePicker,
+        "includes": []
+    },
+    "DropDownBox": {
+        "ele": Select,
+        "includes": []
+    },
+    "FileBox": {
+        "ele": Upload,
+        "includes": []
+    },
+    "FindBox": {
+        "ele": Input,
+        "includes": []
+    },
+    "ImgBox": {
+        "ele": Upload,
+        "includes": []
+    },
+    "NumBox": {
+        "ele": InputNumber,
+        "includes": []
+    },
+    "PassBox": {
+        "ele": Input,
+        "includes": []
+    },
+    "RadioBox": {
+        "ele": Radio,
+        "includes": []
+    },
+    "TextAreaBox": {
+        "ele": Input,
+        "includes": []
+    },
+    "TextBox": {
+        "ele": Input,
+        "includes": []
+    },
+    "TimeBox": {
+        "ele": DatePicker,
+        "includes": []
+    },
+    "FindPanel": {
+        "ele": Table,
+        "includes": []
+    },
+    "FormTmpl": {
+        "ele": Form,
+        "includes": []
+    },
+    "SearchPanel": {
+        "ele": Form,
+        "includes": []
+    },
+    "TableList": {
+        "ele": Table,
+        "includes": []
+    },
 
     // custom...
     // "JsonBox": null,
@@ -49,25 +103,29 @@ let mapping = {
  * }
  * @constructor
  */
-export default function EleProps(componentName){
+export default function EleProps(componentName) {
     let elProps = {};
     if (!mapping.hasOwnProperty(componentName)) {
         console.warn("组件类型不正确,无法获取element原生属性信息. componentName: %s", componentName);
         return {};
     }
-    let elComponent = mapping[componentName];
+    let element = mapping[componentName];
+    let elComponent = element['ele'];
+    let includes = element['includes'];
 
     if (!elComponent.hasOwnProperty('props')) {
         return {};
     }
 
     for (let key in elComponent.props) {
+        if (includes.indexOf(key) < 0)
+            continue;
         let obj = elComponent.props[key];
         let type = obj['type'];
         let defaultV;
 
         if (obj.hasOwnProperty('default')) {
-             defaultV = obj['default'];
+            defaultV = obj['default'];
         } else {
             try {
                 // a typeof prop must be Function Or Array, if it's array, use first Construct
@@ -77,7 +135,7 @@ export default function EleProps(componentName){
                 console.log("element component[%o], the type of prop[%s] is: %o", elComponent, key, type);
             }
         }
-        elProps[key] = defaultV;
+        elProps[camelCaseTo(key, '-')] = defaultV;
     }
 
     return elProps;
