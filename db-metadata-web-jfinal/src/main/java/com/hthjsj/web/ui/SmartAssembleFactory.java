@@ -119,7 +119,7 @@ public class SmartAssembleFactory {
         }
 
         if (fieldConfigWrapper.isRequired()) {
-            builder.setConf("rules", new RulesBuilder().required(metaField).email(metaField).buildRules(metaField.fieldCode()));
+            builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
         }
 
 

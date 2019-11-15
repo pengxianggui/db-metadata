@@ -39,7 +39,7 @@ public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
     }
 
     public boolean isRequired() {
-        return Boolean.parseBoolean(getStr("isNullable"));
+        return !Boolean.parseBoolean(getStr("isNullable"));
     }
 
     public String defaultVal() {
