@@ -10,6 +10,7 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.attr.AttributeBuilder;
+import com.hthjsj.web.component.attr.RulesBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
@@ -118,6 +119,7 @@ public class SmartAssembleFactory {
         }
 
         if (fieldConfigWrapper.isRequired()) {
+            builder.setConf("rules", new RulesBuilder().required(metaField).email(metaField).buildRules(metaField.fieldCode()));
         }
 
 

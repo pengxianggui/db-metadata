@@ -55,6 +55,7 @@ public class AttributeBuilder {
     interface TableAttr {
 
         TableAttr showOverflowTooltip(boolean flag);
+
     }
 
     interface AttrRender {
@@ -96,7 +97,7 @@ public class AttributeBuilder {
         @Override
         public InputAttr defaultVal(String v) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("defaultVal", v);
+            ((Kv) config.getAs("conf")).set("value", v);
             return this;
         }
 
@@ -104,7 +105,6 @@ public class AttributeBuilder {
         public AttributeSteps maxlength(int v) {
             config.putIfAbsent("conf", Kv.create());
             ((Kv) config.getAs("conf")).set("maxlength", v);
-            showWordLimit(true);
             return this;
         }
 
@@ -112,7 +112,6 @@ public class AttributeBuilder {
         public AttributeSteps minlength(int v) {
             config.putIfAbsent("conf", Kv.create());
             ((Kv) config.getAs("conf")).set("minlength", v);
-            showWordLimit(true);
             return this;
         }
 
@@ -152,5 +151,20 @@ public class AttributeBuilder {
             ((Kv) config.getAs("conf")).set("show-overflow-tooltip", flag);
             return this;
         }
+
+        /**
+         * 扩展
+         */
+        public AttributeSteps set(String key, Object value) {
+            config.set(key, value);
+            return this;
+        }
+
+        public AttributeSteps setConf(String key, Object value) {
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set(key, value);
+            return this;
+        }
+
     }
 }
