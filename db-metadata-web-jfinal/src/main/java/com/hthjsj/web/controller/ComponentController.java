@@ -67,7 +67,7 @@ public class ComponentController extends FrontRestController {
             } else {
                 MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
                 MetaObjectViewAdapter metaObjectViewAdapter = SmartAssembleFactory.analysisObject(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderObjectViewAdapter(metaObjectViewAdapter).set("msg", "自动计算首次配置")));
+                renderJson(Ret.ok("data", RenderHelper.renderObjectViewAdapter(metaObjectViewAdapter)).set("msg", "自动计算首次配置"));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, ServiceManager.componentService().loadDefault(compCode).getStr("config"))));
