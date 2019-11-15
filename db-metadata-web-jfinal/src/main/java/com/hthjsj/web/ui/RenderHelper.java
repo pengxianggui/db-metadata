@@ -10,7 +10,7 @@ import com.jfinal.kit.Kv;
  */
 public class RenderHelper {
 
-    public static Kv renderObjectViewAdapter(MetaObjectViewAdapter metaObjectViewAdapter) {
+    public static Kv renderObjectFieldsMap(MetaObjectViewAdapter metaObjectViewAdapter) {
         Kv kv = Kv.create();
 
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
@@ -19,6 +19,16 @@ public class RenderHelper {
             fields.set(key, value.getInstanceConfig().toJson());
         });
         kv.set("fields", fields);
+        return kv;
+    }
+
+    public static Kv renderObjectFlatMap(MetaObjectViewAdapter metaObjectViewAdapter) {
+        Kv kv = Kv.create();
+
+        kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
+        metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {
+            kv.set(key, value.getInstanceConfig().toJson());
+        });
         return kv;
     }
 }

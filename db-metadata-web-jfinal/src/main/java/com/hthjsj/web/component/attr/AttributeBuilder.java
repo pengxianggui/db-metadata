@@ -32,18 +32,22 @@ public class AttributeBuilder {
 
     interface AttrAbility {
 
-        AttrAbility disabled(boolean i);
+        AttrAbility disabled(boolean v);
 
-        AttrAbility resizeable(String i);
+        AttrAbility resizeable(String v);
 
-        AttrAbility clearable(boolean i);
+        AttrAbility clearable(boolean v);
     }
 
-    interface AttrMaxMinDefault {
+    interface InputAttr {
 
-        AttrMaxMinDefault maxlength(int i);
+        InputAttr defaultVal(String v);
 
-        AttrMaxMinDefault minlength(int i);
+        InputAttr maxlength(int v);
+
+        InputAttr minlength(int v);
+
+        InputAttr showWordLimit(boolean v);
 
         AttrRender build();
     }
@@ -58,7 +62,7 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class AttributeSteps implements AttrAbility, AttrMaxMinDefault, AttrRender, AttrCustomMeta, TableAttr {
+    public static class AttributeSteps implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr {
 
         private Kv config = Kv.create();
 
@@ -68,38 +72,54 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps disabled(boolean i) {
+        public AttributeSteps disabled(boolean v) {
             config.putIfAbsent("conf", Kv.create());
-            config.set("disabled", i);
+            config.set("disabled", v);
             return this;
         }
 
         @Override
-        public AttributeSteps resizeable(String i) {
+        public AttributeSteps resizeable(String v) {
             config.putIfAbsent("conf", Kv.create());
             //            none, both, horizontal, vertical
-            ((Kv) config.getAs("conf")).set("resize", i);
+            ((Kv) config.getAs("conf")).set("resize", v);
             return this;
         }
 
         @Override
-        public AttributeSteps clearable(boolean i) {
+        public AttributeSteps clearable(boolean v) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("clearable", i);
+            ((Kv) config.getAs("conf")).set("clearable", v);
             return this;
         }
 
         @Override
-        public AttributeSteps maxlength(int i) {
+        public InputAttr defaultVal(String v) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("maxlength", i);
+            ((Kv) config.getAs("conf")).set("defaultVal", v);
             return this;
         }
 
         @Override
-        public AttributeSteps minlength(int i) {
+        public AttributeSteps maxlength(int v) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("minlength", i);
+            ((Kv) config.getAs("conf")).set("maxlength", v);
+            showWordLimit(true);
+            return this;
+        }
+
+        @Override
+        public AttributeSteps minlength(int v) {
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("minlength", v);
+            showWordLimit(true);
+            return this;
+        }
+
+        @Override
+        public InputAttr showWordLimit(boolean v) {
+            config.putIfAbsent("conf", Kv.create());
+            ((Kv) config.getAs("conf")).set("show-word-limit", v);
             return this;
         }
 
