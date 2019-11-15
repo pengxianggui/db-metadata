@@ -16,15 +16,12 @@ public class FormView extends ViewContainer {
 
     protected String action;
 
-    protected String methods;
-
     public FormView(String name, String label) {
         super(name, label);
     }
 
     public static FormView POST(String action, String name) {
         FormView formView = new FormView(action, name);
-        formView.methods = "POST";
         formView.action = action;
         formView.name = name;
         return formView;
@@ -37,7 +34,6 @@ public class FormView extends ViewContainer {
 
     @Override
     protected void renderCustomMeta(Kv meta) {
-        meta.putIfAbsent("methods", methods);
         meta.putIfAbsent("name", name);
         meta.putIfAbsent("action", action);
         meta.putIfAbsent("component_name", type());
