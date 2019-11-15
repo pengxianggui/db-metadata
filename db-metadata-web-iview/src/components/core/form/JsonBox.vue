@@ -1,5 +1,6 @@
 <template>
     <vue-json-editor v-model="nativeValue"
+                     :mode="mode"
                      v-bind="innerMeta.conf">
     </vue-json-editor>
 </template>
@@ -30,6 +31,7 @@
         },
         props: {
             value: [Object, String],
+            mode: String
         },
     };
 </script>

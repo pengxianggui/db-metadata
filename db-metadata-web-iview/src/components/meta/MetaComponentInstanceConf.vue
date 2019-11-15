@@ -5,12 +5,13 @@
                 <el-col :span="6">
                     <el-form-item label="组件">
                         <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
-                                     @change="loadConf"></DropDownBox>
+                                     @change="loadConf()"></DropDownBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
                     <el-form-item label="元对象">
-                        <DropDownBox v-model="confModel.objectCode" :meta="objectMeta" @change="loadConf"></DropDownBox>
+                        <DropDownBox v-model="confModel.objectCode" :meta="objectMeta"
+                                     @change="loadConf()"></DropDownBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -28,19 +29,24 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col>
-                    <h2 align="center">{{objectOrCompCode}}</h2>
-                    <el-form-item>
-                        <JsonBox v-model="confModel.conf" :meta="confMeta"></JsonBox>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+            <template v-if="confModel.componentCode">
+                <el-row>
+                    <el-col>
+                        <h2 align="center">{{objectOrCompCode}}</h2>
+                        <el-form-item>
+                            <JsonBox v-model="confModel.conf" :meta="confMeta" mode="form"></JsonBox>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </template>
+            <template v-else>
+                <div class="blank-tip">请先选择一个组件</div>
+            </template>
             <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
                 <el-col>
                     <h4>{{index}}.{{key}}</h4>
                     <el-form-item>
-                        <JsonBox v-model="confModel.fConf[key]" :meta="confMeta"></JsonBox>
+                        <JsonBox v-model="confModel.fConf[key]" :meta="confMeta" mode="form"></JsonBox>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -59,6 +65,7 @@
 
 <script>
     import {DEFAULT} from '@/constant';
+    import EleProps from '../element-props'
 
     export default {
         name: "MetaComponentInstanceConf",
@@ -108,6 +115,7 @@
             this.$merge(confMeta, DEFAULT.JsonBox);
 
             return {
+                objectOrCompCode: null,
                 fieldUrl: fieldUrl,
                 objectMeta: objectMeta,
                 componentMeta: componentMeta,
@@ -143,19 +151,30 @@
                     }
                 }).then(resp => {
                     let data = resp.data;
-                    let confKey = this.objectOrCompCode;
-                    let confVal = data[confKey].replace(/\\/g, "");
-                    this.confModel.conf = JSON.parse(confVal);
 
-                    let fConf = data['fields'];
-                    for (let fConfKey in fConf) {
-                        let fConfVal = fConf[fConfKey].replace(/\\/g, "");
-                        this.$set(this.confModel['fConf'], fConfKey, JSON.parse(fConfVal));
+                    for (let key in data) {
+                        if (key === 'fields') {
+                            let fConf = data[key];
+                            for (let fConfKey in fConf) {
+                                let fConfVal = fConf[fConfKey].replace(/\\/g, "");
+                                let fConfValJson = JSON.parse(fConfVal);
+                                fConfValJson['conf'] = fConfValJson['conf'] || {};
+                                this.$merge(fConfValJson['conf']||{}, EleProps(fConfValJson['component_name']));
+                                this.$set(this.confModel['fConf'], fConfKey, fConfValJson);
+                            }
+                            continue;
+                        }
+                        let confVal = data[key].replace(/\\/g, "");
+                        let confValJson = JSON.parse(confVal);
+                        confValJson['conf'] = confValJson['conf'] || {};
+                        this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
+                        this.confModel['conf'] = confValJson;
+
+                        this.objectOrCompCode = key;
                     }
-                    // if (fConf)
                 }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg)
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg||err);
+                    this.$message.error(err.msg);
                 })
             },
             deleteConf: function () {
@@ -168,7 +187,7 @@
             },
             onSubmit: function () {
                 if (!this.confModel['componentCode']) {
-                    this.$message.alert('必须选定一个组件');
+                    this.$message.warning('必须选定一个组件');
                     return;
                 }
                 let params = {
@@ -195,7 +214,7 @@
             },
             onUpdate: function () {
                 if (!this.confModel['componentCode']) {
-                    this.$message.alert('必须选定一个组件');
+                    this.$message.warning('必须选定一个组件');
                     return;
                 }
                 let params = {
@@ -227,12 +246,20 @@
             }
         },
         computed: {
-            objectOrCompCode() {
-                return this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode']
-            }
+            // objectOrCompCode() {
+            //     return this.confModel['objectCode'] ? this.confModel['objectCode'] : this.confModel['componentCode']
+            // }
         }
     }
 </script>
 
 <style scoped>
+    .blank-tip {
+        height: 400px;
+        line-height: 400px;
+        text-align: center;
+        border: 1px solid #eee;
+        margin: 5px 0;
+        color: #999999;
+    }
 </style>
