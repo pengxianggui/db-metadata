@@ -14,11 +14,11 @@ public class RenderHelper {
         Kv kv = Kv.create();
 
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
-
+        Kv fields = Kv.create();
         metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {
-            kv.set(key, value.getInstanceConfig().toJson());
+            fields.set(key, value.getInstanceConfig().toJson());
         });
-
+        kv.set("fields", fields);
         return kv;
     }
 }

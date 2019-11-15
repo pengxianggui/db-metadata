@@ -117,6 +117,9 @@ public class SmartAssembleFactory {
 
         }
 
+        if (fieldConfigWrapper.isRequired()) {
+        }
+
 
         return builder.render();
     }

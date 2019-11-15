@@ -25,9 +25,9 @@ public enum ComponentType {
     TEXTBOX("textbox", "输入框组件", "TextBox"),
     TIMEBOX("timebox", "时间框", "TimeBox"),
     JSONBOX("jsonbox", "Json框", "JsonBox"),
-    FindBox("findbox", "查找框", "FindBox"),
-    FindPanel("findpanel", "查找面板", "FindPanel"),
-    SearchPanel("searchpanel", "搜索面板", "SearchPanel"),
+    FINDBOX("findbox", "查找框", "FindBox"),
+    FINDPANEL("findpanel", "查找面板", "FindPanel"),
+    SEARCHPANEL("searchpanel", "搜索面板", "SearchPanel"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter(AccessLevel.PUBLIC)
