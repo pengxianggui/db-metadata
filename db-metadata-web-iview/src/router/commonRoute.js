@@ -23,6 +23,10 @@ const commonRoute = [
                 name: 'MetaObject',
                 component: () => import('@/components/meta/MetaObject')
             }, {
+                path: 'meta-component-global-conf',
+                name: 'MetaConf',
+                component: () => import('@/components/meta/MetaComponentGlobalConf')
+            }, {
                 path: 'meta-component-instance-conf',
                 name: 'MetaConf',
                 component: () => import('@/components/meta/MetaComponentInstanceConf')

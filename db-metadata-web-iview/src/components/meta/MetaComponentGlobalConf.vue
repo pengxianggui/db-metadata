@@ -4,12 +4,7 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"></DropDownBox>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item label="元对象">
-                        <DropDownBox v-model="confModel.objectCode" :meta="objectMeta"
+                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
                                      @change="loadConf()"></DropDownBox>
                     </el-form-item>
                 </el-col>
@@ -19,19 +14,10 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col>
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">提交</el-button>
-                        <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">取消</el-button>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <template v-if="confModel.componentCode && confModel.objectCode">
+            <template v-if="confModel.componentCode">
                 <el-row>
                     <el-col>
-                        <h2 align="center">{{confModel.objectCode}}</h2>
+                        <h2 align="center">{{confModel.componentCode}}</h2>
                         <el-form-item>
                             <JsonBox v-model="confModel.conf" :meta="confMeta" mode="form"></JsonBox>
                         </el-form-item>
@@ -41,14 +27,7 @@
             <template v-else>
                 <div class="blank-tip">请先选择一个组件</div>
             </template>
-            <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
-                <el-col>
-                    <h4>{{index}}.{{key}}</h4>
-                    <el-form-item>
-                        <JsonBox v-model="confModel.fConf[key]" :meta="confMeta" mode="form"></JsonBox>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+
             <el-row>
                 <el-col>
                     <el-form-item>
@@ -67,7 +46,7 @@
     import EleProps from '../element-props'
 
     export default {
-        name: "MetaComponentInstanceConf",
+        name: "MetaComponentGlobalConf",
         data() {
             let componentMeta = {
                 name: "component",
@@ -78,28 +57,6 @@
                     "filterable": true,
                 }
             };
-            let objectMeta = {
-                name: "object",
-                label: "元对象",
-                data_url: "/table/list?objectCode=meta_object&fs=code",
-                group: false,
-                conf: {
-                    "filterable": true,
-                    "clearable": true
-                },
-                behavior: {
-                    format: function (data) {
-                        let arr = [];
-                        for (let i = 0; i < data.length; i++) {
-                            arr.push({
-                                key: data[i].code,
-                                value: data[i].code
-                            })
-                        }
-                        return arr;
-                    }
-                }
-            };
             let confMeta = {
                 name: "conf",
                 label: "配置",
@@ -107,31 +64,24 @@
                     mode: 'code',
                 }
             };
-
-            this.$merge(objectMeta, DEFAULT.DropDownBox);
             this.$merge(componentMeta, DEFAULT.DropDownBox);
             this.$merge(confMeta, DEFAULT.JsonBox);
-
             return {
-                objectMeta: objectMeta,
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
                     componentCode: null,
-                    objectCode: null,
-                    conf: {}, // conf of metaObject
-                    fConf: {} // conf of fields
+                    conf: {}, // conf of component
                 }
             }
         },
         methods: {
             loadConf: function () {
-                const {componentCode, objectCode} = this.confModel;
+                const {componentCode} = this.confModel;
                 const url = 'component/load';
 
-                if (!componentCode || !objectCode) {
+                if (!componentCode) {
                     this.confModel['conf'] = {};
-                    this.confModel['fConf'] = {};
                     return;
                 }
 
@@ -139,29 +89,18 @@
                     method: 'get',
                     url: url,
                     params: {
-                        objectCode: objectCode,
                         componentCode: componentCode
                     }
                 }).then(resp => {
                     let data = resp.data;
 
                     for (let key in data) {
-                        if (key === 'fields') {
-                            let fConf = data[key];
-                            for (let fConfKey in fConf) {
-                                let fConfVal = fConf[fConfKey].replace(/\\/g, "");
-                                let fConfValJson = JSON.parse(fConfVal);
-                                fConfValJson['conf'] = fConfValJson['conf'] || {};
-                                this.$merge(fConfValJson['conf']||{}, EleProps(fConfValJson['component_name']));
-                                this.$set(this.confModel['fConf'], fConfKey, fConfValJson);
-                            }
-                            continue;
-                        }
                         let confVal = data[key].replace(/\\/g, "");
                         let confValJson = JSON.parse(confVal);
                         confValJson['conf'] = confValJson['conf'] || {};
                         this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
                         this.confModel['conf'] = confValJson;
+                        break;
                     }
                 }).catch(err => {
                     console.error('[ERROR] url: %s, msg: %s', url, err.msg||err);
@@ -169,7 +108,7 @@
                 })
             },
             deleteConf: function () {
-                let url = this.$compile('/component/delete/{objectCode}?componentCode={componentCode}', this.confModel);
+                let url = this.$compile('/component/delete?componentCode={componentCode}', this.confModel);
                 this.$axios.delete(url).then(resp => {
                     this.$message.success(resp.msg);
                 }).catch(err => {
@@ -177,21 +116,17 @@
                 })
             },
             onSubmit: function () {
-                if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
-                    this.$message.warning('必须选定组件和元对象');
+                if (!this.confModel['componentCode']) {
+                    this.$message.warning('必须选定一个组件');
                     return;
                 }
-
                 let componentCode = this.confModel['componentCode'];
-                let objectCode = this.confModel['objectCode'];
+                let conf = this.confModel['conf'];
                 let params = {
-                    componentCode: componentCode,
-                    objectCode: objectCode
+                    "componentCode":  componentCode
                 };
-                params[objectCode] = this.confModel['conf'];
-                for (let fConfKey in this.confModel['fConf']) {
-                    params[fConfKey] = this.confModel['fConf'][fConfKey];
-                }
+
+                params[componentCode] = conf;
 
                 this.$axios({
                     method: 'POST',
@@ -204,21 +139,16 @@
                 })
             },
             onUpdate: function () {
-                if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
-                    this.$message.warning('必须选定组件和元对象');
+                if (!this.confModel['componentCode']) {
+                    this.$message.warning('必须选定一个组件');
                     return;
                 }
 
-                let componentCode = this.confModel['componentCode'];
-                let objectCode = this.confModel['objectCode'];
-                let params = {
-                    componentCode: componentCode,
-                    objectCode: objectCode
-                };
-                params[objectCode] = this.confModel['conf'];
-                for (let fConfKey in this.confModel['fConf']) {
-                    params[fConfKey] = this.confModel['fConf'][fConfKey];
-                }
+                let key = this.confModel['componentCode'];
+                let conf = this.confModel['conf'];
+                let params = {};
+
+                params[key] = conf;
 
                 this.$axios({
                     method: 'POST',
@@ -235,7 +165,7 @@
             onCancel: function () {
                 // pxg_todo
             }
-        }
+        },
     }
 </script>
 
