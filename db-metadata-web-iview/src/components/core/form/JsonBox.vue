@@ -26,6 +26,8 @@
 
     export default {
         mixins: [Meta(DEFAULT.JsonBox), Val(format)],
+        name: "JsonBox",
+        label: "Json框",
         components: {
             vueJsonEditor
         },

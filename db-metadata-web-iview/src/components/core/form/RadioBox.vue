@@ -17,6 +17,7 @@
     export default {
         mixins: [Meta(DEFAULT.RadioBox), Val],
         name: "RadioBox",
+        label: "单选框",
         data () {
             return {
                 innerOptions: []

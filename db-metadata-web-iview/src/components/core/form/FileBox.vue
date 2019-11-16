@@ -19,6 +19,7 @@
     export default {
         mixins: [Meta(DEFAULT.FileBox)],
         name: "FileBox",
+        label: "文件上传框",
         data () {
             return {
                 fileList: []

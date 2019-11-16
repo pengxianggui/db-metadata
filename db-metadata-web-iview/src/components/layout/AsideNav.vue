@@ -22,6 +22,10 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">组件实例配置</span>
             </el-menu-item>
+            <el-menu-item index="/main/form-builder">
+                <i class="el-icon-menu"></i>
+                <span slot="title">表单构建</span>
+            </el-menu-item>
             <el-menu-item index="/main/meta-manager">
                 <i class="el-icon-menu"></i>
                 <span slot="title">元字段管理</span>

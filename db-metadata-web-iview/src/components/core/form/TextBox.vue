@@ -16,6 +16,7 @@
     export default {
         mixins: [Meta(DEFAULT.TextBox), Val],
         name: "TextBox",
+        label: "文本框",
         props: {
             value: String,
         }

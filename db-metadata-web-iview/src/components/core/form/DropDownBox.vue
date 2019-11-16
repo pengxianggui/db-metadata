@@ -34,6 +34,7 @@
     export default {
         mixins: [Meta(DEFAULT.DropDownBox), Val],
         name: "DropDownBox",
+        label: "下拉框",
         data() {
             return {
                 innerOptions: []

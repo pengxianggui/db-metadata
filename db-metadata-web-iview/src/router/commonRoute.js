@@ -31,6 +31,10 @@ const commonRoute = [
                 name: 'MetaConf',
                 component: () => import('@/components/meta/MetaComponentInstanceConf')
             }, {
+                path: 'form-builder',
+                name: 'FormBuilder',
+                component: () => import('@/components/meta/form-builder')
+            }, {
                 path: 'demo',
                 name: 'Demo',
                 component: () => import('@/components/demo/DemoMain')

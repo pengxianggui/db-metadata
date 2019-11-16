@@ -14,6 +14,7 @@
     export default {
         mixins: [Meta(DEFAULT.DateBox), Val],
         name: "DateBox",
+        label: "日期框",
         props: {
             value: {
                 type: [Date, String]

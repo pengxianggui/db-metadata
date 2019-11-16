@@ -17,6 +17,7 @@
     export default {
         mixins: [Meta(DEFAULT.PassBox), Val],
         name: "PassBox",
+        label: "密码框",
         props: {
             value: String,
         }

@@ -12,6 +12,7 @@
     export default {
         mixins: [Meta(DEFAULT.NumBox), Val],
         name: "NumBox",
+        label: "数字框",
         props: {
             value: Number,
         }

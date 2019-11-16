@@ -17,8 +17,9 @@
     import Val from './value-mixins'
 
     export default {
-        name: "FindBox",
         mixins: [Meta(DEFAULT.FindBox), Val],
+        name: "FindBox",
+        label: "查找框",
         props: {
             value: String
         },

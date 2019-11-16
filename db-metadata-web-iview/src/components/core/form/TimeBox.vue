@@ -13,6 +13,7 @@
     export default {
         mixins: [Meta(DEFAULT.TimeBox), Val],
         name: "TimeBox",
+        label: "时间框",
         props: {
             value: [Date, String],
         },

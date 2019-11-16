@@ -16,6 +16,7 @@
     export default {
         mixins: [Meta(DEFAULT.CheckBox), Val],
         name: "CheckBox",
+        label: "复选框",
         data () {
             return {
                 innerOptions: {}

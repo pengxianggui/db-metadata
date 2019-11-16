@@ -13,6 +13,7 @@
     export default {
         mixins: [Meta(DEFAULT.BoolBox)],
         name: "BoolBox",
+        label: "布尔框",
         props: {
             value: {
                 type: [Boolean, Number, String],

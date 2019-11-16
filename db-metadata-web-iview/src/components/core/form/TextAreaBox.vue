@@ -18,6 +18,7 @@
     export default {
         mixins: [Meta(DEFAULT.TextAreaBox), Val],
         name: "TextAreaBox",
+        label: "文本域",
         props: {
             value: String,
         },
