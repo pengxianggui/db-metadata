@@ -32,6 +32,8 @@ public class AttributeBuilder {
         AttrCustomMeta label(String label);
 
         AttributeSteps options(List<Kv> options);
+
+        AttributeSteps dataUrl(String url);
     }
 
     interface AttrAbility {
@@ -124,19 +126,19 @@ public class AttributeBuilder {
 
         @Override
         public AttrCustomMeta componentName(String componentCode) {
-            config.set("component_name", componentCode);
+            config.setIfNotBlank("component_name", componentCode);
             return this;
         }
 
         @Override
         public AttrCustomMeta name(String name) {
-            config.set("name", name);
+            config.setIfNotBlank("name", name);
             return this;
         }
 
         @Override
         public AttrCustomMeta label(String label) {
-            config.set("label", label);
+            config.setIfNotBlank("label", label);
             return this;
         }
 
@@ -145,6 +147,12 @@ public class AttributeBuilder {
             if (options != null && options.size() > 0) {
                 set("options", options);
             }
+            return this;
+        }
+
+        @Override
+        public AttributeSteps dataUrl(String url) {
+            config.setIfNotBlank("dataUrl", url);
             return this;
         }
 
@@ -158,13 +166,13 @@ public class AttributeBuilder {
          * 扩展
          */
         public AttributeSteps set(String key, Object value) {
-            config.set(key, value);
+            config.setIfNotNull(key, value);
             return this;
         }
 
         public AttributeSteps setConf(String key, Object value) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set(key, value);
+            ((Kv) config.getAs("conf")).setIfNotNull(key, value);
             return this;
         }
     }

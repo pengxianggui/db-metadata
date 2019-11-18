@@ -51,8 +51,8 @@
     .el-col {
         display: inline-block;
         float: left;
-        width: 150px;
-        margin: 18px;
+        width: 110px;
+        margin: 10px;
         cursor: pointer;
         text-align: center;
     }

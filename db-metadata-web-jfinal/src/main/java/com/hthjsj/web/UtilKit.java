@@ -55,6 +55,9 @@ public class UtilKit {
     public static boolean verifySQL(String sql) {
         boolean flag = false;
         try {
+            //            MySqlStatementParser sqlStatementParser = new MySqlStatementParser(sql);
+            //            sqlStatementParser.parseStatementList();
+
             SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
             flag = true;
         } catch (ParserException e) {

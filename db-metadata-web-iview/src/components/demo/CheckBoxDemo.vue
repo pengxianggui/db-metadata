@@ -22,7 +22,20 @@
                     label: '测试',
                     conf: {
                         // other options
-                    }
+                    },
+                    options: [{
+                        'key': '航天恒嘉',
+                        'value': '1'
+                    }, {
+                        'key': '中国石化',
+                        'value': '2'
+                    }, {
+                        'key': '阿里巴巴',
+                        'value': '3'
+                    }, {
+                        'key': '小米科技',
+                        'value': '4'
+                    }]
                 },
                 // meta: {
                 //     "component_name": "CheckBox",
@@ -32,19 +45,7 @@
                 //     "label": "系统模块",
                 //     "name": "is_sys"
                 // },
-                options: [{
-                    'key': '航天恒嘉',
-                    'value': '1'
-                },{
-                    'key': '中国石化',
-                    'value': '2'
-                },{
-                    'key': '阿里巴巴',
-                    'value': '3'
-                },{
-                    'key': '小米科技',
-                    'value': '4'
-                }]
+
             }
         }
     }

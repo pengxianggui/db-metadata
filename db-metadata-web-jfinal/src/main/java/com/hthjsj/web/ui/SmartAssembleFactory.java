@@ -126,7 +126,9 @@ public class SmartAssembleFactory {
             }
             if (fieldConfigWrapper.isSql()) {
                 log.info("fieldConfigWrapper sql:{}", fieldConfigWrapper.sourceSql());
+                builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
+            builder.componentName(ComponentType.DROPDOWN.getCode());
         }
 
         if (fieldConfigWrapper.isRequired()) {

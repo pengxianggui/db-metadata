@@ -1,12 +1,12 @@
 <template>
     <el-row>
-        <el-col :span="6">
+        <el-col :span="5">
             <ComponentList></ComponentList>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="11">
             <WorkArea @select="handleSelectFormItem"></WorkArea>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
             <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
         </el-col>
     </el-row>
@@ -33,5 +33,9 @@
 <style scoped>
     .el-row, .el-col {
         height: 100%;
+    }
+
+    .el-col {
+        margin-left: 10px;
     }
 </style>

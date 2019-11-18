@@ -43,6 +43,10 @@ public class OptionsKit {
         return result;
     }
 
+    public static String buildUrl(String objectCode, String fieldCode) {
+        return new StringBuilder("/component/options/").append(objectCode).append("?f=").append(fieldCode).toString();
+    }
+
     public static void main(String[] args) {
         System.out.println(options(new String[] { "123", "12312", "fdsa" }));
     }
