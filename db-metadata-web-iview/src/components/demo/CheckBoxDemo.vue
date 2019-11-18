@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{meta.component_name}}: </h2>
-        <component :is="meta.component_name" v-model="value" :meta="meta" :options="options"></component>
+        <component :is="meta.component_name" v-model="value" :meta="meta"></component>
         <br>
         值为: {{value}}
         <z-toggle-panel>

@@ -8,7 +8,7 @@
                @focus="$emit('focus', $event)">
         <template v-if="!innerMeta.group">
             <el-option v-for="item in innerOptions" :key="item.value" :label="item.key"
-                       :value="item.value ? item.value : item">
+                       :value="item.value">
                 {{item.key}}
             </el-option>
         </template>
@@ -42,7 +42,7 @@
         },
         props: {
             value: {
-                type: [Object, String]
+                type: [Object, String, Number]
             },
             options: Array,
         },
