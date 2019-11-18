@@ -1,5 +1,5 @@
 <template>
-    <el-container direction="vertical" class="el-card">
+    <el-container direction="vertical" class="el-card" ref="container">
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
@@ -83,6 +83,9 @@
                 </slot>
             </el-col>
         </el-row>
+
+        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="formMeta" @ok="getData()"></DialogBox>
+
     </el-container>
 </template>
 
@@ -107,6 +110,9 @@
                     index: 1,
                     total: 0
                 },
+                formMeta: {},
+                dialogMeta: {},
+                dialogVisible: false
             }
         },
         props: {
@@ -155,14 +161,21 @@
                     url = this.$compile(FORM_TO_ADD_URL, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.$axios.get(url).then(resp => {
-                    let formMeta = resp.data;
-                    this.$dialog(formMeta, {
-                        title: id ? '编辑' : '新增',
-                    }).then(() => {
-                        this.getData(); // refresh
-                    });
-                }).catch(err => {
-                    console.log(err);
+                    this.formMeta = resp.data;
+                    this.dialogMeta = {
+                        component_name: "DialogBox",
+                        title: id ? '编辑' : '新增'
+                    }
+                    this.dialogVisible = true
+
+                //     let formMeta = resp.data;
+                //     this.$dialog(this.$refs['container'], formMeta, null, {
+                //         title: id ? '编辑' : '新增',
+                //     }).then(() => {
+                //         this.getData(); // refresh
+                //     });
+                // }).catch(err => {
+                //     console.log(err);
                 });
             },
             // 删除单行

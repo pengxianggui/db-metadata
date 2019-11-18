@@ -82,9 +82,14 @@
             }
         },
         computed: {
-            formMeta() {
-                this.$merge(this.value, DEFAULT.FormTmpl);
-                return this.value;
+            formMeta: {
+                get: function () {
+                    this.$merge(this.value, DEFAULT.FormTmpl);
+                    return this.value;
+                },
+                set: function (newVal) {
+                    this.$emit('input', newVal);
+                }
             }
         }
     }

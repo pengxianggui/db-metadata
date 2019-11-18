@@ -3,7 +3,7 @@
         <el-col :span="5">
             <ComponentList></ComponentList>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="12">
             <WorkArea @select="handleSelectFormItem"></WorkArea>
         </el-col>
         <el-col :span="7">

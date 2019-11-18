@@ -1,6 +1,8 @@
 <template>
     <div class="el-card container">
         <div class="header">
+            <el-button @click="preview">视图预览</el-button>
+            <el-button @click="jsonView">json预览</el-button>
         </div>
         <div class="work-area">
             <FormTmpl :ref="formMeta.name" :meta="formMeta">
@@ -57,6 +59,9 @@
         components: {
             draggable
         },
+        props: {
+            data: Object
+        },
         data() {
             return {
                 selectIndex: null,
@@ -88,6 +93,16 @@
                 if (ev) ev.stopPropagation();
                 this.selectIndex = index
             },
+            jsonView() {
+                this.$dialog(DEFAULT.JsonBox, this.data, {
+                    title: "Json预览"
+                })
+            },
+            preview() {
+                this.$dialog(this.data, null, {
+                    title: "视图预览"
+                })
+            }
         },
         watch: {
             selectIndex(newVal) {
@@ -107,7 +122,6 @@
 
 <style scoped>
     .container {
-        display: flex;
         height: 100%;
         overflow: auto;
     }

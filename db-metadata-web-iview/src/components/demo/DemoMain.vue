@@ -16,6 +16,11 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <DialogBoxDemo></DialogBoxDemo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <search-panel-demo></search-panel-demo>
             </el-col>
         </el-row>
@@ -47,6 +52,11 @@
         <el-row>
             <el-col :span="24">
                 <radio-box-demo></radio-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <bool-box-demo></bool-box-demo>
             </el-col>
         </el-row>
         <el-row>
