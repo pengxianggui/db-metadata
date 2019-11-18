@@ -32,6 +32,7 @@
                 <el-col>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
                         <el-button @click="onCancel">取消</el-button>
                     </el-form-item>
@@ -164,6 +165,12 @@
             },
             onCancel: function () {
                 // pxg_todo
+            },
+            preview: function () {
+                let data = this.confModel['conf'].hasOwnProperty('default_value') ? this.confModel['conf']['default_value'] : null;
+                this.$dialog(this.confModel['conf'], data, {
+                    title: '预览'
+                })
             }
         },
     }

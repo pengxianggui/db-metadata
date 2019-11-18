@@ -23,6 +23,7 @@
                 <el-col>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
                         <el-button @click="onCancel">取消</el-button>
                     </el-form-item>
@@ -53,6 +54,7 @@
                 <el-col>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
                         <el-button @click="onCancel">取消</el-button>
                     </el-form-item>
@@ -229,11 +231,20 @@
                 }).catch(err => {
                     this.$message.error(err.msg);
                 })
-
-
             },
             onCancel: function () {
                 // pxg_todo
+            },
+            preview: function () {
+                let meta = this.confModel['conf'];
+                for (let key in this.confModel['fConf']) {
+                    let item = this.confModel['fConf'][key];
+                    meta.columns.push(item);
+                }
+
+                this.$dialog(meta, null, {
+                    title: '预览'
+                })
             }
         }
     }
