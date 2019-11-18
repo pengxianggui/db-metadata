@@ -46,7 +46,10 @@ const DEFAULT = {
         "group": false,
         "conf": {
             "clearable": true
-        }
+        },
+        "options": [
+            // {"key":"value"}
+        ]
     },
     "TimeBox": {
         "component_name": "TimeBox",
@@ -95,7 +98,10 @@ const DEFAULT = {
         "label": "单选框",
         "inline": true,
         "data_url": "/dict/yn",
-        "conf": {}
+        "conf": {},
+        "options": [
+            // {"key":"value"}
+        ]
     },
     "CheckBox": {
         "component_name": "CheckBox",
@@ -103,7 +109,10 @@ const DEFAULT = {
         "label": "多选框",
         "inline": true,
         "data_url": "/dict/yn",
-        "conf": {}
+        "conf": {},
+        "options": [
+            // {"key":"value"}
+        ]
     },
     "JsonBox": {
         "component_name": "JsonBox",

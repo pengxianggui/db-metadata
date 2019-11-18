@@ -47,6 +47,10 @@
                     this.innerOptions = this.options;
                     return;
                 }
+                if (this.innerMeta.hasOwnProperty('options')) { // 组件元对象定义了options
+                    this.innerOptions = this.innerMeta['options'];
+                    return;
+                }
                 if (this.innerMeta.hasOwnProperty('data_url')) {
                     this.getOptions();
                     return
