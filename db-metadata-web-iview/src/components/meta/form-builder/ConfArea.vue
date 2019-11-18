@@ -104,7 +104,7 @@
 
     .container > .el-row {
         flex: 1;
-        padding: 20px;
+        padding: 20px 0;
         overflow: auto;
     }
 </style>
