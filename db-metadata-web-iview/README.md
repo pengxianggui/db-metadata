@@ -179,6 +179,13 @@
  -[ ] 创建一个Meta class, 对所有组件的prop: meta 进行强类型校验, 同时初始化meta(和全局默认meta进行merge)
  -[ ] 重复路由点击报错(NavigationDuplicated), element bug. 等待element(2.13). https://github.com/ElemeFE/element/pull/17269
  -[ ] 思考组件强干预的策略
+ -[ ] DropDownBox, RadioBox, CheckBox支持三种传入选项数据的方式:
+    - 硬编码传入options属性
+    - 组件元对象中定义options属性和值
+    - data_url组件内自动获取选项数据(GET), 响应格式需为[{key:value}, ...],若不满足,需要给组件元数据定义behavior选项,并自定义'format'函数,将响应数据转换为key-value格式
+    
+    优先级: 逐渐降低. 数据格式均需满足: [{key:value}, ...]
+    
  -[ ] 组件中各个属性先后位置尽量统一
  
         name
