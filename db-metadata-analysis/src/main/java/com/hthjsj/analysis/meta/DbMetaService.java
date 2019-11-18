@@ -55,6 +55,20 @@ public class DbMetaService {
         return IMetaObject;
     }
 
+    public IMetaField findFieldByCode(String objectCode, String fieldCode) {
+        IMetaField metaField = null;
+        if (StrKit.notBlank(objectCode, fieldCode)) {
+            Record field = Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=?", objectCode, fieldCode);
+            if (field == null) {
+                throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
+            }
+            metaField = new MetaField(field.getColumns());
+        } else {
+            throw new MetaOperateException("元对象编码和字段编码必须指定,objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
+        }
+        return metaField;
+    }
+
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
         if (new MetaObjectConfigWrapper(metaObject.config(), metaObject.code()).isUUIDPrimary()) {
             metaObject.dataMap().put("id", SnowFlake.me().nextId());

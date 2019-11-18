@@ -10,7 +10,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -197,11 +197,11 @@ public class ComponentService {
          * new objectConfig
          * foreach fieldsConfig
          */
-        newObjectSelfConfig(component, object.code(), Utils.getKv(instanceAllConfig, object.code()));
+        newObjectSelfConfig(component, object.code(), UtilKit.getKv(instanceAllConfig, object.code()));
 
         List<Record> fieldRecords = Lists.newArrayList();
         object.fields().forEach(f -> {
-            Kv fkv = Utils.getKv(instanceAllConfig, f.fieldCode());
+            Kv fkv = UtilKit.getKv(instanceAllConfig, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 
@@ -211,7 +211,7 @@ public class ComponentService {
     }
 
     public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
-        Kv fkv = Utils.getKv(config, fieldCode);
+        Kv fkv = UtilKit.getKv(config, fieldCode);
         Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
         return Db.save(META_COMPONENT_INSTANCE, fieldRecord);
     }
@@ -229,13 +229,13 @@ public class ComponentService {
 
         deleteObjectConfig(component.code(), object.code(), false);
 
-        newObjectSelfConfig(component, object.code(), Utils.getKv(config, object.code()));
+        newObjectSelfConfig(component, object.code(), UtilKit.getKv(config, object.code()));
 
         Collection<IMetaField> fields = object.fields();
 
         List<Record> fieldRecords = Lists.newArrayList();
         fields.forEach(f -> {
-            Kv fkv = Utils.getKv(config, f.fieldCode());
+            Kv fkv = UtilKit.getKv(config, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 

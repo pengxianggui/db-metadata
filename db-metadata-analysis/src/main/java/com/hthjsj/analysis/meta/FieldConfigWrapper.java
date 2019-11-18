@@ -2,6 +2,7 @@ package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.jfinal.kit.StrKit;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -27,15 +28,27 @@ public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
          * 2. hasDataOpts
          * 3. 指定数据源
          */
+        return isRange() || isSql();
+    }
+
+    public boolean isRange() {
         return range().length > 0;
     }
 
     public String[] range() {
-        JSONArray jsonArray = getAs("range");
+        JSONArray jsonArray = getAs("scopeRange");
         if (jsonArray == null) {
             jsonArray = new JSONArray();
         }
         return jsonArray.toArray(new String[jsonArray.size()]);
+    }
+
+    public boolean isSql() {
+        return StrKit.notBlank(sourceSql());
+    }
+
+    public String sourceSql() {
+        return getStr("scopeSql");
     }
 
     public boolean isRequired() {

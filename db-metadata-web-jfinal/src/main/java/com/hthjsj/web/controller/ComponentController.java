@@ -5,7 +5,7 @@ import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
@@ -109,7 +109,7 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-        Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
+        Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
@@ -119,7 +119,7 @@ public class ComponentController extends FrontRestController {
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().newObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().newDefault(compCode, Utils.getKv(config.getStr(compCode)));
+            ServiceManager.componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }
@@ -134,13 +134,13 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-        Kv config = Kv.create().set(Utils.toObjectFlat(getRequest().getParameterMap()));
+        Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
             ServiceManager.componentService().updateObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().updateDefault(compCode, Utils.getKv(config.getStr(compCode)));
+            ServiceManager.componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }

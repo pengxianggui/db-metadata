@@ -2,6 +2,8 @@ package com.hthjsj.web.component.attr;
 
 import com.jfinal.kit.Kv;
 
+import java.util.List;
+
 /**
  * <p> @Date : 2019/11/6 </p>
  * <p> @Project : db-meta-serve</p>
@@ -28,6 +30,8 @@ public class AttributeBuilder {
         AttrCustomMeta name(String name);
 
         AttrCustomMeta label(String label);
+
+        AttributeSteps options(List<Kv> options);
     }
 
     interface AttrAbility {
@@ -55,7 +59,6 @@ public class AttributeBuilder {
     interface TableAttr {
 
         TableAttr showOverflowTooltip(boolean flag);
-
     }
 
     interface AttrRender {
@@ -74,51 +77,43 @@ public class AttributeBuilder {
 
         @Override
         public AttributeSteps disabled(boolean v) {
-            config.putIfAbsent("conf", Kv.create());
-            config.set("disabled", v);
+            setConf("disabled", v);
             return this;
         }
 
         @Override
         public AttributeSteps resizeable(String v) {
-            config.putIfAbsent("conf", Kv.create());
-            //            none, both, horizontal, vertical
-            ((Kv) config.getAs("conf")).set("resize", v);
+            setConf("resize", v);
             return this;
         }
 
         @Override
         public AttributeSteps clearable(boolean v) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("clearable", v);
+            setConf("clearable", v);
             return this;
         }
 
         @Override
         public InputAttr defaultVal(String v) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("value", v);
+            setConf("value", v);
             return this;
         }
 
         @Override
         public AttributeSteps maxlength(int v) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("maxlength", v);
+            setConf("maxlength", v);
             return this;
         }
 
         @Override
         public AttributeSteps minlength(int v) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("minlength", v);
+            setConf("minlength", v);
             return this;
         }
 
         @Override
         public InputAttr showWordLimit(boolean v) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("show-word-limit", v);
+            setConf("show-word-limit", v);
             return this;
         }
 
@@ -146,9 +141,16 @@ public class AttributeBuilder {
         }
 
         @Override
+        public AttributeSteps options(List<Kv> options) {
+            if (options != null && options.size() > 0) {
+                set("options", options);
+            }
+            return this;
+        }
+
+        @Override
         public TableAttr showOverflowTooltip(boolean flag) {
-            config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).set("show-overflow-tooltip", flag);
+            setConf("show-overflow-tooltip", flag);
             return this;
         }
 
@@ -165,6 +167,5 @@ public class AttributeBuilder {
             ((Kv) config.getAs("conf")).set(key, value);
             return this;
         }
-
     }
 }

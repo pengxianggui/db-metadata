@@ -1,9 +1,6 @@
 package com.hthjsj.web.jfinal;
 
-import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.sql.parser.ParserException;
-import com.alibaba.druid.util.JdbcConstants;
-import com.hthjsj.web.WebException;
+import com.hthjsj.web.UtilKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.SqlPara;
 import lombok.Getter;
@@ -64,13 +61,6 @@ public class SqlParaExt extends SqlPara {
      * @return
      */
     public boolean verify() {
-        boolean flag = false;
-        try {
-            SQLUtils.parseStatements(getSql(), JdbcConstants.MYSQL);
-            flag = true;
-        } catch (ParserException e) {
-            throw new WebException("SQL格式不正确 %s", getSql());
-        }
-        return flag;
+        return UtilKit.verifySQL(getSql());
     }
 }

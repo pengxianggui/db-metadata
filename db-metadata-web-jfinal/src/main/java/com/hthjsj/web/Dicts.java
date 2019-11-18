@@ -40,7 +40,7 @@ public class Dicts {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        dict.set(Utils.getKv(result));
+        dict.set(UtilKit.getKv(result));
     }
 
     public Kv dict() {
@@ -48,7 +48,7 @@ public class Dicts {
     }
 
     public List<Kv> getKvs(String key) {
-        return Utils.getKvs(dict(), key);
+        return UtilKit.getKvs(dict(), key);
     }
 
     public List<Kv> getGender() {

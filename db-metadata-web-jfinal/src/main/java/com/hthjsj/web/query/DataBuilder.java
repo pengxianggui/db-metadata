@@ -7,7 +7,7 @@ import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class DataBuilder {
 
     public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject, boolean isInsert) {
-        Kv params = Kv.create().set(Utils.toObjectFlat(httpParams));
+        Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
 
 

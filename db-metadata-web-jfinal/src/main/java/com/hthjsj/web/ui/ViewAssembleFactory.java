@@ -6,7 +6,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.jfinal.kit.Kv;
@@ -47,7 +47,7 @@ public class ViewAssembleFactory {
         //全部全局配置
         Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置
-        Kv globalComponentConfig = Utils.getKv(globalAllConfig, componentType.getCode());
+        Kv globalComponentConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
         //实例配置
         Kv instanceConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
 
@@ -63,7 +63,7 @@ public class ViewAssembleFactory {
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         for (IMetaField field : fields) {
-            Kv instanceConfig = Utils.getKv(instanceAllConfig, field.fieldCode());
+            Kv instanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, instanceConfig);
             metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
         }

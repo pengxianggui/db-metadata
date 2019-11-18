@@ -7,7 +7,7 @@ import com.hthjsj.analysis.component.ViewInject;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.form.FormField;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.component.form.FormView;
@@ -40,7 +40,7 @@ public class ViewFactory {
             @Override
             public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 meta.putIfAbsent("objectCode", metaObject.code());
-                Kv kv = Utils.getKv(tableViewConfig, metaObject.code());
+                Kv kv = UtilKit.getKv(tableViewConfig, metaObject.code());
                 kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
 
                 List<Kv> fs = new ArrayList<>();
@@ -55,7 +55,7 @@ public class ViewFactory {
 
             @Override
             public Kv inject(Kv meta, IMetaField field) {
-                Kv kv = Utils.getKv(tableViewConfig, field.fieldCode());
+                Kv kv = UtilKit.getKv(tableViewConfig, field.fieldCode());
                 kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
                 return kv;
             }
@@ -74,11 +74,11 @@ public class ViewFactory {
             public void inject(FormView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 meta.putIfAbsent("objectCode", metaObject.code());
 
-                Kv kv = Utils.getKv(formViewConfig, metaObject.code());
+                Kv kv = UtilKit.getKv(formViewConfig, metaObject.code());
                 //https://blog.csdn.net/tangyaya8/article/details/91399650
                 kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
                 for (IMetaField metaField : metaObject.fields()) {
-                    Kv config = Utils.getKv(formViewConfig, metaField.fieldCode());
+                    Kv config = UtilKit.getKv(formViewConfig, metaField.fieldCode());
                     FormField formField = FormFieldFactory.createFormField(metaField, config);
                     component.getFields().add(formField);
                 }

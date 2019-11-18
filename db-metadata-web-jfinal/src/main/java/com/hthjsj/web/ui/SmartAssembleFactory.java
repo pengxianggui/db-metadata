@@ -7,7 +7,7 @@ import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.Utils;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.attr.RulesBuilder;
@@ -27,6 +27,12 @@ import java.util.List;
 @Slf4j
 public class SmartAssembleFactory {
 
+
+
+    /**
+     * 1. 推测控件(metafield)
+     * 2. 推测样式配置(metafield,ComponentType)
+     */
     /**
      * 使用系统默认ComponentConfig 信息构建容器View组件
      *
@@ -43,7 +49,7 @@ public class SmartAssembleFactory {
          */
         Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
         Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
-        Kv containerConfig = Utils.getKv(globalAllConfig, componentType.getCode());
+        Kv containerConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
         List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalAllConfig);
         return new MetaObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
     }
@@ -56,7 +62,7 @@ public class SmartAssembleFactory {
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
             Kv recommendConfig = recommendConfig(field);
-            Kv fieldConfig = Utils.getKv(globalConfig, recommendConfig.getStr("component_name"));
+            Kv fieldConfig = UtilKit.getKv(globalConfig, recommendConfig.getStr("component_name"));
             recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
             metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
         }
@@ -115,7 +121,12 @@ public class SmartAssembleFactory {
         log.debug("analysis metafield config");
         FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
         if (fieldConfigWrapper.hasTranslation()) {
-
+            if (fieldConfigWrapper.isRange()) {
+                builder.options(OptionsKit.options(fieldConfigWrapper.range()));
+            }
+            if (fieldConfigWrapper.isSql()) {
+                log.info("fieldConfigWrapper sql:{}", fieldConfigWrapper.sourceSql());
+            }
         }
 
         if (fieldConfigWrapper.isRequired()) {
