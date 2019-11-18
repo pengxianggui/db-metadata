@@ -2,7 +2,11 @@ package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -28,7 +32,7 @@ public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
          * 2. hasDataOpts
          * 3. 指定数据源
          */
-        return isRange() || isSql();
+        return isRange() || isSql() || isOptions();
     }
 
     public boolean isRange() {
@@ -41,6 +45,18 @@ public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
             jsonArray = new JSONArray();
         }
         return jsonArray.toArray(new String[jsonArray.size()]);
+    }
+
+    public boolean isOptions() {
+        return options().size() > 0;
+    }
+
+    public List<Kv> options() {
+        String jsonArray = getStr("scopeOptions");
+        if (jsonArray == null) {
+            return new ArrayList<>();
+        }
+        return JSONArray.parseArray(jsonArray, Kv.class);
     }
 
     public boolean isSql() {

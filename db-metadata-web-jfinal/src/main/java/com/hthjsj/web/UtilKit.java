@@ -45,7 +45,11 @@ public class UtilKit {
     }
 
     public static List<Kv> getKvs(Kv kv, String key) {
-        return JSONArray.parseArray(kv.getStr(key), Kv.class);
+        return getKvs(kv.getStr(key));
+    }
+
+    public static List<Kv> getKvs(String jsonArray) {
+        return JSONArray.parseArray(jsonArray, Kv.class);
     }
 
     public static Kv getKv(String json) {

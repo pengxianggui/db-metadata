@@ -7,7 +7,7 @@
 package com.hthjsj.analysis.db;
 
 import com.hthjsj.analysis.MetaAnalysisException;
-import com.hthjsj.analysis.meta.MetaField;
+import com.hthjsj.analysis.meta.IMetaField;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -81,7 +81,7 @@ public class MetaDataTypeConvert {
         return map.get(dataType).getTypeName();
     }
 
-    public static Object convert(MetaField field, Object o) {
+    public static Object convert(IMetaField field, Object o) {
         if (o == null) {
             return null;
         }
@@ -89,7 +89,7 @@ public class MetaDataTypeConvert {
         Integer size = field.dbTypeLength().intValue();
         Class clazz = getType(typeName);
         // DB类型特殊转换规则
-        if (typeName.equalsIgnoreCase("TINYINT") && size == 1) {
+        if ((typeName.equalsIgnoreCase("tinyint") && size == 1) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
             clazz = Boolean.class;
         }
         o = cast(o.toString(), clazz);

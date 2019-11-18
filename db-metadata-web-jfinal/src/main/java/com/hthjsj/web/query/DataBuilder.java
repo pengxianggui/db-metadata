@@ -10,7 +10,6 @@ import com.hthjsj.web.User;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.jfinal.kit.Kv;
-import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -32,24 +31,22 @@ public class DataBuilder {
 
         for (IMetaField metaField : metaObject.fields()) {
 
-            Class dbType = MetaDataTypeConvert.getType(metaField.dbType().rawData());
-            String value = params.getStr(metaField.fieldCode());
-            Object castedValue = null;
+//            Class dbType = MetaDataTypeConvert.getType(metaField.dbType().rawData());
+//            String value = params.getStr(metaField.fieldCode());
+            //转值
+            Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
             try {
                 //主键处理
                 if (metaField.isPrimary() && isInsert) {
                     formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
                     continue;
                 }
-
-                //转值
-                castedValue = MetaDataTypeConvert.cast(value, dbType);
-                if (StrKit.notBlank(value)) {
+                if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
                 }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {
                 log.error(e.getMessage(), e);
-                throw new WebException("非法转换: 元字段 %s 是%s类型-> %s 失败", metaField.fieldCode(), dbType.getSimpleName(), value);
+                throw new WebException("非法转换: 元字段 %s 是%s类型-> %s 失败", metaField.fieldCode(), metaField.dbType().rawData(), (String) castedValue);
             }
         }
 

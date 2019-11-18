@@ -7,6 +7,7 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -57,8 +58,8 @@ public class TableController extends FrontRestController {
          * escape field value;
          * 1. 是否需要转义的规则;
          *
-         *
          */
+        result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
 
 
 

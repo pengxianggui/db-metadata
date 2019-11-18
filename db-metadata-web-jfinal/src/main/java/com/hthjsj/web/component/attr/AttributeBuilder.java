@@ -152,7 +152,7 @@ public class AttributeBuilder {
 
         @Override
         public AttributeSteps dataUrl(String url) {
-            config.setIfNotBlank("dataUrl", url);
+            config.setIfNotBlank("data_url", url);
             return this;
         }
 

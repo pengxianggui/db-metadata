@@ -122,10 +122,13 @@ public class SmartAssembleFactory {
         FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
         if (fieldConfigWrapper.hasTranslation()) {
             if (fieldConfigWrapper.isRange()) {
-                builder.options(OptionsKit.options(fieldConfigWrapper.range()));
+                builder.options(OptionsKit.transKeyValue(fieldConfigWrapper.range()));
             }
             if (fieldConfigWrapper.isSql()) {
                 log.info("fieldConfigWrapper sql:{}", fieldConfigWrapper.sourceSql());
+                builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
+            }
+            if (fieldConfigWrapper.isOptions()) {
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
             builder.componentName(ComponentType.DROPDOWN.getCode());
