@@ -47,9 +47,9 @@ const DEFAULT = {
         "conf": {
             "clearable": true
         },
-        "options": [
-            // {"key":"value"}
-        ]
+        // "options": [
+        //     {"key":"value"}
+        // ]
     },
     "TimeBox": {
         "component_name": "TimeBox",
@@ -99,9 +99,9 @@ const DEFAULT = {
         "inline": true,
         "data_url": "/dict/yn",
         "conf": {},
-        "options": [
-            // {"key":"value"}
-        ]
+        // "options": [
+        //     {"key":"value"}
+        // ]
     },
     "CheckBox": {
         "component_name": "CheckBox",
@@ -110,9 +110,9 @@ const DEFAULT = {
         "inline": true,
         "data_url": "/dict/yn",
         "conf": {},
-        "options": [
-            // {"key":"value"}
-        ]
+        // "options": [
+        //     {"key":"value"}
+        // ]
     },
     "JsonBox": {
         "component_name": "JsonBox",
