@@ -1,19 +1,20 @@
 <template>
     <div class="el-card container">
-        <div class="header"></div>
+        <div class="header">
+        </div>
         <div class="work-area">
             <FormTmpl :ref="formMeta.name" :meta="formMeta">
                 <template #form-item="{columns}">
                     <draggable
-                        :animation="200"
-                        :disabled="false"
-                        :list="list"
-                        @add="handleAdd"
-                        @end="handleMoveEnd"
-                        @start="handleMoveStart"
-                        group="form"
-                        style="padding-bottom: 80px;"
-                        tag="el-row">
+                            :animation="200"
+                            :disabled="false"
+                            :list="list"
+                            @add="handleAdd"
+                            @end="handleMoveEnd"
+                            @start="handleMoveStart"
+                            group="form"
+                            style="padding: 5px;border: 1px dotted grey;"
+                            tag="el-row">
                         <div v-if="columns.length === 0" class="blank-tip">
                             从左侧拖拽来添加表单项
                         </div>
@@ -134,6 +135,7 @@
         z-index: 1;
         padding: 0 20px;
         border: 1px dashed rgba(0, 0, 0, 0);
+        /*border-bottom: dotted 1px;*/
     }
 
     /*!* 遮挡区(遮挡住) *!*/
