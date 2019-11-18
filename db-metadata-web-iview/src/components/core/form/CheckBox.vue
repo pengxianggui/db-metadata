@@ -19,7 +19,7 @@
         label: "复选框",
         data () {
             return {
-                innerOptions: {}
+                innerOptions: []
             }
         },
         props: {
