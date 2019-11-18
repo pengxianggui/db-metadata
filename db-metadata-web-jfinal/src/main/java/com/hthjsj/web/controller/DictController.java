@@ -1,13 +1,10 @@
 package com.hthjsj.web.controller;
 
-import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.Dicts;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
-
-import java.util.List;
 
 /**
  * <p> Class title: </p>
@@ -30,19 +27,13 @@ public class DictController extends FrontRestController {
     }
 
     public void sex() {
-        List<Kv> options = Lists.newArrayList();
-        options.add(Kv.by("key", "男").set("value", "1"));
-        options.add(Kv.by("key", "女").set("value", "2"));
-        renderJson(Ret.ok("data", options));
+        renderJson(Ret.ok("data", Dicts.me().getGender()));
     }
 
     /**
      * yes or no
      */
     public void yn() {
-        List<Kv> options = Lists.newArrayList();
-        options.add(Kv.by("key", "是").set("value", "1"));
-        options.add(Kv.by("key", "否").set("value", "0"));
-        renderJson(Ret.ok("data", options));
+        renderJson(Ret.ok("data", Dicts.me().getYesNo()));
     }
 }

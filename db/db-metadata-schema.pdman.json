@@ -20,7 +20,8 @@
               "name": "code",
               "type": "LongKey",
               "remark": "",
-              "chnname": "对象编码"
+              "chnname": "对象编码",
+              "notNull": true
             },
             {
               "name": "name",
@@ -32,13 +33,15 @@
               "name": "table_name",
               "type": "LongKey",
               "remark": "",
-              "chnname": "表名"
+              "chnname": "表名",
+              "notNull": true
             },
             {
               "name": "schema_name",
               "type": "LongKey",
               "remark": "",
-              "chnname": "库名"
+              "chnname": "库名",
+              "notNull": true
             },
             {
               "name": "primarys",
@@ -928,10 +931,10 @@
               "notNull": true
             },
             {
-              "name": "created_by",
+              "name": "pid",
               "type": "LongKey",
               "remark": "",
-              "chnname": "创建人"
+              "chnname": "父层标志"
             },
             {
               "name": "created_time",

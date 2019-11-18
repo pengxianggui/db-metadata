@@ -63,6 +63,7 @@ public class AppWebConfig extends JFinalConfig {
 
         //component register
         Components.me().init();
+        Dicts.me().init();
     }
 
     @Override

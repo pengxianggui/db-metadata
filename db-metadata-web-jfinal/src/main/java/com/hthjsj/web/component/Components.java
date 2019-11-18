@@ -2,8 +2,8 @@ package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Joiner;
-import com.google.common.io.Files;
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import com.google.common.reflect.ClassPath;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
@@ -11,12 +11,10 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.Utils;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
-import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,15 +83,16 @@ final public class Components {
         }
     }
 
-    public JSONObject loadTmplConfigFromFile() {
-        List<String> lines = null;
+    private JSONObject loadTmplConfigFromFile() {
+        String result = "";
         try {
-            lines = Files.readLines(new File(PathKitExt.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
-        } catch (IOException e) {
+            //            lines = Files.readLines(new File(PathKitExt.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
+            InputStream fis = getClass().getClassLoader().getResourceAsStream("jsonTemplate.json");
+            result = CharStreams.toString(new InputStreamReader(fis, Charsets.UTF_8));
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
-        String result = Joiner.on("").join(lines);
         JSONObject jsonObject = JSON.parseObject(result);
         for (ComponentType t : ComponentType.values()) {
             if (jsonObject.get(t.getCode()) == null) {
