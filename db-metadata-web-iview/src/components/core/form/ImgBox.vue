@@ -18,7 +18,7 @@
 
     export default {
         mixins: [Meta(DEFAULT.ImgBox)],
-        name: 'img-box',
+        name: 'ImgBox',
         label: '图片上传框',
         data() {
             return {

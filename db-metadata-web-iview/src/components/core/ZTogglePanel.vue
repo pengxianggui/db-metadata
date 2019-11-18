@@ -13,7 +13,7 @@
     import Val from './form/value-mixins'
     export default {
         mixins: [Meta(DEFAULT.ZTogglePanel), Val],
-        name: "z-toggle-panel",
+        name: "ZTogglePanel",
         data() {
             return {
                 open: false

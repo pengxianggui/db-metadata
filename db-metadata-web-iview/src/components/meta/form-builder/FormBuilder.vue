@@ -4,10 +4,10 @@
             <ComponentList></ComponentList>
         </el-col>
         <el-col :span="12">
-            <WorkArea></WorkArea>
+            <WorkArea @select="handleSelectFormItem"></WorkArea>
         </el-col>
         <el-col :span="6">
-            <ConfArea></ConfArea>
+            <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
         </el-col>
     </el-row>
 </template>
@@ -15,6 +15,18 @@
 <script>
     export default {
         name: "FormBuilder",
+        data() {
+            return {
+                formMeta: {},
+                selectIndex: null
+            }
+        },
+        methods: {
+            handleSelectFormItem (formMeta, selectIndex) {
+                this.formMeta = formMeta;
+                this.selectIndex = selectIndex;
+            }
+        }
     }
 </script>
 

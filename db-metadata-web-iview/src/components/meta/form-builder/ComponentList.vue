@@ -1,6 +1,6 @@
 <template>
     <div class="el-card" style="height: 100%; overflow: auto;">
-        <h4 align="center">组件列表</h4>
+        <h4 align="center">组件列表({{comps.length}})</h4>
         <el-row>
             <draggable
                 :clone="addFormItem"
@@ -19,6 +19,7 @@
 <script>
     import components from '@/components/core/form'
     import draggable from 'vuedraggable'
+    import {DEFAULT} from '@/constant'
 
 
     export default {
@@ -28,12 +29,19 @@
         },
         data() {
             return {
+                globalId: 0,
                 comps: components
             }
         },
         methods: {
-            addFormItem() {
-                // pxg_todo
+            addFormItem(data) {
+                let {name, label} = data;
+                let meta = {
+                    name: name + this.globalId++,
+                    label: label
+                };
+                this.$merge(meta, DEFAULT[name]);
+                return meta;
             }
         }
     }
