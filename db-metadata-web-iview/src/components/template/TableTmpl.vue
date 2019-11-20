@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "TableData",
+        name: "TableTmpl",
         props: {
             R_oc: String
         },

@@ -61,6 +61,11 @@ const children = [
         name: 'DbVersion',
         props: {R_oc: "db_version"},
         component: () => import('@/components/meta/DbVersion')
+    }, {
+        path: 'table',
+        name: 'Table',
+        props: {R_oc: "meta_dict"},
+        component: () => import('@/components/template/TableTmpl')
     }
 ];
 

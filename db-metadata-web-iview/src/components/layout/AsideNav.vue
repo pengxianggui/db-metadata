@@ -46,6 +46,10 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">DbVersion</span>
             </el-menu-item>
+            <el-menu-item index="/main/table">
+                <i class="el-icon-menu"></i>
+                <span slot="title">字典</span>
+            </el-menu-item>
             <el-menu-item index="/main/demo">
                 <i class="el-icon-menu"></i>
                 <span slot="title">Demo</span>
