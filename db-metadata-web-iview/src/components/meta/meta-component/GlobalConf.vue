@@ -33,7 +33,7 @@
                         <el-button type="primary" @click="onSubmit">提交</el-button>
                         <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">取消</el-button>
+                        <el-button @click="onCancel">返回</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -166,7 +166,7 @@
 
             },
             onCancel: function () {
-                // pxg_todo
+                this.$router.back();
             },
             preview: function () {
                 let data = this.confModel['conf'].hasOwnProperty('default_value') ? this.confModel['conf']['default_value'] : null;

@@ -36,7 +36,13 @@
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
-
+                let componentCode = row.code;
+                this.$router.push({
+                    path: 'global-conf',
+                    query: {
+                        componentCode: componentCode
+                    }
+                })
             }
         },
         created() {

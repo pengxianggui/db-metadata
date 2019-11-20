@@ -278,8 +278,8 @@
             }
         }
         ```
-    -[ ] 支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.
- 
+    -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
+    -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
  
 ### 其他资料
 

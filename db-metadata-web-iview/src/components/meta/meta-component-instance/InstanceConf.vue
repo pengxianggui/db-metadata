@@ -4,13 +4,14 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"></DropDownBox>
+                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
+                                     @change="loadConf"></DropDownBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
                     <el-form-item label="元对象">
                         <DropDownBox v-model="confModel.objectCode" :meta="objectMeta"
-                                     @change="loadConf()"></DropDownBox>
+                                     @change="loadConf"></DropDownBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -25,7 +26,7 @@
                         <el-button type="primary" @click="onSubmit">提交</el-button>
                         <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">取消</el-button>
+                        <el-button @click="onCancel">返回</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -56,7 +57,7 @@
                         <el-button type="primary" @click="onSubmit">提交</el-button>
                         <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">取消</el-button>
+                        <el-button @click="onCancel">返回</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -158,7 +159,7 @@
                                 let fConfVal = fConf[fConfKey].replace(/\\/g, "");
                                 let fConfValJson = JSON.parse(fConfVal);
                                 fConfValJson['conf'] = fConfValJson['conf'] || {};
-                                this.$merge(fConfValJson['conf']||{}, EleProps(fConfValJson['component_name']));
+                                this.$merge(fConfValJson['conf'] || {}, EleProps(fConfValJson['component_name']));
                                 this.$set(this.confModel['fConf'], fConfKey, fConfValJson);
                             }
                             continue;
@@ -170,7 +171,7 @@
                         this.confModel['conf'] = confValJson;
                     }
                 }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg||err);
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                     this.$message.error(err.msg);
                 })
             },
@@ -237,7 +238,7 @@
                 })
             },
             onCancel: function () {
-                // pxg_todo
+                this.$router.back();
             },
             preview: function () {
                 let meta = this.confModel['conf'];
