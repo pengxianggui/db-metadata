@@ -41,7 +41,6 @@ public class QueryCondition {
      * 数值 : key_in = 1,3,4,5,6
      * 字符 : key_in = "1","2","3","4"
      */
-
     /**
      * <p>
      * FIXME :
@@ -78,7 +77,7 @@ public class QueryCondition {
             }
         }
 
-        log.info("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
+        log.debug("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
         return buildExceptSelect(conds, sqlParaExt, metaObject);
     }
 
@@ -150,7 +149,7 @@ public class QueryCondition {
         sqlParaExt.setFrom(" from " + metaObject.tableName());
         sqlParaExt.setWhereExcept(" where 1=1 " + sqlExceptSelect.toString());
         sqlParaExt.verify();
-        log.info("from sql:{}", sqlParaExt.getFromWhere());
+        log.debug("buildExceptSelect from sql:{}", sqlParaExt.getFromWhere());
         return sqlParaExt;
     }
 }
