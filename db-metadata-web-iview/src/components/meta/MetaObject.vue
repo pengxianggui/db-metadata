@@ -1,6 +1,6 @@
 <template>
     <table-list :ref="meta['name']" :meta="meta">
-        <template #operation>
+        <template #operation-bar>
             <el-button-group>
                 <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
             </el-button-group>

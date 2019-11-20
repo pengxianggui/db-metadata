@@ -4,8 +4,7 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
-                                     @change="loadConf()"></DropDownBox>
+                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta" @change="loadConf"></DropDownBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -44,10 +43,13 @@
 
 <script>
     import {DEFAULT} from '@/constant';
-    import EleProps from '../element-props'
+    import EleProps from '../../element-props'
 
     export default {
-        name: "MetaComponentGlobalConf",
+        name: "GlobalConf",
+        props: {
+            R_cc: String
+        },
         data() {
             let componentMeta = {
                 name: "component",
@@ -71,7 +73,7 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
-                    componentCode: null,
+                    componentCode: this.R_cc,
                     conf: {}, // conf of component
                 }
             }
@@ -173,6 +175,11 @@
                 })
             }
         },
+        mounted() {
+            if (this.R_cc !== undefined) {
+                this.loadConf();
+            }
+        }
     }
 </script>
 

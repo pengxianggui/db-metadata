@@ -5,17 +5,25 @@
 <script>
     export default {
         name: "MetaConfig",
+        props: {
+            R_oc: String
+        },
         data() {
             return {
+                objectCode: this.R_oc,
                 meta: {}
             }
         },
         methods: {
             getMeta() {
-                this.$axios.get("/meta/fields/meta_config")
-                .then(resp => {
+                let url = this.$compile("/meta/fields/{objectCode}", {
+                    objectCode: this.objectCode
+                });
+
+                this.$axios.get(url).then(resp => {
                     this.meta = resp.data;
                 }).catch(err => {
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
                     this.$message.error(err.msg);
                 })
             }

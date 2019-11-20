@@ -23,7 +23,7 @@
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
 
-                    <!-- muti select conf -->
+                    <!-- multi select conf -->
                     <template v-if="innerMeta.multi_select">
                         <el-table-column type="selection" width="55"></el-table-column>
                     </template>
@@ -54,7 +54,7 @@
                                 </span>
                             </template>
                             <template slot-scope="scope">
-                                <slot name="buttons">
+                                <slot name="buttons" v-bind:scope="scope">
                                     <el-button :size="innerMeta.conf['size']"
                                                @click="handleEdit($event, scope.row, scope.$index)">编辑
                                     </el-button>

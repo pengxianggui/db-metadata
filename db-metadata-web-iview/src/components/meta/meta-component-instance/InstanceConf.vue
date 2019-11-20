@@ -66,10 +66,14 @@
 
 <script>
     import {DEFAULT} from '@/constant';
-    import EleProps from '../element-props'
+    import EleProps from '../../element-props'
 
     export default {
-        name: "MetaComponentInstanceConf",
+        name: "InstanceConf",
+        props: {
+            R_cc: String,
+            R_oc: String
+        },
         data() {
             let componentMeta = {
                 name: "component",
@@ -119,8 +123,8 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
-                    componentCode: null,
-                    objectCode: null,
+                    componentCode: this.R_cc,
+                    objectCode: this.R_oc,
                     conf: {}, // conf of metaObject
                     fConf: {} // conf of fields
                 }
@@ -245,6 +249,11 @@
                 this.$dialog(meta, null, {
                     title: '预览'
                 })
+            }
+        },
+        mounted() {
+            if (this.R_cc !== undefined && this.R_oc !== undefined) {
+                this.loadConf();
             }
         }
     }

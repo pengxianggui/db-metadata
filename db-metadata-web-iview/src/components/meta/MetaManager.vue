@@ -19,6 +19,9 @@
 
     export default {
         name: "meta-manager",
+        props: {
+            R_oc: String
+        },
         data() {
             return {
                 visible: false,
@@ -46,7 +49,7 @@
                         }
                     }
                 },
-                metaObj: null, // 元对象
+                metaObj: this.R_oc, // 元对象
             }
         },
         methods: {
@@ -68,7 +71,9 @@
             },
             refreshTableData() {
                 this.tableMeta['data_url']= this.tableUrl + '&object_code=' + this.metaObj;
-                this.$refs[this.tableMeta['name']].getData();
+                this.$nextTick(() => {
+                    this.$refs[this.tableMeta['name']].getData();
+                })
             },
             updateSon() {
                 this.refreshTableData();
@@ -91,6 +96,11 @@
         created() {
             this.getFormMeta();
             this.getTableMeta();
+        },
+        mounted() {
+            if (this.R_oc !== undefined) {
+                this.refreshTableData();
+            }
         }
     }
 </script>

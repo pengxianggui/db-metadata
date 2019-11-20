@@ -15,8 +15,12 @@
 <script>
     export default {
         name: "FormBuilder",
+        props: {
+            R_oc: String
+        },
         data() {
             return {
+                objectCode: this.R_oc,
                 formMeta: {},
                 selectIndex: null
             }

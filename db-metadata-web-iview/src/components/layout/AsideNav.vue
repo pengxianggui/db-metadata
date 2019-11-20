@@ -14,11 +14,11 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">元对象管理</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-component-global-conf">
+            <el-menu-item index="/main/meta-component">
                 <i class="el-icon-menu"></i>
                 <span slot="title">组件全局配置</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-component-instance-conf">
+            <el-menu-item index="/main/meta-component-instance">
                 <i class="el-icon-menu"></i>
                 <span slot="title">组件实例配置</span>
             </el-menu-item>
