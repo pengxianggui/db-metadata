@@ -71,7 +71,6 @@ public class AppWebConfig extends JFinalConfig {
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
         me.add(new UserSettingIntercept());
-        //        me.add(new FrontRestIntercept());
     }
 
     @Override

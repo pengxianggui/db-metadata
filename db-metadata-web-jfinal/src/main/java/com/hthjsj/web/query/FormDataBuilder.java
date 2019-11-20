@@ -5,14 +5,11 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.ThreadLocalUserKit;
-import com.hthjsj.web.User;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -22,7 +19,7 @@ import java.util.Map;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class DataBuilder {
+public class FormDataBuilder {
 
     public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject, boolean isInsert) {
         Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
@@ -50,13 +47,7 @@ public class DataBuilder {
             }
         }
 
-        setUser(formData);
+        UtilKit.setUser(formData);
         return formData;
-    }
-
-    private static void setUser(MetaData data) {
-        User user = ThreadLocalUserKit.getUser();
-        data.set("created_by", user.userId());
-        data.set("created_time", new Date());
     }
 }

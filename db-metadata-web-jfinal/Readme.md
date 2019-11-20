@@ -16,5 +16,5 @@ MetaField 数据源配置
 "scopeSql": "select value id,name cn from meta_dict where pid=1",
 //如value 为 1,2 int类型,则下拉框反赋值时会直接显示value,而非key
 "scopeOptions": [{ "key": "男", "value": "1" }, { "key": "女", "value": "2" }],
-"scopeRange": [1,3,4,5],
+"scopeRange": ["options1","options2","option3"],
 ```

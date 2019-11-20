@@ -6,8 +6,10 @@ import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Maps;
+import com.hthjsj.analysis.meta.MetaData;
 import com.jfinal.kit.Kv;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,5 +70,11 @@ public class UtilKit {
             throw new WebException("SQL格式不正确 %s", sql);
         }
         return flag;
+    }
+
+    public static void setUser(MetaData data) {
+        User user = ThreadLocalUserKit.getUser();
+        data.set("created_by", user.userId());
+        data.set("created_time", new Date());
     }
 }

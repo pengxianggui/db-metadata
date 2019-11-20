@@ -57,7 +57,6 @@ public class TableController extends FrontRestController {
         /**
          * escape field value;
          * 1. 是否需要转义的规则;
-         *
          */
         result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
 

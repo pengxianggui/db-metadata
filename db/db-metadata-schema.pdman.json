@@ -1042,7 +1042,56 @@
         }
       ],
       "graphCanvas": {
-        "nodes": [],
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "meta_field",
+            "moduleName": false,
+            "x": 210,
+            "y": 560,
+            "id": "2f6f9008"
+          },
+          {
+            "shape": "table",
+            "title": "test_table",
+            "moduleName": false,
+            "x": 1100,
+            "y": 570,
+            "id": "98215e10"
+          },
+          {
+            "shape": "table",
+            "title": "meta_component_instance",
+            "moduleName": false,
+            "x": 790,
+            "y": 580,
+            "id": "6699c16e"
+          },
+          {
+            "shape": "table",
+            "title": "meta_object",
+            "moduleName": false,
+            "x": 160,
+            "y": 160,
+            "id": "ac02f504"
+          },
+          {
+            "shape": "table",
+            "title": "meta_component",
+            "moduleName": false,
+            "x": 980,
+            "y": 160,
+            "id": "da4373d8"
+          },
+          {
+            "shape": "table",
+            "title": "meta_field:1",
+            "moduleName": false,
+            "x": 510,
+            "y": 200,
+            "id": "2a4ac86b"
+          }
+        ],
         "edges": []
       },
       "associations": []

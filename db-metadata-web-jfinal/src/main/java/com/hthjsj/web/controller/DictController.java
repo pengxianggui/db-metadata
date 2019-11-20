@@ -1,9 +1,6 @@
 package com.hthjsj.web.controller;
 
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.Dicts;
-import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 
 /**
@@ -18,12 +15,7 @@ public class DictController extends FrontRestController {
 
     @Override
     public void index() {
-        QueryHelper queryHelper = new QueryHelper(this);
-        String objectCode = queryHelper.getObjectCode();
-        String fieldCode = queryHelper.getFieldCode();
-
-
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        renderJson(Ret.ok("data", Dicts.me().dict()));
     }
 
     public void sex() {

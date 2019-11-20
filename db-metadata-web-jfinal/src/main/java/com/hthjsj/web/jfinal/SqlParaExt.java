@@ -36,12 +36,6 @@ public class SqlParaExt extends SqlPara {
     public SqlParaExt() {
     }
 
-    public SqlParaExt(String select, String from, String whereExcept) {
-        this.select = select;
-        this.from = from;
-        this.whereExcept = whereExcept;
-    }
-
     public String getFromWhere() {
         return getFrom() + getWhereExcept() + getOrderBy();
     }

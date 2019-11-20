@@ -5,7 +5,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.query.DataBuilder;
+import com.hthjsj.web.query.FormDataBuilder;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
@@ -42,7 +42,7 @@ public class FormController extends FrontRestController {
 
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
 
-        MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
+        MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         boolean status = ServiceManager.metaService().saveData(metaObject, metadata);
 
@@ -74,7 +74,7 @@ public class FormController extends FrontRestController {
         String dataId = getPara(metaObject.primaryKey());
 
 
-        MetaData metadata = DataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
+        MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
         metadata.set(metaObject.primaryKey(), dataId);
         boolean status = ServiceManager.metaService().updateData(metaObject, metadata);
 

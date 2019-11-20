@@ -10,6 +10,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
 import com.hthjsj.web.ui.SmartAssembleFactory;
 import com.jfinal.aop.Aop;
@@ -40,11 +41,7 @@ public class DBController extends FrontRestController {
     @Override
     public void list() {
         List<String> schemas = Aop.get(MysqlService.class).showSchema();
-        List<Kv> results = Lists.newArrayList();
-        for (String s : schemas) {
-            results.add(Kv.by("key", s).set("value", s));
-        }
-        renderJson(Ret.ok("data", results));
+        renderJson(Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()]))));
     }
 
     /**
