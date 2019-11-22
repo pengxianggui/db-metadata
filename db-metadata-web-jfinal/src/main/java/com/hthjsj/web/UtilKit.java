@@ -1,8 +1,5 @@
 package com.hthjsj.web;
 
-import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.sql.parser.ParserException;
-import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Maps;
@@ -57,17 +54,6 @@ public class UtilKit {
 
     public static Kv getKv(String json) {
         return JSON.parseObject(json, Kv.class);
-    }
-
-    public static boolean verifySQL(String sql) {
-        boolean flag = false;
-        try {
-            SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
-            flag = true;
-        } catch (ParserException e) {
-            throw new WebException("SQL格式不正确 %s", sql);
-        }
-        return flag;
     }
 
     public static void setUser(MetaData data) {

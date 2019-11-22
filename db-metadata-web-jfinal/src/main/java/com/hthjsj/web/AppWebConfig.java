@@ -46,6 +46,7 @@ public class AppWebConfig extends JFinalConfig {
         me.add("/table", TableController.class);
         me.add("/form", FormController.class);
         me.add("/dict", DictController.class);
+        me.add("/check", ValidatorController.class);
     }
 
     @Override

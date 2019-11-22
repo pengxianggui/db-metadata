@@ -1,6 +1,6 @@
 package com.hthjsj.web.jfinal;
 
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.SqlPara;
 import lombok.Getter;
@@ -55,6 +55,6 @@ public class SqlParaExt extends SqlPara {
      * @return
      */
     public boolean verify() {
-        return UtilKit.verifySQL(getSql());
+        return SqlAnalysis.check(getSql());
     }
 }

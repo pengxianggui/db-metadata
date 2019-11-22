@@ -1,14 +1,18 @@
 package com.hthjsj.web.ui;
 
+import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLSelect;
 import com.alibaba.druid.sql.ast.statement.SQLSelectItem;
 import com.alibaba.druid.sql.ast.statement.SQLSelectQueryBlock;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
+import com.alibaba.druid.sql.parser.ParserException;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.util.JdbcConstants;
+import com.google.common.base.Preconditions;
+import com.hthjsj.web.WebException;
 import lombok.Data;
 
 /**
@@ -18,6 +22,41 @@ import lombok.Data;
  * <p> @author konbluesky </p>
  */
 public class SqlAnalysis {
+
+    private final static SqlAnalysis me = new SqlAnalysis();
+
+    public static SqlAnalysis me() {
+        return me;
+    }
+
+    public static boolean check(String sql) {
+        boolean flag = false;
+        try {
+            SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+            flag = true;
+        } catch (ParserException e) {
+            throw new WebException("SQL格式不正确 %s", sql);
+        }
+        return flag;
+    }
+
+    public static boolean checkIdCn(String sql) {
+        SQLStatementParser sqlStatementParser = SQLParserUtils.createSQLStatementParser(sql, JdbcConstants.MYSQL);
+        ParseModel parseModel = new ParseModel(sqlStatementParser.parseStatement());
+        MySqlSchemaStatVisitor mySqlSchemaStatVisitor = new MySqlSchemaStatVisitor();
+        parseModel.getSelectStatement().accept(mySqlSchemaStatVisitor);
+        Preconditions.checkArgument(parseModel.getQuery().getSelectList().size() == 2, "该sql只允许返回2列内容");
+        int i = 0;
+        for (SQLSelectItem item : parseModel.getQuery().getSelectList()) {
+            if ("id".equalsIgnoreCase(item.getExpr().toString()) || "id".equalsIgnoreCase(item.getAlias())) {
+                i++;
+            }
+            if ("cn".equalsIgnoreCase(item.getExpr().toString()) || "cn".equalsIgnoreCase(item.getAlias())) {
+                i++;
+            }
+        }
+        return i == 2;
+    }
 
     public static void main(String[] args) {
         SQLStatementParser sqlStatementParser = SQLParserUtils.createSQLStatementParser(

@@ -6,7 +6,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
-import com.hthjsj.web.UtilKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -77,7 +76,7 @@ public class OptionsKit {
      * @return
      */
     public static List<Kv> transKeyValueBySql(String sql) {
-        Preconditions.checkArgument(UtilKit.verifySQL(sql), "无效的SQL配置,%s", sql);
+        Preconditions.checkArgument(SqlAnalysis.check(sql), "无效的SQL配置,%s", sql);
         List<Record> optionsRecord = Db.find(sql);
         return OptionsKit.transKeyValue(optionsRecord);
     }
@@ -93,7 +92,7 @@ public class OptionsKit {
      * @return
      */
     public static Kv transIdCnFlatMapBySql(String sql) {
-        Preconditions.checkArgument(UtilKit.verifySQL(sql), "无效的SQL配置,%s", sql);
+        Preconditions.checkArgument(SqlAnalysis.check(sql), "无效的SQL配置,%s", sql);
         Kv mapped = Kv.create();
         List<Record> optionsRecord = Db.find(sql);
         optionsRecord.forEach(r -> {
