@@ -125,7 +125,7 @@ public class SmartAssembleFactory {
                 builder.options(OptionsKit.transKeyValue(metaFieldConfigWrapper.range()));
             }
             if (metaFieldConfigWrapper.isSql()) {
-                log.info("metaFieldConfigWrapper sql:{}", metaFieldConfigWrapper.sourceSql());
+                log.info("metaFieldConfigWrapper sql:{}", metaFieldConfigWrapper.scopeSql());
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
             if (metaFieldConfigWrapper.isOptions()) {

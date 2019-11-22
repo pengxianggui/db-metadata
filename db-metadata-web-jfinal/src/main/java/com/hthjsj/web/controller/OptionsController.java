@@ -33,7 +33,7 @@ public class OptionsController extends Controller {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);
         }
         if (metaFieldConfigWrapper.isSql()) {
-            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigWrapper.sourceSql());
+            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigWrapper.scopeSql());
             renderJson(Ret.ok("data", options));
             return;
         }

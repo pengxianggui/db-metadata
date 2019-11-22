@@ -137,7 +137,7 @@ public class OptionsKit {
             configWrapper = new MetaFieldConfigWrapper(field.config());
             if (configWrapper.hasTranslation()) {
                 if (configWrapper.isSql()) {
-                    Kv mapped = transIdCnFlatMapBySql(configWrapper.sourceSql());
+                    Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql());
                     mappeds.set(field.fieldCode(), mapped);
                 }
                 if (configWrapper.isOptions()) {

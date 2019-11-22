@@ -60,10 +60,10 @@ public class MetaFieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
     }
 
     public boolean isSql() {
-        return StrKit.notBlank(sourceSql());
+        return StrKit.notBlank(scopeSql());
     }
 
-    public String sourceSql() {
+    public String scopeSql() {
         return getStr("scopeSql");
     }
 
