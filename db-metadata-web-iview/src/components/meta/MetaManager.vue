@@ -6,23 +6,17 @@
                            @change="refreshTableData()"></drop-down-box>
             <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
         </el-button-group>
-        <table-list :ref="tableMeta['name']" :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']">
+        <TableList :ref="tableMeta['name']" :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']">
             <template #dialog-content="{formMeta}">
-                <FormTmpl :meta="formMeta" @ok="ok" @cancel="cancel">
+                <FormTmpl ref="form" :meta="formMeta" @ok="ok" @cancel="cancel">
                     <template #form-item-config="{columnMeta, model}">
                         <el-form-item prop="config">
-                            <MiniFormConfigDemo v-model="model"></MiniFormConfigDemo>
+                            <MiniFormConfigDemo :model="model" @submit="submit"></MiniFormConfigDemo>
                         </el-form-item>
-
-<!--                        <el-form v-model="model" style="margin: 10px 100px; border: 1px solid #eee;">-->
-<!--                            <el-form-item v-for="(value, key, index) in columnMeta" :key="key" :prop="key">-->
-<!--                                <component is="TextBox" :name="key" v-model="model[key]"></component>-->
-<!--                            </el-form-item>-->
-<!--                        </el-form>-->
                     </template>
                 </FormTmpl>
             </template>
-        </table-list>
+        </TableList>
         <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
@@ -70,6 +64,9 @@
             }
         },
         methods: {
+            submit(params) {
+                this.$refs['form']['model']['config'] = params; // 通过ref 硬干预 替换插槽表单中的config字段
+            },
             ok(params) {
                 this.nativeVisible = false;
                 this.$refs[this.tableMeta['name']].dialogVisible = false;

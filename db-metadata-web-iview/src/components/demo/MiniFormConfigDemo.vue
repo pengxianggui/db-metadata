@@ -62,51 +62,47 @@
     export default {
         name: "MiniFormConfigDemo",
         props: {
-            value: [Object, String]
+            model: [Object, String]
         },
         data() {
             return {
-                hasTranslation: false
+                hasTranslation: false,
+                config: {
+                    addStatus: 100,
+                    updateStatus: 100,
+                    viewStatus: 100,
+                    defaultVal: '',
+                    isNullable: '',
+                    isQuery: false,
+                    scopeSql: '',
+                    scopeOptions: [],
+                    scopeRange: [],
+                }
             }
         },
         methods: {
             onSubmit() {
-                // this.$refs.sub_config.
-                console.log('submit!');
-                this.$emit("input", this.config);
-            },
-            assemblyModel(value) {
-
+                this.$emit("submit", this.config);
             }
         },
-        computed: {
-            config: {
-                get: function () {
-                    let self = this;
-                    let config = {
-                        addStatus: 100,
-                        updateStatus: 100,
-                        viewStatus: 100,
-                        defaultVal: '',
-                        isNullable: '',
-                        isQuery: false,
-                        scopeSql: '',
-                        scopeOptions: [],
-                        scopeRange: [],
-                    };
-                    // this.assemblyModel(this.value);
-
-                    Object.keys(config).forEach(key => {
-                        let val = JSON.parse(self.value).hasOwnProperty(key) ? JSON.parse(self.value)[key] : null;
-                        self.$set(config, key, val)
-                    });
-                    return config;
+        watch: {
+            'model': {
+                handler: function (newVal, oldVal) {
+                    let model = this.model;
+                    if (typeof model === 'string') {
+                        model = JSON.parse(model);
+                        this.$reverseMerge(this.config, model);
+                    }
                 },
-                set: function (n) {
-                    if (n === '') n = null;
-                    return this.$emit("input", n); // 通过 input 事件更新 model
-                }
+                deep: true
             }
+        },
+        mounted() {
+            let model = this.model;
+            if (typeof model === 'string') {
+                model = JSON.parse(model);
+            }
+            this.$reverseMerge(this.config, model);
         }
     }
 </script>
