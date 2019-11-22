@@ -153,7 +153,7 @@ public class OptionsKit {
                 String oldVal = record.getStr((String) fieldCode);
                 if (StrKit.notBlank(oldVal) && oldVal.indexOf(",") >= 0) {//多值逻辑
                     String[] ss = Splitter.on(",").omitEmptyStrings().splitToList(oldVal).toArray(new String[] {});
-                    for (int i = 0; i <= ss.length; i++) {
+                    for (int i = 0; i < ss.length; i++) {
                         ss[i] = ((Kv) mapped).getStr(ss[i]);
                     }
                     record.set((String) fieldCode, Joiner.on(",").skipNulls().join(ss));
