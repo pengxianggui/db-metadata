@@ -60,9 +60,6 @@ public class TableController extends FrontRestController {
          */
         result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
 
-
-
-
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
     }
 

@@ -1,11 +1,14 @@
 package com.hthjsj.web.ui;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
 import com.hthjsj.web.UtilKit;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -113,8 +116,11 @@ public class OptionsKit {
      *
      * 处理逻辑:
      *   1. 遍历元子段,处理转义逻辑
-     *   2. 将需要转义的字段 -> mappeds 存放
-     *   3. 遍历数据列表 用值->从mappeds中反取转义后的内容
+     *      1.1 处理 sql 查询
+     *      1.2 处理静态数组
+     *   2. 遍历数据列表 用值->从mappeds中反取转义后的内容
+     *      2.1 多值逻辑
+     *      2.2 单值逻辑
      * </pre>
      *
      * @param fields
@@ -124,11 +130,11 @@ public class OptionsKit {
      */
     public static List<Record> trans(Collection<IMetaField> fields, List<Record> dataRecords) {
         List<Record> result = Lists.newArrayList(dataRecords);
-        FieldConfigWrapper configWrapper = null;
+        MetaFieldConfigWrapper configWrapper = null;
         Kv mappeds = Kv.create();
         //计算需要转义的字段的映射关系
         for (IMetaField field : fields) {
-            configWrapper = new FieldConfigWrapper(field.config());
+            configWrapper = new MetaFieldConfigWrapper(field.config());
             if (configWrapper.hasTranslation()) {
                 if (configWrapper.isSql()) {
                     Kv mapped = transIdCnFlatMapBySql(configWrapper.sourceSql());
@@ -142,10 +148,18 @@ public class OptionsKit {
         }
         //转义数据
         for (Record record : dataRecords) {
-            mappeds.forEach((key, value) -> {
+            mappeds.forEach((fieldCode, mapped) -> {
                 //旧值
-                String oldVal = record.getStr((String) key);
-                record.set((String) key, ((Kv) value).getStr(oldVal));
+                String oldVal = record.getStr((String) fieldCode);
+                if (StrKit.notBlank(oldVal) && oldVal.indexOf(",") >= 0) {//多值逻辑
+                    String[] ss = Splitter.on(",").omitEmptyStrings().splitToList(oldVal).toArray(new String[] {});
+                    for (int i = 0; i <= ss.length; i++) {
+                        ss[i] = ((Kv) mapped).getStr(ss[i]);
+                    }
+                    record.set((String) fieldCode, Joiner.on(",").skipNulls().join(ss));
+                } else {//单值逻辑
+                    record.set((String) fieldCode, ((Kv) mapped).getStr(oldVal));
+                }
             });
         }
 
@@ -154,5 +168,6 @@ public class OptionsKit {
 
     public static void main(String[] args) {
         System.out.println(transKeyValue(new String[] { "123", "12312", "fdsa" }));
+        System.out.println(Joiner.on(",").skipNulls().join(new String[] { "123", "12312", "fdsa", "dfa" }));
     }
 }

@@ -3,8 +3,8 @@ package com.hthjsj.web.ui;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
@@ -119,22 +119,22 @@ public class SmartAssembleFactory {
         log.debug("auto compute config : {}", builder.render().toJson());
 
         log.debug("analysis metafield config");
-        FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
-        if (fieldConfigWrapper.hasTranslation()) {
-            if (fieldConfigWrapper.isRange()) {
-                builder.options(OptionsKit.transKeyValue(fieldConfigWrapper.range()));
+        MetaFieldConfigWrapper metaFieldConfigWrapper = new MetaFieldConfigWrapper(metaField.config());
+        if (metaFieldConfigWrapper.hasTranslation()) {
+            if (metaFieldConfigWrapper.isRange()) {
+                builder.options(OptionsKit.transKeyValue(metaFieldConfigWrapper.range()));
             }
-            if (fieldConfigWrapper.isSql()) {
-                log.info("fieldConfigWrapper sql:{}", fieldConfigWrapper.sourceSql());
+            if (metaFieldConfigWrapper.isSql()) {
+                log.info("metaFieldConfigWrapper sql:{}", metaFieldConfigWrapper.sourceSql());
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
-            if (fieldConfigWrapper.isOptions()) {
+            if (metaFieldConfigWrapper.isOptions()) {
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
             builder.componentName(ComponentType.DROPDOWN.getCode());
         }
 
-        if (fieldConfigWrapper.isRequired()) {
+        if (metaFieldConfigWrapper.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
         }
 

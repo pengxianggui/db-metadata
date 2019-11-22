@@ -44,7 +44,11 @@ interface UIMetaFieldAccess {
 
     /**
      * addStatus/updateStatus 控制展示行为
-     * 正常/隐藏/只读/禁用
+     * 正常(能看,能生成sql)
+     * 隐藏(不能看,能生成sql)
+     * 只读(能看,不生成sql)
+     * 禁用(不能看,不生成SQL)
+     *
      * 100/50/30/10
      * @return
      */

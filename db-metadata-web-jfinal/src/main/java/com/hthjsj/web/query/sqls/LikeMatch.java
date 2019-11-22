@@ -14,7 +14,7 @@ public class LikeMatch extends MetaSQLBuilder {
 
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
-
+        throw new RuntimeException("not finished");
     }
 
     @Override

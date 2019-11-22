@@ -14,9 +14,9 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
+public class MetaFieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
 
-    public FieldConfigWrapper(String config) {
+    public MetaFieldConfigWrapper(String config) {
         set(JSON.parseObject(config));
     }
 
@@ -77,5 +77,21 @@ public class FieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
 
     public boolean isMultiple() {
         return Boolean.parseBoolean(getStr("isMultiple"));
+    }
+
+    public boolean isQuery() {
+        return false;
+    }
+
+    public int addStatus() {
+        return 0;
+    }
+
+    public int updateStatus() {
+        return 0;
+    }
+
+    public int viewStatus() {
+        return 0;
     }
 }

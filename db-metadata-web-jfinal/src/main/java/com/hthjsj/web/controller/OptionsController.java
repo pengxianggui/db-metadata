@@ -1,7 +1,7 @@
 package com.hthjsj.web.controller;
 
-import com.hthjsj.analysis.meta.FieldConfigWrapper;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.query.QueryHelper;
@@ -27,18 +27,18 @@ public class OptionsController extends Controller {
 
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
-        FieldConfigWrapper fieldConfigWrapper = new FieldConfigWrapper(metaField.config());
+        MetaFieldConfigWrapper metaFieldConfigWrapper = new MetaFieldConfigWrapper(metaField.config());
 
-        if (!fieldConfigWrapper.hasTranslation()) {
+        if (!metaFieldConfigWrapper.hasTranslation()) {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);
         }
-        if (fieldConfigWrapper.isSql()) {
-            List<Kv> options = OptionsKit.transKeyValueBySql(fieldConfigWrapper.sourceSql());
+        if (metaFieldConfigWrapper.isSql()) {
+            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigWrapper.sourceSql());
             renderJson(Ret.ok("data", options));
             return;
         }
-        if (fieldConfigWrapper.isOptions()) {
-            renderJson(Ret.ok("data", fieldConfigWrapper.options()));
+        if (metaFieldConfigWrapper.isOptions()) {
+            renderJson(Ret.ok("data", metaFieldConfigWrapper.options()));
             return;
         }
 
