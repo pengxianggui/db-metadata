@@ -31,6 +31,11 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <PopMenu></PopMenu>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <search-panel-demo></search-panel-demo>
             </el-col>
         </el-row>

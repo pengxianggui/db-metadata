@@ -35,6 +35,18 @@
                                          :prop="item.name"
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
+                            <template slot="header">
+                                <PopMenu trigger="rightClick">
+                                    <template #label>{{item.label}}</template>
+                                    <template #menu>
+                                        <ul id="menu">
+                                            <li @click="editMetaObject(innerMeta.objectCode)">编辑元对象</li>
+                                            <li @click="editMetaField(innerMeta.objectCode, item.name)">编辑元字段</li>
+                                            <li @click="editInstanceConf(innerMeta.objectCode, item.name)">编辑实例UI配置</li>
+                                        </ul>
+                                    </template>
+                                </PopMenu>
+                            </template>
                         </el-table-column>
                     </template>
                     <slot name="operation-column">
@@ -84,8 +96,12 @@
             </el-col>
         </el-row>
 
-        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="formMeta" @ok="getData()"></DialogBox>
-
+        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="formMeta"
+                   @ok="getData()" @cancel="dialogVisible=false">
+            <template #body>
+                <slot name="dialog-content" v-bind:formMeta="formMeta"></slot>
+            </template>
+        </DialogBox>
     </el-container>
 </template>
 
@@ -112,7 +128,10 @@
                 },
                 formMeta: {},
                 dialogMeta: {},
-                dialogVisible: false
+                dialogVisible: false,
+
+                contextMenuTarget: document.body, // 可右键区域，这里也可以绑定$refs
+                contextMenuVisible: false
             }
         },
         props: {
@@ -168,14 +187,14 @@
                     }
                     this.dialogVisible = true
 
-                //     let formMeta = resp.data;
-                //     this.$dialog(this.$refs['container'], formMeta, null, {
-                //         title: id ? '编辑' : '新增',
-                //     }).then(() => {
-                //         this.getData(); // refresh
-                //     });
-                // }).catch(err => {
-                //     console.log(err);
+                    //     let formMeta = resp.data;
+                    //     this.$dialog(this.$refs['container'], formMeta, null, {
+                    //         title: id ? '编辑' : '新增',
+                    //     }).then(() => {
+                    //         this.getData(); // refresh
+                    //     });
+                    // }).catch(err => {
+                    //     console.log(err);
                 });
             },
             // 删除单行
@@ -259,6 +278,25 @@
                 this.pageModel['index'] = parseInt(index);
                 this.pageModel['size'] = parseInt(size);
             },
+            rightClickHander(ev, objectCode, fieldCode) {
+                if (ev) {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                }
+                // this.popVisible = true;
+                this.$refs['pop-' + fieldCode].value = true;
+            },
+
+            editMetaObject(objectCode) {
+                this.$root.dialogVisible = true;
+            },
+            editMetaField(objectCode, objectField) {
+
+            },
+            editInstanceConf(objectCode, objectField) {
+
+            },
+
             getData(params) {
                 if (!this.innerMeta.hasOwnProperty('data_url')) {
                     console.error('lack data_url attribute');
@@ -327,4 +365,53 @@
 </script>
 
 <style scoped>
+
+    .right-menu {
+        position: fixed;
+        background: #fff;
+        border: solid 1px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        z-index: 999;
+        display: none;
+    }
+
+    .right-menu a {
+        width: 75px;
+        height: 28px;
+        line-height: 28px;
+        text-align: center;
+        display: block;
+        color: #1a1a1a;
+    }
+
+    .right-menu a:hover {
+        background: #eee;
+        color: #fff;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    .right-menu {
+        border: 1px solid #eee;
+        box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, .1);
+        border-radius: 1px;
+    }
+
+    ul#menu {
+        list-style: none;
+        margin: 0;
+        padding: 5px;
+    }
+
+    ul#menu li {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    ul#menu li:hover {
+        background-color: #eeeeee;
+    }
 </style>

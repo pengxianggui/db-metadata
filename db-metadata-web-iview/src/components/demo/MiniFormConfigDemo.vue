@@ -61,26 +61,51 @@
 <script>
     export default {
         name: "MiniFormConfigDemo",
+        props: {
+            value: [Object, String]
+        },
         data() {
             return {
-                hasTranslation: false,
-                config: {
-                    addStatus: 100,
-                    updateStatus: 100,
-                    viewStatus: 100,
-                    defaultVal: '',
-                    isNullable: '',
-                    isQuery: false,
-                    scopeSql: '',
-                    scopeOptions: [],
-                    scopeRange: [],
-                }
+                hasTranslation: false
             }
         },
         methods: {
             onSubmit() {
                 // this.$refs.sub_config.
                 console.log('submit!');
+                this.$emit("input", this.config);
+            },
+            assemblyModel(value) {
+
+            }
+        },
+        computed: {
+            config: {
+                get: function () {
+                    let self = this;
+                    let config = {
+                        addStatus: 100,
+                        updateStatus: 100,
+                        viewStatus: 100,
+                        defaultVal: '',
+                        isNullable: '',
+                        isQuery: false,
+                        scopeSql: '',
+                        scopeOptions: [],
+                        scopeRange: [],
+                    };
+                    // this.assemblyModel(this.value);
+
+                    Object.keys(config).forEach(key => {
+                        let val = JSON.parse(self.value).hasOwnProperty(key) ? JSON.parse(self.value)[key] : null;
+                        self.$set(config, key, val)
+                    });
+                    return config;
+                },
+                set: function (n) {
+                    if (n === '') n = null;
+                    return this.$emit("input", n); // 通过 input 事件更新 model
+                }
             }
         }
     }

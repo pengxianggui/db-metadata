@@ -1,12 +1,19 @@
 <template>
     <div id="app">
         <router-view></router-view>
+        <DialogBox ref="globalDialog" :visible.sync="dialogVisible" :component-meta="dialogComponentMea"></DialogBox>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'app'
+        name: 'app',
+        data() {
+            return {
+                dialogVisible: false,
+                dialogComponentMea: {}
+            }
+        }
     }
 </script>
 

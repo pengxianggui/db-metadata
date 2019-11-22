@@ -185,7 +185,8 @@
     - data_url组件内自动获取选项数据(GET), 响应格式需为[{key:value}, ...],若不满足,需要给组件元数据定义behavior选项,并自定义'format'函数,将响应数据转换为key-value格式
     
     优先级: 逐渐降低. 数据格式均需满足: [{key:value}, ...]
-    
+ -[ ] CheckBox支持(a,b,c 多值形式)
+ 
  -[ ] 组件中各个属性先后位置尽量统一
  
         name
@@ -236,8 +237,9 @@
  -[ ] BoolBox
     -[x] 添加对[false, true, "false", "true", 0, 1, "0", "1", "f", "t"]的支持, 保存时保留原值;
     
- -[ ] SearchPanel 搜索面板(简单)
+ -[ ] SearchPanel 搜索面板
     -[x] 参见jsonTemplate.json或者default.js
+    -[ ] SearchPanel脱离FormTmpl独立, 内部根据SearchPanel的meta另行实现,需要考虑范围搜索(如日期范围,需要两个日期控件), 大于等于  等；
     
  -[ ] FindBox 搜索框
     -[x] 搜索框，参见jsonTemplate.json或者default.js
