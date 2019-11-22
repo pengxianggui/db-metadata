@@ -5,8 +5,8 @@
                 <el-input v-model="form.defaultVal" size="mini"></el-input>
             </el-col>
         </el-form-item>
-        <el-form-item>
-            <el-checkbox v-model="form.isNullable" label="是否为空" border></el-checkbox>
+        <el-form-item label="开关">
+            <el-checkbox v-model="form.isNullable" label="允许为空" border></el-checkbox>
             <el-checkbox v-model="form.isQuery" label="允许搜索" border></el-checkbox>
         </el-form-item>
         <el-form-item label="新增状态">
