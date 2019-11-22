@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Maps;
 import com.hthjsj.analysis.meta.MetaData;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 
 import java.util.Date;
 import java.util.List;
@@ -61,9 +62,6 @@ public class UtilKit {
     public static boolean verifySQL(String sql) {
         boolean flag = false;
         try {
-            //            MySqlStatementParser sqlStatementParser = new MySqlStatementParser(sql);
-            //            sqlStatementParser.parseStatementList();
-
             SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
             flag = true;
         } catch (ParserException e) {
@@ -76,5 +74,14 @@ public class UtilKit {
         User user = ThreadLocalUserKit.getUser();
         data.set("created_by", user.userId());
         data.set("created_time", new Date());
+    }
+
+    public static String defaultIfBlank(String str, String defaultValue) {
+        if (!StrKit.isBlank(str)) {
+            if (str.equalsIgnoreCase("null")) {
+                return defaultValue;
+            }
+        }
+        return StrKit.isBlank(str) ? defaultValue : str;
     }
 }

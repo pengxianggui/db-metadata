@@ -1,9 +1,6 @@
 package com.hthjsj.web.query;
 
-import com.hthjsj.web.query.sqls.EasyMatch;
-import com.hthjsj.web.query.sqls.FieldEqualsMatch;
-import com.hthjsj.web.query.sqls.MetaSQLBuilder;
-import com.hthjsj.web.query.sqls.SortMatch;
+import com.hthjsj.web.query.sqls.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -34,5 +31,6 @@ public class QueryParses {
         parseter.add(EasyMatch.class);
         parseter.add(FieldEqualsMatch.class);
         parseter.add(SortMatch.class);
+        parseter.add(InNotInMatch.class);
     }
 }

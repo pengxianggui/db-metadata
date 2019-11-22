@@ -115,7 +115,7 @@ public class QueryCondition {
         }
 
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
-        log.info("select sql:{}", sqlParaExt.getSelect());
+        log.debug("select sql:{}", sqlParaExt.getSelect());
     }
 
     private SqlParaExt buildExceptSelect(Okv kv, SqlParaExt sqlParaExt, IMetaObject metaObject) {
@@ -148,8 +148,10 @@ public class QueryCondition {
         }
         sqlParaExt.setFrom(" from " + metaObject.tableName());
         sqlParaExt.setWhereExcept(" where 1=1 " + sqlExceptSelect.toString());
+        //hack sql, 1=1 写法会影响索引的生效,故需要处理"1=1 and"字符串,正则 非贪婪匹配第一个
+        sqlParaExt.setWhereExcept(sqlParaExt.getWhereExcept().replaceFirst("1=1.*?and", ""));
         sqlParaExt.verify();
-        log.debug("buildExceptSelect from sql:{}", sqlParaExt.getFromWhere());
+        log.debug("buildExceptSelect from sql:{}", sqlParaExt.getSql());
         return sqlParaExt;
     }
 }
