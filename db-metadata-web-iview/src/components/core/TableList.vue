@@ -68,11 +68,11 @@
                             </template>
                             <template slot-scope="scope">
                                 <slot name="buttons" v-bind:scope="scope">
-                                    <el-button :size="innerMeta.conf['size']"
-                                               @click="handleEdit($event, scope.row, scope.$index)">编辑
+                                    <el-button :size="innerMeta.conf['size']" icon="el-icon-edit" circle
+                                               @click="handleEdit($event, scope.row, scope.$index)">
                                     </el-button>
-                                    <el-button :size="innerMeta.conf['size']" type="danger"
-                                               @click="handleDelete($event, scope.row, scope.$index)">删除
+                                    <el-button :size="innerMeta.conf['size']" type="danger" icon="el-icon-delete" circle
+                                               @click="handleDelete($event, scope.row, scope.$index)">
                                     </el-button>
                                 </slot>
                             </template>

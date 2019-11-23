@@ -62,7 +62,12 @@
     export default {
         name: "MiniFormConfigDemo",
         props: {
-            model: [Object, String]
+            model: {
+                type: [Object, String],
+                default: function () {
+                    return {}
+                }
+            }
         },
         data() {
             return {

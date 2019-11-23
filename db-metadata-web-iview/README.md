@@ -222,10 +222,18 @@
     -[x] 下拉设置列显隐功能 由renderHeader实现 =>(替换为) 插槽实
     -[x] 表格的操作条支持插槽扩展
         
- -[ ] 表单(FormTmpl)
+ -[ ] 表单Box(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
     -[x] 区分表单编辑/新增模式
-    -[ ] 更新/新增 模式下字段的不同属性配置, 可以设置两套配置(新增、编辑)
+    -[ ] 更新/新增 模式下字段的不同属性配置, 可以设置两套配置(新增、编辑)- 暂定用一套配置。 需要支持：
+        - [ ] 字段新增状态下： 正常|隐藏|只读|禁用
+        - [ ] 字段更新状态下： 正常|隐藏|只读|禁用
+        - [ ] 字段查看状态下： 正常|隐藏|只读|禁用
+        根据接口(toUpdate/toAdd/toView)可以做处理, 前端透明; 对应配置为: 
+        - 正常(能看,能生成sql):    (showable: true, readonly:false, disabled: false)
+        - 隐藏(不能看,能生成sql:    (showable: false, readonly:true, disabled: false)
+        - 只读(能看,不生成sql):    (showable: true, readonly: true, disabled: true)
+        - 禁用(不能看,不生成SQL:    (showable: false, readonly: true, disabled: true)
     
  -[ ] dialog
     -[ ] dialog 运行时实例配置
