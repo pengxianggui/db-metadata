@@ -6,7 +6,7 @@
                     <component :is="componentMeta.component_name" v-if="componentMeta.component_name"
                                @ok="ok" @cancel="cancel" :meta="componentMeta"></component>
                 </template>
-                <template>
+                <template v-else>
                     body
                 </template>
             </slot>

@@ -96,10 +96,10 @@
             </el-col>
         </el-row>
 
-        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="formMeta"
+        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
                    @ok="getData()" @cancel="dialogVisible=false">
             <template #default>
-                <slot name="dialog-body" v-bind:meta="formMeta"></slot>
+                <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>
             </template>
             <template #footer><span></span></template>  <!-- 表单自带button条 -->
         </DialogBox>
@@ -127,7 +127,7 @@
                     index: 1,
                     total: 0
                 },
-                formMeta: {},
+                dialogComponentMea: {},
                 dialogMeta: {},
                 dialogVisible: false,
 
@@ -181,7 +181,7 @@
                     url = this.$compile(FORM_TO_ADD_URL, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.$axios.get(url).then(resp => {
-                    this.formMeta = resp.data;
+                    this.dialogComponentMea = resp.data;
                     this.dialogMeta = {
                         component_name: "DialogBox",
                         conf: {
