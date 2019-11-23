@@ -1,13 +1,14 @@
 <!--
     容器型组件-路由指向入口
+    ps: @/components/core/FormTmpl应该更名为FormBox
 -->
 <template>
-    <table-list :ref="meta['name']" :meta="meta"></table-list>
+    <FormTmpl :ref="meta['name']" :meta="meta"></FormTmpl>
 </template>
 
 <script>
     export default {
-        name: "TableTmpl",
+        name: "FormTmpl",
         props: {
             R_oc: String
         },
@@ -19,7 +20,8 @@
         },
         methods: {
             getMeta() {
-                let url = this.$compile("/meta/fields/{objectCode}", {
+                // TODO 需要单独一个toUpdate接口，只需要传入objectCode参数, 此处url待定
+                let url = this.$compile('/form/toUpdate/meta_object?objectCode={objectCode}', {
                     objectCode: this.objectCode
                 });
 

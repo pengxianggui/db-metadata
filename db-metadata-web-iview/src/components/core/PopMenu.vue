@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <el-popover :trigger="nativeTrigger" v-model="visible">
+    <el-popover :trigger="nativeTrigger" v-model="visible">
             <span slot="reference">
                 <span @click.right="rightClickHander">
                     <slot name="label">
@@ -8,13 +7,12 @@
                     </slot>
                 </span>
             </span>
-            <slot name="menu">
-                <ul id="menu">
-                    <li v-for="(item, index) in data" :key="index" @click="item.behavior(item.data)">{{item.data}}</li>
-                </ul>
-            </slot>
-        </el-popover>
-    </div>
+        <slot name="menu">
+            <ul id="menu">
+                <li v-for="(item, index) in data" :key="index" @click="item.behavior(item.data)">{{item.data}}</li>
+            </ul>
+        </slot>
+    </el-popover>
 </template>
 
 <script>
@@ -56,9 +54,6 @@
                     })
                 }
             }
-        },
-        mounted() {
-            // pxg_todo
         },
         computed: {
             nativeTrigger() {

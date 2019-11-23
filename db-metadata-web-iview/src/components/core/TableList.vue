@@ -40,9 +40,10 @@
                                     <template #label>{{item.label}}</template>
                                     <template #menu>
                                         <ul id="menu">
-                                            <li @click="editMetaObject(innerMeta.objectCode)">编辑元对象</li>
-                                            <li @click="editMetaField(innerMeta.objectCode, item.name)">编辑元字段</li>
-                                            <li @click="editInstanceConf(innerMeta.objectCode, item.name)">编辑实例UI配置</li>
+                                            <li @click="editMetaObject">编辑元对象</li>
+                                            <li @click="editMetaField(item.name)">编辑元字段</li>
+                                            <li @click="editInstanceConf()">编辑实例UI配置</li>
+                                            <li @click="editInstanceFieldConf()">编辑实例字段UI配置</li>
                                         </ul>
                                     </template>
                                 </PopMenu>
@@ -127,12 +128,9 @@
                     index: 1,
                     total: 0
                 },
-                dialogComponentMea: {},
-                dialogMeta: {},
-                dialogVisible: false,
-
-                contextMenuTarget: document.body, // 可右键区域，这里也可以绑定$refs
-                contextMenuVisible: false
+                dialogComponentMea: {}, // 弹窗内包含的组件元对象
+                dialogMeta: {}, // 弹窗组件元对象
+                dialogVisible: false,   // 弹窗显隐
             }
         },
         props: {
@@ -154,10 +152,8 @@
                     return true;
                 }
             },
-            // 选中的行： 用于批量操作，表现为勾选
-            choseData: Array,
-            // 激活的一行： 用于对单行操作
-            activeData: Object,
+            choseData: Array,   // 选中的行： 用于批量操作，表现为勾选
+            activeData: Object, // 激活的一行： 用于对单行操作
         },
         methods: {
             handleSelectionChange(selection) {
@@ -189,15 +185,6 @@
                         }
                     };
                     this.dialogVisible = true
-
-                    //     let formMeta = resp.data;
-                    //     this.$dialog(this.$refs['container'], formMeta, null, {
-                    //         title: id ? '编辑' : '新增',
-                    //     }).then(() => {
-                    //         this.getData(); // refresh
-                    //     });
-                    // }).catch(err => {
-                    //     console.log(err);
                 });
             },
             // 删除单行
@@ -290,14 +277,29 @@
                 this.$refs['pop-' + fieldCode].value = true;
             },
 
-            editMetaObject(objectCode) {
-                this.$root.dialogVisible = true;
+            editMetaObject() {
+                // TODO 需要单独一个toUpdate接口，只需要传入objectCode参数, 此处url待定
+                // /form/toUpdate/meta_object?id=
             },
-            editMetaField(objectCode, objectField) {
-
+            editMetaField(fieldCode) {
+                // TODO 需要单独一个toUpdate接口，只需要传入objectCode和fieldCode参数, 此处url待定
+                // /form/toUpdate/meta_field?id=
             },
-            editInstanceConf(objectCode, objectField) {
-
+            editInstanceConf() {
+                let objectCode = this.innerMeta['objectCode'];
+                let componentCode = 'TableList';
+                let url = '/instance-conf';
+                let routeUrl = this.$router.resolve({
+                    path: url,
+                    query: {
+                        componentCode: componentCode,
+                        objectCode: objectCode
+                    }
+                });
+                window.open(routeUrl.href, '_blank');
+            },
+            editInstanceFieldConf(fieldCode) {
+                this.editInstanceConf(); // just edit the ui conf of field named fieldCode. anchor point ?
             },
 
             getData(params) {
