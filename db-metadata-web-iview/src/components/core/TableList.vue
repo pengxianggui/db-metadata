@@ -98,9 +98,10 @@
 
         <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="formMeta"
                    @ok="getData()" @cancel="dialogVisible=false">
-            <template #body>
-                <slot name="dialog-content" v-bind:formMeta="formMeta"></slot>
+            <template #default>
+                <slot name="dialog-body" v-bind:meta="formMeta"></slot>
             </template>
+            <template #footer><span></span></template>  <!-- 表单自带button条 -->
         </DialogBox>
     </el-container>
 </template>
@@ -183,8 +184,10 @@
                     this.formMeta = resp.data;
                     this.dialogMeta = {
                         component_name: "DialogBox",
-                        title: id ? '编辑' : '新增'
-                    }
+                        conf: {
+                            title: id ? '编辑' : '新增'
+                        }
+                    };
                     this.dialogVisible = true
 
                     //     let formMeta = resp.data;

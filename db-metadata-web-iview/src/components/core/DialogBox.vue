@@ -1,14 +1,22 @@
 <template>
-    <el-dialog :visible.sync="nativeVisible" v-bind="innerMeta.conf">
-        <slot name="body">
-            <component :is="componentMeta.component_name" v-if="componentMeta.component_name"
-                       @ok="ok" @cancel="cancel" v-model="model" :meta="componentMeta"></component>
-        </slot>
-        <!-- 考虑到子组件(如FormTmpl)中可以自定义按钮, 为方便起见，弹框的按钮由子组件替代 -->
-<!--        <slot name="footer" class="dialog-footer">-->
-<!--            <el-button @click="cancel">取 消</el-button>-->
-<!--            <el-button type="primary" @click="ok">确 定</el-button>-->
-<!--        </slot>-->
+    <el-dialog :visible.sync="nativeVisible" v-bind="innerMeta.conf" >
+        <template #default>
+            <slot>
+                <template v-if="componentMeta !== undefined">
+                    <component :is="componentMeta.component_name" v-if="componentMeta.component_name"
+                               @ok="ok" @cancel="cancel" :meta="componentMeta"></component>
+                </template>
+                <template>
+                    body
+                </template>
+            </slot>
+        </template>
+        <template #footer>
+            <slot name="footer">
+                <el-button class="btn btn-primary" @click="ok">确定</el-button>
+                <el-button class="btn" @click="cancel">取消</el-button>
+            </slot>
+        </template>
     </el-dialog>
 </template>
 
@@ -20,14 +28,12 @@
         mixins: [Meta(DEFAULT.DialogBox)],
         props: {
             visible: Boolean,
-            componentMeta: Object,
-            initModel: Object
+            componentMeta: Object
         },
         name: "DialogBox",
         label: "弹出框",
         data() {
             return {
-                model: this.initModel,
             };
         },
         methods: {

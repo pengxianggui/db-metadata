@@ -3,7 +3,7 @@
         <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
             <slot name="form-item" v-bind:columns="innerMeta.columns">
                 <template v-for="(item, index) in innerMeta.columns">
-                    <slot :name="'form-item-' + item.name" v-bind:columnMeta="item" v-bind:model="model[item.name]">
+                    <slot :name="'form-item-' + item.name" v-bind:columnMeta="item" v-bind:value="model[item.name]">
                         <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
                                       :label="item.label" :prop="item.name" :class="{inline: item.inline}"
                                       :rules="item.conf['rules']">

@@ -7,15 +7,17 @@
             <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
         </el-button-group>
         <TableList :ref="tableMeta['name']" :meta="tableMeta" v-if="tableMeta && tableMeta['data_url']">
-            <template #dialog-content="{formMeta}">
-                <FormTmpl ref="form" :meta="formMeta" @ok="ok" @cancel="cancel">
-                    <template #form-item-config="{columnMeta, model}">
+
+            <template #dialog-body="{meta}">
+                <FormTmpl ref="form" :meta="meta" @ok="ok" @cancel="cancel">
+                    <template #form-item-config="{columnMeta, value}">
                         <el-form-item prop="config">
-                            <MiniFormConfigDemo :model="model" @submit="submit"></MiniFormConfigDemo>
+                            <MiniFormConfigDemo ref="configMiniForm" :model="value" @submit="submit"></MiniFormConfigDemo>
                         </el-form-item>
                     </template>
                 </FormTmpl>
             </template>
+
         </TableList>
         <el-dialog title="创建元数据" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
@@ -68,12 +70,13 @@
                 this.$refs['form']['model']['config'] = params; // 通过ref 硬干预 替换插槽表单中的config字段
             },
             ok(params) {
-                this.nativeVisible = false;
-                this.$refs[this.tableMeta['name']].dialogVisible = false;
-                this.$refs[this.tableMeta['name']].getData();
+                let tableRef = this.$refs[this.tableMeta['name']];
+                tableRef.dialogVisible = false;
+                tableRef.getData();
             },
             cancel(params) {
-                this.$refs[this.tableMeta['name']].dialogVisible = false;
+                let tableRef = this.$refs[this.tableMeta['name']];
+                tableRef.dialogVisible = false;
             },
             getTableMeta() {
                 this.$axios.get('/meta/fields').then(resp => {

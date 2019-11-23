@@ -88,21 +88,23 @@
         watch: {
             'model': {
                 handler: function (newVal, oldVal) {
-                    let model = this.model;
+                    let model = newVal;
+                    let self = this;
+
                     if (typeof model === 'string') {
                         model = JSON.parse(model);
-                        this.$reverseMerge(this.config, model);
                     }
+                    Object.keys(self.config).forEach(key => {
+                        if (model.hasOwnProperty(key)) {
+                            self.config[key] = model[key];
+                        } else {
+                            self.config[key] = null;    // 防止model字段不完整，导致config遗留上一次的属性和属性值
+                        }
+                    });
                 },
-                deep: true
+                deep: true,
+                immediate: true
             }
-        },
-        mounted() {
-            let model = this.model;
-            if (typeof model === 'string') {
-                model = JSON.parse(model);
-            }
-            this.$reverseMerge(this.config, model);
         }
     }
 </script>
