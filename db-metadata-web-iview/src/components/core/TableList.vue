@@ -40,10 +40,10 @@
                                     <template #label>{{item.label}}</template>
                                     <template #menu>
                                         <ul id="menu">
-                                            <li @click="editMetaObject">编辑元对象</li>
-                                            <li @click="editMetaField(item.name)">编辑元字段</li>
-                                            <li @click="editInstanceConf()">编辑实例UI配置</li>
-                                            <li @click="editInstanceFieldConf()">编辑实例字段UI配置</li>
+                                            <li @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</li>
+                                            <li @click="editMetaField(item.name)">编辑元字段({{item.name}})</li>
+                                            <li @click="editInstanceConf()">编辑实例UI配置({{innerMeta.objectCode}})</li>
+                                            <li @click="editInstanceFieldConf()">编辑实例字段UI配置({{item.name}})</li>
                                         </ul>
                                     </template>
                                 </PopMenu>
