@@ -62,7 +62,7 @@
                         {
                             "component_name": "DateTimeBox",
                             "name": "birthdaytime",
-                            "label": "出生日期时间",
+                            "label": "日期时间",
                             "conf": {
                             }
                         },
