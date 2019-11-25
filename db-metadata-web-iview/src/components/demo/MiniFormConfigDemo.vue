@@ -39,17 +39,18 @@
         <template v-if="hasTranslation">
             <el-form-item label="指定SQL">
                 <el-col :span="6">
-                    <el-input v-model="config.defaultVal" size="mini"></el-input>
+                    <el-input v-model="config.scopeSql" size="mini"></el-input>
                 </el-col>
             </el-form-item>
             <el-form-item label="静态数组">
-                <el-checkbox-group v-model="checkList">
-                    <el-checkbox label="复选框 A"></el-checkbox>
-                    <el-checkbox label="复选框 B"></el-checkbox>
-                    <el-checkbox label="复选框 C"></el-checkbox>
-                    <el-checkbox label="禁用" disabled></el-checkbox>
-                    <el-checkbox label="选中且禁用" disabled></el-checkbox>
-                </el-checkbox-group>
+                <el-select
+                        v-model="config.scopeOptions"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="动态添加选项">
+                </el-select>
             </el-form-item>
         </template>
         <el-form-item>
