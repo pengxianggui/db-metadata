@@ -185,7 +185,7 @@
     - data_url组件内自动获取选项数据(GET), 响应格式需为[{key:value}, ...],若不满足,需要给组件元数据定义behavior选项,并自定义'format'函数,将响应数据转换为key-value格式
     
     优先级: 逐渐降低. 数据格式均需满足: [{key:value}, ...]
- -[ ] CheckBox支持(a,b,c 多值形式)
+ -[x] CheckBox支持(a,b,c 多值形式)
  
  -[ ] 组件中各个属性先后位置尽量统一
  
@@ -236,7 +236,6 @@
         - 禁用(不能看,不生成SQL:    (showable: false, readonly: true, disabled: true)
     
  -[ ] dialog
-    -[ ] dialog 运行时实例配置
     -[x] dialog 全局配置
   
  -[ ] JsonBox

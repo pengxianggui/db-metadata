@@ -23,9 +23,7 @@
             }
         },
         props: {
-            value: {
-                type: [Array]
-            },
+            value: [Array, String],
             options: Array,
         },
         methods: {
@@ -66,6 +64,32 @@
         mounted() {
             this.initOptions();
         },
+        computed: {
+            nativeValue: {
+                get: function () {
+                    let type = typeof this.value;
+                    switch (type) {
+                        case "string":
+                            return this.value.trim() === '' ? [] : this.value.split(',');
+                        default:
+                            return this.value;
+                    }
+                },
+                set: function (val) {
+                    let type = typeof this.value;
+                    let newVal;
+                    switch (type) {
+                        case "string":
+                            newVal = val.join(',');
+                            break;
+                        default:
+                            newVal = val;
+                            break;
+                    }
+                    this.$emit('input', newVal);
+                }
+            }
+        }
     }
 </script>
 
