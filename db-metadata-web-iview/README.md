@@ -246,7 +246,19 @@
     
  -[ ] SearchPanel 搜索面板
     -[x] 参见jsonTemplate.json或者default.js
-    -[ ] SearchPanel脱离FormTmpl独立, 内部根据SearchPanel的meta另行实现,需要考虑范围搜索(如日期范围,需要两个日期控件), 大于等于  等；
+    -[x] SearchPanel脱离FormTmpl独立, 内部根据SearchPanel的meta另行实现,需要考虑范围搜索(如日期范围,需要两个日期控件), 大于等于  等；
+        ```
+        操作符：
+        - 等于(eq)
+        - 不等于(ne)
+        - 大于(gt)
+        - 小于(lt)
+        - 大于等于(ge)
+        - 小于等于(le)
+        - 范围(range)
+        - in(in)
+        - 模糊(like)
+        ```
     
  -[ ] FindBox 搜索框
     -[x] 搜索框，参见jsonTemplate.json或者default.js
@@ -289,6 +301,7 @@
         ```
     -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
+ -[ ] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  
 ### 其他资料
 

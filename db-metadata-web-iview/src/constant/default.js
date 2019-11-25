@@ -247,27 +247,24 @@ const DEFAULT = {
         "name": "SearchPanel",
         "label": "搜索面板",
         "conf": {
-            "label-width": '40px',
+            "label-width": '80px',
             "size": 'medium', // medium|small|mini
-            "disabled": false,
-            "inline": true,
         },
         // "columns": [
             // {
             //     component_name: 'TextBox',
             //     name: 'name',
             //     label: '姓名',
-            //     conf: {
-            //         "inline": false
-            //     }
             // },
             // {
             //     component_name: 'NumBox',
             //     name: 'age',
-            //     label: '年龄',
-            //     conf: {
-            //         "inline": false
-            //     }
+            //     label: '年龄'
+            // },
+            // {
+            //     component_name: 'DropDownBox',
+            //     name: 'sex',
+            //     label: '性别'
             // }
         // ],
     },

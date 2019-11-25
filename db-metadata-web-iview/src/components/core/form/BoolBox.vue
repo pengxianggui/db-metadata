@@ -8,7 +8,7 @@
     import {DEFAULT} from '@/constant'
     import Meta from '../mixins/meta'
 
-    let expand = [false, true, "false", "true", 0, 1, "0", "1", "f", "t"]; // odd: false, even: true
+    let expand = [false, true, "false", "true", 0, 1, "0", "1", "f", "t", null, true, undefined, true]; // odd: false, even: true
 
     export default {
         mixins: [Meta(DEFAULT.BoolBox)],

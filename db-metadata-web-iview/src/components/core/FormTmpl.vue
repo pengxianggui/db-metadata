@@ -1,29 +1,27 @@
 <template>
-    <el-container direction="vertical">
-        <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
-            <slot name="form-item" v-bind:columns="innerMeta.columns">
-                <template v-for="(item, index) in innerMeta.columns">
-                    <slot :name="'form-item-' + item.name" v-bind:columnMeta="item" v-bind:value="model[item.name]">
-                        <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
-                                      :label="item.label" :prop="item.name" :class="{inline: item.inline}"
-                                      :rules="item.conf['rules']">
-                            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
-                        </el-form-item>
-                    </slot>
-                </template>
-            </slot>
-            <el-form-item>
-                <slot name="action" v-bind:model="model">
-                    <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']"
-                               @click="onSubmit"
-                               v-text="innerMeta.btns['submit']['label']"></el-button>
-                    <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']"
-                               @click="onCancel"
-                               v-text="innerMeta.btns['cancel']['label']"></el-button>
+    <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model">
+        <slot name="form-item" v-bind:columns="innerMeta.columns">
+            <template v-for="(item, index) in innerMeta.columns">
+                <slot :name="'form-item-' + item.name" v-bind:columnMeta="item" v-bind:value="model[item.name]">
+                    <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
+                                  :label="item.label" :prop="item.name" :class="{inline: item.inline}"
+                                  :rules="item.conf['rules']">
+                        <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
+                    </el-form-item>
                 </slot>
-            </el-form-item>
-        </el-form>
-    </el-container>
+            </template>
+        </slot>
+        <el-form-item>
+            <slot name="action" v-bind:model="model">
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']"
+                           @click="onSubmit"
+                           v-text="innerMeta.btns['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']"
+                           @click="onCancel"
+                           v-text="innerMeta.btns['cancel']['label']"></el-button>
+            </slot>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script>

@@ -25,7 +25,7 @@ export default function (defaultMeta) {
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, defaultMeta);
+                return this.$merge(this.meta, defaultMeta||{});
             }
         }
     }

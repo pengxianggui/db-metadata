@@ -5,7 +5,20 @@
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
               @clear="$emit('clear', $event)"
-    ></el-input>
+    >
+        <template #prefix>
+            <slot name="prefix"></slot>
+        </template>
+        <template #suffix>
+            <slot name="suffix"></slot>
+        </template>
+        <template #prepend>
+            <slot name="prepend"></slot>
+        </template>
+        <template #append>
+            <slot name="append"></slot>
+        </template>
+    </el-input>
 </template>
 
 <script>
@@ -18,7 +31,7 @@
         name: "TextBox",
         label: "文本框",
         props: {
-            value: String,
+            value: [String, Number],
         }
     }
 </script>

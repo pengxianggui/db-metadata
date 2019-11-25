@@ -1,5 +1,5 @@
 # Form Component
-表单组件. 
+表单控件. 
 - 非Z开头的为基于element-ui封装的
 - Z开头为自行封装的
 

@@ -27,18 +27,14 @@
                             "component_name": "TextBox",
                             "name": "name",
                             "label": "姓名",
-                            "index": 1,            // 排序号, 决定表格中列的先后顺序
                             "conf": {
-                                // "inline": false
                             }
                         },
                         {
                             "component_name": "NumBox",
                             "name": "age",
                             "label": "年龄",
-                            "index": 2,            // 排序号, 决定表格中列的先后顺序
                             "conf": {
-                                // "inline": false
                             }
                         },
                         {
@@ -46,9 +42,35 @@
                             "name": "sex",
                             "label": "性别",
                             "data_url": "/dict/sex",
-                            "index": 3,            // 排序号, 决定表格中列的先后顺序
                             "conf": {
-                                // "inline": false
+                            }
+                        },
+                        {
+                            "component_name": "DateBox",
+                            "name": "birthday",
+                            "label": "出生日期",
+                            "conf": {
+                            }
+                        },
+                        {
+                            "component_name": "TimeBox",
+                            "name": "birthtime",
+                            "label": "出生时间",
+                            "conf": {
+                            }
+                        },
+                        {
+                            "component_name": "DateTimeBox",
+                            "name": "birthdaytime",
+                            "label": "出生日期时间",
+                            "conf": {
+                            }
+                        },
+                        {
+                            "component_name": "BoolBox",
+                            "name": "buff",
+                            "label": "Buff加成",
+                            "conf": {
                             }
                         }
                     ],

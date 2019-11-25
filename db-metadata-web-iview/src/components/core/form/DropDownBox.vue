@@ -42,7 +42,7 @@
         },
         props: {
             value: {
-                type: [Object, String, Number]
+                type: [Object, String, Number, Array]
             },
             options: Array,
         },
