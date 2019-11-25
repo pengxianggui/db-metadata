@@ -3,12 +3,17 @@
     ps: @/components/core/FormTmpl应该更名为FormBox
 -->
 <template>
-    <FormTmpl :ref="meta['name']" :meta="meta"></FormTmpl>
+    <FormBox :ref="meta['name']" :meta="meta"></FormBox>
 </template>
 
 <script>
+    import FormTmpl from "../core/FormTmpl";
+
     export default {
         name: "FormTmpl",
+        components: {
+            "FormBox": FormTmpl
+        },
         props: {
             R_oc: String
         },

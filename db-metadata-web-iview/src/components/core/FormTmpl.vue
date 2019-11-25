@@ -81,13 +81,16 @@
             assemblyModel(meta) {
                 this.model = {};
                 let columns = meta.columns;
-                let record = meta.hasOwnProperty('record') ? meta.record : {};
+                let record = meta.hasOwnProperty('record') && meta.record ? meta.record : {};
+
                 this.isEdit = record.hasOwnProperty('id') && (record.id != null);
 
-                columns.forEach(item => {
-                    this.$merge(item, DEFAULT[item.component_name]); // merge column
-                    this.$set(this.model, item.name, record[item.name] || item.default_value);
-                });
+                if (Array.isArray(columns)) {
+                    columns.forEach(item => {
+                        this.$merge(item, DEFAULT[item.component_name]); // merge column
+                        this.$set(this.model, item.name, record[item.name] || item.default_value);
+                    });
+                }
             }
         },
         computed: {
