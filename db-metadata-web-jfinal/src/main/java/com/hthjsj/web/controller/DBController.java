@@ -95,12 +95,12 @@ public class DBController extends FrontRestController {
                 Kv metaConfig = Kv.create();
 
                 //TableView
-                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssembleFactory.analysisObject((MetaObject) metaObject, ComponentType.TABLEVIEW);
+                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter((MetaObject) metaObject, ComponentType.TABLEVIEW);
                 metaConfig = RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter);
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
 
                 //FormView
-                metaObjectIViewAdapter = SmartAssembleFactory.analysisObject((MetaObject) metaObject, ComponentType.FORMVIEW);
+                metaObjectIViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter((MetaObject) metaObject, ComponentType.FORMVIEW);
                 metaConfig = RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter);
 
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);

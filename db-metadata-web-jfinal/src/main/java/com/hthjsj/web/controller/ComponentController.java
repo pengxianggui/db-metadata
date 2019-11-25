@@ -29,7 +29,7 @@ public class ComponentController extends FrontRestController {
 
     public void instance() {
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
-        renderJson(Ret.ok("data", ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.FORMVIEW)));
+        renderJson(Ret.ok("data", ViewAssembleFactory.createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW)));
     }
 
     public void init() {
@@ -66,7 +66,7 @@ public class ComponentController extends FrontRestController {
                 renderJson(Ret.ok("data", objectConfig));
             } else {
                 MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssembleFactory.analysisObject(metaObject, ComponentType.V(compCode));
+                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter(metaObject, ComponentType.V(compCode));
                 renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("msg", "自动计算首次配置"));
             }
         } else {

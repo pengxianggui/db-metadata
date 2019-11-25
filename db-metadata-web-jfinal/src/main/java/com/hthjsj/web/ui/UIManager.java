@@ -12,7 +12,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 public class UIManager {
 
     public static MetaObjectViewAdapter getView(MetaObject metaObject, ComponentType componentType) {
-        return ViewAssembleFactory.fetchObjectAdapter(metaObject, componentType);
+        return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }
 
     /**
@@ -23,7 +23,7 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedFrom(MetaObject metaObject) {
-        return SmartAssembleFactory.analysisObject(metaObject, ComponentType.FORMVIEW);
+        return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW);
     }
 
     /**
@@ -34,7 +34,7 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedTable(MetaObject metaObject) {
-        return SmartAssembleFactory.analysisObject(metaObject, ComponentType.TABLEVIEW);
+        return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 
     /**
@@ -45,7 +45,7 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getForm(MetaObject metaObject) {
-        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.FORMVIEW);
+        return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW);
     }
 
     /**
@@ -56,6 +56,6 @@ public class UIManager {
      * @return
      */
     public static MetaObjectViewAdapter getTable(MetaObject metaObject) {
-        return ViewAssembleFactory.fetchObjectAdapter(metaObject, ComponentType.TABLEVIEW);
+        return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 }

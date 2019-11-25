@@ -10,6 +10,23 @@ import com.jfinal.kit.Kv;
  */
 public class RenderHelper {
 
+    /**
+     * <pre>
+     *     Data structure:
+     *     {
+     *         meta_object_code_abc:{config object},
+     *         fields:[
+     *              meta_field1:{config object},
+     *              meta_field2:{config object},
+     *              meta_field3:{config object},
+     *         ]
+     *     }
+     * </pre>
+     *
+     * @param metaObjectViewAdapter
+     *
+     * @return
+     */
     public static Kv renderObjectFieldsMap(MetaObjectViewAdapter metaObjectViewAdapter) {
         Kv kv = Kv.create();
 
@@ -22,6 +39,21 @@ public class RenderHelper {
         return kv;
     }
 
+    /**
+     * <pre>
+     *     Data structure:
+     *     {
+     *         meta_object_code_abc:{config object},
+     *         meta_field1:{config object},
+     *         meta_field2:{config object},
+     *         meta_field3:{config object},
+     *     }
+     * </pre>
+     *
+     * @param metaObjectViewAdapter
+     *
+     * @return
+     */
     public static Kv renderObjectFlatMap(MetaObjectViewAdapter metaObjectViewAdapter) {
         Kv kv = Kv.create();
 

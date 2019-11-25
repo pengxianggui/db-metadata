@@ -22,7 +22,26 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class ViewAssembleFactory {
+public class ViewAssembleFactory implements MetaViewAdapterFactory {
+
+    public static final MetaViewAdapterFactory me = new ViewAssembleFactory();
+
+    public static MetaViewAdapterFactory me() {
+        return me;
+    }
+
+    private static List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
+
+        List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
+
+        for (IMetaField field : fields) {
+            Kv instanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
+            Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, instanceConfig);
+            metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
+        }
+
+        return metaFields;
+    }
 
     /**
      * 使用系统默认ComponentConfig 信息构建容器View组件
@@ -32,7 +51,8 @@ public class ViewAssembleFactory {
      *
      * @return
      */
-    public static MetaObjectViewAdapter fetchObjectAdapter(MetaObject metaObject, ComponentType componentType) {
+    @Override
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(MetaObject metaObject, ComponentType componentType) {
 
         /**
          * 校验元对象
@@ -56,18 +76,5 @@ public class ViewAssembleFactory {
         MetaObjectViewAdapter objectViewAdapter = new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, fields);
 
         return objectViewAdapter;
-    }
-
-    private static List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
-
-        List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
-
-        for (IMetaField field : fields) {
-            Kv instanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
-            Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, instanceConfig);
-            metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
-        }
-
-        return metaFields;
     }
 }

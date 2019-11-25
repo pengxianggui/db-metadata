@@ -25,35 +25,18 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class SmartAssembleFactory {
+public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
+    private static MetaViewAdapterFactory me = new SmartAssembleFactory();
 
+    public static MetaViewAdapterFactory me() {
+        return me;
+    }
 
     /**
      * 1. 推测控件(metafield)
      * 2. 推测样式配置(metafield,ComponentType)
      */
-    /**
-     * 使用系统默认ComponentConfig 信息构建容器View组件
-     *
-     * @param metaObject
-     * @param componentType
-     *
-     * @return
-     */
-    public static MetaObjectViewAdapter analysisObject(MetaObject metaObject, ComponentType componentType) {
-
-        /**
-         * 分析元对象
-         * 适配选择Component,进行构建IViewAdapter
-         */
-        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
-        Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
-        Kv containerConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
-        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalAllConfig);
-        return new MetaObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
-    }
-
     private static List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
@@ -140,5 +123,27 @@ public class SmartAssembleFactory {
 
 
         return builder.render();
+    }
+
+    /**
+     * 使用系统默认ComponentConfig 信息构建容器View组件
+     *
+     * @param metaObject
+     * @param componentType
+     *
+     * @return
+     */
+    @Override
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(MetaObject metaObject, ComponentType componentType) {
+
+        /**
+         * 分析元对象
+         * 适配选择Component,进行构建IViewAdapter
+         */
+        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
+        Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
+        Kv containerConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
+        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalAllConfig);
+        return new MetaObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
     }
 }
