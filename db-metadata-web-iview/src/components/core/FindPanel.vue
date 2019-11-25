@@ -64,7 +64,7 @@
         },
         computed: {
             spMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.FindPanel);
+                let meta = this.$merge(this.meta, DEFAULT.SearchPanel);
                 let columns = this.meta['columns'];
 
                 meta.component_name = 'SearchPanel';
@@ -72,7 +72,7 @@
                 return meta;
             },
             tlMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.FindPanel);
+                let meta = this.$merge(this.meta, DEFAULT.TableList);
                 meta.component_name = 'TableList';
                 meta.multi_select = false; // pxg_todo 暂不支持多选
                 return meta;

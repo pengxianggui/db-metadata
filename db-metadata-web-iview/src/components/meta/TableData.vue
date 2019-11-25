@@ -1,5 +1,8 @@
 <template>
-    <table-list :ref="meta['name']" :meta="meta"></table-list>
+    <div>
+        <SearchPanel :meta="meta" @search="handleSearch"></SearchPanel>
+        <table-list :ref="meta['name']" :meta="meta"></table-list>
+    </div>
 </template>
 
 <script>
@@ -27,6 +30,9 @@
                     this.$message.error(err.msg);
                 })
             },
+            handleSearch(params) {
+                this.$refs[this.meta['name']].getData(params);
+            }
         },
         created() {
             this.getMeta();

@@ -13,7 +13,7 @@
 <template>
     <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline>
         <template v-for="(item) in innerMeta.columns">
-            <el-form-item :key="item.name" :label="item.label" :prop="item.name">
+            <el-form-item :key="item.name" :label="item.label" :prop="item.name" v-if="model.hasOwnProperty(item.name)">
                 <DropDownBox v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
                              v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
                 </DropDownBox>
@@ -115,19 +115,23 @@
             },
             onReset() {
                 this.model = {};
+                this.$emit('search', {});
             },
             assemblyModel(meta) {
                 this.model = {};
                 let columns = meta.columns;
-
-                columns.forEach(item => {
-                    let componentName = item.component_name;
-                    this.$merge(item, DEFAULT[componentName]); // merge column
-                    this.$set(this.model, item.name, {
-                        value: null,
-                        symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
+                if (Array.isArray(columns)) {
+                    columns.forEach(item => {
+                        if (item.hasOwnProperty("searchable") && item.searchable === true) {
+                            let componentName = item.component_name;
+                            this.$merge(item, DEFAULT[componentName]); // merge column
+                            this.$set(this.model, item.name, {
+                                value: null,
+                                symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
+                            });
+                        }
                     });
-                });
+                }
             }
         },
         filters: {
