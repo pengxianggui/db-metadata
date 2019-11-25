@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class LikeMatch extends MetaSQLBuilder {
+public class LikeMatch extends MetaSQLExtract {
 
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {

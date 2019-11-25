@@ -14,7 +14,7 @@ import java.util.Map;
  * "nin"
  * 每一类解析规则为一类实现, 最终根据httpparam生成一个或一组条件
  */
-public interface SQLBuilderByHttp {
+public interface SQLExtract {
 
     void loadOfHttpParams(Map<String, Object> httpParams);
 

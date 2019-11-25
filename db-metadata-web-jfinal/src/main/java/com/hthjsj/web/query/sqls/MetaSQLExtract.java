@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class MetaSQLBuilder implements SQLBuilderByHttp {
+public abstract class MetaSQLExtract implements SQLExtract {
 
     public static final String SQL_PREFIX = "sql_";
 

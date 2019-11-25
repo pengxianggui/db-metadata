@@ -17,7 +17,7 @@ public class QueryParses {
     private static final QueryParses me = new QueryParses();
 
     @Getter
-    List<Class<? extends MetaSQLBuilder>> parseter = new ArrayList<>();
+    List<Class<? extends MetaSQLExtract>> parseter = new ArrayList<>();
 
     {
         init();

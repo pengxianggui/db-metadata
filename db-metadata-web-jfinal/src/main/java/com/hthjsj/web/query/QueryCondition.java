@@ -6,7 +6,7 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
-import com.hthjsj.web.query.sqls.MetaSQLBuilder;
+import com.hthjsj.web.query.sqls.MetaSQLExtract;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
@@ -64,9 +64,9 @@ public class QueryCondition {
 
         for (IMetaField field : metaObject.fields()) {
 
-            for (Class<? extends MetaSQLBuilder> mClass : QueryParses.me().parseter) {
+            for (Class<? extends MetaSQLExtract> mClass : QueryParses.me().parseter) {
                 try {
-                    MetaSQLBuilder metaSQLBuilder = mClass.newInstance();
+                    MetaSQLExtract metaSQLBuilder = mClass.newInstance();
                     metaSQLBuilder.init(field, params);
                     conds.putAll(metaSQLBuilder.result());
                 } catch (InstantiationException e) {
@@ -141,8 +141,8 @@ public class QueryCondition {
                 continue;
             }
             //正常 where 逻辑
-            if (key.startsWith(MetaSQLBuilder.SQL_PREFIX)) {
-                sqlExceptSelect.append(" and ").append(key.replaceFirst(MetaSQLBuilder.SQL_PREFIX, "")).append(" ");
+            if (key.startsWith(MetaSQLExtract.SQL_PREFIX)) {
+                sqlExceptSelect.append(" and ").append(key.replaceFirst(MetaSQLExtract.SQL_PREFIX, "")).append(" ");
                 sqlParaExt.addPara(kv.get(key));
             }
         }

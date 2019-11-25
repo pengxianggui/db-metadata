@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class InNotInMatch extends MetaSQLBuilder {
+public class InNotInMatch extends MetaSQLExtract {
 
     public static final String IN_SUFFIX = "_in";
 
