@@ -250,6 +250,7 @@
             },
             preview: function () {
                 let meta = this.confModel['conf'];
+                meta.columns = [];
                 for (let key in this.confModel['fConf']) {
                     let item = this.confModel['fConf'][key];
                     meta.columns.push(item);
