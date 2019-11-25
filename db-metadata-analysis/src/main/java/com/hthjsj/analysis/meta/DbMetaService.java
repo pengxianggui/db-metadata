@@ -104,17 +104,17 @@ public class DbMetaService {
                 objectCode) > 0;
     }
 
-    public boolean saveData(MetaObject object, Kv data) {
+    public boolean saveData(IMetaObject object, Kv data) {
         boolean status = Db.use(App.DB_MAIN).save(object.tableName(), object.primaryKey(), new Record().setColumns(data));
         buriedPoint(object, Kv.create(), data);
         return status;
     }
 
-    public Record findData(MetaObject object, String id) {
+    public Record findData(IMetaObject object, String id) {
         return Db.findById(object.tableName(), id);
     }
 
-    public boolean updateData(MetaObject object, Kv data) {
+    public boolean updateData(IMetaObject object, Kv data) {
         // TODO support single primaryKey;
         Record old = Db.use(App.DB_MAIN).findById(object.tableName(), data.get(object.primaryKey()));
         boolean status = Db.use(App.DB_MAIN).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
@@ -122,7 +122,7 @@ public class DbMetaService {
         return status;
     }
 
-    public boolean deleteData(MetaObject object, String[] ids) {
+    public boolean deleteData(IMetaObject object, String[] ids) {
         return Db.deleteByIds(object.tableName(), object.primaryKey(), ids);
     }
 
@@ -133,7 +133,7 @@ public class DbMetaService {
      * @param oldData
      * @param newData
      */
-    private void buriedPoint(MetaObject object, Map oldData, Map newData) {
+    private void buriedPoint(IMetaObject object, Map oldData, Map newData) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
         record.set("object_code", object.code());
