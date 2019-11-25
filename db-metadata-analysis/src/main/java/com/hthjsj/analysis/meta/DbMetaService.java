@@ -70,7 +70,7 @@ public class DbMetaService {
     }
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
-        if (new MetaObjectConfigWrapper(metaObject.config(), metaObject.code()).isUUIDPrimary()) {
+        if (new MetaObjectConfigParse(metaObject.config(), metaObject.code()).isUUIDPrimary()) {
             metaObject.dataMap().put("id", SnowFlake.me().nextId());
         }
         boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", new Record().setColumns(metaObject.dataMap()));

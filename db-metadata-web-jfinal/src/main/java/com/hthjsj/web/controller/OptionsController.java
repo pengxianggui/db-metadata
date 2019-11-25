@@ -1,7 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.query.QueryHelper;
@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class OptionsController extends Controller {
 
+    /**
+     * URL: /component/options/meta_object?f=field_code_abc
+     */
     public void index() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
@@ -27,18 +30,18 @@ public class OptionsController extends Controller {
 
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
-        MetaFieldConfigWrapper metaFieldConfigWrapper = new MetaFieldConfigWrapper(metaField.config());
+        MetaFieldConfigParse metaFieldConfigParse = new MetaFieldConfigParse(metaField.config());
 
-        if (!metaFieldConfigWrapper.hasTranslation()) {
+        if (!metaFieldConfigParse.hasTranslation()) {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);
         }
-        if (metaFieldConfigWrapper.isSql()) {
-            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigWrapper.scopeSql());
+        if (metaFieldConfigParse.isSql()) {
+            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigParse.scopeSql());
             renderJson(Ret.ok("data", options));
             return;
         }
-        if (metaFieldConfigWrapper.isOptions()) {
-            renderJson(Ret.ok("data", metaFieldConfigWrapper.options()));
+        if (metaFieldConfigParse.isOptions()) {
+            renderJson(Ret.ok("data", metaFieldConfigParse.options()));
             return;
         }
 

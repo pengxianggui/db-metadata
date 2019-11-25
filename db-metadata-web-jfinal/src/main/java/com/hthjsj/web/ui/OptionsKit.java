@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -37,6 +37,10 @@ public class OptionsKit {
             kvs.add(Kv.by("key", value).set("value", value));
         }
         return kvs;
+    }
+
+    public static Kv transKeyValueFlatMapByBoolean() {
+        return Kv.by("1", "是").set("0", "否");
     }
 
     /**
@@ -129,11 +133,11 @@ public class OptionsKit {
      */
     public static List<Record> trans(Collection<IMetaField> fields, List<Record> dataRecords) {
         List<Record> result = Lists.newArrayList(dataRecords);
-        MetaFieldConfigWrapper configWrapper = null;
+        MetaFieldConfigParse configWrapper = null;
         Kv mappeds = Kv.create();
         //计算需要转义的字段的映射关系
         for (IMetaField field : fields) {
-            configWrapper = new MetaFieldConfigWrapper(field.config());
+            configWrapper = new MetaFieldConfigParse(field.config());
             if (configWrapper.hasTranslation()) {
                 if (configWrapper.isSql()) {
                     Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql());
@@ -143,6 +147,9 @@ public class OptionsKit {
                     Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
                     mappeds.set(field.fieldCode(), mapped);
                 }
+            }
+            if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
+                mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
             }
         }
         //转义数据

@@ -63,6 +63,17 @@ public class DBTypeJudge {
         return value.equalsIgnoreCase("json");
     }
 
+    /**
+     * DBTypeJudge 不持有dbTypeLength,需外部传入
+     *
+     * @param length
+     *
+     * @return
+     */
+    public boolean isBoolean(int length) {
+        return isText() && length == 1;
+    }
+
     public String rawData() {
         return value;
     }

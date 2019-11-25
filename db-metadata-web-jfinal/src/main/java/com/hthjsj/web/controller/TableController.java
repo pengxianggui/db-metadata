@@ -3,6 +3,9 @@ package com.hthjsj.web.controller;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.MetaObjectConfigParse;
+import com.hthjsj.analysis.meta.aop.AopInvocation;
+import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
@@ -10,9 +13,12 @@ import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.extern.slf4j.Slf4j;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -25,6 +31,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class TableController extends FrontRestController {
 
     @Override
@@ -70,6 +77,28 @@ public class TableController extends FrontRestController {
         List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-        renderJson(Ret.ok("data", ServiceManager.metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]))));
+
+        MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
+        DeletePointCut pointCut = metaObjectConfigParse.interceptor();
+        AopInvocation invocation = new AopInvocation(metaObject);
+
+        boolean status = Db.tx(new IAtom() {
+
+            @Override
+            public boolean run() throws SQLException {
+                boolean s = false;
+                try {
+                    pointCut.deleteBefore(invocation);
+                    s = ServiceManager.metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]));
+                    pointCut.deleteAfter(s, invocation);
+                } catch (Exception e) {
+                    log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
+                    s = false;
+                }
+                return s;
+            }
+        });
+
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 }

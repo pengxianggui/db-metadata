@@ -111,10 +111,6 @@ public class MetaConfigFactory {
             this("", objectCode);
         }
 
-        public boolean isUUIDPrimary() {
-            return Boolean.parseBoolean(getStr("isUUIDPrimary"));
-        }
-
         @Override
         public String module() {
             return MODULE_OBJECT;

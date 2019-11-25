@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.MetaFieldConfigWrapper;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
@@ -102,22 +102,22 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         log.debug("auto compute config : {}", builder.render().toJson());
 
         log.debug("analysis metafield config");
-        MetaFieldConfigWrapper metaFieldConfigWrapper = new MetaFieldConfigWrapper(metaField.config());
-        if (metaFieldConfigWrapper.hasTranslation()) {
-            if (metaFieldConfigWrapper.isRange()) {
-                builder.options(OptionsKit.transKeyValue(metaFieldConfigWrapper.range()));
+        MetaFieldConfigParse metaFieldConfigParse = new MetaFieldConfigParse(metaField.config());
+        if (metaFieldConfigParse.hasTranslation()) {
+            if (metaFieldConfigParse.isRange()) {
+                builder.options(OptionsKit.transKeyValue(metaFieldConfigParse.range()));
             }
-            if (metaFieldConfigWrapper.isSql()) {
-                log.info("metaFieldConfigWrapper sql:{}", metaFieldConfigWrapper.scopeSql());
+            if (metaFieldConfigParse.isSql()) {
+                log.info("metaFieldConfigParse sql:{}", metaFieldConfigParse.scopeSql());
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
-            if (metaFieldConfigWrapper.isOptions()) {
+            if (metaFieldConfigParse.isOptions()) {
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
             builder.componentName(ComponentType.DROPDOWN.getCode());
         }
 
-        if (metaFieldConfigWrapper.isRequired()) {
+        if (metaFieldConfigParse.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
         }
 

@@ -14,9 +14,9 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaFieldConfigWrapper extends MetaConfigFactory.MetaFieldConfig {
+public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
 
-    public MetaFieldConfigWrapper(String config) {
+    public MetaFieldConfigParse(String config) {
         set(JSON.parseObject(config));
     }
 
