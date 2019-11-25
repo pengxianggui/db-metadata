@@ -45,15 +45,15 @@
             </template>
             <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key" v-if="index%2==0">
                 <el-col :span="12">
-                    <h4>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</h4>
                     <el-form-item>
+                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
                         <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" :meta="confMeta"
                                  mode="form"></JsonBox>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
-                    <h4>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</h4>
                     <el-form-item>
+                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
                         <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" :meta="confMeta"
                                  mode="form"></JsonBox>
                     </el-form-item>
