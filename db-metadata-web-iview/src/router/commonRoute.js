@@ -66,6 +66,11 @@ const children = [
         name: 'Table',
         props: {R_oc: "meta_dict"},
         component: () => import('@/components/template/TableTmpl')
+    }, {
+        path: 'form',
+        name: 'Form',
+        props: (route) => ({R_oc: route.query.objectCode}),
+        component: () => import('@/components/template/FormTmpl')
     }
 ];
 
