@@ -12,7 +12,7 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
-import com.hthjsj.web.ui.SmartAssembleFactory;
+import com.hthjsj.web.ui.UIManager;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
 import com.jfinal.core.JFinal;
@@ -95,13 +95,13 @@ public class DBController extends FrontRestController {
                 Kv metaConfig = Kv.create();
 
                 //TableView
-                MetaObjectViewAdapter metaObjectIViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter((MetaObject) metaObject, ComponentType.TABLEVIEW);
-                metaConfig = RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter);
+                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.TABLEVIEW);
+                metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
 
                 //FormView
-                metaObjectIViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter((MetaObject) metaObject, ComponentType.FORMVIEW);
-                metaConfig = RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter);
+                metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.FORMVIEW);
+                metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
 
                 ServiceManager.componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
             }

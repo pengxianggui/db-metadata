@@ -1,6 +1,6 @@
 package com.hthjsj.web.ui;
 
-import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 
 /**
  * <p> @Date : 2019/11/14 </p>
@@ -27,14 +27,14 @@ public class RenderHelper {
      *
      * @return
      */
-    public static Kv renderObjectFieldsMap(MetaObjectViewAdapter metaObjectViewAdapter) {
-        Kv kv = Kv.create();
+    public static Okv renderObjectFieldsMap(MetaObjectViewAdapter metaObjectViewAdapter) {
+        Okv kv = Okv.create();
 
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
-        Kv fields = Kv.create();
-        metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {
-            fields.set(key, value.getInstanceConfig().toJson());
-        });
+        Okv fields = Okv.create();
+        for (MetaFieldViewAdapter metaFieldViewAdapter : metaObjectViewAdapter.getFields()) {
+            fields.set(metaFieldViewAdapter.getMetaField().fieldCode(), metaFieldViewAdapter.getInstanceConfig().toJson());
+        }
         kv.set("fields", fields);
         return kv;
     }
@@ -54,8 +54,8 @@ public class RenderHelper {
      *
      * @return
      */
-    public static Kv renderObjectFlatMap(MetaObjectViewAdapter metaObjectViewAdapter) {
-        Kv kv = Kv.create();
+    public static Okv renderObjectFlatMap(MetaObjectViewAdapter metaObjectViewAdapter) {
+        Okv kv = Okv.create();
 
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
         metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {

@@ -43,11 +43,19 @@
             <template v-else>
                 <div class="blank-tip">请先选择一个组件</div>
             </template>
-            <el-row v-for="(value, key, index) in confModel.fConf" :key="key">
-                <el-col>
-                    <h4>{{index}}.{{key}}</h4>
+            <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key" v-if="index%2==0">
+                <el-col :span="12">
+                    <h4>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</h4>
                     <el-form-item>
-                        <JsonBox v-model="confModel.fConf[key]" :meta="confMeta" mode="form"></JsonBox>
+                        <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" :meta="confMeta"
+                                 mode="form"></JsonBox>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
+                    <h4>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</h4>
+                    <el-form-item>
+                        <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" :meta="confMeta"
+                                 mode="form"></JsonBox>
                     </el-form-item>
                 </el-col>
             </el-row>

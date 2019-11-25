@@ -11,8 +11,7 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.RenderHelper;
-import com.hthjsj.web.ui.SmartAssembleFactory;
-import com.hthjsj.web.ui.ViewAssembleFactory;
+import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -25,11 +24,6 @@ public class ComponentController extends FrontRestController {
     @Override
     public void api() {
         renderJson(Components.me().getRegistry());
-    }
-
-    public void instance() {
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
-        renderJson(Ret.ok("data", ViewAssembleFactory.createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW)));
     }
 
     public void init() {
@@ -57,16 +51,18 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-
         if (StrKit.notBlank(compCode, objectCode)) {
-            Kv objectConfig = Kv.create();
+            MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+            //已存在的配置
             if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
-                objectConfig.set(objectCode, ServiceManager.componentService().loadObjectConfig(compCode, objectCode));
-                objectConfig.set("fields", ServiceManager.componentService().loadFieldsConfigMap(compCode, objectCode));
-                renderJson(Ret.ok("data", objectConfig));
-            } else {
-                MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-                MetaObjectViewAdapter metaObjectViewAdapter = SmartAssembleFactory.createMetaObjectViewAdapter(metaObject, ComponentType.V(compCode));
+
+                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
+                renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)));
+            }
+            //自动计算的配置
+            else {
+
+                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
                 renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("msg", "自动计算首次配置"));
             }
         } else {

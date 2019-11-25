@@ -11,6 +11,10 @@ import com.hthjsj.analysis.meta.MetaObject;
  */
 public class UIManager {
 
+    public static MetaObjectViewAdapter getSmartAutoView(MetaObject metaObject, ComponentType componentType) {
+        return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
+    }
+
     public static MetaObjectViewAdapter getView(MetaObject metaObject, ComponentType componentType) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }
