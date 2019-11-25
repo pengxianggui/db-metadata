@@ -17,7 +17,7 @@ public class MetaField implements IMetaField {
 
     Record record = new Record();
 
-    IMetaConfig metaFieldConfig;
+    DBTypeJudge dbTypeJudge;
 
     public MetaField(Map<String, Object> fieldMap) {
         this.record = new Record().setColumns(fieldMap);
@@ -68,7 +68,10 @@ public class MetaField implements IMetaField {
 
     @Override
     public DBTypeJudge dbType() {
-        return new DBTypeJudge(record.getStr("db_type"));
+        if (dbTypeJudge == null) {
+            dbTypeJudge = new DBTypeJudge(record.getStr("db_type"));
+        }
+        return dbTypeJudge;
     }
 
     @Override

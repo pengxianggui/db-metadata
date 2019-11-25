@@ -22,6 +22,8 @@ public class Dicts {
 
     private static final Dicts me = new Dicts();
 
+    private static final String DICT_JSON = "dict.json";
+
     public static final Dicts me() {
         return me;
     }
@@ -32,9 +34,8 @@ public class Dicts {
 
     private void loadTmplConfigFromFile() {
         String result = "";
-        try {
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream(DICT_JSON)) {
             log.info("load  dict.json file");
-            InputStream fis = getClass().getClassLoader().getResourceAsStream("dict.json");
             result = CharStreams.toString(new InputStreamReader(fis, Charsets.UTF_8));
             log.info("file length : {}", result.length());
         } catch (Exception e) {

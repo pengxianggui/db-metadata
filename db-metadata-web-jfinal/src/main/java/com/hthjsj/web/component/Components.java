@@ -31,6 +31,8 @@ final public class Components {
 
     private static final Components me = new Components();
 
+    private static final String JSON_TEMPLATE_JSON = "jsonTemplate.json";
+
     private final List<Class<? extends Component>> pluginList = new ArrayList<Class<? extends Component>>();
 
     private final Map<ComponentType, Class<? extends Component>> registry = new HashMap<>();
@@ -85,9 +87,7 @@ final public class Components {
 
     private JSONObject loadTmplConfigFromFile() {
         String result = "";
-        try {
-            //            lines = Files.readLines(new File(PathKitExt.getRootClassPath() + "/jsonTemplate.json"), Charset.defaultCharset());
-            InputStream fis = getClass().getClassLoader().getResourceAsStream("jsonTemplate.json");
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream(JSON_TEMPLATE_JSON)) {
             result = CharStreams.toString(new InputStreamReader(fis, Charsets.UTF_8));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

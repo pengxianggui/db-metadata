@@ -2,10 +2,9 @@ package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.meta.IMetaField;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p> @Date : 2019/10/16 </p>
@@ -38,6 +37,35 @@ public class EasyMatch extends MetaSQLExtract {
 
     Map<String, Object> values = new HashMap<>();
 
+    /**
+     * 判断时间格式 格式必须为“YYYY-MM-dd”
+     * 2004-2-30 是无效的
+     * 2003-2-29 是无效的
+     *
+     * @param sDate
+     *
+     * @return
+     */
+    private boolean isLegalDate(String sDate, String fmt) {
+        int legalLen = 10;
+        if ((sDate == null) || (sDate.length() != legalLen)) {
+            return false;
+        }
+
+        DateFormat formatter = new SimpleDateFormat(fmt);
+        try {
+            Date date = formatter.parse(sDate);
+            return sDate.equals(formatter.format(date));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+//    public static void main(String[] args) {
+//        System.out.println(isLegalDate("1988-01-22","yyyy-MM-dd"));
+//        System.out.println(isLegalDate("1988-01-22 22:11","yyyy-MM-dd HH:mm:ss"));
+//    }
+
     private String buildQueryKey(String key, String suffix) {
         return key + SEPARATOR + suffix;
     }
@@ -51,9 +79,25 @@ public class EasyMatch extends MetaSQLExtract {
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
         for (String[] ss : rules) {
             Object v = httpParams.get(buildQueryKey(metaField.en(), ss[0]));
+
+            //对时间日期类型数据,进行对齐
+            //普通日期 2019-01-01 -> 2019-01-01 00:00:00.000  便于生成 date>2019-01-01 00:00:00.000 sql
+//            if (metaField.dbType().isDate()) {
+//                String str = String.valueOf(v);
+//                if (metaField.dbType().isDateOnly()) {
+//                    if (isLegalDate(str, DateKit.datePattern)) {
+//                        v = dateAlignAtZeroTime(str);
+//                    }
+//                }
+//            }
+
             if (v != null) {
                 values.put(SQL_PREFIX + metaField.en() + ss[1], v);
             }
         }
+    }
+
+    private String dateAlignAtZeroTime(String value) {
+        return value.concat(" 00:00:00.000");
     }
 }
