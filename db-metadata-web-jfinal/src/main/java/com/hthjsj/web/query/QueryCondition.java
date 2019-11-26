@@ -63,6 +63,7 @@ public class QueryCondition {
 
             for (Class<? extends MetaSQLExtract> mClass : QueryParses.me().parseter) {
                 try {
+                    //TODO 待优化,每个请求解析参数时,会创建大量的Extract实例,性能较差
                     MetaSQLExtract metaSQLBuilder = mClass.newInstance();
                     metaSQLBuilder.init(field, params);
                     conds.putAll(metaSQLBuilder.result());

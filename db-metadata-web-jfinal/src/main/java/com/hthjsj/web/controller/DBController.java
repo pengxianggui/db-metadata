@@ -7,7 +7,7 @@ import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.AppConst;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
@@ -66,15 +66,13 @@ public class DBController extends FrontRestController {
     public void truncate() {
         String token = getPara(0, "");
         StringBuilder sb = new StringBuilder();
-        sb.append("即将清除表:meta_component, meta_component_instance,meta_config,meta_field,meta_object");
-        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "请输入token,{}" + sb.toString());
+        sb.append("即将清除的数据表:meta_component, meta_component_instance,meta_config,meta_field,meta_object");
         Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
-        log.info("清空meta相关表{}", sb.toString());
-        Db.delete("delete from meta_component");
-        Db.delete("delete from meta_component_instance");
-        Db.delete("delete from meta_config");
-        Db.delete("delete from meta_field");
-        Db.delete("delete from meta_object");
+        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "开发token不正确:{}", sb.toString());
+        log.warn("清空meta相关表{}", sb.toString());
+        AppConst.SYS_TABLE.rowKeySet().forEach(key -> {
+            Db.delete("delete from " + key);
+        });
         renderJson(Ret.ok("msg", sb.toString()));
     }
 
@@ -96,13 +94,13 @@ public class DBController extends FrontRestController {
                 //TableView
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.TABLEVIEW);
                 metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
-                componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.TABLEVIEW.getCode()), metaObject, metaConfig);
+                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
 
                 //FormView
                 metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.FORMVIEW);
                 metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
 
-                componentService().newObjectConfig(ViewFactory.createEmptyViewComponent(ComponentType.FORMVIEW.getCode()), metaObject, metaConfig);
+                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
             }
         }
         renderJson(Ret.ok());

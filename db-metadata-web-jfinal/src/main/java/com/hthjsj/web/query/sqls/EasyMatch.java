@@ -1,5 +1,6 @@
 package com.hthjsj.web.query.sqls;
 
+import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.meta.IMetaField;
 
 import java.text.DateFormat;
@@ -90,6 +91,11 @@ public class EasyMatch extends MetaSQLExtract {
 //                    }
 //                }
 //            }
+
+            //boolean 转义
+            if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
+                v = MetaDataTypeConvert.convert(metaField, v);
+            }
 
             if (v != null) {
                 values.put(SQL_PREFIX + metaField.en() + ss[1], v);

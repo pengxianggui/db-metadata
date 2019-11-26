@@ -1,5 +1,6 @@
 package com.hthjsj.web.query.sqls;
 
+import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.meta.IMetaField;
 
 import java.util.HashMap;
@@ -13,18 +14,24 @@ import java.util.Map;
  */
 public class FieldEqualsMatch extends MetaSQLExtract {
 
-    Map<String, Object> value;
+    Map<String, Object> values = new HashMap<>(1);
 
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
-        value = new HashMap<>(1);
+        Object value = httpParams.get(metaField.en());
+
+        //boolean 转义
+        if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
+            value = MetaDataTypeConvert.convert(metaField, value);
+        }
+
         if (httpParams.get(metaField.en()) != null) {
-            value.put(SQL_PREFIX + metaField.en() + "=?", httpParams.get(metaField.en()));
+            values.put(SQL_PREFIX + metaField.en() + "=?", value);
         }
     }
 
     @Override
     public Map<String, Object> result() {
-        return value;
+        return values;
     }
 }
