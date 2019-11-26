@@ -1,43 +1,44 @@
 <template>
-    <div class="container el-card">
-        <el-row>
-            <el-col>
-                <h5>表单配置</h5>
-                <el-form>
-                    <JsonBox v-model="formMeta"></JsonBox>
-<!--                    <template v-for="(value, key, index) in formMeta">-->
-<!--                        <template v-if="excludes.indexOf(key) < 0">-->
-<!--                            <el-form-item :key="key" :label="key" v-if="key !== 'conf'">-->
-<!--                                <component v-bind:is="value|type" v-model="formMeta[key]"></component>-->
-<!--                            </el-form-item>-->
-<!--                            <template v-else>-->
-<!--                                <div :key="key">-->
-<!--                                    <h6>Element Conf</h6>-->
-<!--                                    <JsonBox v-model="formMeta[key]" mode="form"></JsonBox>-->
-<!--                                    &lt;!&ndash;                                    <template v-for="(confV, confK) in value">&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                        <el-form-item :key="confK" :label="confK">&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                            <component :is="confV|type" v-model="value[confK]"></component>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                        </el-form-item>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                    </template>&ndash;&gt;-->
-<!--                                </div>-->
-<!--                            </template>-->
-<!--                        </template>-->
-<!--                    </template>-->
+    <div class="">
+        <el-tabs type="border-card">
+            <el-tab-pane label="域配置">
+<!--                <JsonBox v-model="activeFieldMeta"></JsonBox>-->
+
+                <el-form size="mini">
+                    <template v-for="(value, key, index) in activeFieldMeta">
+                        <template v-if="excludes.indexOf(key) < 0">
+                            <el-form-item :key="key" :label="key" v-if="key !== 'conf'">
+                                <component :is="type(activeFieldMeta['name'], key, value)" v-model="activeFieldMeta[key]"></component>
+                            </el-form-item>
+                            <el-form-item :key="key" :label="key" v-else>
+                                <div :key="key">
+                                    <JsonBox v-model="activeFieldMeta[key]" mode="form"></JsonBox>
+                                </div>
+                            </el-form-item>
+                        </template>
+                    </template>
                 </el-form>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <h5>域配置</h5>
-<!--                <el-form v-if="formMeta.columns && formMeta.columns[selectIndex]">-->
-<!--                    <el-form-item v-for="(value, key, index) in formMeta.columns[selectIndex]" :key="key">-->
-<!--                        &lt;!&ndash;                        <component></component>&ndash;&gt;-->
-<!--                        {{key}}-->
-<!--                    </el-form-item>-->
-<!--                </el-form>-->
-                <JsonBox v-model="formMeta.columns[selectIndex]"></JsonBox>
-            </el-col>
-        </el-row>
+
+            </el-tab-pane>
+
+            <el-tab-pane label="表单配置">
+<!--                <JsonBox v-model="formMeta"></JsonBox>-->
+                <el-form size="mini">
+                    <template v-for="(value, key, index) in formMeta">
+                        <template v-if="excludes.indexOf(key) < 0">
+                            <el-form-item :key="key" :label="key" v-if="key !== 'conf'">
+                                <component :is="type(formMeta['name'], key, value)" v-model="formMeta[key]"></component>
+                            </el-form-item>
+                            <el-form-item :key="key" :label="key" v-else>
+                                <div :key="key">
+                                    <JsonBox v-model="formMeta[key]" mode="form"></JsonBox>
+                                </div>
+                            </el-form-item>
+                        </template>
+                    </template>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
@@ -53,16 +54,20 @@
         },
         data() {
             return {
-                excludes: ['component_name', 'columns', 'btns'], // not allow customize
-
+                excludes: ['component_name', 'columns', 'btns', 'name'], // temporarily not allow customize
+                typeMapping: {}
             }
         },
         methods: {
-            cloneDeep: cloneDeep
-        },
-        filters: {
-            type(data) {
-                let type = typeof data;
+            cloneDeep: cloneDeep,
+            type(field, key, value) {
+                let fKey = field + "." + key;
+                if (this.typeMapping.hasOwnProperty(fKey)) {
+                    value = this.typeMapping[fKey];
+                } else {
+                    this.typeMapping[fKey] = value;
+                }
+                let type = typeof value;
                 let componentName = "TextBox";
                 switch (type) {
                     case "string":
@@ -90,6 +95,9 @@
                 set: function (newVal) {
                     this.$emit('input', newVal);
                 }
+            },
+            activeFieldMeta() {
+                return this.formMeta.columns[this.selectIndex];
             }
         }
     }
