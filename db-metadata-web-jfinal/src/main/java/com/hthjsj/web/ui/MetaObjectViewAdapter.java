@@ -68,7 +68,8 @@ public class MetaObjectViewAdapter {
      */
     public Component build() {
         component = ViewFactory.createFormView((MetaObject) metaObject);
-        instanceConfig = component.toKv();
+        //FIXME 找合适的时机 触发渲染;
+//        instanceConfig = component.toKv();
         return component;
     }
 
