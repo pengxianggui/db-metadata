@@ -27,7 +27,7 @@ public enum ComponentType {
     JSONBOX("jsonbox", "Json框", "JsonBox"),
     FINDBOX("findbox", "查找框", "FindBox"),
     FINDPANEL("findpanel", "查找面板", "FindPanel"),
-    SEARCHVIEW("searchpanel", "搜索面板", "SearchPanel"),
+    SEARCHVIEW("searchview", "搜索面板", "SearchPanel"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter(AccessLevel.PUBLIC)
