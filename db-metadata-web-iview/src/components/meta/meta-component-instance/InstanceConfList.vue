@@ -1,5 +1,8 @@
 <template>
     <table-list :ref="meta['name']" :meta="meta">
+        <template #operation-bar>
+            <span></span>
+        </template>
         <template #buttons="{scope}">
             <el-tooltip content="配置" placement="top">
                 <el-button icon="el-icon-s-tools" circle
