@@ -17,6 +17,6 @@ public class SearchView extends ViewContainer {
 
     @Override
     public ComponentType componentType() {
-        return ComponentType.SEARCHPANEL;
+        return ComponentType.SEARCHVIEW;
     }
 }

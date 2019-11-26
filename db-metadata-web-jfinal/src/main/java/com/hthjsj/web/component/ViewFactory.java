@@ -63,7 +63,6 @@ public class ViewFactory {
 
     public static FormView createFormView(MetaObject metaObject) {
         Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
-        log.info("ComponentFormViewConfig:{}", instanceFlatConfig.toJson());
         return createFormView(metaObject, instanceFlatConfig);
     }
 
@@ -91,6 +90,35 @@ public class ViewFactory {
         return formView;
     }
 
+    public static SearchView createSearchView(MetaObject metaObject) {
+        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
+        return createSearchView(metaObject, instanceFlatConfig);
+    }
+
+    public static SearchView createSearchView(MetaObject metaObject, Kv instanceFlatConfig) {
+
+        SearchView searchView = new SearchView(metaObject.code(), metaObject.name());
+        searchView.setViewInject(new ViewInject<SearchView>() {
+
+            @Override
+            public void inject(SearchView component, Kv meta, FieldInject<IMetaField> fieldInject) {
+                meta.putIfAbsent("objectCode", metaObject.code());
+
+                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
+                UtilKit.mergeUseOld(meta, kv);
+
+                for (IMetaField metaField : metaObject.fields()) {
+                    Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
+                    FormField formField = FormFieldFactory.createFormField(metaField, config);
+                    component.getFields().add(formField);
+                }
+                //overwrite columns
+                meta.set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
+            }
+        });
+        return searchView;
+    }
+
     public static Component createViewComponent(MetaObject metaObject, ComponentType componentType) {
         Component component = null;
         switch (componentType) {
@@ -100,8 +128,9 @@ public class ViewFactory {
             case TABLEVIEW:
                 component = createTableView(metaObject);
                 break;
-            case SEARCHPANEL:
-                throw new RuntimeException("not finished");
+            case SEARCHVIEW:
+                component = createSearchView(metaObject);
+                break;
             default:
         }
         return component;
@@ -125,8 +154,8 @@ public class ViewFactory {
             case TABLEVIEW:
                 component = new TableView(type.getCn(), type.getCode());
                 break;
-            case SEARCHPANEL:
-                component = new SearchPanelView(type.getCn(), type.getCode());
+            case SEARCHVIEW:
+                component = new SearchView(type.getCn(), type.getCode());
                 break;
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
