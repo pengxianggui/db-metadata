@@ -3,6 +3,9 @@ package com.hthjsj.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.hthjsj.analysis.meta.DbMetaService;
+import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.ComponentService;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
@@ -17,6 +20,14 @@ import java.util.Arrays;
  * <p> @author konbluesky </p>
  */
 public abstract class FrontRestController extends Controller implements FrontRest {
+
+    protected DbMetaService metaService() {
+        return ServiceManager.metaService();
+    }
+
+    protected ComponentService componentService() {
+        return ServiceManager.componentService();
+    }
 
     public void api() {
         renderJson(JFinal.me().getAllActionKeys());
@@ -73,6 +84,7 @@ public abstract class FrontRestController extends Controller implements FrontRes
 
     /**
      * 在序列化json时支持排除字段
+     *
      * @param data
      * @param excludes
      */
@@ -86,7 +98,9 @@ public abstract class FrontRestController extends Controller implements FrontRes
                                          simplePropertyPreFilter,
                                          SerializerFeature.DisableCircularReferenceDetect,
                                          SerializerFeature.WriteDateUseDateFormat,
-                                         SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
+                                         SerializerFeature.WriteNullListAsEmpty,
+                                         SerializerFeature.WriteMapNullValue,
+                                         SerializerFeature.WriteNullStringAsEmpty));
         } else {
             renderJson(data);
         }

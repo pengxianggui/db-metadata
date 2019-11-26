@@ -6,7 +6,6 @@ import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
-import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
@@ -38,7 +37,7 @@ public class TableController extends FrontRestController {
 
     public void meta() {
         String objectCode = new QueryHelper(this).getObjectCode();
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/" + metaObject.code());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -65,7 +64,7 @@ public class TableController extends FrontRestController {
         String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
         Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
@@ -85,7 +84,7 @@ public class TableController extends FrontRestController {
         String idss = getPara("ids");
         List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
         MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
         DeletePointCut pointCut = metaObjectConfigParse.interceptor();
@@ -98,7 +97,7 @@ public class TableController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.deleteBefore(invocation);
-                    s = ServiceManager.metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]));
+                    s = metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]));
                     pointCut.deleteAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());

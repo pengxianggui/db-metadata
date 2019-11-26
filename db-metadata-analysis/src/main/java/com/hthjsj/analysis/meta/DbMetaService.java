@@ -115,14 +115,27 @@ public class DbMetaService {
     }
 
     /**
-     * 获取该元对象在Meta_Object当中的记录
-     *
-     * @param metaObject
+     * 获取该元对象在meta_object当中的记录
+     * TODO [绕]
+     * @param code
      *
      * @return
      */
-    public Record findDataOfMetaObjectCode(IMetaObject metaObject) {
-        return Db.findFirst("select * from meta_object where code=?", metaObject.code());
+    public Record findDataOfMetaObjectCode(String code) {
+        return Db.findFirst("select * from meta_object where code=?", code);
+    }
+
+    /**
+     * 获取该元字段 在meta_field当中的记录
+     * TODO [绕]
+     *
+     * @param code
+     * @param fieldCode
+     *
+     * @return
+     */
+    public Record findDataOfMetaFieldCode(String code, String fieldCode) {
+        return Db.findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
     }
 
     public boolean updateData(IMetaObject object, Kv data) {

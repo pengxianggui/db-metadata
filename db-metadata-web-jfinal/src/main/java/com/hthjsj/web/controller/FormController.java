@@ -6,7 +6,6 @@ import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.AddPointCut;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
-import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.query.FormDataBuilder;
@@ -37,7 +36,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doAdd");
 
@@ -50,7 +49,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
@@ -65,7 +64,7 @@ public class FormController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.addBefore(invocation);
-                    s = ServiceManager.metaService().saveData(invocation.getMetaObject(), invocation.getMetaData());
+                    s = metaService().saveData(invocation.getMetaObject(), invocation.getMetaData());
                     pointCut.addAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
@@ -84,12 +83,12 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         String dataId = getPara(metaObject.primaryKey());
 
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
 
-        Record d = ServiceManager.metaService().findDataById(metaObject, dataId);
+        Record d = metaService().findDataById(metaObject, dataId);
 
         renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }
@@ -99,7 +98,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
@@ -113,7 +112,7 @@ public class FormController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.updateBefore(invocation);
-                    s = ServiceManager.metaService().updateData(invocation.getMetaObject(), invocation.getMetaData());
+                    s = metaService().updateData(invocation.getMetaObject(), invocation.getMetaData());
                     pointCut.updateAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());

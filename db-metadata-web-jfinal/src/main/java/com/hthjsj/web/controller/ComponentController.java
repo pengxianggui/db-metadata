@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
@@ -36,7 +35,7 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
 
         renderJson(Ret.ok("data", metaObjectViewAdapter.build().toKv()));
@@ -44,7 +43,7 @@ public class ComponentController extends FrontRestController {
 
     @Override
     public void list() {
-        List<Record> components = ServiceManager.componentService().loadComponents();
+        List<Record> components = componentService().loadComponents();
         List<Kv> results = Lists.newArrayList();
         components.forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
@@ -63,9 +62,9 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
 
         if (StrKit.notBlank(compCode, objectCode)) {
-            MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
             //已存在的配置
-            if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
+            if (componentService().hasObjectConfig(compCode, objectCode)) {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
                 renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)));
@@ -77,7 +76,7 @@ public class ComponentController extends FrontRestController {
                 renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("msg", "自动计算首次配置"));
             }
         } else {
-            renderJson(Ret.ok("data", Kv.by(compCode, ServiceManager.componentService().loadDefault(compCode).getStr("config"))));
+            renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
         }
 
 
@@ -119,14 +118,14 @@ public class ComponentController extends FrontRestController {
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
-            if (ServiceManager.componentService().hasObjectConfig(compCode, objectCode)) {
+            if (componentService().hasObjectConfig(compCode, objectCode)) {
                 renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
                 return;
             }
-            MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-            ServiceManager.componentService().newObjectConfig(component, metaObject, config);
+            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+            componentService().newObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
+            componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }
@@ -144,10 +143,10 @@ public class ComponentController extends FrontRestController {
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
-            MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-            ServiceManager.componentService().updateObjectConfig(component, metaObject, config);
+            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+            componentService().updateObjectConfig(component, metaObject, config);
         } else {
-            ServiceManager.componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
+            componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
         renderJson(Ret.ok());
     }
@@ -159,10 +158,10 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
 
         if (StrKit.notBlank(objectCode, compCode)) {
-            ServiceManager.componentService().deleteObjectConfig(compCode, objectCode, false);
+            componentService().deleteObjectConfig(compCode, objectCode, false);
             renderJson(Ret.ok());
         } else {
-            ServiceManager.componentService().deleteDefault(compCode);
+            componentService().deleteDefault(compCode);
             renderJson(Ret.ok());
         }
     }
