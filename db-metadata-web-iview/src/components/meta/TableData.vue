@@ -1,54 +1,15 @@
 <template>
     <div>
-        <SearchPanel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></SearchPanel>
-        <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
+        <single-grid-tmpl r_oc="test_table"></single-grid-tmpl>
     </div>
 </template>
 
 <script>
+    import SingleGridTmpl from "../template/SingleGridTmpl";
+
     export default {
         name: "TableData",
-        props: {
-            R_oc: String
-        },
-        data() {
-            return {
-                objectCode: this.R_oc,
-                tlMeta: {},
-                spMeta: {}
-            }
-        },
-        methods: {
-            getTlMeta() {
-                let url = this.$compile("/table/meta/{objectCode}", {
-                    objectCode: this.objectCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.tlMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                });
-            },
-            getSpMeta() {
-                let url = this.$compile("/component/meta?componentCode=SearchPanel&objectCode={objectCode}", {
-                    objectCode: this.objectCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.spMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                });
-            },
-            handleSearch(params) {
-                this.$refs[this.tlMeta['name']].getData(params);
-            }
-        },
-        created() {
-            this.getTlMeta();
-            this.getSpMeta();
-        },
+        components: {SingleGridTmpl}
     }
 </script>
 
