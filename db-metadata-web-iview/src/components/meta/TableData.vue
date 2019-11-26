@@ -1,7 +1,7 @@
 <template>
     <div>
-        <SearchPanel :meta="meta" @search="handleSearch"></SearchPanel>
-        <table-list :ref="meta['name']" :meta="meta"></table-list>
+        <SearchPanel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></SearchPanel>
+        <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
     </div>
 </template>
 
@@ -14,28 +14,40 @@
         data() {
             return {
                 objectCode: this.R_oc,
-                meta: {}
+                tlMeta: {},
+                spMeta: {}
             }
         },
         methods: {
-            getMeta() {
+            getTlMeta() {
                 let url = this.$compile("/meta/fields/{objectCode}", {
                     objectCode: this.objectCode
                 });
-
                 this.$axios.get(url).then(resp => {
-                    this.meta = resp.data;
+                    this.tlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] url: %s, msg: %s', url, err.msg);
                     this.$message.error(err.msg);
-                })
+                });
+            },
+            getSpMeta() {
+                let url = this.$compile("/meta/fields/{objectCode}", {
+                    objectCode: this.objectCode
+                });
+                this.$axios.get(url).then(resp => {
+                    this.spMeta = resp.data;
+                }).catch(err => {
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
+                    this.$message.error(err.msg);
+                });
             },
             handleSearch(params) {
-                this.$refs[this.meta['name']].getData(params);
+                this.$refs[this.tlMeta['name']].getData(params);
             }
         },
         created() {
-            this.getMeta();
+            this.getTlMeta();
+            this.getSpMeta();
         },
     }
 </script>
