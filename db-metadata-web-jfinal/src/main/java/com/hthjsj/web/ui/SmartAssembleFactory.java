@@ -33,25 +33,6 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
-    /**
-     * 1. 推测控件(metafield)
-     * 2. 推测样式配置(metafield,ComponentType)
-     */
-    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
-
-        List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
-
-        // 读取globalConfig中的配置
-        // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
-        for (IMetaField field : fields) {
-            Kv recommendConfig = recommendConfig(field);
-            Kv fieldConfig = UtilKit.getKv(globalConfig, recommendConfig.getStr("component_name"));
-            recommendConfig.forEach((k, v) -> fieldConfig.merge(k, v, (oldValue, newValue) -> newValue));
-            metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
-        }
-        return metaFields;
-    }
-
     private static Kv recommendConfig(IMetaField metaField) {
         /**
          * 分析元字段
@@ -123,6 +104,25 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
 
         return builder.render();
+    }
+
+    /**
+     * 1. 推测控件(metafield)
+     * 2. 推测样式配置(metafield,ComponentType)
+     */
+    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
+
+        List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
+
+        // 读取globalConfig中的配置
+        // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
+        for (IMetaField field : fields) {
+            Kv recommendConfig = recommendConfig(field);
+            Kv fieldConfig = UtilKit.getKv(globalConfig, recommendConfig.getStr("component_name"));
+            UtilKit.mergeUseOld(fieldConfig, recommendConfig);
+            metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
+        }
+        return metaFields;
     }
 
     /**

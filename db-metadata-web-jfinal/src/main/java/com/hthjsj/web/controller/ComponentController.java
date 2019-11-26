@@ -167,10 +167,4 @@ public class ComponentController extends FrontRestController {
         }
     }
 
-    /**
-     * 用于预览客户端配置好的组件实例;
-     */
-    public void preview() {
-
-    }
 }

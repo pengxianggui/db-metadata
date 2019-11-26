@@ -43,9 +43,6 @@ public class QueryCondition {
      */
     /**
      * <p>
-     * FIXME :
-     * http://url?ef=id,name,config&f=config 会滤出全部列
-     * <p>
      * 过滤字段 -> 根据解析规则 拆解 httpparams -> 构建SqlExtPara
      * Map 结构
      * id=?,v_id

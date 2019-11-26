@@ -71,8 +71,29 @@ public class UtilKit {
         return StrKit.isBlank(str) ? defaultValue : str;
     }
 
-    public static Kv mergeUseOld(Kv oldMap, Kv newMap) {
-        newMap.forEach((k, v) -> oldMap.merge(k, v, (oldValue, newValue) -> oldValue));
+    /**
+     * 合并两个Map,Key重复时不合并
+     *
+     * @param mergeMap 等待合并的对象
+     * @param newMap
+     *
+     * @return
+     */
+    public static Kv mergeUseOld(Kv mergeMap, Kv newMap) {
+        newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> oldValue));
+        return newMap;
+    }
+
+    /**
+     * 合并两个Map,Key重复时执行覆盖操作
+     *
+     * @param mergeMap
+     * @param newMap
+     *
+     * @return
+     */
+    public static Kv mergeUseNew(Kv mergeMap, Kv newMap) {
+        newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> newValue));
         return newMap;
     }
 }

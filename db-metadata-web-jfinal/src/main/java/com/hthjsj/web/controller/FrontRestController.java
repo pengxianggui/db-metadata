@@ -73,11 +73,6 @@ public abstract class FrontRestController extends Controller implements FrontRes
 
     /**
      * 在序列化json时支持排除字段
-     * FIXME
-     * f=en&ef=en 时候 会序列化出columnNames,columnValues,columns字段
-     * 原因:f=en&ef=en 即指定又排除时,会触发Record的hashmap 序列化机制,所以序列化除了的Record自身的字段;
-     * 解决:在源头解决
-     *
      * @param data
      * @param excludes
      */
