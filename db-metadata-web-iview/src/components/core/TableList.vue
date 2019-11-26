@@ -278,9 +278,8 @@
             },
 
             editMetaObject() {
-                // TODO 需要单独一个toUpdate接口，只需要传入objectCode参数, 此处url待定
                 let objectCode = this.innerMeta['objectCode'];
-                let url = this.$compile("/form/toUpdate/{objectCode}", {objectCode: objectCode});
+                let url = this.$compile("/meta/editObject/{objectCode}", {objectCode: objectCode});
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
                     this.dialogMeta = {
@@ -290,11 +289,24 @@
                         }
                     };
                     this.dialogVisible = true
-                })
+                });
             },
             editMetaField(fieldCode) {
-                // TODO 需要单独一个toUpdate接口，只需要传入objectCode和fieldCode参数, 此处url待定
-                // /form/toUpdate/meta_field?id=
+                let objectCode = this.innerMeta['objectCode'];
+                let url = this.$compile("/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}", {
+                    objectCode: objectCode,
+                    fieldCode: fieldCode
+                });
+                this.$axios.get(url).then(resp => {
+                    this.dialogComponentMea = resp.data;
+                    this.dialogMeta = {
+                        component_name: "DialogBox",
+                        conf: {
+                            title: "编辑元对象" + objectCode
+                        }
+                    };
+                    this.dialogVisible = true
+                });
             },
             editInstanceConf() {
                 let objectCode = this.innerMeta['objectCode'];

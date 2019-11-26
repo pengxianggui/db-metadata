@@ -20,7 +20,7 @@
         },
         methods: {
             getTlMeta() {
-                let url = this.$compile("/meta/fields/{objectCode}", {
+                let url = this.$compile("/table/meta/{objectCode}", {
                     objectCode: this.objectCode
                 });
                 this.$axios.get(url).then(resp => {
@@ -31,7 +31,7 @@
                 });
             },
             getSpMeta() {
-                let url = this.$compile("/meta/fields/{objectCode}", {
+                let url = this.$compile("/component/meta?componentCode=SearchPanel&objectCode={objectCode}", {
                     objectCode: this.objectCode
                 });
                 this.$axios.get(url).then(resp => {
