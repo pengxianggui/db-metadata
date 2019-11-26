@@ -126,7 +126,7 @@ public class DbMetaService {
     }
 
     /**
-     * 获取该元字段 在meta_field当中的记录
+     * 获取指定元对象,元字段 在meta_field当中的记录
      * TODO [绕]
      *
      * @param code

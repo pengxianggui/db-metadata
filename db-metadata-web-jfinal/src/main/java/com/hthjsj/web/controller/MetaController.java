@@ -80,9 +80,12 @@ public class MetaController extends FrontRestController {
     public void editObject() {
         String objectCode = new QueryHelper(this).getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
+
         MetaObject metaObject = (MetaObject) metaService().findByCode("meta_object");//hard Code
-        FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
+
         Record data = metaService().findDataOfMetaObjectCode(metaObject.code());
+
+        FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
     }
 
@@ -91,9 +94,12 @@ public class MetaController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元字段的更新动作,必须指定objectCode和fieldCode");
+
         MetaObject metaObject = (MetaObject) metaService().findByCode("meta_field");//hard Code
+
+        Record data = metaService().findDataOfMetaFieldCode(objectCode, fieldCode);
+
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
-        Record data = metaService().findDataOfMetaFieldCode(metaObject.code(), fieldCode);
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
     }
 
