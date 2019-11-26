@@ -103,8 +103,8 @@
                             params[name + symbol] = value;
                             break;
                         case "range":
-                            params[name + "_gt"] = value[0];
-                            params[name + "_lt"] = value[1];
+                            params[name + "gt"] = value[0];
+                            params[name + "lt"] = value[1];
                             break;
                         default:
                             params[name + this.symbols[symbol]] = value;
