@@ -3,6 +3,8 @@
         <div class="header">
             <el-button @click="preview">视图预览</el-button>
             <el-button @click="jsonView">json预览</el-button>
+            <el-button @click="submitForm">保存</el-button>
+            <el-button @click="resetForm">重置</el-button>
         </div>
         <div class="work-area">
             <FormTmpl :ref="formMeta.name" :meta="formMeta">
@@ -102,6 +104,13 @@
                 this.$dialog(this.data, null, {
                     title: "视图预览"
                 })
+            },
+            submitForm() {
+                this.$message.error("submitForm action not finished!");
+                // this.$refs[this.formMeta.name].onSubmit();
+            },
+            resetForm() {
+                this.$message.error("resetForm action not finished!");
             }
         },
         watch: {
