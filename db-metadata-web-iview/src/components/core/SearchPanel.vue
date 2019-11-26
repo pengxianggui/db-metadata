@@ -122,14 +122,14 @@
                 let columns = meta.columns;
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
-                        if (item.hasOwnProperty("searchable") && item.searchable === true) {
+                        // if (item.hasOwnProperty("searchable") && item.searchable === true) {
                             let componentName = item.component_name;
                             this.$merge(item, DEFAULT[componentName]); // merge column
                             this.$set(this.model, item.name, {
                                 value: null,
                                 symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
                             });
-                        }
+                        // }
                     });
                 }
             }
