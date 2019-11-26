@@ -70,7 +70,8 @@ public class MetaController extends FrontRestController {
      * @deprecated
      */
     public void fields() {
-        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
+        log.error("接口废弃 -> /table/meta");
+//        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
