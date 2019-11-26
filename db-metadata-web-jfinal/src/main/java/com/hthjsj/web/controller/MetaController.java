@@ -82,7 +82,7 @@ public class MetaController extends FrontRestController {
     public void toUpdate() {
         String objectCode = new QueryHelper(this).getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
-        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
         Record data = ServiceManager.metaService().findDataOfMetaObjectCode(metaObject);
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
