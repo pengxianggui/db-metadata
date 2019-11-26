@@ -22,3 +22,4 @@ MetaField 数据源配置
 - [ ] 增加 MetaObject / MetaField 的mock手段;
 - [ ] db-metadata-analysis的数据源 目前只绑定了一个
 - [ ] db-metadata-web-jfinal 端的数据库操作,未做多数据源的指定;
+- [ ] 在实例配置阶段删除字段问题(无法彻底删除,因系统多数遍历 使用metaobject.fields) 

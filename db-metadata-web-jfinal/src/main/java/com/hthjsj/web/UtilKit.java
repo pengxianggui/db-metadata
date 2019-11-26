@@ -41,7 +41,8 @@ public class UtilKit {
     }
 
     public static Kv getKv(Kv kv, String key) {
-        return JSON.parseObject(kv.getStr(key), Kv.class);
+        Kv result = JSON.parseObject(kv.getStr(key), Kv.class);
+        return result != null ? result : Kv.create();
     }
 
     public static List<Kv> getKvs(Kv kv, String key) {
