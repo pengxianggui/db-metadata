@@ -1,7 +1,7 @@
 <template>
     <table-list :ref="meta['name']" :meta="meta">
         <template #operation-bar>
-            <span></span>
+            <el-button @click="addConf">新增</el-button>
         </template>
         <template #buttons="{scope}">
             <el-tooltip content="配置" placement="top">
@@ -29,6 +29,9 @@
             }
         },
         methods: {
+            addConf() {
+                this.$router.push("/main/instance-conf");
+            },
             getMeta() {
                 this.$axios.get("/meta/fields/meta_component_instance")
                     .then(resp => {
