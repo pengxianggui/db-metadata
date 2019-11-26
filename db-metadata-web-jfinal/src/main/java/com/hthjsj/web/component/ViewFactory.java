@@ -97,7 +97,7 @@ public class ViewFactory {
 
     public static SearchView createSearchView(MetaObject metaObject, Kv instanceFlatConfig) {
 
-        SearchView searchView = new SearchView(metaObject.code(), metaObject.name());
+        SearchView searchView = new SearchView(metaObject.code() + ComponentType.SEARCHVIEW.getCode(), metaObject.name());
         searchView.setViewInject(new ViewInject<SearchView>() {
 
             @Override

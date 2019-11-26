@@ -38,7 +38,7 @@ public class ComponentController extends FrontRestController {
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
 
-        renderJson(Ret.ok("data", metaObjectViewAdapter.build().toKv()));
+        renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig()));
     }
 
     @Override
