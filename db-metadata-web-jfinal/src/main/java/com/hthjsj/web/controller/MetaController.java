@@ -13,6 +13,7 @@ import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -83,7 +84,8 @@ public class MetaController extends FrontRestController {
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
-        renderJson(Ret.ok("data", formView.toKv()));
+        Record data = ServiceManager.metaService().findDataOfMetaObjectCode(metaObject);
+        renderJson(Ret.ok("data", formView.toKv().set("record", data)));
     }
 
     @Override

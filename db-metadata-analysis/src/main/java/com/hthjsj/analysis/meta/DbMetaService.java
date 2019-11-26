@@ -110,8 +110,19 @@ public class DbMetaService {
         return status;
     }
 
-    public Record findData(IMetaObject object, String id) {
+    public Record findDataById(IMetaObject object, String id) {
         return Db.findById(object.tableName(), id);
+    }
+
+    /**
+     * 获取该元对象在Meta_Object当中的记录
+     *
+     * @param metaObject
+     *
+     * @return
+     */
+    public Record findDataOfMetaObjectCode(IMetaObject metaObject) {
+        return Db.findFirst("select * from meta_object where code=?", metaObject.code());
     }
 
     public boolean updateData(IMetaObject object, Kv data) {

@@ -89,7 +89,7 @@ public class FormController extends FrontRestController {
 
         FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
 
-        Record d = ServiceManager.metaService().findData(metaObject, dataId);
+        Record d = ServiceManager.metaService().findDataById(metaObject, dataId);
 
         renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }
