@@ -27,6 +27,11 @@ public class FormView extends ViewContainer {
         return formView;
     }
 
+    public FormView action(String url) {
+        meta.setIfNotBlank("action", url);
+        return this;
+    }
+
     @Override
     public ComponentType componentType() {
         return ComponentType.FORMVIEW;

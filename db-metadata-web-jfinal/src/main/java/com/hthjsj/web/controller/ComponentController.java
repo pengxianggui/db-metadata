@@ -31,6 +31,17 @@ public class ComponentController extends FrontRestController {
         renderJson(Ret.ok());
     }
 
+    public void meta() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCode = queryHelper.getComponentCode();
+
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
+
+        renderJson(Ret.ok("data", metaObjectViewAdapter.build().toKv()));
+    }
+
     @Override
     public void list() {
         List<Record> components = ServiceManager.componentService().loadComponents();

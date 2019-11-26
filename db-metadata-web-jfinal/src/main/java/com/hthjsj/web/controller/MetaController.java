@@ -58,8 +58,7 @@ public class MetaController extends FrontRestController {
 
     public void objs() {
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode("meta_object");
-        TableView tableView = ViewFactory.createTableView("meta_object_table", "元对象", metaObject);
-        tableView.dataUrl("/table/list/meta_object");
+        TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/meta_object");
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
@@ -74,7 +73,7 @@ public class MetaController extends FrontRestController {
 //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+        TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/" + metaObject.code());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
@@ -83,7 +82,7 @@ public class MetaController extends FrontRestController {
         String objectCode = new QueryHelper(this).getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
-        FormView formView = ViewFactory.createFormView("/form/doUpdate", metaObject);
+        FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
         renderJson(Ret.ok("data", formView.toKv()));
     }
 

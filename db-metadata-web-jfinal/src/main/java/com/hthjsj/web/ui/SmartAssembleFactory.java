@@ -37,7 +37,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
      * 1. 推测控件(metafield)
      * 2. 推测样式配置(metafield,ComponentType)
      */
-    private static List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
+    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 

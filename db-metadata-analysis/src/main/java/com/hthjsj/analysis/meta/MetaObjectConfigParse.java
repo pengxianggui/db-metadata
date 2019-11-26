@@ -30,8 +30,9 @@ public class MetaObjectConfigParse extends MetaConfigFactory.MetaObjectConfig {
     }
 
     public <T> T interceptor() {
+        T clazz = null;
         try {
-            T clazz = (T) Class.forName(getStr("bizInterceptor")).newInstance();
+            clazz = (T) Class.forName(getStr("bizInterceptor")).newInstance();
             return clazz;
         } catch (ClassNotFoundException e) {
             log.error(e.getMessage(), e);
@@ -39,7 +40,10 @@ public class MetaObjectConfigParse extends MetaConfigFactory.MetaObjectConfig {
             log.error(e.getMessage(), e);
         } catch (InstantiationException e) {
             log.error(e.getMessage(), e);
+        } catch (NullPointerException e) {
+            log.error("元对象 {},未配置拦截器.", moduleCode());
         }
+        log.warn("元对象{},使用默认拦截器{}", moduleCode(), PointCut.class);
         return (T) new PointCut();
     }
 }

@@ -30,7 +30,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
-    private static List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
+    private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
@@ -63,7 +63,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
          * 装配 MetaObjectViewAdapter
          *
          */
-        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
+        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType);
         //全部全局配置
         Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置

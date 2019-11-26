@@ -70,4 +70,9 @@ public class UtilKit {
         }
         return StrKit.isBlank(str) ? defaultValue : str;
     }
+
+    public static Kv mergeUseOld(Kv oldMap, Kv newMap) {
+        newMap.forEach((k, v) -> oldMap.merge(k, v, (oldValue, newValue) -> oldValue));
+        return newMap;
+    }
 }

@@ -26,7 +26,7 @@ public class ComponentTest {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.start();
         MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
-        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+        TableView tableView = ViewFactory.createTableView(metaObject);
 
         Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create());
         //        init(metaObject);
@@ -40,7 +40,7 @@ public class ComponentTest {
     }
 
     public static void init(MetaObject metaObject) {
-        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+        TableView tableView = ViewFactory.createTableView(metaObject);
         {
             //            tableView.setGlobal("hahaa", "xixi");
             Record record = new Record();

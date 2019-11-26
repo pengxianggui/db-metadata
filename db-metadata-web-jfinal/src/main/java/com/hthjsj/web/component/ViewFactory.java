@@ -27,21 +27,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ViewFactory {
 
-    public static TableView createTableView(String name, String label, MetaObject metaObject) {
-        TableView tableView = new TableView(name, label);
-        //TODO bad small code
-        tableView.dataUrl("/table/list/" + metaObject.code());
+    public static TableView createTableView(MetaObject metaObject) {
+        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.TABLEVIEW.getCode(), metaObject.code());
+        return createTableView(metaObject, instanceFlatConfig);
+    }
 
-        Kv tableViewConfig = ServiceManager.componentService().loadObjectConfigFlat(tableView.type(), metaObject.code());
-        log.info("ComponentTableViewConfig:{}", tableViewConfig.toJson());
-
+    public static TableView createTableView(MetaObject metaObject, Kv instanceFlatConfig) {
+        TableView tableView = new TableView(metaObject.code(), metaObject.name());
         tableView.setViewInject(new ViewInject<TableView>() {
 
             @Override
             public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 meta.putIfAbsent("objectCode", metaObject.code());
-                Kv kv = UtilKit.getKv(tableViewConfig, metaObject.code());
-                kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
+                UtilKit.mergeUseOld(meta, kv);
 
                 List<Kv> fs = new ArrayList<>();
                 for (IMetaField field : metaObject.fields()) {
@@ -55,30 +54,33 @@ public class ViewFactory {
 
             @Override
             public Kv inject(Kv meta, IMetaField field) {
-                Kv kv = UtilKit.getKv(tableViewConfig, field.fieldCode());
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
+                Kv kv = UtilKit.getKv(instanceFlatConfig, field.fieldCode());
+                return UtilKit.mergeUseOld(meta, kv);
             }
         });
         return tableView;
     }
 
-    public static FormView createFormView(String action, MetaObject metaObject) {
-        Kv formViewConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
-        log.info("ComponentFormViewConfig:{}", formViewConfig.toJson());
+    public static FormView createFormView(MetaObject metaObject) {
+        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
+        log.info("ComponentFormViewConfig:{}", instanceFlatConfig.toJson());
+        return createFormView(metaObject, instanceFlatConfig);
+    }
 
-        FormView formView = FormView.POST(action, metaObject.name());
+    public static FormView createFormView(MetaObject metaObject, Kv instanceFlatConfig) {
+
+        FormView formView = new FormView(metaObject.code(), metaObject.name());
         formView.setViewInject(new ViewInject<FormView>() {
 
             @Override
             public void inject(FormView component, Kv meta, FieldInject<IMetaField> fieldInject) {
                 meta.putIfAbsent("objectCode", metaObject.code());
 
-                Kv kv = UtilKit.getKv(formViewConfig, metaObject.code());
-                //https://blog.csdn.net/tangyaya8/article/details/91399650
-                kv.forEach((k, v) -> meta.merge(k, v, (oldVal, newVal) -> oldVal));
+                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
+                UtilKit.mergeUseOld(meta, kv);
+
                 for (IMetaField metaField : metaObject.fields()) {
-                    Kv config = UtilKit.getKv(formViewConfig, metaField.fieldCode());
+                    Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
                     FormField formField = FormFieldFactory.createFormField(metaField, config);
                     component.getFields().add(formField);
                 }
@@ -87,6 +89,22 @@ public class ViewFactory {
             }
         });
         return formView;
+    }
+
+    public static Component createViewComponent(MetaObject metaObject, ComponentType componentType) {
+        Component component = null;
+        switch (componentType) {
+            case FORMVIEW:
+                component = createFormView(metaObject);
+                break;
+            case TABLEVIEW:
+                component = createTableView(metaObject);
+                break;
+            case SEARCHPANEL:
+                throw new RuntimeException("not finished");
+            default:
+        }
+        return component;
     }
 
     /**
@@ -107,6 +125,8 @@ public class ViewFactory {
             case TABLEVIEW:
                 component = new TableView(type.getCn(), type.getCode());
                 break;
+            case SEARCHPANEL:
+                throw new RuntimeException("not finished");
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
         }

@@ -3,7 +3,9 @@ package com.hthjsj.web.ui;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.component.ViewFactory;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 
@@ -55,6 +57,19 @@ public class MetaObjectViewAdapter {
         this.instanceConfig = component.toKv();
         this.fieldsMap = fields.stream().collect(Collectors.toMap(metaFieldViewAdapter -> metaFieldViewAdapter.metaField.fieldCode(),
                                                                   metaFieldViewAdapter -> metaFieldViewAdapter));
+    }
+
+    /**
+     * FIXME Build 复用了ViewFactory逻辑;
+     * ViewFactory create时会View容器内的子元素一并构建,而不是依赖List<MetaFieldViewAdapter> fields 进行构建
+     * 会有重复计算的损耗,同时会架空MetaFieldViewAdapter类型的fields;
+     *
+     * @return
+     */
+    public Component build() {
+        component = ViewFactory.createFormView((MetaObject) metaObject);
+        instanceConfig = component.toKv();
+        return component;
     }
 
     /**
