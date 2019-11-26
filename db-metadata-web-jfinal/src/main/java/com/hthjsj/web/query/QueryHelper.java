@@ -28,7 +28,7 @@ public class QueryHelper {
     }
 
     public String getFieldCode() {
-        return tp.getPara("f", tp.getPara("objectField"));
+        return tp.getPara("f", tp.getPara("fieldCode"));
     }
 
     public Integer getPageSize() {

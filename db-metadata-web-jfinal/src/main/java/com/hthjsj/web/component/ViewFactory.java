@@ -126,7 +126,8 @@ public class ViewFactory {
                 component = new TableView(type.getCn(), type.getCode());
                 break;
             case SEARCHPANEL:
-                throw new RuntimeException("not finished");
+                component = new SearchPanelView(type.getCn(), type.getCode());
+                break;
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
         }
