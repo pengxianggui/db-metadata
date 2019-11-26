@@ -12,6 +12,7 @@ import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -65,12 +66,29 @@ public class MetaController extends FrontRestController {
     /**
      * mock metas 数据
      * Fixme
+     *
+     * @deprecated
      */
     public void fields() {
+        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
         renderJson(Ret.ok("data", tableView.toKv()));
+    }
+
+    @Override
+    public void toUpdate() {
+        String objectCode = new QueryHelper(this).getObjectCode();
+        Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        FormView formView = ViewFactory.createFormView("/form/doUpdate", metaObject);
+        renderJson(Ret.ok("data", formView.toKv()));
+    }
+
+    @Override
+    public void doUpdate() {
+
     }
 
     @Override

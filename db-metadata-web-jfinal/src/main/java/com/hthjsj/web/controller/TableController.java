@@ -7,6 +7,8 @@ import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.TableView;
+import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryCondition;
 import com.hthjsj.web.query.QueryHelper;
@@ -33,6 +35,14 @@ import java.util.List;
  */
 @Slf4j
 public class TableController extends FrontRestController {
+
+    public void meta() {
+        String objectCode = new QueryHelper(this).getObjectCode();
+        MetaObject metaObject = (MetaObject) ServiceManager.metaService().findByCode(objectCode);
+        TableView tableView = ViewFactory.createTableView(metaObject.name(), metaObject.code(), metaObject);
+        renderJson(Ret.ok("data", tableView.toKv()));
+    }
+
 
     @Override
     public void list() {
