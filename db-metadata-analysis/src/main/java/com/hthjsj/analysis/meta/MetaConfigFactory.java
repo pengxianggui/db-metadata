@@ -26,14 +26,15 @@ public class MetaConfigFactory {
         config.set("objectCode", metaField.objectCode());
         config.set("fieldCode", metaField.fieldCode());
 
-
+        //主键:新增不可见,更新只读
         if (metaField.isPrimary()) {
             config.set("addStatus", MetaFieldConfigParse.DISABLE);
+            config.set("updateStatus", MetaFieldConfigParse.READONLY);
         } else {
             config.set("addStatus", MetaFieldConfigParse.NORMAL);
+            config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         }
 
-        config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         config.set("isListShow", true);
         config.set("isSearch", true);
         return new MetaFieldConfigParse(config);

@@ -82,7 +82,7 @@ public class UtilKit {
      */
     public static Kv mergeUseOld(Kv mergeMap, Kv newMap) {
         newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> oldValue));
-        return newMap;
+        return mergeMap;
     }
 
     /**
@@ -95,6 +95,6 @@ public class UtilKit {
      */
     public static Kv mergeUseNew(Kv mergeMap, Kv newMap) {
         newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> newValue));
-        return newMap;
+        return mergeMap;
     }
 }

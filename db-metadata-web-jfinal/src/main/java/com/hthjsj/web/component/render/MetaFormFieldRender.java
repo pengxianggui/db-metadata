@@ -9,6 +9,8 @@ import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 
+import java.util.Map;
+
 /**
  * 元子段 与 元子控件的渲染
  * <p> @Date : 2019/11/27 </p>
@@ -37,13 +39,14 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
 
     @Override
     public Kv render() {
+        UtilKit.mergeUseOld(component.getMeta(), fieldInstanceConfig);
         if (component.getContainer() instanceof FormView) {
             FormView formView = (FormView) component.getContainer();
             AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
             if (formView.isAdd()) {
                 if (metaField.configParser().isAdd()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().addStatus()) {
-                        builder.readOnly(true);
+                        builder.disabled(true);
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().addStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
@@ -55,7 +58,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
             if (formView.isUpdate()) {
                 if (metaField.configParser().isUpdate()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().updateStatus()) {
-                        builder.readOnly(true);
+                        builder.disabled(true);
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().updateStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
@@ -67,7 +70,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
             if (formView.isView()) {
                 if (metaField.configParser().isView()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().viewStatus()) {
-                        builder.readOnly(true);
+                        builder.disabled(true);
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().viewStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().viewStatus()) {
@@ -75,7 +78,11 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
                     }
                 }
             }
+            //TODO
+            component.getMeta().putIfAbsent("conf", Kv.create());
+            builder.render().putIfAbsent("conf", Kv.create());
+            ((Kv) builder.render().getAs("conf")).forEach((k, v) -> ((Map) component.getMeta().getAs("conf")).merge(k, v, (oldValue, newValue) -> oldValue));
         }
-        return UtilKit.mergeUseOld(component.getMeta(), fieldInstanceConfig);
+        return component.getMeta();
     }
 }

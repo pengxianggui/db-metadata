@@ -111,15 +111,15 @@ public class MetaFieldConfigParse extends MetaData {
      * @return
      */
     public int addStatus() {
-        return getInt("addStatus");
+        return Integer.valueOf(getStr("addStatus"));
     }
 
     public int updateStatus() {
-        return getInt("updateStatus");
+        return Integer.valueOf(getStr("updateStatus"));
     }
 
     public int viewStatus() {
-        return getInt("viewStatus");
+        return Integer.valueOf(getStr("viewStatus"));
     }
 
 
