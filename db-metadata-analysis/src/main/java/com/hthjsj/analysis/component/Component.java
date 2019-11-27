@@ -16,9 +16,11 @@ public abstract class Component {
 
     protected String label;
 
-    @Getter
     @Setter
-    ComponentRender<? extends Component> render;
+    protected ComponentRender<? extends Component> render;
+
+    @Setter
+    protected ViewContainer viewContainer;
 
     @Getter
     @Setter

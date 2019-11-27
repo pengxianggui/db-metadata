@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class AttributeBuilder {
 
+    private AttributeBuilder() {
+    }
     public static AttributeSteps newBuilder() {
         return new AttributeSteps();
     }
@@ -54,6 +56,8 @@ public class AttributeBuilder {
         InputAttr minlength(int v);
 
         InputAttr showWordLimit(boolean v);
+
+        InputAttr readOnly(boolean v);
 
         AttrRender build();
     }
@@ -116,6 +120,12 @@ public class AttributeBuilder {
         @Override
         public InputAttr showWordLimit(boolean v) {
             setConf("show-word-limit", v);
+            return this;
+        }
+
+        @Override
+        public InputAttr readOnly(boolean v) {
+            setConf("readonly", v);
             return this;
         }
 

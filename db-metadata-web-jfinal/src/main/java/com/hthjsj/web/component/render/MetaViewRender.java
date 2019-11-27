@@ -53,7 +53,7 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
 
         for (IMetaField metaField : metaObject.fields()) {
             Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
-            FormField formField = FormFieldFactory.createFormField(metaField, config);
+            FormField formField = FormFieldFactory.createFormFieldInContainer(metaField, config, component);
 
             if (component.componentType() == ComponentType.TABLEVIEW) {
                 if (metaField.configParser().isListShow()) {

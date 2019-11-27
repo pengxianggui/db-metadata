@@ -25,6 +25,6 @@ public abstract class FormField extends Component {
 
     @Override
     public ViewContainer getContainer() {
-        throw new UnsupportedOperationException("原子组件不支持此操作");
+        return this.viewContainer;
     }
 }

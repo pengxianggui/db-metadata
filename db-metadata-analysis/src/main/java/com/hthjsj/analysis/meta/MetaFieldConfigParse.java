@@ -114,6 +114,15 @@ public class MetaFieldConfigParse extends MetaData {
         return getInt("addStatus");
     }
 
+    public int updateStatus() {
+        return getInt("updateStatus");
+    }
+
+    public int viewStatus() {
+        return getInt("viewStatus");
+    }
+
+
     public boolean isAdd() {
         return addStatus() > DISABLE;
     }
@@ -126,11 +135,4 @@ public class MetaFieldConfigParse extends MetaData {
         return viewStatus() > DISABLE;
     }
 
-    public int updateStatus() {
-        return getInt("updateStatus");
-    }
-
-    public int viewStatus() {
-        return getInt("viewStatus");
-    }
 }

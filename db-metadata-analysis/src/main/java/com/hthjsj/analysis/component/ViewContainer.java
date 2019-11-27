@@ -65,6 +65,6 @@ public abstract class ViewContainer extends Component {
             //如使用了Inject,就覆盖默认逻辑
             renderFieldsMeta(fields, meta);
         }
-        return getRender().render();
+        return render.render();
     }
 }

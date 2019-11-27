@@ -1,6 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.component.ViewContainer;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.component.render.MetaFormFieldRender;
 import com.jfinal.kit.Kv;
@@ -35,6 +36,21 @@ public class FormFieldFactory {
     public static FormField createFormFieldDefault(IMetaField metaField, Kv globalConfig) {
         globalConfig.set("name", metaField.fieldCode()).set("label", metaField.cn());
         return createFormField(metaField, globalConfig);
+    }
+
+    /**
+     * 创建带容器的FormField
+     *
+     * @param metaField
+     * @param globalConfig
+     * @param viewContainer
+     *
+     * @return
+     */
+    public static FormField createFormFieldInContainer(IMetaField metaField, Kv globalConfig, ViewContainer viewContainer) {
+        FormField formField = createFormField(metaField, globalConfig);
+        formField.setViewContainer(viewContainer);
+        return formField;
     }
 
     /**

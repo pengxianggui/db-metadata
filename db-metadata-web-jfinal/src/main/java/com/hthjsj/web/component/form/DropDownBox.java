@@ -37,7 +37,7 @@ public class DropDownBox extends FormField {
     @Override
     public Kv toKv() {
         getFieldInject().inject(meta);
-        return getRender().render();
+        return render.render();
     }
 
     @Override
