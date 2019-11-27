@@ -22,8 +22,14 @@ public class SearchView extends ViewContainer {
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
     }
+
     @Override
     public ComponentType componentType() {
         return ComponentType.SEARCHVIEW;
+    }
+
+    @Override
+    public Kv toKv() {
+        return getRender().render();
     }
 }
