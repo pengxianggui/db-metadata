@@ -38,7 +38,7 @@ public class TableController extends FrontRestController {
     public void meta() {
         String objectCode = new QueryHelper(this).getObjectCode();
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/" + metaObject.code());
+        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 

@@ -114,6 +114,18 @@ public class MetaFieldConfigParse extends MetaData {
         return getInt("addStatus");
     }
 
+    public boolean isAdd() {
+        return addStatus() > DISABLE;
+    }
+
+    public boolean isUpdate() {
+        return updateStatus() > DISABLE;
+    }
+
+    public boolean isView() {
+        return viewStatus() > DISABLE;
+    }
+
     public int updateStatus() {
         return getInt("updateStatus");
     }

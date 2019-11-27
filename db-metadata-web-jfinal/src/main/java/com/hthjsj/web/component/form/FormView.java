@@ -15,7 +15,15 @@ import com.jfinal.kit.Kv;
  */
 public class FormView extends ViewContainer {
 
-    protected String action;
+    public static final String ADD = "add";
+
+    public static final String UPDATE = "update";
+
+    public static final String VIEW = "view";
+
+    String action;
+
+    String formType;
 
     public FormView(String name, String label) {
         super(name, label);
@@ -30,7 +38,35 @@ public class FormView extends ViewContainer {
     }
 
     public FormView action(String url) {
+        action = url;
         meta.setIfNotBlank("action", url);
+        return this;
+    }
+
+    public boolean isAdd() {
+        return ADD.equalsIgnoreCase(formType);
+    }
+
+    public boolean isUpdate() {
+        return UPDATE.equalsIgnoreCase(formType);
+    }
+
+    public boolean isView() {
+        return VIEW.equalsIgnoreCase(formType);
+    }
+
+    public FormView addForm() {
+        this.formType = ADD;
+        return this;
+    }
+
+    public FormView updateForm() {
+        this.formType = UPDATE;
+        return this;
+    }
+
+    public FormView viewForm() {
+        this.formType = VIEW;
         return this;
     }
 
@@ -46,5 +82,4 @@ public class FormView extends ViewContainer {
         meta.setIfNotBlank("action", action);
         meta.putIfAbsent("component_name", type());
     }
-
 }

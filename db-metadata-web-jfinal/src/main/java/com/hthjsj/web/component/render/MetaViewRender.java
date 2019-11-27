@@ -8,6 +8,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.form.FormField;
 import com.hthjsj.web.component.form.FormFieldFactory;
+import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 
 import java.util.stream.Collectors;
@@ -37,6 +38,11 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
         return component;
     }
 
+    /**
+     * TABLEVIEW,SEARCHVIEW,FORMVIEW(ADD,UPDATE,DETAILS)共用的渲染逻辑;
+     *
+     * @return
+     */
     @Override
     public Kv render() {
 
@@ -63,7 +69,25 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
                 }
             }
             if (component.componentType() == ComponentType.FORMVIEW) {
-                component.getFields().add(formField);
+                if (((FormView) component).isAdd()) {
+                    if (metaField.configParser().isAdd()) {
+                        component.getFields().add(formField);
+                        continue;
+                    }
+                }
+                if (((FormView) component).isUpdate()) {
+                    if (metaField.configParser().isUpdate()) {
+                        component.getFields().add(formField);
+                        continue;
+                    }
+                }
+
+                if (((FormView) component).isView()) {
+                    if (metaField.configParser().isView()) {
+                        component.getFields().add(formField);
+                        continue;
+                    }
+                }
             }
         }
         //overwrite columns

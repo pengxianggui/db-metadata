@@ -58,7 +58,7 @@ public class MetaController extends FrontRestController {
 
     public void objs() {
         MetaObject metaObject = (MetaObject) metaService().findByCode("meta_object");
-        TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/meta_object");
+        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/meta_object");
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
@@ -73,7 +73,7 @@ public class MetaController extends FrontRestController {
 //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.createTableView(metaObject).dataUrl("/table/list/" + metaObject.code());
+        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
 
@@ -85,7 +85,7 @@ public class MetaController extends FrontRestController {
 
         Record data = metaService().findDataOfMetaObjectCode(metaObject.code());
 
-        FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
     }
 
@@ -99,7 +99,7 @@ public class MetaController extends FrontRestController {
 
         Record data = metaService().findDataOfMetaFieldCode(objectCode, fieldCode);
 
-        FormView formView = ViewFactory.createFormView(metaObject).action("/form/doUpdate");
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
     }
 
