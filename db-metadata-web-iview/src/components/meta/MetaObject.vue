@@ -1,33 +1,49 @@
 <template>
-    <table-list :ref="meta['name']" :meta="meta">
-        <template #operation-bar>
-            <el-button-group>
-                <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
-            </el-button-group>
-        </template>
-    </table-list>
+    <div>
+        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="tlMeta['name']" :meta="tlMeta">
+            <template #operation-bar>
+                <el-button-group>
+                    <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
+                </el-button-group>
+            </template>
+        </table-list>
+    </div>
 </template>
 
 <script>
+    import {getSpMeta} from "../core/mixins/methods"
+
     export default {
         name: "MetaObject",
+        mixins: [getSpMeta],
+        props: {
+            R_oc: String
+        },
         data() {
             return {
-                meta: {}
+                objectCode: this.R_oc,
+                tlMeta: {},
+                spMeta: {}
             }
         },
         methods: {
-            getTableMeta() {
-                const url = '/meta/objs';
+            getTlMeta(objectCode) {
+                let url = this.$compile("/table/meta/{objectCode}", {
+                    objectCode: objectCode
+                });
                 this.$axios.get(url).then(resp => {
-                    this.meta = resp.data;
+                    this.tlMeta = resp.data;
                     this.$nextTick(() => {
                         this.ref.doDelete = this.doDelete; // override doDelete
                     });
                 }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg ? err.msg : err);
-                    this.$message.error(err.msg)
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
+                    this.$message.error(err.msg);
                 });
+            },
+            handleSearch(params) {
+                this.$refs[this.tlMeta['name']].getData(params);
             },
             handleBatchDelete(ev) {
                 this.ref.handleBatchDelete(ev);
@@ -59,11 +75,12 @@
             }
         },
         created() {
-            this.getTableMeta()
+            this.getTlMeta(this.objectCode);
+            this.getSpMeta(this.objectCode);
         },
         computed: {
             ref() {
-                return this.$refs[this.meta['name']];
+                return this.$refs[this.tlMeta['name']];
             }
         }
     }

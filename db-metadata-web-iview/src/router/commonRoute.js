@@ -13,6 +13,7 @@ const children = [
     }, {
         path: 'meta-object',
         name: 'MetaObject',
+        props: {R_oc: "meta_object"},
         component: () => import('@/components/meta/MetaObject')
     }, {
         path: 'meta-component',

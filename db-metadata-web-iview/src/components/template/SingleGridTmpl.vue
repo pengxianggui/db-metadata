@@ -1,19 +1,17 @@
 <template>
     <div>
-        <slot name="search-panel">
-            <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
-        </slot>
-        <slot name="table-list">
-            <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
-        </slot>
+        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
     </div>
 </template>
 
 <script>
     import SearchPanel from "../core/SearchPanel";
+    import {getTlMeta, getSpMeta} from "../core/mixins/methods"
 
     export default {
         name: "SingleGridTmpl",
+        mixins: [getTlMeta, getSpMeta],
         components: {SearchPanel},
         props: {
             R_oc: String
@@ -26,35 +24,13 @@
             }
         },
         methods: {
-            getTlMeta() {
-                let url = this.$compile("/table/meta/{objectCode}", {
-                    objectCode: this.objectCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.tlMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                });
-            },
-            getSpMeta() {
-                let url = this.$compile("/component/meta?componentCode=SearchPanel&objectCode={objectCode}", {
-                    objectCode: this.objectCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.spMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                });
-            },
             handleSearch(params) {
                 this.$refs[this.tlMeta['name']].getData(params);
             }
         },
         created() {
-            this.getTlMeta();
-            this.getSpMeta();
+            this.getTlMeta(this.objectCode);
+            this.getSpMeta(this.objectCode);
         },
     }
 </script>
