@@ -89,20 +89,24 @@ public class DBController extends FrontRestController {
                 IMetaObject metaObject = metaService().importFromTable("metadata", t.getTableName());
                 metaService().saveMetaObject(metaObject, true);
                 metaObject = metaService().findByCode(t.getTableName());
-                Kv metaConfig = Kv.create();
 
-                //TableView
-                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.TABLEVIEW);
-                metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
-                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
-
-                //FormView
-                metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, ComponentType.FORMVIEW);
-                metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
-
-                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
+                smartInit(metaObject, ComponentType.TABLEVIEW);
+                smartInit(metaObject, ComponentType.FORMVIEW);
+                smartInit(metaObject, ComponentType.SEARCHVIEW);
             }
         }
         renderJson(Ret.ok());
+    }
+
+    /**
+     * 自动初始化 元对象*view配置;
+     *
+     * @param metaObject
+     * @param componentType
+     */
+    private void smartInit(IMetaObject metaObject, ComponentType componentType) {
+        MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, componentType);
+        Kv metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
+        componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
     }
 }
