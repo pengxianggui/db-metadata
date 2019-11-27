@@ -37,7 +37,7 @@
                 this.$router.push("/main/instance-conf");
             },
             getTlMeta() {
-                this.$axios.get("/meta/fields/meta_component_instance")
+                this.$axios.get("/table/meta/meta_component_instance")
                     .then(resp => {
                         this.tlMeta = resp.data;
                     }).catch(err => {

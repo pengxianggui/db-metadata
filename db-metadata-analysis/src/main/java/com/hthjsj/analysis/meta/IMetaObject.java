@@ -63,7 +63,7 @@ public interface IMetaObject {
 
     void config(String config);
 
-    void config(IMetaConfig config);
+    MetaObjectConfigParse configParser();
 
     Map<String, Object> dataMap();
 

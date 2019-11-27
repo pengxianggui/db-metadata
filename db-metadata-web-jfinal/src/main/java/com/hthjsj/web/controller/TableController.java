@@ -89,7 +89,7 @@ public class TableController extends FrontRestController {
         Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
-        MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
+        MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut pointCut = metaObjectConfigParse.interceptor();
         AopInvocation invocation = new AopInvocation(metaObject);
 

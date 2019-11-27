@@ -70,7 +70,7 @@ public class DbMetaService {
     }
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
-        if (new MetaObjectConfigParse(metaObject.config(), metaObject.code()).isUUIDPrimary()) {
+        if (metaObject.configParser().isUUIDPrimary()) {
             metaObject.dataMap().put("id", SnowFlake.me().nextId());
         }
         boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", new Record().setColumns(metaObject.dataMap()));
@@ -117,6 +117,7 @@ public class DbMetaService {
     /**
      * 获取该元对象在meta_object当中的记录
      * TODO [绕]
+     *
      * @param code
      *
      * @return

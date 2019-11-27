@@ -1,9 +1,6 @@
 package com.hthjsj.analysis.db;
 
-import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaConfigFactory;
-import com.hthjsj.analysis.meta.MetaField;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.*;
 
 /**
  * <p> Class title: </p>
@@ -43,7 +40,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
             mf.orderNum(i);
 
-            MetaConfigFactory.MetaFieldConfig fieldConfig = MetaConfigFactory.createV1FieldConfig(
+            MetaFieldConfigParse fieldConfig = MetaConfigFactory.createV1FieldConfig(
                     mf.objectCode(),
                     mf.fieldCode(),
                     column.getColumnDefault(),

@@ -1,6 +1,5 @@
 package com.hthjsj.analysis.meta;
 
-import com.alibaba.fastjson.JSON;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
@@ -22,9 +21,9 @@ public class MetaObject implements IMetaObject {
 
     List<IMetaField> fields = new ArrayList<>();
 
-    Record record = new Record();
+    MetaObjectConfigParse metaObjectConfigParse;
 
-    IMetaConfig metaConfig;
+    Record record = new Record();
 
     public MetaObject() {
     }
@@ -135,9 +134,11 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
-    public void config(IMetaConfig config) {
-        this.metaConfig = config;
-        record.set("config", JSON.toJSONString(metaConfig.getConfig()));
+    public MetaObjectConfigParse configParser() {
+        if (metaObjectConfigParse == null) {
+            metaObjectConfigParse = new MetaObjectConfigParse(config());
+        }
+        return metaObjectConfigParse;
     }
 
     @Override

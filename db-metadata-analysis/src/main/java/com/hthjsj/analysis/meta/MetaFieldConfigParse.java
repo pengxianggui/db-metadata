@@ -14,7 +14,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
+public class MetaFieldConfigParse extends MetaData {
 
     public static final int NORMAL = 100;
 

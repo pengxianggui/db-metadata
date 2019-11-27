@@ -1,6 +1,8 @@
 package com.hthjsj.analysis.meta;
 
+import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.aop.PointCut;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,14 +13,14 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class MetaObjectConfigParse extends MetaConfigFactory.MetaObjectConfig {
+public class MetaObjectConfigParse extends MetaData {
 
-    public MetaObjectConfigParse(String config, String objectCode) {
-        super(config, objectCode);
+    MetaObjectConfigParse(Kv config) {
+        set(config);
     }
 
-    public MetaObjectConfigParse(String objectCode) {
-        super(objectCode);
+    MetaObjectConfigParse(String config) {
+        set(JSON.parseObject(config));
     }
 
     public boolean isUUIDPrimary() {
@@ -41,9 +43,9 @@ public class MetaObjectConfigParse extends MetaConfigFactory.MetaObjectConfig {
         } catch (InstantiationException e) {
             log.error(e.getMessage(), e);
         } catch (NullPointerException e) {
-            log.error("元对象 {},未配置拦截器.", moduleCode());
+            log.error("元对象 {},未配置拦截器.", getStr("objectCode"));
         }
-        log.warn("元对象{},使用默认拦截器{}", moduleCode(), PointCut.class);
+        log.warn("元对象{},使用默认拦截器{}", getStr("objectCode"), PointCut.class);
         return (T) new PointCut();
     }
 }

@@ -53,7 +53,7 @@ public class FormController extends FrontRestController {
 
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
-        MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
+        MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut pointCut = metaObjectConfigParse.interceptor();
         AopInvocation invocation = new AopInvocation(metaObject, metadata);
 
@@ -101,7 +101,7 @@ public class FormController extends FrontRestController {
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
-        MetaObjectConfigParse metaObjectConfigParse = new MetaObjectConfigParse(metaObject.config(), metaObject.code());
+        MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut pointCut = metaObjectConfigParse.interceptor();
         AopInvocation invocation = new AopInvocation(metaObject, metadata);
 

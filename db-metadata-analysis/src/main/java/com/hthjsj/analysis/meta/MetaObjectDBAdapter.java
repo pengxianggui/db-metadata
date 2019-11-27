@@ -23,6 +23,8 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
 
     Storage storage;
 
+    MetaObjectConfigParse metaObjectConfigParse;
+
     public MetaObjectDBAdapter(MetaObject object) {
         this.metaObject = object;
         this.record = object.record;
@@ -140,8 +142,11 @@ public class MetaObjectDBAdapter implements IMetaObject, Storage {
     }
 
     @Override
-    public void config(IMetaConfig config) {
-        metaObject.config(config);
+    public MetaObjectConfigParse configParser() {
+        if (metaObjectConfigParse == null) {
+            metaObjectConfigParse = new MetaObjectConfigParse(config());
+        }
+        return metaObjectConfigParse;
     }
 
     @Override
