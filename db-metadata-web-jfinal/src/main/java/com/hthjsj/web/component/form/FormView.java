@@ -2,6 +2,7 @@ package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ViewContainer;
+import com.hthjsj.web.component.ManualRender;
 import com.jfinal.kit.Kv;
 
 /**
@@ -18,6 +19,7 @@ public class FormView extends ViewContainer {
 
     public FormView(String name, String label) {
         super(name, label);
+        setRender(new ManualRender<FormView>(this));
     }
 
     public static FormView POST(String action, String name) {
@@ -44,11 +46,9 @@ public class FormView extends ViewContainer {
         meta.setIfNotBlank("action", action);
         meta.putIfAbsent("component_name", type());
     }
-    //
-    //    @Override
-    //    public Kv toKv() {
-    //        //        meta.putIfAbsent("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-    //        //        getViewInject().inject(this, meta, getFieldInject());
-    //        return super.toKv();
-    //    }
+
+    @Override
+    public Kv toKv() {
+        return getRender().render();
+    }
 }

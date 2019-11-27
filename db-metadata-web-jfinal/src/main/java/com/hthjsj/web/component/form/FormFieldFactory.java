@@ -1,7 +1,6 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.component.FieldInject;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.jfinal.kit.Kv;
 
@@ -13,159 +12,9 @@ import com.jfinal.kit.Kv;
  */
 public class FormFieldFactory {
 
-    static DropDownBox createDropDownBox(IMetaField metaField, Kv instanceFieldConfig) {
-        DropDownBox dropDownBox = new DropDownBox(metaField.fieldCode(), metaField.cn());
-
-        dropDownBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return dropDownBox;
-    }
-
-    static TextBox createTextBox(IMetaField metaField, Kv instanceFieldConfig) {
-        TextBox textBox = new TextBox(metaField.fieldCode(), metaField.cn());
-        textBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return textBox;
-    }
-
-    static RadioBox createRadioBox(IMetaField metaField, Kv instanceFieldConfig) {
-        RadioBox radioBox = new RadioBox(metaField.fieldCode(), metaField.cn());
-        radioBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return radioBox;
-    }
-
-    static NumberBox createNumberBox(IMetaField metaField, Kv instanceFieldConfig) {
-        NumberBox numberBox = new NumberBox(metaField.fieldCode(), metaField.cn());
-        numberBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return numberBox;
-    }
-
-    static BoolBox createBoolBox(IMetaField metaField, Kv instanceFieldConfig) {
-        BoolBox boolBox = new BoolBox(metaField.fieldCode(), metaField.cn());
-        boolBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return boolBox;
-    }
-
-    static TextAreaBox createTextAreaBox(IMetaField metaField, Kv instanceFieldConfig) {
-        TextAreaBox textAreaBox = new TextAreaBox(metaField.fieldCode(), metaField.cn());
-        textAreaBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return textAreaBox;
-    }
-
-    static DateBox createDateBox(IMetaField metaField, Kv instanceFieldConfig) {
-        DateBox dateBox = new DateBox(metaField.fieldCode(), metaField.cn());
-        dateBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return dateBox;
-    }
-
-    static TimeBox createTimeBox(IMetaField metaField, Kv instanceFieldConfig) {
-        TimeBox timeBox = new TimeBox(metaField.fieldCode(), metaField.cn());
-        timeBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return timeBox;
-    }
-
-    static DateTimeBox createDateTimeBox(IMetaField metaField, Kv instanceFieldConfig) {
-        DateTimeBox dateTimeBox = new DateTimeBox(metaField.fieldCode(), metaField.cn());
-        dateTimeBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return dateTimeBox;
-    }
-
-    static JsonBox createJsonBox(IMetaField metaField, Kv instanceFieldConfig) {
-        JsonBox jsonBox = new JsonBox(metaField.fieldCode(), metaField.cn());
-        jsonBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return jsonBox;
-    }
-
-    static CheckBox createCheckBox(IMetaField metaField, Kv instanceFieldConfig) {
-        CheckBox checkBox = new CheckBox(metaField.fieldCode(), metaField.cn());
-        checkBox.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta) {
-                Kv kv = Kv.create().set(instanceFieldConfig);
-                kv.forEach((k, v) -> meta.merge(k, v, (oldValue, newValue) -> oldValue));
-                return kv;
-            }
-        });
-        return checkBox;
+    static <T extends FormField> T create(T formField, IMetaField metaField, Kv instanceFieldConfig) {
+        formField.setRender(new MetaFormFieldRender<T>(metaField, formField, instanceFieldConfig));
+        return formField;
     }
 
     /**
@@ -196,43 +45,50 @@ public class FormFieldFactory {
      * </pre>
      *
      * @param metaField
-     * @param instanceFieldConfig
+     * @param instanceFieldConfig 假定所有列都有对应存在的配置
      *
      * @return
      */
     public static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
-        //TODO bad small;
-        if (instanceFieldConfig == null) {
-            instanceFieldConfig = Kv.create();
-        }
         ComponentType type = ComponentType.V(instanceFieldConfig.getStr("component_name"));
+        TextBox textBox = new TextBox(metaField.fieldCode(), metaField.cn());
         switch (type) {
             case TEXTBOX:
-                return createTextBox(metaField, instanceFieldConfig);
+                return create(textBox, metaField, instanceFieldConfig);
             case CHECKBOX:
-                return createCheckBox(metaField, instanceFieldConfig);
+                CheckBox checkBox = new CheckBox(metaField.fieldCode(), metaField.cn());
+                return create(checkBox, metaField, instanceFieldConfig);
             case DROPDOWN:
-                return createDropDownBox(metaField, instanceFieldConfig);
+                DropDownBox dropDownBox = new DropDownBox(metaField.fieldCode(), metaField.cn());
+                return create(dropDownBox, metaField, instanceFieldConfig);
             case RADIOBOX:
-                return createRadioBox(metaField, instanceFieldConfig);
+                RadioBox radioBox = new RadioBox(metaField.fieldCode(), metaField.cn());
+                return create(radioBox, metaField, instanceFieldConfig);
             case NUMBERBOX:
-                return createNumberBox(metaField, instanceFieldConfig);
+                NumberBox numberBox = new NumberBox(metaField.fieldCode(), metaField.cn());
+                return create(numberBox, metaField, instanceFieldConfig);
             case BOOLBOX:
-                return createBoolBox(metaField, instanceFieldConfig);
+                BoolBox boolBox = new BoolBox(metaField.fieldCode(), metaField.cn());
+                return create(boolBox, metaField, instanceFieldConfig);
             case TEXTAREABOX:
-                return createTextAreaBox(metaField, instanceFieldConfig);
+                TextAreaBox textAreaBox = new TextAreaBox(metaField.fieldCode(), metaField.cn());
+                return create(textAreaBox, metaField, instanceFieldConfig);
             case DATEBOX:
-                return createDateBox(metaField, instanceFieldConfig);
+                DateBox dateBox = new DateBox(metaField.fieldCode(), metaField.cn());
+                return create(dateBox, metaField, instanceFieldConfig);
             case TIMEBOX:
-                return createTimeBox(metaField, instanceFieldConfig);
+                TimeBox timeBox = new TimeBox(metaField.fieldCode(), metaField.cn());
+                return create(timeBox, metaField, instanceFieldConfig);
             case DATETIMEBOX:
-                return createDateTimeBox(metaField, instanceFieldConfig);
+                DateTimeBox dateTimeBox = new DateTimeBox(metaField.fieldCode(), metaField.cn());
+                return create(dateTimeBox, metaField, instanceFieldConfig);
             case JSONBOX:
-                return createJsonBox(metaField, instanceFieldConfig);
+                JsonBox jsonBox = new JsonBox(metaField.fieldCode(), metaField.cn());
+                return create(jsonBox, metaField, instanceFieldConfig);
             default:
                 break;
         }
         //if type == unknow  use TextBox
-        return createTextBox(metaField, instanceFieldConfig);
+        return create(textBox, metaField, instanceFieldConfig);
     }
 }

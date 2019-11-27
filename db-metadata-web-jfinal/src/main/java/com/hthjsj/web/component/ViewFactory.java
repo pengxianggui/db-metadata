@@ -1,22 +1,13 @@
 package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ComponentRender;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.component.FieldInject;
-import com.hthjsj.analysis.component.ViewInject;
-import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.UtilKit;
-import com.hthjsj.web.component.form.FormField;
-import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/10/21 </p>
@@ -34,30 +25,8 @@ public class ViewFactory {
 
     public static TableView createTableView(MetaObject metaObject, Kv instanceFlatConfig) {
         TableView tableView = new TableView(metaObject.code(), metaObject.name());
-        tableView.setViewInject(new ViewInject<TableView>() {
-
-            @Override
-            public void inject(TableView component, Kv meta, FieldInject<IMetaField> fieldInject) {
-                meta.putIfAbsent("objectCode", metaObject.code());
-                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
-                UtilKit.mergeUseOld(meta, kv);
-
-                List<Kv> fs = new ArrayList<>();
-                for (IMetaField field : metaObject.fields()) {
-                    fs.add(fieldInject.inject(meta, field));
-                }
-                meta.set("columns", fs);
-            }
-        });
-
-        tableView.setFieldInject(new FieldInject.DefaultFieldInject<IMetaField>() {
-
-            @Override
-            public Kv inject(Kv meta, IMetaField field) {
-                Kv kv = UtilKit.getKv(instanceFlatConfig, field.fieldCode());
-                return UtilKit.mergeUseOld(meta, kv);
-            }
-        });
+        ComponentRender<TableView> componentRender = new MetaViewRender<TableView>(metaObject, tableView, instanceFlatConfig);
+        tableView.setRender(componentRender);
         return tableView;
     }
 
@@ -69,24 +38,8 @@ public class ViewFactory {
     public static FormView createFormView(MetaObject metaObject, Kv instanceFlatConfig) {
 
         FormView formView = new FormView(metaObject.code(), metaObject.name());
-        formView.setViewInject(new ViewInject<FormView>() {
-
-            @Override
-            public void inject(FormView component, Kv meta, FieldInject<IMetaField> fieldInject) {
-                meta.putIfAbsent("objectCode", metaObject.code());
-
-                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
-                UtilKit.mergeUseOld(meta, kv);
-
-                for (IMetaField metaField : metaObject.fields()) {
-                    Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
-                    FormField formField = FormFieldFactory.createFormField(metaField, config);
-                    component.getFields().add(formField);
-                }
-                //overwrite columns
-                meta.set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-            }
-        });
+        ComponentRender<FormView> componentRender = new MetaViewRender<FormView>(metaObject, formView, instanceFlatConfig);
+        formView.setRender(componentRender);
         return formView;
     }
 
@@ -96,26 +49,8 @@ public class ViewFactory {
     }
 
     public static SearchView createSearchView(MetaObject metaObject, Kv instanceFlatConfig) {
-
         SearchView searchView = new SearchView(metaObject.code() + ComponentType.SEARCHVIEW.getCode(), metaObject.name());
-        searchView.setViewInject(new ViewInject<SearchView>() {
-
-            @Override
-            public void inject(SearchView component, Kv meta, FieldInject<IMetaField> fieldInject) {
-                meta.putIfAbsent("objectCode", metaObject.code());
-
-                Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
-                UtilKit.mergeUseOld(meta, kv);
-
-                for (IMetaField metaField : metaObject.fields()) {
-                    Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
-                    FormField formField = FormFieldFactory.createFormField(metaField, config);
-                    component.getFields().add(formField);
-                }
-                //overwrite columns
-                meta.set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-            }
-        });
+        searchView.setRender(new MetaViewRender<SearchView>(metaObject, searchView, instanceFlatConfig));
         return searchView;
     }
 

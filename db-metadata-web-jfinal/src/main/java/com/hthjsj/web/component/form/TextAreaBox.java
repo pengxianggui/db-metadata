@@ -23,6 +23,6 @@ public class TextAreaBox extends FormField {
     @Override
     public Kv toKv() {
         getFieldInject().inject(meta);
-        return meta;
+        return getRender().render();
     }
 }

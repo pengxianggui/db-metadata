@@ -2,6 +2,7 @@ package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ViewContainer;
+import com.hthjsj.web.component.ManualRender;
 
 /**
  * <p> Class title: </p>
@@ -19,6 +20,7 @@ public abstract class FormField extends Component {
         this.meta.set("component_name", type());
         this.meta.set("name", name);
         this.meta.set("label", label);
+        setRender(new ManualRender<FormField>(this));
     }
 
     @Override

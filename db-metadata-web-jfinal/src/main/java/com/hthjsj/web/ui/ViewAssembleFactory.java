@@ -30,14 +30,25 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
+    /**
+     * 计算元子段列 实例配置,组装成MetaFieldViewAdapter对象
+     *
+     * @param fields
+     * @param instanceAllConfig
+     *
+     * @return
+     */
     private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         for (IMetaField field : fields) {
-            Kv instanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
-            Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, instanceConfig);
-            metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
+            Kv fieldInstanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
+            //TODO 配置为空时,该字段则不存在实例配置
+            if (!fieldInstanceConfig.isEmpty()) {
+                Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
+                metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
+            }
         }
 
         return metaFields;

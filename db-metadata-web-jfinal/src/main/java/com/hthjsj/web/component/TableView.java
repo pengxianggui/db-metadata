@@ -1,9 +1,11 @@
 package com.hthjsj.web.component;
 
+import com.hthjsj.analysis.component.ComponentRender;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ViewContainer;
 import com.jfinal.kit.Kv;
 import lombok.Data;
+import lombok.Setter;
 
 /**
  * <p> Class title: 表格显示控件</p>
@@ -15,6 +17,9 @@ import lombok.Data;
  */
 @Data
 public class TableView extends ViewContainer {
+
+    @Setter
+    ComponentRender render;
 
     public TableView(String name, String label) {
         super(name, label);
@@ -39,6 +44,6 @@ public class TableView extends ViewContainer {
 
     @Override
     public Kv toKv() {
-        return super.toKv();
+        return getRender().render();
     }
 }
