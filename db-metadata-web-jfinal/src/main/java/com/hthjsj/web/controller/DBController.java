@@ -8,6 +8,7 @@ import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.AppConst;
+import com.hthjsj.web.component.Components;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
@@ -83,6 +84,7 @@ public class DBController extends FrontRestController {
         Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
         List<Table> tables = Aop.get(MysqlService.class).showTables("metadata");
 
+        Components.me().init();
         for (Table t : tables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
             if (!t.getTableName().equalsIgnoreCase("PDMAN_DB_VERSION".toLowerCase())) {
