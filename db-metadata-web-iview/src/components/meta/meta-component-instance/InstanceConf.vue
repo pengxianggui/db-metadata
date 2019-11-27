@@ -4,14 +4,14 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta"
-                                     @change="loadConf"></DropDownBox>
+                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
+                                     @change="loadConf"></drop-down-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
                     <el-form-item label="元对象">
-                        <DropDownBox v-model="confModel.objectCode" :meta="objectMeta"
-                                     @change="loadConf"></DropDownBox>
+                        <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
+                                     @change="loadConf"></drop-down-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -35,7 +35,7 @@
                     <el-col>
                         <h2 align="center">{{confModel.objectCode}}</h2>
                         <el-form-item>
-                            <JsonBox v-model="confModel.conf" :meta="confMeta" mode="form"></JsonBox>
+                            <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -47,15 +47,15 @@
                 <el-col :span="12">
                     <el-form-item>
                         <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                        <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" :meta="confMeta"
-                                 mode="form"></JsonBox>
+                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" :meta="confMeta"
+                                 mode="form"></json-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
                     <el-form-item>
                         <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                        <JsonBox v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" :meta="confMeta"
-                                 mode="form"></JsonBox>
+                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" :meta="confMeta"
+                                 mode="form"></json-box>
                     </el-form-item>
                 </el-col>
             </el-row>

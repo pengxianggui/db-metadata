@@ -2,16 +2,16 @@
     <el-container direction="vertical">
         <el-row>
             <el-col>
-                <SearchPanel :ref="spMeta['name']" :meta="spMeta" @search="handlerSearch"></SearchPanel>
+                <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handlerSearch"></search-panel>
             </el-col>
         </el-row>
         <el-row>
             <el-col>
-                <TableList :ref="tlMeta['name']" :meta="tlMeta" :active-data.sync="choseData"
+                <table-list :ref="tlMeta['name']" :meta="tlMeta" :active-data.sync="choseData"
                     @row-dblclick="ok">
                     <template #operation-bar><span></span></template>
                     <template #buttons><span></span></template>
-                </TableList>
+                </table-list>
             </el-col>
         </el-row>
         <slot name="action">
@@ -31,9 +31,11 @@
 
 <script>
     import {DEFAULT} from '@/constant'
+    import SearchPanel from "./SearchPanel";
 
     export default {
         name: "FindPanel",
+        components: {SearchPanel},
         props: {
             meta: {
                 type: Object,

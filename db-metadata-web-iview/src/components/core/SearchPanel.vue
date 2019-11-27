@@ -17,12 +17,12 @@
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
-                        <DropDownBox v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
+                        <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
                                      v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
-                        </DropDownBox>
+                        </drop-down-box>
 
-                        <BoolBox v-model="model[item.name]['value']" :meta="item"
-                                 v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></BoolBox>
+                        <bool-box v-model="model[item.name]['value']" :meta="item"
+                                 v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>
 
                         <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
                                         is-range type="daterange"
@@ -68,6 +68,8 @@
 <script>
     import {DEFAULT} from '@/constant'
     import Meta from './mixins/meta'
+    import BoolBox from "./form/BoolBox";
+    import DropDownBox from "./form/DropDownBox";
 
     // 控件默认的搜索符，其他控件均为eq
     let defaultSymbol = {
@@ -80,6 +82,7 @@
 
     export default {
         name: "SearchPanel",
+        components: {DropDownBox, BoolBox},
         mixins: [Meta(DEFAULT.SearchPanel)],
         data() {
             return {

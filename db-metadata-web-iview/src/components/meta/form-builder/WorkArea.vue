@@ -7,7 +7,7 @@
             <el-button @click="resetForm">重置</el-button>
         </div>
         <div class="work-area">
-            <FormTmpl :ref="formMeta.name" :meta="formMeta">
+            <form-tmpl :ref="formMeta.name" :meta="formMeta">
                 <template #form-item="{columns}">
                     <draggable
                             :animation="200"
@@ -46,7 +46,7 @@
                         </template>
                     </draggable>
                 </template>
-            </FormTmpl>
+            </form-tmpl>
         </div>
     </div>
 </template>
@@ -55,10 +55,12 @@
     import draggable from 'vuedraggable'
     import cloneDeep from 'lodash/cloneDeep'
     import {DEFAULT} from '@/constant'
+    import FormTmpl from "../../core/FormTmpl";
 
     export default {
         name: "WorkArea",
         components: {
+            FormTmpl,
             draggable
         },
         props: {

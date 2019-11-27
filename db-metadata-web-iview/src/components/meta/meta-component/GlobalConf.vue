@@ -4,7 +4,7 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <DropDownBox v-model="confModel.componentCode" :meta="componentMeta" @change="loadConf"></DropDownBox>
+                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta" @change="loadConf"></drop-down-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -18,7 +18,7 @@
                     <el-col>
                         <h2 align="center">{{confModel.componentCode}}</h2>
                         <el-form-item>
-                            <JsonBox v-model="confModel.conf" :meta="confMeta" mode="form"></JsonBox>
+                            <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
                         </el-form-item>
                     </el-col>
                 </el-row>

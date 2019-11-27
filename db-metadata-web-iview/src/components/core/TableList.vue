@@ -36,7 +36,7 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template slot="header">
-                                <PopMenu trigger="rightClick">
+                                <pop-menu trigger="rightClick">
                                     <template #label>{{item.label}}</template>
                                     <template #menu>
                                         <ul id="menu">
@@ -46,7 +46,7 @@
                                             <li @click="editInstanceFieldConf()">编辑实例字段UI配置({{item.name}})</li>
                                         </ul>
                                     </template>
-                                </PopMenu>
+                                </pop-menu>
                             </template>
                         </el-table-column>
                     </template>
@@ -97,13 +97,13 @@
             </el-col>
         </el-row>
 
-        <DialogBox :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
+        <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
                    @ok="getData()" @cancel="dialogVisible=false">
             <template #default>
                 <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>
             </template>
             <template #footer><span></span></template>  <!-- 表单自带button条 -->
-        </DialogBox>
+        </dialog-box>
     </el-container>
 </template>
 
@@ -111,9 +111,11 @@
     import DEFAULT from '@/constant/default'
     import {FORM_TO_ADD_URL, FORM_TO_EDIT_URL, TABLE_DATA_DELETE_URL} from '@/constant/constant'
     import utils from '@/utils'
+    import PopMenu from "./PopMenu";
 
     export default {
         name: "TableList",
+        components: {PopMenu},
         data() {
             return {
                 innerData: [],

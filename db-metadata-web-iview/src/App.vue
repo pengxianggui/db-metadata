@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <router-view :key="new Date().getTime()"></router-view>
-        <DialogBox ref="globalDialog" :visible.sync="dialogVisible" :component-meta="dialogComponentMea"></DialogBox>
     </div>
 </template>
 
@@ -10,8 +9,6 @@
         name: 'app',
         data() {
             return {
-                dialogVisible: false,
-                dialogComponentMea: {}
             }
         }
     }
