@@ -9,11 +9,16 @@ import lombok.Setter;
  */
 public abstract class Component {
 
+    @Getter
     protected Kv meta = Kv.create();
 
     protected String name;
 
     protected String label;
+
+    @Getter
+    @Setter
+    ComponentRender<? extends Component> render;
 
     @Getter
     @Setter
