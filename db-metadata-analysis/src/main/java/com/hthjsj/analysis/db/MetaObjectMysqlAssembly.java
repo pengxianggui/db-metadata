@@ -40,14 +40,6 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
             mf.orderNum(i);
 
-            MetaFieldConfigParse fieldConfig = MetaConfigFactory.createV1FieldConfig(
-                    mf.objectCode(),
-                    mf.fieldCode(),
-                    column.getColumnDefault(),
-                    column.getIsNullable());
-
-            mf.config(fieldConfig.toJson());
-
             if (PRIMARY.equals(column.getColumnKey())) {
                 mf.isPrimary(true);
                 metaObject.addPrimary(mf);
@@ -55,6 +47,9 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
                 mf.isPrimary(false);
             }
 
+            MetaFieldConfigParse fieldConfig = MetaConfigFactory.createV1FieldConfig(mf, column.getColumnDefault(), column.getIsNullable());
+
+            mf.config(fieldConfig.toJson());
             metaObject.addField(mf);
         }
         return metaObject;

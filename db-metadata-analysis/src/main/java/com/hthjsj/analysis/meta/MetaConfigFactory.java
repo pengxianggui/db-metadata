@@ -19,13 +19,20 @@ public class MetaConfigFactory {
         return new MetaObjectConfigParse(config);
     }
 
-    public static MetaFieldConfigParse createV1FieldConfig(String objectCode, String fieldCode, String defaultValue, String isNUll) {
+    public static MetaFieldConfigParse createV1FieldConfig(MetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
         config.set("defaultValue", defaultValue == null ? "" : defaultValue);
-        config.set("objectCode", objectCode);
-        config.set("fieldCode", fieldCode);
-        config.set("addStatus", MetaFieldConfigParse.NORMAL);
+        config.set("objectCode", metaField.objectCode());
+        config.set("fieldCode", metaField.fieldCode());
+
+
+        if (metaField.isPrimary()) {
+            config.set("addStatus", MetaFieldConfigParse.DISABLE);
+        } else {
+            config.set("addStatus", MetaFieldConfigParse.NORMAL);
+        }
+
         config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         config.set("isListShow", true);
         config.set("isSearch", true);
