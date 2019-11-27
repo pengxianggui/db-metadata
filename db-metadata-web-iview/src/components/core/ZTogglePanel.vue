@@ -1,9 +1,16 @@
 <template>
     <div class="toggle-panel">
-        <div class="toggle-button" @click="toggle">
-            {{open ? oLabel: cLabel}}
+        <div :class="after" class="label" @click="toggle">
+            <slot name="label" v-if="before === 'top'">
+                <i :class="{'el-icon-caret-bottom': open, 'el-icon-caret-top': !open}"></i>
+            </slot>
         </div>
         <slot v-if="open"></slot>
+        <div :class="after" class="label" @click="toggle">
+            <slot name="label" v-if="before === 'bottom'">
+                <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
+            </slot>
+        </div>
     </div>
 </template>
 
@@ -11,9 +18,19 @@
     import {DEFAULT} from '@/constant'
     import Meta from './mixins/meta'
     import Val from './form/value-mixins'
+
     export default {
         mixins: [Meta(DEFAULT.ZTogglePanel), Val],
         name: "ZTogglePanel",
+        props: {
+            "labelPosition": {
+                type: String,
+                default: "bottom-center",
+                validator: function (value) {
+                    return ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"].indexOf(value) >= 0;
+                }
+            }
+        },
         data() {
             return {
                 open: false
@@ -34,11 +51,11 @@
             defaultOpen() {
                 return this.innerMeta['default_open'];
             },
-            oLabel() {
-                return this.innerMeta['olabel'];
+            before() {
+                return this.labelPosition.split('-')[0]
             },
-            cLabel() {
-                return this.innerMeta['clabel'];
+            after() {
+                return this.labelPosition.split('-')[1]
             }
         }
     }
@@ -48,13 +65,24 @@
     .toggle-panel {
     }
 
-    div.toggle-button {
-        text-align: center;
-        padding: 2px;
-        height: 20px;
-        line-height: 20px;
-        margin: 0;
+    .label {
+        color: #aaaaaa;
+    }
+
+    .label:hover {
         cursor: pointer;
-        color: #999999;
+        color: #666666;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .right {
+        text-align: right;
     }
 </style>

@@ -11,49 +11,58 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-    <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline>
-        <template v-for="(item) in innerMeta.columns">
-            <el-form-item :key="item.name" :label="item.label" :prop="item.name" v-if="model.hasOwnProperty(item.name)">
-                <DropDownBox v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
-                             v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
-                </DropDownBox>
+    <z-toggle-panel label-position="bottom-right">
+        <el-card>
+            <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline>
+                <template v-for="(item) in innerMeta.columns">
+                    <el-form-item :key="item.name" :label="item.label" :prop="item.name"
+                                  v-if="model.hasOwnProperty(item.name)">
+                        <DropDownBox v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
+                                     v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
+                        </DropDownBox>
 
-                <BoolBox v-model="model[item.name]['value']" :meta="item"
-                         v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></BoolBox>
+                        <BoolBox v-model="model[item.name]['value']" :meta="item"
+                                 v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></BoolBox>
 
-                <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                is-range type="daterange"
-                                v-else-if="['DateBox'].indexOf(item.component_name) >= 0">
-                </el-date-picker>
+                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
+                                        is-range type="daterange"
+                                        v-else-if="['DateBox'].indexOf(item.component_name) >= 0">
+                        </el-date-picker>
 
-                <el-time-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                is-range type="timerange"
-                                v-else-if="['TimeBox'].indexOf(item.component_name) >= 0">
-                </el-time-picker>
+                        <el-time-picker v-model="model[item.name]['value']" v-bind="item.conf"
+                                        is-range type="timerange"
+                                        v-else-if="['TimeBox'].indexOf(item.component_name) >= 0">
+                        </el-time-picker>
 
-                <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                is-range type="datetimerange"
-                                v-else-if="['DateTimeBox'].indexOf(item.component_name) >= 0">
-                </el-date-picker>
+                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
+                                        is-range type="datetimerange"
+                                        v-else-if="['DateTimeBox'].indexOf(item.component_name) >= 0">
+                        </el-date-picker>
 
-                <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>
-                    <template #prepend v-if="item.component_name == 'NumBox'">
-                        <el-select v-model="model[item.name]['symbol']" style="width: 70px;">
-                            <el-option v-for="(value, key) in symbols" :key="key" :value="key">{{key}}</el-option>
-                        </el-select>
-                    </template>
-                </el-input>
-            </el-form-item>
+                        <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>
+                            <template #prepend v-if="item.component_name == 'NumBox'">
+                                <el-select v-model="model[item.name]['symbol']" style="width: 70px;">
+                                    <el-option v-for="(value, key) in symbols" :key="key" :value="key">{{key}}
+                                    </el-option>
+                                </el-select>
+                            </template>
+                        </el-input>
+                    </el-form-item>
+                </template>
+                <el-form-item>
+                    <slot name="action" v-bind:model="model">
+                        <el-button type="primary" @click="onSubmit">
+                            <slot name="search-label">搜索</slot>
+                        </el-button>
+                        <el-button @click="onReset">重置</el-button>
+                    </slot>
+                </el-form-item>
+            </el-form>
+        </el-card>
+        <template #label>
+            <slot name="label-bar"></slot>
         </template>
-        <el-form-item>
-            <slot name="action" v-bind:model="model">
-                <el-button type="primary" @click="onSubmit">
-                    <slot name="search-label">搜索</slot>
-                </el-button>
-                <el-button @click="onReset">重置</el-button>
-            </slot>
-        </el-form-item>
-    </el-form>
+    </z-toggle-panel>
 </template>
 
 <script>
@@ -122,14 +131,12 @@
                 let columns = meta.columns;
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
-                        // if (item.hasOwnProperty("searchable") && item.searchable === true) {
-                            let componentName = item.component_name;
-                            this.$merge(item, DEFAULT[componentName]); // merge column
-                            this.$set(this.model, item.name, {
-                                value: null,
-                                symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
-                            });
-                        // }
+                        let componentName = item.component_name;
+                        this.$merge(item, DEFAULT[componentName]); // merge column
+                        this.$set(this.model, item.name, {
+                            value: null,
+                            symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
+                        });
                     });
                 }
             }
