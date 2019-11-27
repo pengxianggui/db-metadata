@@ -23,17 +23,21 @@
         mixins: [Meta(DEFAULT.ZTogglePanel), Val],
         name: "ZTogglePanel",
         props: {
-            "labelPosition": {
+            labelPosition: {
                 type: String,
                 default: "bottom-center",
                 validator: function (value) {
                     return ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"].indexOf(value) >= 0;
                 }
+            },
+            defaultOpen: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
-                open: false
+                open: this.defaultOpen
             }
         },
         methods: {
@@ -41,16 +45,7 @@
                 this.open = !this.open
             }
         },
-        created() {
-            this.open = this.defaultOpen;
-        },
         computed: {
-            innerMeta() {
-                return this.$merge(this.meta, DEFAULT.ZTogglePanel);
-            },
-            defaultOpen() {
-                return this.innerMeta['default_open'];
-            },
             before() {
                 return this.labelPosition.split('-')[0]
             },

@@ -156,14 +156,6 @@ const DEFAULT = {
             "auto-upload": false
         }
     },
-    "ZTogglePanel": {
-        "component_name": "ZTogglePanel",
-        "name": "ZTogglePanel",
-        "label": "收缩面板",
-        "default_open": false,
-        "olabel": "收起",
-        "clabel": "展开"
-    },
     "DialogBox": {
         "component_name": "DialogBox",
         "name": "DialogBox",
@@ -246,6 +238,7 @@ const DEFAULT = {
         "component_name": "SearchPanel",
         "name": "SearchPanel",
         "label": "搜索面板",
+        "expand": true,
         "conf": {
             "label-width": '80px',
             "size": 'medium', // medium|small|mini
