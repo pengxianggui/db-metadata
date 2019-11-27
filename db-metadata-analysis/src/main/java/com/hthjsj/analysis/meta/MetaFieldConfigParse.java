@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
 
-    public MetaFieldConfigParse(String config) {
+    MetaFieldConfigParse(String config) {
         set(JSON.parseObject(config));
     }
 
@@ -80,18 +80,22 @@ public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
     }
 
     public boolean isQuery() {
-        return false;
+        return Boolean.parseBoolean(getStr("isQuery"));
+    }
+
+    public boolean isListShow() {
+        return Boolean.parseBoolean(getStr("isListShow"));
     }
 
     public int addStatus() {
-        return 0;
+        return getInt("addStatus");
     }
 
     public int updateStatus() {
-        return 0;
+        return getInt("updateStatus");
     }
 
     public int viewStatus() {
-        return 0;
+        return getInt("viewStatus");
     }
 }

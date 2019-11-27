@@ -30,7 +30,7 @@ public class OptionsController extends Controller {
 
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
-        MetaFieldConfigParse metaFieldConfigParse = new MetaFieldConfigParse(metaField.config());
+        MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
 
         if (!metaFieldConfigParse.hasTranslation()) {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);

@@ -137,7 +137,7 @@ public class OptionsKit {
         Kv mappeds = Kv.create();
         //计算需要转义的字段的映射关系
         for (IMetaField field : fields) {
-            configWrapper = new MetaFieldConfigParse(field.config());
+            configWrapper = field.configParser();
             if (configWrapper.hasTranslation()) {
                 if (configWrapper.isSql()) {
                     Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql());

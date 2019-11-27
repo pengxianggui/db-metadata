@@ -71,6 +71,8 @@ public interface IMetaField {
     @JSONField(name = "config")
     String config();
 
+    MetaFieldConfigParse configParser();
+
     Map<String, Object> dataMap();
 
     void dataMap(Map<String, Object> data);

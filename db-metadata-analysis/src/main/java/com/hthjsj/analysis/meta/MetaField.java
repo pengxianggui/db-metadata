@@ -19,6 +19,8 @@ public class MetaField implements IMetaField {
 
     DBTypeJudge dbTypeJudge;
 
+    MetaFieldConfigParse metaFieldConfigParse;
+
     public MetaField(Map<String, Object> fieldMap) {
         this.record = new Record().setColumns(fieldMap);
     }
@@ -123,6 +125,14 @@ public class MetaField implements IMetaField {
     @Override
     public String config() {
         return record.getStr("config");
+    }
+
+    @Override
+    public MetaFieldConfigParse configParser() {
+        if (metaFieldConfigParse == null) {
+            metaFieldConfigParse = new MetaFieldConfigParse(config());
+        }
+        return metaFieldConfigParse;
     }
 
     @Override

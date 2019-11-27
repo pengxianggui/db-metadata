@@ -87,7 +87,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         log.debug("auto compute config : {}", builder.render().toJson());
 
         log.debug("analysis metafield config");
-        MetaFieldConfigParse metaFieldConfigParse = new MetaFieldConfigParse(metaField.config());
+        MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.hasTranslation()) {
             if (metaFieldConfigParse.isRange()) {
                 builder.options(OptionsKit.transKeyValue(metaFieldConfigParse.range()));
