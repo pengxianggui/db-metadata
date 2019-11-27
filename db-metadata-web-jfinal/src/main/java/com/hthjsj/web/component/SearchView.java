@@ -28,8 +28,4 @@ public class SearchView extends ViewContainer {
         return ComponentType.SEARCHVIEW;
     }
 
-    @Override
-    public Kv toKv() {
-        return getRender().render();
-    }
 }

@@ -41,9 +41,4 @@ public class TableView extends ViewContainer {
         meta.setIfNotBlank("label", label);
         meta.setIfNotBlank("component_name", type());
     }
-
-    @Override
-    public Kv toKv() {
-        return getRender().render();
-    }
 }

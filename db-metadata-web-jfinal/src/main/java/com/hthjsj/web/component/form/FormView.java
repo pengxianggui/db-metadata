@@ -47,8 +47,4 @@ public class FormView extends ViewContainer {
         meta.putIfAbsent("component_name", type());
     }
 
-    @Override
-    public Kv toKv() {
-        return getRender().render();
-    }
 }
