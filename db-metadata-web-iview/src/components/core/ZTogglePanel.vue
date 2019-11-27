@@ -15,12 +15,7 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
-    import Meta from './mixins/meta'
-    import Val from './form/value-mixins'
-
     export default {
-        mixins: [Meta(DEFAULT.ZTogglePanel), Val],
         name: "ZTogglePanel",
         props: {
             labelPosition: {
