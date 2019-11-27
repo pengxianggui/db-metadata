@@ -1,6 +1,7 @@
-package com.hthjsj.web.component;
+package com.hthjsj.web.component.render;
 
 import com.hthjsj.analysis.component.ComponentRender;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ViewContainer;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -47,12 +48,26 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
         for (IMetaField metaField : metaObject.fields()) {
             Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
             FormField formField = FormFieldFactory.createFormField(metaField, config);
-            component.getFields().add(formField);
+
+            if (component.componentType() == ComponentType.TABLEVIEW) {
+                if (metaField.configParser().isListShow()) {
+                    component.getFields().add(formField);
+                    continue;
+                }
+            }
+
+            if (component.componentType() == ComponentType.SEARCHVIEW) {
+                if (metaField.configParser().isSearch()) {
+                    component.getFields().add(formField);
+                    continue;
+                }
+            }
+            if (component.componentType() == ComponentType.FORMVIEW) {
+                component.getFields().add(formField);
+            }
         }
         //overwrite columns
         component.getMeta().set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
-
-
         return component.getMeta();
     }
 }

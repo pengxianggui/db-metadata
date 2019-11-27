@@ -1,4 +1,4 @@
-package com.hthjsj.web.component.form;
+package com.hthjsj.web.component.render;
 
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentRender;

@@ -1,6 +1,7 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
 import java.util.Map;
@@ -32,12 +33,16 @@ public class MetaConfigFactory {
     }
 
     public static MetaFieldConfig createV1FieldConfig(String objectCode, String fieldCode, String defaultValue, String isNUll) {
-        MetaFieldConfig metaFieldConfig = createEmptyFieldConfig(objectCode, fieldCode);
-        metaFieldConfig.set("isNullable", "yes".equalsIgnoreCase(isNUll));
-        metaFieldConfig.set("defaultValue", defaultValue == null ? "" : defaultValue);
-        //common config
-        metaFieldConfig.set("isMultiple", false);
-        return metaFieldConfig;
+        Kv config = Kv.create();
+        config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
+        config.set("defaultValue", defaultValue == null ? "" : defaultValue);
+        config.set("objectCode", objectCode);
+        config.set("fieldCode", fieldCode);
+        config.set("addStatus", MetaFieldConfigParse.NORMAL);
+        config.set("updateStatus", MetaFieldConfigParse.NORMAL);
+        config.set("isListShow", true);
+        config.set("isSearch", true);
+        return new MetaFieldConfigParse(config);
     }
 
     public static class MetaFieldConfig extends MetaData implements IMetaConfig {

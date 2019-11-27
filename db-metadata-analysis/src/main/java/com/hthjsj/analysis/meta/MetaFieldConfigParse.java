@@ -16,6 +16,18 @@ import java.util.List;
  */
 public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
 
+    public static final int NORMAL = 100;
+
+    public static final int HIDDEN = 50;
+
+    public static final int READONLY = 30;
+
+    public static final int DISABLE = 10;
+
+    MetaFieldConfigParse(Kv config) {
+        set(config);
+    }
+
     MetaFieldConfigParse(String config) {
         set(JSON.parseObject(config));
     }
@@ -79,14 +91,25 @@ public class MetaFieldConfigParse extends MetaConfigFactory.MetaFieldConfig {
         return Boolean.parseBoolean(getStr("isMultiple"));
     }
 
-    public boolean isQuery() {
-        return Boolean.parseBoolean(getStr("isQuery"));
+    public boolean isSearch() {
+        return Boolean.parseBoolean(getStr("isSearch"));
     }
 
     public boolean isListShow() {
         return Boolean.parseBoolean(getStr("isListShow"));
     }
 
+    /**
+     * addStatus/updateStatus 控制展示行为
+     * 正常(能看,能生成sql)
+     * 隐藏(不能看,能生成sql)
+     * 只读(能看,不生成sql)
+     * 禁用(不能看,不生成SQL)
+     * <p>
+     * 100/50/30/10
+     *
+     * @return
+     */
     public int addStatus() {
         return getInt("addStatus");
     }

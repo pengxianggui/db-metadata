@@ -7,7 +7,8 @@
         </el-form-item>
         <el-form-item label="开关">
             <el-checkbox v-model="config.isNullable" label="允许为空" border></el-checkbox>
-            <el-checkbox v-model="config.isQuery" label="允许搜索" border></el-checkbox>
+            <el-checkbox v-model="config.isSearch" label="允许搜索" border></el-checkbox>
+            <el-checkbox v-model="config.isListShow" label="列表显示" border></el-checkbox>
         </el-form-item>
         <el-form-item label="新增状态">
             <el-radio-group v-model="config.addStatus">
@@ -76,9 +77,10 @@
                     viewStatus: 30,
                     defaultVal: '',
                     isNullable: true,
-                    isQuery: false,
+                    isSearch: false,
                     scopeSql: '',
                     scopeOptions: [],
+                    isListShow: true,
                     scopeRange: [],
                 }
             }
