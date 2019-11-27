@@ -74,7 +74,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
          * 装配 MetaObjectViewAdapter
          *
          */
-        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
+        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType);
         //全部全局配置
         Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置
