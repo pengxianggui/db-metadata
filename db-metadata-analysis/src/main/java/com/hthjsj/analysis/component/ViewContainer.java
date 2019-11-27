@@ -21,6 +21,7 @@ public abstract class ViewContainer extends Component {
     public ViewContainer(String name, String label) {
         this.name = name;
         this.label = label;
+        setRender(new ManualRender<ViewContainer>(this));
     }
 
     @Override
@@ -64,6 +65,6 @@ public abstract class ViewContainer extends Component {
             //如使用了Inject,就覆盖默认逻辑
             renderFieldsMeta(fields, meta);
         }
-        return meta;
+        return getRender().render();
     }
 }

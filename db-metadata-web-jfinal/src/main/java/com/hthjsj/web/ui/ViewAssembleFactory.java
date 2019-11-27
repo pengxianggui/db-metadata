@@ -74,18 +74,18 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
          * 装配 MetaObjectViewAdapter
          *
          */
-        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType);
+        Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
         //全部全局配置
-        Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
+        Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置
-        Kv globalComponentConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
-        //实例配置
-        Kv instanceConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
+        Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());
+        //完整的实例配置,元对象级+字段级
+        Kv allLevelConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
+        //对象级配置
+        Kv levelObjectConfig = UtilKit.getKv(allLevelConfig, metaObject.code());
 
-        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), instanceConfig);
+        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig);
 
-        MetaObjectViewAdapter objectViewAdapter = new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, fields);
-
-        return objectViewAdapter;
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectConfig, fields);
     }
 }

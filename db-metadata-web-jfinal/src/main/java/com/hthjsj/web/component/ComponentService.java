@@ -160,7 +160,6 @@ public class ComponentService {
         String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
         //ensure return avalible value, like "" , "{}"
         Kv objConf = Kv.by(destCode, StrKit.isBlank(objectConfig) ? Maps.newHashMapWithExpectedSize(0) : objectConfig);
-
         //load fields config
         objConf.set(loadFieldsConfigMap(componentCode, destCode));
         return objConf;

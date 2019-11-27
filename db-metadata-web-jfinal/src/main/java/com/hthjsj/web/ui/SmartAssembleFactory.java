@@ -33,7 +33,11 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
-    private static Kv recommendConfig(IMetaField metaField) {
+    private Kv recommendObjectConfig(MetaObject metaObject) {
+        return Kv.create();
+    }
+
+    private Kv recommendFieldConfig(IMetaField metaField) {
         /**
          * 分析元字段
          * 拼装instanceFieldConfig
@@ -117,7 +121,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         // 读取globalConfig中的配置
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
-            Kv recommendConfig = recommendConfig(field);
+            Kv recommendConfig = recommendFieldConfig(field);
             Kv fieldConfig = UtilKit.getKv(globalConfig, recommendConfig.getStr("component_name"));
             UtilKit.mergeUseOld(fieldConfig, recommendConfig);
             metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
@@ -141,9 +145,16 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
          * 适配选择Component,进行构建IViewAdapter
          */
         Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
-        Kv globalAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
-        Kv containerConfig = UtilKit.getKv(globalAllConfig, componentType.getCode());
-        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalAllConfig);
-        return new MetaObjectViewAdapter(metaObject, containerComponent, containerConfig, fields);
+        //全部全局配置
+        Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
+        //某一组件全局配置
+        Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());
+
+        Kv levelObjectConfig = recommendObjectConfig(metaObject);
+
+        // 因配置为自动计算,所以传入组件全局配置map
+        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalComponentAllConfig);
+
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectConfig, fields);
     }
 }

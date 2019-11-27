@@ -1,8 +1,8 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.Component;
+import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
-import com.hthjsj.web.component.ManualRender;
 
 /**
  * <p> Class title: </p>

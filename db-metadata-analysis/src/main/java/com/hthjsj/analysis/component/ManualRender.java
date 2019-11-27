@@ -1,7 +1,5 @@
-package com.hthjsj.web.component;
+package com.hthjsj.analysis.component;
 
-import com.hthjsj.analysis.component.Component;
-import com.hthjsj.analysis.component.ComponentRender;
 import com.jfinal.kit.Kv;
 
 /**

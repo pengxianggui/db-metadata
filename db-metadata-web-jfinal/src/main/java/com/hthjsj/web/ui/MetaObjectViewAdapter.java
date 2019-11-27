@@ -3,9 +3,7 @@ package com.hthjsj.web.ui;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.UtilKit;
-import com.hthjsj.web.component.ViewFactory;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 
@@ -45,7 +43,7 @@ public class MetaObjectViewAdapter {
     @Getter
     Map<String, MetaFieldViewAdapter> fieldsMap;
 
-    public MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, List<MetaFieldViewAdapter> fields) {
+    public MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, Kv instanceConfig, List<MetaFieldViewAdapter> fields) {
         this.metaObject = metaObject;
         this.component = component;
         this.fields = fields;
@@ -53,25 +51,11 @@ public class MetaObjectViewAdapter {
         //init config
         this.objectConfig = UtilKit.getKv(metaObject.config());
         this.globalComponentConfig = globalComponentConfig;
-        //TODO 来源变更
-        this.instanceConfig = component.toKv();
+        this.instanceConfig = instanceConfig;
         this.fieldsMap = fields.stream().collect(Collectors.toMap(metaFieldViewAdapter -> metaFieldViewAdapter.metaField.fieldCode(),
                                                                   metaFieldViewAdapter -> metaFieldViewAdapter));
     }
 
-    /**
-     * FIXME Build 复用了ViewFactory逻辑;
-     * ViewFactory create时会View容器内的子元素一并构建,而不是依赖List<MetaFieldViewAdapter> fields 进行构建
-     * 会有重复计算的损耗,同时会架空MetaFieldViewAdapter类型的fields;
-     *
-     * @return
-     */
-    public Component build() {
-        component = ViewFactory.createFormView((MetaObject) metaObject);
-        //FIXME 找合适的时机 触发渲染;
-//        instanceConfig = component.toKv();
-        return component;
-    }
 
     /**
      * 获取元子段
