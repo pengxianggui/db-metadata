@@ -24,36 +24,24 @@
 </template>
 
 <script>
+    import {getTlMeta, getSpMeta} from "../../core/mixins/methods"
+
     export default {
         name: "InstanceConfList",
+        mixins: [getTlMeta, getSpMeta],
+        props: {
+            R_oc: String
+        },
         data() {
             return {
-                spMeta: {},
-                tlMeta: {}
+                objectCode: this.R_oc,
+                tlMeta: {},
+                spMeta: {}
             }
         },
         methods: {
             addConf() {
                 this.$router.push("/main/instance-conf");
-            },
-            getTlMeta() {
-                this.$axios.get("/table/meta/meta_component_instance")
-                    .then(resp => {
-                        this.tlMeta = resp.data;
-                    }).catch(err => {
-                    this.$message.error(err.msg);
-                })
-            },
-            getSpMeta() {
-                let url = this.$compile("/component/meta?componentCode=SearchPanel&objectCode=meta_component_instance", {
-                    objectCode: this.objectCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.spMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                });
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
@@ -68,12 +56,12 @@
                 })
             },
             handleSearch(params) {
-                this.$refs[this.tlMeta['name']].getData(params);
+                this.ref.getData(params);
             }
         },
         created() {
-            this.getTlMeta();
-            this.getSpMeta();
+            this.getTlMeta(this.objectCode);
+            this.getSpMeta(this.objectCode);
         },
         computed: {
             ref() {

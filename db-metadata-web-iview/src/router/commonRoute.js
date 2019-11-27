@@ -18,6 +18,7 @@ const children = [
     }, {
         path: 'meta-component',
         name: 'MetaComponent',
+        props: {R_oc: "meta_component_instance"},
         component: () => import('@/components/meta/meta-component/GlobalConfList')
     }, {
         path: 'global-conf',
@@ -27,6 +28,7 @@ const children = [
     }, {
         path: 'meta-component-instance',
         name: 'MetaComponentInstance',
+        props: {R_oc: "meta_component_instance"},
         component: () => import('@/components/meta/meta-component-instance/InstanceConfList')
     }, {
         path: 'instance-conf',

@@ -1,44 +1,50 @@
 <template>
-    <table-list :ref="meta['name']" :meta="meta">
-        <template #operation-bar>
-            <el-button @click="addConf">新增</el-button>
-        </template>
-        <template #buttons="{scope}">
-            <el-tooltip content="配置" placement="top">
-                <el-button icon="el-icon-s-tools" circle
-                           @click="handlerConf($event, scope.row, scope.$index)"></el-button>
-            </el-tooltip>
-            <el-tooltip content="编辑" placement="top">
-                <el-button icon="el-icon-edit" circle
-                           @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
-            </el-tooltip>
-            <el-tooltip content="删除" placement="top">
-                <el-button icon="el-icon-delete" circle type="danger"
-                           @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
-            </el-tooltip>
-        </template>
-    </table-list>
+    <div>
+        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="tlMeta['name']" :meta="tlMeta">
+            <template #operation-bar>
+                <el-button @click="addConf">新增</el-button>
+            </template>
+            <template #buttons="{scope}">
+                <el-tooltip content="配置" placement="top">
+                    <el-button icon="el-icon-s-tools" circle
+                               @click="handlerConf($event, scope.row, scope.$index)"></el-button>
+                </el-tooltip>
+                <el-tooltip content="编辑" placement="top">
+                    <el-button icon="el-icon-edit" circle
+                               @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
+                </el-tooltip>
+                <el-tooltip content="删除" placement="top">
+                    <el-button icon="el-icon-delete" circle type="danger"
+                               @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
+                </el-tooltip>
+            </template>
+        </table-list>
+    </div>
 </template>
 
 <script>
+    import {getTlMeta, getSpMeta} from "../../core/mixins/methods"
+
     export default {
         name: "GlobalConfList",
+        mixins: [getTlMeta, getSpMeta],
+        props: {
+            R_oc: String
+        },
         data() {
             return {
-                meta: {}
+                objectCode: this.R_oc,
+                tlMeta: {},
+                spMeta: {}
             }
         },
         methods: {
+            handleSearch(params) {
+                this.$refs[this.tlMeta['name']].getData(params);
+            },
             addConf() {
                 this.$router.push("/main/global-conf");
-            },
-            getMeta() {
-                this.$axios.get("/meta/fields/meta_component")
-                    .then(resp => {
-                        this.meta = resp.data;
-                    }).catch(err => {
-                    this.$message.error(err.msg);
-                })
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
@@ -52,11 +58,12 @@
             }
         },
         created() {
-            this.getMeta();
+            this.getTlMeta(this.objectCode);
+            this.getSpMeta(this.objectCode);
         },
         computed: {
             ref() {
-                return this.$refs[this.meta['name']];
+                return this.$refs[this.tlMeta['name']];
             }
         }
     }
