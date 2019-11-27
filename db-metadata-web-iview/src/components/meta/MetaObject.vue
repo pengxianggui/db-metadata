@@ -76,7 +76,13 @@
         },
         created() {
             this.getTlMeta(this.objectCode);
-            this.getSpMeta(this.objectCode);
+
+            this.getSpMeta(this.objectCode).then(resp => {
+                this.spMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
         },
         computed: {
             ref() {

@@ -8,7 +8,7 @@
                 <aside-nav></aside-nav>
             </el-aside>
             <el-main style="height: auto; overflow: auto;">
-                <router-view></router-view>
+                <router-view :key="new Date().getTime()"></router-view>
             </el-main>
         </el-container>
     </el-container>

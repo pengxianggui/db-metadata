@@ -1,35 +1,50 @@
 <template>
-    <table-list :ref="meta['name']" :meta="meta"></table-list>
+    <div>
+        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
+    </div>
 </template>
 
 <script>
+    import {getTlMeta, getSpMeta} from "../core/mixins/methods"
+
     export default {
         name: "MetaConfig",
+        mixins: [getTlMeta, getSpMeta],
         props: {
             R_oc: String
         },
         data() {
             return {
                 objectCode: this.R_oc,
-                meta: {}
+                tlMeta: {},
+                spMeta: {}
             }
         },
         methods: {
-            getMeta() {
-                let url = this.$compile("/meta/fields/{objectCode}", {
-                    objectCode: this.objectCode
-                });
-
-                this.$axios.get(url).then(resp => {
-                    this.meta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                })
+            handleSearch(params) {
+                this.ref.getData(params);
             }
         },
         created() {
-            this.getMeta();
+            this.getTlMeta(this.objectCode).then(resp => {
+                this.tlMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+
+            this.getSpMeta(this.objectCode).then(resp => {
+                this.spMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+        },
+        computed: {
+            ref() {
+                return this.$refs[this.tlMeta['name']];
+            }
         }
     }
 </script>

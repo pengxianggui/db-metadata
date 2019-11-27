@@ -8,7 +8,7 @@ const children = [
     // }, {
         path: 'meta-manager',
         name: 'MetaManager',
-        props: (route) => ({R_oc: route.query.objectCode}),
+        props: (route) => ({R_oc: 'meta_field', R_objC: route.query.objectCode}),
         component: () => import('@/components/meta/MetaManager')
     }, {
         path: 'meta-object',
@@ -48,27 +48,27 @@ const children = [
         path: 'table-data',
         name: 'TableData',
         props: {R_oc: "test_table"},
-        component: () => import('@/components/meta/TableData')
+        component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'change-log',
         name: 'ChangeLog',
         props: {R_oc: "change_log"},
-        component: () => import('@/components/meta/ChangeLog')
+        component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'meta-config',
         name: 'MetaConfig',
         props: {R_oc: "meta_config"},
-        component: () => import('@/components/meta/MetaConfig')
+        component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'db-version',
         name: 'DbVersion',
         props: {R_oc: "db_version"},
-        component: () => import('@/components/meta/DbVersion')
+        component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'table',
         name: 'Table',
         props: {R_oc: "meta_dict"},
-        component: () => import('@/components/template/TableTmpl')
+        component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'form',
         name: 'Form',

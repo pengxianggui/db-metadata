@@ -60,8 +60,19 @@
             }
         },
         created() {
-            this.getTlMeta(this.objectCode);
-            this.getSpMeta(this.objectCode);
+            this.getTlMeta(this.objectCode).then(resp => {
+                this.tlMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+
+            this.getSpMeta(this.objectCode).then(resp => {
+                this.spMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
         },
         computed: {
             ref() {

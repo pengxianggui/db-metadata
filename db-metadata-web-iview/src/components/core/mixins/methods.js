@@ -10,12 +10,7 @@ export const getTlMeta = {
             let url = this.$compile("/table/meta/{objectCode}", {
                 objectCode: objectCode
             });
-            this.$axios.get(url).then(resp => {
-                this.tlMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                this.$message.error(err.msg);
-            });
+            return this.$axios.get(url);
         }
     }
 };
@@ -27,16 +22,11 @@ export const getTlMeta = {
  */
 export const getSpMeta = {
     methods: {
-        getSpMeta() {
+        getSpMeta(objectCode) {
             let url = this.$compile("/component/meta?componentCode=SearchPanel&objectCode={objectCode}", {
-                objectCode: this.objectCode
+                objectCode: objectCode
             });
-            this.$axios.get(url).then(resp => {
-                this.spMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                this.$message.error(err.msg);
-            });
+            return this.$axios.get(url);
         }
     }
 };
