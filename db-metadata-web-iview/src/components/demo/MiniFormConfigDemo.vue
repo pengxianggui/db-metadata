@@ -53,9 +53,6 @@
                 </el-select>
             </el-form-item>
         </template>
-        <el-form-item>
-            <el-button type="primary" @click="onSubmit">确定</el-button>
-        </el-form-item>
     </el-form>
 </template>
 
@@ -76,9 +73,9 @@
                 config: {
                     addStatus: 100,
                     updateStatus: 100,
-                    viewStatus: 100,
+                    viewStatus: 30,
                     defaultVal: '',
-                    isNullable: '',
+                    isNullable: true,
                     isQuery: false,
                     scopeSql: '',
                     scopeOptions: [],
@@ -86,31 +83,22 @@
                 }
             }
         },
-        methods: {
-            onSubmit() {
-                this.$emit("submit", this.config);
-            }
-        },
-        watch: {
-            'model': {
-                handler: function (newVal, oldVal) {
-                    let model = newVal;
-                    let self = this;
+        mounted() {
+            let self = this;
+            let model = self.model;
 
-                    if (typeof model === 'string') {
-                        model = JSON.parse(model);
-                    }
-                    Object.keys(self.config).forEach(key => {
-                        if (model.hasOwnProperty(key)) {
-                            self.config[key] = model[key];
-                        } else {
-                            self.config[key] = null;    // 防止model字段不完整，导致config遗留上一次的属性和属性值
-                        }
-                    });
-                },
-                deep: true,
-                immediate: true
+            if (typeof model === 'string') {
+                model = JSON.parse(model);
             }
+
+            Object.keys(self.config).forEach(key => {
+                if (model.hasOwnProperty(key)) {
+                    self.config[key] = model[key];
+                }
+            });
+        },
+        updated() {
+            this.$emit("submit", this.config);  // immediate emit
         }
     }
 </script>

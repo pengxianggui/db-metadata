@@ -19,7 +19,7 @@ Vue.prototype.$dialog = dialog;
 
 Vue.config.productionTip = false;
 
-// 注册原子业务组件
+// 注册全局组件
 const atomComponent = require.context(
     './components/core', // 组件目录的相对路径
     true, // 是否查询其子目录
