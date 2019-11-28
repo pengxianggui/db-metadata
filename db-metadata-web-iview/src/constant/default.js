@@ -297,7 +297,7 @@ const DEFAULT = {
             "layout": "total, sizes, prev, pager, next, jumper"
         },
         "operation-bar": { // 针对操作栏中所有按钮的默认设置
-            "size": "small",
+            "size": "medium",
             "type": "primary"
         },
         "buttons": {
@@ -306,7 +306,7 @@ const DEFAULT = {
                 "conf": {
                     "circle": true,
                     "icon": "el-icon-edit",
-                    "size": "small",
+                    "size": "medium",
                     "type": "primary"
                 }
             },
@@ -315,7 +315,7 @@ const DEFAULT = {
                 "conf": {
                     "circle": true,
                     "icon": "el-icon-delete",
-                    "size": "small",
+                    "size": "medium",
                     "type": "danger"
                 }
             }

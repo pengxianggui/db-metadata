@@ -7,9 +7,10 @@
                       v-bind:conf="innerMeta['operation-bar']"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
-                        <el-button @click="handleAdd" size="mini" icon="el-icon-document-add"></el-button>
-                        <el-button @click="handleBatchDelete($event)" type="danger" size="mini"
-                                   icon="el-icon-delete-solid"></el-button>
+                        <el-button @click="handleAdd"
+                                   v-bind="innerMeta['operation-bar']">新增</el-button>
+                        <el-button @click="handleBatchDelete($event)" type="danger"
+                                   v-bind="innerMeta['operation-bar']" >删除</el-button>
                     </el-button-group>
                 </slot>
             </el-col>
@@ -70,13 +71,19 @@
                                 </span>
                             </template>
                             <template slot-scope="scope">
-                                <slot name="buttons" v-bind:scope="scope">
-                                    <el-button v-bind="innerMeta['buttons']['edit']['conf']"
-                                               @click="handleEdit($event, scope.row, scope.$index)">
-                                    </el-button>
-                                    <el-button v-bind="innerMeta['buttons']['delete']['conf']"
-                                               @click="handleDelete($event, scope.row, scope.$index)">
-                                    </el-button>
+                                <slot name="buttons"
+                                      v-bind:conf="innerMeta['buttons']"
+                                      v-bind:scope="scope">
+                                    <el-tooltip :content="innerMeta['buttons']['edit']['label']" placement="top">
+                                        <el-button v-bind="innerMeta['buttons']['edit']['conf']"
+                                                   @click="handleEdit($event, scope.row, scope.$index)">
+                                        </el-button>
+                                    </el-tooltip>
+                                    <el-tooltip :content="innerMeta['buttons']['delete']['label']" placement="top">
+                                        <el-button v-bind="innerMeta['buttons']['delete']['conf']"
+                                                   @click="handleDelete($event, scope.row, scope.$index)">
+                                        </el-button>
+                                    </el-tooltip>
                                 </slot>
                             </template>
                         </el-table-column>
@@ -101,7 +108,7 @@
         </el-row>
 
         <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
-                   @ok="getData()" @cancel="dialogVisible=false">
+                    @ok="getData()" @cancel="dialogVisible=false">
             <template #default>
                 <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>
             </template>

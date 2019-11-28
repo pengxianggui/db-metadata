@@ -2,20 +2,20 @@
     <div>
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
-            <template #operation-bar>
-                <el-button @click="addConf">新增</el-button>
+            <template #operation-bar="{conf}">
+                <el-button v-bind="conf" @click="addConf">新增</el-button>
             </template>
-            <template #buttons="{scope}">
+            <template #buttons="{conf, scope}">
                 <el-tooltip content="配置" placement="top">
-                    <el-button icon="el-icon-s-tools" circle
+                    <el-button icon="el-icon-s-tools" v-bind="conf['edit']['conf']" type="info"
                                @click="handlerConf($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
-                <el-tooltip content="编辑" placement="top">
-                    <el-button icon="el-icon-edit" circle
+                <el-tooltip :content="conf['edit']['label']" placement="top">
+                    <el-button v-bind="conf['edit']['conf']"
                                @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
-                <el-tooltip content="删除" placement="top">
-                    <el-button icon="el-icon-delete" circle type="danger"
+                <el-tooltip :content="conf['delete']['label']" placement="top">
+                    <el-button v-bind="conf['delete']['conf']"
                                @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
             </template>

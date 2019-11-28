@@ -1,10 +1,10 @@
 <template>
     <el-container direction="vertical">
         <el-button-group style="display: flex; margin: 5px 0;">
-            <span style="flex: 1"></span>
+<!--            <span style="flex: 1"></span>-->
             <drop-down-box :ref="objMeta['name']" v-model="objectCode" :meta="objMeta"
                            @change="refreshTableData()"></drop-down-box>
-            <el-button type="primary" plain @click="visible=true">创建元对象</el-button>
+            <el-button size="small" type="primary" plain @click="visible=true">创建元对象</el-button>
         </el-button-group>
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta" v-if="tlMeta && tlMeta['data_url']">
@@ -58,7 +58,8 @@
                     "data_url": "/table/list/meta_object",
                     "conf": {
                         'clearable': true,
-                        'filterable': true
+                        'filterable': true,
+                        'size': 'small'
                     },
                     'behavior': {
                         'format': function (params) {

@@ -1,10 +1,10 @@
 <template>
     <div class="el-card container">
         <div class="header">
-            <el-button @click="preview">视图预览</el-button>
-            <el-button @click="jsonView">json预览</el-button>
-            <el-button @click="submitForm">保存</el-button>
-            <el-button @click="resetForm">重置</el-button>
+            <el-button @click="preview" icon="el-icon-view" size="small" type="primary">视图预览</el-button>
+            <el-button @click="jsonView" icon="el-icon-view" size="small" type="primary">json预览</el-button>
+            <el-button @click="submitForm" icon="el-icon-download" size="small" type="success">保存</el-button>
+            <el-button @click="resetForm" icon="el-icon-delete" size="small" type="danger">重置</el-button>
         </div>
         <div class="work-area">
             <form-tmpl :ref="formMeta.name" :meta="formMeta">
