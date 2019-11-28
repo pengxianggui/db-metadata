@@ -96,7 +96,9 @@
                 })
             },
             refreshTableData() {
-                this.tlMeta['data_url']= this.tableUrl + '?object_code=' + this.objectCode;
+                this.tlMeta['data_url']= this.$compile(this.tableUrl, {
+                    objectCode: this.objectCode
+                })
             },
             updateSon() {
                 this.refreshTableData();
@@ -121,8 +123,8 @@
 
             this.getTlMeta(this.R_oc).then(resp => {
                 this.tlMeta = resp.data;
-                this.tableUrl = this.tlMeta['data_url'];
-                this.tlMeta['data_url'] = this.tableUrl + "?object_code=''";
+                this.tableUrl = this.tlMeta['data_url'] + "?object_code={objectCode}";
+                this.tlMeta['data_url'] = this.tableUrl;
             }).catch(err => {
                 console.error('[ERROR] msg: %s', err.msg);
                 this.$message.error(err.msg);

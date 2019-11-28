@@ -4,7 +4,7 @@ import * as common from './common'
 import {splice, compile} from './url'
 
 export default {
-    common,
+    ...common,
     merge,
     reverseMerge,
     splice,

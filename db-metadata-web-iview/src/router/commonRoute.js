@@ -2,10 +2,11 @@ import cloneDeep from 'lodash/cloneDeep'
 
 const children = [
     {
-    //     path: 'meta-data',
-    //     name: 'Metadata',
-    //     component: () => import('@/components/template/MasterSlaveTableTmpl')
-    // }, {
+        path: 'meta-data',
+        name: 'Metadata',
+        props: {R_moc: "meta_object", R_soc: "meta_field", R_linkage: { m: "code", s: "object_code"}}, // m.code=s.object_code
+        component: () => import('@/components/template/MasterSlaveTableTmpl')
+    }, {
         path: 'meta-manager',
         name: 'MetaManager',
         props: (route) => ({R_oc: 'meta_field', R_objC: route.query.objectCode}),

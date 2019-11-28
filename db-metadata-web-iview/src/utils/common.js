@@ -44,3 +44,12 @@ export function camelCaseTo(str, separator) {
     }
     return temp
 }
+
+/**
+ * 判断值是否为对象. 数组、null等都将返回false, 只有严格的{}才会返回true
+ * @param obj
+ */
+export function isObject(obj) {
+    let toStr = Object.prototype.toString.call(obj);
+    return toStr === '[object Object]'
+}

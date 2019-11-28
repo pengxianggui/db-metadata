@@ -8,9 +8,11 @@
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
                         <el-button @click="handleAdd" icon="el-icon-document-add"
-                                   v-bind="innerMeta['operation-bar']">新增</el-button>
+                                   v-bind="innerMeta['operation-bar']">新增
+                        </el-button>
                         <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                   v-bind="innerMeta['operation-bar']" >删除</el-button>
+                                   v-bind="innerMeta['operation-bar']">删除
+                        </el-button>
                     </el-button-group>
                 </slot>
             </el-col>
@@ -80,7 +82,8 @@
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </el-tooltip>
-                                        <el-tooltip :content="innerMeta['buttons']['delete']['label']" placement="right">
+                                        <el-tooltip :content="innerMeta['buttons']['delete']['label']"
+                                                    placement="right">
                                             <el-button v-bind="innerMeta['buttons']['delete']['conf']"
                                                        @click="handleDelete($event, scope.row, scope.$index)">
                                             </el-button>
@@ -250,6 +253,7 @@
                 this.innerActiveData = row;
                 this.$emit('update:active-data', row);
 
+                if (!event.ctrlKey) return; // ctrl + 鼠标左击 实现多选
                 if (this.innerMeta.multi_select) {
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
@@ -340,6 +344,8 @@
             },
 
             getData(params) {
+                if (!utils.isObject(params)) params = {};
+
                 if (!this.innerMeta.hasOwnProperty('data_url')) {
                     console.error('lack data_url attribute');
                     return;
@@ -348,7 +354,9 @@
                 let columnNames = (this.innerMeta['columns'] || [])
                     .filter(column => column['conf']['showable']).map(column => column['name']);
 
-                let url = utils.splice(this.innerMeta['data_url'], {
+                let url = this.innerMeta['data_url'];
+
+                Object.assign(params, {
                     'fs': columnNames.join(','),
                     'p': this.pageModel['index'],
                     's': this.pageModel['size']
@@ -377,15 +385,18 @@
                     return;
                 }
                 if (this.innerMeta.hasOwnProperty('data_url')) {
-                    this.getData();
+                    // this.getData();
                     return;
                 }
                 console.error("data or data_url in meta provide one at least!")
             },
         },
         watch: {
-            'innerMeta.data_url': function () {
-                this.getData();
+            'innerMeta.data_url': {
+                handler: function () {
+                    this.getData();
+                },
+                immediate: false
             }
         },
         mounted() {

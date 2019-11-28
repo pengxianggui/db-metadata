@@ -1,93 +1,94 @@
 <template>
-    <el-container direction="vertical">
-        <el-row class="el-card">
-            <el-col :span="24">
-                <!-- FormTmpl -->
-            </el-col>
-            <el-col :span="24">
-                <table-list :meta="masterMeta" :data="masterData" :chose-data.sync="choseMasterData"
-                            :active-data.sync="activeMasterData">
-                </table-list>
-            </el-col>
-        </el-row>
-        <el-row class="el-card" style="margin-top: 10px">
-            <el-col :span="24">
-                <table-list :meta="slaveMeta" :data="slaveData" :chose-data.sync="choseSlaveData"
-                            :active-data.sync="activeSlaveData"></table-list>
-            </el-col>
-        </el-row>
-    </el-container>
+    <div>
+        <el-card>
+            <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData">
+                <template #operation-bar="{conf, operations}">
+                    <slot name="master-operations" v-bind:conf="conf" v-bind:operations="operations"></slot>
+                </template>
+            </table-list>
+
+            <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
+            <table-list :ref="sTlMeta['name']" :meta="sTlMeta"></table-list>
+        </el-card>
+    </div>
 </template>
 
 <script>
-    import mockData from '@/mockdata.js'
+    import {getTlMeta, getSpMeta} from "../core/mixins/methods"
 
     export default {
         name: "master-slave-table-tmpl",
+        mixins: [getTlMeta, getSpMeta],
+        props: {
+            R_moc: String,
+            R_soc: String,
+            R_linkage: {
+                type: Object,
+                validator: (value) => { return value.hasOwnProperty('m') && value.hasOwnProperty('s') }
+            },
+        },
         data() {
             return {
-                searchMeta: {}, // 搜索条的元数据
-                masterMeta: {}, // 主表元对象
-                slaveMeta: {}, // 子表元对象
-                masterData: [], // 主表业务数据
-                slaveData: [], // 子表业务数据
-                choseMasterData: [], // TableList中选中的数据
-                choseSlaveData: [], // TableList中选中的数据
-                activeMasterData: {}, // 主表中当前激活的行
-                activeSlaveData: {}, // 从表中当前激活的行
-
-                /* 搜索、排序、分页数据, 作为参数获取真实数据 */
-                searchModel: {}, // 搜索表单模型
-                // operationData: {} // 用于构成操作面板，绑定函数 todo 操作条的动态实现还需要进一步思考
+                mObjectCode: this.R_moc,
+                sObjectCode: this.R_soc,
+                mSpMeta: {},
+                mTlMeta: {},
+                activeMData: {},
+                sSpMeta: {},
+                sTlMeta: {},
+                sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
             }
         },
         methods: {
-            getMasterMeta() {
-                return mockData.masterMetadata
+            mHandleSearch(params) {
+                this.$refs[this.mTlMeta['name']].getData(params);
             },
-            getMasterFieldMeta() {
-                return mockData.masterFieldMetadata
-            },
-            getSlaveMeta() {
-                return mockData.slaveMetadata
-            },
-            getSlaveFieldMeta() {
-                return mockData.slaveFieldMetadata
-            },
-            getMasterData() { // ajax http请求的实际执行处
-                let data = mockData.masterData;
-                // todo request {table: masterMeta.table_name, schema: masterMeta.schema_name, condition: parse from params}
-                console.log('searchModel: ' + JSON.stringify(this.searchModel));
-                return data
-            },
-            getSlaveData() {
-                // todo 根据masterActiveData 获取slaveData
-            },
-            masterSearch() {
-                this.masterData = this.getMasterData()
-            },
-            slaveSearch() {
-                this.slaveData = this.getSlaveData()
+            sHandleSearch(params) {
+                this.$refs[this.sTlMeta['name']].getData(params);
             }
         },
         watch: {
-            activeMasterData: {
-                handler: function () {
-                    this.slaveSearch()
+            activeMData: {
+                handler: function (newVal, oldVal) {
+                    this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
+                        objectCode: newVal[this.R_linkage['m']]
+                    });
                 },
                 deep: true
             }
         },
         created() {
-            // 获取元数据
-            this.masterMeta = this.getMasterMeta();
-            // this.masterFieldMeta = this.getMasterFieldMeta()
-            this.slaveMeta = this.getSlaveMeta()
-            // this.slaveFieldMeta = this.getSlaveFieldMeta()
-        },
-        mounted() {
-            // 获取业务数据
-            this.masterSearch({})
+            // 获取主表TableList 组件meta
+            this.getTlMeta(this.mObjectCode).then(resp => {
+                this.mTlMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+            // 获取主表SearchPanel 组件meta
+            this.getSpMeta(this.mObjectCode).then(resp => {
+                this.mSpMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+            // 获取从表TableList 组件meta
+            this.getTlMeta(this.sObjectCode).then(resp => {
+                this.sTlMeta = resp.data;
+                this.sTableUrl = this.sTlMeta['data_url'] + '?' + this.R_linkage['s'] + '={objectCode}';
+                this.sTlMeta['data_url'] = this.sTableUrl;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
+            // 获取从表SearchPanel 组件meta
+            this.getSpMeta(this.sObjectCode).then(resp => {
+                this.sSpMeta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] msg: %s', err.msg);
+                this.$message.error(err.msg);
+            });
         },
     }
 </script>

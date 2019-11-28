@@ -6,13 +6,11 @@
 </template>
 
 <script>
-    import SearchPanel from "../core/SearchPanel";
     import {getTlMeta, getSpMeta} from "../core/mixins/methods"
 
     export default {
         name: "SingleGridTmpl",
         mixins: [getTlMeta, getSpMeta],
-        components: {SearchPanel},
         props: {
             R_oc: String
         },
