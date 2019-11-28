@@ -1,5 +1,6 @@
 <template>
     <div class="toggle-panel">
+
         <div :class="after" class="label" @click="toggle">
             <slot name="label" v-if="before === 'top'">
                 <i :class="{'el-icon-caret-bottom': open, 'el-icon-caret-top': !open}"></i>
@@ -7,9 +8,11 @@
         </div>
         <slot v-if="open"></slot>
         <div :class="after" class="label" @click="toggle">
-            <slot name="label" v-if="before === 'bottom'">
-                <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
-            </slot>
+            <el-divider>
+                <slot name="label" v-if="before === 'bottom'">
+                    <i class="el-icon-search"></i>
+                </slot>
+            </el-divider>
         </div>
     </div>
 </template>

@@ -11,7 +11,7 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-    <z-toggle-panel label-position="bottom-right" :default-open="innerMeta['expand']">
+    <z-toggle-panel label-position="bottom-center" :default-open="innerMeta['expand']">
         <el-card>
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline>
                 <template v-for="(item) in innerMeta.columns">
