@@ -169,5 +169,7 @@
 </script>
 
 <style scoped>
-
+    .el-card {
+        margin-bottom: 10px;
+    }
 </style>
