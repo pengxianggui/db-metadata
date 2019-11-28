@@ -75,12 +75,12 @@
                                       v-bind:conf="innerMeta['buttons']"
                                       v-bind:scope="scope">
                                     <el-button-group>
-                                        <el-tooltip :content="innerMeta['buttons']['edit']['label']" placement="top">
+                                        <el-tooltip :content="innerMeta['buttons']['edit']['label']" placement="left">
                                             <el-button v-bind="innerMeta['buttons']['edit']['conf']"
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </el-tooltip>
-                                        <el-tooltip :content="innerMeta['buttons']['delete']['label']" placement="top">
+                                        <el-tooltip :content="innerMeta['buttons']['delete']['label']" placement="right">
                                             <el-button v-bind="innerMeta['buttons']['delete']['conf']"
                                                        @click="handleDelete($event, scope.row, scope.$index)">
                                             </el-button>

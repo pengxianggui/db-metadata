@@ -7,7 +7,7 @@
             </template>
             <template #buttons="{conf, scope}">
                 <el-button-group>
-                    <el-tooltip content="配置" placement="top">
+                    <el-tooltip content="配置" placement="left">
                         <el-button icon="el-icon-s-tools" v-bind="conf['edit']['conf']" type="info"
                                    @click="handlerConf($event, scope.row, scope.$index)"></el-button>
                     </el-tooltip>
@@ -15,7 +15,7 @@
                         <el-button v-bind="conf['edit']['conf']"
                                    @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
                     </el-tooltip>
-                    <el-tooltip :content="conf['delete']['label']" placement="top">
+                    <el-tooltip :content="conf['delete']['label']" placement="right">
                         <el-button v-bind="conf['delete']['conf']"
                                    @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
                     </el-tooltip>
