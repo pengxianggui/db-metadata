@@ -5,7 +5,7 @@
             <template #operation-bar="{conf, operations}">
                 <el-button-group>
                     <el-button v-bind="conf" @click="operations.handleBatchDelete($event)" type="danger"
-                               icon="el-icon-delete"></el-button>
+                               icon="el-icon-delete-solid">删除</el-button>
                 </el-button-group>
             </template>
         </table-list>

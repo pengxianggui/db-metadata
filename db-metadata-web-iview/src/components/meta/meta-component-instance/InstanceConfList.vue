@@ -3,7 +3,7 @@
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
             <template #operation-bar="{conf}">
-                <el-button v-bind="conf" @click="addConf">新增</el-button>
+                <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
             <template #buttons="{conf, scope}">
                 <el-button-group>
