@@ -3,10 +3,12 @@
         <el-row>
             <el-col :span="24">
                 <!-- operation bar -->
-                <slot name="operation-bar">
+                <slot name="operation-bar"
+                      v-bind:conf="innerMeta['operation-bar']"
+                      v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
-                        <el-button @click="handleAdd">新增</el-button>
-                        <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
+                        <el-button @click="handleAdd" size="mini">新增</el-button>
+                        <el-button @click="handleBatchDelete($event)" type="danger" size="mini">删除</el-button>
                     </el-button-group>
                 </slot>
             </el-col>
@@ -68,10 +70,10 @@
                             </template>
                             <template slot-scope="scope">
                                 <slot name="buttons" v-bind:scope="scope">
-                                    <el-button :size="innerMeta.conf['size']" icon="el-icon-edit" circle
+                                    <el-button v-bind="innerMeta['buttons']['edit']['conf']"
                                                @click="handleEdit($event, scope.row, scope.$index)">
                                     </el-button>
-                                    <el-button :size="innerMeta.conf['size']" type="danger" icon="el-icon-delete" circle
+                                    <el-button v-bind="innerMeta['buttons']['delete']['conf']"
                                                @click="handleDelete($event, scope.row, scope.$index)">
                                     </el-button>
                                 </slot>

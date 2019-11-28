@@ -2,9 +2,9 @@
     <div>
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
-            <template #operation-bar>
+            <template #operation-bar="{conf, operations}">
                 <el-button-group>
-                    <el-button @click="handleBatchDelete($event)" type="danger">删除</el-button>
+                    <el-button v-bind="conf" @click="handleBatchDelete($event)" type="danger">删除</el-button>
                 </el-button-group>
             </template>
         </table-list>

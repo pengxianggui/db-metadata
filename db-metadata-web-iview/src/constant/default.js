@@ -239,10 +239,10 @@ const DEFAULT = {
         "name": "SearchPanel",
         "label": "搜索面板",
         "expand": false,
-        "label-position": "bottom-center",
+        "label-position": "top-center",
         "conf": {
             "label-width": '80px',
-            "size": 'medium', // medium|small|mini
+            "size": 'mini', // medium|small|mini
         },
         // "columns": [
             // {
@@ -295,6 +295,30 @@ const DEFAULT = {
             "page-sizes": PAGE_NUM_AREA,
             "current-page": 1,
             "layout": "total, sizes, prev, pager, next, jumper"
+        },
+        "operation-bar": { // 针对操作栏中所有按钮的默认设置
+            "size": "small",
+            "type": "primary"
+        },
+        "buttons": {
+            "edit": {
+                "label": "编辑",
+                "conf": {
+                    "circle": true,
+                    "icon": "el-icon-edit",
+                    "size": "small",
+                    "type": "primary"
+                }
+            },
+            "delete": {
+                "label": "删除",
+                "conf": {
+                    "circle": true,
+                    "icon": "el-icon-delete",
+                    "size": "small",
+                    "type": "danger"
+                }
+            }
         }
     },
     "FindPanel": {
