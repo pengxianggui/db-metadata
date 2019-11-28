@@ -2,11 +2,10 @@
     <div>
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
-            <template #operation-bar="{conf, operations}">
-                <el-button-group>
-                    <el-button v-bind="conf" @click="operations.handleBatchDelete($event)" type="danger"
-                               icon="el-icon-delete-solid">删除</el-button>
-                </el-button-group>
+            <template #add-btn><span></span></template>
+            <template #batch-delete-btn="{conf, batchDelete}">
+                <el-button v-bind="conf" @click="batchDelete($event)" type="danger"
+                           icon="el-icon-delete-solid">删除</el-button>
             </template>
         </table-list>
     </div>

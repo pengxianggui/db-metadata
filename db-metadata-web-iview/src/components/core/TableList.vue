@@ -7,12 +7,18 @@
                       v-bind:conf="innerMeta['operation-bar']"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
-                        <el-button @click="handleAdd" icon="el-icon-document-add"
-                                   v-bind="innerMeta['operation-bar']">新增
-                        </el-button>
-                        <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                   v-bind="innerMeta['operation-bar']">删除
-                        </el-button>
+                        <slot name="add-btn" v-bind:conf="innerMeta['operation-bar']" v-bind:add="handleAdd">
+                            <el-button @click="handleAdd" icon="el-icon-document-add"
+                                       v-bind="innerMeta['operation-bar']">新增
+                            </el-button>
+                        </slot>
+                        <slot name="batch-delete-btn" v-bind:conf="innerMeta['operation-bar']"
+                              v-bind:batchDelete="handleBatchDelete">
+                            <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
+                                       v-bind="innerMeta['operation-bar']">删除
+                            </el-button>
+                        </slot>
+                        <slot name="extend-btn"></slot>
                     </el-button-group>
                 </slot>
             </el-col>
@@ -58,7 +64,7 @@
                     </template>
                     <slot name="operation-column">
                         <el-table-column width="180">
-                            <template slot="header">
+                            <template #header>
                                 <span>
                                     <span>操作</span>
                                     <el-popover placement="bottom-end" trigger="hover">
@@ -77,17 +83,32 @@
                                       v-bind:conf="innerMeta['buttons']"
                                       v-bind:scope="scope">
                                     <el-button-group>
-                                        <el-tooltip :content="innerMeta['buttons']['edit']['label']" placement="left">
-                                            <el-button v-bind="innerMeta['buttons']['edit']['conf']"
-                                                       @click="handleEdit($event, scope.row, scope.$index)">
-                                            </el-button>
-                                        </el-tooltip>
-                                        <el-tooltip :content="innerMeta['buttons']['delete']['label']"
-                                                    placement="right">
-                                            <el-button v-bind="innerMeta['buttons']['delete']['conf']"
-                                                       @click="handleDelete($event, scope.row, scope.$index)">
-                                            </el-button>
-                                        </el-tooltip>
+                                        <slot name="inner-before-extend-btn"
+                                              v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                              v-bind:scope="scope"></slot>
+                                        <slot name="edit-btn" v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                              v-bind:edit="handleEdit"
+                                              v-bind:scope="scope">
+                                            <el-tooltip :content="innerMeta['buttons']['edit']['label']"
+                                                        placement="left">
+                                                <el-button v-bind="innerMeta['buttons']['edit']['conf']"
+                                                           @click="handleEdit($event, scope.row, scope.$index)">
+                                                </el-button>
+                                            </el-tooltip>
+                                        </slot>
+                                        <slot name="delete-btn" v-bind:conf="innerMeta['buttons']['delete']['label']"
+                                              v-bind:delete="handleDelete"
+                                              v-bind:scope="scope">
+                                            <el-tooltip :content="innerMeta['buttons']['delete']['label']"
+                                                        placement="right">
+                                                <el-button v-bind="innerMeta['buttons']['delete']['conf']"
+                                                           @click="handleDelete($event, scope.row, scope.$index)">
+                                                </el-button>
+                                            </el-tooltip>
+                                        </slot>
+                                        <slot name="inner-after-extend-btn"
+                                              v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                              v-bind:scope="scope"></slot>
                                     </el-button-group>
                                 </slot>
                             </template>
@@ -352,7 +373,7 @@
                 }
 
                 let columnNames = (this.innerMeta['columns'] || [])
-                    .filter(column => column['conf']['showable']).map(column => column['name']);
+                    .filter(column => column.hasOwnProperty('showable')).map(column => column['name']);
 
                 let url = this.innerMeta['data_url'];
 

@@ -8,12 +8,12 @@
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
             <el-menu-item index="/main/meta-data">
                 <i class="el-icon-menu"></i>
-                <span slot="title">MetaData</span>
+                <span slot="title">元数据管理</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-object">
-                <i class="el-icon-menu"></i>
-                <span slot="title">元对象管理</span>
-            </el-menu-item>
+<!--            <el-menu-item index="/main/meta-object">-->
+<!--                <i class="el-icon-menu"></i>-->
+<!--                <span slot="title">元对象管理</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="/main/meta-component">
                 <i class="el-icon-menu"></i>
                 <span slot="title">组件全局配置</span>
@@ -26,10 +26,10 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">表单构建</span>
             </el-menu-item>
-            <el-menu-item index="/main/meta-manager">
-                <i class="el-icon-menu"></i>
-                <span slot="title">元字段管理</span>
-            </el-menu-item>
+<!--            <el-menu-item index="/main/meta-manager">-->
+<!--                <i class="el-icon-menu"></i>-->
+<!--                <span slot="title">元字段管理</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="/main/change-log">
                 <i class="el-icon-menu"></i>
                 <span slot="title">ChangeLog</span>

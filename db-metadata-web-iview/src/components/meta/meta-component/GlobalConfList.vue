@@ -2,24 +2,15 @@
     <div>
         <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
-            <template #operation-bar="{conf}">
+            <template #add-btn="{conf}">
                 <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
-            <template #buttons="{conf, scope}">
-                <el-button-group>
-                    <el-tooltip content="配置" placement="left">
-                        <el-button icon="el-icon-s-tools" v-bind="conf['edit']['conf']" type="info"
-                                   @click="handlerConf($event, scope.row, scope.$index)"></el-button>
-                    </el-tooltip>
-                    <el-tooltip :content="conf['edit']['label']" placement="top">
-                        <el-button v-bind="conf['edit']['conf']"
-                                   @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
-                    </el-tooltip>
-                    <el-tooltip :content="conf['delete']['label']" placement="right">
-                        <el-button v-bind="conf['delete']['conf']"
-                                   @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
-                    </el-tooltip>
-                </el-button-group>
+            <template #batch-delete-btn><span></span></template>
+            <template #inner-before-extend-btn="{conf, scope}">
+                <el-tooltip content="配置" placement="left">
+                    <el-button icon="el-icon-s-tools" v-bind="conf" type="info"
+                               @click="handlerConf($event, scope.row, scope.$index)"></el-button>
+                </el-tooltip>
             </template>
         </table-list>
     </div>
@@ -50,7 +41,7 @@
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
-                let componentCode = row.code;
+                let componentCode = row['comp_code'];
                 this.$router.push({
                     path: 'global-conf',
                     query: {

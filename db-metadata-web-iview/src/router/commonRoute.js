@@ -5,7 +5,7 @@ const children = [
         path: 'meta-data',
         name: 'Metadata',
         props: {R_moc: "meta_object", R_soc: "meta_field", R_linkage: { m: "code", s: "object_code"}}, // m.code=s.object_code
-        component: () => import('@/components/template/MasterSlaveTableTmpl')
+        component: () => import('@/components/meta/MetaObjectManager')
     }, {
         path: 'meta-manager',
         name: 'MetaManager',
@@ -87,7 +87,7 @@ const commonRoute = [
         path: '/main',
         name: 'main',
         component: () => import('@/components/Main'),
-        redirect: '/main/meta-object',
+        redirect: '/main/meta-data',
         children: children
     },
 ];

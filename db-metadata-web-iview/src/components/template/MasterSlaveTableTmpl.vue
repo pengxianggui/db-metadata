@@ -2,11 +2,7 @@
     <div>
         <el-card>
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData">
-                <template #operation-bar="{conf, operations}">
-                    <slot name="master-operations" v-bind:conf="conf" v-bind:operations="operations"></slot>
-                </template>
-            </table-list>
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData"></table-list>
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
             <table-list :ref="sTlMeta['name']" :meta="sTlMeta"></table-list>
@@ -18,7 +14,7 @@
     import {getTlMeta, getSpMeta} from "../core/mixins/methods"
 
     export default {
-        name: "master-slave-table-tmpl",
+        name: "MasterSlaveTableTmpl",
         mixins: [getTlMeta, getSpMeta],
         props: {
             R_moc: String,
