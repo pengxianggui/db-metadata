@@ -54,8 +54,8 @@
 <script>
     import draggable from 'vuedraggable'
     import cloneDeep from 'lodash/cloneDeep'
-    import {DEFAULT} from '@/constant'
     import FormTmpl from "../../core/FormTmpl";
+    import {DEFAULT} from '@/constant'
 
     export default {
         name: "WorkArea",
@@ -64,7 +64,7 @@
             draggable
         },
         props: {
-            data: Object
+            value: Object
         },
         data() {
             return {
@@ -98,12 +98,12 @@
                 this.selectIndex = index
             },
             jsonView() {
-                this.$dialog(DEFAULT.JsonBox, this.data, {
+                this.$dialog(DEFAULT.JsonBox, this.formMeta, {
                     title: "Json预览"
                 })
             },
             preview() {
-                this.$dialog(this.data, null, {
+                this.$dialog(this.formMeta, null, {
                     title: "视图预览"
                 })
             },
@@ -122,9 +122,19 @@
         },
         computed: {
             formMeta() {
-                let formMeta = this.$merge({}, DEFAULT.FormTmpl);
-                let columnMeta = cloneDeep(this.list);
-                formMeta.columns = columnMeta;
+                let formMeta = this.value;
+                let columns = formMeta.columns;
+                let columnNames = columns.map(item => item.name);
+
+                let newColumns = cloneDeep(this.list);
+
+                for (let i = 0; i < newColumns.length; i++) {
+                    let name = newColumns[i].name;
+                    if (columnNames.includes(name)) {
+                        this.$reverseMerge(newColumns[i], columns[columnNames.indexOf(name)]);
+                    }
+                }
+                formMeta.columns = newColumns;
                 return formMeta;
             }
         }

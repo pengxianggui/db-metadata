@@ -43,7 +43,6 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import cloneDeep from 'lodash/cloneDeep'
 
     export default {
@@ -86,10 +85,18 @@
                 return componentName;
             }
         },
+        watch: {
+            formMeta: {
+                handler: function (newVal, oldVal) {
+                    console.log('formMeta..update..');
+                    this.$emit('input', newVal);
+                },
+                deep: true
+            }
+        },
         computed: {
             formMeta: {
                 get: function () {
-                    this.$merge(this.value, DEFAULT.FormTmpl);
                     return this.value;
                 },
                 set: function (newVal) {

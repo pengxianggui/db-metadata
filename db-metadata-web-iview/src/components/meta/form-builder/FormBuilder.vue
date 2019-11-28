@@ -4,7 +4,7 @@
             <ComponentList></ComponentList>
         </el-col>
         <el-col :span="12">
-            <WorkArea @select="handleSelectFormItem" :data="formMeta"></WorkArea>
+            <WorkArea @select="handleSelectFormItem" v-model="formMeta"></WorkArea>
         </el-col>
         <el-col :span="7">
             <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import {DEFAULT} from '@/constant'
     export default {
         name: "FormBuilder",
         props: {
@@ -21,7 +22,7 @@
         data() {
             return {
                 objectCode: this.R_oc,
-                formMeta: {},
+                formMeta: this.$merge({}, DEFAULT.FormTmpl),
                 selectIndex: null
             }
         },
