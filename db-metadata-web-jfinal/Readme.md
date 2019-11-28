@@ -23,8 +23,8 @@ MetaField 数据源配置
 - [ ] db-metadata-analysis的数据源 目前只绑定了一个
 - [ ] db-metadata-web-jfinal 端的数据库操作,未做多数据源的指定;
 - [ ] 在实例配置阶段删除字段问题(无法彻底删除,因系统多数遍历 使用metaobject.fields)
-- [ ] 推敲xxxView构建逻辑,以配置为准 还是以fields为准
-    > 以fields为准,则需要在metaField中对字段是否予以显示做开关
+- [x] 推敲xxxView构建逻辑,以配置为准 还是以fields为准
+    - [x] 以fields为准,则需要在metaField中对字段是否予以显示做开关
     > 以配置为准,则需要在所有渲染的地方,对"{}"做逻辑判断,防止渲染; 
     
     

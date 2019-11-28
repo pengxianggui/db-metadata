@@ -24,8 +24,6 @@ import java.util.*;
 @Slf4j
 public class QueryCondition {
 
-    public static final String PREFIX_COL = "__COLUMN__";
-
     /**
      * 普通值过滤
      * 数值 : key=value
@@ -123,7 +121,7 @@ public class QueryCondition {
             String key = (String) iter.next();
 
             //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
-            if (key.indexOf("in(") >= 0) {
+            if (key.contains("in(")) {
                 //这时的getAs取出来的是String[]数据;
                 String[] vals = kv.getAs(key);
                 sqlExceptSelect.append(" and ").append(key).append(" ");
@@ -133,7 +131,7 @@ public class QueryCondition {
                 continue;
             }
 
-            if (key.indexOf("order by") >= 0) {
+            if (key.contains("order by")) {
                 String v = kv.getAs(key);
                 sqlParaExt.setOrderBy(key + v);
                 continue;

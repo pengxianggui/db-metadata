@@ -22,11 +22,11 @@ public class WebException extends RuntimeException {
 
     private static String resolveString(String errorMsgTemplate, String... args) {
 
-        if (errorMsgTemplate.indexOf("{}") >= 0) {
+        if (errorMsgTemplate.contains("{}")) {
             errorMsgTemplate = String.format(errorMsgTemplate.replaceAll("\\{\\}", "%s"));
         }
 
-        if (errorMsgTemplate.indexOf("%s") >= 0) {
+        if (errorMsgTemplate.contains("%s")) {
             errorMsgTemplate = String.format(errorMsgTemplate, args);
         }
         return errorMsgTemplate;

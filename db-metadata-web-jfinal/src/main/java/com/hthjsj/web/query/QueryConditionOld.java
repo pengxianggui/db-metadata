@@ -204,7 +204,7 @@ public class QueryConditionOld {
             }
 
             //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
-            if (key.indexOf("in(") >= 0) {
+            if (key.contains("in(")) {
                 //这时的getAs取出来的是String[]数据;
                 String[] vals = kv.getAs(key);
                 sqlExceptSelect.append(" and ").append(key).append(" ");
