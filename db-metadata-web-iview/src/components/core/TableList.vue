@@ -1,9 +1,8 @@
 <template>
     <el-container direction="vertical" class="el-card" ref="container">
         <el-row justify="end">
-            <el-col :span="24" style="display: flex">
+            <el-col :span="24">
                 <!-- operation bar -->
-                <span style="flex: 1"></span>
                 <slot name="operation-bar"
                       v-bind:conf="innerMeta['operation-bar']"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
