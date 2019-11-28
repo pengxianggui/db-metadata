@@ -84,12 +84,39 @@
                     this.$message.error(err.msg);
                 })
             },
+            jumpToConf(objectCode) {
+                let title = '创建成功，是否前往配置界面对' + objectCode +  '进行UI配置?';
+                let url = "/main/instance-conf?componentCode=TableList&objectCode=" + objectCode;
+                this.$confirm(title, '提示', {
+                    confirmButtonText: '去配置',
+                    cancelButtonText: '下次再说',
+                    type: 'success',
+                }).then(() => {
+                    this.$router.push(url);
+                }).catch(() => {
+                    const h = this.$createElement;
+
+                    this.$notify.info({
+                        title: '消息',
+                        message: h('span', {}, [
+                            h('span', {}, '如不进行UI配置, 此元对象相关视图可能出现异常.'),
+                            h('a', {
+                                attrs: {
+                                    href: '#' + url
+                                }
+                            }, '去配置')
+                        ])
+                    });
+                });
+
+            },
             formSubmit(formModel) {
                 this.$axios.post(this.formMeta.action, formModel).then(resp => {
                     this.$message.success(resp.msg);
-                    this.objectCode = formModel['objectCode'];
+                    let objectCode = formModel['objectCode'];
                     this.visible = false;
                     this.refreshMasterTableData();
+                    this.jumpToConf(objectCode);
                 }).catch(err => {
                     this.$message.error(err.msg);
                 })
