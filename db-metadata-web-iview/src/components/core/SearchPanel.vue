@@ -11,18 +11,18 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-    <z-toggle-panel label-position="bottom-center" :default-open="innerMeta['expand']">
+    <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
         <el-card>
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline>
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
                         <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
-                                     v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
+                                       v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
                         </drop-down-box>
 
                         <bool-box v-model="model[item.name]['value']" :meta="item"
-                                 v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>
+                                  v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>
 
                         <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
                                         is-range type="daterange"
@@ -60,7 +60,11 @@
             </el-form>
         </el-card>
         <template #label>
-            <slot name="label-bar"></slot>
+            <slot name="label-bar">
+                <el-divider>
+                    <i class="el-icon-search"></i>
+                </el-divider>
+            </slot>
         </template>
     </z-toggle-panel>
 </template>

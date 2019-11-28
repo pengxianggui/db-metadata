@@ -238,7 +238,8 @@ const DEFAULT = {
         "component_name": "SearchPanel",
         "name": "SearchPanel",
         "label": "搜索面板",
-        "expand": true,
+        "expand": false,
+        "label-position": "bottom-center",
         "conf": {
             "label-width": '80px',
             "size": 'medium', // medium|small|mini
