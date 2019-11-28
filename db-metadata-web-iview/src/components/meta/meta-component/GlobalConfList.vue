@@ -6,25 +6,27 @@
                 <el-button v-bind="conf" @click="addConf">新增</el-button>
             </template>
             <template #buttons="{conf, scope}">
-                <el-tooltip content="配置" placement="top">
-                    <el-button icon="el-icon-s-tools" v-bind="conf['edit']['conf']" type="info"
-                               @click="handlerConf($event, scope.row, scope.$index)"></el-button>
-                </el-tooltip>
-                <el-tooltip :content="conf['edit']['label']" placement="top">
-                    <el-button v-bind="conf['edit']['conf']"
-                               @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
-                </el-tooltip>
-                <el-tooltip :content="conf['delete']['label']" placement="top">
-                    <el-button v-bind="conf['delete']['conf']"
-                               @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
-                </el-tooltip>
+                <el-button-group>
+                    <el-tooltip content="配置" placement="top">
+                        <el-button icon="el-icon-s-tools" v-bind="conf['edit']['conf']" type="info"
+                                   @click="handlerConf($event, scope.row, scope.$index)"></el-button>
+                    </el-tooltip>
+                    <el-tooltip :content="conf['edit']['label']" placement="top">
+                        <el-button v-bind="conf['edit']['conf']"
+                                   @click="ref.handleEdit($event, scope.row, scope.$index)"></el-button>
+                    </el-tooltip>
+                    <el-tooltip :content="conf['delete']['label']" placement="top">
+                        <el-button v-bind="conf['delete']['conf']"
+                                   @click="ref.handleDelete($event, scope.row, scope.$index)"></el-button>
+                    </el-tooltip>
+                </el-button-group>
             </template>
         </table-list>
     </div>
 </template>
 
 <script>
-    import {getTlMeta, getSpMeta} from "../../core/mixins/methods"
+    import {getSpMeta, getTlMeta} from "../../core/mixins/methods"
 
     export default {
         name: "GlobalConfList",
