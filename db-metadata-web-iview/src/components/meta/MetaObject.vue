@@ -4,7 +4,8 @@
         <table-list :ref="tlMeta['name']" :meta="tlMeta">
             <template #operation-bar="{conf, operations}">
                 <el-button-group>
-                    <el-button v-bind="conf" @click="handleBatchDelete($event)" type="danger">删除</el-button>
+                    <el-button v-bind="conf" @click="handleBatchDelete($event)" type="danger" size="mini"
+                               icon="el-icon-delete-solid"></el-button>
                 </el-button-group>
             </template>
         </table-list>

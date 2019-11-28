@@ -1,14 +1,15 @@
 <template>
     <el-container direction="vertical" class="el-card" ref="container">
         <el-row>
-            <el-col :span="24">
+            <el-col :span="2" :offset="22">
                 <!-- operation bar -->
                 <slot name="operation-bar"
                       v-bind:conf="innerMeta['operation-bar']"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
-                        <el-button @click="handleAdd" size="mini">新增</el-button>
-                        <el-button @click="handleBatchDelete($event)" type="danger" size="mini">删除</el-button>
+                        <el-button @click="handleAdd" size="mini" icon="el-icon-document-add"></el-button>
+                        <el-button @click="handleBatchDelete($event)" type="danger" size="mini"
+                                   icon="el-icon-delete-solid"></el-button>
                     </el-button-group>
                 </slot>
             </el-col>
