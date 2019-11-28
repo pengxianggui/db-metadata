@@ -28,5 +28,8 @@
 </script>
 
 <style scoped>
-
+    .el-main {
+        margin: 0px 5px 0px 5px;
+        padding: 0px;
+    }
 </style>

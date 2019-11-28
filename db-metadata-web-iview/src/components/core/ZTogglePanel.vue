@@ -1,6 +1,5 @@
 <template>
     <div class="toggle-panel">
-
         <div :class="after" class="label" @click="toggle">
             <slot name="label" v-if="before === 'top'">
                 <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
@@ -60,6 +59,10 @@
         color: #aaaaaa;
     }
 
+    .el-divider.el-divider--horizontal {
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
     .label:hover {
         cursor: pointer;
         color: #666666;
