@@ -29,4 +29,12 @@
     .el-popover {
         min-width: 50px;
     }
+
+    .quote {
+        margin: 10px;
+        padding: 10px;
+        border-left: 5px solid #409EFF;
+        color: #666666;
+        background-color: #eeeeee;
+    }
 </style>

@@ -156,6 +156,18 @@ const DEFAULT = {
             "auto-upload": false
         }
     },
+    "MiniFormBox": {
+        "component_name": "MiniFormBox",
+        "name": "MiniFormBox",
+        "label": "迷你表单框",
+        "inline": false,
+        "conf": {
+            "label-width": "80px",
+            "size": "mini",
+            "disabled": false,
+            "inline": false
+        }
+    },
     "DialogBox": {
         "component_name": "DialogBox",
         "name": "DialogBox",

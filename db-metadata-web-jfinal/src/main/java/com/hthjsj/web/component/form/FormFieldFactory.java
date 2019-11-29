@@ -102,6 +102,9 @@ public class FormFieldFactory {
             case JSONBOX:
                 JsonBox jsonBox = new JsonBox(metaField.fieldCode(), metaField.cn());
                 return create(jsonBox, metaField, instanceFieldConfig);
+            case MiniFormBox:
+                MiniFormBox miniFormBox = new MiniFormBox(metaField.fieldCode(), metaField.cn());
+                return create(miniFormBox, metaField, instanceFieldConfig);
             default:
                 break;
         }
