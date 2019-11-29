@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="sub_form" :model="nativeValue" v-bind="innerMeta['conf']">
+    <el-form ref="sub_form" :model="nativeValue" v-bind="innerMeta['conf']" size="mini">
         <el-form-item label="默认值">
             <el-col :span="6">
                 <el-input v-model="nativeValue.defaultVal" size="mini"></el-input>
