@@ -12,7 +12,7 @@
 -->
 <template>
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
-        <el-card>
+        <div class="el-card">
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline
                      @keyup.enter.native="onSubmit">
                 <template v-for="(item) in innerMeta.columns">
@@ -59,7 +59,7 @@
                     </slot>
                 </el-form-item>
             </el-form>
-        </el-card>
+        </div>
         <template #label>
             <slot name="label-bar">
                 <el-divider>

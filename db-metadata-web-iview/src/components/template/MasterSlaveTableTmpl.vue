@@ -1,12 +1,12 @@
 <template>
     <div>
-        <el-card>
+        <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData"></table-list>
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
             <table-list :ref="sTlMeta['name']" :meta="sTlMeta"></table-list>
-        </el-card>
+        </div>
     </div>
 </template>
 

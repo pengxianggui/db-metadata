@@ -1,10 +1,10 @@
 <template>
     <div>
-        <!--        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
-        <!--            <el-radio-button :label="false">展开</el-radio-button>-->
-        <!--            <el-radio-button :label="true">收起</el-radio-button>-->
-        <!--        </el-radio-group>-->
-        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true" active-text-color
+        <div style="text-align: center">
+            <el-button :icon="isCollapse ? 'el-icon-arrow-right':'el-icon-arrow-left'" size="mini"
+                       @click="isCollapse = !isCollapse"></el-button>
+        </div>
+        <el-menu :default-active="$route.fullPath" class="el-menu-vertical-demo" :router="true" active-text-color
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
             <el-menu-item index="/main/meta-data">
                 <i class="el-icon-menu"></i>

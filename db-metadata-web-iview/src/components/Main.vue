@@ -4,10 +4,9 @@
             <header-bar></header-bar>
         </el-header>
         <el-container style="flex: 1; overflow: auto;">
-            <el-aside width="200px">
-                <aside-nav></aside-nav>
-            </el-aside>
+            <aside-nav></aside-nav>
             <el-main style="height: auto; overflow: auto;">
+<!--                <tag-nav></tag-nav>-->
                 <router-view :key="new Date().getTime()"></router-view>
             </el-main>
         </el-container>
@@ -15,14 +14,16 @@
 </template>
 
 <script>
-    import AsideNav from '@/components/layout/AsideNav'
-    import HeaderBar from '@/components/layout/HeaderBar'
+    import AsideNav from './layout/AsideNav'
+    import HeaderBar from './layout/HeaderBar'
+    import TagNav from './layout/TagNav'
 
     export default {
         name: "Main",
         components: {
             AsideNav,
-            HeaderBar
+            HeaderBar,
+            TagNav
         }
     }
 </script>

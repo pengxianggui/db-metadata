@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-card>
+        <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData">
                 <template #add-btn="{conf}">
@@ -10,7 +10,7 @@
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
             <table-list :ref="sTlMeta['name']" :meta="sTlMeta"></table-list>
-        </el-card>
+        </div>
 
         <el-dialog title="创建元对象" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
