@@ -306,3 +306,8 @@
 ### 其他资料
 
 - vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js
+- vue cli3使用vue.config.js，不再使用传统的webpack, 导致别名路径@设置后, IDE无法识别(@/constant).
+  
+  ```
+    解决办法：将别名设置的部分抽取出来放到单独的配置文件`alias.config.js`，再配置IDE, WebPack->webpack configuration file 设置为alias.config.js即可。
+  ```
