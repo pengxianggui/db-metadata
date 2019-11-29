@@ -111,10 +111,10 @@ const DEFAULT_CONF = {
         "label": "多选框",
         "inline": true,
         "data_url": "/dict/yn",
-        "conf": {},
-        // "options": [
-        //     {"key":"value"}
-        // ]
+        "options": [
+            // {"key":"value"}
+        ],
+        "conf": {}
     },
     "JsonBox": {
         "component_name": "JsonBox",

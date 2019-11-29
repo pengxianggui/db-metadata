@@ -12,7 +12,7 @@
                             </el-form-item>
                             <el-form-item :key="key" :label="key" v-else>
                                 <div :key="key">
-                                    <JsonBox v-model="activeFieldMeta[key]" mode="form"></JsonBox>
+                                    <json-box v-model="activeFieldMeta[key]" mode="form"></json-box>
                                 </div>
                             </el-form-item>
                         </template>
@@ -31,7 +31,7 @@
                             </el-form-item>
                             <el-form-item :key="key" :label="key" v-else>
                                 <div :key="key">
-                                    <JsonBox v-model="formMeta[key]" mode="form"></JsonBox>
+                                    <json-box v-model="formMeta[key]" mode="form"></json-box>
                                 </div>
                             </el-form-item>
                         </template>
@@ -43,7 +43,10 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import cloneDeep from 'lodash/cloneDeep'
+    import OptionsInput from './relate/OptionsInput'
+    import JsonBox from "@/components/core/form/JsonBox";
 
     export default {
         name: "ConfArea",
@@ -51,6 +54,7 @@
             value: Object,
             selectIndex: Number
         },
+        components: {JsonBox, OptionsInput},
         data() {
             return {
                 excludes: ['component_name', 'columns', 'btns', 'name'], // temporarily not allow customize
@@ -66,19 +70,26 @@
                 } else {
                     this.typeMapping[fKey] = value;
                 }
-                let type = typeof value;
+                let type = utils.typeOf(value);
                 let componentName = "TextBox";
                 switch (type) {
-                    case "string":
+                    case "[object String]":
                         componentName = "TextBox";
                         break;
-                    case "number":
+                    case "[object Number]":
                         componentName = "NumBox";
                         break;
-                    case "boolean":
+                    case "[object Boolean]":
                         componentName = "BoolBox";
                         break;
-                    case "object":
+                    case "[object Array]":
+                        if (key === 'options') {
+                            componentName = 'options-input';
+                        } else {
+                            componentName = 'JsonBox';
+                        }
+                        break;
+                    case "[object Object]":
                         componentName = "JsonBox";
                         break;
                 }

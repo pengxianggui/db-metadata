@@ -53,3 +53,14 @@ export function isObject(obj) {
     let toStr = Object.prototype.toString.call(obj);
     return toStr === '[object Object]'
 }
+
+/**
+ * 返回值的类型:
+ * [object String]、[object Number]、[object Object]、[object Boolean]、
+ * [object Array]、[object Function]、[object Null]、[object Undefined]
+ * @param value
+ * @returns {string}
+ */
+export function typeOf(value) {
+    return Object.prototype.toString.call(value);
+}

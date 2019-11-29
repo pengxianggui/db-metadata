@@ -87,8 +87,7 @@
 
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
-                        this.$merge(item, DEFAULT[item.component_name]); // merge column
-                        this.$set(this.model, item.name, record[item.name] || item.default_value);
+                        this.$set(this.model, item.name, record[item.name]);
                     });
                 }
             }

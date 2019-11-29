@@ -17,7 +17,7 @@
         mixins: [Meta(DEFAULT.CheckBox), Val],
         name: "CheckBox",
         label: "复选框",
-        data () {
+        data() {
             return {
                 innerOptions: []
             }
@@ -45,11 +45,13 @@
                     this.innerOptions = this.options;
                     return;
                 }
-                if (this.innerMeta.hasOwnProperty('options')) { // 组件元对象定义了options
+                if (this.meta.hasOwnProperty('options')
+                    && Array.isArray(this.meta['options'])
+                    && this.meta['options'].length > 0) { // 组件元对象定义了options, 并且有值
                     this.innerOptions = this.innerMeta['options'];
                     return;
                 }
-                if (this.innerMeta.hasOwnProperty('data_url')) {
+                if (this.meta.hasOwnProperty('data_url')) {
                     this.getOptions();
                     return
                 }
@@ -71,6 +73,8 @@
                     switch (type) {
                         case "string":
                             return this.value.trim() === '' ? [] : this.value.split(',');
+                        case "undefined":
+                            return [];
                         default:
                             return this.value;
                     }
