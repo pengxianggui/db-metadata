@@ -16,7 +16,7 @@
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline
                      @keyup.enter.native="onSubmit">
                 <template v-for="(item) in innerMeta.columns">
-                    <el-form-item :key="item.name" :label="item.label" :prop="item.name"
+                    <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
                         <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
                                        v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
