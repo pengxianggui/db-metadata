@@ -17,7 +17,8 @@
 </template>
 
 <script>
-    import {getSpMeta, getTlMeta} from "../../core/mixins/methods"
+    import {URL} from '@/constant'
+    import {getSpMeta, getTlMeta} from "@/components/core/mixins/methods"
 
     export default {
         name: "InstanceConfList",
@@ -34,7 +35,7 @@
         },
         methods: {
             addConf() {
-                this.$router.push("/main/instance-conf");
+                this.$router.push(URL.R_INSTANCE_CONF_ADD);
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();

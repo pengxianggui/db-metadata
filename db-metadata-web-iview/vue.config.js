@@ -1,7 +1,4 @@
-const path = require('path');
-function resolve(dir) {
-    return path.join(__dirname, dir)
-}
+import alias from './alias.config';
 
 const name = "db-metadata-web-iview";
 const serverProxy = {
@@ -20,11 +17,7 @@ module.exports = {
         // provide the app's title in webpack's name field, so that
         // it can be accessed in index.html to inject the correct title.
         name: name,
-        resolve: {
-            alias: {
-                '@': resolve('src')
-            }
-        }
+        resolve: alias.resolve
     },
     devServer: {
         host: '0.0.0.0',

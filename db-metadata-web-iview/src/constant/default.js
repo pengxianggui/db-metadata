@@ -1,6 +1,8 @@
 import {PAGE_NUM_AREA} from './constant'
-// 组件的默认UI配置
-const DEFAULT = {
+/**
+ * 组件的默认UI配置
+ */
+const DEFAULT_CONF = {
     "BoolBox": {
         "component_name": "BoolBox",
         "name": "BoolBox",
@@ -361,5 +363,4 @@ const DEFAULT = {
         // ]
     }
 };
-
-export default DEFAULT
+export default DEFAULT_CONF;

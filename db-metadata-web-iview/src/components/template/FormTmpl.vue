@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import FormTmpl from "../core/FormTmpl";
+    import FormTmpl from "@/components/core/FormTmpl";
 
     export default {
         name: "FormTmpl",
@@ -25,8 +25,7 @@
         },
         methods: {
             getMeta() {
-                // TODO 需要单独一个toUpdate接口，只需要传入objectCode参数, 此处url待定
-                let url = this.$compile('/form/toUpdate/meta_object?objectCode={objectCode}', {
+                let url = this.$compile('/form/toUpdate?objectCode={objectCode}', {
                     objectCode: this.objectCode
                 });
 

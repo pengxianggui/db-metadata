@@ -1,4 +1,4 @@
-import {ERROR_MSG, SUCCESS_MSG} from "../constant/constant";
+import {CONSTANT} from "../constant";
 
 /**
  * 请求正常下响应数据的统一格式处理（msg保证）
@@ -7,7 +7,7 @@ import {ERROR_MSG, SUCCESS_MSG} from "../constant/constant";
  */
 export function s_format(res) {
     const fail = res.data && res.data.state !== 'ok';
-    const defaultMsg = fail ? ERROR_MSG : SUCCESS_MSG;
+    const defaultMsg = fail ? CONSTANT.ERROR_MSG : CONSTANT.SUCCESS_MSG;
     res.data.msg = res.data.msg || defaultMsg;
     return !fail;
 }

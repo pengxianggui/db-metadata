@@ -1,5 +1,5 @@
-import {BASE_URL} from "../constant/constant";
+import {CONSTANT} from "../constant";
 
 export default {
-    baseURL: BASE_URL
+    baseURL: CONSTANT.BASE_URL
 }

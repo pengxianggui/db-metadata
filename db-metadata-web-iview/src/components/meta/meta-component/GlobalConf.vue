@@ -42,8 +42,8 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant';
-    import EleProps from '../../../config/element-props'
+    import {DEFAULT, URL} from '@/constant';
+    import EleProps from '@/config/element-props'
 
     export default {
         name: "GlobalConf",
@@ -54,7 +54,7 @@
             let componentMeta = {
                 name: "component",
                 label: "组件",
-                data_url: "/component/list",
+                data_url: URL.COMPONENT_CODE_LIST,
                 group: false,
                 conf: {
                     "filterable": true,
@@ -81,20 +81,17 @@
         methods: {
             loadConf: function () {
                 const {componentCode} = this.confModel;
-                const url = 'component/load';
-
                 if (!componentCode) {
+
                     this.confModel['conf'] = {};
                     return;
                 }
 
-                this.$axios({
-                    method: 'get',
-                    url: url,
-                    params: {
-                        componentCode: componentCode
-                    }
-                }).then(resp => {
+                const url = this.$compile(URL.COMP_GOBAL_CONF_LOAD, {
+                    componentCode: componentCode
+                });
+
+                this.$axios.get(url).then(resp => {
                     let data = resp.data;
 
                     for (let key in data) {
@@ -111,7 +108,7 @@
                 })
             },
             deleteConf: function () {
-                let url = this.$compile('/component/delete?componentCode={componentCode}', this.confModel);
+                let url = this.$compile(URL.COMP_GOBAL_CONF_DELETE, this.confModel);
                 this.$axios.delete(url).then(resp => {
                     this.$message.success(resp.msg);
                 }).catch(err => {
@@ -133,7 +130,7 @@
 
                 this.$axios({
                     method: 'POST',
-                    url: 'component/doAdd',
+                    url: URL.COMP_CONF_ADD,
                     data: params
                 }).then(resp => {
                     this.$message.success(resp.msg);
@@ -155,7 +152,7 @@
 
                 this.$axios({
                     method: 'POST',
-                    url: 'component/doUpdate',
+                    url: URL.COMP_CONF_UPDATE,
                     data: params
                 }).then(resp => {
                     this.$message.success(resp.msg);

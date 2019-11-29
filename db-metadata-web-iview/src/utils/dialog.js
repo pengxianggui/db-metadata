@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import DEFAULT from '../constant/default'
+import {DEFAULT} from '@/constant'
 
 /**
  * Dynamic Content dialog box

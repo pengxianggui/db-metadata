@@ -144,8 +144,7 @@
 </template>
 
 <script>
-    import DEFAULT from '@/constant/default'
-    import {FORM_TO_ADD_URL, FORM_TO_EDIT_URL, TABLE_DATA_DELETE_URL} from '@/constant/constant'
+    import {DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
     import PopMenu from "./PopMenu";
 
@@ -207,12 +206,12 @@
             doEdit(id) {
                 let url;
                 if (id) {
-                    url = this.$compile(FORM_TO_EDIT_URL, {
+                    url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
                         id: id
                     });
                 } else {
-                    url = this.$compile(FORM_TO_ADD_URL, {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(URL.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
@@ -254,7 +253,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let beforeCompileUrl = this.innerMeta['delete_url'] || TABLE_DATA_DELETE_URL;
+                    let beforeCompileUrl = this.innerMeta['delete_url'] || URL.RECORD_DELETE;
                     let afterCompileUrl = this.$compile(beforeCompileUrl,
                         {objectCode: this.innerMeta['objectCode'], ids: ids});
                     this.$axios.delete(afterCompileUrl).then(resp => {
@@ -318,13 +317,13 @@
 
             editMetaObject() {
                 let objectCode = this.innerMeta['objectCode'];
-                let url = this.$compile("/meta/editObject/{objectCode}", {objectCode: objectCode});
+                let url = this.$compile(URL.META_OBJECT_TO_EDIT, {objectCode: objectCode});
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
                     this.dialogMeta = {
                         component_name: "DialogBox",
                         conf: {
-                            title: "编辑元对象" + objectCode
+                            title: "编辑元对象:" + objectCode
                         }
                     };
                     this.dialogVisible = true
@@ -332,7 +331,7 @@
             },
             editMetaField(fieldCode) {
                 let objectCode = this.innerMeta['objectCode'];
-                let url = this.$compile("/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}", {
+                let url = this.$compile(URL.META_FIELD_TO_EDIT, {
                     objectCode: objectCode,
                     fieldCode: fieldCode
                 });
@@ -341,7 +340,7 @@
                     this.dialogMeta = {
                         component_name: "DialogBox",
                         conf: {
-                            title: "编辑元对象" + objectCode
+                            title: "编辑元字段:" + fieldCode
                         }
                     };
                     this.dialogVisible = true
@@ -350,7 +349,7 @@
             editInstanceConf() {
                 let objectCode = this.innerMeta['objectCode'];
                 let componentCode = 'TableList';
-                let url = '/instance-conf';
+                let url = URL.RR_INSTANCE_CONF_ADD;
                 let routeUrl = this.$router.resolve({
                     path: url,
                     query: {

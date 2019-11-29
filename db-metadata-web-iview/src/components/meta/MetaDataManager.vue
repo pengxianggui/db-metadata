@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    import {URL} from '@/constant'
     import {getTlMeta, getSpMeta} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
 
@@ -47,27 +48,7 @@
                 sTlMeta: {},
                 sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
                 visible: false,
-                formMeta: {},
-                objMeta: { // 下拉选元对象
-                    "data_url": "/table/list/meta_object",
-                    "conf": {
-                        'clearable': true,
-                        'filterable': true,
-                        'size': 'small'
-                    },
-                    'behavior': {
-                        'format': function (params) {
-                            let kvs = [];
-                            for (let i = 0; i < params.length; i++) {
-                                kvs.push({
-                                    key: params[i].code,
-                                    value: params[i].code
-                                })
-                            }
-                            return kvs;
-                        }
-                    }
-                }
+                formMeta: {}
             }
         },
         methods: {
@@ -78,7 +59,7 @@
                 this.sTlRef.getData(params);
             },
             getFormMeta() {
-                this.$axios.get('/meta/toAdd').then(resp => {
+                this.$axios.get(URL.META_OBJECT_TO_ADD).then(resp => {
                     this.formMeta = resp.data
                 }).catch(err => {
                     this.$message.error(err.msg);
@@ -86,7 +67,10 @@
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode +  '进行UI配置?';
-                let url = "/main/instance-conf?componentCode=TableList&objectCode=" + objectCode;
+                let url = this.$compile(URL.R_INSTANCE_CONF_EDIT, {
+                    componentCode: 'TableList',
+                    objectCode: objectCode
+                });
                 this.$confirm(title, '提示', {
                     confirmButtonText: '去配置',
                     cancelButtonText: '下次再说',
@@ -136,7 +120,9 @@
                     objectCodes = row.code;
                 }
                 let title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
-                let url = '/meta/delete?objectCode=' + objectCodes;
+                let url = this.$compile(URL.META_OBJECT_DELETE, {
+                    objectCode: objectCodes
+                });
 
                 this.$confirm(title, '提示', {
                     confirmButtonText: '确定',

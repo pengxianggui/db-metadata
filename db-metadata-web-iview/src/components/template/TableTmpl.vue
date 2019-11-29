@@ -6,8 +6,11 @@
 </template>
 
 <script>
+    import {getTlMeta} from "@/components/core/mixins/methods";
+
     export default {
         name: "TableTmpl",
+        mixins: [getTlMeta],
         props: {
             R_oc: String
         },
@@ -17,22 +20,13 @@
                 meta: {}
             }
         },
-        methods: {
-            getMeta() {
-                let url = this.$compile("/meta/fields/{objectCode}", {
-                    objectCode: this.objectCode
-                });
-
-                this.$axios.get(url).then(resp => {
-                    this.meta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                })
-            },
-        },
         created() {
-            this.getMeta();
+            this.getTlMeta(this.objectCode).then(resp => {
+                this.meta = resp.data;
+            }).catch(err => {
+                console.error('[ERROR] url: %s, msg: %s', err.msg);
+                this.$message.error(err.msg);
+            })
         },
     }
 </script>

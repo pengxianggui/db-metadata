@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import {getTlMeta, getSpMeta} from "../core/mixins/methods"
+    import {getTlMeta, getSpMeta} from "@/components/core/mixins/methods"
 
     export default {
         name: "SingleGridTmpl",
