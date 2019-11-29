@@ -1,4 +1,4 @@
-import alias from './alias.config';
+let alias = require('./alias.config');
 
 const name = "db-metadata-web-iview";
 const serverProxy = {
