@@ -15,7 +15,7 @@ public class MiniFormBox extends FormField {
 
     @Override
     public ComponentType componentType() {
-        return ComponentType.MiniFormBox;
+        return ComponentType.MINIFORMBOX;
     }
 
     @Override

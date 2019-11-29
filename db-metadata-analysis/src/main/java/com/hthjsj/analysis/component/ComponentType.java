@@ -25,7 +25,7 @@ public enum ComponentType {
     TEXTBOX("textbox", "输入框组件", "TextBox"),
     TIMEBOX("timebox", "时间框", "TimeBox"),
     JSONBOX("jsonbox", "Json框", "JsonBox"),
-    MiniFormBox("miniformbox", "迷你表单框", "MiniFormBox"),
+    MINIFORMBOX("miniformbox", "迷你表单框", "MiniFormBox"),
     FINDBOX("findbox", "查找框", "FindBox"),
     FINDPANEL("findpanel", "查找面板", "FindPanel"),
     SEARCHVIEW("searchview", "搜索面板", "SearchPanel"),
