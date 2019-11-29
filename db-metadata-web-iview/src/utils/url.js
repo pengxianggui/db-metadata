@@ -1,4 +1,3 @@
-import qs from 'qs'
 /**
  * compile url with params, only effect for first level variable of params eg:
  * url : /table/list?object_code={objectCode}
@@ -15,18 +14,4 @@ export function compile(url, params) {
         url = url.replace(/\{.*?\}/, params[xv]);
     }
     return url;
-}
-
-/**
- * 拼接url
- * @param url /xx/yy
- * @param paramsMap {'param1': 111, 'param2': 222}
- * @return /xx/yy?param1=111&param2=222
- */
-export function splice(url, paramsMap) {
-    let params = qs.stringify(paramsMap);
-    if (url.indexOf('?') !== -1) {
-        return url + '&' + params;
-    }
-    return url + '?' + params;
 }

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import DEFAULT from '@/constant/default'
+import DEFAULT from '../constant/default'
 
 /**
  * Dynamic Content dialog box
@@ -8,7 +8,7 @@ import DEFAULT from '@/constant/default'
  * @param conf 弹框自身的配置
  * @returns {{}}
  */
-export default function (meta, data, conf) {
+export function dialog(meta, data, conf) {
     let promise = new Promise(function (resolve, reject) {
 
         let DialogTmpl = Vue.extend({

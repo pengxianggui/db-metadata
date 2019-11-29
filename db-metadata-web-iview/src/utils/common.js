@@ -28,7 +28,7 @@ export function deepCopy(obj) {
 
 
 /**
- * 驼峰转=>下划线(默认)
+ * 驼峰转=>?(默认下划线)
  * @param str
  * @param separator
  * @returns {*}

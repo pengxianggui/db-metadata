@@ -1,4 +1,4 @@
-import {camelCaseTo} from '@/utils/common.js'
+import {camelCaseTo} from '../utils/common.js'
 import {
     Checkbox,
     Input,

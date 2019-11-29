@@ -1,13 +1,13 @@
-import {merge, reverseMerge} from './merge.js'
-import * as kvFormat from './kvFormat'
+import * as merges from './merge.js'
+import * as kvFormats from './kvFormat'
 import * as common from './common'
-import {splice, compile} from './url'
+import * as dialog from './dialog'
+import * as url from './url'
 
 export default {
     ...common,
-    merge,
-    reverseMerge,
-    splice,
-    compile,
-    kvFormat
+    ...merges,
+    ...url,
+    ...kvFormats,
+    ...dialog
 }

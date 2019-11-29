@@ -23,7 +23,7 @@
     import MetaImport from './MetaImport'
 
     export default {
-        name: "MetaObjectManager",
+        name: "MetaDataManager",
         mixins: [getTlMeta, getSpMeta],
         props: {
             R_moc: String,

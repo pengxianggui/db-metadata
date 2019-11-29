@@ -4,18 +4,8 @@ const children = [
     {
         path: 'meta-data',
         name: 'Metadata',
-        props: {R_moc: "meta_object", R_soc: "meta_field", R_linkage: { m: "code", s: "object_code"}}, // m.code=s.object_code
-        component: () => import('@/components/meta/MetaObjectManager')
-    }, {
-        path: 'meta-manager',
-        name: 'MetaManager',
-        props: (route) => ({R_oc: 'meta_field', R_objC: route.query.objectCode}),
-        component: () => import('@/components/meta/MetaManager')
-    }, {
-        path: 'meta-object',
-        name: 'MetaObject',
-        props: {R_oc: "meta_object"},
-        component: () => import('@/components/meta/MetaObject')
+        props: {R_moc: "meta_object", R_soc: "meta_field", R_linkage: {m: "code", s: "object_code"}}, // m.code=s.object_code
+        component: () => import('@/components/meta/MetaDataManager')
     }, {
         path: 'meta-component',
         name: 'MetaComponent',
@@ -42,39 +32,44 @@ const children = [
         props: (route) => ({R_oc: route.query.objectCode}),
         component: () => import('@/components/meta/form-builder')
     }, {
-        path: 'demo',
-        name: 'Demo',
-        component: () => import('@/components/demo/DemoMain')
-    }, {
-        path: 'table-data',
-        name: 'TableData',
-        props: {R_oc: "test_table"},
-        component: () => import('@/components/template/SingleGridTmpl')
-    }, {
-        path: 'change-log',
-        name: 'ChangeLog',
-        props: {R_oc: "change_log"},
-        component: () => import('@/components/template/SingleGridTmpl')
-    }, {
-        path: 'meta-config',
-        name: 'MetaConfig',
-        props: {R_oc: "meta_config"},
-        component: () => import('@/components/template/SingleGridTmpl')
-    }, {
-        path: 'db-version',
-        name: 'DbVersion',
-        props: {R_oc: "db_version"},
-        component: () => import('@/components/template/SingleGridTmpl')
-    }, {
         path: 'table',
-        name: 'Table',
-        props: {R_oc: "meta_dict"},
+        name: 'table',
+        props: (route) => ({R_oc: route.query.objectCode}),
         component: () => import('@/components/template/SingleGridTmpl')
     }, {
+    //     path: 'ChangeLog',
+    //     name: 'ChangeLog',
+    //     props: {R_oc: "change_log"},
+    //     component: () => import('@/components/template/SingleGridTmpl')
+    // }, {
+    //     path: 'table',
+    //     name: 'MetaConfig',
+    //     props: {R_oc: "meta_config"},
+    //     component: () => import('@/components/template/SingleGridTmpl')
+    // }, {
+    //     path: 'table',
+    //     name: 'DbVersion',
+    //     props: {R_oc: "db_version"},
+    //     component: () => import('@/components/template/SingleGridTmpl')
+    // }, {
+    //     path: 'table',
+    //     name: 'MetaDict',
+    //     props: {R_oc: "meta_dict"},
+    //     component: () => import('@/components/template/SingleGridTmpl')
+    // }, {
+    //     path: 'table',
+    //     name: 'TestTable',
+    //     props: {R_oc: "test_table"},
+    //     component: () => import('@/components/template/SingleGridTmpl')
+    // }, {
         path: 'form',
         name: 'Form',
         props: (route) => ({R_oc: route.query.objectCode}),
         component: () => import('@/components/template/FormTmpl')
+    }, {
+        path: 'demo',
+        name: 'Demo',
+        component: () => import('@/components/demo/DemoMain')
     }
 ];
 

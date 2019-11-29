@@ -48,15 +48,6 @@
                     this.findPanelMeta = resp.data;
                     this.findPanelMeta.component_name = 'FindPanel';
                     this.dialogVisible = true;
-
-
-                    // this.$dialog(findPanelMeta, {
-                    //     "title": "请选择数据"
-                    // }).then(value => {
-                    //     this.nativeValue = value;
-                    // }).catch(flag => {
-                    //     if (flag === 'clean') this.nativeValue = null;
-                    // });
                 }).catch(err => {
                     console.error(err.msg);
                     this.$message.error(err.msg);

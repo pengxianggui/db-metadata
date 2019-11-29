@@ -43,7 +43,7 @@
 
 <script>
     import {DEFAULT} from '@/constant';
-    import EleProps from '../../element-props'
+    import EleProps from '../../../config/element-props'
 
     export default {
         name: "GlobalConf",
