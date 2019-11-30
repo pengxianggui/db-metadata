@@ -1,10 +1,10 @@
 package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.meta.IMetaField;
-import com.jfinal.kit.StrKit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p> @Date : 2019/10/28 </p>
@@ -36,16 +36,16 @@ public class LikeMatch extends MetaSQLExtract {
 
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
-        Object value = httpParams.get(metaField.fieldCode() + SUFFIX_LIKE);
-        if (StrKit.notNull(value)) {
+        Optional<Object> value = Optional.of(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE));
+        if (value.isPresent()) {
             values.put(SQL_PREFIX + metaField.fieldCode() + LIKE, value);
         }
-        value = httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_RIGHT);
-        if (StrKit.notNull(value)) {
+        value = Optional.of(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_RIGHT));
+        if (value.isPresent()) {
             values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_RIGHT, value);
         }
-        value = httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_LEFT);
-        if (StrKit.notNull(value)) {
+        value = Optional.of(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_LEFT));
+        if (value.isPresent()) {
             values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_LEFT, value);
         }
     }
