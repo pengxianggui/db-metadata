@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
+import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
@@ -31,5 +32,12 @@ public class ValidatorController extends Controller {
             List<Record> result = Db.find(exeSql);
             renderJson(Ret.ok("data", result));
         }
+    }
+
+    public void has() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String fieldCode = queryHelper.getFieldCode();
+        String valueString = getPara("v", getPara("val", getPara("value")));
     }
 }
