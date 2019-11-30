@@ -3,6 +3,7 @@ package com.hthjsj.analysis.component;
 import com.jfinal.kit.Kv;
 
 /**
+ * 在ViewContainer渲染过程中,负责元子组件渲染的干预
  * <p> @Date : 2019/10/21 </p>
  * <p> @Project : db-meta-serve</p>
  *

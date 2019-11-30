@@ -3,6 +3,7 @@ package com.hthjsj.analysis.component;
 import com.jfinal.kit.Kv;
 
 /**
+ * 默认的render行为,直接范围meta数据
  * <p> @Date : 2019/11/27 </p>
  * <p> @Project : db-meta-serve</p>
  *

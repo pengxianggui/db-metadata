@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ * 组件枚举,显示注册,新增组件时需要在此处增加
  * <p> @Date : 2019/10/21 </p>
  * <p> @Project : db-meta-serve</p>
  *

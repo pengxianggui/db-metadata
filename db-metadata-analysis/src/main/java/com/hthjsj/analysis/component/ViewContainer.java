@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 容器类Component的基类
+ *
  * @author konbluesky
  */
 public abstract class ViewContainer extends Component {
