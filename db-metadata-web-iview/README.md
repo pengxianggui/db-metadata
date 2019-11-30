@@ -221,6 +221,8 @@
         需要思考
     -[x] 下拉设置列显隐功能 由renderHeader实现 =>(替换为) 插槽实
     -[x] 表格的操作条支持插槽扩展
+    -[ ] 目前SearchPanel没有嵌入在TableList, 存在一个问题: 当SearchPanel中有输入值, 
+    再去改选TableList字段显隐时, SearchPanel中的参数如何带入到触发的搜索中？
         
  -[ ] 表单Box(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
