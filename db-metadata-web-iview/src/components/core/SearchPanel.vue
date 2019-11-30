@@ -41,9 +41,11 @@
                         </el-date-picker>
 
                         <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>
-                            <template #prepend v-if="item.component_name == 'NumBox'">
-                                <el-select v-model="model[item.name]['symbol']" style="width: 70px;">
-                                    <el-option v-for="(value, key) in symbols" :key="key" :value="key">{{key}}
+                            <template #prepend>
+                                <el-select v-model="model[item.name]['symbol']['value']" style="width: 80px;">
+                                    <el-option v-for="(value, key) in model[item.name]['symbol']['options']"
+                                               :key="key" :value="key">
+                                        {{key}}
                                     </el-option>
                                 </el-select>
                             </template>
@@ -75,15 +77,7 @@
     import Meta from './mixins/meta'
     import BoolBox from "./form/BoolBox";
     import DropDownBox from "./form/DropDownBox";
-
-    // 控件默认的搜索符，其他控件均为eq
-    let defaultSymbol = {
-        "TextBox": "=", // should support like symbol
-        "DropDownBox": "in",
-        "DateBox": "range",
-        "TimeBox": "range",
-        "DateTimeBox": "range"
-    };
+    import util from '@/utils'
 
     export default {
         name: "SearchPanel",
@@ -93,12 +87,55 @@
             return {
                 model: {},
                 symbols: {
-                    "=": "eq",
-                    "!=": "ne",
-                    ">": "gt",
-                    "<": "lt",
-                    ">=": "ge",
-                    "<=": "le",
+                    "TextBox": {
+                        "value": "%v%",
+                        "options": {
+                            "%v": "lk_l",
+                            "v%": "lk_r",
+                            "%v%": "lk"
+                        }
+                    },
+                    "BoolBox": {
+                        "value": "=",
+                        "options": {
+                            "=": "eq"
+                        }
+                    },
+                    "NumBox": {
+                        "value": "=",
+                        "options": {
+                            "=": "eq",
+                            "!=": "ne",
+                            ">": "gt",
+                            "<": "lt",
+                            ">=": "ge",
+                            "<=": "le"
+                        }
+                    },
+                    "DropDownBox": {
+                        "value": "in",
+                        "options": {
+                            "in": "in"
+                        }
+                    },
+                    "DateBox": {
+                        "value": "range",
+                        "options": {
+                            "range": "range"
+                        }
+                    },
+                    "TimeBox": {
+                        "value": "range",
+                        "options": {
+                            "range": "range"
+                        }
+                    },
+                    "DateTimeBox": {
+                        "value": "range",
+                        "options": {
+                            "range": "range"
+                        }
+                    }
                 }
             }
         },
@@ -114,17 +151,17 @@
 
                     if (value == null || value.length == 0) continue;
 
-                    switch (symbol) {
+                    switch (symbol.value) {
                         case "in":
                             value = value.join(',');
-                            params[name + symbol] = value;
+                            params[name + 'in'] = value;
                             break;
                         case "range":
                             params[name + "gt"] = value[0];
                             params[name + "lt"] = value[1];
                             break;
                         default:
-                            params[name + this.symbols[symbol]] = value;
+                            params[name + symbol.options[symbol.value]] = value;
                     }
                 }
 
@@ -136,14 +173,17 @@
             },
             assemblyModel(meta) {
                 this.model = {};
+                let symbols = this.symbols;
                 let columns = meta.columns;
+
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
                         let componentName = item.component_name;
                         this.$merge(item, DEFAULT[componentName]); // merge column
+                        let symbol = util.deepCopy(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
                         this.$set(this.model, item.name, {
                             value: null,
-                            symbol: defaultSymbol.hasOwnProperty(componentName) ? defaultSymbol[componentName] : '='
+                            symbol: symbol
                         });
                     });
                 }

@@ -89,22 +89,18 @@
                                         <slot name="edit-btn" v-bind:conf="innerMeta['buttons']['edit']['conf']"
                                               v-bind:edit="handleEdit"
                                               v-bind:scope="scope">
-                                            <el-tooltip :content="innerMeta['buttons']['edit']['label']"
-                                                        placement="left">
-                                                <el-button v-bind="innerMeta['buttons']['edit']['conf']"
-                                                           @click="handleEdit($event, scope.row, scope.$index)">
-                                                </el-button>
-                                            </el-tooltip>
+                                            placement="left">
+                                            <el-button v-bind="innerMeta['buttons']['edit']['conf']"
+                                                       @click="handleEdit($event, scope.row, scope.$index)">
+                                            </el-button>
                                         </slot>
                                         <slot name="delete-btn" v-bind:conf="innerMeta['buttons']['delete']['label']"
                                               v-bind:delete="handleDelete"
                                               v-bind:scope="scope">
-                                            <el-tooltip :content="innerMeta['buttons']['delete']['label']"
-                                                        placement="right">
-                                                <el-button v-bind="innerMeta['buttons']['delete']['conf']"
-                                                           @click="handleDelete($event, scope.row, scope.$index)">
-                                                </el-button>
-                                            </el-tooltip>
+                                            placement="right">
+                                            <el-button v-bind="innerMeta['buttons']['delete']['conf']"
+                                                       @click="handleDelete($event, scope.row, scope.$index)">
+                                            </el-button>
                                         </slot>
                                         <slot name="inner-after-extend-btn"
                                               v-bind:conf="innerMeta['buttons']['edit']['conf']"
@@ -372,7 +368,8 @@
                 }
 
                 let columnNames = (this.innerMeta['columns'] || [])
-                    .filter(column => column.hasOwnProperty('showable')).map(column => column['name']);
+                    .filter(column => column.hasOwnProperty('showable') && column['showable'])
+                    .map(column => column['name']);
 
                 let url = this.innerMeta['data_url'];
 

@@ -5,7 +5,9 @@
                 <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
             </slot>
         </div>
-        <slot v-if="open"></slot>
+        <div v-show="open">
+            <slot></slot>
+        </div>
         <div :class="after" class="label" @click="toggle">
             <slot name="label" v-if="before === 'bottom'">
                 <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
@@ -63,6 +65,7 @@
         margin-top: 12px;
         margin-bottom: 12px;
     }
+
     .label:hover {
         cursor: pointer;
         color: #666666;
