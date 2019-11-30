@@ -32,5 +32,6 @@ public class QueryParses {
         parseter.add(FieldEqualsMatch.class);
         parseter.add(SortMatch.class);
         parseter.add(InNotInMatch.class);
+        parseter.add(LikeMatch.class);
     }
 }

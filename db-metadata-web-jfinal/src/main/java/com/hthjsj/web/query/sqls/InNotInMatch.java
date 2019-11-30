@@ -28,15 +28,15 @@ public class InNotInMatch extends MetaSQLExtract {
 
         String notInValString = UtilKit.defaultIfBlank(String.valueOf(httpParams.get(metaField.fieldCode() + NOT_IN_SUFFIX)), "");
 
-        String[] notInVals = Splitter.on(",").omitEmptyStrings().splitToList(notInValString).toArray(new String[] {});
-        if (notInVals.length > 0) {
+        String[] notInValues = Splitter.on(",").omitEmptyStrings().splitToList(notInValString).toArray(new String[] {});
+        if (notInValues.length > 0) {
             // sqlKey : "fieldAbc not in(?,?,?)"  value:["s1","s2","s3"]
-            values.put(toSqlKey(metaField.fieldCode(), notInVals, false), notInVals);
+            values.put(toSqlKey(metaField.fieldCode(), notInValues, false), notInValues);
         }
-        String[] inVals = Splitter.on(",").omitEmptyStrings().splitToList(inValString).toArray(new String[] {});
-        if (inVals.length > 0) {
+        String[] inValues = Splitter.on(",").omitEmptyStrings().splitToList(inValString).toArray(new String[] {});
+        if (inValues.length > 0) {
             // sqlKey : "fieldAbc in(?,?,?)"  value:["s1","s2","s3"]
-            values.put(toSqlKey(metaField.fieldCode(), inVals, true), inVals);
+            values.put(toSqlKey(metaField.fieldCode(), inValues, true), inValues);
         }
     }
 

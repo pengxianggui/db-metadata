@@ -26,7 +26,7 @@ public class FieldEqualsMatch extends MetaSQLExtract {
         }
 
         if (httpParams.get(metaField.en()) != null) {
-            values.put(SQL_PREFIX + metaField.en() + "=?", value);
+            values.put(SQL_PREFIX + metaField.fieldCode() + "=?", value);
         }
     }
 
