@@ -14,7 +14,7 @@
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
         <div class="el-card">
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline
-                     @keyup.enter.native="onSubmit">
+                     @keyup.enter.native="onSubmit" v-if="innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">

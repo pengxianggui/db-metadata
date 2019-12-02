@@ -38,15 +38,15 @@ public class LikeMatch extends MetaSQLExtract {
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
         Optional<Object> value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE));
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE, value);
+            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE, value.get());
         }
         value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_RIGHT));
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_RIGHT, value);
+            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_RIGHT, value.get());
         }
         value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_LEFT));
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_LEFT, value);
+            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_LEFT, value.get());
         }
     }
 
