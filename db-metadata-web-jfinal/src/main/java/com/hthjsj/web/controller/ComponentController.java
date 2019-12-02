@@ -9,6 +9,7 @@ import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
 import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
@@ -46,7 +47,13 @@ public class ComponentController extends FrontRestController {
      */
     public void contact() {
         String componentCode = new QueryHelper(this).getComponentCode();
-        renderJson(Ret.ok("data", componentService().loadObjectsByType(componentCode)));
+        boolean kv = getBoolean("kv", false);
+        List<String> result = componentService().loadObjectsByType(componentCode);
+        if (kv) {
+            renderJson(Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0]))));
+            return;
+        }
+        renderJson(Ret.ok("data", result));
     }
 
     @Override

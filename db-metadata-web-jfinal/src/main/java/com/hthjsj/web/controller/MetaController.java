@@ -10,6 +10,7 @@ import com.hthjsj.web.component.form.DropDownBox;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
@@ -136,7 +137,14 @@ public class MetaController extends FrontRestController {
      */
     public void contact() {
         String objectCode = new QueryHelper(this).getObjectCode();
+        boolean kv = getBoolean("kv", false);
         List<String> result = componentService().loadTypesByObjectCode(objectCode).stream().map(c -> c.getCode()).collect(Collectors.toList());
+
+        if (kv) {
+            renderJson(Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0]))));
+            return;
+        }
+
         renderJson(Ret.ok("data", result));
     }
 }
