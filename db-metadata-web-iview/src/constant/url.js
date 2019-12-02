@@ -22,6 +22,8 @@ export const RECORD_DELETE = '/table/delete?objectCode={objectCode}&ids={ids}'; 
 export const RECORD_TO_ADD = "/form/toAdd/{objectCode}";  // 新增记录(TO)
 export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={id}';    // 更新记录(TO)
 
+export const LOAD_COMP_BY_OBJECT = '/meta/contact/{objectCode}?kv={kv}'; // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
+
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 
 //  [路由URL]-START --------------------------------------------------------------------------------------------------

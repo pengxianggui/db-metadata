@@ -343,7 +343,7 @@
             editInstanceConf() {
                 let objectCode = this.innerMeta['objectCode'];
 
-                this.$axios.get(this.$compile('/meta/contact/{objectCode}?kv=true', {objectCode: objectCode}))
+                this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: true}))
                     .then(resp => {
                         let componentCode = resp.data[0].value;
                         this.$dialog({
