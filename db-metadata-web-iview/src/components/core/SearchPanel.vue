@@ -14,7 +14,7 @@
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
         <div class="el-card">
             <el-form :ref="innerMeta['name']" v-bind="innerMeta.conf" :model="model" inline
-                     @keyup.enter.native="onSubmit" v-if="innerMeta.columns.length > 0">
+                     @keyup.enter.native="onSubmit" v-if="innerMeta.columns && innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
@@ -78,6 +78,7 @@
     import BoolBox from "./form/BoolBox";
     import DropDownBox from "./form/DropDownBox";
     import util from '@/utils'
+    import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
 
     export default {
         name: "SearchPanel",
@@ -85,59 +86,7 @@
         mixins: [Meta(DEFAULT.SearchPanel)],
         data() {
             return {
-                model: {},
-                symbols: {
-                    "TextBox": {
-                        "value": "%v%",
-                        "options": {
-                            "%v": "lk_l",
-                            "v%": "lk_r",
-                            "%v%": "lk"
-                        }
-                    },
-                    "BoolBox": {
-                        "value": "=",
-                        "options": {
-                            "=": "eq"
-                        }
-                    },
-                    "NumBox": {
-                        "value": "=",
-                        "optional": true,   // 供用户选择
-                        "options": {
-                            "=": "eq",
-                            "!=": "ne",
-                            ">": "gt",
-                            "<": "lt",
-                            ">=": "ge",
-                            "<=": "le"
-                        }
-                    },
-                    "DropDownBox": {
-                        "value": "in",
-                        "options": {
-                            "in": "in"
-                        }
-                    },
-                    "DateBox": {
-                        "value": "range",
-                        "options": {
-                            "range": "range"
-                        }
-                    },
-                    "TimeBox": {
-                        "value": "range",
-                        "options": {
-                            "range": "range"
-                        }
-                    },
-                    "DateTimeBox": {
-                        "value": "range",
-                        "options": {
-                            "range": "range"
-                        }
-                    }
-                }
+                model: {}
             }
         },
         methods: {
@@ -174,7 +123,6 @@
             },
             assemblyModel(meta) {
                 this.model = {};
-                let symbols = this.symbols;
                 let columns = meta.columns;
 
                 if (Array.isArray(columns)) {
