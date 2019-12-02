@@ -1,17 +1,4 @@
 {
-  "meta_object": {
-    "FormTmpl": {
-      "config": {
-        "conf": {
-          "size": "mini"
-        },
-        "name": "config",
-        "label": "配置",
-        "inline": false,
-        "component_name": "MiniFormBox"
-      }
-    }
-  },
   "meta_field": {
     "FormTmpl": {
       "config": {
