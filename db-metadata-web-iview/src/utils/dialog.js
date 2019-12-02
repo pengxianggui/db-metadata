@@ -13,9 +13,15 @@ export function dialog(meta, data, conf) {
 
         let DialogTmpl = Vue.extend({
             template: `
-                <el-dialog :visible.sync="visible" v-bind="conf">
+                <el-dialog :visible.sync="visible" v-bind="conf" center>
                     <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
                      @ok="ok" @cancel="cancel"></component>
+                    <slot name="footer" v-if="conf.showButtons">
+                        <div class="dialog-footer" style="margin-top: 10px; text-align: center">
+                            <el-button @click="visible = false">取 消</el-button>
+                            <el-button type="primary" @click="ok(ref.value)">确 定</el-button>
+                        </div>
+                    </slot>
                 </el-dialog>
             `,
             data() {
@@ -34,6 +40,11 @@ export function dialog(meta, data, conf) {
                 cancel: function (params) {
                     this.visible = false;
                     reject(params);
+                }
+            },
+            computed: {
+                ref: function () {
+                    return this.$refs[this.innerMeta.name];
                 }
             }
         });

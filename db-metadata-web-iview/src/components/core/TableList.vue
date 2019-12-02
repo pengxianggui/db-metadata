@@ -342,16 +342,30 @@
             },
             editInstanceConf() {
                 let objectCode = this.innerMeta['objectCode'];
-                let componentCode = 'TableList';
-                let url = URL.RR_INSTANCE_CONF_ADD;
-                let routeUrl = this.$router.resolve({
-                    path: url,
-                    query: {
-                        componentCode: componentCode,
-                        objectCode: objectCode
-                    }
-                });
-                window.open(routeUrl.href, '_blank');
+
+                this.$axios.get(this.$compile('/meta/contact/{objectCode}?kv=true', {objectCode: objectCode}))
+                    .then(resp => {
+                        let componentCode = resp.data[0].value;
+                        this.$dialog({
+                            component_name: 'RadioBox',
+                            name: "componentCode",
+                            options: resp.data
+                        }, componentCode, {
+                            title: '选择一个组件(' + objectCode + ')',
+                            width: '30%',
+                            showButtons: true
+                        }).then(componentCode => {
+                            let url = URL.RR_INSTANCE_CONF_ADD;
+                            let routeUrl = this.$router.resolve({
+                                path: url,
+                                query: {
+                                    componentCode: componentCode,
+                                    objectCode: objectCode
+                                }
+                            });
+                            window.open(routeUrl.href, '_blank');
+                        });
+                    });
             },
             editInstanceFieldConf(fieldCode) {
                 this.editInstanceConf(); // just edit the ui conf of field named fieldCode. anchor point ?
