@@ -38,6 +38,16 @@ public class DbMetaService {
         return Db.queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
     }
 
+    public List<IMetaObject> findAll() {
+        List<IMetaObject> result = new ArrayList<>();
+
+        List<String> objs = Db.use(App.DB_MAIN).query("select code from meta_object");
+        for (String metaObjectCode : objs) {
+            result.add(findByCode(metaObjectCode));
+        }
+        return result;
+    }
+
     public IMetaObject findByCode(String objectCode) {
         if (StrKit.isBlank(objectCode)) {
             throw new MetaOperateException("必须指定元对象编码,当前元对象编码:%s", objectCode);

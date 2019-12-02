@@ -1,0 +1,12 @@
+{
+  "meta_object": {
+    "_fields": {}
+  },
+  "test_table": {
+    "config": {
+      "objectCode": "test_table",
+      "isUUIDPrimary": true,
+      "testKey": 123
+    }
+  }
+}

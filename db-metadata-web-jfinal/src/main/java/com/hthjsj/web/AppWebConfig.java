@@ -66,6 +66,9 @@ public class AppWebConfig extends JFinalConfig {
         //component register
         Components.me().init();
         Dicts.me().init();
+        if (getPropertyToBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
+            InitKit.me().init();
+        }
     }
 
     @Override

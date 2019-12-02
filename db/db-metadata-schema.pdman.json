@@ -857,6 +857,12 @@
               "chnname": "新数据"
             },
             {
+              "name": "diff",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "差异"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",

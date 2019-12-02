@@ -234,18 +234,6 @@
       }
     }
   },
-  "SearchPanel": {
-    "component_name": "SearchPanel",
-    "name": "SearchPanel",
-    "label": "搜索面板",
-    "conf": {
-      "label-width": "40px",
-      "size": "medium",
-      "disabled": false,
-      "inline": true
-    },
-    "columns": []
-  },
   "FindBox": {
     "component_name": "FindBox",
     "name": "FindBox",
