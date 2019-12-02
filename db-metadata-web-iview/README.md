@@ -264,11 +264,12 @@
     
  -[ ] FindBox 搜索框
     -[x] 搜索框，参见jsonTemplate.json或者default.js
-    -[ ] 支持指定FindPanel回选字段
+    -[ ] 支持多选
+    -[ ] 支持sql配置FindPanel可选内容
  
  -[ ] FindPanel 查找面板(复杂)
     -[x] 参见jsonTemplate.json或者default.js
-    -[ ] 支持数组回选
+    -[ ] 支持数组(多选)回选
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
@@ -303,7 +304,7 @@
         ```
     -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
- -[ ] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
+ -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  
 ### 其他资料
 
