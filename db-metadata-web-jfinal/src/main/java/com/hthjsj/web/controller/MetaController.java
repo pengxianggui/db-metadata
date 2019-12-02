@@ -15,6 +15,9 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -133,6 +136,7 @@ public class MetaController extends FrontRestController {
      */
     public void contact() {
         String objectCode = new QueryHelper(this).getObjectCode();
-        renderJson(componentService().loadTypesByObjectCode(objectCode));
+        List<String> result = componentService().loadTypesByObjectCode(objectCode).stream().map(c -> c.getCode()).collect(Collectors.toList());
+        renderJson(Ret.ok("data", result));
     }
 }
