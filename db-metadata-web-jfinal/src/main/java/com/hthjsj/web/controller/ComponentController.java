@@ -46,7 +46,7 @@ public class ComponentController extends FrontRestController {
      */
     public void contact() {
         String componentCode = new QueryHelper(this).getComponentCode();
-        renderJson(componentService().loadObjectsByType(componentCode));
+        renderJson(Ret.ok("data", componentService().loadObjectsByType(componentCode)));
     }
 
     @Override
