@@ -96,7 +96,6 @@
                                         <slot name="delete-btn" v-bind:conf="innerMeta['buttons']['delete']['label']"
                                               v-bind:delete="handleDelete"
                                               v-bind:scope="scope">
-                                            placement="right">
                                             <el-button v-bind="innerMeta['buttons']['delete']['conf']"
                                                        @click="handleDelete($event, scope.row, scope.$index)">
                                             </el-button>
