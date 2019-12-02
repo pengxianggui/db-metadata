@@ -12,6 +12,7 @@ import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
 import com.hthjsj.web.UtilKit;
 import com.jfinal.aop.Before;
+import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -241,6 +242,27 @@ public class ComponentService {
         Db.batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
+    }
+
+    /**
+     * TODO 单独更新实例字段,目前只在InitKit中使用;
+     *
+     * @param component
+     * @param metaField
+     * @param config
+     *
+     * @return
+     */
+    public boolean updateFieldConfig(ComponentType componentType, IMetaField metaField, Kv config) {
+        Record fieldInstance = Db.findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                                            componentType.getCode(),
+                                            INSTANCE.META_FIELD.toString(),
+                                            metaField.objectCode() + "." + metaField.fieldCode());
+        fieldInstance.set("config", config.toJson());
+        Date timestamp = new Date();
+        fieldInstance.set("updated_time", timestamp);
+        fieldInstance.set("remark", "from file" + DateKit.toStr(timestamp));
+        return Db.update(META_COMPONENT_INSTANCE, fieldInstance);
     }
 
     private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, Kv config) {

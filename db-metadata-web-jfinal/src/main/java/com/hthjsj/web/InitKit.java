@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.google.common.collect.Sets;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.kit.Kv;
@@ -45,10 +46,21 @@ public class InitKit {
         jsonInstanceConfig = JSON.parseObject(instanceConfig, Feature.OrderedField);
     }
 
-    public void init() {
-        log.info("Start the configuration import.....");
+    public InitKit importMetaObjectConfig() {
+        log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
         resolveMetaObjects(lists);
+        return this;
+    }
+
+    public InitKit importInstanceConfig() {
+        log.info("Start the MetaObject configuration import.....");
+        List<IMetaObject> lists = ServiceManager.metaService().findAll();
+        for (IMetaObject metaObject : lists) {
+            //TODO 只自动覆盖FORMVIEW
+            resolveMetaComponentInstance(metaObject, ComponentType.FORMVIEW);
+        }
+        return this;
     }
 
     public void resolveMetaObjects(List<IMetaObject> metaObjects) {
@@ -66,7 +78,7 @@ public class InitKit {
     public void resolveMetaObject(IMetaObject metaObject) {
         if (!jsonObjectConfig.containsKey(metaObject.code()))
             return;
-        log.info("found the configuration of {}", metaObject.code());
+        log.info("found the object configuration of {}", metaObject.code());
         JSONObject self = jsonObjectConfig.getJSONObject(metaObject.code());
         JSONObject fields = self.containsKey("_fields") ? self.getJSONObject("_fields") : new JSONObject();
         try {
@@ -91,9 +103,13 @@ public class InitKit {
                 //元子段自身配置更新
                 if (!fields.isEmpty()) {
                     JSONObject field = null;
+                    log.info("Begin parsing the property configuration");
                     for (IMetaField f : metaObject.fields()) {
                         field = fields.containsKey(f.fieldCode()) ? fields.getJSONObject(f.fieldCode()) : new JSONObject();
                         Sets.SetView<String> intersectionKeys = Sets.intersection(f.dataMap().keySet(), field.keySet());
+                        if (intersectionKeys.isEmpty())
+                            continue;
+                        log.info("Find {} properties that you can merge : {}", intersectionKeys.size(), intersectionKeys);
                         for (String intersectionKey : intersectionKeys) {
                             log.info("merge Field{} - {} ", metaObject.code(), intersectionKey);
                             f.dataMap().merge(intersectionKey, field.get(intersectionKeys), (oldValue, newValue) -> newValue);
@@ -113,10 +129,34 @@ public class InitKit {
         }
     }
 
-    public void resolveMetaComponentInstance() {
-        List<IMetaObject> lists = ServiceManager.metaService().findAll();
-//        List<Component> components = ServiceManager.componentService();
+    public void resolveMetaComponentInstance(IMetaObject metaObject, ComponentType componentType) {
+        if (!jsonInstanceConfig.containsKey(metaObject.code()))
+            return;
+        log.info("found the component instance configuration of {} - {}", metaObject.code(), componentType);
+        JSONObject objectSelf = jsonInstanceConfig.getJSONObject(metaObject.code());
+        if (objectSelf == null || objectSelf.isEmpty() || !objectSelf.containsKey(componentType.getCode()))
+            return;
+        JSONObject component = objectSelf.getJSONObject(componentType.getCode());
+        for (IMetaField metaField : metaObject.fields()) {
+            if (!component.containsKey(metaField.fieldCode()))
+                continue;
 
+            Sets.SetView<String> intersectionKeys = Sets.intersection(metaField.dataMap().keySet(), component.keySet());
+            if (intersectionKeys.isEmpty())
+                continue;
+
+            log.info("Find {} properties that you can merge : {}", intersectionKeys.size(), intersectionKeys);
+            for (String fieldKey : intersectionKeys) {
+                //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
+                if (component.get(fieldKey) instanceof JSONObject) {
+                    Kv config = UtilKit.getKv(((JSONObject) component.get(fieldKey)).toJSONString());
+                    if (!config.isEmpty()) {
+                        ServiceManager.componentService().updateFieldConfig(componentType, metaField, config);
+                        log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
+                    }
+                }
+            }
+        }
     }
 }
 
