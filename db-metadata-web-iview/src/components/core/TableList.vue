@@ -89,7 +89,6 @@
                                         <slot name="edit-btn" v-bind:conf="innerMeta['buttons']['edit']['conf']"
                                               v-bind:edit="handleEdit"
                                               v-bind:scope="scope">
-                                            placement="left">
                                             <el-button v-bind="innerMeta['buttons']['edit']['conf']"
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
