@@ -1,4 +1,5 @@
 import {PAGE_NUM_AREA} from './constant'
+
 /**
  * 组件的默认UI配置
  */
@@ -46,12 +47,13 @@ const DEFAULT_CONF = {
         "label": "下拉框",
         "inline": true,
         "group": false,
+        "data_url": "/dict/yn",
+        "options": [
+            //     {"key":"value"}
+        ],
         "conf": {
             "clearable": true
-        },
-        // "options": [
-        //     {"key":"value"}
-        // ]
+        }
     },
     "TimeBox": {
         "component_name": "TimeBox",
@@ -100,10 +102,10 @@ const DEFAULT_CONF = {
         "label": "单选框",
         "inline": true,
         "data_url": "/dict/yn",
-        "conf": {},
-        // "options": [
-        //     {"key":"value"}
-        // ]
+        "options": [
+            //     {"key":"value"}
+        ],
+        "conf": {}
     },
     "CheckBox": {
         "component_name": "CheckBox",
@@ -259,21 +261,21 @@ const DEFAULT_CONF = {
             "size": 'mini', // medium|small|mini
         },
         // "columns": [
-            // {
-            //     component_name: 'TextBox',
-            //     name: 'name',
-            //     label: '姓名',
-            // },
-            // {
-            //     component_name: 'NumBox',
-            //     name: 'age',
-            //     label: '年龄'
-            // },
-            // {
-            //     component_name: 'DropDownBox',
-            //     name: 'sex',
-            //     label: '性别'
-            // }
+        // {
+        //     component_name: 'TextBox',
+        //     name: 'name',
+        //     label: '姓名',
+        // },
+        // {
+        //     component_name: 'NumBox',
+        //     name: 'age',
+        //     label: '年龄'
+        // },
+        // {
+        //     component_name: 'DropDownBox',
+        //     name: 'sex',
+        //     label: '性别'
+        // }
         // ],
     },
     "TableList": {
@@ -291,18 +293,18 @@ const DEFAULT_CONF = {
             // "max-height": 500,
         },
         // "columns": [
-            // {
-            //     name: 'name',
-            //     label: 'label',
-            //     component_name: '',
-            //     editable: false,     // 表格内可编辑
-            //     searchable: true,    // 搜索面板支持该字段搜索
-            //     conf: {
-            //         width: '',
-            //         sortable: true,  // 表格中可否根据此列进行排序
-            //         //...
-            //     }
-            // }
+        // {
+        //     name: 'name',
+        //     label: 'label',
+        //     component_name: '',
+        //     editable: false,     // 表格内可编辑
+        //     searchable: true,    // 搜索面板支持该字段搜索
+        //     conf: {
+        //         width: '',
+        //         sortable: true,  // 表格中可否根据此列进行排序
+        //         //...
+        //     }
+        // }
         // ], // 字段元数据
         "pagination": { // element ui配置
             "page-size": PAGE_NUM_AREA[0],
@@ -339,27 +341,27 @@ const DEFAULT_CONF = {
         "label": "查找面板",
         "data_url": "/table/list/{objectCode}",
         // "columns": [// {
-            //     component_name: 'TextBox',
-            //     name: 'id',
-            //     label: 'ID',
-            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-            //     conf: {
-            //         width: '',
-            //         sortable: true,  // 表格中可否根据此列进行排序
-            //         //...
-            //     }
-            // },
-            // {
-            //     component_name: 'TextBox',
-            //     name: 'name',
-            //     label: '姓名',
-            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-            //     conf: {
-            //         width: '',
-            //         sortable: true,  // 表格中可否根据此列进行排序
-            //         //...
-            //     }
-            // }
+        //     component_name: 'TextBox',
+        //     name: 'id',
+        //     label: 'ID',
+        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+        //     conf: {
+        //         width: '',
+        //         sortable: true,  // 表格中可否根据此列进行排序
+        //         //...
+        //     }
+        // },
+        // {
+        //     component_name: 'TextBox',
+        //     name: 'name',
+        //     label: '姓名',
+        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+        //     conf: {
+        //         width: '',
+        //         sortable: true,  // 表格中可否根据此列进行排序
+        //         //...
+        //     }
+        // }
         // ]
     }
 };

@@ -61,6 +61,9 @@
         watch: {
             'innerMeta.data_url': function () {
                 this.getOptions();
+            },
+            'innerMeta.options': function () {
+                this.initOptions();
             }
         },
         mounted() {

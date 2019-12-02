@@ -67,7 +67,9 @@
                     this.innerOptions = options;
                     return;
                 }
-                if (this.innerMeta.hasOwnProperty('options')) { // 组件元对象定义了options
+                if (this.innerMeta.hasOwnProperty('options')
+                    && Array.isArray(this.meta['options'])
+                    && this.meta['options'].length > 0) { // 组件元对象定义了options, 并且有值
                     this.innerOptions = this.innerMeta['options'];
                     return;
                 }
@@ -80,7 +82,10 @@
         },
         watch: {
             'innerMeta.data_url': function () {
-                this.getOptions();
+                this.initOptions();
+            },
+            'innerMeta.options': function () {
+                this.initOptions();
             }
         },
         created() {
