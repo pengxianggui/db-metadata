@@ -70,10 +70,15 @@ public class InitKit {
     }
 
     /**
+     * <pre>
      * 1. 获取元对象列表
      * 2. 以元对象列表分解 defaultObject.json 配置
-     * 3. 组装新配置
-     * 4. 更新
+     * 3. 分解元对象自身
+     *      3.1 取元对象数据 key 与 json key 交集 ,防止无效key混入map,导致更新失败
+     *      3.2 merge
+     * 4. 分解元字段
+     *      4.1-2 同上
+     *  </pre>
      */
     public void resolveMetaObject(IMetaObject metaObject) {
         if (!jsonObjectConfig.containsKey(metaObject.code()))
@@ -105,7 +110,10 @@ public class InitKit {
                     JSONObject field = null;
                     log.info("Begin parsing the property configuration");
                     for (IMetaField f : metaObject.fields()) {
-                        field = fields.containsKey(f.fieldCode()) ? fields.getJSONObject(f.fieldCode()) : new JSONObject();
+                        if (!fields.containsKey(f.fieldCode()))
+                            continue;
+                        field = fields.getJSONObject(f.fieldCode());
+
                         Sets.SetView<String> intersectionKeys = Sets.intersection(f.dataMap().keySet(), field.keySet());
                         if (intersectionKeys.isEmpty())
                             continue;
@@ -138,6 +146,7 @@ public class InitKit {
             return;
         JSONObject component = objectSelf.getJSONObject(componentType.getCode());
         for (IMetaField metaField : metaObject.fields()) {
+            //json中未配置的field 直接放行;
             if (!component.containsKey(metaField.fieldCode()))
                 continue;
 
@@ -148,6 +157,7 @@ public class InitKit {
             log.info("Find {} properties that you can merge : {}", intersectionKeys.size(), intersectionKeys);
             for (String fieldKey : intersectionKeys) {
                 //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
+                //WARN 仅支持配置config字段
                 if (component.get(fieldKey) instanceof JSONObject) {
                     Kv config = UtilKit.getKv(((JSONObject) component.get(fieldKey)).toJSONString());
                     if (!config.isEmpty()) {
