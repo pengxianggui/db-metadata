@@ -56,12 +56,6 @@ public class MetaController extends FrontRestController {
         renderJson(Ret.ok("data", formView.toKv()));
     }
 
-    public void objs() {
-        MetaObject metaObject = (MetaObject) metaService().findByCode("meta_object");
-        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/meta_object");
-        renderJson(Ret.ok("data", tableView.toKv()));
-    }
-
     /**
      * mock metas 数据
      * Fixme
@@ -132,5 +126,13 @@ public class MetaController extends FrontRestController {
         log.info("删除元对象{}实例配置", metaObject.code());
         componentService().deleteObjectAll(objectCode);
         renderJson(Ret.ok());
+    }
+
+    /**
+     * 返回某元对象的关联Component 实例
+     */
+    public void contact() {
+        String objectCode = new QueryHelper(this).getObjectCode();
+        renderJson(componentService().loadTypesByObjectCode(objectCode));
     }
 }

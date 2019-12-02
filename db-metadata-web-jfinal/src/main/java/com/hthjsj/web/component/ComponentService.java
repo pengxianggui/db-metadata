@@ -19,6 +19,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -137,6 +138,21 @@ public class ComponentService {
 
     public String loadObjectConfig(String componentCode, String destCode) {
         return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
+    }
+
+    public List<ComponentType> loadTypesByObjectCode(String objectCode) {
+        List<String> codes = Db.query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
+                                      INSTANCE.META_OBJECT.toString(),
+                                      objectCode);
+        List<ComponentType> types = new ArrayList<>();
+        codes.forEach(s -> {
+            types.add(ComponentType.V(s));
+        });
+        return types;
+    }
+
+    public List<String> loadObjectsByType(String typeCode) {
+        return Db.query("select dest_object from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=?", typeCode, INSTANCE.META_OBJECT.toString());
     }
 
     /**

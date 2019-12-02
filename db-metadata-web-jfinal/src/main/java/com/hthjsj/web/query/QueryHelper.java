@@ -1,5 +1,6 @@
 package com.hthjsj.web.query;
 
+import com.google.common.base.Splitter;
 import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.core.Controller;
 
@@ -45,5 +46,9 @@ public class QueryHelper {
 
     public ComponentType getComponentType() {
         return ComponentType.V(tp.getPara("compType", tp.getPara("componentType")));
+    }
+
+    public String[] getObjectCodes() {
+        return Splitter.on(",").omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
     }
 }

@@ -1,4 +1,4 @@
-package com.hthjsj.web.controller;
+package com.hthjsj.web.module;
 
 import com.jfinal.core.Controller;
 

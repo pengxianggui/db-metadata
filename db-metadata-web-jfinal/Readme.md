@@ -26,7 +26,7 @@ MetaField 数据源配置
 - [x] 推敲xxxView构建逻辑,以配置为准 还是以fields为准
     - [x] 以fields为准,则需要在metaField中对字段是否予以显示做开关
     > 以配置为准,则需要在所有渲染的地方,对"{}"做逻辑判断,防止渲染; 
-    
+- [ ] https://github.com/fslev/json-compare     
     
     
 ##### BUG

@@ -41,6 +41,14 @@ public class ComponentController extends FrontRestController {
         renderJson(Ret.ok("data", metaObjectViewAdapter.getComponent().toKv()));
     }
 
+    /**
+     * 返回某Component的关联元对象实例
+     */
+    public void contact() {
+        String componentCode = new QueryHelper(this).getComponentCode();
+        renderJson(componentService().loadObjectsByType(componentCode));
+    }
+
     @Override
     public void list() {
         List<Record> components = componentService().loadComponents();
