@@ -178,7 +178,11 @@
  -[x] 组件中的变量初始值统一(null, {}等): 基本类型null, 对象{}/数组[]
  -[ ] 创建一个Meta class, 对所有组件的prop: meta 进行强类型校验, 同时初始化meta(和全局默认meta进行merge)
  -[ ] 重复路由点击报错(NavigationDuplicated), element bug. 等待element(2.13). https://github.com/ElemeFE/element/pull/17269
- -[ ] 思考组件强干预的策略
+ -[ ] 思考组件强干预的策略:
+    - 广泛应用插槽(视图干预)
+    - ref引用(逻辑干预)
+    - 模板(DOM)替换(模板干预: 视图、逻辑全替换, 支持可脱离vue单页应用?)
+    
  -[x] DropDownBox, RadioBox, CheckBox支持三种传入选项数据的方式:
     - 硬编码传入options属性
     - 组件元对象中定义options属性和值
@@ -305,6 +309,7 @@
     -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
+ -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件
  
 ### 其他资料
 
