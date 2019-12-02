@@ -15,6 +15,9 @@ export const COMP_GOBAL_CONF_DELETE = '/component/delete?componentCode={componen
 export const COMP_INSTANCE_CONF_LOAD = '/component/load?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例配置加载
 export const COMP_INSTANCE_CONF_DELETE = '/component/delete/{objectCode}?componentCode={componentCode}'; // 组件实例配置删除
 
+export const TABLE_INSTANCE_META = '/table/meta/{objectCode}'; // 表实例元数据
+export const COMPONENT_INSTANCE_META = '/component/meta?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例元数据
+
 export const RECORD_DELETE = '/table/delete?objectCode={objectCode}&ids={ids}'; // 删除记录
 export const RECORD_TO_ADD = "/form/toAdd/{objectCode}";  // 新增记录(TO)
 export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={id}';    // 更新记录(TO)

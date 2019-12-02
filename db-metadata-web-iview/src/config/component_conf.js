@@ -1,4 +1,4 @@
-// SearchPanel Conf
+// SearchPanel Conf: 各个字段的展示控件与搜索逻辑
 export const SEARCH_PANEL_CONF = {
     "TextBox": {
         "value": "%v%",
