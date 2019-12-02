@@ -19,7 +19,7 @@
                     "component_name": "FindBox",
                     "name": "FindBox",
                     "label": "查找框",
-                    "data_url": "/meta/fields/test_table", // 这个data_url响应的是FindPanel的meta, 也可以是TableList的meta
+                    "data_url": "/table/meta/test_table", // 这个data_url响应的是FindPanel的meta, 也可是TableList的meta
                     "conf": {
                         "clearable": true,
                         "placeholder": "戳我展开搜索面板..",

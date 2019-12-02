@@ -400,7 +400,7 @@
                     return;
                 }
                 if (this.innerMeta.hasOwnProperty('data_url')) {
-                    // this.getData();
+                    this.getData();
                     return;
                 }
                 console.error("data or data_url in meta provide one at least!")

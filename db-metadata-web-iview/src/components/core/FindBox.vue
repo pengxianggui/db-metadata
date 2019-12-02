@@ -10,7 +10,8 @@
                   v-on:click.native="handlerClick($event)"
                   suffix-icon="el-icon-search"
         ></el-input>
-        <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="findPanelMeta" @ok="handlerOk" @cancel="handlerCancel">
+        <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="findPanelMeta"
+                    @ok="handlerOk" @cancel="handlerCancel">
             <template #footer><span></span></template>
         </dialog-box>
     </div>

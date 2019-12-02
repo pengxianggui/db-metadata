@@ -42,7 +42,7 @@
 
                         <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>
                             <template #prepend v-if="model[item.name]['symbol']['optional']">
-                                <el-select v-model="model[item.name]['symbol']['value']" style="width: 80px;">
+                                <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">
                                     <el-option v-for="(value, key) in model[item.name]['symbol']['options']"
                                                :key="key" :value="key">
                                         {{key}}
