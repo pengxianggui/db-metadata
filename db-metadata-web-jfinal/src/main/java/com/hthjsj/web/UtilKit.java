@@ -2,11 +2,16 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.io.CharStreams;
 import com.hthjsj.analysis.meta.MetaData;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +22,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class UtilKit {
 
     /**
@@ -96,5 +102,24 @@ public class UtilKit {
     public static Kv mergeUseNew(Kv mergeMap, Kv newMap) {
         newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> newValue));
         return mergeMap;
+    }
+
+    /**
+     * 从 class path下读取json文件;
+     *
+     * @param fileName
+     *
+     * @return
+     */
+    public static String loadContentByFile(String fileName) {
+        String result = "";
+        try (InputStream fis = UtilKit.class.getClassLoader().getResourceAsStream(fileName)) {
+            log.info("load  {} file", fileName);
+            result = CharStreams.toString(new InputStreamReader(fis, Charsets.UTF_8));
+            log.info("file length : {}", result.length());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return result;
     }
 }

@@ -1,7 +1,7 @@
 package com.hthjsj.web.ui;
 
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.IMetaObject;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -11,11 +11,11 @@ import com.hthjsj.analysis.meta.MetaObject;
  */
 public class UIManager {
 
-    public static MetaObjectViewAdapter getSmartAutoView(MetaObject metaObject, ComponentType componentType) {
+    public static MetaObjectViewAdapter getSmartAutoView(IMetaObject metaObject, ComponentType componentType) {
         return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }
 
-    public static MetaObjectViewAdapter getView(MetaObject metaObject, ComponentType componentType) {
+    public static MetaObjectViewAdapter getView(IMetaObject metaObject, ComponentType componentType) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }
 
@@ -26,7 +26,7 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getAutoComputedFrom(MetaObject metaObject) {
+    public static MetaObjectViewAdapter getAutoComputedFrom(IMetaObject metaObject) {
         return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW);
     }
 
@@ -37,7 +37,7 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getAutoComputedTable(MetaObject metaObject) {
+    public static MetaObjectViewAdapter getAutoComputedTable(IMetaObject metaObject) {
         return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 
@@ -48,7 +48,7 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getForm(MetaObject metaObject) {
+    public static MetaObjectViewAdapter getForm(IMetaObject metaObject) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.FORMVIEW);
     }
 
@@ -59,7 +59,7 @@ public class UIManager {
      *
      * @return
      */
-    public static MetaObjectViewAdapter getTable(MetaObject metaObject) {
+    public static MetaObjectViewAdapter getTable(IMetaObject metaObject) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.ViewFactory;
@@ -63,7 +63,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
      * @return
      */
     @Override
-    public MetaObjectViewAdapter createMetaObjectViewAdapter(MetaObject metaObject, ComponentType componentType) {
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(IMetaObject metaObject, ComponentType componentType) {
 
         /**
          * 校验元对象

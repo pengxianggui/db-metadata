@@ -1,7 +1,7 @@
 package com.hthjsj.web.ui;
 
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.IMetaObject;
 
 /**
  * <p> @Date : 2019/11/25 </p>
@@ -11,5 +11,5 @@ import com.hthjsj.analysis.meta.MetaObject;
  */
 public interface MetaViewAdapterFactory {
 
-    MetaObjectViewAdapter createMetaObjectViewAdapter(MetaObject metaObject, ComponentType componentType);
+    MetaObjectViewAdapter createMetaObjectViewAdapter(IMetaObject metaObject, ComponentType componentType);
 }
