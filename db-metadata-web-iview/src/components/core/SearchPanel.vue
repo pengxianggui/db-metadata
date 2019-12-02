@@ -75,14 +75,11 @@
 <script>
     import {DEFAULT} from '@/constant'
     import Meta from './mixins/meta'
-    import BoolBox from "./form/BoolBox";
-    import DropDownBox from "./form/DropDownBox";
     import util from '@/utils'
     import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
 
     export default {
         name: "SearchPanel",
-        components: {DropDownBox, BoolBox},
         mixins: [Meta(DEFAULT.SearchPanel)],
         data() {
             return {
