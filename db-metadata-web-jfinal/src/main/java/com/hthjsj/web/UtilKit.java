@@ -2,6 +2,7 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
@@ -121,5 +122,42 @@ public class UtilKit {
             log.error(e.getMessage(), e);
         }
         return result;
+    }
+
+    /**
+     * <pre>
+     * 递归merge 两个json对象
+     * 说明:
+     * 从source -> merge 到 target
+     * 如遇key重复, newValue指用source的内容,oldValue指用target的内容
+     * </pre>
+     *
+     * @param source
+     * @param target
+     *
+     * @return
+     */
+    public static JSONObject deepMerge(JSONObject source, JSONObject target, boolean isNew) {
+
+        for (String key : source.keySet()) {
+            Object value = source.get(key);
+            if (!target.containsKey(key)) {
+                // new value for "key":
+                target.put(key, value);
+            } else {
+                // existing value for "key" - recursively deep merge:
+                if (value instanceof JSONObject) {
+                    JSONObject valueJson = (JSONObject) value;
+                    deepMerge(valueJson, target.getJSONObject(key), isNew);
+                } else {
+                    if (isNew) {
+                        target.merge(key, value, (oldValue, newValue) -> newValue);
+                    } else {
+                        target.merge(key, value, (oldValue, newValue) -> oldValue);
+                    }
+                }
+            }
+        }
+        return target;
     }
 }

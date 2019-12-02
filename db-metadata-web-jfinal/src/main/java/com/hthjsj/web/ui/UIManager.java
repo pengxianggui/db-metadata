@@ -62,4 +62,12 @@ public class UIManager {
     public static MetaObjectViewAdapter getTable(IMetaObject metaObject) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
+
+    public static boolean update(MetaObjectViewAdapter metaObjectViewAdapter) {
+        return false;
+    }
+
+    public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter) {
+        return false;
+    }
 }
