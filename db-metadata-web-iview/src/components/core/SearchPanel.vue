@@ -100,7 +100,7 @@
 
                     switch (symbol.value) {
                         case "in":
-                            value = value.join(',');
+                            value = Array.isArray(value) ? value.join(',') : value;
                             params[name + 'in'] = value;
                             break;
                         case "range":
