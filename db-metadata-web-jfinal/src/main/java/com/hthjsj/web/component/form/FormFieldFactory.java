@@ -29,26 +29,26 @@ public class FormFieldFactory {
      * </pre>
      *
      * @param metaField
-     * @param globalConfig
+     * @param fieldInstanceConfig
      *
      * @return
      */
-    public static FormField createFormFieldDefault(IMetaField metaField, Kv globalConfig) {
-        globalConfig.set("name", metaField.fieldCode()).set("label", metaField.cn());
-        return createFormField(metaField, globalConfig);
+    public static FormField createFormFieldDefault(IMetaField metaField, Kv fieldInstanceConfig) {
+        fieldInstanceConfig.set("name", metaField.fieldCode()).set("label", metaField.cn());
+        return createFormField(metaField, fieldInstanceConfig);
     }
 
     /**
      * 创建带容器的FormField
      *
      * @param metaField
-     * @param globalConfig
+     * @param fieldIntanceConfig
      * @param viewContainer
      *
      * @return
      */
-    public static FormField createFormFieldInContainer(IMetaField metaField, Kv globalConfig, ViewContainer viewContainer) {
-        FormField formField = createFormField(metaField, globalConfig);
+    public static FormField createFormFieldInContainer(IMetaField metaField, Kv fieldInstanceConfig, ViewContainer viewContainer) {
+        FormField formField = createFormField(metaField, fieldInstanceConfig);
         formField.setViewContainer(viewContainer);
         return formField;
     }

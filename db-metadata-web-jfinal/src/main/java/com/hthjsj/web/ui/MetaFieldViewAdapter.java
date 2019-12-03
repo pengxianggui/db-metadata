@@ -26,18 +26,16 @@ public class MetaFieldViewAdapter {
     Kv fieldConfig;
 
     @Getter
-    Kv componentGlobalConfig;
+    Kv globalComponentConfig;
 
     @Getter
     Kv instanceConfig;
 
-    public MetaFieldViewAdapter(IMetaField metaField, Component component) {
+    public MetaFieldViewAdapter(IMetaField metaField, Component component, Kv globalComponentConfig, Kv levelFieldInstanceConfig) {
         this.metaField = metaField;
         this.component = component;
-        // init config
-        //TODO instanceConfig的来源 要变更
-        this.instanceConfig = component.toKv();
-        this.componentGlobalConfig = Kv.create();
+        this.instanceConfig = levelFieldInstanceConfig;
+        this.globalComponentConfig = globalComponentConfig;
         this.fieldConfig = UtilKit.getKv(metaField.config());
     }
 }

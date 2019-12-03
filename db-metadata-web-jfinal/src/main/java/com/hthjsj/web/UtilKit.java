@@ -128,37 +128,37 @@ public class UtilKit {
      * <pre>
      * 递归merge 两个json对象
      * 说明:
-     * 从source -> merge 到 target
+     * 从source -> merge 到 mergeMap
      * 如遇key重复, newValue指用source的内容,oldValue指用target的内容
      * </pre>
      *
-     * @param source
-     * @param target
+     * @param mergeMap
+     * @param newMap
      *
      * @return
      */
-    public static Map deepMerge(Map target, Map source, boolean overwrite) {
+    public static Map deepMerge(Map mergeMap, Map newMap, boolean overwrite) {
 
-        for (Object key : source.keySet()) {
-            Object value = source.get(String.valueOf(key));
-            if (!target.containsKey(key)) {
+        for (Object key : newMap.keySet()) {
+            Object value = newMap.get(String.valueOf(key));
+            if (!mergeMap.containsKey(key)) {
                 // new value for "key":
-                target.put(key, value);
+                mergeMap.put(key, value);
             } else {
                 // existing value for "key" - recursively deep merge:
                 if (value instanceof JSONObject) {
                     JSONObject valueJson = (JSONObject) value;
-                    deepMerge((Map) target.get(key), valueJson, overwrite);
+                    deepMerge((Map) mergeMap.get(key), valueJson, overwrite);
                 } else {
                     if (overwrite) {
-                        target.merge(key, value, (oldValue, newValue) -> newValue);
+                        mergeMap.merge(key, value, (oldValue, newValue) -> newValue);
                     } else {
-                        target.merge(key, value, (oldValue, newValue) -> oldValue);
+                        mergeMap.merge(key, value, (oldValue, newValue) -> oldValue);
                     }
                 }
             }
         }
-        return target;
+        return mergeMap;
     }
 
     public static void diffJson(JSONObject source, JSONObject target) {

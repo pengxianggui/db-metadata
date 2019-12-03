@@ -7,6 +7,8 @@ import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -145,6 +147,8 @@ public class InitKit {
         if (objectSelf == null || objectSelf.isEmpty() || !objectSelf.containsKey(componentType.getCode()))
             return;
         JSONObject component = objectSelf.getJSONObject(componentType.getCode());
+
+        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, componentType);
         for (IMetaField metaField : metaObject.fields()) {
             //json中未配置的field 直接放行;
             if (!component.containsKey(metaField.fieldCode()))

@@ -34,20 +34,22 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
      * 计算元子段列 实例配置,组装成MetaFieldViewAdapter对象
      *
      * @param fields
-     * @param instanceAllConfig
+     * @param allLevelConfig 完整的实例配置,元对象级+字段级
      *
      * @return
      */
-    private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv instanceAllConfig) {
+    private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv allLevelConfig, Kv globalComponentAllConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         for (IMetaField field : fields) {
-            Kv fieldInstanceConfig = UtilKit.getKv(instanceAllConfig, field.fieldCode());
+            Kv fieldInstanceConfig = UtilKit.getKv(allLevelConfig, field.fieldCode());
             //TODO 配置为空时,该字段则不存在实例配置
             if (!fieldInstanceConfig.isEmpty()) {
                 Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
-                metaFields.add(new MetaFieldViewAdapter(field, fieldComponent));
+                Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, fieldComponent.componentType().getCode());
+                //携带 为Field 分配的Component 在全局的配置 + 字段实例的配置
+                metaFields.add(new MetaFieldViewAdapter(field, fieldComponent, globalComponentConfig, fieldInstanceConfig));
             }
         }
 
@@ -82,10 +84,10 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         //完整的实例配置,元对象级+字段级
         Kv allLevelConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
         //对象级配置
-        Kv levelObjectConfig = UtilKit.getKv(allLevelConfig, metaObject.code());
+        Kv levelObjectInstanceConfig = UtilKit.getKv(allLevelConfig, metaObject.code());
 
-        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig);
+        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig, globalComponentAllConfig);
 
-        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectConfig, fields);
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectInstanceConfig, fields);
     }
 }

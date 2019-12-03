@@ -43,7 +43,7 @@ public class MetaObjectViewAdapter {
     @Getter
     Map<String, MetaFieldViewAdapter> fieldsMap;
 
-    public MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, Kv instanceConfig, List<MetaFieldViewAdapter> fields) {
+    public MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, Kv levelObjectInstanceConfig, List<MetaFieldViewAdapter> fields) {
         this.metaObject = metaObject;
         this.component = component;
         this.fields = fields;
@@ -51,7 +51,7 @@ public class MetaObjectViewAdapter {
         //init config
         this.objectConfig = UtilKit.getKv(metaObject.config());
         this.globalComponentConfig = globalComponentConfig;
-        this.instanceConfig = instanceConfig;
+        this.instanceConfig = levelObjectInstanceConfig;
         this.fieldsMap = fields.stream().collect(Collectors.toMap(metaFieldViewAdapter -> metaFieldViewAdapter.metaField.fieldCode(),
                                                                   metaFieldViewAdapter -> metaFieldViewAdapter));
     }

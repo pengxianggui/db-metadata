@@ -20,5 +20,5 @@ public interface MetaViewAdapterFactory {
      * 2. 还未生成的配置,重新计算
      * */
 
-//    void reCompute(IMetaField metaField);
+//    void reCompute(IMetaField metaField,ComponentType componentType);
 }

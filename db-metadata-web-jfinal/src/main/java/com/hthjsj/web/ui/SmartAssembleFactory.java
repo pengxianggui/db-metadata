@@ -113,8 +113,13 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     /**
      * 1. 推测控件(metafield)
      * 2. 推测样式配置(metafield,ComponentType)
+     *
+     * @param fields
+     * @param globalComponentAllConfig 所有组件的全局配置
+     *
+     * @return
      */
-    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalConfig) {
+    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalComponentAllConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
@@ -122,9 +127,10 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
             Kv recommendConfig = recommendFieldConfig(field);
-            Kv fieldConfig = UtilKit.getKv(globalConfig, recommendConfig.getStr("component_name"));
-            UtilKit.mergeUseOld(fieldConfig, recommendConfig);
-            metaFields.add(new MetaFieldViewAdapter(field, FormFieldFactory.createFormFieldDefault(field, fieldConfig)));
+            Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
+            Kv fieldInstanceConfig = UtilKit.mergeUseOld(globalComponentConfig, recommendConfig);
+            Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
+            metaFields.add(new MetaFieldViewAdapter(field, fieldComponent, globalComponentConfig, fieldInstanceConfig));
         }
         return metaFields;
     }
