@@ -18,15 +18,15 @@ public class AopInvocation {
 
     private IMetaObject metaObject;
 
-    private MetaData metaData;
+    private MetaData formData;
 
     private Ret ret;
 
     private Kv httpParams;
 
-    public AopInvocation(IMetaObject metaObject, MetaData metaData, Kv httpParams) {
+    public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
         this.metaObject = metaObject;
-        this.metaData = metaData;
+        this.formData = formData;
         this.httpParams = httpParams;
     }
 

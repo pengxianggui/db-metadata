@@ -29,7 +29,7 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
     }
 
     /**
-     * 级联动作
+     * 此处更新的是meta_field的记录,但是需要级联计算的是,该条记录中指向的[元对象,元子段]
      *
      * @param result
      * @param invocation
@@ -38,9 +38,14 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
     public boolean updateAfter(boolean result, AopInvocation invocation) {
         if (result) {
             log.info("MetaFieldEditPointCut.updateAfter run");
-            Kv updateData = invocation.getMetaData();
-            String fieldCode = updateData.getStr("field_code");
-            IMetaObject metaObject = invocation.getMetaObject();
+            Kv formData = invocation.getFormData();
+            //获取表单数据中的
+            String objectCode = formData.getStr("object_code");
+            String fieldCode = formData.getStr("field_code");
+
+            IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+
+            log.info("Update {} - field {},Biz data Primary key:{}", metaObject.code(), fieldCode, formData.get(metaObject.primaryKey()));
             List<ComponentType> existTypes = ServiceManager.componentService().loadTypesByObjectCode(metaObject.code());
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);

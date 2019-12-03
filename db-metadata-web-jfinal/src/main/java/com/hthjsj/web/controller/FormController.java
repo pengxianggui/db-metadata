@@ -64,7 +64,7 @@ public class FormController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.addBefore(invocation);
-                    s = metaService().saveData(invocation.getMetaObject(), invocation.getMetaData());
+                    s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
                     pointCut.addAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
@@ -112,10 +112,11 @@ public class FormController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.updateBefore(invocation);
-                    s = metaService().updateData(invocation.getMetaObject(), invocation.getMetaData());
+                    s = metaService().updateData(invocation.getMetaObject(), invocation.getFormData());
                     pointCut.updateAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
+                    log.error(e.getMessage(), e);
                     s = false;
                 }
                 return s;
