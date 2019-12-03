@@ -34,13 +34,15 @@ public class TestAddPointCut implements AddPointCut, UpdatePointCut, DeletePoint
     }
 
     @Override
-    public void updateBefore(AopInvocation invocation) {
+    public boolean updateBefore(AopInvocation invocation) {
         log.error("this is updateBefore!");
+        return false;
     }
 
     @Override
-    public void updateAfter(boolean result, AopInvocation invocation) {
+    public boolean updateAfter(boolean result, AopInvocation invocation) {
         log.error("this is updateAfter!");
+        return false;
     }
 
     @Override

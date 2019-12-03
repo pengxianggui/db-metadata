@@ -1,6 +1,7 @@
 package com.hthjsj.web.ui;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.collect.Maps;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.UtilKit;
@@ -9,7 +10,6 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * MetaObjectViewAdapter 同时持有metaObject,component,各层config 实例
@@ -22,28 +22,28 @@ import java.util.stream.Collectors;
 public class MetaObjectViewAdapter {
 
     @Getter
-    IMetaObject metaObject;
+    private IMetaObject metaObject;
 
     @Getter
     @JSONField(serialize = false)
-    Component component;
+    private Component component;
 
     @Getter
-    List<MetaFieldViewAdapter> fields;
+    private List<MetaFieldViewAdapter> fields;
 
     @Getter
-    Kv objectConfig;
+    private Kv objectConfig;
 
     @Getter
-    Kv globalComponentConfig;
+    private Kv globalComponentConfig;
 
     @Getter
-    Kv instanceConfig;
+    private Kv instanceConfig;
 
     @Getter
-    Map<String, MetaFieldViewAdapter> fieldsMap;
+    private Map<String, MetaFieldViewAdapter> fieldsMap;
 
-    public MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, Kv levelObjectInstanceConfig, List<MetaFieldViewAdapter> fields) {
+    MetaObjectViewAdapter(IMetaObject metaObject, Component component, Kv globalComponentConfig, Kv levelObjectInstanceConfig, List<MetaFieldViewAdapter> fields) {
         this.metaObject = metaObject;
         this.component = component;
         this.fields = fields;
@@ -52,8 +52,11 @@ public class MetaObjectViewAdapter {
         this.objectConfig = UtilKit.getKv(metaObject.config());
         this.globalComponentConfig = globalComponentConfig;
         this.instanceConfig = levelObjectInstanceConfig;
-        this.fieldsMap = fields.stream().collect(Collectors.toMap(metaFieldViewAdapter -> metaFieldViewAdapter.metaField.fieldCode(),
-                                                                  metaFieldViewAdapter -> metaFieldViewAdapter));
+        this.fieldsMap = Maps.newHashMap();
+        for (MetaFieldViewAdapter metaFieldViewAdapter : fields) {
+            metaFieldViewAdapter.setContainer(this);
+            fieldsMap.put(metaFieldViewAdapter.getMetaField().fieldCode(), metaFieldViewAdapter);
+        }
     }
 
     /**

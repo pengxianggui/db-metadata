@@ -8,7 +8,7 @@ package com.hthjsj.analysis.meta.aop;
  */
 public interface UpdatePointCut {
 
-    void updateBefore(AopInvocation invocation);
+    boolean updateBefore(AopInvocation invocation);
 
-    void updateAfter(boolean result, AopInvocation invocation);
+    boolean updateAfter(boolean result, AopInvocation invocation);
 }

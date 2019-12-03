@@ -29,13 +29,13 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     }
 
     @Override
-    public void updateBefore(AopInvocation invocation) {
-
+    public boolean updateBefore(AopInvocation invocation) {
+        return false;
     }
 
     @Override
-    public void updateAfter(boolean result, AopInvocation invocation) {
-
+    public boolean updateAfter(boolean result, AopInvocation invocation) {
+        return false;
     }
 
     @Override

@@ -99,7 +99,7 @@ public class InitKit {
                     log.info("merge Object Self {} - {} ", metaObject.code(), selfFieldKey);
                     //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
                     if (self.get(selfFieldKey) instanceof JSONObject) {
-                        Kv config = UtilKit.getKv(((JSONObject) self.get(selfFieldKey)).toJSONString());
+                        Kv config = UtilKit.getKv(self.getJSONObject(selfFieldKey).toJSONString());
                         metaObject.dataMap().merge(selfFieldKey, config.toJson(), (oldValue, newValue) -> newValue);
                     } else {
                         metaObject.dataMap().merge(selfFieldKey, self.get(selfFieldKey), (oldValue, newValue) -> newValue);
@@ -163,9 +163,9 @@ public class InitKit {
                 //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
                 //WARN 仅支持配置config字段
                 if (component.get(fieldKey) instanceof JSONObject) {
-                    Kv config = UtilKit.getKv(((JSONObject) component.get(fieldKey)).toJSONString());
+                    Kv config = UtilKit.getKv(component.getJSONObject(fieldKey).toJSONString());
                     if (!config.isEmpty()) {
-                        ServiceManager.componentService().updateFieldConfig(componentType, metaField, config);
+                        UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
                         log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
                     }
                 }

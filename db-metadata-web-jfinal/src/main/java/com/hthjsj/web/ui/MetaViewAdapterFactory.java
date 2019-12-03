@@ -27,5 +27,5 @@ public interface MetaViewAdapterFactory {
      */
     boolean reCompute(IMetaField metaField, Component fieldComponent, Kv toBeUpdatedFieldInstanceConfig);
 
-    boolean reCompute(MetaFieldViewAdapter metaFieldViewAdapter);
+    boolean reCompute(MetaFieldViewAdapter metaFieldViewAdapter, Kv toBeUpdatedFieldInstanceConfig);
 }

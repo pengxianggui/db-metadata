@@ -3,6 +3,7 @@ package com.hthjsj.web.ui;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.WebException;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -69,6 +70,11 @@ public class UIManager {
     }
 
     public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter) {
-        return ViewAssembleFactory.me().reCompute(metaFieldViewAdapter);
+        Kv toBeUpdatedFieldInstanceConfig = ComputeKit.recommendFieldConfig(metaFieldViewAdapter.getMetaField());
+        return update(metaFieldViewAdapter, toBeUpdatedFieldInstanceConfig);
+    }
+
+    public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter, Kv toBeUpdatedFieldInstanceConfig) {
+        return ViewAssembleFactory.me().reCompute(metaFieldViewAdapter, toBeUpdatedFieldInstanceConfig);
     }
 }

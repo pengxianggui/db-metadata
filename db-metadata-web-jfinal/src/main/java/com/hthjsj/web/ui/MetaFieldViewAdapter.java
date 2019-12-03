@@ -6,6 +6,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.UtilKit;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -16,22 +17,26 @@ import lombok.Getter;
 public class MetaFieldViewAdapter {
 
     @Getter
-    IMetaField metaField;
+    private IMetaField metaField;
 
     @Getter
     @JSONField(serialize = false)
-    Component component;
+    private Component component;
 
     @Getter
-    Kv fieldConfig;
+    private Kv fieldConfig;
 
     @Getter
-    Kv globalComponentConfig;
+    private Kv globalComponentConfig;
 
     @Getter
-    Kv fieldInstanceConfig;
+    private Kv fieldInstanceConfig;
 
-    public MetaFieldViewAdapter(IMetaField metaField, Component component, Kv globalComponentConfig, Kv levelFieldInstanceConfig) {
+    @Setter
+    @Getter
+    private MetaObjectViewAdapter container;
+
+    MetaFieldViewAdapter(IMetaField metaField, Component component, Kv globalComponentConfig, Kv levelFieldInstanceConfig) {
         this.metaField = metaField;
         this.component = component;
         this.fieldInstanceConfig = levelFieldInstanceConfig;

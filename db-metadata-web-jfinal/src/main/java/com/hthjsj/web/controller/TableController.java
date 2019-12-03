@@ -91,7 +91,7 @@ public class TableController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut pointCut = metaObjectConfigParse.interceptor();
-        AopInvocation invocation = new AopInvocation(metaObject);
+        AopInvocation invocation = new AopInvocation(metaObject, getKv());
 
         boolean status = Db.tx(new IAtom() {
 

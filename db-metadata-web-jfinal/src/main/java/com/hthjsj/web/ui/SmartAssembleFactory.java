@@ -99,7 +99,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     }
 
     @Override
-    public boolean reCompute(MetaFieldViewAdapter metaFieldViewAdapter) {
+    public boolean reCompute(MetaFieldViewAdapter metaFieldViewAdapter, Kv toBeUpdatedFieldInstanceConfig) {
         throw new WebException("This is not intended to be implemented!");
     }
 }

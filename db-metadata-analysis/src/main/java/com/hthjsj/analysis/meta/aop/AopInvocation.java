@@ -1,7 +1,8 @@
 package com.hthjsj.analysis.meta.aop;
 
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import lombok.Data;
 
@@ -15,18 +16,22 @@ import lombok.Data;
 @Data
 public class AopInvocation {
 
-    MetaObject metaObject;
+    private IMetaObject metaObject;
 
-    MetaData metaData;
+    private MetaData metaData;
 
-    Ret ret;
+    private Ret ret;
 
-    public AopInvocation(MetaObject metaObject, MetaData metaData) {
+    private Kv httpParams;
+
+    public AopInvocation(IMetaObject metaObject, MetaData metaData, Kv httpParams) {
         this.metaObject = metaObject;
         this.metaData = metaData;
+        this.httpParams = httpParams;
     }
 
-    public AopInvocation(MetaObject metaObject) {
+    public AopInvocation(IMetaObject metaObject, Kv httpParams) {
         this.metaObject = metaObject;
+        this.httpParams = httpParams;
     }
 }

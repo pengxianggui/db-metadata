@@ -1,4 +1,13 @@
 {
+  "meta_field": {
+    "is_sys": 1,
+    "config": {
+      "bizInterceptor": "com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+    }
+  },
+  "meta_object": {
+    "is_sys": 1
+  },
   "test_table": {
     "config": {
       "objectCode": "test_table",

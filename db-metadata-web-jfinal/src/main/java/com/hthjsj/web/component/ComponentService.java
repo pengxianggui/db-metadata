@@ -269,9 +269,9 @@ public class ComponentService {
      *
      * @return
      */
-    public boolean updateFieldConfig(ComponentType componentType, IMetaField metaField, Kv config) {
+    public boolean updateFieldConfig(ComponentType containerType, IMetaField metaField, Kv config) {
         Record fieldInstance = Db.findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                            componentType.getCode(),
+                                            containerType.getCode(),
                                             INSTANCE.META_FIELD.toString(),
                                             metaField.objectCode() + "." + metaField.fieldCode());
         fieldInstance.set("config", config.toJson());

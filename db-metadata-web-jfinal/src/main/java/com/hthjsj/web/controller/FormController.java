@@ -55,7 +55,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut pointCut = metaObjectConfigParse.interceptor();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -103,7 +103,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut pointCut = metaObjectConfigParse.interceptor();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
