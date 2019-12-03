@@ -9,8 +9,6 @@ import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 
-import java.util.Map;
-
 /**
  * 元子段 与 元子控件的渲染
  * <p> @Date : 2019/11/27 </p>
@@ -81,10 +79,8 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
                     }
                 }
             }
-            //TODO
-            component.getMeta().putIfAbsent("conf", Kv.create());
-            builder.render().putIfAbsent("conf", Kv.create());
-            ((Kv) builder.render().getAs("conf")).forEach((k, v) -> ((Map) component.getMeta().getAs("conf")).merge(k, v, (oldValue, newValue) -> oldValue));
+
+            UtilKit.deepMerge(component.getMeta(), builder.render(), true);
         }
         return component.getMeta();
     }

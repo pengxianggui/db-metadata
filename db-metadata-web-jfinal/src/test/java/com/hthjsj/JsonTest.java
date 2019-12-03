@@ -6,6 +6,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hthjsj.web.UtilKit;
 import com.jfinal.kit.Kv;
 
+import java.util.Map;
+
 /**
  * <p> Class title: </p>
  * <p> @Describe: </p>
@@ -42,14 +44,14 @@ public class JsonTest {
 
     public static void mergeTest() {
         String str1 = "{\n" + "  \"meta_field\": {\n" + "    \"FormTmpl\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
-                + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置\",\n" + "        \"inline\": false,\n"
+                + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置1\",\n" + "        \"inline\": false,\n"
                 + "        \"component_name\": \"MiniFormBox\"\n" + "      }\n" + "    }\n" + "  }\n" + "}\n";
         String str2 = "{\n" + "  \"meta_field\": {\n" + "    \"FormTmpl\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
-                + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置\",\n" + "        \"inline\": true,\n"
+                + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置12\",\n" + "        \"inline\": true,\n"
                 + "        \"component_name\": \"_MiniFOrmBox\",\"dfjie\":\"extention11\"\n" + "      }\n" + "    }\n" + "  }\n" + "}\n";
         JSONObject json1 = JSON.parseObject(str1);
         JSONObject json2 = JSON.parseObject(str2);
-        JSONObject result = UtilKit.deepMerge(json1, json2, false);
+        Map result = UtilKit.deepMerge(json1.getInnerMap(), json2.getInnerMap(), true);
 
         System.out.println(JSON.toJSONString(result, SerializerFeature.PrettyFormat));
     }

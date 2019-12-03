@@ -137,10 +137,10 @@ public class UtilKit {
      *
      * @return
      */
-    public static JSONObject deepMerge(JSONObject source, JSONObject target, boolean isNew) {
+    public static Map deepMerge(Map target, Map source, boolean overwrite) {
 
-        for (String key : source.keySet()) {
-            Object value = source.get(key);
+        for (Object key : source.keySet()) {
+            Object value = source.get(String.valueOf(key));
             if (!target.containsKey(key)) {
                 // new value for "key":
                 target.put(key, value);
@@ -148,9 +148,9 @@ public class UtilKit {
                 // existing value for "key" - recursively deep merge:
                 if (value instanceof JSONObject) {
                     JSONObject valueJson = (JSONObject) value;
-                    deepMerge(valueJson, target.getJSONObject(key), isNew);
+                    deepMerge((Map) target.get(key), valueJson, overwrite);
                 } else {
-                    if (isNew) {
+                    if (overwrite) {
                         target.merge(key, value, (oldValue, newValue) -> newValue);
                     } else {
                         target.merge(key, value, (oldValue, newValue) -> oldValue);
