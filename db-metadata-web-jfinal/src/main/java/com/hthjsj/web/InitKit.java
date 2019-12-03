@@ -99,7 +99,7 @@ public class InitKit {
                     log.info("merge Object Self {} - {} ", metaObject.code(), selfFieldKey);
                     //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
                     if (self.get(selfFieldKey) instanceof JSONObject) {
-                        Kv config = UtilKit.getKv(self.getJSONObject(selfFieldKey).toJSONString());
+                        Kv config = UtilKit.getKv(self.getString(selfFieldKey));
                         metaObject.dataMap().merge(selfFieldKey, config.toJson(), (oldValue, newValue) -> newValue);
                     } else {
                         metaObject.dataMap().merge(selfFieldKey, self.get(selfFieldKey), (oldValue, newValue) -> newValue);
@@ -109,20 +109,30 @@ public class InitKit {
 
                 //元子段自身配置更新
                 if (!fields.isEmpty()) {
-                    JSONObject field = null;
+                    JSONObject fieldJson = null;
                     log.info("Begin parsing the property configuration");
-                    for (IMetaField f : metaObject.fields()) {
-                        if (!fields.containsKey(f.fieldCode()))
-                            continue;
-                        field = fields.getJSONObject(f.fieldCode());
+                    for (IMetaField metaField : metaObject.fields()) {
 
-                        Sets.SetView<String> intersectionKeys = Sets.intersection(f.dataMap().keySet(), field.keySet());
+                        if (!fields.containsKey(metaField.fieldCode()))
+                            continue;
+
+                        fieldJson = fields.getJSONObject(metaField.fieldCode());
+                        Sets.SetView<String> intersectionKeys = Sets.intersection(metaField.dataMap().keySet(), fieldJson.keySet());
                         if (intersectionKeys.isEmpty())
                             continue;
+
                         log.info("Find {} properties that you can merge : {}", intersectionKeys.size(), intersectionKeys);
                         for (String intersectionKey : intersectionKeys) {
                             log.info("merge Field{} - {} ", metaObject.code(), intersectionKey);
-                            f.dataMap().merge(intersectionKey, field.get(intersectionKeys), (oldValue, newValue) -> newValue);
+
+                            if (fieldJson.get(intersectionKey) instanceof JSONObject) {
+                                Kv orgin = UtilKit.getKv(metaField.config());
+                                Kv config = UtilKit.getKv(fieldJson.getString(intersectionKey));
+                                Kv result = Kv.create().set(UtilKit.deepMerge(orgin, config, true));
+                                metaField.dataMap().merge(intersectionKey, result.toJson(), (oldValue, newValue) -> newValue);
+                            } else {
+                                metaField.dataMap().merge(intersectionKey, fieldJson.get(intersectionKey), (oldValue, newValue) -> newValue);
+                            }
                             hasModify = true;
                         }
                     }
@@ -168,6 +178,8 @@ public class InitKit {
                         UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
                         log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
                     }
+                } else {
+//                    UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
                 }
             }
         }
