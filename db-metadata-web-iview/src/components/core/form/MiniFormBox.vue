@@ -74,6 +74,7 @@
         },
         data() {
             return {
+                hasTranslation: false,
                 config: {
                     addStatus: 100,
                     updateStatus: 100,
@@ -92,10 +93,14 @@
         updated() {
             this.$emit("input", this.nativeValue);
         },
+        mounted() {
+            let value = this.value;
+            if (typeof value === 'string') {
+                value = JSON.parse(value);
+            }
+            this.hasTranslation = value.scopeSql || value.scopeOptions;
+        },
         computed: {
-            hasTranslation() {
-                return this.value.scopeSql && this.value.scopeOptions;
-            },
             nativeValue() {
                 let self = this;
                 let value = self.value;
