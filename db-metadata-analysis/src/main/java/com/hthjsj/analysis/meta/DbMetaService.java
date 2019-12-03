@@ -158,7 +158,13 @@ public class DbMetaService {
     }
 
     public boolean deleteData(IMetaObject object, String[] ids) {
-        return Db.deleteByIds(object.tableName(), object.primaryKey(), ids);
+        boolean success;
+        for (String id : ids) {
+            success = Db.deleteById(object.tableName(), object.primaryKey(), id); // Db.deleteByIds 用于联合主键删除
+            if (!success)
+                return false;
+        }
+        return true;
     }
 
     /**
