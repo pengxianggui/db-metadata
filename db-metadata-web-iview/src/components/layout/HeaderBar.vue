@@ -1,7 +1,8 @@
 <template>
     <el-container direction="horizontal" style="display: flex; padding: 10px;">
-        <div style="flex: 1;">
-            <img src="../../../static/1575363637.jpg" style="height: 40px;">
+        <div style="flex: 1; color: #409EFF">
+            <span class="h2" style="font-family: unset">元数据管理系统</span>
+            <span style="font-family: cursive;">—— Data Fuck Everything</span>
         </div>
         <el-tooltip class="item" effect="dark" content="初始化数据库" placement="bottom">
             <el-button @click="initDb" type="primary" icon="el-icon-magic-stick" size="mini"></el-button>
