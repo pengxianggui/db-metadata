@@ -139,7 +139,7 @@
             decorate(meta, componentName) {
                 switch (componentName) {
                     case "DropDownBox":
-                        meta.conf['multiple'] = true;
+                        // meta.conf['multiple'] = true;
                         break;
                 }
                 return meta;

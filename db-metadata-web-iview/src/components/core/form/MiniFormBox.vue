@@ -9,7 +9,7 @@
             <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
             <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
             <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
-            <el-checkbox v-model="nativeValue.isMultiple" label="允许多选" border></el-checkbox>
+            <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
         </el-form-item>
         <el-form-item label="新增状态">
             <el-radio-group v-model="nativeValue.addStatus">
@@ -45,14 +45,7 @@
                 </el-col>
             </el-form-item>
             <el-form-item label="静态数组">
-                <el-select
-                    v-model="nativeValue.scopeOptions"
-                    multiple
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="动态添加选项">
-                </el-select>
+                <options-input v-model="nativeValue.scopeOptions"></options-input>
             </el-form-item>
         </template>
     </el-form>
@@ -61,13 +54,16 @@
 <script>
     import {DEFAULT} from '@/constant'
     import Meta from '../mixins/meta'
+    import OptionsInput from '@/components/meta/form-builder/relate/OptionsInput'
 
     export default {
         mixins: [Meta(DEFAULT.JsonBox)],
         name: "MiniFormBox",
         label: "迷你表单",
         description: "输入控件的一种,JsonBox的表单表现形式",
-        components: {},
+        components: {
+            OptionsInput
+        },
         props: {
             value: {
                 type: [Object, String],
@@ -78,7 +74,6 @@
         },
         data() {
             return {
-                hasTranslation: false,
                 config: {
                     addStatus: 100,
                     updateStatus: 100,
@@ -98,6 +93,9 @@
             this.$emit("input", this.nativeValue);
         },
         computed: {
+            hasTranslation() {
+                return this.value.scopeSql && this.value.scopeOptions;
+            },
             nativeValue() {
                 let self = this;
                 let value = self.value;
