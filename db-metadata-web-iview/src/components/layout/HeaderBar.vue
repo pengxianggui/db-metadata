@@ -17,18 +17,17 @@
         name: "HeaderBar",
         methods: {
             initDb: function () {
-                this.$prompt('提示:请输入口令', '确定要初始化系统', {
-                }).then(data => {
+                this.$prompt('提示:请输入口令', '确定要初始化系统', {}).then(data => {
                     this.$axios.get('/db/init/' + data.value).then(resp => {
                         this.$message.success(resp.msg);
+                        this.$router.go(0);
                     }).catch(err => {
                         this.$message.error(err.msg);
                     })
                 })
             },
             cleanDb: function () {
-                this.$prompt('提示:请输入口令', '确定要清空数据库', {
-                }).then(data => {
+                this.$prompt('提示:请输入口令', '确定要清空数据库', {}).then(data => {
                     this.$axios.get('/db/truncate/' + data.value).then(resp => {
                         this.$message.success(resp.msg);
                     }).catch(err => {
@@ -36,8 +35,6 @@
                     })
                 }).catch(() => {
                 });
-
-
             }
         }
     }
