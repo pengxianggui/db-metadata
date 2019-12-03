@@ -1,6 +1,10 @@
 <template>
     <el-container direction="horizontal" style="display: flex; padding: 5px;">
-        <span style="flex: 1">Header 占坑</span>
+        <div style="flex: 1">
+            <span class="h2">元数据管理系统</span>
+            <span> —— </span>
+            <span>Data drives everything</span>
+        </div>
         <el-tooltip class="item" effect="dark" content="初始化数据库" placement="bottom">
             <el-button @click="initDb" type="primary" icon="el-icon-magic-stick" size="mini"></el-button>
         </el-tooltip>
@@ -15,20 +19,19 @@
         name: "HeaderBar",
         methods: {
             initDb: function () {
-                this.$axios.get('/db/init/hello').then(resp => {
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                this.$prompt('提示:请输入口令', '确定要初始化系统', {
+                }).then(data => {
+                    this.$axios.get('/db/init/' + data.value).then(resp => {
+                        this.$message.success(resp.msg);
+                    }).catch(err => {
+                        this.$message.error(err.msg);
+                    })
                 })
             },
             cleanDb: function () {
-
-                this.$confirm('此操作将清空数据, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$axios.get('/db/truncate/hello').then(resp => {
+                this.$prompt('提示:请输入口令', '确定要清空数据库', {
+                }).then(data => {
+                    this.$axios.get('/db/truncate/' + data.value).then(resp => {
                         this.$message.success(resp.msg);
                     }).catch(err => {
                         this.$message.error(err.msg);
