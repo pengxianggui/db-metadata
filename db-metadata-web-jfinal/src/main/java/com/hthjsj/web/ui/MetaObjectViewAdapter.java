@@ -56,7 +56,6 @@ public class MetaObjectViewAdapter {
                                                                   metaFieldViewAdapter -> metaFieldViewAdapter));
     }
 
-
     /**
      * 获取元子段
      *
@@ -64,7 +63,7 @@ public class MetaObjectViewAdapter {
      *
      * @return
      */
-    public MetaFieldViewAdapter getField(String fieldCode) {
+    public MetaFieldViewAdapter getFieldAdapter(String fieldCode) {
         return fieldsMap.get(fieldCode);
     }
 }

@@ -29,12 +29,12 @@ public class MetaFieldViewAdapter {
     Kv globalComponentConfig;
 
     @Getter
-    Kv instanceConfig;
+    Kv fieldInstanceConfig;
 
     public MetaFieldViewAdapter(IMetaField metaField, Component component, Kv globalComponentConfig, Kv levelFieldInstanceConfig) {
         this.metaField = metaField;
         this.component = component;
-        this.instanceConfig = levelFieldInstanceConfig;
+        this.fieldInstanceConfig = levelFieldInstanceConfig;
         this.globalComponentConfig = globalComponentConfig;
         this.fieldConfig = UtilKit.getKv(metaField.config());
     }

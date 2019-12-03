@@ -90,4 +90,20 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
 
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectInstanceConfig, fields);
     }
+
+    @Override
+    public boolean reCompute(IMetaField metaField, Component fieldComponent, Kv toBeUpdatedFieldInstanceConfig) {
+        return ServiceManager.componentService().updateFieldConfig(fieldComponent.componentType(), metaField, toBeUpdatedFieldInstanceConfig);
+    }
+
+    @Override
+    public boolean reCompute(MetaFieldViewAdapter metaFieldViewAdapter) {
+        //自动计算
+        Kv autoCompute = ComputeKit.recommendFieldConfig(metaFieldViewAdapter.getMetaField());
+        //获取原来配置
+        Kv fieldInstanceConfig = metaFieldViewAdapter.getFieldInstanceConfig();
+        //merge操作
+        Kv mergedResult = Kv.create().set(UtilKit.deepMerge(fieldInstanceConfig, autoCompute, true));
+        return reCompute(metaFieldViewAdapter.getMetaField(), metaFieldViewAdapter.getComponent(), mergedResult);
+    }
 }

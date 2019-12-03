@@ -33,7 +33,7 @@ public class RenderHelper {
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
         Okv fields = Okv.create();
         for (MetaFieldViewAdapter metaFieldViewAdapter : metaObjectViewAdapter.getFields()) {
-            fields.set(metaFieldViewAdapter.getMetaField().fieldCode(), metaFieldViewAdapter.getInstanceConfig().toJson());
+            fields.set(metaFieldViewAdapter.getMetaField().fieldCode(), metaFieldViewAdapter.getFieldInstanceConfig().toJson());
         }
         kv.set("fields", fields);
         return kv;
@@ -59,7 +59,7 @@ public class RenderHelper {
 
         kv.set(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig().toJson());
         metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {
-            kv.set(key, value.getInstanceConfig().toJson());
+            kv.set(key, value.getFieldInstanceConfig().toJson());
         });
         return kv;
     }

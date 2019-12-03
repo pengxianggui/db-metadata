@@ -2,6 +2,7 @@ package com.hthjsj.web.ui;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.WebException;
 
 /**
  * <p> @Date : 2019/11/13 </p>
@@ -64,10 +65,10 @@ public class UIManager {
     }
 
     public static boolean update(MetaObjectViewAdapter metaObjectViewAdapter) {
-        return false;
+        throw new WebException("not finished");
     }
 
     public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter) {
-        return false;
+        return ViewAssembleFactory.me().reCompute(metaFieldViewAdapter);
     }
 }
