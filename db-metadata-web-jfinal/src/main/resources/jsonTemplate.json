@@ -67,7 +67,8 @@
     "inline": true,
     "group": false,
     "conf": {
-      "clearable": true
+      "clearable": true,
+      "multiple": false
     }
   },
   "TimeBox": {

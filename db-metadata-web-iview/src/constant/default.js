@@ -52,7 +52,8 @@ const DEFAULT_CONF = {
             //     {"key":"value"}
         ],
         "conf": {
-            "clearable": true
+            "clearable": true,
+            "multiple": false
         }
     },
     "TimeBox": {

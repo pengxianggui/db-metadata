@@ -76,6 +76,10 @@ public class ComputeKit {
             builder.componentName(ComponentType.DROPDOWN.getCode());
         }
 
+        if (metaFieldConfigParse.isMultiple()) {
+            builder.multiple(true);
+        }
+
         if (metaFieldConfigParse.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
         }

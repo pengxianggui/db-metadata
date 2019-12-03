@@ -25,6 +25,7 @@ public class MetaConfigFactory {
         config.set("defaultValue", defaultValue == null ? "" : defaultValue);
         config.set("objectCode", metaField.objectCode());
         config.set("fieldCode", metaField.fieldCode());
+        config.set("isMultiple", false);
 
         //主键:新增不可见,更新只读
         if (metaField.isPrimary()) {

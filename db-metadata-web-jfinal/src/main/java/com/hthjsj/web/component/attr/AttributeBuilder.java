@@ -14,6 +14,7 @@ public class AttributeBuilder {
 
     private AttributeBuilder() {
     }
+
     public static AttributeSteps newBuilder() {
         return new AttributeSteps();
     }
@@ -45,6 +46,8 @@ public class AttributeBuilder {
         AttrAbility resizeable(String v);
 
         AttrAbility clearable(boolean v);
+
+        AttrAbility multiple(boolean v);
     }
 
     interface InputAttr {
@@ -96,6 +99,12 @@ public class AttributeBuilder {
         @Override
         public AttributeSteps clearable(boolean v) {
             setConf("clearable", v);
+            return this;
+        }
+
+        @Override
+        public AttrAbility multiple(boolean v) {
+            setConf("multiple", v);
             return this;
         }
 

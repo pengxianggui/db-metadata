@@ -28,6 +28,7 @@ MetaField 数据源配置
     > 以配置为准,则需要在所有渲染的地方,对"{}"做逻辑判断,防止渲染; 
 - [ ] https://github.com/fslev/json-compare     
     
+- [ ] 复选checkbox,选中的值无法命中 数据库中1,23,4数据 
     
 ##### BUG
 - [ ] searchPanel 无实例配时,会成功渲染

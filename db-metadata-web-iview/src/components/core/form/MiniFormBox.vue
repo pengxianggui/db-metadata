@@ -9,6 +9,7 @@
             <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
             <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
             <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
+            <el-checkbox v-model="nativeValue.isMultiple" label="允许多选" border></el-checkbox>
         </el-form-item>
         <el-form-item label="新增状态">
             <el-radio-group v-model="nativeValue.addStatus">
@@ -85,6 +86,7 @@
                     defaultVal: '',
                     isNullable: true,
                     isSearch: false,
+                    isMultiple: false,
                     scopeSql: '',
                     scopeOptions: [],
                     isListShow: true,
