@@ -1,9 +1,7 @@
 <template>
-    <el-container direction="horizontal" style="display: flex; padding: 5px;">
-        <div style="flex: 1">
-            <span class="h2">元数据管理系统</span>
-            <span> —— </span>
-            <span>Data drives everything</span>
+    <el-container direction="horizontal" style="display: flex; padding: 10px;">
+        <div style="flex: 1;">
+            <img src="../../../static/1575363637.jpg" style="height: 40px;">
         </div>
         <el-tooltip class="item" effect="dark" content="初始化数据库" placement="bottom">
             <el-button @click="initDb" type="primary" icon="el-icon-magic-stick" size="mini"></el-button>
