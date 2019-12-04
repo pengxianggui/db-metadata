@@ -26,6 +26,7 @@
 
 <script>
     import {DEFAULT} from '@/constant'
+    import utils from '@/utils'
 
     export default {
         name: "FormTmpl",
@@ -54,6 +55,7 @@
                 } else {
                     let url = this.$compile(action, {objectCode: this.innerMeta['objectCode']});
                     params['objectCode'] = this.innerMeta['objectCode'];
+                    utils.joinArrInObj(params);
                     this.$axios.post(url, params).then(resp => {
                         this.$emit('ok', params); //  default callback
                         this.$message.success(resp.msg);

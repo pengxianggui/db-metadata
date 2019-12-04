@@ -54,6 +54,11 @@ export function isObject(obj) {
     return toStr === '[object Object]'
 }
 
+export function isArr(obj) {
+    let toStr = Object.prototype.toString.call(obj);
+    return toStr === '[object Array]'
+}
+
 /**
  * 返回值的类型:
  * [object String]、[object Number]、[object Object]、[object Boolean]、
@@ -63,4 +68,41 @@ export function isObject(obj) {
  */
 export function typeOf(value) {
     return Object.prototype.toString.call(value);
+}
+
+/**
+ * 将数组转为字符串, 如: [1,2,3] => "1,2,3"; ["a","b","c"] => "a,b,c"
+ * 如果val不为数组, 不做任何处理, 直接返回val; 如果val是数组, 并且不满足"每个元素都不是数组, 都不是对象"这一条件, 也不做任何处理, 直接返回.
+ * @param arr 数组
+ * @param separator 分隔符号, 字符串, 默认为 ","
+ */
+export function joinArr(val, separator) {
+    separator = (separator === undefined) ? ',' : separator;
+    if (isArr(val) && val.every(item => !isArr(item) && !isObject(item))) {
+        return val.join(separator)
+    }
+    return val;
+}
+
+/**
+ * 将对象中所有值为数组(数组必须为基本类型数组,即不含有对象和数组元素的数组)的值转为分隔符分隔的字符串.
+ * 此方法会改变val值
+ * @param val   对象值
+ * @param separator 分隔符, 默认为 ","
+ * @param deep 是否需要对val进行深度遍历, 默认为false, 即只处理一层
+ * @returns {*} 返回处理后的val
+ */
+export function joinArrInObj(val, separator, deep) {
+    separator = (separator === undefined) ? ',' : separator;
+    deep = (deep === true) ? true : false;
+    if (isObject(val)) {
+        for (let key in val) {
+            if (deep && isObject(val[key])) {
+                val[key] = joinArrInObj(val[key], separator, deep)
+            } else {
+                val[key] = joinArr(val[key], separator);
+            }
+        }
+    }
+    return val;
 }
