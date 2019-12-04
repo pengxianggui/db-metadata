@@ -31,7 +31,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <PopMenu></PopMenu>
+                <PopMenuDemo></PopMenuDemo>
             </el-col>
         </el-row>
         <el-row>
