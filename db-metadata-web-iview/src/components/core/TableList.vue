@@ -50,13 +50,40 @@
                             <template slot="header">
                                 <pop-menu trigger="rightClick">
                                     <template #label>{{item.label || item.name}}</template>
-                                    <template #menu>
-                                        <ul id="menu">
-                                            <li @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</li>
-                                            <li @click="editMetaField(item.name)">编辑元字段({{item.name}})</li>
-                                            <li @click="editInstanceConf()">编辑实例UI配置({{innerMeta.objectCode}})</li>
-                                            <li @click="editInstanceFieldConf()">编辑实例字段UI配置({{item.name}})</li>
-                                        </ul>
+                                    <template #body>
+                                        <pop-menu-item @click="editMetaObject">
+                                            编辑元对象({{innerMeta.objectCode}})
+                                        </pop-menu-item>
+
+                                        <pop-menu-item @click="editMetaField(item.name)">
+                                            编辑元字段({{item.name}})
+                                        </pop-menu-item>
+
+                                        <pop-menu-item @hover="getComponentCode(innerMeta.objectCode)">
+                                            <pop-menu trigger="hover" placement="right">
+                                                <template #label>编辑实例UI配置({{innerMeta.objectCode}})</template>
+                                                <template #body>
+                                                    <pop-menu-item v-for="compCode in componentCodes"
+                                                                   :key="compCode"
+                                                                   @click="editInstanceConf(innerMeta.objectCode, compCode)">
+                                                        {{compCode}}
+                                                    </pop-menu-item>
+                                                </template>
+                                            </pop-menu>
+                                        </pop-menu-item>
+
+                                        <pop-menu-item @hover="getComponentCode(innerMeta.objectCode)">
+                                            <pop-menu trigger="hover" placement="right">
+                                                <template #label>编辑实例字段UI配置({{item.name}})</template>
+                                                <template #body>
+                                                    <pop-menu-item v-for="compCode in componentCodes"
+                                                                   :key="compCode"
+                                                                   @click="editInstanceFieldConf(innerMeta.objectCode, compCode, item.name)">
+                                                        {{compCode}}
+                                                    </pop-menu-item>
+                                                </template>
+                                            </pop-menu>
+                                        </pop-menu-item>
                                     </template>
                                 </pop-menu>
                             </template>
@@ -140,11 +167,12 @@
 <script>
     import {DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
-    import PopMenu from "./PopMenu";
+    import PopMenu from "./PopMenu/src/PopMenu";
+    import PopMenuItem from "@/components/core/PopMenu/src/PopMenuItem";
 
     export default {
         name: "TableList",
-        components: {PopMenu},
+        components: {PopMenuItem, PopMenu},
         data() {
             return {
                 innerData: [],
@@ -162,6 +190,7 @@
                 dialogComponentMea: {}, // 弹窗内包含的组件元对象
                 dialogMeta: {}, // 弹窗组件元对象
                 dialogVisible: false,   // 弹窗显隐
+                componentCodes: [], // 当前objectCode 配置过的所有componentCode(容器层, 及元对象层)
             }
         },
         props: {
@@ -309,6 +338,7 @@
                 this.$refs['pop-' + fieldCode].value = true;
             },
 
+            // fast edit meta-data or edit ui conf ----------------------------------------------------------
             editMetaObject() {
                 let objectCode = this.innerMeta['objectCode'];
                 let url = this.$compile(URL.META_OBJECT_TO_EDIT, {objectCode: objectCode});
@@ -340,37 +370,28 @@
                     this.dialogVisible = true
                 });
             },
-            editInstanceConf() {
-                let objectCode = this.innerMeta['objectCode'];
-
-                this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: true}))
+            editInstanceConf(objectCode, componentCode) {
+                let url = URL.RR_INSTANCE_CONF_ADD;
+                let routeUrl = this.$router.resolve({
+                    path: url,
+                    query: {
+                        componentCode: componentCode,
+                        objectCode: objectCode
+                    }
+                });
+                window.open(routeUrl.href, '_blank');
+            },
+            editInstanceFieldConf(objectCode, componentCode, fieldCode) {
+                this.editInstanceConf(objectCode, componentCode); // just edit the ui conf of field named fieldCode. anchor point ?
+            },
+            getComponentCode(objectCode) {
+                this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: false}))
                     .then(resp => {
-                        let componentCode = resp.data[0].value;
-                        this.$dialog({
-                            component_name: 'RadioBox',
-                            name: "componentCode",
-                            options: resp.data
-                        }, componentCode, {
-                            title: '选择一个组件(' + objectCode + ')',
-                            width: '30%',
-                            showButtons: true
-                        }).then(componentCode => {
-                            let url = URL.RR_INSTANCE_CONF_ADD;
-                            let routeUrl = this.$router.resolve({
-                                path: url,
-                                query: {
-                                    componentCode: componentCode,
-                                    objectCode: objectCode
-                                }
-                            });
-                            window.open(routeUrl.href, '_blank');
-                        });
-                    });
-            },
-            editInstanceFieldConf(fieldCode) {
-                this.editInstanceConf(); // just edit the ui conf of field named fieldCode. anchor point ?
+                        this.componentCodes = resp.data;
+                    })
             },
 
+            // get business data
             getData(params) {
                 if (!utils.isObject(params)) params = {};
 
@@ -447,53 +468,4 @@
 </script>
 
 <style scoped>
-
-    .right-menu {
-        position: fixed;
-        background: #fff;
-        border: solid 1px rgba(0, 0, 0, .2);
-        border-radius: 3px;
-        z-index: 999;
-        display: none;
-    }
-
-    .right-menu a {
-        width: 75px;
-        height: 28px;
-        line-height: 28px;
-        text-align: center;
-        display: block;
-        color: #1a1a1a;
-    }
-
-    .right-menu a:hover {
-        background: #eee;
-        color: #fff;
-    }
-
-    html,
-    body {
-        height: 100%;
-    }
-
-    .right-menu {
-        border: 1px solid #eee;
-        box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, .1);
-        border-radius: 1px;
-    }
-
-    ul#menu {
-        list-style: none;
-        margin: 0;
-        padding: 5px;
-    }
-
-    ul#menu li {
-        padding: 5px;
-        cursor: pointer;
-    }
-
-    ul#menu li:hover {
-        background-color: #eeeeee;
-    }
 </style>

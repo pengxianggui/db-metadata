@@ -1,17 +1,15 @@
 <template>
-    <el-popover :trigger="nativeTrigger" v-model="visible">
-            <span slot="reference">
-                <span @click.right="rightClickHander">
-                    <slot name="label">
-                        <i class="el-icon-caret-bottom" style="cursor: pointer"></i>
-                    </slot>
-                </span>
+    <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible">
+        <span slot="reference">
+            <span @click.right="rightClickHander">
+                <slot name="label">
+                    <i class="el-icon-caret-bottom" style="cursor: pointer"></i>
+                </slot>
             </span>
-        <slot name="menu">
-            <ul id="menu">
-                <li v-for="(item, index) in data" :key="index" @click="item.behavior(item.data)">{{item.data}}</li>
-            </ul>
-        </slot>
+        </span>
+        <ul id="menu">
+            <slot name="body"></slot>
+        </ul>
     </el-popover>
 </template>
 
@@ -24,15 +22,7 @@
                 default: 'click',
                 validator: value => ['click', 'focus', 'hover', 'rightClick'].indexOf(value) > -1
             },
-            data: {
-                type: Array,
-                validator: value => {
-                    return value.filter(item => !(item instanceof Object)
-                        || !item.hasOwnProperty('data')
-                        || !item.hasOwnProperty('behavior')
-                        || !(item.behavior instanceof Function)).length <= 0;
-                }
-            }
+            placement: String
         },
         data() {
             return {
@@ -68,14 +58,5 @@
         list-style: none;
         margin: 0;
         padding: 5px;
-    }
-
-    ul#menu li {
-        padding: 5px 0;
-        cursor: pointer;
-    }
-
-    ul#menu li:hover {
-        background-color: #eeeeee;
     }
 </style>
