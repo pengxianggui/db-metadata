@@ -99,6 +99,10 @@ public class MetaFieldConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isListShow"));
     }
 
+    public boolean isFile() {
+        return Boolean.parseBoolean(getStr("isFile")) && StrKit.notBlank(getStr("fileUploadPath"));
+    }
+
     /**
      * addStatus/updateStatus 控制展示行为
      * 正常(能看,能生成sql)
@@ -122,7 +126,6 @@ public class MetaFieldConfigParse extends MetaData {
         return Integer.valueOf(getStr("viewStatus"));
     }
 
-
     public boolean isAdd() {
         return addStatus() > DISABLE;
     }
@@ -134,5 +137,4 @@ public class MetaFieldConfigParse extends MetaData {
     public boolean isView() {
         return viewStatus() > DISABLE;
     }
-
 }

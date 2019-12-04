@@ -45,6 +45,14 @@
       "objectCode": "test_table",
       "isUUIDPrimary": true,
       "testKey": 123
+    },
+    "_fields": {
+      "col_file": {
+        "config": {
+          "isFile": true,
+          "fileUploadPath": "okok"
+        }
+      }
     }
   }
 }

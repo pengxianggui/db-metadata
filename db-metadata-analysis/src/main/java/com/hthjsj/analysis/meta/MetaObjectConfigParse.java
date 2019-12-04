@@ -27,10 +27,6 @@ public class MetaObjectConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isUUIDPrimary"));
     }
 
-    public boolean hasBizInterceptor() {
-        return StrKit.notBlank(getStr("bizInterceptor"));
-    }
-
     public <T extends IPointCut> T interceptor() {
         if (!StrKit.notBlank(getStr("bizInterceptor"))) {
             return (T) new PointCut();

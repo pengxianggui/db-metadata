@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.*;
+import com.hthjsj.web.file.FileController;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.UserSettingIntercept;
@@ -47,6 +48,7 @@ public class AppWebConfig extends JFinalConfig {
         me.add("/form", FormController.class);
         me.add("/dict", DictController.class);
         me.add("/check", ValidatorController.class);
+        me.add("/file", FileController.class);
     }
 
     @Override

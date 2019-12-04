@@ -2,6 +2,8 @@ package com.hthjsj.web;
 
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.file.FileService;
+import com.hthjsj.web.file.LocalFileService;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.aop.Aop;
 
@@ -22,6 +24,10 @@ public class ServiceManager {
 
     public static ComponentService componentService() {
         return Aop.get(ComponentService.class);
+    }
+
+    public static FileService fileService() {
+        return LocalFileService.me();
     }
 
     public static SqlAnalysis sqlAnalysis() {

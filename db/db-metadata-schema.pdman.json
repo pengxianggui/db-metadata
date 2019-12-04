@@ -479,6 +479,12 @@
               "chnname": "普通字符"
             },
             {
+              "name": "col_file",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "文件"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",

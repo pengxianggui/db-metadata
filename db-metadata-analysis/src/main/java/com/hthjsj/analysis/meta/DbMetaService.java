@@ -28,6 +28,11 @@ import java.util.Map;
 @Before(Tx.class)
 public class DbMetaService {
 
+    public <T> T findFieldDataById(IMetaObject metaObject, IMetaField metaField, String id) {
+        //select metaField.fileCode() from metaObject.tableName() where metaObject.primarykey()=id
+        return (T) Db.use(App.DB_MAIN).queryFirst("select " + metaField.fieldCode() + " from " + metaObject.tableName() + " where " + metaObject.primaryKey() + "=?", id);
+    }
+
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
         Table t = dbService.getTable(schema, table);
@@ -122,7 +127,7 @@ public class DbMetaService {
     }
 
     public Record findDataById(IMetaObject object, String id) {
-        return Db.findById(object.tableName(), id);
+        return Db.use(App.DB_MAIN).findById(object.tableName(), id);
     }
 
     /**
@@ -133,8 +138,8 @@ public class DbMetaService {
      *
      * @return
      */
-    public Record findDataOfMetaObjectCode(String code) {
-        return Db.findFirst("select * from meta_object where code=?", code);
+    public Record findMetaDataOfMetaObjectCode(String code) {
+        return Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", code);
     }
 
     /**
@@ -147,7 +152,7 @@ public class DbMetaService {
      * @return
      */
     public Record findDataOfMetaFieldCode(String code, String fieldCode) {
-        return Db.findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
+        return Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
     }
 
     public boolean updateData(IMetaObject object, Kv data) {
@@ -163,7 +168,7 @@ public class DbMetaService {
             throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
         String idsString = StrKit.join(ids, "','");
-        return Db.update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
+        return Db.use(App.DB_MAIN).update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
     }
 
     /**

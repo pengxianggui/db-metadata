@@ -84,7 +84,7 @@ public class MetaController extends FrontRestController {
 
         MetaObject metaObject = (MetaObject) metaService().findByCode("meta_object");
 
-        Record data = metaService().findDataOfMetaObjectCode(metaObject.code());
+        Record data = metaService().findMetaDataOfMetaObjectCode(metaObject.code());
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
