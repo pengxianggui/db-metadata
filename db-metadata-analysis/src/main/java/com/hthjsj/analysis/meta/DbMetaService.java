@@ -1,6 +1,7 @@
 package com.hthjsj.analysis.meta;
 
 import com.hthjsj.App;
+import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.db.*;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
@@ -158,13 +159,11 @@ public class DbMetaService {
     }
 
     public boolean deleteData(IMetaObject object, String[] ids) {
-        boolean success;
-        for (String id : ids) {
-            success = Db.deleteById(object.tableName(), object.primaryKey(), id); // Db.deleteByIds 用于联合主键删除
-            if (!success)
-                return false;
+        if (object.primaryKey().contains(",")) {
+            throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
-        return true;
+        String idsString = StrKit.join(ids, "','");
+        return Db.update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
     }
 
     /**

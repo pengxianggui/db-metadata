@@ -6,7 +6,7 @@ package com.hthjsj.analysis.meta.aop;
  *
  * <p> @author konbluesky </p>
  */
-public interface DeletePointCut {
+public interface DeletePointCut extends IPointCut {
 
     void deleteBefore(AopInvocation invocation);
 

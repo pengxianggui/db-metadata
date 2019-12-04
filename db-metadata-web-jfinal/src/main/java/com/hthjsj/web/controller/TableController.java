@@ -90,7 +90,7 @@ public class TableController extends FrontRestController {
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        DeletePointCut pointCut = metaObjectConfigParse.interceptor();
+        DeletePointCut pointCut = metaObjectConfigParse.deletePointCut();
         AopInvocation invocation = new AopInvocation(metaObject, getKv());
 
         boolean status = Db.tx(new IAtom() {
@@ -104,6 +104,7 @@ public class TableController extends FrontRestController {
                     pointCut.deleteAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
+                    log.error(e.getMessage(), e);
                     s = false;
                 }
                 return s;

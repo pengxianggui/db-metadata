@@ -6,7 +6,7 @@ package com.hthjsj.analysis.meta.aop;
  *
  * <p> @author konbluesky </p>
  */
-public interface AddPointCut {
+public interface AddPointCut extends IPointCut {
 
     /**
      * 两类匹配策略

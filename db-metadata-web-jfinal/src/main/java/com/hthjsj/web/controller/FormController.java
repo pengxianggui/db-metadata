@@ -54,7 +54,7 @@ public class FormController extends FrontRestController {
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        AddPointCut pointCut = metaObjectConfigParse.interceptor();
+        AddPointCut pointCut = metaObjectConfigParse.addPointCut();
         AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
@@ -68,6 +68,7 @@ public class FormController extends FrontRestController {
                     pointCut.addAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
+                    log.error(e.getMessage(), e);
                     s = false;
                 }
                 return s;
@@ -102,7 +103,7 @@ public class FormController extends FrontRestController {
         MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        UpdatePointCut pointCut = metaObjectConfigParse.interceptor();
+        UpdatePointCut pointCut = metaObjectConfigParse.updatePointCut();
         AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {

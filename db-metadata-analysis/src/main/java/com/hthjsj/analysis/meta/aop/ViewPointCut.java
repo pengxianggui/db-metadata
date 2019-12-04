@@ -6,7 +6,7 @@ package com.hthjsj.analysis.meta.aop;
  *
  * <p> @author konbluesky </p>
  */
-public interface ViewPointCut {
+public interface ViewPointCut extends IPointCut {
 
     void viewBefore(AopInvocation invocation);
 

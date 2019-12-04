@@ -6,7 +6,7 @@ package com.hthjsj.analysis.meta.aop;
  *
  * <p> @author konbluesky </p>
  */
-public interface UpdatePointCut {
+public interface UpdatePointCut extends IPointCut {
 
     boolean updateBefore(AopInvocation invocation);
 
