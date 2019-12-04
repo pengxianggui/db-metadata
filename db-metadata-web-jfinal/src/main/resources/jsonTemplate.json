@@ -18,7 +18,13 @@
     "columns": [],
     "pagination": {
       "page-size": 10,
-      "page-sizes": [10, 20, 50, 100, 200],
+      "page-sizes": [
+        10,
+        20,
+        50,
+        100,
+        200
+      ],
       "current-page": 1,
       "layout": "total, sizes, prev, pager, next, jumper"
     }
@@ -163,10 +169,10 @@
     "label": "文件上传框",
     "inline": false,
     "conf": {
-      "action": "/upload/file",
+      "action": "/file/upload",
       "limit": 5,
       "tip": "上传文件限制不超过2M",
-      "auto-upload": false
+      "auto-upload": true
     }
   },
   "MiniFormBox": {

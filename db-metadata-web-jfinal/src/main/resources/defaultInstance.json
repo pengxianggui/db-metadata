@@ -17,5 +17,12 @@
         "component_name": "MiniFormBox"
       }
     }
+  },
+  "test_table": {
+    "FormTmpl": {
+      "col_file": {
+        "component_name": "FileBox"
+      }
+    }
   }
 }

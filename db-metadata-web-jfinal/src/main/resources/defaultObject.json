@@ -50,7 +50,7 @@
       "col_file": {
         "config": {
           "isFile": true,
-          "fileUploadPath": "okok"
+          "fileUploadPath": "/uploadPath"
         }
       }
     }

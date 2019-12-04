@@ -105,6 +105,9 @@ public class FormFieldFactory {
             case MINIFORMBOX:
                 MiniFormBox miniFormBox = new MiniFormBox(metaField.fieldCode(), metaField.cn());
                 return create(miniFormBox, metaField, instanceFieldConfig);
+            case FILEBOX:
+                FileBox fileBox = new FileBox(metaField.fieldCode(), metaField.cn());
+                return create(fileBox, metaField, instanceFieldConfig);
             default:
                 break;
         }
