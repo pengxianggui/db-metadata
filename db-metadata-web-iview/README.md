@@ -270,6 +270,16 @@
     -[x] 搜索框，参见jsonTemplate.json或者default.js
     -[ ] 支持多选
     -[ ] 支持sql配置FindPanel可选内容
+    
+ -[ ] FileBox 文件上传
+    
+    ```js
+        // 上传后响应的数据
+        [
+           {"name": "readme.txt", "suffix": "txt", "url": "http://xxx", "token": "xxx"},
+           // ...    
+        ]
+    ``` 
  
  -[ ] FindPanel 查找面板(复杂)
     -[x] 参见jsonTemplate.json或者default.js
@@ -310,6 +320,7 @@
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件
+ 
  
 ### 其他资料
 
