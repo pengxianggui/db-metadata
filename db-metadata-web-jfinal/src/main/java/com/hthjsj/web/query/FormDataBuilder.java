@@ -35,10 +35,10 @@ public class FormDataBuilder {
 
             try {
                 //TODO 兼容逻辑 用来处理 col_checkbox -> ["2","1"] 类型的值
-                if (metaField.configParser().isMultiple()) {
-                    String t = String.valueOf(castedValue);
-                    castedValue = t.replace("[", "").replace("]", "").replace("\"", "");
-                }
+//                if (metaField.configParser().isMultiple()) {
+//                    String t = String.valueOf(castedValue);
+//                    castedValue = t.replace("[", "").replace("]", "").replace("\"", "");
+//                }
                 //主键处理
                 if (metaField.isPrimary() && isInsert) {
                     formData.set(metaField.fieldCode(), SnowFlake.me().nextId());

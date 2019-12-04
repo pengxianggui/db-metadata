@@ -39,8 +39,8 @@ public class InNotInMatch extends MetaSQLExtract {
             // TODO 额外处理 多值逻辑,虽然入口是通过 in/nin 进来,但是需要用locate生成sql
             // 逻辑混入,这种兼容逻辑应放在XXXMatch以外的地方
             if (inValues.length > 0) {
-                //locate('8',column_name)
-                //(locate('8',column_name)>0 or locate('1',column_name)>0)
+                //locate('1',column_name)
+                //((locate('1',column_name)>0 or locate('2',column_name)>0))
                 String[] vs = new String[inValues.length];
                 for (int i = 0; i < inValues.length; i++) {
                     vs[i] = (" LOCATE('" + inValues[i] + "'," + metaField.fieldCode() + ")>0 ");
