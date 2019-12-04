@@ -139,7 +139,9 @@ public class QueryCondition {
             //正常 where 逻辑
             if (key.startsWith(MetaSQLExtract.SQL_PREFIX)) {
                 sqlExceptSelect.append(" and ").append(key.replaceFirst(MetaSQLExtract.SQL_PREFIX, "")).append(" ");
-                sqlParaExt.addPara(kv.get(key));
+                if (StrKit.notNull(kv.get(key))) {
+                    sqlParaExt.addPara(kv.get(key));
+                }
             }
         }
         sqlParaExt.setFrom(" from " + metaObject.tableName());

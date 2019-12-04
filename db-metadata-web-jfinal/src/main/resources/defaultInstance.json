@@ -1,6 +1,12 @@
 {
   "meta_field": {
     "FormTmpl": {
+      "cn": {
+        "inline": true
+      },
+      "en": {
+        "inline": true
+      },
       "config": {
         "conf": {
           "size": "mini"

@@ -153,9 +153,11 @@ public class InitKit {
         if (!jsonInstanceConfig.containsKey(metaObject.code()))
             return;
         log.info("found the component instance configuration of {} - {}", metaObject.code(), componentType);
+        //识别元对象
         JSONObject objectSelf = jsonInstanceConfig.getJSONObject(metaObject.code());
         if (objectSelf == null || objectSelf.isEmpty() || !objectSelf.containsKey(componentType.getCode()))
             return;
+        //识别组件
         JSONObject component = objectSelf.getJSONObject(componentType.getCode());
 
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, componentType);
@@ -164,22 +166,13 @@ public class InitKit {
             if (!component.containsKey(metaField.fieldCode()))
                 continue;
 
-            Sets.SetView<String> intersectionKeys = Sets.intersection(metaField.dataMap().keySet(), component.keySet());
-            if (intersectionKeys.isEmpty())
-                continue;
-
-            log.info("Find {} properties that you can merge : {}", intersectionKeys.size(), intersectionKeys);
-            for (String fieldKey : intersectionKeys) {
-                //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
-                //WARN 仅支持配置config字段
-                if (component.get(fieldKey) instanceof JSONObject) {
-                    Kv config = UtilKit.getKv(component.getJSONObject(fieldKey).toJSONString());
-                    if (!config.isEmpty()) {
-                        UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
-                        log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
-                    }
-                } else {
-//                    UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
+            //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
+            //WARN 仅支持配置config字段
+            if (component.get(metaField.fieldCode()) instanceof JSONObject) {
+                Kv config = UtilKit.getKv(component.getString(metaField.fieldCode()));
+                if (!config.isEmpty()) {
+                    UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
+                    log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
                 }
             }
         }
