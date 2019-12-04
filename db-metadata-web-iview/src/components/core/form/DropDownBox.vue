@@ -28,6 +28,7 @@
 
 <script>
     import {DEFAULT} from '@/constant'
+    import utils from '@/utils'
     import Meta from '../mixins/meta'
     import Val from './value-mixins'
 
@@ -94,7 +95,37 @@
             // init option data
             this.initOptions()
         },
-        computed: {}
+        computed: {
+            nativeValue: {
+                get: function () {
+                    let multiple = this.innerMeta.hasOwnProperty('conf') && this.innerMeta['conf']['multiple'] === true;
+                    if (multiple) {
+                        switch (utils.typeOf(this.value)) {
+                            case "[object String]":
+                                return this.value.trim() === '' ? [] : this.value.split(',');
+                            case "[object Array]":
+                                return this.value;
+                        }
+                    }
+                    return this.value;
+                },
+                set: function (val) {
+                    let newVal = val;
+                    let multiple = this.innerMeta.hasOwnProperty('conf') && this.innerMeta['conf']['multiple'] === true;
+                    if (multiple) {
+                        switch (utils.typeOf(this.value)) {
+                            case "[object String]":
+                                newVal = val.join(',');
+                                break;
+                            case "[object Array]":
+                                newVal = val;
+                                break;
+                        }
+                    }
+                    this.$emit('input', newVal);
+                }
+            }
+        }
     }
 </script>
 

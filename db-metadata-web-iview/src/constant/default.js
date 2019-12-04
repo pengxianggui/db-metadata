@@ -364,6 +364,41 @@ const DEFAULT_CONF = {
         //     }
         // }
         // ]
+    },
+    "TreeList": {
+        "component_name": "TreeList",
+        "name": "TreeList",
+        "label": "树型列表",
+        "conf": {
+            "node-key": "id",
+            "highlight-current": true,
+            "default-expand-all": false,
+            "check-on-click-node": false,
+            "show-checkbox": false,
+            "default-expanded-keys": [],
+            "default-checked-keys": [],
+            "accordion": false,
+            "indent": 16,
+            "icon-class": "el-icon-caret-right",
+            "draggable": false,
+            "props": {
+                "label": "label",
+                "children": "children"
+            }
+        },
+        "behavior": {
+            "allowDrag": function (node) {
+                return true
+            },
+            "allowDrop": function (draddingNode, dropNode, type) {
+                return true
+            },
+            "filterNodeMethod": function (value, data, node) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+            "renderContent": function (h, {node, data, store}) {}
+        }
     }
 };
 export default DEFAULT_CONF;
