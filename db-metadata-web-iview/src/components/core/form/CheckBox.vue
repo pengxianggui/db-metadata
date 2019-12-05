@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT} from '@/constant'
     import Meta from '../mixins/meta'
     import Val from './value-mixins'
@@ -72,25 +73,17 @@
         computed: {
             nativeValue: {
                 get: function () {
-                    let type = typeof this.value;
-                    switch (type) {
-                        case "string":
+                    switch (utils.typeOf(this.value)) {
+                        case "[object String]":
                             return this.value.trim() === '' ? [] : this.value.split(',');
-                        case "undefined":
-                            return [];
-                        default:
-                            return this.value;
                     }
+                    return this.value;
                 },
                 set: function (val) {
-                    let type = typeof this.value;
-                    let newVal;
-                    switch (type) {
-                        case "string":
+                    let newVal = val;
+                    switch (utils.typeOf(this.value)) {
+                        case "[object String]":
                             newVal = val.join(',');
-                            break;
-                        default:
-                            newVal = val;
                             break;
                     }
                     this.$emit('input', newVal);
