@@ -73,12 +73,19 @@ public class AttributeBuilder {
         TableAttr showOverflowTooltip(boolean flag);
     }
 
+    interface FileUploadAttr {
+
+        FileUploadAttr autoUpload(boolean v);
+
+        FileUploadAttr actionUrl(String url);
+    }
+
     interface AttrRender {
 
         Kv render();
     }
 
-    public static class AttributeSteps implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr {
+    public static class AttributeSteps implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr {
 
         private Kv config = Kv.create();
 
@@ -89,56 +96,47 @@ public class AttributeBuilder {
 
         @Override
         public AttributeSteps disabled(boolean v) {
-            setConf("disabled", v);
-            return this;
+            return setConf("disabled", v);
         }
 
         @Override
         public AttributeSteps resizeable(String v) {
-            setConf("resize", v);
-            return this;
+            return setConf("resize", v);
         }
 
         @Override
         public AttributeSteps clearable(boolean v) {
-            setConf("clearable", v);
-            return this;
+            return setConf("clearable", v);
         }
 
         @Override
         public AttrAbility multiple(boolean v) {
-            setConf("multiple", v);
-            return this;
+            return setConf("multiple", v);
         }
 
         @Override
         public InputAttr defaultVal(String v) {
-            setConf("value", v);
-            return this;
+            return setConf("value", v);
         }
 
         @Override
         public AttributeSteps maxlength(int v) {
-            setConf("maxlength", v);
-            return this;
+            return setConf("maxlength", v);
         }
 
         @Override
         public AttributeSteps minlength(int v) {
-            setConf("minlength", v);
-            return this;
+            return setConf("minlength", v);
         }
 
         @Override
         public InputAttr showWordLimit(boolean v) {
-            setConf("show-word-limit", v);
-            return this;
+            return setConf("show-word-limit", v);
         }
 
         @Override
         public InputAttr readOnly(boolean v) {
-            setConf("readonly", v);
-            return this;
+            return setConf("readonly", v);
         }
 
         @Override
@@ -185,8 +183,7 @@ public class AttributeBuilder {
 
         @Override
         public TableAttr showOverflowTooltip(boolean flag) {
-            setConf("show-overflow-tooltip", flag);
-            return this;
+            return setConf("show-overflow-tooltip", flag);
         }
 
         /**
@@ -201,6 +198,16 @@ public class AttributeBuilder {
             config.putIfAbsent("conf", Kv.create());
             ((Kv) config.getAs("conf")).setIfNotNull(key, value);
             return this;
+        }
+
+        @Override
+        public FileUploadAttr autoUpload(boolean v) {
+            return setConf("auto-upload", v);
+        }
+
+        @Override
+        public FileUploadAttr actionUrl(String url) {
+            return setConf("action", url);
         }
     }
 }

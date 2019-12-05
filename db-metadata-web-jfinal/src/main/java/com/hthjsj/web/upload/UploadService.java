@@ -1,6 +1,5 @@
 package com.hthjsj.web.upload;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 
 /**
@@ -16,8 +15,4 @@ public interface UploadService {
     String getBasePath();
 
     File getFile(String filePath);
-
-    String downloadUrl(HttpServletRequest request, String objectCode, String fieldCode);
-
-    String uploadUrl(HttpServletRequest request, String objectCode, String fieldCode);
 }

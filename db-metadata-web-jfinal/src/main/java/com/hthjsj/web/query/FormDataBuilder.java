@@ -5,10 +5,9 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObject;
-import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
-import com.jfinal.core.Controller;
+import com.hthjsj.web.upload.UploadKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -53,12 +52,12 @@ public class FormDataBuilder {
         return formData;
     }
 
-    public static void buildUpdateFormData(MetaObject metaObject, Record record, Controller controller) {
+    public static void buildUpdateFormData(MetaObject metaObject, Record record) {
         for (IMetaField metaField : metaObject.fields()) {
 
             if (metaField.configParser().isFile()) {
-                String filePath = record.getStr(metaField.fieldCode());
-                String url = ServiceManager.fileService().downloadUrl(controller.getRequest(), metaField.objectCode(), metaField.fieldCode());
+                String id = record.getStr(metaObject.primaryKey());
+                String url = UploadKit.downloadUrl(metaField.objectCode(), metaField.fieldCode(), id);
                 log.info("downloadUrl:{}", url);
                 Kv file = Kv.create();
                 file.setIfNotBlank("name", record.getStr(metaField.fieldCode()));

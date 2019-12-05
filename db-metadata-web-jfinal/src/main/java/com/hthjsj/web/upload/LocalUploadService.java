@@ -2,13 +2,10 @@ package com.hthjsj.web.upload;
 
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
-import com.hthjsj.web.UtilKit;
-import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.PropKit;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -70,17 +67,4 @@ public class LocalUploadService implements UploadService {
         return new File(getBasePath() + filePath);
     }
 
-    @Override
-    public String downloadUrl(HttpServletRequest request, String objectCode, String fieldCode) {
-        QueryHelper queryHelper = QueryHelper.queryBuilder();
-        String params = queryHelper.builder("objectObject", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
-        return UtilKit.domainUrl(request) + "down" + params;
-    }
-
-    @Override
-    public String uploadUrl(HttpServletRequest request, String objectCode, String fieldCode) {
-        QueryHelper queryHelper = QueryHelper.queryBuilder();
-        String params = queryHelper.builder("objectObject", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
-        return UtilKit.domainUrl(request) + "upload" + params;
-    }
 }

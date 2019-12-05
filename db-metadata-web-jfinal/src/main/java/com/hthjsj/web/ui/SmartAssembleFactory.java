@@ -57,7 +57,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         for (IMetaField field : fields) {
             Kv recommendConfig = recommendFieldConfig(field);
             Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
-            Kv fieldInstanceConfig = UtilKit.mergeUseOld(globalComponentConfig, recommendConfig);
+            Kv fieldInstanceConfig = UtilKit.mergeUseNew(globalComponentConfig, recommendConfig);
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
             metaFields.add(new MetaFieldViewAdapter(field, fieldComponent, globalComponentConfig, fieldInstanceConfig));
         }

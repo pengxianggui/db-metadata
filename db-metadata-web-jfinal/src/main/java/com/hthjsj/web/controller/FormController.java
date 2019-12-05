@@ -91,7 +91,7 @@ public class FormController extends FrontRestController {
 
         Record d = metaService().findDataById(metaObject, dataId);
 
-        FormDataBuilder.buildUpdateFormData(metaObject, d, this);
+        FormDataBuilder.buildUpdateFormData(metaObject, d);
 
         renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }

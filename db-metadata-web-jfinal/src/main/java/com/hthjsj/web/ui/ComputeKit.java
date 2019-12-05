@@ -5,6 +5,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.attr.RulesBuilder;
+import com.hthjsj.web.upload.UploadKit;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -87,6 +88,7 @@ public class ComputeKit {
         //上传框
         if (metaField.fieldCode().contains("file")) {
             builder.componentName(ComponentType.FILEBOX);
+            builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
         }
 
 
