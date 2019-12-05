@@ -7,6 +7,9 @@ import com.jfinal.core.Controller;
  */
 public class FeatureController extends Controller {
 
+    /**
+     * 功能 = ((元对象(表),元对象(视图),元对象(非表)) + 控件) * n
+     */
     public void load() {
     }
 

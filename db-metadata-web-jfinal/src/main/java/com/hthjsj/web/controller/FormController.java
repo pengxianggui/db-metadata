@@ -8,7 +8,7 @@ import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.query.FormDataBuilder;
+import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -51,7 +51,7 @@ public class FormController extends FrontRestController {
 
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
 
-        MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, true);
+        MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut pointCut = metaObjectConfigParse.addPointCut();
@@ -91,7 +91,7 @@ public class FormController extends FrontRestController {
 
         Record d = metaService().findDataById(metaObject, dataId);
 
-        FormDataBuilder.buildUpdateFormData(metaObject, d);
+        FormDataFactory.buildUpdateFormData(metaObject, d);
 
         renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }
@@ -102,7 +102,7 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
-        MetaData metadata = FormDataBuilder.buildFormData(getRequest().getParameterMap(), metaObject, false);
+        MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut pointCut = metaObjectConfigParse.updatePointCut();

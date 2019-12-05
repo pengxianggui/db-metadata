@@ -21,7 +21,7 @@ import java.util.Map;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class FormDataBuilder {
+public class FormDataFactory {
 
     public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject, boolean isInsert) {
         Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
