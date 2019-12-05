@@ -23,7 +23,7 @@
         label: "文件上传框",
         props: {
             value: {
-                type: [Object, Array],
+                type: [Object, Array, String],
                 default: function () {
                     return []
                 },
@@ -53,7 +53,9 @@
                 this.$message.warning('文件数量超过设定值：' + files.length);
             },
             beforeRemove(file, fileList) {
-                return this.$confirm(`确定移除 ${file.name}？`);
+                return this.$confirm(`确定移除 ${file.name}？`).then(data => {
+                    this.fileList = [];
+                });
             },
             handleOnSuccess(response, file, fileList) {
                 let emitFileList = [];
@@ -73,7 +75,7 @@
                     let temp;
                     switch (utils.typeOf(this.value)) {
                         case "[object String]":
-                            temp = JSON.parse(this.value);
+                            temp = this.value.trim() === '' ? [] : JSON.parse(this.value);
                             utils.isObject(temp) ? value.push(temp) : value = temp;
                             break;
                         case "[object Object]":
