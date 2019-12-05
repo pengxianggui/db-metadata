@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>db-metadata-web-jfinal</artifactId>
+    <artifactId>db-metadata-server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- 使用阿里 maven 库 -->
@@ -56,7 +56,7 @@
         <!--            <version>2.0.25.Final</version>-->
         <!--        </dependency>-->
     </dependencies>
-    <name>db-metadata-web-jfinal</name>
+    <name>db-metadata-server</name>
     <build>
         <plugins>
             <!--

@@ -1,6 +1,6 @@
 let alias = require('./alias.config');
 
-const name = "db-metadata-web-iview";
+const name = "db-metadata-web";
 const serverProxy = {
     target: 'http://localhost:8888',
     // target: 'http://192.168.110.67:8888',
