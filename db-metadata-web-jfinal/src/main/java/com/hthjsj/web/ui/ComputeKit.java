@@ -89,6 +89,7 @@ public class ComputeKit {
         if (metaField.fieldCode().contains("file")) {
             builder.componentName(ComponentType.FILEBOX);
             builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
+            builder.autoUpload(true);
         }
 
 
