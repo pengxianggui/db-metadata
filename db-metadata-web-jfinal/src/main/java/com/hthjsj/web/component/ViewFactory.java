@@ -45,7 +45,7 @@ public class ViewFactory {
     }
 
     public static SearchView searchView(IMetaObject metaObject) {
-        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
+        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.SEARCHVIEW.getCode(), metaObject.code());
         return searchView(metaObject, instanceFlatConfig);
     }
 
@@ -66,6 +66,23 @@ public class ViewFactory {
                 break;
             case SEARCHVIEW:
                 component = searchView(metaObject);
+                break;
+            default:
+        }
+        return component;
+    }
+
+    public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType, Kv instanceFlatConfig) {
+        Component component = null;
+        switch (componentType) {
+            case FORMVIEW:
+                component = formView(metaObject, instanceFlatConfig);
+                break;
+            case TABLEVIEW:
+                component = tableView(metaObject, instanceFlatConfig);
+                break;
+            case SEARCHVIEW:
+                component = searchView(metaObject, instanceFlatConfig);
                 break;
             default:
         }

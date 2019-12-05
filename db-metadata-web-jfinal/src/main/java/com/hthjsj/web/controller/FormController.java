@@ -128,4 +128,21 @@ public class FormController extends FrontRestController {
 
         renderJson(status ? Ret.ok() : Ret.fail());
     }
+
+    @Override
+    public void detail() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+
+        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        String dataId = getPara(metaObject.primaryKey());
+
+        FormView formView = ViewFactory.formView(metaObject).viewForm();
+
+        Record d = metaService().findDataById(metaObject, dataId);
+
+        FormDataFactory.buildUpdateFormData(metaObject, d);
+
+        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
+    }
 }

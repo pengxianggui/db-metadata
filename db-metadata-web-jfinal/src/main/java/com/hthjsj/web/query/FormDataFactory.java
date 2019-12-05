@@ -13,6 +13,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,8 +45,12 @@ public class FormDataFactory {
                     formData.set(metaField.fieldCode(), castedValue);
                 }
                 if (metaField.configParser().isFile()) {
-                    Kv fileInfo = UtilKit.getKv(String.valueOf(castedValue));
-                    formData.set(metaField.fieldCode(), fileInfo.get("url"));
+                    List<Kv> files = UtilKit.getKvs(String.valueOf(castedValue));
+                    if (files != null && files.size() > 0) {
+                        formData.set(metaField.fieldCode(), files.get(0).getStr("url"));
+                    } else {
+                        formData.set(metaField.fieldCode(), "");
+                    }
                 }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {
                 log.error(e.getMessage(), e);

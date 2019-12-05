@@ -34,6 +34,11 @@ public class MetaConfigFactory {
             config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         }
 
+        //TODO 初始化field配置时 , 名称包含file的 默认设定isFile = true
+        if (metaField.fieldCode().contains("file")) {
+            config.set("isFile", true);
+        }
+
         config.set("isListShow", true);
         config.set("isSearch", true);
         return new MetaFieldConfigParse(config);

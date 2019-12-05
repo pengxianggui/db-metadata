@@ -100,7 +100,9 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     public boolean isFile() {
-        return Boolean.parseBoolean(getStr("isFile")) && StrKit.notBlank(getStr("fileUploadPath"));
+        return Boolean.parseBoolean(getStr("isFile"));
+        //TODO 局域路径来覆盖全局 upload.dir
+//                && StrKit.notBlank(getStr("fileUploadPath"));
     }
 
     /**

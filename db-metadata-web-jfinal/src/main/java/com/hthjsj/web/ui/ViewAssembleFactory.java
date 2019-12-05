@@ -46,7 +46,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
             Kv fieldInstanceConfig = UtilKit.getKv(allLevelConfig, field.fieldCode());
             //TODO 配置为空时,该字段则不存在实例配置
             if (!fieldInstanceConfig.isEmpty()) {
-                Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
+                Component fieldComponent = FormFieldFactory.createFormField(field, fieldInstanceConfig);
                 Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, fieldComponent.componentType().getCode());
                 //携带 为Field 分配的Component 在全局的配置 + 字段实例的配置
                 metaFields.add(new MetaFieldViewAdapter(field, fieldComponent, globalComponentConfig, fieldInstanceConfig));
@@ -76,7 +76,7 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
          * 装配 MetaObjectViewAdapter
          *
          */
-        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType);
+
         //全部全局配置
         Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置
@@ -85,6 +85,8 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         Kv allLevelConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
         //对象级配置
         Kv levelObjectInstanceConfig = UtilKit.getKv(allLevelConfig, metaObject.code());
+
+        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType, allLevelConfig);
 
         List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig, globalComponentAllConfig);
 
