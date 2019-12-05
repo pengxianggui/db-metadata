@@ -76,6 +76,8 @@
                     switch (utils.typeOf(this.value)) {
                         case "[object String]":
                             return this.value.trim() === '' ? [] : this.value.split(',');
+                        case "[object Undefined]":
+                            return [];
                     }
                     return this.value;
                 },
