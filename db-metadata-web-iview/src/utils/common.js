@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash/cloneDeep'
+
 // 常规utils方法
 /**
  * 深拷贝
@@ -69,6 +71,16 @@ export function isString(val) {
     return toStr === '[object String]'
 }
 
+export function isNumber(val) {
+    let toStr = Object.prototype.toString.call(val);
+    return toStr === '[object Number]'
+}
+
+export function isFunction(val) {
+    let toStr = Object.prototype.toString.call(val);
+    return toStr === '[object Function]'
+}
+
 /**
  * 返回值的类型:
  * [object String]、[object Number]、[object Object]、[object Boolean]、
@@ -115,4 +127,93 @@ export function joinArrInObj(val, separator, deep) {
         }
     }
     return val;
+}
+
+/**
+ * 提取数组中不重复的元素(重复规则看keyName), 只保留重复中的第一个. 返回提取后的新数组。例如:
+ * 指定:
+ * arr: [
+ *  {key: 'key1', value: '1'},
+ *  {key: 'key2', value: '0'}
+ *  {key: 'key1', value: '0'}
+ * ]
+ * keyName: key
+ * 则将返回:
+ * [
+ *  {key: 'key1', value: '1'},
+ *  {key: 'key2', value: '0'}
+ * ]
+ *
+ * 同时不含有key键的元素也会被移除.
+ *
+ * 当元素全部为同一类基本类型时, 移除重复的元素, 返回去重后的数组。 方法不改变原数组
+ *
+ * @param arr
+ * @param keyName
+ */
+export function extractNotRepeatEle(arr, keyName) {
+    if (!isArr(arr)) return deepCopy(arr);
+    let eleType;
+
+    if (arr.every(ele => isObject(ele))) {
+        eleType = '[object Object]'
+    } else if (arr.every(ele => isString(ele))) {
+        eleType = '[object String]'
+    } else if (arr.every(ele => isNumber(ele))) {
+        eleType = '[object Number]'
+    } else if (arr.every(ele => isBool(ele))) {
+        eleType = '[object Boolean]'
+    } else {
+        return deepCopy(arr);
+    }
+
+    let newArr = [];
+    let inNewArr = function (val) {
+        return newArr.map(item => item[keyName]).indexOf(val) > -1
+    };
+
+    arr.forEach(item => {
+        switch (eleType) {
+            case '[object Object]':
+                if (item.hasOwnProperty(keyName) && !inNewArr(item[keyName])) {
+                    newArr.push(deepClone(item));
+                }
+                break;
+            default:
+                if (!newArr.indexOf(item) > -1) {
+                    newArr.push(deepClone(item));
+                }
+                break;
+        }
+    });
+    return newArr;
+}
+
+/**
+ * 标记重复元素, 无返回值
+ * @param arr: 对象数组
+ * @param keyName   指定重复依据的键名
+ * @param notRepeatCallback 回调函数, 参数为每个非重复的元素
+ * @param repeatCallback 回调函数, 参数为每个重复的元素
+ */
+export function markNotRepeatEle(arr, keyName, notRepeatCallback, repeatCallback) {
+    if (!isArr(arr) || !arr.every(ele => isObject(ele))) return;
+
+    let tempArr = [];
+    let inTempArr = function (val) {
+        return tempArr.map(item => item[keyName]).indexOf(val) > -1
+    };
+
+    arr.forEach(item => {
+        if (item.hasOwnProperty(keyName) && !inTempArr(item[keyName])) {
+            tempArr.push(deepClone(item));
+            if (isFunction(notRepeatCallback)) notRepeatCallback(item);
+        } else {
+            if (isFunction(repeatCallback)) repeatCallback(item);
+        }
+    });
+}
+
+export function deepClone(val) {
+    return cloneDeep(val);
 }

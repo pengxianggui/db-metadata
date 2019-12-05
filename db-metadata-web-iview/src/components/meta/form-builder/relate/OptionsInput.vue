@@ -2,81 +2,96 @@
     <ul class="container" style="display: block;">
         <br>
         <li v-for="(item, index) in nativeValue" :key="item.id">
-            <el-input v-model="item.key">
-                <template #prepend><label>K</label></template>
-            </el-input>
-            <el-input v-model="item.value">
-                <template #prepend><label>V</label></template>
-            </el-input>
-            <el-button circle icon="el-icon-minus" @click="minus(item)"></el-button>
+            <div :class="{'red-border': item.error}">
+                <el-input v-model="item.key" @change="emit">
+                    <template #prepend><label>key</label></template>
+                </el-input>
+                <el-input v-model="item.value" @change="emit">
+                    <template #prepend><label>value</label></template>
+                </el-input>
+<!--                <el-button circle icon="el-icon-top" @click="moveUp(index)"></el-button>-->
+<!--                <el-button circle icon="el-icon-bottom" @click="moveDown(index)"></el-button>-->
+                <el-button circle icon="el-icon-minus" @click="minus(item)"></el-button>
+            </div>
         </li>
         <li style="text-align: left;">
             <el-button circle icon="el-icon-plus" @click="plus"></el-button>
-            <el-button circle icon="el-icon-upload2" type="primary" @click="emit"></el-button>
+<!--            <el-button circle icon="el-icon-upload2" type="primary" @click="emit"></el-button>-->
+            <span v-if="errorTip">
+                <span class="tip">&nbsp;tip: 不符合规则的红色项将被遗弃.</span>
+                <el-tooltip content="规则: key值不能重复, 且key, value均不能为空" placement="right">
+                    <i class="el-icon-question"></i>
+                </el-tooltip>
+            </span>
         </li>
     </ul>
 </template>
 
 <script>
+    import utils from '@/utils'
+
     export default {
         name: "OptionsInput",
         props: {
             value: Array
         },
         data() {
+            let value = utils.deepClone(this.value);
+            value.forEach(ele => {
+                ele['error'] = false;
+                ele['id'] = Math.floor(Math.random() * 10000);
+            });
             return {
-                maxLength: 0,
-                nativeValue: [{
-                    id: 0,
-                    key: null,
-                    value: null
-                }]
+                nativeValue: value
             }
         },
         methods: {
             plus() {
                 this.nativeValue.push({
-                    id: this.maxLength++,
+                    id: Math.floor(Math.random() * 10000),
                     key: null,
-                    value: null
+                    value: null,
+                    error: true
                 });
+                this.emit();
             },
             minus(item) {
-                if (this.nativeValue.length === 1) return;
+                if (this.nativeValue.length === 0) return;
                 let index = this.nativeValue.map(item => item.key).indexOf(item.key);
                 this.nativeValue.splice(index, 1);
+                this.emit();
+            },
+            moveUp(index) {
+                if (index == 0) return;
+                let temp = this.nativeValue[index];
+                this.nativeValue[index] = this.nativeValue[index - 1];
+                this.nativeValue[index - 1] = temp;
+            },
+            moveDown(index) {
+
             },
             emit() {
                 let options = [];
-                for (let i = 0; i < this.nativeValue.length; i++) {
-                    let item = this.nativeValue[i];
-                    if (item.key && item.value) {
-                        options.push(item);
+
+                utils.markNotRepeatEle(this.nativeValue, 'key', function (ele) {
+                    ele['error'] = false || (!ele.key || !ele.value);
+                }, function (ele) {
+                    ele['error'] = true;
+                });
+
+                options = this.nativeValue.filter(ele => ele.error === false).map(ele => {
+                    return {
+                        key: ele.key,
+                        value: ele.value
                     }
-                }
+                });
+
                 this.$emit('input', options);
             }
         },
-        watch: {
-            'value': {
-                handler: function (newVal, oldVal) {
-                    this.nativeValue.splice(0, this.nativeValue.length);
-                    this.maxLength = 0;
-                    if (newVal.length !== 0) {
-                        for (let i = 0; i < newVal.length; i++) {
-                            newVal[i]['id'] = (this.maxLength++);
-                            this.nativeValue.push(newVal[i]);
-                        }
-                    } else {
-                        this.nativeValue.push({
-                            id: this.maxLength++,
-                            key: null,
-                            value: null
-                        });
-                    }
-                },
-                deep: true,
-                immediate: true
+        computed: {
+            errorTip() {
+                return !this.nativeValue.every(ele => ele.error === false);
             }
         }
     }
@@ -93,5 +108,17 @@
 
     ul.container .el-input {
         width: 200px;
+    }
+
+    .red-border {
+        display: inline-block;
+        border: 1px dotted #f56c6c;
+        border-radius: 20px;
+        padding: 2px;
+    }
+
+    .tip {
+        font-size: 12px;
+        color: #999999;
     }
 </style>
