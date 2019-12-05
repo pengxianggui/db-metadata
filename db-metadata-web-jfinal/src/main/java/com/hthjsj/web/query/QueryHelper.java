@@ -49,6 +49,6 @@ public class QueryHelper {
     }
 
     public String[] getObjectCodes() {
-        return Splitter.on(",").omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
+        return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
     }
 }

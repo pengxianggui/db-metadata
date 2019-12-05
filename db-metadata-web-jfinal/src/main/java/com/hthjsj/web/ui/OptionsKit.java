@@ -158,7 +158,7 @@ public class OptionsKit {
                 //旧值
                 String oldVal = record.getStr((String) fieldCode);
                 if (StrKit.notBlank(oldVal) && oldVal.contains(",")) {//多值逻辑
-                    String[] ss = Splitter.on(",").omitEmptyStrings().splitToList(oldVal).toArray(new String[] {});
+                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(oldVal).toArray(new String[] {});
                     for (int i = 0; i < ss.length; i++) {
                         ss[i] = ((Kv) mapped).getStr(ss[i]);
                     }

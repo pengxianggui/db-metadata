@@ -32,8 +32,8 @@ public class InNotInMatch extends MetaSQLExtract {
         String notInValString = UtilKit.defaultIfBlank(String.valueOf(httpParams.get(metaField.fieldCode() + NOT_IN_SUFFIX)), "");
 
 
-        String[] notInValues = Splitter.on(",").omitEmptyStrings().splitToList(notInValString).toArray(new String[] {});
-        String[] inValues = Splitter.on(",").omitEmptyStrings().splitToList(inValString).toArray(new String[] {});
+        String[] notInValues = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(notInValString).toArray(new String[] {});
+        String[] inValues = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(inValString).toArray(new String[] {});
 
         if (metaField.configParser().isMultiple()) {
             // TODO 额外处理 多值逻辑,虽然入口是通过 in/nin 进来,但是需要用locate生成sql
