@@ -7,7 +7,7 @@
         :before-remove="beforeRemove"
         :on-exceed="handleExceed"
         :file-list="fileList">
-        <el-button size="small" type="primary">点击上传</el-button>
+        <el-button size="mini" icon="el-icon-upload" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip" v-text="innerMeta.conf['tip']"></div>
     </el-upload>
 </template>
@@ -46,7 +46,8 @@
         methods: {
             handleRemove(file, fileList) {
             },
-            handlePreview(file) {
+            handlePreview(file) { // download
+                window.open(file.url, '_blank');
             },
             handleExceed(files, fileList) {
                 this.$message.warning('文件数量超过设定值：' + files.length);
