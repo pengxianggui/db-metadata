@@ -9,6 +9,7 @@ import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.upload.UploadKit;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +43,10 @@ public class FormDataFactory {
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
                 }
+                if (metaField.configParser().isFile()) {
+                    Kv fileInfo = UtilKit.getKv(String.valueOf(castedValue));
+                    formData.set(metaField.fieldCode(), fileInfo.get("url"));
+                }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {
                 log.error(e.getMessage(), e);
                 throw new WebException("非法转换: 元字段 %s 是%s类型-> %s 失败", metaField.fieldCode(), metaField.dbType().rawData(), (String) castedValue);
@@ -57,10 +62,14 @@ public class FormDataFactory {
 
             if (metaField.configParser().isFile()) {
                 String id = record.getStr(metaObject.primaryKey());
+                String filepath = record.getStr(metaField.fieldCode());
+                if (StrKit.isBlank(filepath)) {
+                    continue;
+                }
                 String url = UploadKit.downloadUrl(metaField.objectCode(), metaField.fieldCode(), id);
                 log.info("downloadUrl:{}", url);
                 Kv file = Kv.create();
-                file.setIfNotBlank("name", record.getStr(metaField.fieldCode()));
+                file.setIfNotBlank("name", filepath);
                 file.setIfNotBlank("url", url);
                 record.set(metaField.fieldCode(), file);
             }
