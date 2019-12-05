@@ -21,15 +21,15 @@ public class ComputeKit {
          */
         AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
         //set default componentName is "TextBox"
-        builder.componentName(ComponentType.TEXTBOX.getCode());
+        builder.componentName(ComponentType.TEXTBOX);
         if (metaField.dbType().isText()) {
             if (metaField.dbTypeLength() == 1L) {
-                builder.componentName(ComponentType.BOOLBOX.getCode());
+                builder.componentName(ComponentType.BOOLBOX);
             } else {
                 builder.maxlength(metaField.dbTypeLength().intValue());
             }
             if (metaField.dbTypeLength() > 255L) {
-                builder.componentName(ComponentType.TEXTAREABOX.getCode());
+                builder.componentName(ComponentType.TEXTAREABOX);
                 builder.resizeable("none");
                 builder.showOverflowTooltip(true);
             }
@@ -38,24 +38,24 @@ public class ComputeKit {
         //日期
         if (metaField.dbType().isDate()) {
             if (metaField.dbType().isDateTime()) {
-                builder.componentName(ComponentType.DATETIMEBOX.getCode());
+                builder.componentName(ComponentType.DATETIMEBOX);
             }
             if (metaField.dbType().isTime()) {
-                builder.componentName(ComponentType.TIMEBOX.getCode());
+                builder.componentName(ComponentType.TIMEBOX);
             }
             if (metaField.dbType().isDateOnly()) {
-                builder.componentName(ComponentType.DATEBOX.getCode());
+                builder.componentName(ComponentType.DATEBOX);
             }
         }
 
         //数值
         if (metaField.dbType().isNumber()) {
-            builder.componentName(ComponentType.NUMBERBOX.getCode());
+            builder.componentName(ComponentType.NUMBERBOX);
         }
 
         //Json
         if (metaField.dbType().isJson()) {
-            builder.componentName(ComponentType.JSONBOX.getCode());
+            builder.componentName(ComponentType.JSONBOX);
             builder.showOverflowTooltip(true);
         }
         log.debug("auto compute config : {}", builder.render().toJson());
@@ -73,7 +73,7 @@ public class ComputeKit {
             if (metaFieldConfigParse.isOptions()) {
                 builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             }
-            builder.componentName(ComponentType.DROPDOWN.getCode());
+            builder.componentName(ComponentType.DROPDOWN);
         }
 
         if (metaFieldConfigParse.isMultiple()) {
@@ -82,6 +82,11 @@ public class ComputeKit {
 
         if (metaFieldConfigParse.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
+        }
+
+        //上传框
+        if (metaField.fieldCode().contains("file")) {
+            builder.componentName(ComponentType.FILEBOX);
         }
 
 

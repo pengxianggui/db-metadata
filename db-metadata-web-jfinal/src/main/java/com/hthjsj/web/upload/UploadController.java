@@ -1,4 +1,4 @@
-package com.hthjsj.web.file;
+package com.hthjsj.web.upload;
 
 import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.DbMetaService;
@@ -21,7 +21,7 @@ import java.io.File;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class FileController extends Controller {
+public class UploadController extends Controller {
 
     /**
      * param objectCode
@@ -39,15 +39,20 @@ public class FileController extends Controller {
 
         UploadFile file = getFile();
 
-        FileService fileService = ServiceManager.fileService();
-        File destFile = fileService.upload(file.getFile(), objectCode, fieldCode);
+        UploadService uploadService = ServiceManager.fileService();
+        File destFile = uploadService.upload(file.getFile(), objectCode, fieldCode);
 
         log.info("destFile.getPath : {}", destFile.getPath());
 
-        Kv result = Kv.by("name", file.getFileName()).set("url", destFile.getPath().replaceFirst(fileService.getBasePath(), ""));
+        Kv result = Kv.by("name", file.getFileName()).set("url", destFile.getPath().replaceFirst(uploadService.getBasePath(), ""));
         renderJson(Ret.ok("data", result));
     }
 
+    /**
+     * param objectCode
+     * param fieldCode
+     * param 业务记录 id
+     */
     public void down() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
@@ -56,12 +61,14 @@ public class FileController extends Controller {
         //TODO 2次查询,待优化
         DbMetaService dbMetaService = ServiceManager.metaService();
         IMetaObject metaObject = dbMetaService.findByCode(objectCode);
-
         IMetaField metaField = dbMetaService.findFieldByCode(objectCode, fieldCode);
 
         Preconditions.checkNotNull(id, "必须指定业务记录id");
+
         String filePath = dbMetaService.findFieldDataById(metaObject, metaField, id);
+
         Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
+
         renderFile(ServiceManager.fileService().getFile(filePath));
     }
 }

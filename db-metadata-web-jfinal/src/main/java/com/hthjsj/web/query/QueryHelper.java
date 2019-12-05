@@ -1,8 +1,13 @@
 package com.hthjsj.web.query;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.Kv;
+
+import java.util.List;
 
 /**
  * <p> Class title: </p>
@@ -16,8 +21,19 @@ public class QueryHelper {
 
     private Controller tp;
 
+    private Kv params = Kv.create();
+
     public QueryHelper(Controller controller) {
         tp = controller;
+    }
+
+    /**
+     * 参数构建器
+     *
+     * @return
+     */
+    public static QueryHelper queryBuilder() {
+        return new QueryHelper(null);
     }
 
     public String getObjectCode() {
@@ -50,5 +66,22 @@ public class QueryHelper {
 
     public String[] getObjectCodes() {
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
+    }
+
+    public QueryHelper builder(String key, String value) {
+        params.setIfNotBlank(key, value);
+        return this;
+    }
+
+    public String buildQueryString(boolean questionMark) {
+        StringBuilder sb = new StringBuilder();
+        if (questionMark) {
+            sb.append("?");
+        }
+        List<String> ss = Lists.newArrayList();
+        params.forEach((key, value) -> {
+            ss.add(key + "=" + value);
+        });
+        return Joiner.on("&").appendTo(sb, ss).toString();
     }
 }

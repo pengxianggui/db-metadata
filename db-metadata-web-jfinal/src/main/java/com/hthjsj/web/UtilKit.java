@@ -11,6 +11,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
@@ -163,5 +164,9 @@ public class UtilKit {
 
     public static void diffJson(JSONObject source, JSONObject target) {
         throw new RuntimeException("not finished!");
+    }
+
+    public static String domainUrl(HttpServletRequest request) {
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
     }
 }

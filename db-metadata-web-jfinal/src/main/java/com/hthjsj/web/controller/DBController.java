@@ -6,7 +6,6 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.AppConst;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
@@ -59,8 +58,6 @@ public class DBController extends FrontRestController {
         tables.forEach(r -> {
             results.add(Kv.create().set("key", r.getTableName()).set("value", r.getTableName()));
         });
-        //        List<String> tableNames = Aop.get(MysqlService.class).showTables(schemaName).stream().map(table -> table.getTableName()).collect(Collectors.toList());
-
         renderJson(Ret.ok("data", results));
     }
 
@@ -107,7 +104,7 @@ public class DBController extends FrontRestController {
      * @param componentType
      */
     private void smartInit(IMetaObject metaObject, ComponentType componentType) {
-        MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView((MetaObject) metaObject, componentType);
+        MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, componentType);
         Kv metaConfig = Kv.create().set(RenderHelper.renderObjectFlatMap(metaObjectIViewAdapter));
         componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaConfig);
     }

@@ -4,12 +4,12 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.*;
-import com.hthjsj.web.file.FileController;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.UserSettingIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
+import com.hthjsj.web.upload.UploadController;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
 import com.jfinal.plugin.activerecord.Record;
@@ -48,7 +48,7 @@ public class AppWebConfig extends JFinalConfig {
         me.add("/form", FormController.class);
         me.add("/dict", DictController.class);
         me.add("/check", ValidatorController.class);
-        me.add("/file", FileController.class);
+        me.add("/file", UploadController.class);
     }
 
     @Override

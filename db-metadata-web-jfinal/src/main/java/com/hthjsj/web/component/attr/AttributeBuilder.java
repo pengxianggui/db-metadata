@@ -1,5 +1,6 @@
 package com.hthjsj.web.component.attr;
 
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class AttributeBuilder {
     interface AttrCustomMeta {
 
         AttrCustomMeta componentName(String componentCode);
+
+        AttrCustomMeta componentName(ComponentType componentType);
 
         AttrCustomMeta name(String name);
 
@@ -147,6 +150,11 @@ public class AttributeBuilder {
         public AttrCustomMeta componentName(String componentCode) {
             config.setIfNotBlank("component_name", componentCode);
             return this;
+        }
+
+        @Override
+        public AttrCustomMeta componentName(ComponentType componentType) {
+            return componentName(componentType.getCode());
         }
 
         @Override

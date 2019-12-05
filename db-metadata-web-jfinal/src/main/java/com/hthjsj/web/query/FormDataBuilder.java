@@ -5,9 +5,12 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
+import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -28,17 +31,10 @@ public class FormDataBuilder {
 
         for (IMetaField metaField : metaObject.fields()) {
 
-//            Class dbType = MetaDataTypeConvert.getType(metaField.dbType().rawData());
-//            String value = params.getStr(metaField.fieldCode());
             //转值
             Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
-                //TODO 兼容逻辑 用来处理 col_checkbox -> ["2","1"] 类型的值
-//                if (metaField.configParser().isMultiple()) {
-//                    String t = String.valueOf(castedValue);
-//                    castedValue = t.replace("[", "").replace("]", "").replace("\"", "");
-//                }
                 //主键处理
                 if (metaField.isPrimary() && isInsert) {
                     formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
@@ -55,5 +51,20 @@ public class FormDataBuilder {
 
         UtilKit.setUser(formData);
         return formData;
+    }
+
+    public static void buildUpdateFormData(MetaObject metaObject, Record record, Controller controller) {
+        for (IMetaField metaField : metaObject.fields()) {
+
+            if (metaField.configParser().isFile()) {
+                String filePath = record.getStr(metaField.fieldCode());
+                String url = ServiceManager.fileService().downloadUrl(controller.getRequest(), metaField.objectCode(), metaField.fieldCode());
+                log.info("downloadUrl:{}", url);
+                Kv file = Kv.create();
+                file.setIfNotBlank("name", record.getStr(metaField.fieldCode()));
+                file.setIfNotBlank("url", url);
+                record.set(metaField.fieldCode(), file);
+            }
+        }
     }
 }
