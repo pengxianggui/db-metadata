@@ -78,6 +78,8 @@
                             return this.value.trim() === '' ? [] : this.value.split(',');
                         case "[object Undefined]":
                             return [];
+                        case "[object Null]":
+                            return [];
                     }
                     return this.value;
                 },

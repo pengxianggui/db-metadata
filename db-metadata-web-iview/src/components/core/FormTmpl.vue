@@ -47,8 +47,8 @@
         methods: {
             doSubmit(ev) {
                 const fn = 'submit';
-                const params = this.model;
                 const action = this.innerMeta['action'];
+                let params = this.model;
 
                 if (this.$listeners.hasOwnProperty(fn)) {
                     this.$emit(fn, params);
@@ -56,6 +56,11 @@
                     let url = this.$compile(action, {objectCode: this.innerMeta['objectCode']});
                     params['objectCode'] = this.innerMeta['objectCode'];
                     utils.joinArrInObj(params);
+
+                    // pxg_todo file field need to extract url: 需要将FileBox中的url提取出来
+                    let field = this.innerMeta.columns.find(field => field.component_name === 'FileBox');
+                    params = utils.fileExtractUrl(params, field ? field.name : null);
+
                     this.$axios.post(url, params).then(resp => {
                         this.$emit('ok', params); //  default callback
                         this.$message.success(resp.msg);

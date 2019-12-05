@@ -155,10 +155,11 @@ const DEFAULT_CONF = {
         "label": "文件上传框",
         "inline": false,
         "conf": {
-            "action": "/upload/file",
-            "limit": 5,
+            "action": "/file/upload/{objectCode}/{fieldCode}",
             "tip": "上传文件限制不超过2M",
-            "auto-upload": false
+            "auto-upload": false,
+            "limit": 1,
+            "multiple": false,  // 暂时单选
         }
     },
     "MiniFormBox": {

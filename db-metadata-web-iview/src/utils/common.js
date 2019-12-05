@@ -64,6 +64,11 @@ export function isBool(val) {
     return toStr === '[object Boolean]'
 }
 
+export function isString(val) {
+    let toStr = Object.prototype.toString.call(val);
+    return toStr === '[object String]'
+}
+
 /**
  * 返回值的类型:
  * [object String]、[object Number]、[object Object]、[object Boolean]、
