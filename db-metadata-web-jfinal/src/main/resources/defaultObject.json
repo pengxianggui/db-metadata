@@ -8,7 +8,19 @@
   "meta_object": {
     "is_sys": true,
     "_fields": {
+      "code": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30
+        }
+      },
       "table_name": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30
+        }
+      },
+      "schema_name": {
         "config": {
           "addStatus": 30,
           "updateStatus": 30
