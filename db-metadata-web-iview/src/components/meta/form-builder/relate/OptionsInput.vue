@@ -1,22 +1,21 @@
 <template>
     <ul class="container" style="display: block;">
         <br>
-        <li v-for="(item, index) in nativeValue" :key="item.id">
-            <div :class="{'red-border': item.error}">
-                <el-input v-model="item.key" @change="emit">
-                    <template #prepend><label>key</label></template>
-                </el-input>
-                <el-input v-model="item.value" @change="emit">
-                    <template #prepend><label>value</label></template>
-                </el-input>
-<!--                <el-button circle icon="el-icon-top" @click="moveUp(index)"></el-button>-->
-<!--                <el-button circle icon="el-icon-bottom" @click="moveDown(index)"></el-button>-->
-                <el-button circle icon="el-icon-minus" @click="minus(item)"></el-button>
-            </div>
-        </li>
+        <draggable v-model="nativeValue" @end="emit">
+            <li v-for="(item, index) in nativeValue" :key="item.id">
+                <div :class="{'red-border': item.error}">
+                    <el-input v-model="item.key" @change="emit">
+                        <template #prepend><label>key</label></template>
+                    </el-input>
+                    <el-input v-model="item.value" @change="emit">
+                        <template #prepend><label>value</label></template>
+                    </el-input>
+                    <el-button circle icon="el-icon-minus" @click="minus(item)"></el-button>
+                </div>
+            </li>
+        </draggable>
         <li style="text-align: left;">
             <el-button circle icon="el-icon-plus" @click="plus"></el-button>
-<!--            <el-button circle icon="el-icon-upload2" type="primary" @click="emit"></el-button>-->
             <span v-if="errorTip">
                 <span class="tip">&nbsp;tip: 不符合规则的红色项将被遗弃.</span>
                 <el-tooltip content="规则: key值不能重复, 且key, value均不能为空" placement="right">
@@ -29,9 +28,13 @@
 
 <script>
     import utils from '@/utils'
+    import draggable from 'vuedraggable'
 
     export default {
         name: "OptionsInput",
+        components: {
+            draggable
+        },
         props: {
             value: Array
         },
@@ -60,15 +63,6 @@
                 let index = this.nativeValue.map(item => item.key).indexOf(item.key);
                 this.nativeValue.splice(index, 1);
                 this.emit();
-            },
-            moveUp(index) {
-                if (index == 0) return;
-                let temp = this.nativeValue[index];
-                this.nativeValue[index] = this.nativeValue[index - 1];
-                this.nativeValue[index - 1] = temp;
-            },
-            moveDown(index) {
-
             },
             emit() {
                 let options = [];
