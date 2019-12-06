@@ -8,14 +8,12 @@
                  @check="$emit('check')"
                  @current-change="$emit('current-change')"
                  @node-expand="$emit('node-expand')"
-                 @node-collapse="$emit('node-collapse')"
-
-        >
-            <span slot-scope="{ node, data }">
-<!--            <template slot-scope="{ node, data }">-->
-                <slot v-bind:node="node" v-bind:data="data"></slot>
-                <!--            </template>-->
-                </span>
+                 @node-collapse="$emit('node-collapse')">
+            <template slot-scope="{ node, data }">
+                <slot v-bind:node="node" v-bind:data="data">
+                    <span>{{data[innerMeta.conf['props']['label']]}}</span>
+                </slot>
+            </template>
         </el-tree>
     </div>
 </template>
