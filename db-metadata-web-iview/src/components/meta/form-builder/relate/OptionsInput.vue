@@ -17,8 +17,8 @@
         <li style="text-align: left;">
             <el-button circle icon="el-icon-plus" @click="plus"></el-button>
             <span v-if="errorTip">
-                <span class="tip">&nbsp;tip: 不符合规则的红色项将被遗弃.</span>
-                <el-tooltip content="规则: key值不能重复, 且key, value均不能为空" placement="right">
+                <span class="tip">&nbsp;规则: key值不能重复, 且key, value均不能为空.</span>
+                <el-tooltip content="不符合规则的红色项将不被保存" placement="right">
                     <i class="el-icon-question"></i>
                 </el-tooltip>
             </span>
@@ -81,6 +81,7 @@
                 });
 
                 this.$emit('input', options);
+                this.$emit('change', options);
             }
         },
         computed: {

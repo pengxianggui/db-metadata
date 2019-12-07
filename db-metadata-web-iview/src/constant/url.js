@@ -24,6 +24,8 @@ export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={id}';    // 更
 
 export const LOAD_COMP_BY_OBJECT = '/meta/contact/{objectCode}?kv={kv}'; // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
 
+export const CHECK_SQL = '/check/sql?sql={sql}';
+
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 
 //  [路由URL]-START --------------------------------------------------------------------------------------------------

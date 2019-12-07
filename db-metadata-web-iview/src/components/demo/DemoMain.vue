@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <sql-box v-model="sql"></sql-box>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <tree-list-demo></tree-list-demo>
             </el-col>
         </el-row>
@@ -127,7 +132,6 @@
     </div>
 </template>
 <script>
-
     // 批量注册
     const requireComponent = require.context('./', false, /\w+Demo\.(vue|js)$/);
     let demos = {};
@@ -141,6 +145,7 @@
         name: "demo",
         data() {
             return {
+                sql: 'select * '
             }
         },
         methods: {

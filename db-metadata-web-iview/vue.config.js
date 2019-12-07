@@ -33,6 +33,7 @@ module.exports = {
             '^\/form\/': serverProxy,
             '^\/dict\/': serverProxy,
             '^\/file\/': serverProxy,
+            '^\/check\/': serverProxy,
         }
     }
 };

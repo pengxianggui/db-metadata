@@ -199,6 +199,16 @@ const DEFAULT_CONF = {
             "placeholder": "戳我展开搜索面板.."
         }
     },
+    "SqlBox": {
+        "component_name": "SqlBox",
+        "name": "SqlBox",
+        "label": "SQL输入框",
+        "check": true,
+        "check_url": "/check/sql?sql={sql}",
+        "theme": "default", // default、ambiance
+        "lineNumbers": true,
+        "mode": 'text/x-mysql'
+    },
     "FormTmpl": {
         "component_name": "FormTmpl",
         "name": "FormTmpl",

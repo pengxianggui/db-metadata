@@ -37,12 +37,16 @@
             </el-radio-group>
         </el-form-item>
         <el-form-item label="数据源">
-            <el-checkbox v-model="hasTranslation" border></el-checkbox>
+            <el-checkbox v-model="hasTranslation" border>
+                <el-tooltip content="优先级: 静态数组 > 指定SQL" placement="right">
+                    <i class="el-icon-question"></i>
+                </el-tooltip>
+            </el-checkbox>
         </el-form-item>
         <template v-if="hasTranslation">
             <el-form-item label="指定SQL">
-                <el-col :span="6">
-                    <el-input v-model="nativeValue.scopeSql" size="mini"></el-input>
+                <el-col :span="24">
+                    <sql-box v-model="nativeValue.scopeSql"></sql-box>
                 </el-col>
             </el-form-item>
             <el-form-item label="静态数组">
