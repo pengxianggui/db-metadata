@@ -7,6 +7,7 @@ import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
@@ -33,6 +34,11 @@ public class FeatureService {
         Record record = Db.findFirst("select * from meta_feature where code=?", featureCode);
         FeatureType type = FeatureType.V(record.getStr("type"));
         return (T) JSON.parseObject(record.getStr("config"), type.configEntity);
+    }
+
+    public boolean deleteFeature(String[] ids) {
+        String idsString = StrKit.join(ids, "','");
+        return Db.update("delete from meta_feature where code in ('" + idsString + "')") > 0;
     }
 
     private Record getRecord(FeatureType type, String name, String code, Kv config) {

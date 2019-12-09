@@ -2,11 +2,14 @@ package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.feature.ms.MasterSlaveConfig;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
+
+import java.util.List;
 
 public class FeatureController extends FrontRestController {
 
@@ -32,5 +35,13 @@ public class FeatureController extends FrontRestController {
         Feature feature = featureService().loadFeatureConfig(featureCode);
 
         renderJson(Ret.ok("data", feature.execute()));
+    }
+
+    @Override
+    public void delete() {
+        String idss = getPara("ids");
+        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
+        boolean status = featureService().deleteFeature(ids.toArray(new String[0]));
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 }
