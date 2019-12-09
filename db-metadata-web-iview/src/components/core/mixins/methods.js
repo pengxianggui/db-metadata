@@ -1,3 +1,4 @@
+import utils from '@/utils'
 import {URL} from '@/constant'
 
 /**
@@ -30,6 +31,47 @@ export const getSpMeta = {
                 objectCode: objectCode
             });
             return this.$axios.get(url);
+        }
+    }
+};
+
+export const initOptions = {
+    methods: {
+        initOptions() {
+            let options = this.options;
+            if (options !== undefined) { // 父组件定义了options
+                this.innerOptions = options;
+                return;
+            }
+
+            options = this.meta['options'];
+            if (utils.isArray(options) && options.length > 0) { // 组件元对象定义了options, 并且有值
+                this.innerOptions = this.innerMeta['options'];
+                return;
+            }
+            if (this.meta.hasOwnProperty('data_url')) {
+                this.getOptions();
+                return
+            }
+            console.error("options or data_url in meta provide one at least!")
+        }
+    }
+};
+
+export const getOptions = {
+    methods: {
+        getOptions () {
+            let url = this.innerMeta['data_url'];
+            if (url) {
+                this.$axios.safeGet(url).then(resp => {
+                    // if provide format callback fn, execute callback fn
+                    let format = this.getBehavior('format');
+                    this.innerOptions = format ? format(resp.data) : resp.data;
+                    this.$emit('update:options', this.innerOptions);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                })
+            }
         }
     }
 };

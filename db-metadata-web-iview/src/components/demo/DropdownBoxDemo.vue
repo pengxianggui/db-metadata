@@ -17,12 +17,14 @@
         data() {
             return {
                 model: {
-                    value: null,
+                    value: ['1', '2'],
                     meta: {
                         name: "DropDownBoxDemo",
                         component_name: 'DropDownBox',
                         group: true,
-                        conf: {},
+                        conf: {
+                            multiple: true
+                        },
                         options: [{
                             label: "五百强公司",
                             options: [{
