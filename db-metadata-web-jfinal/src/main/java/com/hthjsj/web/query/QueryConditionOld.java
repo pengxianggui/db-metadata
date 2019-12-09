@@ -88,12 +88,9 @@ public class QueryConditionOld {
      * 解析逻辑
      * 非连续-> 连续-> 普通
      * <p>
-     * FIXME :
-     * http://url?ef=id,name,config&f=config 会滤出全部列
      */
     public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
 
-        //FIXME
         Collection<IMetaField> metaFields = metaObject.fields();
         SqlParaExt sqlParaExt = new SqlParaExt();
 
@@ -189,7 +186,6 @@ public class QueryConditionOld {
         }
         return null;
     }
-    
 
     private SqlParaExt buildExceptSelect(Kv kv, SqlParaExt sqlParaExt, String tableName) {
         StringBuilder sqlExceptSelect = new StringBuilder();
