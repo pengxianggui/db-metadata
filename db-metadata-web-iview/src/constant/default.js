@@ -4,6 +4,63 @@ import {PAGE_NUM_AREA} from './constant'
  * 组件的默认UI配置
  */
 const DEFAULT_CONF = {
+    "TableList": {
+        "component_name": "TableList",
+        "name": "TableList",
+        "label": "表格模板",
+        "data_url": "/table/list/{objectCode}", // required
+        "delete_url": '/table/delete?objectCode={objectCode}&ids={ids}',
+        "multi_select": true, //多选
+        "editable": false,
+        "conf": {
+            "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
+            "highlight-current-row": true,
+            "size": "medium", // medium, small, mini
+            // "max-height": 500,
+        },
+        "columns": [
+            // {
+            //     name: 'name',
+            //     label: 'label',
+            //     component_name: '',
+            //     editable: false,     // 表格内可编辑
+            //     searchable: true,    // 搜索面板支持该字段搜索
+            //     conf: {
+            //         width: '',
+            //         sortable: true,  // 表格中可否根据此列进行排序
+            //         //...
+            //     }
+            // }
+        ], // 字段元数据
+        "pagination": { // element ui配置
+            "page-size": PAGE_NUM_AREA[0],
+            "page-sizes": PAGE_NUM_AREA,
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next, jumper"
+        },
+        "operation-bar": { // 针对操作栏中所有按钮的默认设置
+            "size": "mini",
+            "type": "primary"
+        },
+        "buttons": {
+            "edit": {
+                "label": "编辑",
+                "conf": {
+                    "icon": "el-icon-edit",
+                    "size": "mini",
+                    "type": "primary"
+                }
+            },
+            "delete": {
+                "label": "删除",
+                "conf": {
+                    "size": "mini",
+                    "icon": "el-icon-delete",
+                    "type": "danger"
+                }
+            }
+        }
+    },
     "BoolBox": {
         "component_name": "BoolBox",
         "name": "BoolBox",
@@ -190,25 +247,17 @@ const DEFAULT_CONF = {
             "destroy-on-close": true
         }
     },
-    "FindBox": {
-        "component_name": "FindBox",
-        "name": "FindBox",
-        "label": "查找框",
-        "data_url": "/meta/fields/{objectCode}", // 这个data_url响应的是FindPanel的meta, 也可以是TableList的meta
+    "SearchPanel": {
+        "component_name": "SearchPanel",
+        "name": "SearchPanel",
+        "label": "搜索面板",
+        "expand": false,
+        "label-position": "top-center",
         "conf": {
-            "clearable": true,
-            "placeholder": "戳我展开搜索面板.."
-        }
-    },
-    "SqlBox": {
-        "component_name": "SqlBox",
-        "name": "SqlBox",
-        "label": "SQL输入框",
-        "check": true,
-        "check_url": "/check/sql?sql={sql}",
-        "theme": "default", // default、ambiance
-        "lineNumbers": true,
-        "mode": 'text/x-mysql'
+            "label-width": '80px',
+            "size": 'mini', // medium|small|mini
+        },
+        "columns": []
     },
     "FormTmpl": {
         "component_name": "FormTmpl",
@@ -263,89 +312,14 @@ const DEFAULT_CONF = {
             }
         }
     },
-    "SearchPanel": {
-        "component_name": "SearchPanel",
-        "name": "SearchPanel",
-        "label": "搜索面板",
-        "expand": false,
-        "label-position": "top-center",
+    "FindBox": {
+        "component_name": "FindBox",
+        "name": "FindBox",
+        "label": "查找框",
+        "data_url": "/meta/fields/{objectCode}", // 这个data_url响应的是FindPanel的meta, 也可以是TableList的meta
         "conf": {
-            "label-width": '80px',
-            "size": 'mini', // medium|small|mini
-        },
-        // "columns": [
-        // {
-        //     component_name: 'TextBox',
-        //     name: 'name',
-        //     label: '姓名',
-        // },
-        // {
-        //     component_name: 'NumBox',
-        //     name: 'age',
-        //     label: '年龄'
-        // },
-        // {
-        //     component_name: 'DropDownBox',
-        //     name: 'sex',
-        //     label: '性别'
-        // }
-        // ],
-    },
-    "TableList": {
-        "component_name": "TableList",
-        "name": "TableList",
-        "label": "表格模板",
-        "data_url": "/table/list/{objectCode}", // required
-        "delete_url": '/table/delete?objectCode={objectCode}&ids={ids}',
-        "multi_select": true, //多选
-        "editable": false,
-        "conf": {
-            "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
-            "highlight-current-row": true,
-            "size": "medium", // medium, small, mini
-            // "max-height": 500,
-        },
-        // "columns": [
-        // {
-        //     name: 'name',
-        //     label: 'label',
-        //     component_name: '',
-        //     editable: false,     // 表格内可编辑
-        //     searchable: true,    // 搜索面板支持该字段搜索
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // }
-        // ], // 字段元数据
-        "pagination": { // element ui配置
-            "page-size": PAGE_NUM_AREA[0],
-            "page-sizes": PAGE_NUM_AREA,
-            "current-page": 1,
-            "layout": "total, sizes, prev, pager, next, jumper"
-        },
-        "operation-bar": { // 针对操作栏中所有按钮的默认设置
-            "size": "mini",
-            "type": "primary"
-        },
-        "buttons": {
-            "edit": {
-                "label": "编辑",
-                "conf": {
-                    "icon": "el-icon-edit",
-                    "size": "mini",
-                    "type": "primary"
-                }
-            },
-            "delete": {
-                "label": "删除",
-                "conf": {
-                    "size": "mini",
-                    "icon": "el-icon-delete",
-                    "type": "danger"
-                }
-            }
+            "clearable": true,
+            "placeholder": "戳我展开搜索面板.."
         }
     },
     "FindPanel": {
@@ -353,7 +327,7 @@ const DEFAULT_CONF = {
         "name": "FindPanel",
         "label": "查找面板",
         "data_url": "/table/list/{objectCode}",
-        // "columns": [// {
+        "columns": [// {
         //     component_name: 'TextBox',
         //     name: 'id',
         //     label: 'ID',
@@ -375,7 +349,17 @@ const DEFAULT_CONF = {
         //         //...
         //     }
         // }
-        // ]
+        ]
+    },
+    "SqlBox": {
+        "component_name": "SqlBox",
+        "name": "SqlBox",
+        "label": "SQL输入框",
+        "check": true,
+        "check_url": "/check/sql?sql={sql}",
+        "theme": "default", // default、ambiance
+        "lineNumbers": true,
+        "mode": 'text/x-mysql'
     },
     "TreeList": {
         "component_name": "TreeList",
@@ -409,7 +393,8 @@ const DEFAULT_CONF = {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
-            "renderContent": function (h, {node, data, store}) {}
+            "renderContent": function (h, {node, data, store}) {
+            }
         }
     }
 };

@@ -27,6 +27,28 @@
       ],
       "current-page": 1,
       "layout": "total, sizes, prev, pager, next, jumper"
+    },
+    "operation-bar": {
+      "size": "mini",
+      "type": "primary"
+    },
+    "buttons": {
+      "edit": {
+        "label": "编辑",
+        "conf": {
+          "icon": "el-icon-edit",
+          "size": "mini",
+          "type": "primary"
+        }
+      },
+      "delete": {
+        "label": "删除",
+        "conf": {
+          "size": "mini",
+          "icon": "el-icon-delete",
+          "type": "danger"
+        }
+      }
     }
   },
   "BoolBox": {
@@ -123,7 +145,6 @@
     "name": "RadioBox",
     "label": "单选框",
     "inline": true,
-    "data_url": "/dict/yn",
     "conf": {}
   },
   "CheckBox": {
@@ -131,7 +152,6 @@
     "name": "CheckBox",
     "label": "多选框",
     "inline": true,
-    "data_url": "/dict/yn",
     "conf": {}
   },
   "JsonBox": {
@@ -139,6 +159,7 @@
     "name": "JsonBox",
     "label": "Json框",
     "inline": false,
+    "default_value": {},
     "conf": {
       "mode": "code",
       "modes": [
@@ -168,11 +189,13 @@
     "name": "FileBox",
     "label": "文件上传框",
     "inline": false,
+    "default_value": [],
     "conf": {
-      "action": "/file/upload",
-      "limit": 5,
+      "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
       "tip": "上传文件限制不超过2M",
-      "auto-upload": true
+      "auto-upload": true,
+      "limit": 1,
+      "multiple": false
     }
   },
   "MiniFormBox": {
@@ -206,12 +229,11 @@
     "component_name": "SearchPanel",
     "name": "SearchPanel",
     "label": "搜索面板",
-    "expand": true,
+    "expand": false,
+    "label-position": "top-center",
     "conf": {
-      "label-width": "40px",
-      "size": "medium",
-      "disabled": false,
-      "inline": true
+      "label-width": "80px",
+      "size": "mini"
     },
     "columns": []
   },
@@ -257,5 +279,43 @@
     "label": "查找面板",
     "data_url": "/table/list/{objectCode}",
     "columns": []
+  },
+  "SqlBox": {
+    "component_name": "SqlBox",
+    "name": "SqlBox",
+    "label": "SQL输入框",
+    "check": true,
+    "check_url": "/check/sql?sql={sql}",
+    "theme": "default",
+    "lineNumbers": true,
+    "mode": "text/x-mysql"
+  },
+  "TreeList": {
+    "component_name": "TreeList",
+    "name": "TreeList",
+    "label": "树型列表",
+    "conf": {
+      "node-key": "id",
+      "highlight-current": true,
+      "default-expand-all": false,
+      "check-on-click-node": false,
+      "show-checkbox": false,
+      "default-expanded-keys": [],
+      "default-checked-keys": [],
+      "accordion": false,
+      "indent": 16,
+      "icon-class": "el-icon-caret-right",
+      "draggable": false,
+      "props": {
+        "label": "label",
+        "children": "children"
+      }
+    },
+    "behavior": {
+      "allowDrag": "function (node) { return true }",
+      "allowDrop": "function (draddingNode, dropNode, type) { return true }",
+      "filterNodeMethod": "function (value, data, node) {if (!value) return true;return data.label.indexOf(value) !== -1;}",
+      "renderContent": "function (h, {node, data, store}) {}"
+    }
   }
 }
