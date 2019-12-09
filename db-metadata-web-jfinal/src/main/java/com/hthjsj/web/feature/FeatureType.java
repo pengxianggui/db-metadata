@@ -1,6 +1,6 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
-import com.hthjsj.web.module.ms.MasterSlaveConfig;
+import com.hthjsj.web.feature.ms.MasterSlaveConfig;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 

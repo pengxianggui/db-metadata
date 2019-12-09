@@ -1,4 +1,4 @@
-package com.hthjsj.web.module.ms;
+package com.hthjsj.web.feature.ms;
 
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;

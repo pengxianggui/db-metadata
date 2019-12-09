@@ -1,4 +1,4 @@
-package com.hthjsj.web.module.ms;
+package com.hthjsj.web.feature.ms;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaObject;

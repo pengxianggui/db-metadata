@@ -1,6 +1,6 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
-import com.hthjsj.web.module.ms.MasterSlaveController;
+import com.hthjsj.web.feature.ms.MasterSlaveController;
 import com.jfinal.config.Routes;
 
 /**
@@ -10,7 +10,7 @@ import com.jfinal.config.Routes;
  *
  * <p> @author konbluesky </p>
  */
-public class ModuleRouter extends Routes {
+public class FeatureRouter extends Routes {
 
     @Override
     public void config() {

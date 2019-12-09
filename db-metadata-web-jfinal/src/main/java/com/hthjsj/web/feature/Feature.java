@@ -1,4 +1,4 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public interface Module {
+public interface Feature {
 
     List<String> metaObjects();
 

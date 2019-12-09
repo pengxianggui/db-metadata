@@ -1,4 +1,4 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.db.SnowFlake;

@@ -1,10 +1,10 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.controller.FrontRestController;
-import com.hthjsj.web.module.ms.MasterSlaveConfig;
+import com.hthjsj.web.feature.ms.MasterSlaveConfig;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 
@@ -29,8 +29,8 @@ public class FeatureController extends FrontRestController {
 
         QueryHelper queryHelper = new QueryHelper(this);
         String featureCode = queryHelper.getFeatureCode();
-        Module module = featureService().loadFeatureConfig(featureCode);
+        Feature feature = featureService().loadFeatureConfig(featureCode);
 
-        renderJson(Ret.ok("data", module.execute()));
+        renderJson(Ret.ok("data", feature.execute()));
     }
 }

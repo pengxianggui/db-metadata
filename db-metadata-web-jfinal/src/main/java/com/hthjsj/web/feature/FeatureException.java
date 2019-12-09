@@ -1,4 +1,4 @@
-package com.hthjsj.web.module;
+package com.hthjsj.web.feature;
 
 import com.hthjsj.web.WebException;
 
@@ -8,13 +8,13 @@ import com.hthjsj.web.WebException;
  *
  * <p> @author konbluesky </p>
  */
-public class ModuleException extends WebException {
+public class FeatureException extends WebException {
 
-    public ModuleException(String message) {
+    public FeatureException(String message) {
         super(message);
     }
 
-    public ModuleException(String messageTmpl, String... args) {
+    public FeatureException(String messageTmpl, String... args) {
         super(messageTmpl, args);
     }
 }

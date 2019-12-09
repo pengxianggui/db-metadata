@@ -1,9 +1,9 @@
-package com.hthjsj.web.module.ms;
+package com.hthjsj.web.feature.ms;
 
 import com.google.common.collect.Maps;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.web.module.Module;
+import com.hthjsj.web.feature.Feature;
 import com.jfinal.kit.Kv;
 import lombok.Data;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * <p> @author konbluesky </p>
  */
-public class MasterSlaveConfig extends MetaData implements Module {
+public class MasterSlaveConfig extends MetaData implements Feature {
 
     Master master;
 
