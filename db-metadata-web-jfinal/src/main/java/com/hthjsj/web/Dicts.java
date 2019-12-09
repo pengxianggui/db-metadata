@@ -37,6 +37,10 @@ public class Dicts {
         return dict;
     }
 
+    public Object[] keys() {
+        return dict.keySet().toArray();
+    }
+
     public List<Kv> getKvs(String key) {
         return UtilKit.getKvs(dict(), key);
     }
