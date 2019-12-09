@@ -121,7 +121,7 @@
             }
         }
        ```
-- [ ] 异步加载数据的组件,指定默认值
+- [x] 异步加载数据的组件,指定默认值
 - [ ] 表格中的批量编辑
 
 ### 概念
@@ -227,6 +227,7 @@
     -[x] 表格的操作条支持插槽扩展
     -[ ] 目前SearchPanel没有嵌入在TableList, 存在一个问题: 当SearchPanel中有输入值, 
     再去改选TableList字段显隐时, SearchPanel中的参数如何带入到触发的搜索中？
+    -[x] 表格排序支持
         
  -[ ] 表单Box(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
@@ -283,7 +284,7 @@
  
  -[ ] FindPanel 查找面板(复杂)
     -[x] 参见jsonTemplate.json或者default.js
-    -[ ] 支持数组(多选)回选
+    -[x] 支持数组(多选)回选
 
  -[ ] Meta-Conf
     -[ ] 表单保存格式问题, 如果元对象编码和字段名一致导致key重复 
@@ -319,7 +320,7 @@
     -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
- -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件
+ -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件: `npm install`
  
  
 ### 其他资料

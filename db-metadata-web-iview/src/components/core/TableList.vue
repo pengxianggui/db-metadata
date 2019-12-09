@@ -178,10 +178,6 @@
                 innerData: [],
                 innerChoseData: [],
                 innerActiveData: {},
-                sortModel: {
-                    prop: null,
-                    order: null
-                }, // {prop: , order: }
                 pageModel: {
                     size: 10,
                     index: 1,
@@ -310,11 +306,13 @@
                 }
             },
             sortChange(param) {
-                let {prop, order} = param;
-                this.sortModel = {
-                    prop: prop,
-                    order: order
-                };
+                let {column, prop, order} = param;
+                if (column.sortable === 'custom') { // 判断是否远程排序
+                    let sortKey = prop + '_st';
+                    let params = {};
+                    params[sortKey] = (order === 'ascending' ? 'asc' : 'desc');
+                    this.getData(params);
+                }
             },
             setPage(index) {
                 this.pageModel['index'] = index;
@@ -328,14 +326,6 @@
                 this.pageModel['total'] = parseInt(total);
                 this.pageModel['index'] = parseInt(index);
                 this.pageModel['size'] = parseInt(size);
-            },
-            rightClickHander(ev, objectCode, fieldCode) {
-                if (ev) {
-                    ev.stopPropagation();
-                    ev.preventDefault();
-                }
-                // this.popVisible = true;
-                this.$refs['pop-' + fieldCode].value = true;
             },
 
             // fast edit meta-data or edit ui conf ----------------------------------------------------------
