@@ -35,13 +35,13 @@ public class OptionsController extends Controller {
         if (!metaFieldConfigParse.hasTranslation()) {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);
         }
+        if (metaFieldConfigParse.isOptions()) {
+            renderJson(Ret.ok("data", metaFieldConfigParse.options()));
+            return;
+        }
         if (metaFieldConfigParse.isSql()) {
             List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigParse.scopeSql());
             renderJson(Ret.ok("data", options));
-            return;
-        }
-        if (metaFieldConfigParse.isOptions()) {
-            renderJson(Ret.ok("data", metaFieldConfigParse.options()));
             return;
         }
 
