@@ -1,18 +1,36 @@
 package com.hthjsj.web.module;
 
-import com.jfinal.core.Controller;
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Preconditions;
+import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.module.ms.MasterSlaveConfig;
+import com.hthjsj.web.query.QueryHelper;
+import com.jfinal.kit.Ret;
 
-/**
- * 功能
- */
-public class FeatureController extends Controller {
+public class FeatureController extends FrontRestController {
+
+    @Override
+    public void doAdd() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        FeatureType type = FeatureType.V(queryHelper.getFeatureType());
+        Preconditions.checkArgument(type != FeatureType.UNKNOWN, "未知的功能模板" + queryHelper.getFeatureType());
+        String name = getPara("name", "tname_test");
+        String code = getPara("code", "tcode_test");
+        String jsonstr = UtilKit.loadContentByFile("ms.json");
+        featureService().createFeature(type, name, code, JSON.parseObject(jsonstr, MasterSlaveConfig.class));
+        renderJson(Ret.ok());
+    }
 
     /**
      * 功能 = ((元对象(表),元对象(视图),元对象(非表)) + 控件) * n
      */
     public void load() {
-    }
 
-    public void config() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String featureCode = queryHelper.getFeatureCode();
+        Module module = featureService().loadFeatureConfig(featureCode);
+
+        renderJson(Ret.ok("data", module.execute()));
     }
 }

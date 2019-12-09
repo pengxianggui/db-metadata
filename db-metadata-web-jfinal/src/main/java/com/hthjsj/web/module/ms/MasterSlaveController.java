@@ -42,8 +42,8 @@ import java.sql.SQLException;
  *     slaves:[{
  *         objectCode:
  *         key:
+ *         order:
  *     },{元对象2}],
- *     config:{}
  * }
  *
  * </pre>
@@ -100,6 +100,21 @@ public class MasterSlaveController extends Controller {
     }
 
     public void toAddS() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
 
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
+
+        //手工build,方便后面编程式操作表单内元子控件
+        formView.render();
+
+
+
+
+
+
+        renderJson(Ret.ok("data", formView.toKv()));
     }
 }

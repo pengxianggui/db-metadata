@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.module.FeatureService;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
@@ -27,6 +28,10 @@ public abstract class FrontRestController extends Controller implements FrontRes
 
     protected ComponentService componentService() {
         return ServiceManager.componentService();
+    }
+
+    protected FeatureService featureService() {
+        return ServiceManager.featureService();
     }
 
     public void api() {

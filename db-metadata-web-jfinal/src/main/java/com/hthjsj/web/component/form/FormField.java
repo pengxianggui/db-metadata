@@ -3,6 +3,7 @@ package com.hthjsj.web.component.form;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
+import com.hthjsj.web.component.attr.AttributeBuilder;
 
 /**
  * <p> Class title: </p>
@@ -13,6 +14,8 @@ import com.hthjsj.analysis.component.ViewContainer;
  * <p> @author konbluesky </p>
  */
 public abstract class FormField extends Component {
+
+    AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
 
     public FormField(String name, String label) {
         this.name = name;

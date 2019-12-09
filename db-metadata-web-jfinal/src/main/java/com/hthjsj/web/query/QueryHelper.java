@@ -44,6 +44,14 @@ public class QueryHelper {
         return tp.getPara(0, tp.getPara("objectCode", defaultCode));
     }
 
+    public String getFeatureCode() {
+        return tp.getPara("featureCode", tp.getPara("fc"));
+    }
+
+    public String getFeatureType() {
+        return tp.getPara("featureType", tp.getPara("ft"));
+    }
+
     public String getFieldCode() {
         return tp.getPara("f", tp.getPara("fieldCode"));
     }

@@ -1,7 +1,7 @@
 package com.hthjsj.web.controller;
 
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.AddPointCut;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
@@ -41,7 +41,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
@@ -54,7 +54,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
 
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
@@ -89,7 +89,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         String dataId = getPara(metaObject.primaryKey());
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
@@ -106,7 +106,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
@@ -139,7 +139,7 @@ public class FormController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         String dataId = getPara(metaObject.primaryKey());
 
         FormView formView = ViewFactory.formView(metaObject).viewForm();
