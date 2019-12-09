@@ -116,7 +116,7 @@ public class AttributeBuilder {
 
         @Override
         public InputAttr defaultVal(String v) {
-            return setConf("value", v);
+            return set("default_value", v);
         }
 
         @Override
