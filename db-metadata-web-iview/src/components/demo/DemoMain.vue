@@ -11,7 +11,7 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <sql-box v-model="sql"></sql-box>
+                <sql-box-demo></sql-box-demo>
             </el-col>
         </el-row>
         <el-row>
@@ -145,7 +145,6 @@
         name: "demo",
         data() {
             return {
-                sql: 'select * '
             }
         },
         methods: {
