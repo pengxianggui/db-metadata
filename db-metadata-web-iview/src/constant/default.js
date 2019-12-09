@@ -155,9 +155,9 @@ const DEFAULT_CONF = {
         "label": "文件上传框",
         "inline": false,
         "conf": {
-            "action": "/file/upload/{objectCode}/{fieldCode}",
+            "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
             "tip": "上传文件限制不超过2M",
-            "auto-upload": false,
+            "auto-upload": true,
             "limit": 1,
             "multiple": false,  // 暂时单选
         }

@@ -15,9 +15,12 @@
             return {
                 meta: {
                     component_name: 'FileBox',
-                    ui_config: {
-                        action: '/file/upload', // *
-                        multiple: true,
+                    conf: {
+                        "action": "/file/upload?objectCode=test_table&fieldCode=col_file",
+                        "tip": "上传文件限制不超过2M",
+                        "auto-upload": true,
+                        "limit": 1,
+                        "multiple": false,  // 暂时单选
                     }
                 },
             }
