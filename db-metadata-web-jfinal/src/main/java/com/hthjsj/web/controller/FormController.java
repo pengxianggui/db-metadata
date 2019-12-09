@@ -27,10 +27,15 @@ import java.sql.SQLException;
 @Slf4j
 public class FormController extends FrontRestController {
 
-    @Override
-    public void index() {
-    }
-
+    /**
+     * <pre>
+     * 1. 允许带初始值构建form
+     * 2. 允许传参,干预form的渲染
+     *
+     * 描述:
+     *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
+     * </pre>
+     */
     @Override
     public void toAdd() {
         QueryHelper queryHelper = new QueryHelper(this);

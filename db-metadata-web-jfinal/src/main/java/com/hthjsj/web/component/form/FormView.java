@@ -1,8 +1,10 @@
 package com.hthjsj.web.component.form;
 
+import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
+import com.hthjsj.web.component.ComponentException;
 import com.jfinal.kit.Kv;
 
 /**
@@ -35,6 +37,21 @@ public class FormView extends ViewContainer {
         formView.action = action;
         formView.name = name;
         return formView;
+    }
+
+    /**
+     * name -> fieldCode
+     *
+     * @param name
+     *
+     * @return
+     */
+    public Component getField(String name) {
+        Component field = getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().get();
+        if (field == null) {
+            throw new ComponentException("FormView 实例中不包含 {} 组件", name);
+        }
+        return field;
     }
 
     public FormView action(String url) {
@@ -78,6 +95,7 @@ public class FormView extends ViewContainer {
     @Override
     protected void renderCustomMeta(Kv meta) {
         meta.putIfAbsent("name", name);
+        meta.setIfNotBlank("formType", formType);
         //TODO
         meta.setIfNotBlank("action", action);
         meta.putIfAbsent("component_name", type());

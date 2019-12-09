@@ -12,8 +12,10 @@ public abstract class Component {
     @Getter
     protected Kv meta = Kv.create();
 
+    @Getter
     protected String name;
 
+    @Getter
     protected String label;
 
     @Setter
@@ -55,6 +57,12 @@ public abstract class Component {
     public abstract ComponentType componentType();
 
     public abstract ViewContainer getContainer();
+
+//    public void setRender(ComponentRender<? extends Component> render) {
+//        this.render = render;
+//        //默认传入Render后 触发构建逻辑;
+//        this.render.render();
+//    }
 
     /**
      * 返回组件Kv数据,用来序列json用

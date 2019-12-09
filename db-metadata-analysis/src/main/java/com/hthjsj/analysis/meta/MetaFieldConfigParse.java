@@ -84,7 +84,7 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     public String defaultVal() {
-        return getStr("defaultValue");
+        return getStr("defaultVal");
     }
 
     public boolean isMultiple() {

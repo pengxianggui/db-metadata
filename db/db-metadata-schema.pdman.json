@@ -961,6 +961,12 @@
               "chnname": "路径"
             },
             {
+              "name": "path_names",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "路径名称"
+            },
+            {
               "name": "name",
               "type": "DefaultString",
               "remark": "",
@@ -1063,6 +1069,30 @@
               "relationNoShow": false,
               "pk": true,
               "notNull": true
+            },
+            {
+              "name": "type",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能类型"
+            },
+            {
+              "name": "name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能名"
+            },
+            {
+              "name": "code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能编码"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
             },
             {
               "name": "created_by",

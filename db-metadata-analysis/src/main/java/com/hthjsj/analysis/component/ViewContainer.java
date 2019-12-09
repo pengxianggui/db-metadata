@@ -18,6 +18,8 @@ public abstract class ViewContainer extends Component {
     @Setter
     ViewInject viewInject = new ViewInject.DefaultViewInject();
 
+    boolean isRendered = false;
+
     private List<Component> fields = new ArrayList<>(0);
 
     public ViewContainer(String name, String label) {
@@ -60,13 +62,26 @@ public abstract class ViewContainer extends Component {
 
     @Override
     public Kv toKv() {
-        renderCustomMeta(meta);
-        if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
-            getViewInject().inject(this, meta, getFieldInject());
-        } else {
-            //如使用了Inject,就覆盖默认逻辑
-            renderFieldsMeta(fields, meta);
+        if (!isRendered) {
+            renderCustomMeta(meta);
+            if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
+                getViewInject().inject(this, meta, getFieldInject());
+            } else {
+                //如使用了Inject,就覆盖默认逻辑
+                renderFieldsMeta(fields, meta);
+            }
+            render.render();
+            isRendered = true;
         }
-        return render.render();
+        return meta;
+    }
+
+    public ViewContainer render() {
+        if (!isRendered) {
+            renderCustomMeta(meta);
+            render.render();
+            isRendered = true;
+        }
+        return this;
     }
 }

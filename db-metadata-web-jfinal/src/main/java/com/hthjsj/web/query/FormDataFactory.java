@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.upload.UploadKit;
@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 public class FormDataFactory {
 
-    public static MetaData buildFormData(Map<String, String[]> httpParams, MetaObject metaObject, boolean isInsert) {
+    public static MetaData buildFormData(Map<String, String[]> httpParams, IMetaObject metaObject, boolean isInsert) {
         Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
 
@@ -63,7 +63,7 @@ public class FormDataFactory {
         return formData;
     }
 
-    public static void buildUpdateFormData(MetaObject metaObject, Record record) {
+    public static void buildUpdateFormData(IMetaObject metaObject, Record record) {
         for (IMetaField metaField : metaObject.fields()) {
 
             if (metaField.configParser().isFile()) {

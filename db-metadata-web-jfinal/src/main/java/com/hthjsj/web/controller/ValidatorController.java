@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.core.Controller;
@@ -34,10 +35,14 @@ public class ValidatorController extends Controller {
         }
     }
 
+    /**
+     * 验证唯一性
+     */
     public void has() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         String valueString = getPara("v", getPara("val", getPara("value")));
+        throw new WebException("not finished!");
     }
 }
