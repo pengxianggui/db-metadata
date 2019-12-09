@@ -1,5 +1,6 @@
 package com.hthjsj.web.query;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -74,9 +75,10 @@ public class FormDataFactory {
                 String url = UploadKit.downloadUrl(metaField.objectCode(), metaField.fieldCode(), id);
                 log.info("downloadUrl:{}", url);
                 Kv file = Kv.create();
-                file.setIfNotBlank("name", filepath);
-                file.setIfNotBlank("url", url);
-                record.set(metaField.fieldCode(), file);
+                file.setIfNotBlank("name", filepath); // set origin file name
+                file.setIfNotBlank("url", filepath);
+                file.setIfNotBlank("download_url", url);
+                record.set(metaField.fieldCode(), Lists.newArrayList(file));
             }
         }
     }

@@ -154,6 +154,7 @@ const DEFAULT_CONF = {
         "name": "FileBox",
         "label": "文件上传框",
         "inline": false,
+        "default_value": [],
         "conf": {
             "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
             "tip": "上传文件限制不超过2M",

@@ -23,18 +23,19 @@
         label: "文件上传框",
         props: {
             value: {
-                type: [Object, Array, String],
+                type: [Array, String],  // String could be convert to Array
                 default: function () {
                     return []
                 },
                 validator: function (val) {
-                    if (utils.isArr(val) && val.length > 0) {
-                        return val.every(item => item.hasOwnProperty('name') && item.hasOwnProperty('url'))
+                    if (utils.isArray(val)) {
+                        return val.every(item => item.hasOwnProperty('name') && item.hasOwnProperty('url')) // return true when val.length = 0
                     }
-                    if (utils.isObject(val) && Object.keys(val).length > 0) {
-                        return val.hasOwnProperty('name') && val.hasOwnProperty('url');
+                    if (utils.isString(val)) {
+                        let arrVal = utils.convertToArray(val);
+                        return arrVal ? (arrVal.every(item => item.hasOwnProperty('name') && item.hasOwnProperty('url'))) : false;
                     }
-                    return true;
+                    return false;
                 }
             }
         },
@@ -47,7 +48,7 @@
             handleRemove(file, fileList) {
             },
             handlePreview(file) { // download
-                window.open(file.url, '_blank');
+                window.open(file['download_url'], '_blank');
             },
             handleExceed(files, fileList) {
                 this.$message.warning('文件数量超过设定值：' + files.length);
@@ -72,14 +73,9 @@
             fileList: {
                 get() {
                     let value = [];
-                    let temp;
                     switch (utils.typeOf(this.value)) {
                         case "[object String]":
-                            temp = this.value.trim() === '' ? [] : JSON.parse(this.value);
-                            utils.isObject(temp) ? value.push(temp) : value = temp;
-                            break;
-                        case "[object Object]":
-                            value.push(this.value);
+                            value = utils.convertToArray(this.value);
                             break;
                         case "[object Array]":
                             value = this.value;
@@ -88,13 +84,7 @@
                     return value;
                 },
                 set(val) {
-                    let newVal = val;
-                    switch (utils.typeOf(this.value)) {
-                        case "[object String]":
-                            newVal = JSON.stringify(val);
-                            break;
-                    }
-                    this.$emit('input', newVal);
+                    this.$emit('input', val); // val must be Array
                 }
             }
         }

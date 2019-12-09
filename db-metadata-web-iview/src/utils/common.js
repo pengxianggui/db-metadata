@@ -56,12 +56,12 @@ export function isObject(val) {
     return toStr === '[object Object]'
 }
 
-export function isArr(val) {
+export function isArray(val) {
     let toStr = Object.prototype.toString.call(val);
     return toStr === '[object Array]'
 }
 
-export function isBool(val) {
+export function isBoolean(val) {
     let toStr = Object.prototype.toString.call(val);
     return toStr === '[object Boolean]'
 }
@@ -93,6 +93,23 @@ export function typeOf(value) {
 }
 
 /**
+ * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回false
+ * @param value
+ */
+export function convertToArray(value) {
+    if (isArray(value)) return value;
+
+    if (!isString(value)) return false;
+    let result;
+    try {
+        result = JSON.parse(value);
+        return isArray(result);
+    } catch (e) {
+        return false;
+    }
+}
+
+/**
  * 将数组转为字符串, 如: [1,2,3] => "1,2,3"; ["a","b","c"] => "a,b,c"
  * 如果val不为数组, 不做任何处理, 直接返回val; 如果val是数组, 并且不满足"每个元素都不是数组, 都不是对象"这一条件, 也不做任何处理, 直接返回.
  * @param arr 数组
@@ -100,7 +117,7 @@ export function typeOf(value) {
  */
 export function joinArr(val, separator) {
     separator = (separator === undefined) ? ',' : separator;
-    if (isArr(val) && val.every(item => !isArr(item) && !isObject(item))) {
+    if (isArray(val) && val.every(item => !isArray(item) && !isObject(item))) {
         return val.join(separator)
     }
     return val;
@@ -152,7 +169,7 @@ export function joinArrInObj(val, separator, deep) {
  * @param keyName
  */
 export function extractNotRepeatEle(arr, keyName) {
-    if (!isArr(arr)) return deepCopy(arr);
+    if (!isArray(arr)) return deepCopy(arr);
     let eleType;
 
     if (arr.every(ele => isObject(ele))) {
@@ -161,7 +178,7 @@ export function extractNotRepeatEle(arr, keyName) {
         eleType = '[object String]'
     } else if (arr.every(ele => isNumber(ele))) {
         eleType = '[object Number]'
-    } else if (arr.every(ele => isBool(ele))) {
+    } else if (arr.every(ele => isBoolean(ele))) {
         eleType = '[object Boolean]'
     } else {
         return deepCopy(arr);
@@ -197,7 +214,7 @@ export function extractNotRepeatEle(arr, keyName) {
  * @param repeatCallback 回调函数, 参数为每个重复的元素
  */
 export function markNotRepeatEle(arr, keyName, notRepeatCallback, repeatCallback) {
-    if (!isArr(arr) || !arr.every(ele => isObject(ele))) return;
+    if (!isArray(arr) || !arr.every(ele => isObject(ele))) return;
 
     let tempArr = [];
     let inTempArr = function (val) {

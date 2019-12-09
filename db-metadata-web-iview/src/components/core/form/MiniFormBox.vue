@@ -125,7 +125,7 @@
             hasTranslation() {
                 let value = utils.isString(this.value) ? JSON.parse(this.value) : this.value;
                 return (utils.isString(value.scopeSql) && value.scopeSql.trim() !== '')
-                    || (utils.isArr(value.scopeOptions) && value.scopeOptions.length > 0)
+                    || (utils.isArray(value.scopeOptions) && value.scopeOptions.length > 0)
             }
         }
     }

@@ -82,24 +82,20 @@
             },
             assemblyModel(meta) {
                 this.model = {};
-                let columns = meta.columns;
+                let columns = utils.isArray(meta.columns) ? meta.columns : [];
 
                 // pxg_todo 编辑/新增 模式根据是否含有record字段 && record非空
                 this.isEdit = meta.hasOwnProperty('record');
 
                 if (this.isEdit) {
-                    let record = meta['record'];
-                    if (Array.isArray(columns)) {
-                        columns.forEach(item => {
-                            this.$set(this.model, item.name, record[item.name]);
-                        });
-                    }
+                    let record = utils.isObject(meta['record']) ? meta['record'] : {};
+                    columns.forEach(item => {
+                        this.$set(this.model, item.name, record[item.name]);
+                    });
                 } else {
-                    if (Array.isArray(columns)) {
-                        columns.forEach(item => {
-                            this.$set(this.model, item.name, item.default_value);
-                        });
-                    }
+                    columns.forEach(item => {
+                        this.$set(this.model, item.name, item.default_value);
+                    });
                 }
             }
         },
