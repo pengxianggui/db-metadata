@@ -1,14 +1,11 @@
 package com.hthjsj.web.feature.ms;
 
-import com.google.common.collect.Maps;
-import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.feature.Feature;
 import com.jfinal.kit.Kv;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -40,15 +37,6 @@ public class MasterSlaveConfig extends MetaData implements Feature {
         List<String> objectCodes = slaves.stream().map(Slave::getObjectCode).collect(Collectors.toList());
         objectCodes.add(master.getObjectCode());
         return objectCodes;
-    }
-
-    @Override
-    public Map<String, ComponentType> componentsMap() {
-        Map<String, ComponentType> values = Maps.newHashMap();
-        metaObjects().forEach(s -> {
-            values.put(s, ComponentType.TABLEVIEW);
-        });
-        return values;
     }
 
     @Override

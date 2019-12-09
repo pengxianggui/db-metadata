@@ -1,10 +1,8 @@
 package com.hthjsj.web.feature;
 
-import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p> @Date : 2019/12/9 </p>
@@ -15,8 +13,6 @@ import java.util.Map;
 public interface Feature {
 
     List<String> metaObjects();
-
-    Map<String, ComponentType> componentsMap();
 
     Kv execute();
 }
