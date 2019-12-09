@@ -83,14 +83,23 @@
             assemblyModel(meta) {
                 this.model = {};
                 let columns = meta.columns;
-                let record = meta.hasOwnProperty('record') && meta.record ? meta.record : {};
 
-                this.isEdit = record.hasOwnProperty('id') && (record.id != null);
+                // pxg_todo 编辑/新增 模式根据是否含有record字段 && record非空
+                this.isEdit = meta.hasOwnProperty('record');
 
-                if (Array.isArray(columns)) {
-                    columns.forEach(item => {
-                        this.$set(this.model, item.name, record[item.name]);
-                    });
+                if (this.isEdit) {
+                    let record = meta['record'];
+                    if (Array.isArray(columns)) {
+                        columns.forEach(item => {
+                            this.$set(this.model, item.name, record[item.name]);
+                        });
+                    }
+                } else {
+                    if (Array.isArray(columns)) {
+                        columns.forEach(item => {
+                            this.$set(this.model, item.name, item.default_value);
+                        });
+                    }
                 }
             }
         },
@@ -99,26 +108,7 @@
                 let meta = this.$merge(this.meta, DEFAULT.FormTmpl);
                 this.assemblyModel(meta);
                 return meta;
-            },
-            // innerMeta() {
-            //     let meta = this.$merge(this.meta, DEFAULT.FormTmpl);
-            //     let columns = meta.columns;
-            //     for (let i = 0; i < columns.length; i++) {
-            //         let item = columns[i];
-            //         this.$merge(item, DEFAULT[item.component_name]); // merge column
-            //     }
-            //     return meta;
-            // },
-            // model() { // rely on innerMeta
-            //     let model = {};
-            //     let record = this.innerMeta.hasOwnProperty('record') ? this.innerMeta.record : {};
-            //     let columns = this.innerMeta.columns;
-            //     for (let i = 0; i < columns.length; i++) {
-            //         let item = columns[i];
-            //         this.$set(model, item.name, record[item.name] || item.default_value);
-            //     }
-            //     return model;
-            // }
+            }
         }
     }
 </script>
