@@ -1,7 +1,7 @@
 <template>
     <div class="toggle-panel">
         <div :class="after" class="label" @click="toggle">
-            <slot name="label" v-if="before === 'top'">
+            <slot name="label" v-if="before === 'top'" v-bind:open="open">
                 <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
             </slot>
         </div>

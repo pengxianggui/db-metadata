@@ -114,6 +114,6 @@
 
     .tip {
         font-size: 12px;
-        color: #999999;
+        color: #f56c6c;
     }
 </style>

@@ -37,26 +37,31 @@
             </el-radio-group>
         </el-form-item>
         <el-form-item label="数据源">
-            <el-checkbox v-model="hasTranslation" border>
-                <el-tooltip content="优先级: 静态数组 > 指定SQL" placement="right">
-                    <i class="el-icon-question"></i>
-                </el-tooltip>
-            </el-checkbox>
+            <z-toggle-panel :default-open="hasTranslation" label-position="top-left">
+                <template #label="{open}">
+                    <el-tooltip content="优先级: 静态数组 > 指定SQL" placement="right">
+                        <i class="el-icon-question"></i>
+                    </el-tooltip>
+                    &nbsp;
+                    <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
+                </template>
+                <div style="padding: 20px; border-left: 3px solid #409EFF">
+                    <el-form-item label="指定SQL">
+                        <el-col :span="24">
+                            <sql-box v-model="nativeValue.scopeSql"></sql-box>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="静态数组">
+                        <options-input v-model="nativeValue.scopeOptions"></options-input>
+                    </el-form-item>
+                </div>
+            </z-toggle-panel>
         </el-form-item>
-        <template v-if="hasTranslation">
-            <el-form-item label="指定SQL">
-                <el-col :span="24">
-                    <sql-box v-model="nativeValue.scopeSql"></sql-box>
-                </el-col>
-            </el-form-item>
-            <el-form-item label="静态数组">
-                <options-input v-model="nativeValue.scopeOptions"></options-input>
-            </el-form-item>
-        </template>
     </el-form>
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT} from '@/constant'
     import Meta from '../mixins/meta'
     import OptionsInput from '@/components/meta/form-builder/relate/OptionsInput'
@@ -79,7 +84,6 @@
         },
         data() {
             return {
-                hasTranslation: false,
                 config: {
                     addStatus: 100,
                     updateStatus: 100,
@@ -100,11 +104,6 @@
             this.$emit("input", this.nativeValue);
         },
         mounted() {
-            let value = this.value;
-            if (typeof value === 'string') {
-                value = JSON.parse(value);
-            }
-            this.hasTranslation = value.scopeSql || value.scopeOptions;
         },
         computed: {
             nativeValue() {
@@ -122,6 +121,11 @@
                 });
                 this.$emit("input", self.config);  // immediate emit
                 return self.config;
+            },
+            hasTranslation() {
+                let value = utils.isString(this.value) ? JSON.parse(this.value) : this.value;
+                return (utils.isString(value.scopeSql) && value.scopeSql.trim() !== '')
+                    || (utils.isArr(value.scopeOptions) && value.scopeOptions.length > 0)
             }
         }
     }
