@@ -479,6 +479,12 @@
               "chnname": "普通字符"
             },
             {
+              "name": "col_file",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "文件"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",
@@ -857,6 +863,12 @@
               "chnname": "新数据"
             },
             {
+              "name": "diff",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "差异"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",
@@ -943,6 +955,152 @@
               "chnname": "父层标志"
             },
             {
+              "name": "paths",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "路径"
+            },
+            {
+              "name": "path_names",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "路径名称"
+            },
+            {
+              "name": "name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "value",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "值"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "字典表"
+        },
+        {
+          "title": "meta_feature",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "type",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能类型"
+            },
+            {
+              "name": "name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能名"
+            },
+            {
+              "name": "code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "功能编码"
+            },
+            {
+              "name": "config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "配置"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
               "name": "created_time",
               "type": "DateTime",
               "remark": "",
@@ -1014,17 +1172,66 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "字典表"
+          "chnname": "功能配置"
         }
       ],
       "graphCanvas": {
-        "nodes": [],
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "meta_field",
+            "moduleName": false,
+            "x": 210,
+            "y": 560,
+            "id": "2f6f9008"
+          },
+          {
+            "shape": "table",
+            "title": "test_table",
+            "moduleName": false,
+            "x": 1100,
+            "y": 570,
+            "id": "98215e10"
+          },
+          {
+            "shape": "table",
+            "title": "meta_component_instance",
+            "moduleName": false,
+            "x": 790,
+            "y": 580,
+            "id": "6699c16e"
+          },
+          {
+            "shape": "table",
+            "title": "meta_object",
+            "moduleName": false,
+            "x": 160,
+            "y": 160,
+            "id": "ac02f504"
+          },
+          {
+            "shape": "table",
+            "title": "meta_component",
+            "moduleName": false,
+            "x": 980,
+            "y": 160,
+            "id": "da4373d8"
+          },
+          {
+            "shape": "table",
+            "title": "meta_field:1",
+            "moduleName": false,
+            "x": 510,
+            "y": 200,
+            "id": "2a4ac86b"
+          }
+        ],
         "edges": []
       },
       "associations": []
     }
   ],
-  "message": "0.22",
-  "version": "0.22",
-  "date": "2019/11/18 21:15:54"
+  "message": "0.26",
+  "version": "0.26",
+  "date": "2019/12/9 20:22:35"
 }
