@@ -5,14 +5,17 @@ import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.upload.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * <p> @Date : 2019/12/4 </p>
@@ -22,6 +25,25 @@ import java.io.File;
  */
 @Slf4j
 public class UploadController extends Controller {
+
+    /**
+     * TODO 透传文件给前端
+     */
+    public void index() {
+        String filename = getPara();
+        Preconditions.checkNotNull(filename);
+        filename += ".json";
+        if (JFinal.me().getConstants().getDevMode()) {
+            Optional<String> result = Optional.ofNullable(UtilKit.loadContentByFile(filename));
+            if (result.isPresent()) {
+                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadContentByFile(filename))));
+            } else {
+                renderJson(Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
+            }
+        } else {
+            renderJson(Ret.fail().set("msg", "开发功能已关闭,不能直接通过本接口获得[" + filename + "]文件内容"));
+        }
+    }
 
     /**
      * param objectCode
