@@ -92,7 +92,7 @@ public class ComputeKit {
             builder.autoUpload(true);
         }
 
-
+        builder.defaultVal(metaFieldConfigParse.defaultVal());
         return builder.render();
     }
 }
