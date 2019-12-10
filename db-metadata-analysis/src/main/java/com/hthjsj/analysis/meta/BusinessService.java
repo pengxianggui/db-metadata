@@ -1,6 +1,5 @@
 package com.hthjsj.analysis.meta;
 
-import com.hthjsj.App;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.jfinal.aop.Before;
@@ -26,24 +25,24 @@ import java.util.Map;
 public class BusinessService {
 
     public Record findDataById(IMetaObject object, String id) {
-        return Db.use(App.DB_MAIN).findById(object.tableName(), id);
+        return Db.use(object.schemaName()).findById(object.tableName(), id);
     }
 
-    public <T> T findDataFieldById(IMetaObject metaObject, IMetaField metaField, String id) {
-        //select metaField.fileCode() from metaObject.tableName() where metaObject.primarykey()=id
-        return (T) Db.use(App.DB_MAIN).queryFirst("select " + metaField.fieldCode() + " from " + metaObject.tableName() + " where " + metaObject.primaryKey() + "=?", id);
+    public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {
+        //select metaField.fileCode() from object.tableName() where object.primarykey()=id
+        return (T) Db.use(object.schemaName()).queryFirst("select " + metaField.fieldCode() + " from " + object.tableName() + " where " + object.primaryKey() + "=?", id);
     }
 
     public boolean saveData(IMetaObject object, Kv data) {
-        boolean status = Db.use(App.DB_MAIN).save(object.tableName(), object.primaryKey(), new Record().setColumns(data));
+        boolean status = Db.use(object.schemaName()).save(object.tableName(), object.primaryKey(), new Record().setColumns(data));
         buriedPoint(object, Kv.create(), data);
         return status;
     }
 
     public boolean updateData(IMetaObject object, Kv data) {
         // TODO support single primaryKey;
-        Record old = Db.use(App.DB_MAIN).findById(object.tableName(), data.get(object.primaryKey()));
-        boolean status = Db.use(App.DB_MAIN).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
+        Record old = Db.use(object.schemaName()).findById(object.tableName(), data.get(object.primaryKey()));
+        boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
         buriedPoint(object, old.getColumns(), data);
         return status;
     }
@@ -53,7 +52,7 @@ public class BusinessService {
             throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
         String idsString = StrKit.join(ids, "','");
-        return Db.use(App.DB_MAIN).update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
+        return Db.use(object.schemaName()).update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
     }
 
     /**
@@ -73,6 +72,6 @@ public class BusinessService {
         record.set("pvalue", newData.get(object.primaryKey()));
         record.set("olddata", Json.getJson().toJson(oldData));
         record.set("newData", Json.getJson().toJson(newData));
-        Db.use(App.DB_MAIN).save("change_log", record);
+        Db.use(object.schemaName()).save("change_log", record);
     }
 }
