@@ -218,11 +218,14 @@
                     this.$emit('update:chose-data', selection);
                 }
             },
+            extractPrimaryValue(row) {
+                const primaryKey = this.primaryKey;
+                return utils.extractValue(row, primaryKey.split(',')).join('_');
+            },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
+                const primaryValue = this.extractPrimaryValue(row);
 
-                const primaryKey = this.primaryKey;
-                const primaryValue = row[primaryKey];
                 this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(primaryValue) {
@@ -250,26 +253,25 @@
             handleDelete(ev, row, index) {
                 if (ev) ev.stopPropagation();
 
-                const primaryKey = this.primaryKey;
-                const primaryValue = row[primaryKey];
+                const primaryValue = this.extractPrimaryValue(row);
                 this.doDelete(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             // 批量删除
             handleBatchDelete(ev) {
-                const primaryKey = this.primaryKey;
-                const idArr = this.innerChoseData.map(row => row[primaryKey]);
-                if (idArr.length > 0) {
-                    this.doDelete(idArr, ev);
+                const primaryValues = this.innerChoseData.map(row => this.extractPrimaryValue(row));
+
+                if (primaryValues.length > 0) {
+                    this.doDelete(primaryValues, ev);
                     return
                 }
                 this.$message.warning('请至少选择一项!');
             },
             // default remove the assembly logic is based on primaryKey get on
-            doDelete(ids) {
+            doDelete(primaryValue) {
                 let title = '确定删除此条记录?';
-                if (Array.isArray(ids)) {
-                    let size = ids.length;
-                    ids = ids.join(',');
+                if (utils.isArray(primaryValue)) {
+                    let size = primaryValue.length;
+                    primaryValue = primaryValue.join(',');
                     title = '确定删除选中的' + size + '条记录?';
                 }
 
@@ -280,7 +282,7 @@
                 }).then(() => {
                     let beforeCompileUrl = this.innerMeta['delete_url'] || URL.RECORD_DELETE;
                     let afterCompileUrl = this.$compile(beforeCompileUrl,
-                        {objectCode: this.innerMeta['objectCode'], ids: ids});
+                        {objectCode: this.innerMeta['objectCode'], ids: primaryValue});
                     this.$axios.delete(afterCompileUrl).then(resp => {
                         this.$message.success(resp.msg);
                         this.getData();
@@ -461,7 +463,15 @@
                 return this.$merge(this.meta, DEFAULT.TableList);
             },
             primaryKey() {
-                return this.meta['objectPrimaryKey'];
+                const primaryKey = this.meta['objectPrimaryKey'];
+                const defaultPrimaryKey = 'id';
+
+                if (utils.isEmpty(primaryKey)) {
+                    console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
+                    return defaultPrimaryKey;
+                } else {
+                    return primaryKey;
+                }
             }
         }
     }

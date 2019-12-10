@@ -93,6 +93,44 @@ export function typeOf(value) {
 }
 
 /**
+ * 判断一个字符串是否为空, 如果不是字符串，则返回true
+ */
+export function isEmpty(value) {
+    if (!isString(value)) return true;
+    return value.trim() === '';
+}
+
+/**
+ * 提供一个keys数组和一个对象, 从此对象中提取出keys数组对应的values数组, eg:
+ * object: {
+ *     a: '1',
+ *     b: '2',
+ *     c: '3'
+ * },
+ * keys: ['a', 'c']
+ * 则返回: [1,3];
+ * 若keys为"b", 则直接返回[2]
+ *
+ * @param object
+ * @param keys
+ * @return Array, 若没有找到相应的value, 则会返回空数组
+ */
+export function extractValue(object, keys) {
+    if (!isObject(object)) return [];
+
+    let values = [];
+    switch (typeOf(keys)) {
+        case "[object String]":
+            values.push(object[keys]);
+            break;
+        case "[object Array]":
+            keys.forEach(key => values.push(object[key]));
+            break;
+    }
+    return values;
+}
+
+/**
  * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回false
  * @param value
  */
