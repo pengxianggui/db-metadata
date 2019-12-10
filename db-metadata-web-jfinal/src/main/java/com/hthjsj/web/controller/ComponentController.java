@@ -5,7 +5,6 @@ import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.UtilKit;
-import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
@@ -20,16 +19,6 @@ import com.jfinal.plugin.activerecord.Record;
 import java.util.List;
 
 public class ComponentController extends FrontRestController {
-
-    @Override
-    public void api() {
-        renderJson(Components.me().getRegistry());
-    }
-
-    public void init() {
-        Components.me().init();
-        renderJson(Ret.ok());
-    }
 
     public void meta() {
         QueryHelper queryHelper = new QueryHelper(this);
