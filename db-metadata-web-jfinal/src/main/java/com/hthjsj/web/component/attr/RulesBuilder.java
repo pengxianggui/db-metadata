@@ -25,19 +25,6 @@ public class RulesBuilder {
 
     Multimap<String, Kv> rules = HashMultimap.create();
 
-
-    //    public static void main(String[] args) {
-    //        RulesBuilder rulesBuilder = new RulesBuilder();
-    //        rulesBuilder.required("name", "姓名");
-    //        rulesBuilder.required("email", "邮件");
-    //        rulesBuilder.email("email", "邮件");
-    //        rulesBuilder.required("age", "年龄");
-    //
-    //        System.out.println(rulesBuilder.buildObj().toJson());
-    //        System.out.println("======================================");
-    //        System.out.println(JSON.toJSONString(rulesBuilder.buildRules("email")));
-    //    }
-
     public RulesBuilder required(IMetaField metaField) {
         return required(metaField.fieldCode(), metaField.cn());
     }
