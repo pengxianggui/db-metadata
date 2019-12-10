@@ -220,14 +220,17 @@
             },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
-                this.doEdit(row.id, ev, row, index); // params ev,row,index is for convenient to override
+
+                const primaryKey = this.primaryKey;
+                const primaryValue = row[primaryKey];
+                this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
-            doEdit(id) {
+            doEdit(primaryValue) {
                 let url;
-                if (id) {
+                if (primaryValue) {
                     url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
-                        id: id
+                        primaryKey: primaryValue
                     });
                 } else {
                     url = this.$compile(URL.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
@@ -237,7 +240,7 @@
                     this.dialogMeta = {
                         component_name: "DialogBox",
                         conf: {
-                            title: id ? '编辑' : '新增'
+                            title: primaryValue ? '编辑' : '新增'
                         }
                     };
                     this.dialogVisible = true
@@ -246,19 +249,22 @@
             // 删除单行
             handleDelete(ev, row, index) {
                 if (ev) ev.stopPropagation();
-                const id = row.id;
-                this.doDelete(id, ev, row, index); // params ev,row,index is for convenient to override
+
+                const primaryKey = this.primaryKey;
+                const primaryValue = row[primaryKey];
+                this.doDelete(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             // 批量删除
             handleBatchDelete(ev) {
-                const idArr = this.innerChoseData.map(row => row.id);
+                const primaryKey = this.primaryKey;
+                const idArr = this.innerChoseData.map(row => row[primaryKey]);
                 if (idArr.length > 0) {
                     this.doDelete(idArr, ev);
                     return
                 }
                 this.$message.warning('请至少选择一项!');
             },
-            // default remove the assembly logic is based on id get on
+            // default remove the assembly logic is based on primaryKey get on
             doDelete(ids) {
                 let title = '确定删除此条记录?';
                 if (Array.isArray(ids)) {
@@ -289,6 +295,7 @@
             },
             choseRow(row, col, event) {
                 let selected = true;
+                const primaryKey = this.primaryKey;
                 this.innerActiveData = row;
                 this.$emit('update:active-data', row);
 
@@ -297,7 +304,7 @@
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
                         let choseItem = this.$refs[tableRefName]['selection'][i];
-                        if (row.id === choseItem.id) {
+                        if (row[primaryKey] === choseItem[primaryKey]) {
                             selected = false;
                             break
                         }
@@ -452,6 +459,9 @@
                     });
                 }
                 return this.$merge(this.meta, DEFAULT.TableList);
+            },
+            primaryKey() {
+                return this.meta['objectPrimaryKey'];
             }
         }
     }
