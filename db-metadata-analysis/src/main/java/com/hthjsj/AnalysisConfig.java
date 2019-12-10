@@ -40,11 +40,12 @@ public class AnalysisConfig {
 
     private Plugins plugins = new Plugins();
 
-    private AnalysisConfig() {
-
+    public void initDefaultDbSource() {
         //init main database resource
-        DBSource mainSource = new DBSource(App.DB_MAIN, getProp().get(App.DB_MAIN_URL),
-                                           getProp().get(App.DB_MAIN_USERNAME), getProp().get(App.DB_MAIN_PASSWORD),
+        DBSource mainSource = new DBSource(App.DB_MAIN,
+                                           getProp().get(App.DB_MAIN_URL),
+                                           getProp().get(App.DB_MAIN_USERNAME),
+                                           getProp().get(App.DB_MAIN_PASSWORD),
                                            plugins);
         dbSources.add(mainSource);
 
@@ -86,20 +87,20 @@ public class AnalysisConfig {
         }
     }
 
-    interface DbSouceConfig {
+    interface DbSourceConfig {
 
         String configName();
 
         void init(Plugins me);
     }
 
-    public class DBSource implements DbSouceConfig {
+    public class DBSource implements DbSourceConfig {
 
         String configName, url, username, password;
 
-        public DBSource(String configName, String jdbcurl, String username, String password, Plugins plugins) {
+        public DBSource(String configName, String jdbcUrl, String username, String password, Plugins plugins) {
             this.configName = configName;
-            this.url = jdbcurl;
+            this.url = jdbcUrl;
             this.username = username;
             this.password = password;
             init(plugins);

@@ -87,7 +87,7 @@ public class UploadController extends Controller {
 
         Preconditions.checkNotNull(id, "必须指定业务记录id");
 
-        String filePath = dbMetaService.findFieldDataById(metaObject, metaField, id);
+        String filePath = dbMetaService.findDataFieldById(metaObject, metaField, id);
 
         Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
 

@@ -60,6 +60,7 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configPlugin(Plugins me) {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
+        analysisConfig.initDefaultDbSource();
         analysisConfig.getPlugins().forEach(p -> me.add(p));
     }
 
