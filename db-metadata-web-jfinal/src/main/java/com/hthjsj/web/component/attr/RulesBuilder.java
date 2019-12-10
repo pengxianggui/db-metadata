@@ -26,11 +26,16 @@ public class RulesBuilder {
     Multimap<String, Kv> rules = HashMultimap.create();
 
     public RulesBuilder required(IMetaField metaField) {
-        return required(metaField.fieldCode(), metaField.cn());
+        if (metaField.dbType().isNumber()) {
+            return required("number", metaField.fieldCode(), metaField.cn());
+        } else if (metaField.dbType().isText()) {
+            required("string", metaField.fieldCode(), metaField.cn());
+        }
+        return required(null, metaField.fieldCode(), metaField.cn());
     }
 
-    public RulesBuilder required(String fieldCode, String cn) {
-        rules.put(fieldCode, makeRule("string", true, String.format("[%s]是必须填写的", cn), BLUR));
+    public RulesBuilder required(String type, String fieldCode, String cn) {
+        rules.put(fieldCode, makeRule(type, true, String.format("[%s]是必须填写的", cn), BLUR));
         return this;
     }
 
