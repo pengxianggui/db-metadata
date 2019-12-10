@@ -20,13 +20,6 @@ public class AttributeBuilder {
         return new AttributeSteps();
     }
 
-    //        public static void main(String[] args) {
-    //            AttributeSteps builder = AttributeBuilder.newBuilder();
-    //            builder.componentName("TextBox");
-    //            builder.clearable(true).disabled(true).maxlength(10).toKv();
-    //            System.out.println(builder.toKv());
-    //        }
-
     interface AttrCustomMeta {
 
         AttrCustomMeta componentName(String componentCode);
