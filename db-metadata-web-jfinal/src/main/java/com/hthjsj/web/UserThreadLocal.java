@@ -8,7 +8,7 @@ package com.hthjsj.web;
  *
  * <p> @author konbluesky </p>
  */
-public class ThreadLocalUserKit {
+public class UserThreadLocal {
 
     private static final ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
 

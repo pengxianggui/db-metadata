@@ -1,7 +1,7 @@
 package com.hthjsj.web.jfinal;
 
-import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
+import com.hthjsj.web.UserThreadLocal;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 
@@ -24,10 +24,10 @@ public class UserSettingIntercept implements Interceptor {
     @Override
     public void intercept(Invocation inv) {
         try {
-            ThreadLocalUserKit.setUser(user);
+            UserThreadLocal.setUser(user);
             inv.invoke();
         } finally {
-            ThreadLocalUserKit.removeUser(user);
+            UserThreadLocal.removeUser(user);
         }
     }
 }

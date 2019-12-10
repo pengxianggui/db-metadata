@@ -8,8 +8,8 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
+import com.hthjsj.web.UserThreadLocal;
 import com.hthjsj.web.UtilKit;
 import com.jfinal.aop.Before;
 import com.jfinal.ext.kit.DateKit;
@@ -128,7 +128,7 @@ public class ComponentService {
         record.set("config", JSON.toJSONString(config));
         record.set("code", type.getCode());
         record.set("version", 1);
-        User u = ThreadLocalUserKit.getUser();
+        User u = UserThreadLocal.getUser();
         if (u != null) {
             record.set("created_by", u.userId());
             record.set("created_time", new Date());
@@ -339,7 +339,7 @@ public class ComponentService {
         record.set("type", specific.toString());
         record.set("dest_object", specificCode);
         record.set("config", config == null ? Kv.create().toJson() : config.toJson());
-        User u = ThreadLocalUserKit.getUser();
+        User u = UserThreadLocal.getUser();
         if (u != null) {
             record.set("created_by", u.userId());
             record.set("created_time", new Date());

@@ -66,7 +66,7 @@ public class UtilKit {
     }
 
     public static void setUser(MetaData data) {
-        User user = ThreadLocalUserKit.getUser();
+        User user = UserThreadLocal.getUser();
         data.set("created_by", user.userId());
         data.set("created_time", new Date());
     }

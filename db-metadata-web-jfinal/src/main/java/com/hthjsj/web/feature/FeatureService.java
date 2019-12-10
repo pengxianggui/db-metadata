@@ -3,8 +3,8 @@ package com.hthjsj.web.feature;
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.web.ThreadLocalUserKit;
 import com.hthjsj.web.User;
+import com.hthjsj.web.UserThreadLocal;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -51,7 +51,7 @@ public class FeatureService {
         record.set("name", name);
         record.set("code", code);
         record.set("config", config == null ? Kv.create().toJson() : config.toJson());
-        User u = ThreadLocalUserKit.getUser();
+        User u = UserThreadLocal.getUser();
         if (u != null) {
             record.set("created_by", u.userId());
             record.set("created_time", new Date());
