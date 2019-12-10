@@ -287,6 +287,9 @@
            // ...    
         ]
     ``` 
+   
+ -[ ] ImgBox 图片上传
+    -[ ] 编辑表单时, ImgBox字段对应的value中键url的值应当为图片资源路径, 否则无法呈现并预览图片
  
  -[ ] FindPanel 查找面板(复杂)
     -[x] 参见jsonTemplate.json或者default.js
