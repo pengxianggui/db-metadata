@@ -6,62 +6,14 @@
         </div>
         <el-menu :default-active="$route.fullPath" :router="true" active-text-color
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-            <el-submenu index="business">
+            <el-submenu v-for="item in menus" :index="item.path" :key="item.path">
                 <template #title>
-                    <i class="el-icon-s-custom"></i>
-                    <span>业务模块</span>
+                    <i :class="item.icon"></i>
+                    <span v-text="item.label"></span>
                 </template>
-                <el-menu-item index="/main/table?objectCode=test_table">
-                    <i class="el-icon-s-help"></i>
-                    <span slot="title">单表CRUD</span>
-                </el-menu-item>
-                <el-menu-item index="/main/demo">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">组件概览</span>
-                </el-menu-item>
-            </el-submenu>
-            <el-submenu index="system">
-                <template #title>
-                    <i class="el-icon-s-grid"></i>
-                    <span>系统管理</span>
-                </template>
-                <el-menu-item index="/main/table?objectCode=change_log">
-                    <i class="el-icon-finished"></i>
-                    <span slot="title">ChangeLog</span>
-                </el-menu-item>
-                <el-menu-item index="/main/table?objectCode=db_version">
-                    <i class="el-icon-paperclip"></i>
-                    <span slot="title">DbVersion</span>
-                </el-menu-item>
-            </el-submenu>
-            <el-submenu index="meta">
-                <template #title>
-                    <i class="el-icon-s-tools"></i>
-                    <span>平台维护</span>
-                </template>
-                <el-menu-item index="/main/meta-data">
-                    <i class="el-icon-warning"></i>
-                    <span slot="title">元数据管理</span>
-                </el-menu-item>
-                <el-menu-item index="/main/meta-component">
-                    <i class="el-icon-star-off"></i>
-                    <span slot="title">组件全局配置</span>
-                </el-menu-item>
-                <el-menu-item index="/main/meta-component-instance">
-                    <i class="el-icon-star-on"></i>
-                    <span slot="title">组件实例配置</span>
-                </el-menu-item>
-                <el-menu-item index="/main/form-builder">
-                    <i class="el-icon-s-order"></i>
-                    <span slot="title">表单构建</span>
-                </el-menu-item>
-                <el-menu-item index="/main/table?objectCode=meta_config">
-                    <i class="el-icon-s-tools"></i>
-                    <span slot="title">MetaConfig</span>
-                </el-menu-item>
-                <el-menu-item index="/main/table?objectCode=meta_dict">
-                    <i class="el-icon-collection"></i>
-                    <span slot="title">字典</span>
+                <el-menu-item v-for="subItem in item.children" :index="subItem.path" :key="subItem.path">
+                    <i :class="subItem.icon"></i>
+                    <span slot="title" v-text="subItem.label"></span>
                 </el-menu-item>
             </el-submenu>
         </el-menu>
@@ -74,6 +26,65 @@
         data() {
             return {
                 isCollapse: false,
+                menus: [
+                    {
+                        path: 'business',
+                        icon: 'el-icon-s-custom',
+                        label: '业务模块',
+                        children: [{
+                            path: '/main/table?objectCode=test_table',
+                            icon: 'el-icon-s-help',
+                            label: '单表CRUD'
+                        }, {
+                            path: '/main/demo',
+                            icon: 'el-icon-menu',
+                            label: '组件概览'
+                        }]
+                    }, {
+                        path: 'system',
+                        icon: 'el-icon-s-grid',
+                        label: '系统管理',
+                        children: [{
+                            path: '/main/table?objectCode=change_log',
+                            icon: 'el-icon-finished',
+                            label: 'ChangeLog'
+                        }, {
+                            path: '/main/table?objectCode=db_version',
+                            icon: 'el-icon-paperclip',
+                            label: 'DbVersion'
+                        }]
+                    }, {
+                        path: 'meta',
+                        icon: 'el-icon-s-tools',
+                        label: '平台维护',
+                        children: [{
+                            path: '/main/meta-data',
+                            icon: 'el-icon-warning',
+                            label: '元数据管理'
+                        }, {
+                            path: '/main/meta-component',
+                            icon: 'el-icon-star-off',
+                            label: '组件全局配置'
+                        }, {
+                            path: '/main/meta-component-instance',
+                            icon: 'el-icon-star-on',
+                            label: '组件实例配置'
+                        }, {
+                            path: '/main/form-builder',
+                            icon: 'el-icon-s-order',
+                            label: '表单构建'
+                        }, {
+                            path: '/main/table?objectCode=meta_config',
+                            icon: 'el-icon-s-tools',
+                            label: 'MetaConfig'
+                        }, {
+                            path: '/main/table?objectCode=meta_dict',
+                            icon: 'el-icon-collection',
+                            label: '字典'
+                        }]
+                    },
+
+                ]
             }
         },
         methods: {
