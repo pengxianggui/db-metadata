@@ -90,11 +90,11 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        String dataId = getPara(metaObject.primaryKey());
+        Object[] dataIds = queryHelper.getPks(metaObject.primaryKey());
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
 
-        Record d = metaService().findDataById(metaObject, dataId);
+        Record d = metaService().findDataByIds(metaObject, dataIds);
 
         FormDataFactory.buildUpdateFormData(metaObject, d);
 
@@ -140,11 +140,11 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        String dataId = getPara(metaObject.primaryKey());
+        Object[] dataIds = queryHelper.getPks(metaObject.primaryKey());
 
         FormView formView = ViewFactory.formView(metaObject).viewForm();
 
-        Record d = metaService().findDataById(metaObject, dataId);
+        Record d = metaService().findDataByIds(metaObject, dataIds);
 
         FormDataFactory.buildUpdateFormData(metaObject, d);
 

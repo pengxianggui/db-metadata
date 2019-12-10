@@ -59,12 +59,12 @@ public class DbMetaService {
             throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
         }
         List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", objectCode);
-        IMetaObject IMetaObject = new MetaObject(moRecord.getColumns());
+        IMetaObject metaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {
             MetaField defaultMetaField = new MetaField(metafield.getColumns());
-            IMetaObject.addField(defaultMetaField);
+            metaObject.addField(defaultMetaField);
         }
-        return IMetaObject;
+        return metaObject;
     }
 
     public List<IMetaObject> findByCodes(String... objectCodes) {
@@ -151,7 +151,7 @@ public class DbMetaService {
 
     //*****************业务操作(metadata数据库以外的操作迁移至businessService)**************************
 
-    public boolean updateData(IMetaObject object, Kv data) {
+    public boolean updateData(IMetaObject object, MetaData data) {
         return businessService.updateData(object, data);
     }
 
@@ -167,7 +167,7 @@ public class DbMetaService {
         return businessService.saveData(object, data);
     }
 
-    public Record findDataById(IMetaObject object, String id) {
-        return businessService.findDataById(object, id);
+    public Record findDataByIds(IMetaObject object, Object... ids) {
+        return businessService.findDataByIds(object, ids);
     }
 }

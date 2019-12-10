@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.StrKit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,5 +93,18 @@ public class QueryHelper {
             ss.add(key + "=" + value);
         });
         return Joiner.on("&").appendTo(sb, ss).toString();
+    }
+
+    public Object[] getPks(String primaryKey) {
+        List<String> values = new ArrayList<>();
+        if (StrKit.notBlank(primaryKey)) {
+            String[] keys = primaryKey.split(",");
+            for (String key : keys) {
+                if (StrKit.notBlank(key)) {
+                    values.add(tp.get(key));
+                }
+            }
+        }
+        return values.toArray();
     }
 }

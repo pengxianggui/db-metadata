@@ -2,13 +2,13 @@ package com.hthjsj.web.controller.itp;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.ui.MetaFieldViewAdapter;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.UIManager;
-import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -38,14 +38,14 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
     public boolean updateAfter(boolean result, AopInvocation invocation) {
         if (result) {
             log.info("MetaFieldEditPointCut.updateAfter run");
-            Kv formData = invocation.getFormData();
+            MetaData formData = invocation.getFormData();
             //获取表单数据中的
             String objectCode = formData.getStr("object_code");
             String fieldCode = formData.getStr("field_code");
 
             IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
 
-            log.info("Update {} - field {},Biz data Primary key:{}", metaObject.code(), fieldCode, formData.get(metaObject.primaryKey()));
+            log.info("Update {} - field {},Biz data Primary key:{}", metaObject.code(), fieldCode, formData.getPks(metaObject.primaryKey()));
             List<ComponentType> existTypes = ServiceManager.componentService().loadTypesByObjectCode(metaObject.code());
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);

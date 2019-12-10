@@ -24,12 +24,15 @@ import java.util.Map;
 @Before(Tx.class)
 public class BusinessService {
 
-    public Record findDataById(IMetaObject object, String id) {
-        return Db.use(object.schemaName()).findById(object.tableName(), object.primaryKey(), id);
+    public Record findDataByIds(IMetaObject object, Object... ids) {
+        return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), ids);
     }
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {
         //select metaField.fileCode() from object.tableName() where object.primarykey()=id
+        if (object.primaryKey().contains(",")) {
+            throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
+        }
         return (T) Db.use(object.schemaName()).queryFirst("select " + metaField.fieldCode() + " from " + object.tableName() + " where " + object.primaryKey() + "=?", id);
     }
 
@@ -39,9 +42,9 @@ public class BusinessService {
         return status;
     }
 
-    public boolean updateData(IMetaObject object, Kv data) {
+    public boolean updateData(IMetaObject object, MetaData data) {
         // TODO support single primaryKey;
-        Record old = Db.use(object.schemaName()).findById(object.tableName(), data.get(object.primaryKey()));
+        Record old = Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), data.getPks(object.primaryKey()));
         boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
         buriedPoint(object, old.getColumns(), data);
         return status;
