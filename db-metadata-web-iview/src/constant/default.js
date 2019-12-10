@@ -199,11 +199,12 @@ const DEFAULT_CONF = {
         "label": "图片上传框",
         "inline": false,
         "conf": {
-            "action": "/upload/img",
+            "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
             "drag": false,
             "list-type": "picture-card",
-            "auto-upload": false,
-            "accept": "image"
+            "auto-upload": true,
+            "limit": 1,
+            "multiple": false,  // 暂时单选
         }
     },
     "FileBox": {
@@ -216,6 +217,7 @@ const DEFAULT_CONF = {
             "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
             "tip": "上传文件限制不超过2M",
             "auto-upload": true,
+            "show-file-list": true,
             "limit": 1,
             "multiple": false,  // 暂时单选
         }

@@ -177,11 +177,12 @@
     "label": "图片上传框",
     "inline": false,
     "conf": {
-      "action": "/upload/img",
+      "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
       "drag": false,
       "list-type": "picture-card",
-      "auto-upload": false,
-      "accept": "image"
+      "auto-upload": true,
+      "limit": 1,
+      "multiple": false
     }
   },
   "FileBox": {

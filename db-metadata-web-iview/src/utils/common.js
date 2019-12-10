@@ -146,6 +146,13 @@ export function joinArrInObj(val, separator, deep) {
     return val;
 }
 
+export function isImageFile(file) {
+    if (file instanceof File) {
+        return file.type.startsWith('image/');
+    }
+    return false;
+}
+
 /**
  * 提取数组中不重复的元素(重复规则看keyName), 只保留重复中的第一个. 返回提取后的新数组。例如:
  * 指定:

@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <img-box-demo></img-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <file-box-demo></file-box-demo>
             </el-col>
         </el-row>

@@ -41,7 +41,7 @@
         },
         data() {
             return {
-                // fileList: this.value
+                fileList: []
             }
         },
         methods: {
@@ -54,23 +54,33 @@
                 this.$message.warning('文件数量超过设定值：' + files.length);
             },
             beforeRemove(file, fileList) {
+                let self = this;
                 return this.$confirm(`确定移除 ${file.name}？`).then(data => {
-                    this.fileList = [];
+                    let delIndex = -1;
+                    for (let i = 0; i < self.nativeValue.length; i++) {
+                        if (self.nativeValue[i].url === file.url) { // 根据唯一标示进行移除
+                            delIndex = i;
+                            break;
+                        }
+                    }
+                    self.nativeValue.splice(delIndex, 1);
                 });
             },
             handleOnSuccess(response, file, fileList) {
-                let emitFileList = [];
                 if (response.state === 'ok') {
                     this.$message.success('文件上传成功!');
-                    emitFileList.push(response.data);
-                    this.fileList = emitFileList;
+                    file.url = response.data.url; // 设置唯一标示
+                    this.nativeValue.push(response.data);
                 } else {
                     this.$message.error('文件上传失败');
                 }
             }
         },
+        mounted() {
+            this.fileList = utils.deepCopy(this.nativeValue);
+        },
         computed: {
-            fileList: {
+            nativeValue: {
                 get() {
                     let value = [];
                     switch (utils.typeOf(this.value)) {
