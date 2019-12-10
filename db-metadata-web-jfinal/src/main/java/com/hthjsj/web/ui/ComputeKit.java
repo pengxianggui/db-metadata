@@ -23,6 +23,8 @@ public class ComputeKit {
         AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
         //set default componentName is "TextBox"
         builder.componentName(ComponentType.TEXTBOX);
+        builder.name(metaField.fieldCode());
+        builder.label(metaField.cn());
         if (metaField.dbType().isText()) {
             if (metaField.dbTypeLength() == 1L) {
                 builder.componentName(ComponentType.BOOLBOX);

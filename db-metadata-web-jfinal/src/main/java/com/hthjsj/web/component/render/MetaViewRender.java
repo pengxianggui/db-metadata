@@ -48,7 +48,7 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
     public Kv render() {
 
         Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
-        UtilKit.mergeUseOld(component.getMeta(), kv);
+        UtilKit.deepMerge(component.getMeta(), kv, true);
         component.getFields().clear();
 
         for (IMetaField metaField : metaObject.fields()) {

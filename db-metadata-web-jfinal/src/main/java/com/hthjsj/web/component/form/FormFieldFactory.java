@@ -42,7 +42,7 @@ public class FormFieldFactory {
      * 创建带容器的FormField
      *
      * @param metaField
-     * @param fieldIntanceConfig
+     * @param fieldInstanceConfig
      * @param viewContainer
      *
      * @return
