@@ -44,12 +44,4 @@ public class Dicts {
     public List<Kv> getKvs(String key) {
         return UtilKit.getKvs(dict(), key);
     }
-
-    public List<Kv> getGender() {
-        return getKvs("gender");
-    }
-
-    public List<Kv> getYesNo() {
-        return getKvs("yesno");
-    }
 }
