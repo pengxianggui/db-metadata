@@ -25,7 +25,7 @@ import java.util.Map;
 public class BusinessService {
 
     public Record findDataById(IMetaObject object, String id) {
-        return Db.use(object.schemaName()).findById(object.tableName(), id);
+        return Db.use(object.schemaName()).findById(object.tableName(), object.primaryKey(), id);
     }
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {

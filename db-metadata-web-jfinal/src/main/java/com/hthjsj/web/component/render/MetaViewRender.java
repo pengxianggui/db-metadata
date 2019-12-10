@@ -30,6 +30,7 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
         this.component = component;
         this.instanceFlatConfig = instanceFlatConfig;
         component.getMeta().putIfAbsent("objectCode", metaObject.code());
+        component.getMeta().putIfAbsent("objectPrimaryKey", metaObject.primaryKey());
     }
 
     @Override

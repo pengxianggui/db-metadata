@@ -68,7 +68,7 @@ public class TableController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode);
         QueryCondition queryCondition = new QueryCondition();
         SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
-        Page<Record> result = Db.paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
+        Page<Record> result = Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         /**
          * escape field value;
