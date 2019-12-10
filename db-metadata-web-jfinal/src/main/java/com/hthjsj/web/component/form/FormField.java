@@ -26,8 +26,14 @@ public abstract class FormField extends Component {
         setRender(new ManualRender<FormField>(this));
     }
 
-    public void disabled(boolean value) {
+    public FormField disabled(boolean value) {
         builder.disabled(value);
+        return this;
+    }
+
+    public FormField defaultVal(String value) {
+        builder.defaultVal(value);
+        return this;
     }
 
     @Override

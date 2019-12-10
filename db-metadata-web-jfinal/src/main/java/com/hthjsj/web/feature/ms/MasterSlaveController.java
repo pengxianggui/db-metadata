@@ -1,5 +1,6 @@
 package com.hthjsj.web.feature.ms;
 
+import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
@@ -113,15 +114,16 @@ public class MasterSlaveController extends Controller {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         MasterSlaveConfig config = getConfig();
+        Preconditions.checkNotNull(config, "功能配置加载失败");
+        String slaveFieldCode = config.get(objectCode).getForeignFieldCode();
+        String foreignValue = getPara(slaveFieldCode);
 
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
         //手工build,方便后面编程式操作表单内元子控件
         formView.buildChildren();
-        String slaveFieldCode = config.get(objectCode).getForeignFieldCode();
-        formView.getField(slaveFieldCode).disabled(true);
+        formView.getField(slaveFieldCode).disabled(true).defaultVal(foreignValue);
 
         renderJson(Ret.ok("data", formView.toKv()));
     }
