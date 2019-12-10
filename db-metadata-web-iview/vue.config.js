@@ -34,6 +34,7 @@ module.exports = {
             '^\/dict\/': serverProxy,
             '^\/file\/': serverProxy,
             '^\/check\/': serverProxy,
+            '^\/m\/': serverProxy,
         }
     }
 };
