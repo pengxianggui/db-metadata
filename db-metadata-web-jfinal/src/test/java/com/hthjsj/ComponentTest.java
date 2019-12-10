@@ -1,6 +1,7 @@
 package com.hthjsj;
 
 import com.hthjsj.analysis.meta.DbMetaService;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.component.TableView;
@@ -25,7 +26,7 @@ public class ComponentTest {
     public static void main(String[] args) {
         AnalysisConfig analysisConfig = AnalysisConfig.me();
         analysisConfig.start();
-        MetaObject metaObject = (MetaObject) Aop.get(DbMetaService.class).findByCode("meta_object");
+        IMetaObject metaObject = Aop.get(DbMetaService.class).findByCode("meta_object");
         TableView tableView = ViewFactory.tableView(metaObject);
 
         Aop.get(ComponentService.class).newObjectConfig(tableView, metaObject, Kv.create());

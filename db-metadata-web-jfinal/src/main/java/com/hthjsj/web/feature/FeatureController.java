@@ -11,6 +11,9 @@ import com.jfinal.kit.Ret;
 
 import java.util.List;
 
+/**
+ * @author konbluesky
+ */
 public class FeatureController extends FrontRestController {
 
     @Override

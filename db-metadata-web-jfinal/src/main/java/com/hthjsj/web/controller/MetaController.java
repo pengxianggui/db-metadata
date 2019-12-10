@@ -3,7 +3,6 @@ package com.hthjsj.web.controller;
 import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.DropDownBox;
@@ -70,7 +69,7 @@ public class MetaController extends FrontRestController {
         log.error("接口废弃 -> /table/meta");
 //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
         renderJson(Ret.ok("data", tableView.toKv()));
     }
@@ -82,7 +81,7 @@ public class MetaController extends FrontRestController {
         String objectCode = new QueryHelper(this).getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode("meta_object");
+        IMetaObject metaObject = metaService().findByCode("meta_object");
 
         Record data = metaService().findMetaDataOfMetaObjectCode(metaObject.code());
 
@@ -100,7 +99,7 @@ public class MetaController extends FrontRestController {
         String fieldCode = queryHelper.getFieldCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元字段的更新动作,必须指定objectCode和fieldCode");
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode("meta_field");
+        IMetaObject metaObject = metaService().findByCode("meta_field");
 
         Record data = metaService().findDataOfMetaFieldCode(objectCode, fieldCode);
 
@@ -116,7 +115,7 @@ public class MetaController extends FrontRestController {
         String objectCode = getPara("objectCode");
         DbMetaService dbMetaService = metaService();
         Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
-        MetaObject metaObject = (MetaObject) dbMetaService.importFromTable(schemaName, tableName);
+        IMetaObject metaObject = dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
@@ -128,7 +127,7 @@ public class MetaController extends FrontRestController {
     public void delete() {
         String objectCode = new QueryHelper(this).getObjectCode();
         DbMetaService dbMetaService = metaService();
-        MetaObject metaObject = (MetaObject) dbMetaService.findByCode(objectCode);
+        IMetaObject metaObject = dbMetaService.findByCode(objectCode);
         Preconditions.checkArgument(!metaObject.isSystem(), "该对象属于系统元对象,不能删除");
 
         log.info("删除元对象{}数据", metaObject.code());

@@ -3,7 +3,7 @@ package com.hthjsj.web.controller;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.MetaObject;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.ViewFactory;
@@ -36,7 +36,7 @@ public class ComponentController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
-        MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
 
         renderJson(Ret.ok("data", metaObjectViewAdapter.getComponent().toKv()));
@@ -77,7 +77,7 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
 
         if (StrKit.notBlank(compCode, objectCode)) {
-            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+            IMetaObject metaObject = metaService().findByCode(objectCode);
             //已存在的配置
             if (componentService().hasObjectConfig(compCode, objectCode)) {
 
@@ -137,7 +137,7 @@ public class ComponentController extends FrontRestController {
                 renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
                 return;
             }
-            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+            IMetaObject metaObject = metaService().findByCode(objectCode);
             componentService().newObjectConfig(component, metaObject, config);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -158,7 +158,7 @@ public class ComponentController extends FrontRestController {
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
-            MetaObject metaObject = (MetaObject) metaService().findByCode(objectCode);
+            IMetaObject metaObject = metaService().findByCode(objectCode);
             componentService().updateObjectConfig(component, metaObject, config);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));

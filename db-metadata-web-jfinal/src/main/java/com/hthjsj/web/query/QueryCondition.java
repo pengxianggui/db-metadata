@@ -2,7 +2,6 @@ package com.hthjsj.web.query;
 
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaObject;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
@@ -49,7 +48,7 @@ public class QueryCondition {
      * Call:
      * Db.find(select * from tableA where id=? and name >=?,new String[]{v_id,v_name})
      */
-    public SqlParaExt resolve(Map<String, String[]> httpParams, MetaObject metaObject, String[] fields, String[] efields) {
+    public SqlParaExt resolve(Map<String, String[]> httpParams, IMetaObject metaObject, String[] fields, String[] efields) {
         Map<String, Object> params = UtilKit.toObjectFlat(httpParams);
         SqlParaExt sqlParaExt = new SqlParaExt();
 
