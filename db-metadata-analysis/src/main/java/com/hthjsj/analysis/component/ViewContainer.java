@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 容器类Component的基类
@@ -18,7 +19,7 @@ public abstract class ViewContainer extends Component {
     @Setter
     ViewInject viewInject = new ViewInject.DefaultViewInject();
 
-    boolean isRendered = false;
+    boolean isBuild = false;
 
     private List<Component> fields = new ArrayList<>(0);
 
@@ -62,26 +63,36 @@ public abstract class ViewContainer extends Component {
 
     @Override
     public Kv toKv() {
-        if (!isRendered) {
-            renderCustomMeta(meta);
-            if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
-                getViewInject().inject(this, meta, getFieldInject());
-            } else {
-                //如使用了Inject,就覆盖默认逻辑
-                renderFieldsMeta(fields, meta);
-            }
+        renderCustomMeta(meta);
+
+//        if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
+//            getViewInject().inject(this, meta, getFieldInject());
+//        } else {
+//            //如使用了Inject,就覆盖默认逻辑
+//            renderFieldsMeta(fields, meta);
+//        }
+        //TODO
+        if (!isBuild) {
             render.render();
-            isRendered = true;
+        }
+        if (!getFields().isEmpty()) {
+            meta.set("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         }
         return meta;
     }
 
-    public ViewContainer render() {
-        if (!isRendered) {
-            renderCustomMeta(meta);
-            render.render();
-            isRendered = true;
-        }
+    /**
+     * build中触发构建动作,只生成容器中的Component,不生成meta中的json
+     * 用于构建后,单独编辑个别控件
+     *
+     * @return
+     */
+    public ViewContainer buildChildren() {
+        renderCustomMeta(meta);
+
+        render.render();
+
+        isBuild = true;
         return this;
     }
 }

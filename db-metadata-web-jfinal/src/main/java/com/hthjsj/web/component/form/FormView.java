@@ -1,6 +1,5 @@
 package com.hthjsj.web.component.form;
 
-import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
@@ -46,8 +45,8 @@ public class FormView extends ViewContainer {
      *
      * @return
      */
-    public Component getField(String name) {
-        Component field = getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().get();
+    public FormField getField(String name) {
+        FormField field = (FormField) getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().get();
         if (field == null) {
             throw new ComponentException("FormView 实例中不包含 {} 组件", name);
         }

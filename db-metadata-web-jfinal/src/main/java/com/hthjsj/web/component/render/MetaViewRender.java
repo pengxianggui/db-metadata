@@ -11,8 +11,6 @@ import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.jfinal.kit.Kv;
 
-import java.util.stream.Collectors;
-
 /**
  * <p> @Date : 2019/11/27 </p>
  * <p> @Project : db-meta-serve</p>
@@ -31,6 +29,7 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
         this.metaObject = metaObject;
         this.component = component;
         this.instanceFlatConfig = instanceFlatConfig;
+        component.getMeta().putIfAbsent("objectCode", metaObject.code());
     }
 
     @Override
@@ -40,16 +39,16 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
 
     /**
      * TABLEVIEW,SEARCHVIEW,FORMVIEW(ADD,UPDATE,DETAILS)共用的渲染逻辑;
+     * WARN render 需要保证幂等性
      *
      * @return
      */
     @Override
     public Kv render() {
 
-        component.getMeta().putIfAbsent("objectCode", metaObject.code());
-
         Kv kv = UtilKit.getKv(instanceFlatConfig, metaObject.code());
         UtilKit.mergeUseOld(component.getMeta(), kv);
+        component.getFields().clear();
 
         for (IMetaField metaField : metaObject.fields()) {
             Kv config = UtilKit.getKv(instanceFlatConfig, metaField.fieldCode());
@@ -90,8 +89,6 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
                 }
             }
         }
-        //overwrite columns
-        component.getMeta().set("columns", component.getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         return component.getMeta();
     }
 }

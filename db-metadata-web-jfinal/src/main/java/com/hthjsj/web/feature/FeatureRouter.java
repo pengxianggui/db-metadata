@@ -16,5 +16,8 @@ public class FeatureRouter extends Routes {
     public void config() {
         add("/m/ms", MasterSlaveController.class);
         add("/m", FeatureController.class);
+
+        add("/module/masterSlave", MasterSlaveController.class);
+        add("/module", FeatureController.class);
     }
 }

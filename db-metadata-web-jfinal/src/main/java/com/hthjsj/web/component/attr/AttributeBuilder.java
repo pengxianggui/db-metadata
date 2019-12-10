@@ -20,6 +20,10 @@ public class AttributeBuilder {
         return new AttributeSteps();
     }
 
+    public static AttributeSteps newBuilder(Kv config) {
+        return new AttributeSteps(config);
+    }
+
     interface AttrCustomMeta {
 
         AttrCustomMeta componentName(String componentCode);
@@ -81,6 +85,13 @@ public class AttributeBuilder {
     public static class AttributeSteps implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr {
 
         private Kv config = Kv.create();
+
+        public AttributeSteps() {
+        }
+
+        public AttributeSteps(Kv config) {
+            this.config = config;
+        }
 
         @Override
         public Kv render() {

@@ -32,6 +32,9 @@ public class FeatureService {
 
     public <T> T loadFeatureConfig(String featureCode) {
         Record record = Db.findFirst("select * from meta_feature where code=?", featureCode);
+        if (record == null) {
+            throw new FeatureException("%s是无效的功能code", featureCode);
+        }
         FeatureType type = FeatureType.V(record.getStr("type"));
         return (T) JSON.parseObject(record.getStr("config"), type.configEntity);
     }

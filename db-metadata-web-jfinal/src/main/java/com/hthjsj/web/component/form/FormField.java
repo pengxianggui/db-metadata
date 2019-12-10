@@ -15,7 +15,7 @@ import com.hthjsj.web.component.attr.AttributeBuilder;
  */
 public abstract class FormField extends Component {
 
-    AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
+    AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder(this.meta);
 
     public FormField(String name, String label) {
         this.name = name;
@@ -24,6 +24,10 @@ public abstract class FormField extends Component {
         this.meta.set("name", name);
         this.meta.set("label", label);
         setRender(new ManualRender<FormField>(this));
+    }
+
+    public void disabled(boolean value) {
+        builder.disabled(value);
     }
 
     @Override

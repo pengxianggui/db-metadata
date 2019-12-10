@@ -39,7 +39,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
     public Kv render() {
         //先将实例配置,merge到meta
         //以数据库保存的实例配置为准
-        UtilKit.mergeUseNew(component.getMeta(), fieldInstanceConfig);
+        UtilKit.deepMerge(component.getMeta(), fieldInstanceConfig, true);
 
         //TODO 根据表单和字段状态,计算显示属性 ReadOnly Disabled
         if (component.getContainer() instanceof FormView) {

@@ -99,22 +99,42 @@ public class MasterSlaveController extends Controller {
         renderJson(status ? Ret.ok() : Ret.fail());
     }
 
+    /**
+     * ?featureCode=&objectCode=
+     */
     public void toAddS() {
+        /**
+         * 1. 获取功能配置
+         * 2. 获取子元对象
+         * 3. 修改子元对象对应操作(ADD,Update)的formView
+         * 4. render
+         */
+
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
+        MasterSlaveConfig config = getConfig();
 
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
         //手工build,方便后面编程式操作表单内元子控件
-        formView.render();
-
-
-
-
-
+        formView.buildChildren();
+        String slaveFieldCode = config.get(objectCode).getForeignFieldCode();
+        formView.getField(slaveFieldCode).disabled(true);
 
         renderJson(Ret.ok("data", formView.toKv()));
+    }
+
+    /**
+     * 从request中拆解出- 功能Code 来 获取配置
+     *
+     * @return
+     */
+    private MasterSlaveConfig getConfig() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String featureCode = queryHelper.getFeatureCode();
+        MasterSlaveConfig masterSlaveConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
+        return masterSlaveConfig;
     }
 }
