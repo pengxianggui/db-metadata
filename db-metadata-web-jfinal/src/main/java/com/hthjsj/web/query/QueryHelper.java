@@ -95,7 +95,7 @@ public class QueryHelper {
         return Joiner.on("&").appendTo(sb, ss).toString();
     }
 
-    public Object[] getPks(String primaryKey) {
+    public Object[] getPks(String primaryKey, String defaultKey) {
         List<String> values = new ArrayList<>();
         if (StrKit.notBlank(primaryKey)) {
             String[] keys = primaryKey.split(",");
@@ -103,6 +103,13 @@ public class QueryHelper {
                 if (StrKit.notBlank(key)) {
                     values.add(tp.get(key));
                 }
+            }
+        }
+        //FIXME hack primarykey取不到主键时,用默认key,前端支持后,取消这部分逻辑
+        if (StrKit.notBlank(defaultKey)) {
+            values.clear();
+            if (StrKit.notBlank(defaultKey)) {
+                values.add(tp.get(defaultKey));
             }
         }
         return values.toArray();
