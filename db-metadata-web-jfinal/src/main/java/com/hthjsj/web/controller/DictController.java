@@ -35,15 +35,4 @@ public class DictController extends FrontRestController {
         log.info("已有key:{}", Arrays.toString(Dicts.me().keys()));
         renderJson(Ret.fail().set("msg", "dict.json中不存在key为" + key + "的数据"));
     }
-
-    public void sex() {
-        renderJson(Ret.ok("data", Dicts.me().getGender()));
-    }
-
-    /**
-     * yes or no
-     */
-    public void yn() {
-        renderJson(Ret.ok("data", Dicts.me().getYesNo()));
-    }
 }

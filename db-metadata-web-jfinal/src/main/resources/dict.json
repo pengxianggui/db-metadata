@@ -1,5 +1,5 @@
 {
-  "yesno": [
+  "yn": [
     {
       "key": "男",
       "value": 1
@@ -9,7 +9,7 @@
       "value": 2
     }
   ],
-  "gender": [
+  "sex": [
     {
       "key": "是",
       "value": 1
