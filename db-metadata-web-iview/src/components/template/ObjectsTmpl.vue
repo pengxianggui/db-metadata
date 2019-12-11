@@ -4,6 +4,7 @@
         <el-button v-for="object in objectCodes" @click="jump(object.code)" :key="object.code" class="el-card">
             <b>{{object.code}}</b>
         </el-button>
+        <iframe id="iframe" :src="path" frameborder="0" width="100%" height="500" style="padding: 20px;"></iframe>
     </el-card>
 </template>
 
@@ -14,13 +15,16 @@
         name: "ObjectsTmpl",
         data() {
             return {
-                objectCodes: []
+                objectCodes: [],
+                path: null
             }
         },
         methods: {
             jump(objectCode) {
-                let url = this.$compile('/#/main/table?objectCode={objectCode}', {objectCode: objectCode});
-                window.open(url, '_blank');
+                this.path = this.$compile('/#/table?objectCode={objectCode}', {objectCode: objectCode});
+                this.$nextTick(() => {
+                    document.getElementById('iframe').contentWindow.location.reload();
+                });
             }
         },
         created() {
