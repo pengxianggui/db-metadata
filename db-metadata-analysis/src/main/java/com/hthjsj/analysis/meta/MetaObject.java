@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class MetaObject implements IMetaObject {
 
-    List<IMetaField> _primarys = new ArrayList<>();
+//    List<IMetaField> _primarys = new ArrayList<>();
 
     List<IMetaField> fields = new ArrayList<>();
 
@@ -25,10 +25,10 @@ public class MetaObject implements IMetaObject {
 
     Record record = new Record();
 
-    public MetaObject() {
+    MetaObject() {
     }
 
-    public MetaObject(Map<String, Object> dataMap) {
+    MetaObject(Map<String, Object> dataMap) {
         this.record = new Record().setColumns(dataMap);
     }
 
@@ -72,31 +72,31 @@ public class MetaObject implements IMetaObject {
         record.set("schema_name", value);
     }
 
-    @Override
-    public IMetaField[] primarys() {
-        if (_primarys.isEmpty()) {
-            for (IMetaField field : fields) {
-                if (field.isPrimary()) {
-                    _primarys.add(field);
-                }
-            }
-        }
-        return _primarys.toArray(new IMetaField[_primarys.size()]);
-    }
+//    @Override
+//    public IMetaField[] primarys() {
+//        if (_primarys.isEmpty()) {
+//            for (IMetaField field : fields) {
+//                if (field.isPrimary()) {
+//                    _primarys.add(field);
+//                }
+//            }
+//        }
+//        return _primarys.toArray(new IMetaField[_primarys.size()]);
+//    }
+//
+//    @Override
+//    public void primarys(IMetaField[] primarys) {
+//        StringBuilder sb = new StringBuilder();
+//        for (IMetaField mf : primarys) {
+//            sb.append(",").append(mf.fieldCode());
+//        }
+//        record.set("primarys", sb.substring(1));
+//    }
 
-    @Override
-    public void primarys(IMetaField[] primarys) {
-        StringBuilder sb = new StringBuilder();
-        for (IMetaField mf : primarys) {
-            sb.append(",").append(mf.fieldCode());
-        }
-        record.set("primarys", sb.substring(1));
-    }
-
-    public void addPrimary(IMetaField field) {
-        _primarys.add(field);
-        primarys(_primarys.toArray(new IMetaField[_primarys.size()]));
-    }
+//    public void addPrimary(IMetaField field) {
+//        _primarys.add(field);
+//        primarys(_primarys.toArray(new IMetaField[_primarys.size()]));
+//    }
 
     @Override
     public String primaryKey() {
@@ -149,5 +149,10 @@ public class MetaObject implements IMetaObject {
     @Override
     public void dataMap(Map<String, Object> data) {
         record.setColumns(data);
+    }
+
+    @Override
+    public MetaJudge metaType() {
+        return new MetaJudge(MetaJudge.TABLE);
     }
 }

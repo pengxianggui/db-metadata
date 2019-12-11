@@ -17,7 +17,7 @@ public class MetaConfigFactory {
         return new MetaObjectConfigParse(config);
     }
 
-    public static MetaFieldConfigParse createV1FieldConfig(MetaField metaField, String defaultValue, String isNUll) {
+    public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
         config.set("defaultValue", defaultValue == null ? "" : defaultValue);

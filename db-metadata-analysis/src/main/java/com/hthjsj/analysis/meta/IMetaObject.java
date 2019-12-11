@@ -39,11 +39,11 @@ public interface IMetaObject {
     @JSONField(name = "schemaName")
     void schemaName(String value);
 
-    @JSONField(name = "primarys")
-    IMetaField[] primarys();
-
-    @JSONField(name = "primarys")
-    void primarys(IMetaField[] value);
+//    @JSONField(name = "primarys")
+//    IMetaField[] primarys();
+//
+//    @JSONField(name = "primarys")
+//    void primarys(IMetaField[] value);
 
     @JSONField(name = "primaryKey")
     String primaryKey();
@@ -68,5 +68,7 @@ public interface IMetaObject {
     Map<String, Object> dataMap();
 
     void dataMap(Map<String, Object> data);
+
+    MetaJudge metaType();
 }
 

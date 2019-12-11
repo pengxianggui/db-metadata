@@ -7,11 +7,11 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-public class DBTypeJudge {
+public class DbTypeJudge {
 
     String value;
 
-    DBTypeJudge(String value) {
+    DbTypeJudge(String value) {
         this.value = value;
     }
 
@@ -64,7 +64,7 @@ public class DBTypeJudge {
     }
 
     /**
-     * DBTypeJudge 不持有dbTypeLength,需外部传入
+     * DbTypeJudge 不持有dbTypeLength,需外部传入
      *
      * @param length
      *

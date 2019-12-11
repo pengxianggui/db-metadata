@@ -16,7 +16,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
     @Override
     public IMetaObject assembly(Table table) {
-        MetaObject metaObject = new MetaObject();
+        IMetaObject metaObject = MetaFactory.createMetaObject();
 
         metaObject.code(table.getTableName().toLowerCase());
         metaObject.name(table.getTableComment().trim());
@@ -27,7 +27,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
         for (int i = 0; i < table.getColumns().size(); i++) {
             Column column = table.getColumns().get(i);
-            MetaField mf = new MetaField();
+            IMetaField mf = MetaFactory.createMetaField();
 
             mf.objectCode(metaObject.code());
             mf.cn(column.getColumnComment().trim());
@@ -40,12 +40,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
 
             mf.orderNum(i);
 
-            if (PRIMARY.equals(column.getColumnKey())) {
-                mf.isPrimary(true);
-                metaObject.addPrimary(mf);
-            } else {
-                mf.isPrimary(false);
-            }
+            mf.isPrimary(PRIMARY.equals(column.getColumnKey()));
 
             MetaFieldConfigParse fieldConfig = MetaConfigFactory.createV1FieldConfig(mf, column.getColumnDefault(), column.getIsNullable());
 

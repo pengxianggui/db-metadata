@@ -45,7 +45,7 @@ public interface IMetaField {
     void en(String value);
 
     @JSONField(name = "dbType")
-    DBTypeJudge dbType();
+    DbTypeJudge dbType();
 
     @JSONField(name = "dbType")
     void dbType(String value);
