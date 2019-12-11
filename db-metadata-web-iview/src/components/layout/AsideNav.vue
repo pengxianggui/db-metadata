@@ -35,6 +35,10 @@
                             path: '/main/table?objectCode=test_table',
                             icon: 'el-icon-s-help',
                             label: '单表CRUD'
+                        },{
+                            path: '/main/ms-table?featureCode=tcode_test',
+                            icon: 'el-icon-s-help',
+                            label: '主子表'
                         }, {
                             path: '/main/demo',
                             icon: 'el-icon-menu',

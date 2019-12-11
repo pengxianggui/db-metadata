@@ -161,6 +161,8 @@
             </template>
             <template #footer><span></span></template>  <!-- 表单自带button条 -->
         </dialog-box>
+
+        <slot name="behavior" :on="on" :actions="actions"></slot>
     </el-container>
 </template>
 
@@ -238,13 +240,16 @@
                 } else {
                     url = this.$compile(URL.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
                 }
+                this.dialog(url, {
+                    title: primaryValue ? '编辑' : '新增'
+                })
+            },
+            dialog(url, conf) {
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
                     this.dialogMeta = {
                         component_name: "DialogBox",
-                        conf: {
-                            title: primaryValue ? '编辑' : '新增'
-                        }
+                        conf: utils.assertUndefined(conf, {title: '新增'})
                     };
                     this.dialogVisible = true
                 });
@@ -472,6 +477,14 @@
                 } else {
                     return primaryKey;
                 }
+            },
+            // 支持无渲染的行为插槽
+            actions() {
+                const {doDelete} = this;
+                return {doDelete};
+            },
+            on() {
+                return this.$on.bind(this);
             }
         }
     }

@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep'
+import {isUndefined} from "element-ui/src/utils/types";
 
 // 常规utils方法
 /**
@@ -189,6 +190,11 @@ export function isImageFile(file) {
         return file.type.startsWith('image/');
     }
     return false;
+}
+
+export function assertUndefined(value, defaultValue) {
+    if (isUndefined(value)) return defaultValue;
+    return value;
 }
 
 /**

@@ -2,6 +2,21 @@ import utils from '@/utils'
 import {URL} from '@/constant'
 
 /**
+ * 加载功能配置
+ * @type {{methods: {loadFeature(*=): *}}}
+ */
+export const loadFeature = {
+    methods: {
+        loadFeature(featureCode) {
+            let url = this.$compile(URL.FEATURE_LOAD, {
+                featureCode: featureCode
+            });
+            return this.$axios.get(url);
+        }
+    }
+}
+
+/**
  * 获取TableList的meta, 参数objectCode.
  * **组件实例中TableList的meta的命名必须为 tlMeta**
  * @type {{methods: {getTlMeta(*=): void}}}

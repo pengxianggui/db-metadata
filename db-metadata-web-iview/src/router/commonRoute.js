@@ -37,6 +37,11 @@ const children = [
         props: (route) => ({R_oc: route.query.objectCode}),
         component: () => import('@/components/template/SingleGridTmpl')
     }, {
+        path: 'ms-table',
+        name: 'msTable',
+        props: (route) => ({R_fc: route.query.featureCode}),
+        component: () => import('@/components/template/MasterSlaveTableTmpl')
+    }, {
     //     path: 'ChangeLog',
     //     name: 'ChangeLog',
     //     props: {R_oc: "change_log"},
