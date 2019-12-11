@@ -39,6 +39,10 @@
                             path: '/main/demo',
                             icon: 'el-icon-menu',
                             label: '组件概览'
+                        }, {
+                            path: '/main/objects',
+                            icon: 'el-icon-menu',
+                            label: '动态元对象'
                         }]
                     }, {
                         path: 'system',

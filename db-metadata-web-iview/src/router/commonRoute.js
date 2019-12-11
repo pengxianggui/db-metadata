@@ -70,6 +70,10 @@ const children = [
         path: 'demo',
         name: 'Demo',
         component: () => import('@/components/demo/DemoMain')
+    }, {
+        path: 'objects',
+        name: 'objects',
+        component: () => import('@/components/template/ObjectsTmpl')
     }
 ];
 
