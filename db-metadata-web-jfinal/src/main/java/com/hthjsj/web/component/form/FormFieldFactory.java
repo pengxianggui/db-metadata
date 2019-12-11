@@ -108,6 +108,9 @@ public class FormFieldFactory {
             case FILEBOX:
                 FileBox fileBox = new FileBox(metaField.fieldCode(), metaField.cn());
                 return create(fileBox, metaField, instanceFieldConfig);
+            case FINDBOX:
+                FindBox findBox = new FindBox(metaField.fieldCode(), metaField.cn());
+                return create(findBox, metaField, instanceFieldConfig);
             default:
                 break;
         }

@@ -61,6 +61,9 @@ public class MetaFactory {
             manualMetaField.en(name);
             manualMetaField.cn(label);
             manualMetaField.objectCode(objectCode);
+            manualMetaField.dbType("varchar");
+            manualMetaField.config("{}");
+            manualMetaField.config(MetaConfigFactory.createV1FieldConfig(manualMetaField, null, null).toJson());
             manualMetaObject.addField(manualMetaField);
         }
         manualMetaObject.tableName(tableName);

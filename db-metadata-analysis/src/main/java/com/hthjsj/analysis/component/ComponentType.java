@@ -28,7 +28,6 @@ public enum ComponentType {
     JSONBOX("jsonbox", "Json框", "JsonBox"),
     MINIFORMBOX("miniformbox", "迷你表单框", "MiniFormBox"),
     FINDBOX("findbox", "查找框", "FindBox"),
-    FINDPANEL("findpanel", "查找面板", "FindPanel"),
     SEARCHVIEW("searchview", "搜索面板", "SearchPanel"),
     FILEBOX("filebox", "上传控件", "FileBox"),
     UNKNOWN("unknow", "未知控件", "unknow");

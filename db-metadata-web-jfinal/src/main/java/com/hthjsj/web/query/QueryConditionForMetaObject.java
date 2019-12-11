@@ -21,7 +21,7 @@ import java.util.*;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class QueryCondition {
+public class QueryConditionForMetaObject implements IQueryCondition {
 
     /**
      * 普通值过滤
@@ -48,7 +48,14 @@ public class QueryCondition {
      * Call:
      * Db.find(select * from tableA where id=? and name >=?,new String[]{v_id,v_name})
      */
-    public SqlParaExt resolve(Map<String, String[]> httpParams, IMetaObject metaObject, String[] fields, String[] efields) {
+    private IMetaObject metaObject;
+
+    public QueryConditionForMetaObject(IMetaObject metaObject) {
+        this.metaObject = metaObject;
+    }
+
+    @Override
+    public SqlParaExt resolve(Map<String, String[]> httpParams, String[] fields, String[] efields) {
         Map<String, Object> params = UtilKit.toObjectFlat(httpParams);
         SqlParaExt sqlParaExt = new SqlParaExt();
 

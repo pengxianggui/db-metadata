@@ -3,7 +3,7 @@ package com.hthjsj.web;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.component.Components;
-import com.hthjsj.web.controller.*;
+import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.feature.FeatureRouter;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
@@ -40,17 +40,9 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configRoute(Routes me) {
         me.setMappingSuperClass(true);
-        me.addInterceptor(new JsonParamIntercept());
-        me.add("/db", DBController.class);
-        me.add("/meta", MetaController.class);
-        me.add("/component", ComponentController.class);
-        me.add("/component/options", OptionsController.class);
-        me.add("/table", TableController.class);
-        me.add("/form", FormController.class);
-        me.add("/dict", DictController.class);
-        me.add("/check", ValidatorController.class);
-        me.add("/file", UploadController.class);
+        me.add(new CoreRouter());
         me.add(new FeatureRouter());
+        me.add("/file", UploadController.class);
     }
 
     @Override
@@ -80,6 +72,7 @@ public class AppWebConfig extends JFinalConfig {
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
         me.add(new UserSettingIntercept());
+        me.add(new JsonParamIntercept());
     }
 
     @Override

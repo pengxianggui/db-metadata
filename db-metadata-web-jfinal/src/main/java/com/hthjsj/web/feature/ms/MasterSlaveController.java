@@ -48,7 +48,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MasterSlaveController extends Controller {
 
     /**
-     * ?featureCode=&objectCode=
+     * ?featureCode=feature1&
+     * objectCode=meta_field&
+     * object_code=aasdf
      */
     public void toAddS() {
         /**

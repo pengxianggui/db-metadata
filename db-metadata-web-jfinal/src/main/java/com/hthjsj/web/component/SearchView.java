@@ -1,6 +1,7 @@
 package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
 import com.jfinal.kit.Kv;
 
@@ -14,6 +15,7 @@ public class SearchView extends ViewContainer {
 
     public SearchView(String name, String label) {
         super(name, label);
+        setRender(new ManualRender<SearchView>(this));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.hthjsj.web.component;
 
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.component.ManualRender;
 import com.hthjsj.analysis.component.ViewContainer;
 import com.jfinal.kit.Kv;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class TableView extends ViewContainer {
 
     public TableView(String name, String label) {
         super(name, label);
+        setRender(new ManualRender<TableView>(this));
     }
 
     @Override

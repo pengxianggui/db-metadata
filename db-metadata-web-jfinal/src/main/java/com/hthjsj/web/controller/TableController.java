@@ -9,7 +9,7 @@ import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
-import com.hthjsj.web.query.QueryCondition;
+import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Ret;
@@ -66,8 +66,8 @@ public class TableController extends FrontRestController {
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        QueryCondition queryCondition = new QueryCondition();
-        SqlParaExt sqlPara = queryCondition.resolve(getRequest().getParameterMap(), metaObject, fields, excludeFields);
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject);
+        SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
         Page<Record> result = Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         /**

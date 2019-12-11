@@ -1,6 +1,7 @@
 package com.hthjsj.web.component.form;
 
 import com.hthjsj.analysis.component.ComponentType;
+import com.jfinal.kit.Kv;
 
 /**
  * <p> @Date : 2019/11/14 </p>
@@ -17,5 +18,16 @@ public class FindBox extends FormField {
     @Override
     public ComponentType componentType() {
         return ComponentType.FINDBOX;
+    }
+
+    public FindBox dataUrl(String url) {
+        meta.setIfNotBlank("data_url", url);
+        return this;
+    }
+
+    @Override
+    public Kv toKv() {
+        getFieldInject().inject(meta);
+        return render.render();
     }
 }
