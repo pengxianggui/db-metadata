@@ -9,7 +9,11 @@
             </table-list>
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
-            <table-list :ref="sTlMeta['name']" :meta="sTlMeta"></table-list>
+            <table-list :ref="sTlMeta['name']" :meta="sTlMeta">
+                <template #add-btn="{conf}">
+                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
+                </template>
+            </table-list>
         </div>
 
         <el-dialog title="创建元对象" :visible.sync="visible">
@@ -19,28 +23,27 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {URL} from '@/constant'
-    import {getTlMeta, getSpMeta} from "../core/mixins/methods"
+    import {loadFeature, getTlMeta, getSpMeta} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
 
     export default {
         name: "MetaDataManager",
-        mixins: [getTlMeta, getSpMeta],
+        mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
-            R_moc: String,
-            R_soc: String,
-            R_linkage: {
-                type: Object,
-                validator: (value) => { return value.hasOwnProperty('m') && value.hasOwnProperty('s') }
-            },
+            R_fc: String,    // fc: 功能code(feature_code)
         },
         components: {
             MetaImport
         },
         data() {
             return {
-                mObjectCode: this.R_moc,
-                sObjectCode: this.R_soc,
+                featureCode: this.R_fc,
+
+                master: {},
+                slave: {},  // 元对象/元字段 主子表一对一
+
                 mSpMeta: {},
                 mTlMeta: {},
                 activeMData: {},
@@ -66,7 +69,7 @@
                 })
             },
             jumpToConf(objectCode) {
-                let title = '创建成功，是否前往配置界面对' + objectCode +  '进行UI配置?';
+                let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
                 let url = this.$compile(URL.R_INSTANCE_CONF_EDIT, {
                     componentCode: 'TableList',
                     objectCode: objectCode
@@ -92,7 +95,6 @@
                         ])
                     });
                 });
-
             },
             formSubmit(formModel) {
                 this.$axios.post(this.formMeta.action, formModel).then(resp => {
@@ -110,6 +112,24 @@
             },
             refreshSlaveTableData() {
                 this.sTlRef.getData();
+            },
+            handleAdd() {
+                const sObjectCode = this.slave['objectCode'];
+                const featureCode = this.featureCode;
+                const foreignKeyName = this.slave['foreignFieldCode'];
+                const foreignKeyValue = this.activeMData[this.master['primaryKey']];
+
+                if (utils.isEmpty(this.activeMData)) {
+                    this.$message.warning('请先选择一条主表记录', '提示');
+                    return;
+                }
+                const url = this.$compile(URL.MASTER_SLAVE_TO_ADD_S, {
+                    objectCode: sObjectCode,
+                    featureCode: featureCode,
+                    foreignKeyName: foreignKeyName,
+                    foreignKeyValue: foreignKeyValue
+                });
+                this.$refs[this.sTlMeta['name']].dialog(url);
             },
             doDelete(ids, ev, row, index) {
                 let objectCodes;
@@ -143,8 +163,9 @@
         watch: {
             activeMData: {
                 handler: function (newVal, oldVal) {
+                    let primaryKey = this.master['primaryKey'];
                     this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
-                        objectCode: newVal[this.R_linkage['m']]
+                        objectCode: newVal[primaryKey]
                     });
                 },
                 deep: true
@@ -153,38 +174,48 @@
         created() {
             this.getFormMeta();
 
-            // 获取主表TableList 组件meta
-            this.getTlMeta(this.mObjectCode).then(resp => {
-                this.mTlMeta = resp.data;
-                this.$nextTick(() => {
-                    this.mTlRef.doDelete = this.doDelete; // override doDelete
+            this.loadFeature(this.featureCode).then(resp => {
+                const feature = resp.data;
+                this.master = feature['master'];
+                this.slave = feature['slaves'][0]; // 元对象/元字段 主子表一对一
+
+                const mObjectCode = this.master['objectCode'];
+                const sObjectCode = this.slave['objectCode'];
+
+                // 获取主表TableList 组件meta
+                this.getTlMeta(mObjectCode).then(resp => {
+                    this.mTlMeta = resp.data;
+                    this.$nextTick(() => {
+                        this.mTlRef.doDelete = this.doDelete; // override doDelete
+                    });
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
                 });
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
-            });
-            // 获取主表SearchPanel 组件meta
-            this.getSpMeta(this.mObjectCode).then(resp => {
-                this.mSpMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
-            });
-            // 获取从表TableList 组件meta
-            this.getTlMeta(this.sObjectCode).then(resp => {
-                this.sTlMeta = resp.data;
-                this.sTableUrl = this.sTlMeta['data_url'] + '?' + this.R_linkage['s'] + '={objectCode}';
-                this.sTlMeta['data_url'] = this.sTableUrl;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
-            });
-            // 获取从表SearchPanel 组件meta
-            this.getSpMeta(this.sObjectCode).then(resp => {
-                this.sSpMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
+                // 获取主表SearchPanel 组件meta
+                this.getSpMeta(mObjectCode).then(resp => {
+                    this.mSpMeta = resp.data;
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
+                });
+                // 获取从表TableList 组件meta
+                this.getTlMeta(sObjectCode).then(resp => {
+                    let foreignFieldKey = this.slave['foreignFieldCode'];
+                    this.sTlMeta = resp.data;
+                    this.sTableUrl = this.sTlMeta['data_url'] + '?' + foreignFieldKey + '={objectCode}';
+                    this.sTlMeta['data_url'] = this.sTableUrl;
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
+                });
+                // 获取从表SearchPanel 组件meta
+                this.getSpMeta(sObjectCode).then(resp => {
+                    this.sSpMeta = resp.data;
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
+                });
             });
         },
         computed: {

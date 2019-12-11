@@ -94,11 +94,28 @@ export function typeOf(value) {
 }
 
 /**
- * 判断一个字符串是否为空, 如果不是字符串，则返回true
+ * 判断一个值是否为空.
+ * 如果是
+ * 1. 字符串, 则判断是否为空字符串(空格也被视为空)
+ * 2. 对象, 则判断是否无任何键值
+ * 3. 数组, 则判断是否无任何数组成员
+ * 4. null, 返回true
+ * 5. undefined, true
+ * 6. 其他情况均返回false
  */
 export function isEmpty(value) {
-    if (!isString(value)) return true;
-    return value.trim() === '';
+    switch (typeOf(value)) {
+        case '[object String]':
+            return value.trim() === '';
+        case "[object Object]":
+            return Object.keys(value).length === 0;
+        case "[object Array]":
+            return value.length === 0;
+        case "[object Undefined]":
+        case "[object Null]":
+            return true;
+    }
+    return false;
 }
 
 /**

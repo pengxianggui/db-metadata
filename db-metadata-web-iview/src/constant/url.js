@@ -29,7 +29,7 @@ export const CHECK_SQL = '/check/sql?sql={sql}';
 export const FEATURE_ADD = '/m/doAdd?ft={featureType}'; // 添加功能类别
 export const FEATURE_LOAD = '/m/load?fc={featureCode}'; // 加载功能配置
 
-export const MASTER_SLAVE_TO_ADD_S = '/m/ms/toAddS?objectCode={objectCode}&fc={featureCode}';
+export const MASTER_SLAVE_TO_ADD_S = '/m/ms/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}'; // 主子表子表新增URL(TO)
 
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 

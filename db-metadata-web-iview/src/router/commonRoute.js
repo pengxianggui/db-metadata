@@ -4,7 +4,7 @@ const children = [
     {
         path: 'meta-data',
         name: 'Metadata',
-        props: {R_moc: "meta_object", R_soc: "meta_field", R_linkage: {m: "code", s: "object_code"}}, // m.code=s.object_code
+        props: {R_fc: 'tcode_test'}, // TODO 元对象/元字段 主子表功能code暂时为 tcode_test, 正式需要修改
         component: () => import('@/components/meta/MetaDataManager')
     }, {
         path: 'meta-component',
