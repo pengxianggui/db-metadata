@@ -83,7 +83,7 @@ public class MetaController extends FrontRestController {
 
         IMetaObject metaObject = metaService().findByCode("meta_object");
 
-        Record data = metaService().findMetaDataOfMetaObjectCode(metaObject.code());
+        Record data = metaService().findObjectRecordByCode(metaObject.code());
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));
@@ -101,7 +101,7 @@ public class MetaController extends FrontRestController {
 
         IMetaObject metaObject = metaService().findByCode("meta_field");
 
-        Record data = metaService().findDataOfMetaFieldCode(objectCode, fieldCode);
+        Record data = metaService().findFieldRecordByCode(objectCode, fieldCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
         renderJson(Ret.ok("data", formView.toKv().set("record", data)));

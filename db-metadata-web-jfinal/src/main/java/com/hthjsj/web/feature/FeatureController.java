@@ -3,10 +3,12 @@ package com.hthjsj.web.feature;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.feature.ms.MasterSlaveConfig;
 import com.hthjsj.web.query.QueryHelper;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
 import java.util.List;
@@ -15,6 +17,17 @@ import java.util.List;
  * @author konbluesky
  */
 public class FeatureController extends FrontRestController {
+
+    @Override
+    public void list() {
+        List<Kv> results = Lists.newArrayList();
+        for (FeatureType type : FeatureType.values()) {
+            if (type != FeatureType.UNKNOWN) {
+                results.add(Kv.by("key", type.name).set("value", type.code));
+            }
+        }
+        renderJson(Ret.ok("data", results));
+    }
 
     @Override
     public void doAdd() {

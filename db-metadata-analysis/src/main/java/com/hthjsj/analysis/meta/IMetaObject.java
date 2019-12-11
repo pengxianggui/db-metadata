@@ -70,5 +70,7 @@ public interface IMetaObject {
     void dataMap(Map<String, Object> data);
 
     MetaJudge metaType();
+
+    IMetaField getField(String fieldCode);
 }
 

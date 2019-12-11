@@ -37,7 +37,11 @@ public class DbMetaService {
     }
 
     public boolean isExists(String objectCode) {
-        return Db.queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
+        return Db.use(App.DB_MAIN).queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
+    }
+
+    public boolean isExists(IMetaObject metaObject, IMetaField metaField, Object value) {
+        return Db.use(App.DB_MAIN).queryInt("select count(1) from " + metaObject.tableName() + " where " + metaField.fieldCode() + "=?", value) > 0;
     }
 
     public List<IMetaObject> findAll() {
@@ -128,12 +132,12 @@ public class DbMetaService {
      * 获取该元对象在meta_object当中的记录
      * TODO [绕]
      *
-     * @param code
+     * @param objectCode
      *
      * @return
      */
-    public Record findMetaDataOfMetaObjectCode(String code) {
-        return Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", code);
+    public Record findObjectRecordByCode(String objectCode) {
+        return Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
     }
 
     /**
@@ -145,7 +149,7 @@ public class DbMetaService {
      *
      * @return
      */
-    public Record findDataOfMetaFieldCode(String code, String fieldCode) {
+    public Record findFieldRecordByCode(String code, String fieldCode) {
         return Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
     }
 

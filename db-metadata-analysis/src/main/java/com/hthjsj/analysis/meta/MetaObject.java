@@ -155,4 +155,9 @@ public class MetaObject implements IMetaObject {
     public MetaJudge metaType() {
         return new MetaJudge(MetaJudge.TABLE);
     }
+
+    @Override
+    public IMetaField getField(String fieldCode) {
+        return fields.stream().filter(f -> fieldCode.equalsIgnoreCase(f.fieldCode())).findFirst().get();
+    }
 }

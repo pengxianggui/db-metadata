@@ -1,7 +1,9 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
-import com.hthjsj.web.WebException;
+import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.core.Controller;
@@ -38,11 +40,16 @@ public class ValidatorController extends Controller {
     /**
      * 验证唯一性
      */
-    public void has() {
+    public void one() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         String valueString = getPara("v", getPara("val", getPara("value")));
-        throw new WebException("not finished!");
+
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+        IMetaField metaField = metaObject.getField(fieldCode);
+        boolean status = ServiceManager.metaService().isExists(metaObject, metaField, valueString);
+
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 }
