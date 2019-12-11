@@ -29,7 +29,7 @@ public class RulesBuilder {
         if (metaField.dbType().isNumber()) {
             return required("number", metaField.fieldCode(), metaField.cn());
         } else if (metaField.dbType().isText()) {
-            required("string", metaField.fieldCode(), metaField.cn());
+            return required("string", metaField.fieldCode(), metaField.cn());
         }
         return required(null, metaField.fieldCode(), metaField.cn());
     }
