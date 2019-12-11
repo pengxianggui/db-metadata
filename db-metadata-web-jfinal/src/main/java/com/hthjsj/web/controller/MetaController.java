@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.TableView;
@@ -125,16 +126,19 @@ public class MetaController extends FrontRestController {
 
     @Override
     public void delete() {
-        String objectCode = new QueryHelper(this).getObjectCode();
+        String objectCodess = new QueryHelper(this).getObjectCode();
         DbMetaService dbMetaService = metaService();
-        IMetaObject metaObject = dbMetaService.findByCode(objectCode);
-        Preconditions.checkArgument(!metaObject.isSystem(), "该对象属于系统元对象,不能删除");
+        String[] objectCodes = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(objectCodess).toArray(new String[0]);
+        for (String objectCode : objectCodes) {
+            IMetaObject metaObject = dbMetaService.findByCode(objectCode);
+            Preconditions.checkArgument(!metaObject.isSystem(), "该对象属于系统元对象,不能删除");
 
-        log.info("删除元对象{}数据", metaObject.code());
-        dbMetaService.deleteMetaObject(metaObject.code());
+            log.info("删除元对象{}数据", metaObject.code());
+            dbMetaService.deleteMetaObject(metaObject.code());
 
-        log.info("删除元对象{}实例配置", metaObject.code());
-        componentService().deleteObjectAll(objectCode);
+            log.info("删除元对象{}实例配置", metaObject.code());
+            componentService().deleteObjectAll(objectCode);
+        }
         renderJson(Ret.ok());
     }
 

@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -13,6 +14,7 @@ import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
 
@@ -41,6 +43,16 @@ public class ComponentController extends FrontRestController {
             return;
         }
         renderJson(Ret.ok("data", result));
+    }
+
+    @Override
+    public void list() {
+        List<Record> components = componentService().loadComponents();
+        List<Kv> results = Lists.newArrayList();
+        components.forEach(r -> {
+            results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
+        });
+        renderJson(Ret.ok("data", results));
     }
 
     public void load() {
