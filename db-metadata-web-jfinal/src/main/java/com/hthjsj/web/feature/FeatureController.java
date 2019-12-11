@@ -34,8 +34,8 @@ public class FeatureController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         FeatureType type = FeatureType.V(queryHelper.getFeatureType());
         Preconditions.checkArgument(type != FeatureType.UNKNOWN, "未知的功能模板" + queryHelper.getFeatureType());
-        String name = getPara("name", "tname_test");
-        String code = getPara("code", "tcode_test");
+        String name = getPara("name");
+        String code = getPara("code");
         String jsonstr = UtilKit.loadContentByFile("ms.json");
         featureService().createFeature(type, name, code, JSON.parseObject(jsonstr, MasterSlaveConfig.class));
         renderJson(Ret.ok());
