@@ -75,8 +75,8 @@ export const initOptions = {
 
 export const getOptions = {
     methods: {
-        getOptions () {
-            let url = this.innerMeta['data_url'];
+        getOptions(url) {
+            url = utils.assertUndefined(url, this.innerMeta['data_url']);
             if (url) {
                 this.$axios.safeGet(url).then(resp => {
                     // if provide format callback fn, execute callback fn

@@ -94,9 +94,12 @@ eg:
                 })
             },
             refreshTables() {
-                let url = this.$compile(this.tableMeta['data_url'], this.model);
-                this.tableMeta['data_url'] = url;
-                this.$refs[this.tableMeta['name']].getOptions();
+                const tableKey = this.tableMeta['name'];
+                const tableUrl = this.tableMeta['data_url'];
+
+                this.model[tableKey] = null;
+                let url = this.$compile(tableUrl, this.model);
+                this.$refs[tableKey].getOptions(url);
             },
             doSubmit() {
                 const params = this.model;

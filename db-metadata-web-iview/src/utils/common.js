@@ -1,5 +1,4 @@
 import cloneDeep from 'lodash/cloneDeep'
-import {isUndefined} from "element-ui/src/utils/types";
 
 // 常规utils方法
 /**
@@ -80,6 +79,11 @@ export function isNumber(val) {
 export function isFunction(val) {
     let toStr = Object.prototype.toString.call(val);
     return toStr === '[object Function]'
+}
+
+export function isUndefined(val) {
+    let toStr = Object.prototype.toString.call(val);
+    return toStr === '[object Undefined]'
 }
 
 /**
@@ -209,6 +213,12 @@ export function isImageFile(file) {
     return false;
 }
 
+/**
+ * 若传入value为undefined, 则返回提供的默认值
+ * @param value
+ * @param defaultValue
+ * @returns {*}
+ */
 export function assertUndefined(value, defaultValue) {
     if (isUndefined(value)) return defaultValue;
     return value;
