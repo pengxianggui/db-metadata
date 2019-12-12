@@ -39,14 +39,10 @@ public interface IMetaObject {
     @JSONField(name = "schemaName")
     void schemaName(String value);
 
-//    @JSONField(name = "primarys")
-//    IMetaField[] primarys();
-//
-//    @JSONField(name = "primarys")
-//    void primarys(IMetaField[] value);
-
     @JSONField(name = "primaryKey")
     String primaryKey();
+
+    void primaryKey(String primaryKey);
 
     @JSONField(name = "fields")
     Collection<IMetaField> fields();

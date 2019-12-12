@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public class MetaObject implements IMetaObject {
 
-//    List<IMetaField> _primarys = new ArrayList<>();
-
     List<IMetaField> fields = new ArrayList<>();
 
     MetaObjectConfigParse metaObjectConfigParse;
@@ -72,35 +70,14 @@ public class MetaObject implements IMetaObject {
         record.set("schema_name", value);
     }
 
-//    @Override
-//    public IMetaField[] primarys() {
-//        if (_primarys.isEmpty()) {
-//            for (IMetaField field : fields) {
-//                if (field.isPrimary()) {
-//                    _primarys.add(field);
-//                }
-//            }
-//        }
-//        return _primarys.toArray(new IMetaField[_primarys.size()]);
-//    }
-//
-//    @Override
-//    public void primarys(IMetaField[] primarys) {
-//        StringBuilder sb = new StringBuilder();
-//        for (IMetaField mf : primarys) {
-//            sb.append(",").append(mf.fieldCode());
-//        }
-//        record.set("primarys", sb.substring(1));
-//    }
-
-//    public void addPrimary(IMetaField field) {
-//        _primarys.add(field);
-//        primarys(_primarys.toArray(new IMetaField[_primarys.size()]));
-//    }
-
     @Override
     public String primaryKey() {
         return record.getStr("primarys");
+    }
+
+    @Override
+    public void primaryKey(String primaryKey) {
+        record.set("primarys", primaryKey);
     }
 
     @Override
