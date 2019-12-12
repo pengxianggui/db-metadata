@@ -32,7 +32,7 @@ public class ValidatorController extends Controller {
         if (JFinal.me().getConstants().getDevMode()) {
             Preconditions.checkArgument(SqlAnalysis.check(exeSql), "无效SQL [%s]", exeSql);
             Preconditions.checkArgument(SqlAnalysis.checkIdCn(exeSql), "非法列的查询,只允许以ID,CN列返回,查询SQL:[%s]", exeSql);
-            List<Record> result = Db.find(exeSql);
+            List<Record> result = Db.use(SqlAnalysis.getSchema(exeSql)).find(SqlAnalysis.getExecSql(exeSql));
             renderJson(Ret.ok("data", result));
         }
     }

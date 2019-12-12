@@ -32,7 +32,8 @@ public class SqlAnalysis {
     public static boolean check(String sql) {
         boolean flag = false;
         try {
-            SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+
+            SQLUtils.parseStatements(getExecSql(sql), JdbcConstants.MYSQL);
             flag = true;
         } catch (ParserException e) {
             throw new WebException("SQL格式不正确 %s", sql);
@@ -40,7 +41,24 @@ public class SqlAnalysis {
         return flag;
     }
 
-    public static boolean checkIdCn(String sql) {
+    public static String getExecSql(String sql) {
+        String s = sql;
+        if (s.contains(";")) {
+            s = s.split(";")[0];
+        }
+        return s;
+    }
+
+    public static String getSchema(String sql) {
+        String s = sql;
+        if (s.contains(";")) {
+            s = s.split(";")[1];
+        }
+        return s;
+    }
+
+    public static boolean checkIdCn(String s) {
+        String sql = getExecSql(s);
         SQLStatementParser sqlStatementParser = SQLParserUtils.createSQLStatementParser(sql, JdbcConstants.MYSQL);
         ParseModel parseModel = new ParseModel(sqlStatementParser.parseStatement());
         MySqlSchemaStatVisitor mySqlSchemaStatVisitor = new MySqlSchemaStatVisitor();

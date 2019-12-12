@@ -57,8 +57,10 @@ public class FindBoxController extends FrontRestController {
             String sql = metaField.configParser().scopeSql();
             IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
             tableView = ViewFactory.tableView(metaObject);
+            // url : /find/meta/?objectCode=aaa&fieldCode=111
+            String url = "/find/list/" + queryHelper.builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
+            tableView.dataUrl(url);
             searchView = ViewFactory.searchView(metaObject);
-//                    .dataUrl("/table/list/" + metaObject.code());
         }
         Kv result = Kv.create();
         result.set("table", tableView.toKv());
