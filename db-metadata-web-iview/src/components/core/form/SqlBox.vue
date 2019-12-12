@@ -2,11 +2,15 @@
     <div>
         <textarea ref="sqlEditor" type="textarea" :value="cacheValue"></textarea>
         <span v-if="error">
-            <span class="tip">tip: {{tip}}</span>&nbsp;
+            <span class="error-tip">tip: {{tip}}</span>&nbsp;
             <el-tooltip content="此值将不会被保存" placement="right">
                 <i class="el-icon-question"></i>
             </el-tooltip>
         </span>
+        <br>
+        <el-tooltip content="点击校验SQL" placement="right" v-if="innerMeta['check']">
+            <el-button circle icon="el-icon-search" @click="checkSql(cacheValue)"></el-button>
+        </el-tooltip>
     </div>
 </template>
 
@@ -76,13 +80,13 @@
                 }
 
                 // need to checked
-                if (newVal.endsWith(';')) {
-                    self.checkSql(newVal);
-                } else {
-                    self.error = true;
-                    self.nativeValue = null;
-                    self.tip = 'SQL语句必须以英文分号结尾.'
-                }
+                // if (newVal.endsWith(';')) {
+                //     self.checkSql(newVal);
+                // } else {
+                //     self.error = true;
+                //     self.nativeValue = null;
+                //     self.tip = 'SQL语句必须以英文分号结尾.'
+                // }
             });
             editor.setSize('auto', '80px');
         },
@@ -101,8 +105,12 @@
 </script>
 
 <style scoped>
-    .tip {
+    .error-tip {
         font-size: 12px;
         color: #f56c6c;
+    }
+    .success-tip {
+        font-size: 12px;
+        color: #3CB371;
     }
 </style>
