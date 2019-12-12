@@ -76,12 +76,13 @@ public class OptionsKit {
      * 查询结果中包含 id,cn 2个字段
      *
      * @param sql
+     * @param dbConfig sql执行的数据源
      *
      * @return
      */
-    public static List<Kv> transKeyValueBySql(String sql) {
+    public static List<Kv> transKeyValueBySql(String sql, String dbConfig) {
         Preconditions.checkArgument(SqlAnalysis.check(sql), "无效的SQL配置,%s", sql);
-        List<Record> optionsRecord = Db.find(sql);
+        List<Record> optionsRecord = Db.use(dbConfig).find(sql);
         return OptionsKit.transKeyValue(optionsRecord);
     }
 
@@ -92,13 +93,14 @@ public class OptionsKit {
      * 10001:李四
      *
      * @param sql
+     * @param dbConfig sql执行的数据源
      *
      * @return
      */
-    public static Kv transIdCnFlatMapBySql(String sql) {
+    public static Kv transIdCnFlatMapBySql(String sql, String dbConfig) {
         Preconditions.checkArgument(SqlAnalysis.check(sql), "无效的SQL配置,%s", sql);
         Kv mapped = Kv.create();
-        List<Record> optionsRecord = Db.find(sql);
+        List<Record> optionsRecord = Db.use(dbConfig).find(sql);
         optionsRecord.forEach(r -> {
             mapped.set(r.getStr("id"), r.getStr("cn"));
         });
@@ -140,7 +142,9 @@ public class OptionsKit {
             configWrapper = field.configParser();
             if (configWrapper.hasTranslation()) {
                 if (configWrapper.isSql()) {
-                    Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql());
+                    log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
+                    String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
+                    Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql(), dbConfig);
                     mappeds.set(field.fieldCode(), mapped);
                 }
                 if (configWrapper.isOptions()) {

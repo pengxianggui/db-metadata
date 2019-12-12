@@ -1,6 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.WebException;
@@ -9,6 +10,7 @@ import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 
 import java.util.List;
 
@@ -40,7 +42,9 @@ public class OptionsController extends Controller {
             return;
         }
         if (metaFieldConfigParse.isSql()) {
-            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigParse.scopeSql());
+            IMetaObject metaObject = metaField.getParent();
+            String dbConfig = StrKit.defaultIfBlank(metaFieldConfigParse.dbConfig(), metaObject.schemaName());
+            List<Kv> options = OptionsKit.transKeyValueBySql(metaFieldConfigParse.scopeSql(), dbConfig);
             renderJson(Ret.ok("data", options));
             return;
         }

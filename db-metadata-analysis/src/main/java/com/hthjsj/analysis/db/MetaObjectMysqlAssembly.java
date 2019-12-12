@@ -32,7 +32,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
         List<String> pks = new ArrayList<>();
         for (int i = 0; i < table.getColumns().size(); i++) {
             Column column = table.getColumns().get(i);
-            IMetaField mf = MetaFactory.createMetaField();
+            IMetaField mf = MetaFactory.createMetaField(metaObject);
 
             mf.objectCode(metaObject.code());
             mf.cn(column.getColumnComment().trim());

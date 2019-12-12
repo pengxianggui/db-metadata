@@ -8,4 +8,7 @@ package com.hthjsj.analysis.meta;
  */
 public class ManualMetaField extends MetaField {
 
+    ManualMetaField(IMetaObject object) {
+        super(object);
+    }
 }

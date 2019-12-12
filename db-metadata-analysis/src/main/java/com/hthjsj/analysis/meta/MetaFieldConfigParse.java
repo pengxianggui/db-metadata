@@ -76,7 +76,17 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     public String scopeSql() {
-        return getStr("scopeSql");
+        if (StrKit.notBlank(getStr("scopeSql"))) {
+            return getStr("scopeSql").split(";")[0];
+        }
+        return null;
+    }
+
+    public String dbConfig() {
+        if (scopeSql().contains(";")) {
+            return getStr("scopeSql").split(";")[1];
+        }
+        return null;
     }
 
     public boolean isRequired() {

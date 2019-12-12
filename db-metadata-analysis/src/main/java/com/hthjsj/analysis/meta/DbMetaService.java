@@ -65,7 +65,8 @@ public class DbMetaService {
         List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", objectCode);
         IMetaObject metaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {
-            MetaField defaultMetaField = new MetaField(metafield.getColumns());
+            MetaField defaultMetaField = new MetaField(metaObject);
+            defaultMetaField.dataMap(metafield.getColumns());
             metaObject.addField(defaultMetaField);
         }
         return metaObject;
@@ -86,7 +87,10 @@ public class DbMetaService {
             if (field == null) {
                 throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
             }
-            metaField = new MetaField(field.getColumns());
+            //为了防止从MetaField 反查Parent时 出现空指针问题,构造MetaField时 保证赋一个MetaObject对象;
+            IMetaObject metaObject = new MetaObject(findObjectRecordByCode(objectCode).getColumns());
+            metaField = new MetaField(metaObject);
+            metaField.dataMap(field.getColumns());
         } else {
             throw new MetaOperateException("元对象编码和字段编码必须指定,objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
         }
@@ -137,7 +141,11 @@ public class DbMetaService {
      * @return
      */
     public Record findObjectRecordByCode(String objectCode) {
-        return Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        if (moRecord == null) {
+            throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
+        }
+        return moRecord;
     }
 
     /**

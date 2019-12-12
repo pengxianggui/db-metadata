@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.statement.SQLSelectQueryBlock;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.ast.statement.SQLTableSource;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
+import com.jfinal.kit.StrKit;
 
 import java.util.List;
 
@@ -54,9 +55,11 @@ public class MetaFactory {
         String tableName = sqlTableSource.computeAlias();
         ManualMetaField manualMetaField = null;
         for (SQLSelectItem item : columns) {
+            //列名
             String name = item.getExpr().toString();
-            String label = item.getAlias();
-            manualMetaField = new ManualMetaField();
+            //别名
+            String label = StrKit.defaultIfBlank(item.getAlias(), name);
+            manualMetaField = new ManualMetaField(manualMetaObject);
             manualMetaField.fieldCode(name);
             manualMetaField.en(name);
             manualMetaField.cn(label);
@@ -76,8 +79,8 @@ public class MetaFactory {
         System.out.println(metaObject);
     }
 
-    public static IMetaField createMetaField() {
-        return new MetaField();
+    public static IMetaField createMetaField(IMetaObject parent) {
+        return new MetaField(parent);
     }
 
     public static IMetaObject createMetaObject() {

@@ -1,14 +1,24 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaFactory;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.SearchView;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.jfinal.SqlParaExt;
+import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.Controller;
+import com.hthjsj.web.ui.OptionsKit;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 
 /**
  * <p> @Date : 2019/12/11 </p>
@@ -16,7 +26,25 @@ import com.jfinal.kit.Ret;
  *
  * <p> @author konbluesky </p>
  */
-public class FindBoxController extends Controller {
+public class FindBoxController extends FrontRestController {
+
+    /**
+     * TODO 调试用
+     */
+    public void immediate() {
+        String sql = getPara("sql");
+        Preconditions.checkNotNull(sql, "sql条件不能为空");
+        TableView tableView = null;
+        SearchView searchView = null;
+        String alignName = sql.replaceFirst("select ", "").replaceAll("from.*", "").replaceAll("\\s|\\,", "_");
+        IMetaObject metaObject = MetaFactory.createBySql(sql, alignName);
+        tableView = ViewFactory.tableView(metaObject);
+        searchView = ViewFactory.searchView(metaObject);
+        Kv result = Kv.create();
+        result.set("table", tableView.toKv());
+        result.set("search", searchView.toKv());
+        renderJson(Ret.ok("data", result));
+    }
 
     public void meta() {
         QueryHelper queryHelper = new QueryHelper(this);
@@ -24,13 +52,68 @@ public class FindBoxController extends Controller {
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
         TableView tableView = null;
+        SearchView searchView = null;
         if (metaField.configParser().isSql()) {
             String sql = metaField.configParser().scopeSql();
             IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
             tableView = ViewFactory.tableView(metaObject);
+            searchView = ViewFactory.searchView(metaObject);
 //                    .dataUrl("/table/list/" + metaObject.code());
         }
+        Kv result = Kv.create();
+        result.set("table", tableView.toKv());
+        result.set("search", searchView.toKv());
 
-        renderJson(Ret.ok("data", tableView.toKv()));
+
+        renderJson(Ret.ok("data", result));
+    }
+
+    public void list() {
+        /**
+         * 1. query data by metaObject
+         *  [x] 1.1 query all data paging
+         *  [x] 1.2 query data by fields
+         *  [x-] 1.3 allow some conditions
+         * [x] 2. sort
+         * [x] 3. set fields or excludes fields
+         * [x] 4. paging
+         * 5. escape fields value
+         */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String fieldCode = queryHelper.getFieldCode();
+        IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
+
+        Integer pageIndex = queryHelper.getPageIndex();
+        Integer pageSize = queryHelper.getPageSize();
+
+        String includeFieldStr = getPara("fs", getPara("fields", ""));
+        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
+        boolean raw = getParaToBoolean("raw", false);
+        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
+        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
+        IMetaObject metaObject = null;
+
+        if (metaField.configParser().isSql()) {
+            String sql = metaField.configParser().scopeSql();
+            metaObject = MetaFactory.createBySql(sql, objectCode);
+        }
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject);
+        SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
+
+        //Sql 语句默认使用 元对象的数据源;
+        String dbConfig = StrKit.defaultIfBlank(metaField.configParser().dbConfig(), metaObject.schemaName());
+//        AnalysisConfig.me().getDbSources().stream().filter(s -> schemaName.equalsIgnoreCase(s.configName())).findFirst().get();
+        Page<Record> result = Db.use(dbConfig).paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
+
+        /**
+         * escape field value;
+         * 1. 是否需要转义的规则;
+         */
+        if (!raw) {
+            result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
+        }
+
+        renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
     }
 }

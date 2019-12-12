@@ -11,6 +11,7 @@
                     @row-dblclick="ok">
                     <template #operation-bar><span></span></template>
                     <template #buttons><span></span></template>
+                    <template #operation-column><span></span></template>
                 </table-list>
             </el-col>
         </el-row>
@@ -66,15 +67,12 @@
         },
         computed: {
             spMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.SearchPanel);
-                let columns = this.meta['columns'];
-
+                let meta = this.$merge(this.meta.search, DEFAULT.SearchPanel);
                 meta.component_name = 'SearchPanel';
-                meta.columns = columns.filter(item => item['searchable']);
                 return meta;
             },
             tlMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.TableList);
+                let meta = this.$merge(this.meta.table, DEFAULT.TableList);
                 meta.component_name = 'TableList';
                 meta.multi_select = false; // pxg_todo 暂不支持多选
                 return meta;

@@ -78,5 +78,7 @@ public interface IMetaField {
     void dataMap(Map<String, Object> data);
 
     void config(String config);
+
+    IMetaObject getParent();
 }
 

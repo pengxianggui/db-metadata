@@ -17,6 +17,8 @@ public class MetaField implements IMetaField {
 
     Record record = new Record();
 
+    IMetaObject parent;
+
     DbTypeJudge dbTypeJudge;
 
     MetaFieldConfigParse metaFieldConfigParse;
@@ -25,7 +27,8 @@ public class MetaField implements IMetaField {
         this.record = new Record().setColumns(fieldMap);
     }
 
-    MetaField() {
+    MetaField(IMetaObject object) {
+        this.parent = object;
     }
 
     @Override
@@ -148,5 +151,10 @@ public class MetaField implements IMetaField {
     @Override
     public void config(String config) {
         record.set("config", config);
+    }
+
+    @Override
+    public IMetaObject getParent() {
+        return parent;
     }
 }
