@@ -1,6 +1,7 @@
 <template>
     <!-- v-if 确保了弹框每次打开, 弹框中的组件都会被重新创建. destroy-on-close 没有如愿销毁掉弹框中的组件内容, 因此采用 v-if -->
-    <el-dialog :visible.sync="nativeVisible" v-bind="innerMeta.conf" v-if="visible">
+    <el-dialog :visible.sync="nativeVisible" v-bind="innerMeta.conf" :title="innerTitle"
+               v-if="visible">
         <template #default>
             <slot>
                 <template v-if="componentMeta !== undefined">
@@ -29,13 +30,13 @@
         mixins: [Meta(DEFAULT.DialogBox)],
         props: {
             visible: Boolean,
+            title: String,
             componentMeta: Object
         },
         name: "DialogBox",
         label: "弹出框",
         data() {
-            return {
-            };
+            return {};
         },
         methods: {
             ok(params) {
@@ -55,6 +56,9 @@
                 set: function (newVal) {
                     this.$emit('update:visible', newVal)
                 }
+            },
+            innerTitle() {
+                return this.title || this.innerMeta.conf['title']
             }
         }
     };

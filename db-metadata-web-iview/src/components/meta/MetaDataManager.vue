@@ -3,6 +3,9 @@
         <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData">
+                <template #prefix-btn="{conf}">
+                    <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
+                </template>
                 <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="visible=true">创建元对象</el-button>
                 </template>
@@ -19,6 +22,10 @@
         <el-dialog title="创建元对象" :visible.sync="visible">
             <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
         </el-dialog>
+        <dialog-box :visible.sync="featureAddVisible" title="创建功能">
+            <feature-add></feature-add>
+            <template #footer><span></span></template>
+        </dialog-box>
     </div>
 </template>
 
@@ -27,6 +34,7 @@
     import {URL} from '@/constant'
     import {loadFeature, getTlMeta, getSpMeta} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
+    import FeatureAdd from './feature/FeatureAdd'
 
     export default {
         name: "MetaDataManager",
@@ -35,7 +43,8 @@
             R_fc: String,    // fc: 功能code(feature_code)
         },
         components: {
-            MetaImport
+            MetaImport,
+            FeatureAdd
         },
         data() {
             return {
@@ -51,7 +60,8 @@
                 sTlMeta: {},
                 sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
                 visible: false,
-                formMeta: {}
+                formMeta: {},
+                featureAddVisible: false
             }
         },
         methods: {

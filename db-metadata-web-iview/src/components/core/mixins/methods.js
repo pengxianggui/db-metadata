@@ -50,31 +50,52 @@ export const getSpMeta = {
     }
 };
 
-export const initOptions = {
+/**
+ * 针对RadioBox, CheckBox, DropDownBox这一类选项数据处理进行集中抽取
+ * @type {{methods: {initOptions(): (undefined), getOptions(*=): void}, mounted(): void}}
+ */
+export const options = {
+    props: {
+        options: Array,
+        dataUrl: String
+    },
     methods: {
         initOptions() {
             let options = this.options;
             if (options !== undefined) { // 父组件定义了options
                 this.innerOptions = options;
+                this.$watch('options', function (newVal, oldVal) {
+                    this.innerOptions = newVal;
+                });
+                return;
+            }
+
+            if (this.dataUrl !== undefined) {   // 直接透传dataUrl
+                this.getOptions(this.dataUrl);
+                this.$watch('dataUrl', function (newVal, oldVal) {
+                    this.getOptions(newVal);
+                });
                 return;
             }
 
             options = this.meta['options'];
             if (utils.isArray(options) && options.length > 0) { // 组件元对象定义了options, 并且有值
                 this.innerOptions = this.innerMeta['options'];
+                this.$watch('innerMeta.options', function (newVal, oldVal) {
+                    this.innerOptions = newVal;
+                });
                 return;
             }
+
             if (this.meta.hasOwnProperty('data_url')) {
                 this.getOptions();
+                this.$watch('innerMeta.data_url', function (newVal, oldVal) {
+                    this.getOptions(newVal);
+                });
                 return
             }
             console.error("options or data_url in meta provide one at least!")
-        }
-    }
-};
-
-export const getOptions = {
-    methods: {
+        },
         getOptions(url) {
             url = utils.assertUndefined(url, this.innerMeta['data_url']);
             if (url) {
@@ -88,5 +109,8 @@ export const getOptions = {
                 })
             }
         }
-    }
+    },
+    mounted() {
+        this.initOptions();
+    },
 };

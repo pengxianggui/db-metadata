@@ -31,6 +31,8 @@ export const FEATURE_LOAD = '/m/load?fc={featureCode}'; // 加载功能配置
 
 export const MASTER_SLAVE_TO_ADD_S = '/m/ms/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}'; // 主子表子表新增URL(TO)
 
+export const LIST_FEATURE_TYPE = '/m/list'; // 列出所有的功能类型code
+
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 
 //  [路由URL]-START --------------------------------------------------------------------------------------------------

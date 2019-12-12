@@ -12,11 +12,11 @@
     import utils from '@/utils'
     import {DEFAULT} from '@/constant'
     import Meta from '@/components/core/mixins/meta'
-    import {initOptions, getOptions} from "@/components/core/mixins/methods";
+    import {options} from "@/components/core/mixins/methods";
     import Val from './value-mixins'
 
     export default {
-        mixins: [Meta(DEFAULT.CheckBox), Val, initOptions, getOptions],
+        mixins: [Meta(DEFAULT.CheckBox), Val, options],
         name: "CheckBox",
         label: "复选框",
         data() {
@@ -25,19 +25,7 @@
             }
         },
         props: {
-            value: [Array, String],
-            options: Array,
-        },
-        watch: {
-            'innerMeta.data_url': function () {
-                this.getOptions();
-            },
-            'innerMeta.options': function () {
-                this.initOptions();
-            }
-        },
-        mounted() {
-            this.initOptions();
+            value: [Array, String]
         },
         computed: {
             nativeValue: {

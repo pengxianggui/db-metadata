@@ -7,6 +7,7 @@
                       v-bind:conf="innerMeta['operation-bar']"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
+                        <slot name="prefix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
                         <slot name="add-btn" v-bind:conf="innerMeta['operation-bar']" v-bind:add="handleAdd">
                             <el-button @click="handleAdd" icon="el-icon-document-add"
                                        v-bind="innerMeta['operation-bar']">新增
@@ -18,7 +19,7 @@
                                        v-bind="innerMeta['operation-bar']">删除
                             </el-button>
                         </slot>
-                        <slot name="extend-btn"></slot>
+                        <slot name="suffix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
                     </el-button-group>
                 </slot>
             </el-col>

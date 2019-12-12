@@ -30,32 +30,21 @@
     import utils from '@/utils'
     import {DEFAULT} from '@/constant'
     import Meta from '@/components/core/mixins/meta'
-    import {initOptions, getOptions} from "@/components/core/mixins/methods";
+    import {options} from "@/components/core/mixins/methods";
     import Val from './value-mixins'
 
     export default {
-        mixins: [Meta(DEFAULT.DropDownBox), Val, initOptions, getOptions],
+        mixins: [Meta(DEFAULT.DropDownBox), Val, options],
         name: "DropDownBox",
         label: "下拉框",
+        inheritAttrs: true,
         data() {
             return {
                 innerOptions: []
             }
         },
         props: {
-            value: [Object, String, Number, Array],
-            options: Array,
-        },
-        watch: {
-            'innerMeta.data_url': function () {
-                this.getOptions();
-            },
-            'innerMeta.options': function () {
-                this.initOptions();
-            }
-        },
-        mounted() {
-            this.initOptions()
+            value: [Object, String, Number, Array]
         },
         computed: {
             nativeValue: {

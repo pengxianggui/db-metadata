@@ -10,22 +10,22 @@ const children = [
         path: 'meta-component',
         name: 'MetaComponent',
         props: {R_oc: "meta_component_instance"},
-        component: () => import('@/components/meta/meta-component/GlobalConfList')
+        component: () => import('@/components/meta/component/GlobalConfList')
     }, {
         path: 'global-conf',
         name: 'GlobalConf',
         props: (route) => ({R_cc: route.query.componentCode}),
-        component: () => import('@/components/meta/meta-component/GlobalConf')
+        component: () => import('@/components/meta/component/GlobalConf')
     }, {
         path: 'meta-component-instance',
         name: 'MetaComponentInstance',
         props: {R_oc: "meta_component_instance"},
-        component: () => import('@/components/meta/meta-component-instance/InstanceConfList')
+        component: () => import('@/components/meta/component-instance/InstanceConfList')
     }, {
         path: 'instance-conf',
         name: 'InstanceConf',
         props: (route) => ({R_cc: route.query.componentCode, R_oc: route.query.objectCode}),
-        component: () => import('@/components/meta/meta-component-instance/InstanceConf')
+        component: () => import('@/components/meta/component-instance/InstanceConf')
     }, {
         path: 'form-builder',
         name: 'FormBuilder',
