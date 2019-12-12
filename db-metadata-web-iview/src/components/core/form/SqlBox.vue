@@ -84,6 +84,8 @@
 
                 if (!self.innerMeta['check']) { // needn't be checked
                     self.nativeValue = newVal;
+                } else {
+                    if (self.tip['state'] === 'ok') self.setTip(null, null);
                 }
             });
             editor.setSize('auto', '80px');
