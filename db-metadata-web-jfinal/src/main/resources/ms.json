@@ -8,6 +8,11 @@
       "objectCode": "meta_field",
       "foreignFieldCode": "object_code",
       "order": 1
+    },
+    {
+      "objectCode": "change_log",
+      "foreignFieldCode": "object_code",
+      "order": 2
     }
   ]
 }
