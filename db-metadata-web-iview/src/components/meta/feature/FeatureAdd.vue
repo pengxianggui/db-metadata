@@ -38,7 +38,9 @@
                 <!-- TODO 从表后期应当支持多个子表设置 -->
             </template>
             <template v-if="feature.type === 'SingleGrid'">
-
+                <el-form-item label="元对象编码">
+                    <text-box v-model="singleGridConfig.objectCode" required></text-box>
+                </el-form-item>
             </template>
 
             <el-button @click="onSubmit" type="primary">保存</el-button>
@@ -76,7 +78,7 @@
                     }],
                 },
                 singleGridConfig: {
-
+                    objectCode: null
                 },
                 activeTab: 'first'
             }

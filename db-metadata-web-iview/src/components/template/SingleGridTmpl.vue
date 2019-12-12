@@ -6,16 +6,19 @@
 </template>
 
 <script>
-    import {getTlMeta, getSpMeta} from "@/components/core/mixins/methods"
+    import utils from '@/utils'
+    import {loadFeature, getTlMeta, getSpMeta} from "@/components/core/mixins/methods"
 
     export default {
         name: "SingleGridTmpl",
-        mixins: [getTlMeta, getSpMeta],
+        mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
+            R_fc: String,
             R_oc: String
         },
         data() {
             return {
+                featureCode: this.R_fc,
                 objectCode: this.R_oc,
                 tlMeta: {},
                 spMeta: {}
@@ -24,23 +27,37 @@
         methods: {
             handleSearch(params) {
                 this.$refs[this.tlMeta['name']].getData(params);
+            },
+            initMeta(objectCode) {
+                this.getTlMeta(objectCode).then(resp => {
+                    this.tlMeta = resp.data;
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
+                });
+
+                this.getSpMeta(objectCode).then(resp => {
+                    this.spMeta = resp.data;
+                }).catch(err => {
+                    console.error('[ERROR] msg: %s', err.msg);
+                    this.$message.error(err.msg);
+                });
             }
         },
         created() {
-            this.getTlMeta(this.objectCode).then(resp => {
-                this.tlMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
-            });
+            const featureCode = this.featureCode;
+            let objectCode;
 
-            this.getSpMeta(this.objectCode).then(resp => {
-                this.spMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
-            });
-        },
+            if (!utils.isEmpty(featureCode)) {
+                this.loadFeature(featureCode).then(resp => {
+                    objectCode = resp.data['objectCode'];
+                    this.initMeta(objectCode);
+                })
+            } else {
+                objectCode = this.objectCode;
+                this.initMeta(objectCode);
+            }
+        }
     }
 </script>
 

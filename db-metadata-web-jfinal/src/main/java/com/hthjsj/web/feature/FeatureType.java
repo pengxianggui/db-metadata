@@ -1,6 +1,7 @@
 package com.hthjsj.web.feature;
 
 import com.hthjsj.web.feature.ms.MasterSlaveConfig;
+import com.hthjsj.web.feature.singleGrid.SingleGridConfig;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
@@ -12,7 +13,7 @@ import com.jfinal.kit.StrKit;
  */
 public enum FeatureType {
     MasterSlaveGrid("主子表", "MasterSlaveGrid", MasterSlaveConfig.class),
-    SingleGrid("单表", "SingleGrid", Kv.class),
+    SingleGrid("单表", "SingleGrid", SingleGridConfig.class),
     UNKNOWN("未知的功能模板", "unknown", Kv.class);
 
     String name;

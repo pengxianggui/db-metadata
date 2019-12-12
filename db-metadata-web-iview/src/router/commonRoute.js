@@ -27,14 +27,9 @@ const children = [
         props: (route) => ({R_cc: route.query.componentCode, R_oc: route.query.objectCode}),
         component: () => import('@/components/meta/component-instance/InstanceConf')
     }, {
-        path: 'form-builder',
-        name: 'FormBuilder',
-        props: (route) => ({R_oc: route.query.objectCode}),
-        component: () => import('@/components/meta/form-builder')
-    }, {
         path: 'table',
         name: 'table',
-        props: (route) => ({R_oc: route.query.objectCode}),
+        props: (route) => ({R_fc: route.query.featureCode, R_oc: route.query.objectCode}),
         component: () => import('@/components/template/SingleGridTmpl')
     }, {
         path: 'ms-table',
@@ -67,6 +62,11 @@ const children = [
     //     props: {R_oc: "test_table"},
     //     component: () => import('@/components/template/SingleGridTmpl')
     // }, {
+        path: 'form-builder',
+        name: 'FormBuilder',
+        props: (route) => ({R_oc: route.query.objectCode}),
+        component: () => import('@/components/meta/form-builder')
+    }, {
         path: 'form',
         name: 'Form',
         props: (route) => ({R_oc: route.query.objectCode}),

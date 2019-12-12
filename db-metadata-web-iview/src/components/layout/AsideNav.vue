@@ -57,7 +57,7 @@
                             icon: 'el-icon-finished',
                             label: 'ChangeLog'
                         }, {
-                            path: '/main/table?objectCode=db_version',
+                            path: '/main/table?featureCode=DbVersionSingleGrid',
                             icon: 'el-icon-paperclip',
                             label: 'DbVersion'
                         }]
