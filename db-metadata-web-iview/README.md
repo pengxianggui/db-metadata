@@ -332,6 +332,7 @@
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件: `npm install`
  -[ ] 表单渲染时需要整齐划一,控件的宽度统一指定;
+ -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单
  
 ### 其他资料
 
