@@ -1,5 +1,4 @@
 import axios from './default'
-import caseAxios from './case'
 
 // 扩展cancel ----------------------------------------------------------------------------------------------------------
 Promise.cancel = function (msg) {
@@ -13,15 +12,6 @@ Promise.prototype.cancel = function (onCancel) {
     return this;
 };
 // ---------------------------------------------------------------------------------------------------------------------
-
-
-// 特殊的get/post, case.js中定义有特殊逻辑需求的请求/响应拦截器
-axios.caseGet = function (url, config) {
-    return caseAxios.get(url, config);
-};
-axios.casePost = function (url, data, config) {
-    return caseAxios.post(url, data, config);
-};
 
 // 安全请求, 如果url中含有未编译的占位变量, 则取消请求
 
