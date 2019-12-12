@@ -138,7 +138,7 @@
                 </el-table>
             </el-col>
         </el-row>
-        <el-row v-if="pageModel">
+        <el-row v-if="pageModel" style="margin-top: 5px;">
             <el-col>
                 <!-- pagination bar -->
                 <slot name="pagination" v-bind:pageModel="pageModel">
