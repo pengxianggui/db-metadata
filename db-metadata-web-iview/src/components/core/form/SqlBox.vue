@@ -1,16 +1,17 @@
 <template>
     <div>
         <textarea ref="sqlEditor" type="textarea" :value="cacheValue"></textarea>
-        <span v-if="error">
-            <span class="error-tip">tip: {{tip}}</span>&nbsp;
-            <el-tooltip content="此值将不会被保存" placement="right">
-                <i class="el-icon-question"></i>
-            </el-tooltip>
+        <span v-if="tip.state !== null">
+            <span :class="tip.state === 'fail' ? 'error-tip': 'success-tip'">tip: {{tip.msg}}</span>&nbsp;
         </span>
         <br>
-        <el-tooltip content="点击校验SQL" placement="right" v-if="innerMeta['check']">
+        <template v-if="innerMeta['check']">
             <el-button circle icon="el-icon-search" @click="checkSql(cacheValue)"></el-button>
-        </el-tooltip>
+            &nbsp;&nbsp;
+            <el-tooltip content="必须执行校验操作并通过, 否则不予保存" placement="right">
+                <i class="el-icon-question"></i>
+            </el-tooltip>
+        </template>
     </div>
 </template>
 
@@ -36,24 +37,30 @@
         },
         data() {
             return {
-                error: false,
-                tip: '',
+                tip: {
+                    state: null, // fail or ok, otherwise null
+                    msg: null
+                },
                 cacheValue: this.value
             }
         },
         methods: {
+            setTip(state, msg) {
+                this.tip['state'] = state;
+                this.tip['msg'] = msg;
+            },
             checkSql(value) {
-                this.error = true;
                 this.$axios.get(this.$compile(URL.CHECK_SQL, {sql: value})).then(resp => {
                     if (resp.state === 'ok') {
-                        this.error = false;
+                        this.setTip(resp.state, resp.msg);
                         this.nativeValue = value;
                     } else {
-                        this.nativeValue = null;
+                        this.setTip(resp.state, resp.msg)
+                        // this.nativeValue = null;
                     }
                 }).catch(err => {
-                    this.tip = err.msg;
-                    this.nativeValue = null;
+                    this.setTip('fail', err.msg);
+                    // this.nativeValue = null;
                 })
             }
         },
@@ -77,17 +84,7 @@
 
                 if (!self.innerMeta['check']) { // needn't be checked
                     self.nativeValue = newVal;
-
                 }
-
-                // need to checked
-                // if (newVal.endsWith(';')) {
-                //     self.checkSql(newVal);
-                // } else {
-                //     self.error = true;
-                //     self.nativeValue = null;
-                //     self.tip = 'SQL语句必须以英文分号结尾.'
-                // }
             });
             editor.setSize('auto', '80px');
         },
@@ -110,6 +107,7 @@
         font-size: 12px;
         color: #f56c6c;
     }
+
     .success-tip {
         font-size: 12px;
         color: #3CB371;
