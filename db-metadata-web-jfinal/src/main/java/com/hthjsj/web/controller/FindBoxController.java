@@ -100,7 +100,7 @@ public class FindBoxController extends FrontRestController {
             String sql = metaField.configParser().scopeSql();
             metaObject = MetaFactory.createBySql(sql, objectCode);
         }
-        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject);
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
 
         //Sql 语句默认使用 元对象的数据源;

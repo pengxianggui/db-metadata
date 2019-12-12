@@ -6,17 +6,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
+import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p> @Date : 2019/10/31 </p>
@@ -168,5 +168,67 @@ public class UtilKit {
 
     public static String domainUrl(HttpServletRequest request) {
         return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
+    }
+
+    /**
+     * 对Record中的记录,列名进行重命名
+     *
+     * @param dataList
+     * @param aliasMap
+     *
+     * @return
+     */
+    public static List<Record> aliasList(List<Record> dataList, Kv aliasMap) {
+        List<Record> list = dataList;
+        aliasMap.forEach((oldColumn, newColumn) -> {
+            list.forEach((r) -> {
+                r.set(String.valueOf(newColumn), r.get(String.valueOf(oldColumn)));
+            });
+        });
+        return list;
+    }
+
+    /**
+     * 过滤字段
+     *
+     * @param fields
+     * @param efields
+     * @param metaFields
+     *
+     * @return
+     */
+    public static Collection<IMetaField> filter(String[] fields, String[] efields, Collection<IMetaField> metaFields) {
+        Collection<IMetaField> iMetaFields = new ArrayList<>(metaFields);
+        //不需要过滤时,原样返回
+        if (fields.length == 0 && efields.length == 0) {
+            return iMetaFields;
+        }
+        Iterator<IMetaField> metaFieldIterator = iMetaFields.iterator();
+        //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
+        Arrays.sort(fields);
+        Arrays.sort(efields);
+        //相同集合直接返回
+        if (StrKit.notBlank(fields) && StrKit.notBlank(efields) && Arrays.equals(fields, efields)) {
+            throw new WebException("显示列数组与排除列数组相同,fields:[%s];efields[%s]", Arrays.toString(fields), Arrays.toString(efields));
+        }
+        //过滤字段
+        while (metaFieldIterator.hasNext()) {
+            IMetaField metaField = metaFieldIterator.next();
+            //不在指定列表中的剔除
+            if (fields != null && fields.length > 0) {
+                if (Arrays.binarySearch(fields, metaField.en()) < 0) {
+                    metaFieldIterator.remove();
+                    continue;
+                }
+            }
+            //在排除列表中的 剔除
+            if (efields != null && efields.length > 0) {
+                if (Arrays.binarySearch(efields, metaField.en()) >= 0) {
+                    metaFieldIterator.remove();
+                    continue;
+                }
+            }
+        }
+        return iMetaFields;
     }
 }

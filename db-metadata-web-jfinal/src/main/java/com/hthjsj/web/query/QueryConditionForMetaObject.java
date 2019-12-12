@@ -3,14 +3,15 @@ package com.hthjsj.web.query;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.UtilKit;
-import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.sqls.MetaSQLExtract;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * <p> Class title: 查询条件 构造器</p>
@@ -50,8 +51,15 @@ public class QueryConditionForMetaObject implements IQueryCondition {
      */
     private IMetaObject metaObject;
 
-    public QueryConditionForMetaObject(IMetaObject metaObject) {
+    private Collection<IMetaField> metaFields;
+
+    public QueryConditionForMetaObject(IMetaObject metaObject, Collection<IMetaField> filtered) {
         this.metaObject = metaObject;
+        if (filtered == null || filtered.isEmpty()) {
+            this.metaFields = metaObject.fields();
+        } else {
+            this.metaFields = filtered;
+        }
     }
 
     @Override
@@ -61,9 +69,9 @@ public class QueryConditionForMetaObject implements IQueryCondition {
 
         Okv conds = Okv.create();
 
-        buildSelect(sqlParaExt, fields, efields, metaObject.fields());
+        buildSelect(sqlParaExt, metaFields);
 
-        for (IMetaField field : metaObject.fields()) {
+        for (IMetaField field : metaFields) {
 
             for (Class<? extends MetaSQLExtract> mClass : QueryParses.me().parseter) {
                 try {
@@ -83,39 +91,14 @@ public class QueryConditionForMetaObject implements IQueryCondition {
         return buildExceptSelect(conds, sqlParaExt, metaObject);
     }
 
-    public void buildSelect(SqlParaExt sqlParaExt, String[] fields, String[] efields, Collection<IMetaField> metaFields) {
-        Collection<IMetaField> iMetaFields = new ArrayList<>(metaFields);
-        Iterator<IMetaField> mfiter = iMetaFields.iterator();
-        Okv kv = Okv.create();
-        //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
-        Arrays.sort(fields);
-        Arrays.sort(efields);
-        //相同集合直接返回
-        if (StrKit.notBlank(fields) && StrKit.notBlank(efields) && Arrays.equals(fields, efields)) {
-            throw new WebException("显示列数组与排除列数组相同,fields:[%s];efields[%s]", Arrays.toString(fields), Arrays.toString(efields));
-        }
-
+    public void buildSelect(SqlParaExt sqlParaExt, Collection<IMetaField> metaFields) {
+        //遍历处理后的metafield
+        Iterator<IMetaField> destIterator = metaFields.iterator();
         StringBuilder sqlSelect = new StringBuilder("select *");
-        //过滤字段
-        while (mfiter.hasNext()) {
-            IMetaField metaField = mfiter.next();
-            //不在指定列表中的剔除
-            if (fields != null && fields.length > 0) {
-                if (Arrays.binarySearch(fields, metaField.en()) < 0) {
-                    mfiter.remove();
-                    continue;
-                }
-            }
-            //在排除列表中的 剔除
-            if (efields != null && efields.length > 0) {
-                if (Arrays.binarySearch(efields, metaField.en()) >= 0) {
-                    mfiter.remove();
-                    continue;
-                }
-            }
+        while (destIterator.hasNext()) {
+            IMetaField metaField = destIterator.next();
             sqlSelect.append(",").append(metaField.en()).append(" ");
         }
-
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         log.debug("select sql:{}", sqlParaExt.getSelect());
     }
