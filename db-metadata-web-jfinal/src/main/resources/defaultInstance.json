@@ -17,5 +17,16 @@
         "component_name": "MiniFormBox"
       }
     }
+  },
+  "meta_feature": {
+    "FormTmpl": {
+      "type": {
+        "component_name": "DropDownBox",
+        "data_url": "/m/list",
+        "conf": {
+          "multiple": false
+        }
+      }
+    }
   }
 }

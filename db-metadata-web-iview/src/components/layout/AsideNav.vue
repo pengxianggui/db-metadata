@@ -35,7 +35,7 @@
                             path: '/main/table?objectCode=test_table',
                             icon: 'el-icon-s-help',
                             label: '单表CRUD'
-                        },{
+                        }, {
                             path: '/main/ms-table?featureCode=tcode_test',
                             icon: 'el-icon-s-help',
                             label: '主子表'
@@ -66,6 +66,10 @@
                         icon: 'el-icon-s-tools',
                         label: '平台维护',
                         children: [{
+                            path: '/main/table?objectCode=meta_feature',
+                            icon: 'el-icon-warning-outline',
+                            label: '功能维护'
+                        }, {
                             path: '/main/meta-data',
                             icon: 'el-icon-warning',
                             label: '元数据管理'
