@@ -29,6 +29,7 @@
 
     export default {
         name: "SqlBox",
+        label: "SQL编辑框",
         mixins: [Meta(DEFAULT.SqlBox)],
         props: {
             value: String
@@ -76,7 +77,7 @@
 
                 if (!self.innerMeta['check']) { // needn't be checked
                     self.nativeValue = newVal;
-                    return;
+
                 }
 
                 // need to checked
