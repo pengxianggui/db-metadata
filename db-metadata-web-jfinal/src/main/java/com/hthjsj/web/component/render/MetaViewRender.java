@@ -74,19 +74,18 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
                         component.getFields().add(formField);
                         continue;
                     }
-                }
-                if (((FormView) component).isUpdate()) {
+                } else if (((FormView) component).isUpdate()) {
                     if (metaField.configParser().isUpdate()) {
                         component.getFields().add(formField);
                         continue;
                     }
-                }
-
-                if (((FormView) component).isView()) {
+                } else if (((FormView) component).isView()) {
                     if (metaField.configParser().isView()) {
                         component.getFields().add(formField);
                         continue;
                     }
+                } else {
+                    component.getFields().add(formField);
                 }
             }
         }

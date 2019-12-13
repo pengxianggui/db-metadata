@@ -52,6 +52,9 @@
   "meta_component_instance": {
     "is_sys": true
   },
+  "meta_feature": {
+    "is_sys": true
+  },
   "test_table": {
     "config": {
       "objectCode": "test_table",
