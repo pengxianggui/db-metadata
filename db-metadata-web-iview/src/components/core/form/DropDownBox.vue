@@ -46,9 +46,6 @@
         props: {
             value: [Object, String, Number, Array]
         },
-        created() {
-            console.log(this.$attrs)
-        },
         computed: {
             nativeValue: {
                 get: function () {
