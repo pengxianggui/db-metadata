@@ -43,6 +43,8 @@ public class MetaFactory {
     public static IMetaObject createBySql(String sql, String objectCode) {
         ManualMetaObject manualMetaObject = new ManualMetaObject();
         /**
+         * 特殊规则:
+         * 必须指定一列 id
          * 1. 解析 表
          * 2. 解析 列 (分解目标列和别名,用来构建元子段name,label)
          * 3. 构建元子段,填入元对象
@@ -68,6 +70,13 @@ public class MetaFactory {
             manualMetaField.config("{}");
             manualMetaField.config(MetaConfigFactory.createV1FieldConfig(manualMetaField, null, null).toJson());
             manualMetaObject.addField(manualMetaField);
+            //指定主键
+            if ("id".equalsIgnoreCase(name) || "id".equalsIgnoreCase(label)) {
+                manualMetaObject.primaryKey("id");
+            }
+        }
+        if (!StrKit.notBlank(manualMetaObject.primaryKey())) {
+            throw new MetaOperateException("使用sql创建的元对象,必须包含名[id]列,原始Sql:{}", sql);
         }
         manualMetaObject.tableName(tableName);
         manualMetaObject.code(objectCode);
