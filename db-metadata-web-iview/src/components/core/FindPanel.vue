@@ -56,7 +56,7 @@
             },
             assemblyFeedbackValue(data, primaryKeys) {
                 let feedBackValue;
-                feedBackValue = data[primaryKeys];  // TODO 多主键情况
+                feedBackValue = data[primaryKeys];  // 不考虑联合组件
                 return feedBackValue;
             },
             ok() {
