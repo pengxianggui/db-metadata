@@ -182,7 +182,10 @@ public class UtilKit {
         List<Record> list = dataList;
         aliasMap.forEach((oldColumn, newColumn) -> {
             list.forEach((r) -> {
+                //对列重命名
                 r.set(String.valueOf(newColumn), r.get(String.valueOf(oldColumn)));
+                //删除旧名列
+                r.remove(String.valueOf(oldColumn));
             });
         });
         return list;
