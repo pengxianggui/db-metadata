@@ -6,6 +6,8 @@
                     :clone="addFormItem"
                     :group="{ name: 'form', pull: 'clone', put: false }"
                     :list="comps"
+                    @end="handleMoveEnd"
+                    @start="handleMoveStart"
                     :sort="false">
                 <el-col v-for="comp of comps" :key="comp.name" class="el-card">
                     <el-tooltip class="item" effect="dark" :content="comp.name" :open-delay=1000 placement="top-start">
@@ -43,6 +45,10 @@
                 };
                 this.$merge(meta, DEFAULT[name]);
                 return meta;
+            },
+            handleMoveEnd() {
+            },
+            handleMoveStart() {
             }
         }
     }

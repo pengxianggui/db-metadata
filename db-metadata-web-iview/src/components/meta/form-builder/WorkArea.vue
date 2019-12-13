@@ -9,9 +9,7 @@
                     <el-button @click="resetForm" icon="el-icon-delete" size="small" type="danger">重置</el-button>
                 </el-col>
                 <el-col :span="4">
-                    <drop-down-box
-                            data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
-                            v-model="objectCode"></drop-down-box>
+                    <slot name="operation-extend"></slot>
                 </el-col>
             </el-row>
         </div>
@@ -19,15 +17,15 @@
             <form-tmpl :ref="formMeta.name" :meta="formMeta">
                 <template #form-item="{columns}">
                     <draggable
-                            :animation="200"
-                            :disabled="false"
-                            :list="list"
-                            @add="handleAdd"
-                            @end="handleMoveEnd"
-                            @start="handleMoveStart"
-                            group="form"
-                            style="padding: 5px;border: 1px dotted grey;"
-                            tag="el-row">
+                        :animation="200"
+                        :disabled="false"
+                        :list="formMeta.columns"
+                        @add="handleAdd"
+                        @end="handleMoveEnd"
+                        @start="handleMoveStart"
+                        group="form"
+                        style="padding: 5px;border: 1px dotted grey;"
+                        tag="el-row">
                         <div v-if="columns.length === 0" class="blank-tip">
                             从左侧拖拽来添加表单项
                         </div>
@@ -43,13 +41,13 @@
                                                :meta="item"></component>
                                 </el-form-item>
                                 <el-button
-                                        @click.stop="handleDelete(index)"
-                                        class="form-item-delete-btn"
-                                        icon="el-icon-delete"
-                                        size="mini"
-                                        style="border-radius: 0"
-                                        type="primary"
-                                        v-if="selectIndex === index"
+                                    @click.stop="handleDelete(index)"
+                                    class="form-item-delete-btn"
+                                    icon="el-icon-delete"
+                                    size="mini"
+                                    style="border-radius: 0"
+                                    type="primary"
+                                    v-if="selectIndex === index"
                                 ></el-button>
                             </div>
                         </template>
@@ -61,8 +59,8 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import draggable from 'vuedraggable'
-    import cloneDeep from 'lodash/cloneDeep'
     import FormTmpl from "../../core/FormTmpl";
     import {DEFAULT} from '@/constant'
     import DropDownBox from "@/components/core/form/DropDownBox";
@@ -79,22 +77,30 @@
         },
         data() {
             return {
-                objectCode: {},
                 selectIndex: null,
-                list: []
             }
         },
         methods: {
             handleDelete(index) { // 删除
-                this.list.splice(index, 1);
-                if (index >= this.list.length) {
-                    this.selectIndex = this.list.length - 1
+                if (this.formMeta.objectCode) {
+                    this.$message.warning('编辑元对象时不允许移除控件');
+                    return;
+                }
+                let columns = this.formMeta.columns;
+                columns.splice(index, 1);
+                if (index >= this.columns.length) {
+                    this.selectIndex = this.columns.length - 1
                 }
                 this.$emit('select', this.formMeta, this.selectIndex); // 防止从中间删除导致未触发emit
             },
             // 新增
             handleAdd(res) {
-                this.selectIndex = res.newIndex
+                if (this.formMeta.objectCode) { // TODO vuedraggable 再找找到类似beforeAdd事件
+                    this.$message.warning('编辑元对象时不允许新增控件');
+                    this.formMeta.columns.splice(res.newIndex, 1);
+                    return false;
+                }
+                this.selectIndex = res.newIndex;
             },
             // 移动开始
             handleMoveStart(res) {
@@ -102,7 +108,7 @@
             },
             // 移动结束
             handleMoveEnd(res) {
-                this.selectIndex = res.newIndex
+                this.selectIndex = res.newIndex;
             },
             // 点击选中
             handleFormItemClick(index, ev) {
@@ -121,11 +127,10 @@
             },
             submitForm() {
                 this.$message.error("submitForm action not finished!");
-                // this.$refs[this.formMeta.name].onSubmit();
             },
             resetForm() {
                 this.$message.error("resetForm action not finished!");
-            }
+            },
         },
         watch: {
             selectIndex(newVal) {
@@ -135,20 +140,11 @@
         computed: {
             formMeta() {
                 let formMeta = this.value;
-                let columns = formMeta.columns;
-                let columnNames = columns.map(item => item.name);
-
-                let newColumns = cloneDeep(this.list);
-
-                for (let i = 0; i < newColumns.length; i++) {
-                    let name = newColumns[i].name;
-                    if (columnNames.includes(name)) {
-                        this.$reverseMerge(newColumns[i], columns[columnNames.indexOf(name)]);
-                    }
+                if (!utils.isArray(formMeta.columns)) {
+                    this.$set(formMeta, 'columns', []);
                 }
-                formMeta.columns = newColumns;
                 return formMeta;
-            }
+            },
         }
     }
 </script>

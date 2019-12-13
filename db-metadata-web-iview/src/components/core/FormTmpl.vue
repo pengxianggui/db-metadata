@@ -101,9 +101,10 @@
         },
         computed: {
             innerMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.FormTmpl);
-                this.assemblyModel(meta);
-                return meta;
+                let newMeta = utils.deepClone(this.meta);
+                this.$merge(newMeta, DEFAULT.FormTmpl);
+                this.assemblyModel(newMeta);
+                return newMeta;
             }
         }
     }
