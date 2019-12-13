@@ -73,7 +73,9 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
-        me.add(new UserAuthIntercept());
+        if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
+            me.add(new UserAuthIntercept());
+        }
         me.add(new JsonParamIntercept());
     }
 
