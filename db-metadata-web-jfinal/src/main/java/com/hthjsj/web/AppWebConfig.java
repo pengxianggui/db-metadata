@@ -7,10 +7,11 @@ import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.feature.FeatureRouter;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
-import com.hthjsj.web.jfinal.UserSettingIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.hthjsj.web.upload.UploadController;
+import com.hthjsj.web.user.UserAuthIntercept;
+import com.hthjsj.web.user.UserRouter;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
 import com.jfinal.plugin.activerecord.Record;
@@ -42,6 +43,7 @@ public class AppWebConfig extends JFinalConfig {
         me.setMappingSuperClass(true);
         me.add(new CoreRouter());
         me.add(new FeatureRouter());
+        me.add(new UserRouter());
         me.add("/file", UploadController.class);
     }
 
@@ -71,7 +73,7 @@ public class AppWebConfig extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
-        me.add(new UserSettingIntercept());
+        me.add(new UserAuthIntercept());
         me.add(new JsonParamIntercept());
     }
 

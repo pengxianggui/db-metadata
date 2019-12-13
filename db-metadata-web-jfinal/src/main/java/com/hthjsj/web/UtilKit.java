@@ -10,6 +10,8 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
+import com.hthjsj.web.user.User;
+import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;

@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.user;
 
 /**
  * <p> Class title:  线程内User共享</p>
@@ -12,12 +12,12 @@ public class UserThreadLocal {
 
     private static final ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
 
-    public static void setUser(User user) {
-        userThreadLocal.set(user);
-    }
-
     public static User getUser() {
         return userThreadLocal.get();
+    }
+
+    public static void setUser(User user) {
+        userThreadLocal.set(user);
     }
 
     public static void removeUser(User user) {
