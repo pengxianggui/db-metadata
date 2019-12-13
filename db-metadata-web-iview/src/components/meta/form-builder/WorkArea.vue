@@ -1,10 +1,19 @@
 <template>
     <div class="el-card container">
         <div class="header">
-            <el-button @click="preview" icon="el-icon-view" size="small" type="primary">视图预览</el-button>
-            <el-button @click="jsonView" icon="el-icon-view" size="small" type="primary">json预览</el-button>
-            <el-button @click="submitForm" icon="el-icon-download" size="small" type="success">保存</el-button>
-            <el-button @click="resetForm" icon="el-icon-delete" size="small" type="danger">重置</el-button>
+            <el-row>
+                <el-col :span="20">
+                    <el-button @click="preview" icon="el-icon-view" size="small" type="primary">视图预览</el-button>
+                    <el-button @click="jsonView" icon="el-icon-view" size="small" type="primary">json预览</el-button>
+                    <el-button @click="submitForm" icon="el-icon-download" size="small" type="success">保存</el-button>
+                    <el-button @click="resetForm" icon="el-icon-delete" size="small" type="danger">重置</el-button>
+                </el-col>
+                <el-col :span="4">
+                    <drop-down-box
+                            data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
+                            v-model="objectCode"></drop-down-box>
+                </el-col>
+            </el-row>
         </div>
         <div class="work-area">
             <form-tmpl :ref="formMeta.name" :meta="formMeta">
@@ -34,13 +43,13 @@
                                                :meta="item"></component>
                                 </el-form-item>
                                 <el-button
-                                    @click.stop="handleDelete(index)"
-                                    class="form-item-delete-btn"
-                                    icon="el-icon-delete"
-                                    size="mini"
-                                    style="border-radius: 0"
-                                    type="primary"
-                                    v-if="selectIndex === index"
+                                        @click.stop="handleDelete(index)"
+                                        class="form-item-delete-btn"
+                                        icon="el-icon-delete"
+                                        size="mini"
+                                        style="border-radius: 0"
+                                        type="primary"
+                                        v-if="selectIndex === index"
                                 ></el-button>
                             </div>
                         </template>
@@ -56,10 +65,12 @@
     import cloneDeep from 'lodash/cloneDeep'
     import FormTmpl from "../../core/FormTmpl";
     import {DEFAULT} from '@/constant'
+    import DropDownBox from "@/components/core/form/DropDownBox";
 
     export default {
         name: "WorkArea",
         components: {
+            DropDownBox,
             FormTmpl,
             draggable
         },
@@ -68,12 +79,13 @@
         },
         data() {
             return {
+                objectCode: {},
                 selectIndex: null,
                 list: []
             }
         },
         methods: {
-            handleDelete (index) { // 删除
+            handleDelete(index) { // 删除
                 this.list.splice(index, 1);
                 if (index >= this.list.length) {
                     this.selectIndex = this.list.length - 1
@@ -154,6 +166,7 @@
     .work-area {
         flex: 1
     }
+
     .blank-tip {
         height: 400px;
         line-height: 400px;
