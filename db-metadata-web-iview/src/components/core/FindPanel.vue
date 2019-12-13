@@ -54,12 +54,21 @@
             handlerSearch(params) {
                 this.$refs[this.tlMeta['name']].getData(params); // refresh table data
             },
+            assemblyFeedbackValue(data, primaryKeys) {
+                let feedBackValue;
+                feedBackValue = data[primaryKeys];  // TODO 多主键情况
+                return feedBackValue;
+            },
             ok() {
-                if (!this.choseData.id) {
+                if (!this.choseData) {
                     this.$message.warning('请选择数据.');
                     return;
                 }
-                this.$emit('ok', this.choseData.id); // feedback choseData
+
+                const objectPrimaryKey = this.tlMeta['objectPrimaryKey'];
+                const feedBackValue = this.assemblyFeedbackValue(this.choseData, objectPrimaryKey);
+
+                this.$emit('ok', feedBackValue); // feedback choseData
             },
             cancel() {
                 this.$emit('cancel', 'clean'); // feedback clean
