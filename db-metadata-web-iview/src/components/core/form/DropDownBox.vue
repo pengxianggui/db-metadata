@@ -1,6 +1,6 @@
 <template>
     <el-select v-model="nativeValue"
-               v-bind="innerMeta.conf"
+               v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                @change="$emit('change', $event)"
                @remove-tag="$emit('remove-tag', $event)"
                @clear="$emit('clear', $event)"
@@ -45,6 +45,9 @@
         },
         props: {
             value: [Object, String, Number, Array]
+        },
+        created() {
+            console.log(this.$attrs)
         },
         computed: {
             nativeValue: {

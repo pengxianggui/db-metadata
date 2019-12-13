@@ -2,7 +2,7 @@
     <el-date-picker
             v-model="nativeValue"
             type="date"
-            v-bind="innerMeta.conf">
+            v-bind="$reverseMerge(innerMeta.conf, $attrs)">
     </el-date-picker>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <el-checkbox v-model="nativeValue"
-                 v-bind="innerMeta.conf"
+                 v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                  @change="$emit('change', $event)"></el-checkbox>
 </template>
 

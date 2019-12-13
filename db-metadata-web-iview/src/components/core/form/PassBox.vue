@@ -1,6 +1,6 @@
 <template>
     <el-input v-model="nativeValue"
-              v-bind="innerMeta.conf"
+              v-bind="$reverseMerge(innerMeta.conf, $attrs)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"

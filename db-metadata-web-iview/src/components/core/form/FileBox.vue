@@ -1,6 +1,6 @@
 <template>
     <el-upload
-        v-bind="innerMeta.conf"
+        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :on-success="handleOnSuccess"

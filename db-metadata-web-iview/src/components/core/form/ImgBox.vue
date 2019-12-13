@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-upload
-            v-bind="innerMeta.conf"
+            v-bind="$reverseMerge(innerMeta.conf, $attrs)"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :on-success="handleOnSuccess"

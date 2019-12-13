@@ -3,7 +3,7 @@
         <el-radio v-for="item in innerOptions"
                   :key="item.key"
                   :label="item.value"
-                  v-bind="innerMeta.conf">
+                  v-bind="$reverseMerge(innerMeta.conf, $attrs)">
             {{item.key}}
         </el-radio>
     </el-radio-group>

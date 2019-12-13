@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-tree :ref="refName" :data="data"
-                 v-bind="innerMeta.conf"
+                 v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                  @node-click="$emit('node-click')"
                  @node-contextmenu="$emit('node-contextmenu')"
                  @check-change="$emit('check-change')"

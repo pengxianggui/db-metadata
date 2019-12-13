@@ -1,7 +1,7 @@
 <template>
     <vue-json-editor v-model="nativeValue"
                      :mode="mode"
-                     v-bind="innerMeta.conf">
+                     v-bind="$reverseMerge(innerMeta.conf, $attrs)">
     </vue-json-editor>
 </template>
 

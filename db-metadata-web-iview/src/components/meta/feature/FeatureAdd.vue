@@ -14,7 +14,8 @@
                 <h3>主表</h3>
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.objectCode"
-                                   :options="objectCodes" required></drop-down-box>
+                                   :options="objectCodes"
+                                   :filterable="true" :required="true"></drop-down-box>
                 </el-form-item>
                 <el-form-item label="主键" class="inline">
                     <text-box v-model="masterSlaveConfig.master.primaryKey" required></text-box>
@@ -24,7 +25,7 @@
                     <el-tab-pane label="从表1" name="first">
                         <el-form-item label="元对象编码" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].objectCode"
-                                           :options="objectCodes" filterable required></drop-down-box>
+                                           :options="objectCodes" :filterable="true" :required="true"></drop-down-box>
                         </el-form-item>
                         <el-form-item label="外键" class="inline">
                             <text-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode" required></text-box>

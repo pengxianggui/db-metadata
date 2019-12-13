@@ -30,7 +30,7 @@
                     :id="innerMeta.name"
                     :ref="innerMeta.name"
                     :data="innerData"
-                    v-bind="innerMeta.conf"
+                    v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                     @row-click="choseRow"
                     @row-dblclick="$emit('row-dblclick', $event)"
                     @sort-change="sortChange"

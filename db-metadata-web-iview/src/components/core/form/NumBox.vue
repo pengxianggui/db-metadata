@@ -1,7 +1,7 @@
 <template>
     <el-input-number v-model="nativeValue"
                      @change="$emit('change', $event)"
-                     v-bind="innerMeta['conf']"></el-input-number>
+                     v-bind="$reverseMerge(innerMeta['conf'], $attrs)"></el-input-number>
 </template>
 
 <script>

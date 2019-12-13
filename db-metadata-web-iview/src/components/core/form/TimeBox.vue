@@ -1,7 +1,7 @@
 <template>
     <el-time-picker
             v-model="nativeValue"
-            v-bind="innerMeta.conf">
+            v-bind="$reverseMerge(innerMeta.conf, $attrs)">
     </el-time-picker>
 </template>
 
