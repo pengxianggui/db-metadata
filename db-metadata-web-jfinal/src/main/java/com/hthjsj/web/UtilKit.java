@@ -4,16 +4,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -113,7 +118,7 @@ public class UtilKit {
      *
      * @return
      */
-    public static String loadContentByFile(String fileName) {
+    public static String loadContentInCurrentJar(String fileName) {
         String result = "";
         try (InputStream fis = UtilKit.class.getClassLoader().getResourceAsStream(fileName)) {
             log.info("load  {} file", fileName);
@@ -123,6 +128,62 @@ public class UtilKit {
             log.error(e.getMessage(), e);
         }
         return result;
+    }
+
+    public static String loadConfigByFile(String fileName) {
+        return stairsLoad(fileName, "config");
+    }
+
+    /**
+     * load 执行jar包所在目录下逻辑
+     * 读取顺序 : fileName -> /{defDirectory}/fileName -> jar包内部
+     * /fileName
+     * /{defDirectory}/fileName
+     *
+     * @param fileName         文件名
+     * @param defaultDirectory fileName读取失败后,再使用defaultDirectory目录继续读取
+     *
+     * @return
+     */
+    public static String stairsLoad(String fileName, String defaultDirectory) {
+
+//        PathKit.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
+//        PathKit.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
+//        PathKitExt.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
+//        PathKitExt.getLocationPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa
+//        PathKitExt.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
+
+        String locationPath = PathKitExt.getLocationPath();
+        // /fileName
+        {
+            try {
+                String destFilePath = Joiner.on(File.separator).join(locationPath, fileName);
+                File f = new File(destFilePath);
+                if (f.exists()) {
+                    log.info("load success file content in {}", destFilePath);
+                    return Joiner.on("").join(Files.readLines(f, Charsets.UTF_8));
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        // /config/fileName
+        {
+            try {
+                String destFilePath = Joiner.on(File.separator).join(locationPath, defaultDirectory, fileName);
+                File f = new File(destFilePath);
+                if (f.exists()) {
+                    log.info("load success file content in {}", destFilePath);
+                    return Joiner.on("").join(Files.readLines(f, Charsets.UTF_8));
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        //classpath:filename
+        return loadContentInCurrentJar(fileName);
     }
 
     /**

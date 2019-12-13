@@ -29,7 +29,7 @@ public class Dicts {
     }
 
     private void loadTmplConfigFromFile() {
-        String result = UtilKit.loadContentByFile(DICT_JSON);
+        String result = UtilKit.loadConfigByFile(DICT_JSON);
         dict.set(UtilKit.getKv(result));
     }
 

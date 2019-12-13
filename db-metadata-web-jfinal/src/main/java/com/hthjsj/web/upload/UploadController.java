@@ -34,9 +34,9 @@ public class UploadController extends Controller {
         Preconditions.checkNotNull(filename);
         filename += ".json";
         if (JFinal.me().getConstants().getDevMode()) {
-            Optional<String> result = Optional.ofNullable(UtilKit.loadContentByFile(filename));
+            Optional<String> result = Optional.ofNullable(UtilKit.loadConfigByFile(filename));
             if (result.isPresent()) {
-                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadContentByFile(filename))));
+                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));
             } else {
                 renderJson(Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
             }

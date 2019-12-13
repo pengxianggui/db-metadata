@@ -42,8 +42,8 @@ public class InitKit {
     }
 
     public static void loadConfig() {
-        String objectConfig = UtilKit.loadContentByFile(OBJECT_CONFIG);
-        String instanceConfig = UtilKit.loadContentByFile(INSTANCE_JSON);
+        String objectConfig = UtilKit.loadConfigByFile(OBJECT_CONFIG);
+        String instanceConfig = UtilKit.loadConfigByFile(INSTANCE_JSON);
         jsonObjectConfig = JSON.parseObject(objectConfig, Feature.OrderedField);
         jsonInstanceConfig = JSON.parseObject(instanceConfig, Feature.OrderedField);
     }
