@@ -2,37 +2,31 @@
     <div class="">
         <el-tabs type="border-card">
             <el-tab-pane label="域配置">
-<!--                <JsonBox v-model="activeFieldMeta"></JsonBox>-->
-
-                <el-form size="mini">
+                <el-form size="mini" v-if="activeFieldMeta" :key="activeFieldMeta.name">
                     <template v-for="(value, key, index) in activeFieldMeta">
                         <template v-if="excludes.indexOf(key) < 0">
-                            <el-form-item :key="key" :label="key" v-if="key !== 'conf'">
-                                <component :is="type(activeFieldMeta['name'], key, value)" v-model="activeFieldMeta[key]"></component>
+                            <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
+                                <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
+                                           v-model="activeFieldMeta[key]"></component>
                             </el-form-item>
                             <el-form-item :key="key" :label="key" v-else>
                                 <div :key="key">
-                                    <json-box v-model="activeFieldMeta[key]" mode="form"></json-box>
+                                    <component :is="activeFieldMeta.component_name" :meta="activeFieldMeta"
+                                               v-model="activeFieldMeta[key]"></component>
                                 </div>
                             </el-form-item>
                         </template>
                     </template>
                 </el-form>
-
             </el-tab-pane>
 
             <el-tab-pane label="表单配置">
-<!--                <JsonBox v-model="formMeta"></JsonBox>-->
                 <el-form size="mini">
                     <template v-for="(value, key, index) in formMeta">
                         <template v-if="excludes.indexOf(key) < 0">
-                            <el-form-item :key="key" :label="key" v-if="key !== 'conf'">
-                                <component :is="type(formMeta['name'], key, value)" v-model="formMeta[key]"></component>
-                            </el-form-item>
-                            <el-form-item :key="key" :label="key" v-else>
-                                <div :key="key">
-                                    <json-box v-model="formMeta[key]" mode="form"></json-box>
-                                </div>
+                            <el-form-item :key="key" :label="key">
+                                <component :is="metaMapping[key].component_name" :meta="metaMapping[key]"
+                                           v-model="formMeta[key]"></component>
                             </el-form-item>
                         </template>
                     </template>
@@ -43,10 +37,37 @@
 </template>
 
 <script>
+    import {DEFAULT, URL} from "@/constant";
     import utils from '@/utils'
-    import cloneDeep from 'lodash/cloneDeep'
     import OptionsInput from './relate/OptionsInput'
     import JsonBox from "@/components/core/form/JsonBox";
+
+    const CUSTOM_CONF_COMPONENT_MAPPING = {
+        name: DEFAULT.TextBox,
+        label: DEFAULT.TextBox,
+        component_name: utils.merge({data_url: URL.COMPONENT_CODE_LIST}, DEFAULT.DropDownBox),
+        conf: DEFAULT.JsonBox,
+        inline: DEFAULT.BoolBox,
+        data_url: DEFAULT.TextBox,
+        delete_url: DEFAULT.TextBox,
+        multi_select: DEFAULT.BoolBox,
+        editable: DEFAULT.BoolBox,
+        options: {
+            component_name: 'OptionsInput'
+        },
+        group: DEFAULT.BoolBox,
+        expand: DEFAULT.BoolBox,
+        "label-position": utils.merge({
+            options: ['top-center', 'top-left', 'top-right', 'bottom-center', 'bottom-left', 'bottom-right']
+        }, DEFAULT.DropDownBox),
+        action: DEFAULT.TextBox,
+        check: DEFAULT.BoolBox,
+        check_url: DEFAULT.TextBox,
+        theme: utils.merge({options: ['default', 'ambiance']}, DEFAULT.RadioBox),
+        lineNumbers: DEFAULT.BoolBox,
+        mode: utils.merge({options: ['text/x-mysql']}, DEFAULT.DropDownBox)
+    };
+    const EXCLUDES = ['columns', 'btns', 'name', 'group', 'objectCode', 'objectPrimaryKey'];
 
     export default {
         name: "ConfArea",
@@ -57,43 +78,17 @@
         components: {JsonBox, OptionsInput},
         data() {
             return {
-                excludes: ['component_name', 'columns', 'btns', 'name'], // temporarily not allow customize
-                typeMapping: {}
+                excludes: EXCLUDES, // temporarily not allow customize
+                metaMapping: CUSTOM_CONF_COMPONENT_MAPPING
             }
         },
         methods: {
-            cloneDeep: cloneDeep,
-            type(field, key, value) {
-                let fKey = field + "." + key;
-                if (this.typeMapping.hasOwnProperty(fKey)) {
-                    value = this.typeMapping[fKey];
-                } else {
-                    this.typeMapping[fKey] = value;
+            getShowComponentName(key) {
+                const metaMapping = this.metaMapping;
+                if (metaMapping.hasOwnProperty(key)) {
+                    return metaMapping[key].component_name;
                 }
-                let type = utils.typeOf(value);
-                let componentName = "TextBox";
-                switch (type) {
-                    case "[object String]":
-                        componentName = "TextBox";
-                        break;
-                    case "[object Number]":
-                        componentName = "NumBox";
-                        break;
-                    case "[object Boolean]":
-                        componentName = "BoolBox";
-                        break;
-                    case "[object Array]":
-                        if (key === 'options') {
-                            componentName = 'options-input';
-                        } else {
-                            componentName = 'JsonBox';
-                        }
-                        break;
-                    case "[object Object]":
-                        componentName = "JsonBox";
-                        break;
-                }
-                return componentName;
+                return DEFAULT.TextBox.component_name;
             }
         },
         watch: {

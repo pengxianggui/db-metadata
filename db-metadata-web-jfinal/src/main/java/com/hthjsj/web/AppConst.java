@@ -15,6 +15,7 @@ public class AppConst {
     public static final HashBasedTable<String, String, Boolean> SYS_TABLE = HashBasedTable.create();
 
     public static final String CONFIG_ALLOW_REPLACE = "config.allow.replace";
+    public static final String NEED_LOGIN = "need.login";
 
     static {
         SYS_TABLE.put("meta_object", "config", true);

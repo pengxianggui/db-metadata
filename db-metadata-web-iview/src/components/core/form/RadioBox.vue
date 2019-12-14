@@ -25,7 +25,7 @@
             }
         },
         props: {
-            value: [Object, String]
+            value: [Object, String, Number]
         },
     }
 </script>

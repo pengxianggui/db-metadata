@@ -212,7 +212,6 @@ const DEFAULT_CONF = {
         "name": "FileBox",
         "label": "文件上传框",
         "inline": false,
-        "default_value": [],
         "conf": {
             "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
             "tip": "上传文件限制不超过2M",
@@ -361,7 +360,8 @@ const DEFAULT_CONF = {
         "check_url": "/check/sql?sql={sql}",
         "theme": "default", // default、ambiance
         "lineNumbers": true,
-        "mode": 'text/x-mysql'
+        "mode": 'text/x-mysql',
+        "conf": {}
     },
     "TreeList": {
         "component_name": "TreeList",

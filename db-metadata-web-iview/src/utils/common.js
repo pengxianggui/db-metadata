@@ -81,6 +81,11 @@ export function isFunction(val) {
     return toStr === '[object Function]'
 }
 
+export function isNull(val) {
+    let toStr = Object.prototype.toString.call(val);
+    return toStr === '[object Null]'
+}
+
 export function isUndefined(val) {
     let toStr = Object.prototype.toString.call(val);
     return toStr === '[object Undefined]'

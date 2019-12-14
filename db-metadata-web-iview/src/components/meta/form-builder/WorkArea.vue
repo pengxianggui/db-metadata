@@ -15,7 +15,7 @@
         </div>
         <div class="work-area">
             <form-tmpl :ref="formMeta.name" :meta="formMeta">
-                <template #form-item="{columns}">
+                <template #form-item>
                     <draggable
                         :animation="200"
                         :disabled="false"
@@ -26,10 +26,10 @@
                         group="form"
                         style="padding: 5px;border: 1px dotted grey;"
                         tag="el-row">
-                        <div v-if="columns.length === 0" class="blank-tip">
+                        <div v-if="formMeta.columns.length === 0" class="blank-tip">
                             从左侧拖拽来添加表单项
                         </div>
-                        <template v-else v-for="(item, index) in columns">
+                        <template v-else v-for="(item, index) in formMeta.columns">
                             <div :class="{'form-item-active': selectIndex === index}" :key="item.name"
                                  class="form-item"
                                  @click="handleFormItemClick(index, $event)">
@@ -62,7 +62,7 @@
     import utils from '@/utils'
     import draggable from 'vuedraggable'
     import FormTmpl from "../../core/FormTmpl";
-    import {DEFAULT} from '@/constant'
+    import {DEFAULT, URL} from '@/constant'
     import DropDownBox from "@/components/core/form/DropDownBox";
 
     export default {
@@ -126,7 +126,33 @@
                 })
             },
             submitForm() {
-                this.$message.error("submitForm action not finished!");
+                // this.$message.error("submitForm action not finished!");
+
+                const componentCode = 'FormTmpl';
+                const objectCode = this.formMeta.objectCode;
+                let params = {
+                    componentCode: componentCode,
+                    objectCode: objectCode
+                };
+                let objectMeta = utils.deepClone(this.formMeta);
+                let columnsMeta;
+                if (objectMeta.hasOwnProperty('columns')) {
+                    columnsMeta = utils.deepClone(objectMeta.columns);
+                    delete objectMeta['columns'];
+                }
+
+                params[objectCode] = objectMeta;
+                columnsMeta.forEach(fieldMeta => params[fieldMeta.name] = fieldMeta);
+
+                this.$axios({
+                    method: 'POST',
+                    url: URL.COMP_CONF_UPDATE,
+                    data: params
+                }).then(resp => {
+                    this.$message.success(resp.msg);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                })
             },
             resetForm() {
                 this.$message.error("resetForm action not finished!");
