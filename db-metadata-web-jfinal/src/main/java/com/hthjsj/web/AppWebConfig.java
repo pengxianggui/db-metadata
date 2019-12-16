@@ -2,6 +2,9 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
+import com.hthjsj.web.auth.JFinalResourceLoader;
+import com.hthjsj.web.auth.JsonUserPermit;
+import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.feature.FeatureRouter;
@@ -68,6 +71,9 @@ public class AppWebConfig extends JFinalConfig {
         if (getPropertyToBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
             InitKit.me().importMetaObjectConfig().importInstanceConfig();
         }
+
+        MRManager mrManager = new MRManager(new JFinalResourceLoader(), new JsonUserPermit("userMRmap.json"));
+        mrManager.load();
     }
 
     @Override
