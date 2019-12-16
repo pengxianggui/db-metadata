@@ -71,6 +71,7 @@
                     this.$message.success('文件上传成功!');
                     file.url = response.data.url; // 设置唯一标示
                     this.nativeValue.push(response.data);
+                    this.$emit('input', this.nativeValue);
                 } else {
                     this.$message.error('文件上传失败');
                 }
