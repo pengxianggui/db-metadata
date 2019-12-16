@@ -3,10 +3,18 @@ package com.hthjsj.web.user.local;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Joiner;
+import com.google.common.io.Files;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
+import com.hthjsj.web.user.UserAuthIntercept;
+import com.jfinal.server.undertow.PathKitExt;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -15,6 +23,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class LocalUserService extends AbstractUserService<LocalUser> {
 
     private static List<LocalUser> users = new ArrayList<>();
@@ -41,7 +50,11 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
 
     @Override
     public LocalUser login(String username, String password) {
-        return findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username)).findFirst().get();
+        LocalUser user = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username)).findFirst().get();
+        if (user != null) {
+            UserAuthIntercept.caches.put(user.userId(), user);
+        }
+        return user;
     }
 
     @Override
@@ -86,8 +99,33 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
         return user;
     }
 
+    /**
+     * FIXME 存在线程安全问题
+     *
+     * @param user
+     */
     @Override
-    public void updateById(LocalUser user) {
-
+    public boolean updateById(LocalUser user) {
+        String locationPath = PathKitExt.getLocationPath();
+        try {
+            Iterator<LocalUser> it = findAll().iterator();
+            while (it.hasNext()) {
+                LocalUser u = it.next();
+                if (user.userId().equalsIgnoreCase(u.userId())) {
+                    u.attrs = user.attrs;
+                }
+            }
+            String destFilePath = Joiner.on(File.separator).join(locationPath, "config", "user.json");
+            File f = new File(destFilePath);
+            if (!f.exists()) {
+                Files.createParentDirs(f);
+                String json = JSON.toJSONString(findAll(), true);
+                Files.write(json.getBytes(), f);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            return false;
+        }
+        return true;
     }
 }

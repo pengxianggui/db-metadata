@@ -74,7 +74,7 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
     }
 
     @Override
-    public void updateById(JeesiteUser user) {
-
+    public boolean updateById(JeesiteUser user) {
+        return false;
     }
 }

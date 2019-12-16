@@ -14,5 +14,5 @@ public interface UserService<U extends User> {
 
     U findById(Object idValue);
 
-    void updateById(U user);
+    boolean updateById(U user);
 }

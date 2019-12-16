@@ -8,6 +8,7 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +38,11 @@ public class UserAuthIntercept implements Interceptor {
         public Kv attrs() {
             return null;
         }
+
+        @Override
+        public Kv attrs(Map attrs) {
+            return null;
+        }
     };
 
     @Override
@@ -55,7 +61,7 @@ public class UserAuthIntercept implements Interceptor {
          * 4. 放行后更新用户过期时间.
          */
         try {
-            if (inv.getActionKey().startsWith(UserRouter.URL_PREFIX)) {
+            if (inv.getActionKey().startsWith(UserRouter.URL_PREFIX) && !inv.getActionKey().endsWith("update")) {
                 inv.invoke();
                 return;
             }

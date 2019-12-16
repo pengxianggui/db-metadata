@@ -3,9 +3,9 @@ package com.hthjsj.web.user;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.jfinal.kit.Kv;
 
+import java.util.Map;
+
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/10/18 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -21,4 +21,6 @@ public interface User {
 
     @JSONField(name = "attrs")
     Kv attrs();
+
+    Kv attrs(Map attrs);
 }

@@ -1,5 +1,6 @@
 package com.hthjsj.web.user.local;
 
+import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.user.User;
 import com.jfinal.kit.Kv;
 
@@ -32,5 +33,11 @@ public class LocalUser implements User {
     @Override
     public Kv attrs() {
         return attrs;
+    }
+
+    @Override
+    public Kv attrs(Map attrs) {
+        UtilKit.deepMerge(this.attrs, attrs, true);
+        return this.attrs;
     }
 }
