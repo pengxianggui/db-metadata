@@ -7,8 +7,8 @@
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
                     <drop-down-box @change="loadConf(objectCode)" placeholder="选择元对象"
-                        data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
-                        v-model="objectCode"></drop-down-box>
+                                   data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
+                                   v-model="objectCode"></drop-down-box>
                 </template>
             </WorkArea>
         </el-col>
@@ -39,19 +39,24 @@
             }
         },
         methods: {
-            handleSelectFormItem (formMeta, selectIndex) {
+            setInitState() {
+                this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
+            },
+            handleSelectFormItem(formMeta, selectIndex) {
                 this.formMeta = formMeta;
                 this.selectIndex = selectIndex;
             },
             loadConf(objectCode) {
-                let self = this;
                 const url = this.$compile(URL.COMPONENT_INSTANCE_META, {
                     componentCode: 'FormTmpl',
                     objectCode: objectCode
                 });
-                self.$axios.safeGet(url).then(resp => {
+                this.$axios.safeGet(url).then(resp => {
                     let formMeta = resp.data;
-                    self.$reverseMerge(self.formMeta, formMeta, true);
+                    this.$reverseMerge(this.formMeta, formMeta, true);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                    this.setInitState();
                 })
             }
         },

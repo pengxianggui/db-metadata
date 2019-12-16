@@ -241,7 +241,6 @@
     "component_name": "FormTmpl",
     "name": "FormTmpl",
     "label": "表单模板",
-    "action": "/form/doAdd/{objectCode}",
     "conf": {
       "label-width": "100px",
       "size": "medium",
