@@ -4,8 +4,12 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
-                                     @change="loadConf"></drop-down-box>
+<!--                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"-->
+<!--                                     @change="loadConf"></drop-down-box>-->
+                        <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
+                        <radio-box v-model="confModel.componentCode"
+                                   :options="['FormTmpl', 'TableList', 'SearchPanel']"
+                                   @change="loadConf"></radio-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
