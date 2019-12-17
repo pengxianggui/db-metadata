@@ -8,6 +8,7 @@ import com.google.common.io.Files;
 import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
 import com.hthjsj.web.user.UserAuthIntercept;
+import com.jfinal.kit.Kv;
 import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +28,12 @@ import java.util.List;
 public class LocalUserService extends AbstractUserService<LocalUser> {
 
     private static List<LocalUser> users = new ArrayList<>();
+
+    private String fileName;
+
+    public LocalUserService(String fileName) {
+        this.fileName = fileName;
+    }
 
     @Override
     public String tokenKey() {
@@ -75,7 +82,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
     @Override
     public List<LocalUser> findAll() {
         if (users.isEmpty()) {
-            String userJson = UtilKit.loadConfigByFile("user.json");
+            String userJson = UtilKit.loadConfigByFile(fileName);
             JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
             for (int i = 0; i < userObjs.size(); i++) {
                 JSONObject j = (JSONObject) userObjs.get(i);
@@ -87,7 +94,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
 
     @Override
     public LocalUser findById(Object idValue) {
-        String userJson = UtilKit.loadConfigByFile("user.json");
+        String userJson = UtilKit.loadConfigByFile(fileName);
         JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
         LocalUser user = null;
         for (int i = 0; i < userObjs.size(); i++) {
@@ -115,11 +122,11 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
                     u.attrs = user.attrs;
                 }
             }
-            String destFilePath = Joiner.on(File.separator).join(locationPath, "config", "user.json");
+            String destFilePath = Joiner.on(File.separator).join(locationPath, "config", fileName);
             File f = new File(destFilePath);
             if (!f.exists()) {
                 Files.createParentDirs(f);
-                String json = JSON.toJSONString(findAll(), true);
+                String json = JSON.toJSONString(Kv.by("users", findAll()), true);
                 Files.write(json.getBytes(), f);
             }
         } catch (IOException e) {

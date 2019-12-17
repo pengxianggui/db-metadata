@@ -24,16 +24,16 @@ public class ActionResource implements MResource {
 
     @Override
     public String mResourceId() {
-        return null;
+        return rid;
     }
 
     @Override
     public String mResourceName() {
-        return null;
+        return rName;
     }
 
     @Override
     public boolean needPermit() {
-        return false;
+        return needPermit;
     }
 }

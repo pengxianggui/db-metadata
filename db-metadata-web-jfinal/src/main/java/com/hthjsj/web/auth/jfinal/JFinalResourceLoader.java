@@ -1,6 +1,7 @@
-package com.hthjsj.web.auth;
+package com.hthjsj.web.auth.jfinal;
 
-import com.hthjsj.web.auth.jfinal.ActionResource;
+import com.hthjsj.web.auth.MRLoader;
+import com.hthjsj.web.auth.MResource;
 import com.jfinal.core.JFinal;
 
 import java.util.ArrayList;

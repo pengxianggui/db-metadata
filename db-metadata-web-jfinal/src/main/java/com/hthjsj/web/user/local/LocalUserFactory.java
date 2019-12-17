@@ -14,11 +14,11 @@ public class LocalUserFactory extends AbstractUserFactory<LocalUser> {
 
     @Override
     public UserService<LocalUser> createService() {
-        return new LocalUserService();
+        return new LocalUserService("user.json");
     }
 
     @Override
     public LoginService<LocalUser> loginService() {
-        return new LocalUserService();
+        return new LocalUserService("user.json");
     }
 }

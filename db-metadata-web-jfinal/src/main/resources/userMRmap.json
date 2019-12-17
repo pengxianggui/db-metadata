@@ -2,7 +2,9 @@
   "rules": [
     {
       "userId": "1",
-      "resources": []
+      "resources": [
+        "/table/list"
+      ]
     }
   ]
 }
