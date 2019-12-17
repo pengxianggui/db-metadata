@@ -28,12 +28,9 @@
     export default {
         name: "MasterSlaveTableTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
-        props: {
-            R_fc: String,    // fc: 功能code(feature_code)
-        },
         data() {
             return {
-                featureCode: this.R_fc,
+                featureCode: this.$route.query.featureCode,
                 master: {},
                 slaves: [],
                 activeMData: {},

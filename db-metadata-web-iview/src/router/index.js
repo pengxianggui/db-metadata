@@ -15,10 +15,8 @@ const router = new Router({
 const routesKey = 'router';
 let routes;
 
-localStorage.removeItem(routesKey); // 调试阶段先每次清空
-
+// localStorage.removeItem(routesKey); // 调试阶段先每次清空
 router.beforeEach((to, from, next) => {
-    assembleProps(to);
     if (utils.isEmpty(routes)) {
         if (utils.isEmpty(getRoutesFromLocalStorage(routesKey))) {
             axios.get(URL.ROUTE_DATA).then(resp => {
@@ -32,27 +30,9 @@ router.beforeEach((to, from, next) => {
             routerGo(to, next);
         }
     } else {
-        next();
+        next()
     }
 });
-
-function assembleProps(to) {
-    to.matched.filter(route => {
-        let props = route['props']['default'];
-        if (utils.isEmpty(props)) return true;
-
-        if (utils.isEmpty(props.R_fc)) {
-            props['R_fc'] = to.query['featureCode'];
-        }
-        if (utils.isEmpty(props.R_cc)) {
-            props['R_cc'] = to.query['componentCode'];
-        }
-        if (utils.isEmpty(props.R_oc)) {
-            props['R_oc'] = to.query['objectCode'];
-        }
-        return true;
-    });
-}
 
 function getRoutesFromLocalStorage(routesKey) {
     return JSON.parse(window.localStorage.getItem(routesKey));

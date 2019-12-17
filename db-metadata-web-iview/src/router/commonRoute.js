@@ -4,17 +4,14 @@ const children = [
     {
         path: 'meta-data',
         name: 'Metadata',
-        props: {R_fc: 'tcode_test'}, // TODO 元对象/元字段 主子表功能code暂时为 tcode_test, 正式需要修改
         component: 'meta/MetaDataManager'
     }, {
         path: 'meta-component',
         name: 'MetaComponent',
-        props: {R_oc: "meta_component_instance"},
         component: 'meta/component/GlobalConfList'
     }, {
         path: 'global-conf',
         name: 'GlobalConf',
-        props: {R_cc: null},
         component: 'meta/component/GlobalConf'
     }, {
         path: 'meta-component-instance',
@@ -24,12 +21,10 @@ const children = [
     }, {
         path: 'instance-conf',
         name: 'InstanceConf',
-        props: {R_cc: null, R_oc: null},
         component: 'meta/component-instance/InstanceConf'
     }, {
         path: 'form-builder',
         name: 'FormBuilder',
-        props: {R_oc: null},
         component: 'meta/form-builder'
     }, {
         path: 'objects',
@@ -42,17 +37,14 @@ const children = [
     }, {
         path: 'table',
         name: 'table',
-        props: {R_fc: null, R_oc: null},
         component: 'template/SingleGridTmpl'
     }, {
         path: 'ms-table',
         name: 'msTable',
-        props: {R_fc: null},
         component: 'template/MasterSlaveTableTmpl'
     }, {
         path: 'form',
         name: 'Form',
-        props: {R_oc: null},
         component: 'template/FormTmpl'
     }
 ];

@@ -42,14 +42,12 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT, URL} from '@/constant';
     import EleProps from '@/config/element-props'
 
     export default {
         name: "GlobalConf",
-        props: {
-            R_cc: String
-        },
         data() {
             let componentMeta = {
                 name: "component",
@@ -73,7 +71,7 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
-                    componentCode: this.R_cc,
+                    componentCode: this.$route.query.componentCode,
                     conf: {}, // conf of component
                 }
             }
@@ -173,7 +171,7 @@
             }
         },
         mounted() {
-            if (this.R_cc !== undefined) {
+            if (!utils.isEmpty(this.componentCode)) {
                 this.loadConf();
             }
         }

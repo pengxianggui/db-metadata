@@ -23,12 +23,9 @@
     export default {
         name: "InstanceConfList",
         mixins: [getTlMeta, getSpMeta],
-        props: {
-            R_oc: String
-        },
         data() {
             return {
-                objectCode: this.R_oc,
+                objectCode: this.$route.query.objectCode,
                 tlMeta: {},
                 spMeta: {}
             }

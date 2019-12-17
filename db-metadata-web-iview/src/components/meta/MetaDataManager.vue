@@ -39,16 +39,13 @@
     export default {
         name: "MetaDataManager",
         mixins: [loadFeature, getTlMeta, getSpMeta],
-        props: {
-            R_fc: String,    // fc: 功能code(feature_code)
-        },
         components: {
             MetaImport,
             FeatureAdd
         },
         data() {
             return {
-                featureCode: this.R_fc,
+                featureCode: this.$route.query.featureCode,
 
                 master: {},
                 slave: {},  // 元对象/元字段 主子表一对一

@@ -78,15 +78,12 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT, URL} from '@/constant';
     import EleProps from '@/config/element-props'
 
     export default {
         name: "InstanceConf",
-        props: {
-            R_cc: String,
-            R_oc: String
-        },
         data() {
             let componentMeta = {
                 name: "component",
@@ -136,8 +133,8 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
-                    componentCode: this.R_cc,
-                    objectCode: this.R_oc,
+                    componentCode: this.$route.query.componentCode,
+                    objectCode: this.$route.query.objectCode,
                     conf: {}, // conf of metaObject
                     fConf: {} // conf of fields
                 }
@@ -263,7 +260,7 @@
             }
         },
         mounted() {
-            if (this.R_cc !== undefined && this.R_oc !== undefined) {
+            if (!utils.isEmpty(this.componentCode) && !utils.isEmpty(this.objectCode)) {
                 this.loadConf();
             }
         }

@@ -27,13 +27,10 @@
 
     export default {
         name: "FormBuilder",
-        props: {
-            R_oc: String
-        },
         components: {ComponentList, WorkArea, ConfArea},
         data() {
             return {
-                objectCode: this.R_oc,
+                objectCode: this.$route.query.objectCode,
                 formMeta: this.$merge({}, DEFAULT.FormTmpl),
                 selectIndex: null
             }

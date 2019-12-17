@@ -12,14 +12,10 @@
     export default {
         name: "SingleGridTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
-        props: {
-            R_fc: String,
-            R_oc: String
-        },
         data() {
             return {
-                featureCode: this.R_fc,
-                objectCode: this.R_oc,
+                featureCode: this.$route.query.featureCode,
+                objectCode: this.$route.query.objectCode,
                 tlMeta: {},
                 spMeta: {}
             }

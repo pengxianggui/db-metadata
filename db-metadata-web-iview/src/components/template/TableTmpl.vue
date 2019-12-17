@@ -11,12 +11,9 @@
     export default {
         name: "TableTmpl",
         mixins: [getTlMeta],
-        props: {
-            R_oc: String
-        },
         data() {
             return {
-                objectCode: this.R_oc,
+                objectCode: this.$route.query.objectCode,
                 meta: {}
             }
         },
