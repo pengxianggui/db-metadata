@@ -1,7 +1,7 @@
 <template>
     <div>
-        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-list :ref="tlMeta['name']" :meta="tlMeta"></table-list>
+        <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="tableRefName" :meta="tlMeta"></table-list>
     </div>
 </template>
 
@@ -22,7 +22,8 @@
         },
         methods: {
             handleSearch(params) {
-                this.$refs[this.tlMeta['name']].getData(params);
+                const tableRefName = this.tableRefName;
+                this.$refs[tableRefName].getData(params);
             },
             initMeta(objectCode) {
                 this.getTlMeta(objectCode).then(resp => {
@@ -52,6 +53,11 @@
             } else {
                 objectCode = this.objectCode;
                 this.initMeta(objectCode);
+            }
+        },
+        computed: {
+            tableRefName() {
+                return this.tlMeta['name'];
             }
         }
     }
