@@ -4,7 +4,7 @@
             <header-bar></header-bar>
         </el-header>
         <el-container style="flex: 1; overflow: auto;">
-            <aside-nav style="overflow: auto;"></aside-nav>
+            <aside-nav></aside-nav>
             <el-main style="height: auto; overflow: auto;">
 <!--                <tag-nav></tag-nav>-->
                 <router-view :key="new Date().getTime()"></router-view>

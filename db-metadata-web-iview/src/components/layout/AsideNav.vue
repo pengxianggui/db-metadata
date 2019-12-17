@@ -1,11 +1,11 @@
 <template>
-    <div :class="{'expand-menu': !isCollapse}">
+    <div :class="{'expand-menu': !isCollapse}" style="display: flex; flex-direction: column;">
         <div style="text-align: center">
             <el-button :icon="isCollapse ? 'el-icon-arrow-right':'el-icon-arrow-left'" size="mini"
                        @click="isCollapse = !isCollapse"></el-button>
         </div>
         <el-menu :default-active="$route.fullPath" :router="true" active-text-color
-                 @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                 @open="handleOpen" @close="handleClose" :collapse="isCollapse" style="flex: 1; overflow: auto;">
             <el-submenu v-for="item in menus" :index="item.path" :key="item.path">
                 <template #title>
                     <i :class="item.icon"></i>
