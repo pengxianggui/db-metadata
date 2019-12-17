@@ -126,7 +126,7 @@
                     columns.forEach(item => {
                         let componentName = item.component_name;
                         this.$merge(item, DEFAULT[componentName]); // merge column
-                        let symbol = util.deepCopy(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
+                        let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
                         this.$set(this.model, item.name, {
                             value: null,
                             symbol: symbol

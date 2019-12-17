@@ -14,12 +14,12 @@ export function merge(opt1, opt2, deep) {
 
     if (opt2 === null || !common.isObject(opt2)) {
         console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
-        return common.deepCopy(opt1);
+        return common.deepClone(opt1);
     }
 
     if (opt1 === null || !common.isObject(opt1)) {
         console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
-        return common.deepCopy(opt2);
+        return common.deepClone(opt2);
     }
 
     deep = (deep === undefined); // 默认deep模式
@@ -28,7 +28,7 @@ export function merge(opt1, opt2, deep) {
         if (!common.isObject(obj1) || !common.isObject(obj2)) return;
         for (let key in obj2) {
             if (!(key in obj1)) {
-                set(self, obj1, key, common.deepCopy(obj2[key]));
+                set(self, obj1, key, common.deepClone(obj2[key]));
             } else {
                 if (!deep) return;
                 deepMerge(obj1[key], obj2[key])
@@ -38,7 +38,7 @@ export function merge(opt1, opt2, deep) {
 
     // deep merge
     deepMerge(opt1, opt2);
-    return common.deepCopy(opt1);
+    return common.deepClone(opt1);
 }
 
 /**
@@ -54,12 +54,12 @@ export function reverseMerge(opt1, opt2, deep) {
 
     if (opt2 === null || !common.isObject(opt2)) {
         console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
-        return common.deepCopy(opt1);
+        return common.deepClone(opt1);
     }
 
     if (opt1 === null || !common.isObject(opt1)) {
         console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
-        return common.deepCopy(opt2);
+        return common.deepClone(opt2);
     }
 
     deep = (deep === undefined); // 默认deep模式
@@ -70,16 +70,16 @@ export function reverseMerge(opt1, opt2, deep) {
                 if (common.isObject(obj1[key]) && common.isObject(obj2[key]) && deep) {
                     deepMerge(obj1[key], obj2[key])
                 } else {
-                    set(self, obj1, key, common.deepCopy(obj2[key]));
+                    set(self, obj1, key, common.deepClone(obj2[key]));
                 }
             } else {
-                set(self, obj1, key, common.deepCopy(obj2[key]));
+                set(self, obj1, key, common.deepClone(obj2[key]));
             }
         }
     };
 
     deepMerge(opt1, opt2);
-    return common.deepCopy(opt1);
+    return common.deepClone(opt1);
 }
 
 /**

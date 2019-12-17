@@ -78,7 +78,7 @@
             }
         },
         mounted() {
-            this.fileList = utils.deepCopy(this.nativeValue);
+            this.fileList = utils.deepClone(this.nativeValue);
         },
         computed: {
             nativeValue: {

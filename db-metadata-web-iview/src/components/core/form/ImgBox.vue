@@ -92,7 +92,7 @@
             }
         },
         mounted() {
-            this.fileList = utils.deepCopy(this.nativeValue); // TODO 其中的url键值应当为图片资源路径, 否则编辑时无法呈现并预览图片
+            this.fileList = utils.deepClone(this.nativeValue); // TODO 其中的url键值应当为图片资源路径, 否则编辑时无法呈现并预览图片
         },
         computed: {
             nativeValue: {

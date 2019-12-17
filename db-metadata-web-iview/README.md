@@ -334,6 +334,25 @@
  -[ ] 表单渲染时需要整齐划一,控件的宽度统一指定;
  -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单
  
+ 
+### 目录结构NEW
+    - document
+    - public
+    - packages
+        - dropdownbox
+        - ...
+    - src
+        - mixins
+        - utils
+        - axios
+        - constant
+        - router
+        - config
+        - meta
+        - layout
+        - ...
+    
+ 
 ### 其他资料
 
 - vue中动态增加method https://stackoverflow.com/questions/51797029/create-method-dynamically-in-vue-js

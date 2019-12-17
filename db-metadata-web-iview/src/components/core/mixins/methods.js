@@ -11,7 +11,7 @@ export const loadFeature = {
             let url = this.$compile(URL.FEATURE_LOAD, {
                 featureCode: featureCode
             });
-            return this.$axios.get(url);
+            return this.$axios.safeGet(url);
         }
     }
 }
@@ -28,7 +28,7 @@ export const getTlMeta = {
             let url = this.$compile(URL.TABLE_INSTANCE_META, {
                 objectCode: objectCode
             });
-            return this.$axios.get(url);
+            return this.$axios.safeGet(url);
         }
     }
 };
@@ -45,7 +45,7 @@ export const getSpMeta = {
                 componentCode: 'SearchPanel',
                 objectCode: objectCode
             });
-            return this.$axios.get(url);
+            return this.$axios.safeGet(url);
         }
     }
 };

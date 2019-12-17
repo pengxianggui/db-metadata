@@ -1,33 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
 
 // 常规utils方法
-/**
- * 深拷贝
- * @param obj
- * @returns {Array|*}
- */
-export function deepCopy(obj) {
-    if (typeof obj !== "object" || !obj)
-        return obj;
-    let copy;
-    if (Array.isArray(obj)) {
-        copy = [];
-        for (let key = 0; key < obj.length; key++) {
-            copy[key] = deepCopy(obj[key]);
-        }
-        return copy;
-    }
-    let cons = obj.constructor;
-    if (cons === RegExp)
-        return obj;
-
-    copy = new cons();
-    for (let key in obj) {
-        copy[key] = deepCopy(obj[key]);
-    }
-    return copy;
-}
-
 
 /**
  * 驼峰转=>?(默认下划线)
@@ -252,7 +225,7 @@ export function assertUndefined(value, defaultValue) {
  * @param keyName
  */
 export function extractNotRepeatEle(arr, keyName) {
-    if (!isArray(arr)) return deepCopy(arr);
+    if (!isArray(arr)) return deepClone(arr);
     let eleType;
 
     if (arr.every(ele => isObject(ele))) {
@@ -264,7 +237,7 @@ export function extractNotRepeatEle(arr, keyName) {
     } else if (arr.every(ele => isBoolean(ele))) {
         eleType = '[object Boolean]'
     } else {
-        return deepCopy(arr);
+        return deepClone(arr);
     }
 
     let newArr = [];
@@ -315,5 +288,5 @@ export function markNotRepeatEle(arr, keyName, notRepeatCallback, repeatCallback
 }
 
 export function deepClone(val) {
-    return cloneDeep(val);
+    return cloneDeep(val);  // API: http://lodash.think2011.net/cloneDeep, Or other API function of lodash. It's useful
 }
