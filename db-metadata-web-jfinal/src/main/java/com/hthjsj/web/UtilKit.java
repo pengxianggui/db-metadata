@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p> @Date : 2019/10/31 </p>
@@ -296,5 +298,33 @@ public class UtilKit {
             }
         }
         return iMetaFields;
+    }
+
+    /**
+     * 获取匹配参数值
+     *
+     * @param regex 正则表达式
+     * @param str   目标字符串
+     * @param flags 匹配模式
+     *              Pattern.CASE_INSENSITIVE忽略大小写
+     *
+     * @return
+     */
+    public static String[] getMatcherValue(String regex, String str, int flags) {
+        Pattern pat = null;
+        if (flags == -1) {
+            pat = Pattern.compile(regex);
+        } else {
+            pat = Pattern.compile(regex, flags);
+        }
+        Matcher mat = pat.matcher(str);
+        if (mat.find()) {
+            String[] param = new String[mat.groupCount()];
+            for (int i = 0; i < mat.groupCount(); i++) {
+                param[i] = mat.group(i + 1);
+            }
+            return param;
+        }
+        return null;
     }
 }

@@ -60,10 +60,12 @@ public class UserAuthIntercept implements Interceptor {
          * 4. 放行后更新用户过期时间.
          */
         try {
-            if (inv.getActionKey().startsWith(UserRouter.URL_PREFIX) && !inv.getActionKey().endsWith("update")) {
+            //只对登录放行
+            if (inv.getActionKey().startsWith(UserRouter.URL_LOGIN)) {
                 inv.invoke();
                 return;
             }
+
             LoginService<User> loginService = UserManager.me().loginService();
             User user = loginService.getUser(inv.getController().getRequest());
             if (user != null) {
