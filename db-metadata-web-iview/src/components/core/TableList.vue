@@ -200,17 +200,7 @@
                 }
             },
             data: Array,
-            page: {
-                type: Object,
-                validator: function (val) {
-                    if (!val.hasOwnProperty('total')
-                        || !val.hasOwnProperty('size')
-                        || !val.hasOwnProperty('index')) {
-                        return false;
-                    }
-                    return true;
-                }
-            },
+            page: Object,
             choseData: Array,   // 选中的行： 用于批量操作，表现为勾选
             activeData: Object, // 激活的一行： 用于对单行操作
         },
@@ -338,9 +328,9 @@
             },
             setPageModel(page) {
                 const {total, index, size} = page;
-                this.pageModel['total'] = parseInt(total);
-                this.pageModel['index'] = parseInt(index);
-                this.pageModel['size'] = parseInt(size);
+                if(!utils.isEmpty(total)) this.pageModel['total'] = parseInt(total);
+                if(!utils.isEmpty(index)) this.pageModel['index'] = parseInt(index);
+                if(!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
 
             // fast edit meta-data or edit ui conf ----------------------------------------------------------

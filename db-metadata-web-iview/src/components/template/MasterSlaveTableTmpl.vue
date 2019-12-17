@@ -2,14 +2,15 @@
     <div>
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="master['name']" :meta="master.tlMeta" :active-data.sync="activeMData"></table-list>
+            <table-list :ref="master['name']" :meta="master.tlMeta" :active-data.sync="activeMData"
+                        :page="{ size: 5 }"></table-list>
         </div>
         <el-divider></el-divider>
         <div class="el-card">
             <el-tabs type="border-card">
                 <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">
                     <search-panel :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-panel>
-                    <table-list :ref="slave['name']" :meta="slave.tlMeta">
+                    <table-list :ref="slave['name']" :meta="slave.tlMeta" :page="{ size: 5 }">
                         <template #add-btn="{conf}">
                             <el-button v-bind="conf" @click="handleAdd(slave)">新增</el-button>
                         </template>

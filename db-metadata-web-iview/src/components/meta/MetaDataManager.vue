@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData">
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData" :page="{ size: 5 }">
                 <template #prefix-btn="{conf}">
                     <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
                 </template>
@@ -12,7 +12,7 @@
             </table-list>
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
-            <table-list :ref="sTlMeta['name']" :meta="sTlMeta">
+            <table-list :ref="sTlMeta['name']" :meta="sTlMeta" :page="{ size: 5 }">
                 <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="handleAdd">新增</el-button>
                 </template>
