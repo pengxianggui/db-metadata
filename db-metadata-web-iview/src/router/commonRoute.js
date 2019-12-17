@@ -14,7 +14,7 @@ const children = [
     }, {
         path: 'global-conf',
         name: 'GlobalConf',
-        props: (route) => ({R_cc: route.query.componentCode}),
+        props: {R_cc: null},
         component: 'meta/component/GlobalConf'
     }, {
         path: 'meta-component-instance',
@@ -24,12 +24,12 @@ const children = [
     }, {
         path: 'instance-conf',
         name: 'InstanceConf',
-        props: (route) => ({R_cc: route.query.componentCode, R_oc: route.query.objectCode}),
+        props: {R_cc: null, R_oc: null},
         component: 'meta/component-instance/InstanceConf'
     }, {
         path: 'form-builder',
         name: 'FormBuilder',
-        props: (route) => ({R_oc: route.query.objectCode}),
+        props: {R_oc: null},
         component: 'meta/form-builder'
     }, {
         path: 'objects',
@@ -42,17 +42,17 @@ const children = [
     }, {
         path: 'table',
         name: 'table',
-        props: (route) => ({R_fc: route.query.featureCode, R_oc: route.query.objectCode}),
+        props: {R_fc: null, R_oc: null},
         component: 'template/SingleGridTmpl'
     }, {
         path: 'ms-table',
         name: 'msTable',
-        props: (route) => ({R_fc: route.query.featureCode}),
+        props: {R_fc: null},
         component: 'template/MasterSlaveTableTmpl'
     }, {
         path: 'form',
         name: 'Form',
-        props: (route) => ({R_oc: route.query.objectCode}),
+        props: {R_oc: null},
         component: 'template/FormTmpl'
     }
 ];
