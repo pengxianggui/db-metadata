@@ -2,9 +2,6 @@ package com.hthjsj.web.user;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.hthjsj.web.WebException;
-import com.hthjsj.web.auth.MRManager;
-import com.hthjsj.web.auth.MResource;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.Kv;
@@ -70,18 +67,11 @@ public class UserAuthIntercept implements Interceptor {
             LoginService<User> loginService = UserManager.me().loginService();
             User user = loginService.getUser(inv.getController().getRequest());
             if (user != null) {
-                MResource resource = MRManager.me().getResource(inv.getActionKey());
-                if (resource != null) {
-                    if (!MRManager.me().permit(user, resource)) {
-                        throw new WebException("用户无法访问该资源userId:%s-%s,ResourceID:%s", user.userId(), user.userName(), resource.mResourceId());
-                    }
-                }
-                log.debug("{} 资源放行", inv.getActionKey());
                 UserThreadLocal.setUser(user);
                 inv.invoke();
                 inv.getController().setCookie(loginService.cookieKey(), user.userId(), (int) TimeUnit.HOURS.toSeconds(6));
             } else {
-                throw new WebException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey());
+                throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey());
             }
         } finally {
             UserThreadLocal.removeUser(user);

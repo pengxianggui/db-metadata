@@ -3,6 +3,7 @@ package com.hthjsj.web;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.web.auth.JsonUserPermit;
+import com.hthjsj.web.auth.MRIntercept;
 import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
@@ -72,19 +73,24 @@ public class AppWebConfig extends JFinalConfig {
             InitKit.me().importMetaObjectConfig().importInstanceConfig();
         }
 
-        MRManager mrManager = MRManager.me();
-        mrManager.addLoader(new JFinalResourceLoader());
-        mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
-        mrManager.load();
+        if (getPropertyToBoolean(AppConst.NEED_AUTH)) {
+            MRManager mrManager = MRManager.me();
+            mrManager.addLoader(new JFinalResourceLoader());
+            mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
+            mrManager.load();
+        }
     }
 
     @Override
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
+        me.add(new JsonParamIntercept());
         if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
             me.add(new UserAuthIntercept());
         }
-        me.add(new JsonParamIntercept());
+        if (getPropertyToBoolean(AppConst.NEED_AUTH)) {
+            me.add(new MRIntercept());
+        }
     }
 
     @Override
