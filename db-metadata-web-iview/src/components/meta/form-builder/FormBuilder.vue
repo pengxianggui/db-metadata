@@ -8,7 +8,7 @@
                 <template #operation-extend>
                     <drop-down-box @change="loadConf(objectCode)" placeholder="选择元对象"
                                    data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
-                                   v-model="objectCode"></drop-down-box>
+                                   v-model="objectCode" filterable></drop-down-box>
                 </template>
             </WorkArea>
         </el-col>
