@@ -478,7 +478,7 @@
         },
         watch: {
             'data': function (newVal, oldVal) {
-                this.initData();
+                this.initData();    // 为避免data数据过大, 不进行深度监听
             },
             'innerMeta.data_url': {
                 handler: function () {
