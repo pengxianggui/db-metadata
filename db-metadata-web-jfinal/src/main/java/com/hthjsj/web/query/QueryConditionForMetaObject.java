@@ -71,7 +71,7 @@ public class QueryConditionForMetaObject implements IQueryCondition {
 
         buildSelect(sqlParaExt, metaFields);
 
-        for (IMetaField field : metaFields) {
+        for (IMetaField field : metaObject.fields()) {
 
             for (Class<? extends MetaSQLExtract> mClass : QueryParses.me().parseter) {
                 try {
