@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-card">
         <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
         <table-list :ref="tableRefName" :meta="tlMeta"></table-list>
     </div>
@@ -7,7 +7,7 @@
 
 <script>
     import utils from '@/utils'
-    import {loadFeature, getTlMeta, getSpMeta} from "@/components/core/mixins/methods"
+    import {getSpMeta, getTlMeta, loadFeature} from "@/components/core/mixins/methods"
 
     export default {
         name: "SingleGridTmpl",
