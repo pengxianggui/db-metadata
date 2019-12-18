@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <table-form-tmpl style="height: 700px;"></table-form-tmpl>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <table-tree-list-demo></table-tree-list-demo>
             </el-col>
         </el-row>
@@ -142,6 +147,7 @@
     </div>
 </template>
 <script>
+    import TreeTableTmpl from '@/components/template/TableFormTmpl'
     // 批量注册
     const requireComponent = require.context('./', false, /\w+Demo\.(vue|js)$/);
     let demos = {};
@@ -150,6 +156,7 @@
         let cmp = requireComponent(fileName).default;
         demos[cmp.name] = cmp;
     });
+    demos[TreeTableTmpl.name] = TreeTableTmpl;
 
     export default {
         name: "demo",

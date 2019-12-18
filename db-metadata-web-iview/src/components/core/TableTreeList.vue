@@ -32,7 +32,7 @@
                     :data="innerData"
                     :load="handleLoad"
                     v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                    @row-click="choseRow"
+                    @row-click="handleRowClick"
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange"
                     @row-dblclick="$emit('row-dblclick', $event)">
@@ -321,13 +321,12 @@
             handleAdd() {
                 this.doEdit();
             },
-            choseRow(row, col, event) {
+            handleRowClick(row, col, event) {
+                event.ctrlKey ? this.choseRow(row) : this.activeRow(row);
+            },
+            choseRow(row) {
                 let selected = true;
                 const primaryKey = this.primaryKey;
-                this.activeData = row;
-                this.$emit('active-change', row);
-
-                if (!event.ctrlKey) return; // ctrl + 鼠标左击 实现多选
                 if (this.innerMeta.multi_select) {
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
@@ -339,6 +338,17 @@
                     }
                     this.$refs[tableRefName].toggleRowSelection(row, selected);
                 }
+            },
+            activeRow(row) {
+                const primaryKey = this.primaryKey;
+                if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
+                    this.activeData = {};
+                    const refName = this.innerMeta['name'];
+                    this.$refs[refName].setCurrentRow();
+                } else {
+                    this.activeData = row;
+                }
+                this.$emit('active-change', this.activeData);
             },
             sortChange(param) {
                 let {column, prop, order} = param;
