@@ -20,18 +20,6 @@
             return {
                 featureCode: null,
                 objectCode: 'test_table',
-                treeMeta: {
-                    component_name: 'TreeList',
-                    name: 'TreeList', // 可省略, value不指定时, 则选取的值即为整个item对象
-                    label: 'TreeList',
-                    conf: {
-                        // other options
-                        props: {
-                            label: "name",
-                            children: "child"
-                        }
-                    },
-                },
                 fmMeta: {},
                 tlMeta: {}
             }
