@@ -179,8 +179,8 @@
         data() {
             return {
                 innerData: [],
-                innerChoseData: [],
-                innerActiveData: {},
+                choseData: [],
+                activeData: {},
                 pageModel: {
                     size: 10,
                     index: 1,
@@ -200,15 +200,13 @@
                 }
             },
             data: Array,
-            page: Object,
-            choseData: Array,   // 选中的行： 用于批量操作，表现为勾选
-            activeData: Object, // 激活的一行： 用于对单行操作
+            page: Object
         },
         methods: {
             handleSelectionChange(selection) {
                 if (this.innerMeta.multi_select) {
-                    this.innerChoseData = selection;
-                    this.$emit('update:chose-data', selection);
+                    this.choseData = selection;
+                    this.$emit('chose-change', selection);
                 }
             },
             extractPrimaryValue(row) {
@@ -254,7 +252,7 @@
             },
             // 批量删除
             handleBatchDelete(ev) {
-                const primaryValues = this.innerChoseData.map(row => this.extractPrimaryValue(row));
+                const primaryValues = this.choseData.map(row => this.extractPrimaryValue(row));
 
                 if (primaryValues.length > 0) {
                     this.doDelete(primaryValues, ev);
@@ -294,8 +292,8 @@
             choseRow(row, col, event) {
                 let selected = true;
                 const primaryKey = this.primaryKey;
-                this.innerActiveData = row;
-                this.$emit('update:active-data', row);
+                this.activeData = row;
+                this.$emit('active-change', row);
 
                 if (!event.ctrlKey) return; // ctrl + 鼠标左击 实现多选
                 if (this.innerMeta.multi_select) {

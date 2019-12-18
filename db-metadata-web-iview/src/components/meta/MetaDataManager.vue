@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :active-data.sync="activeMData" :page="{ size: 5 }">
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" @active-change="handleActiveChange" :page="{ size: 5 }">
                 <template #prefix-btn="{conf}">
                     <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
                 </template>
@@ -62,6 +62,13 @@
             }
         },
         methods: {
+            handleActiveChange(row) {
+                let primaryKey = this.master['primaryKey'];
+                this.activeMData = row;
+                this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
+                    objectCode: row[primaryKey]
+                });
+            },
             mHandleSearch(params) {
                 this.mTlRef.getData(params);
             },
@@ -165,17 +172,6 @@
                         this.$message.error(err.msg);
                     });
                 });
-            }
-        },
-        watch: {
-            activeMData: {
-                handler: function (newVal, oldVal) {
-                    let primaryKey = this.master['primaryKey'];
-                    this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
-                        objectCode: newVal[primaryKey]
-                    });
-                },
-                deep: true
             }
         },
         created() {

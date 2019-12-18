@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="master['name']" :meta="master.tlMeta" :active-data.sync="activeMData"
+            <table-list :ref="master['name']" :meta="master.tlMeta" @active-change="handleActiveChange"
                         :page="{ size: 5 }"></table-list>
         </div>
         <el-divider></el-divider>
@@ -38,6 +38,11 @@
             }
         },
         methods: {
+            handleActiveChange(row) {
+                let primaryKey = this.master['primaryKey'];
+                this.activeMData = row;
+                this.refreshSlaves(row[primaryKey]);
+            },
             mHandleSearch(params) {
                 const refName = this.master['name'];
                 this.$refs[refName].getData(params);
@@ -74,15 +79,6 @@
                     let url = this.$compile(slave['tableUrl'], {objectCode: objectCode});
                     slave.tlMeta['data_url'] = url;
                 });
-            }
-        },
-        watch: {
-            activeMData: {
-                handler: function (newVal, oldVal) {
-                    let primaryKey = this.master['primaryKey'];
-                    this.refreshSlaves(newVal[primaryKey]);
-                },
-                deep: true
             }
         },
         created() {
