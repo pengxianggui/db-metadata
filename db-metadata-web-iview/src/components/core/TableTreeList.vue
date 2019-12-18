@@ -477,9 +477,12 @@
             },
         },
         watch: {
+            'data': function (newVal, oldVal) {
+                this.initData();
+            },
             'innerMeta.data_url': {
                 handler: function () {
-                    this.getData();
+                    this.initData();
                 },
                 immediate: false
             }

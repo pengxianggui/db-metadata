@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{meta.component_name}}: </h2>
-        <component :is="meta.component_name" :meta="meta" :data="data" :load-childrens="loadChildrens"></component>
+        <component :is="meta.component_name" :meta="meta" :data="data"></component>
         <br>
         <z-toggle-panel>
             <json-box v-model="meta"></json-box>
@@ -30,7 +30,7 @@
                         'tree-props': {
                             'children': 'children'
                         },
-                        'lazy': false
+                        'lazy': true
                     }
                 },
                 data: [],
