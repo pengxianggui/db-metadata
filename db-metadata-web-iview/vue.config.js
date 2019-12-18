@@ -36,6 +36,7 @@ module.exports = {
             '^\/check\/': serverProxy,
             '^\/find\/': serverProxy,
             '^\/m\/': serverProxy,
+            '^\/fileview\/': serverProxy,
             '^\/route\/': serverProxy,
         }
     }

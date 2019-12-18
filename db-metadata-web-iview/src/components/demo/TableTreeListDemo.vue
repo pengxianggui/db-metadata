@@ -19,6 +19,28 @@
                     name: 'TableTreeListDemo',
                     label: 'TableTreeList',
                     columns: [{
+                        name: "id"
+                    }, {
+                        name: "parentId"
+                    }, {
+                        name: "name"
+                    }],
+                    conf: {
+                        'row-key': 'id',
+                        'tree-props': {
+                            'children': 'children'
+                        },
+                        'lazy': false
+                    }
+                },
+                data: [],
+
+                /*
+                meta: {
+                    component_name: 'TableTreeList',
+                    name: 'TableTreeListDemo',
+                    label: 'TableTreeList',
+                    columns: [{
                         name: 'id',
                     }, {
                         name: 'date'
@@ -68,9 +90,17 @@
                     address: '上海市普陀区金沙江路 1519 弄',
                     hasChildren: true
                 }]
+                 */
             }
         },
         methods: {
+            getData() {
+                this.$axios.get("/fileview/view?path=/target").then(resp => {
+                    this.data = resp.data;
+                }).catch(err => {
+                    console.log(err.msg);
+                })
+            },
             loadChildrens({tree, treeNode, resolve}) {
                 console.log(tree);
                 console.log(treeNode);
@@ -89,6 +119,9 @@
                     resolve(mockChildren);
                 }, 1000);
             }
+        },
+        created() {
+            this.getData();
         }
     }
 </script>
