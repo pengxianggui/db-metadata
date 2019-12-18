@@ -37,7 +37,7 @@
             <template v-if="confModel.componentCode && confModel.objectCode">
                 <el-row>
                     <el-col>
-                        <h2 align="center">{{confModel.objectCode}}</h2>
+                        <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}</h2>
                         <el-form-item>
                             <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
                         </el-form-item>
