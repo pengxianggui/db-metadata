@@ -34,45 +34,56 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <template v-if="confModel.componentCode && confModel.objectCode">
-                <el-row>
-                    <el-col>
-                        <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}</h2>
-                        <el-form-item>
-                            <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </template>
-            <template v-else>
-                <div class="blank-tip">请先选择一个组件</div>
-            </template>
-            <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key" v-if="index%2==0">
-                <el-col :span="12">
-                    <el-form-item>
-                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" :meta="confMeta"
-                                 mode="form"></json-box>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
-                    <el-form-item>
-                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" :meta="confMeta"
-                                 mode="form"></json-box>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col>
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">提交</el-button>
-                        <el-button type="primary" @click="preview">预览</el-button>
-                        <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">返回</el-button>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+            <el-tabs type="border-card">
+                <!--                <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">-->
+                <el-tab-pane label="高级配置">
+                    <template v-if="confModel.componentCode && confModel.objectCode">
+                        <el-row>
+                            <el-col>
+                                <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}</h2>
+                                <el-form-item>
+                                    <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </template>
+                    <template v-else>
+                        <div class="blank-tip">请先选择一个组件</div>
+                    </template>
+                    <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key" v-if="index%2==0">
+                        <el-col :span="12">
+                            <el-form-item>
+                                <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
+                                <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
+                                          :meta="confMeta"
+                                          mode="form"></json-box>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
+                            <el-form-item>
+                                <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
+                                <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
+                                          :meta="confMeta"
+                                          mode="form"></json-box>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit">提交</el-button>
+                                <el-button type="primary" @click="preview">预览</el-button>
+                                <el-button type="warning" @click="onUpdate">更新</el-button>
+                                <el-button @click="onCancel">返回</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane v-if="confModel.componentCode=='FormTmpl'" label="表单设计">
+                    <form-builder></form-builder>
+                </el-tab-pane>
+            </el-tabs>
+
         </el-form>
     </div>
 </template>
@@ -81,9 +92,11 @@
     import utils from '@/utils'
     import {DEFAULT, URL} from '@/constant';
     import EleProps from '@/config/element-props'
+    import FormBuilder from "@/components/meta/form-builder/FormBuilder";
 
     export default {
         name: "InstanceConf",
+        components: {FormBuilder},
         data() {
             let componentMeta = {
                 name: "component",
