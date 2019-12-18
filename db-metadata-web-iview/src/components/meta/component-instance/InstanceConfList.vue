@@ -25,7 +25,7 @@
         mixins: [getTlMeta, getSpMeta],
         data() {
             return {
-                objectCode: this.$route.query.objectCode,
+                objectCode: "meta_component_instance",
                 tlMeta: {},
                 spMeta: {}
             }

@@ -45,7 +45,7 @@
         },
         data() {
             return {
-                featureCode: this.$route.query.featureCode,
+                featureCode: "tcode_test",
 
                 master: {},
                 slave: {},  // 元对象/元字段 主子表一对一

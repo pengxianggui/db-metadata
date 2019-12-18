@@ -16,7 +16,6 @@ const children = [
     }, {
         path: 'meta-component-instance',
         name: 'MetaComponentInstance',
-        props: {R_oc: "meta_component_instance"},
         component: 'meta/component-instance/InstanceConfList'
     }, {
         path: 'instance-conf',
@@ -58,7 +57,7 @@ const commonRoute = [
         path: '/main',
         name: 'main',
         component: 'Main',
-        redirect: '/main/meta-data',
+        redirect: '/main/meta-data?',
         children: children
     },
 ];

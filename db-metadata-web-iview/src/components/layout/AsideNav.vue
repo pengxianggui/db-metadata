@@ -70,15 +70,15 @@
                             icon: 'el-icon-warning-outline',
                             label: '功能维护'
                         }, {
-                            path: '/main/meta-data?featureCode=tcode_test',
+                            path: '/main/meta-data',
                             icon: 'el-icon-warning',
                             label: '元数据管理'
                         }, {
-                            path: '/main/meta-component?objectCode=meta_component',
+                            path: '/main/meta-component',
                             icon: 'el-icon-star-off',
                             label: '组件全局配置'
                         }, {
-                            path: '/main/meta-component-instance?objectCode=meta_component_instance',
+                            path: '/main/meta-component-instance',
                             icon: 'el-icon-star-on',
                             label: '组件实例配置'
                         }, {
