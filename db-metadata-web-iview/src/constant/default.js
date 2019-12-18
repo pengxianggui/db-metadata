@@ -61,6 +61,56 @@ const DEFAULT_CONF = {
             }
         }
     },
+    "TableTreeList": {
+        "component_name": "TableTreeList",
+        "name": "TableTreeList",
+        "label": "树型表",
+        "data_url": "/table/list/{objectCode}",
+        "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
+        "children_data_url": "/table/list/{objectCode}?parentPrimary={parentPrimary}",
+        "multi_select": false,
+        "editable": false,
+        "conf": {
+            "row-key": "id",
+            "tree-props": {
+                "hasChildren": "hasChildren",
+                "children": "children"
+            },
+            "lazy": false,
+            "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
+            "highlight-current-row": true,
+            "size": "medium", // medium, small, mini
+        },
+        "columns": [],
+        "pagination": { // element ui配置
+            "page-size": PAGE_NUM_AREA[0],
+            "page-sizes": PAGE_NUM_AREA,
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next, jumper"
+        },
+        "operation-bar": { // 针对操作栏中所有按钮的默认设置
+            "size": "mini",
+            "type": "primary"
+        },
+        "buttons": {
+            "edit": {
+                "label": "编辑",
+                "conf": {
+                    "icon": "el-icon-edit",
+                    "size": "mini",
+                    "type": "primary"
+                }
+            },
+            "delete": {
+                "label": "删除",
+                "conf": {
+                    "size": "mini",
+                    "icon": "el-icon-delete",
+                    "type": "danger"
+                }
+            }
+        }
+    },
     "BoolBox": {
         "component_name": "BoolBox",
         "name": "BoolBox",
@@ -329,27 +379,27 @@ const DEFAULT_CONF = {
         "label": "查找面板",
         "data_url": "/table/list/{objectCode}",
         "columns": [// {
-        //     component_name: 'TextBox',
-        //     name: 'id',
-        //     label: 'ID',
-        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // },
-        // {
-        //     component_name: 'TextBox',
-        //     name: 'name',
-        //     label: '姓名',
-        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // }
+            //     component_name: 'TextBox',
+            //     name: 'id',
+            //     label: 'ID',
+            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+            //     conf: {
+            //         width: '',
+            //         sortable: true,  // 表格中可否根据此列进行排序
+            //         //...
+            //     }
+            // },
+            // {
+            //     component_name: 'TextBox',
+            //     name: 'name',
+            //     label: '姓名',
+            //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
+            //     conf: {
+            //         width: '',
+            //         sortable: true,  // 表格中可否根据此列进行排序
+            //         //...
+            //     }
+            // }
         ]
     },
     "SqlBox": {

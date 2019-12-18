@@ -235,6 +235,7 @@
         3. custom: 服务端排序
         ```
     -[ ] 主键名由后端提供(meta.objectPrimaryKey), 需要支持联合主键问题。当组件为联合主键时,编辑/新增判断需要调整支持, 批量删除需要调整支持(接口需要调整)
+    -[ ] 像activeData, choseData目前并不支持从父组件流入其中，只是单向从TableList流向父组件，因此改为emit触发，还可以取消父组件对该属性的watch
         
  -[ ] 表单Box(FormTmpl)
     -[x] 表单布局: 针对每个控件配置自定义(非element原生支持)inline属性
@@ -332,7 +333,13 @@
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件: `npm install`
  -[ ] 表单渲染时需要整齐划一,控件的宽度统一指定;
- -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单
+ -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单——等featureType类型较多时再采用此方案
+ -[ ] 新增功能弹窗，主键的输入改成下拉选择
+ 
+        类似这样的输入都限定下拉选择；数据驱动一切，因此项目中数据的正确性至关重要，所有用户输入的入口，都必须用尽办法保证输入的正确性
+    
+  
+ 
  
  
 ### 目录结构NEW
