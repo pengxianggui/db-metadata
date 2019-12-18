@@ -7,20 +7,28 @@
                @blur="$emit('blur', $event)"
                @focus="$emit('focus', $event)">
         <template v-if="!innerMeta.group">
-            <el-option v-for="item in innerOptions" :key="item.value" :label="item.key"
-                       :value="item.value">
-                {{item.key}}
-            </el-option>
+            <slot name="options" v-bind:options="innerOptions">
+                <el-option v-for="item in innerOptions" :key="item.value" :label="item.key"
+                           :value="item.value">
+                    <slot name="label" v-bind:option="item">
+                        {{item.key}}
+                    </slot>
+                </el-option>
+            </slot>
         </template>
         <template v-else>
             <el-option-group
                 v-for="group in innerOptions"
                 :key="group.label"
                 :label="group.label">
-                <el-option v-for="item in group.options" :key="item.value" :label="item.key"
-                           :value="item.value ? item.value : item">
-                    {{item.key}}
-                </el-option>
+                <slot name="options" v-bind:options="innerOptions">
+                    <el-option v-for="item in group.options" :key="item.value" :label="item.key"
+                               :value="item.value ? item.value : item">
+                        <slot name="label" v-bind:options="item">
+                            {{item.key}}
+                        </slot>
+                    </el-option>
+                </slot>
             </el-option-group>
         </template>
     </el-select>

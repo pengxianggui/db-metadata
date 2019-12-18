@@ -4,7 +4,9 @@
                      :key="item.key"
                      :label="item.value"
                      v-bind="$reverseMerge(innerMeta.conf, $attrs)">
-            {{item.key}}
+            <slot name="label" v-bind:option="item">
+                {{item.key}}
+            </slot>
         </el-checkbox>
     </el-checkbox-group>
 </template>

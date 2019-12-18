@@ -14,24 +14,36 @@
                 <h3>主表</h3>
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.objectCode"
-                                   :options="objectCodes"
+                                   :options="objectCodes" @change="masterSlaveConfig.master.primaryKey = null"
                                    :filterable="true" :required="true"></drop-down-box>
                 </el-form-item>
                 <el-form-item label="主键" class="inline">
-                    <text-box v-model="masterSlaveConfig.master.primaryKey" required></text-box>
+                    <drop-down-box v-model="masterSlaveConfig.master.primaryKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.master.objectCode})"
+                                   required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
                 </el-form-item>
 
                 <el-tabs v-model="activeTab" @tab-click="handleClick">
                     <el-tab-pane label="从表1" name="first">
                         <el-form-item label="元对象编码" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].objectCode"
+                                           @change="masterSlaveConfig.slaves[0].foreignFieldCode = null"
                                            :options="objectCodes" :filterable="true" :required="true"></drop-down-box>
                         </el-form-item>
                         <el-form-item label="外键" class="inline">
-                            <text-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode" required></text-box>
+                            <drop-down-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode"
+                                           :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.slaves[0].objectCode})">
+                                <template #label="{option}">
+                                    <span>{{option.value}}({{option.label}})</span>
+                                </template>
+                            </drop-down-box>
                         </el-form-item>
                         <el-form-item label="排序" class="inline">
-                            <text-box v-model="masterSlaveConfig.slaves[0].order" required></text-box>
+                            <num-box v-model="masterSlaveConfig.slaves[0].order" required></num-box>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
@@ -40,7 +52,14 @@
             </template>
             <template v-if="feature.type === 'SingleGrid'">
                 <el-form-item label="元对象编码">
-                    <text-box v-model="singleGridConfig.objectCode" required></text-box>
+                    <drop-down-box v-model="singleGridConfig.objectCode" :data-url="metaObjectCodeUrl">
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
                 </el-form-item>
             </template>
 
@@ -53,12 +72,15 @@
 <script>
     import {DEFAULT, URL} from '@/constant'
     import DropDownBox from "@/components/core/form/DropDownBox";
+    import NumBox from "@/components/core/form/NumBox";
 
     export default {
         name: "feature-add",
-        components: {DropDownBox},
+        components: {NumBox, DropDownBox},
         data() {
             return {
+                metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
+                metaFieldCodeUrl: URL.FIELD_CODE_LIST_BY_OBJECT,
                 featureTypes: [],
                 objectCodes: [],
                 feature: {
@@ -94,7 +116,7 @@
         },
         methods: {
             handleClick(tab, event) {
-                  // todo
+                // todo
             },
             loadObjectCode() {
                 this.$axios.get(URL.OBJECT_CODE_LIST).then(resp => {
@@ -106,7 +128,7 @@
                     })
                 })
             },
-            assemblyParams () {
+            assemblyParams() {
                 let type = this.feature.type;
                 switch (type) {
                     case "MasterSlaveGrid":

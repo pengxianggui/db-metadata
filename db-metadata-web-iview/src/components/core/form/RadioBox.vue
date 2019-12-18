@@ -5,7 +5,9 @@
                   :label="item.value"
                   v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                   @change="$emit('change')">
-            {{item.key}}
+            <slot name="label" v-bind:option="item">
+                {{item.key}}
+            </slot>
         </el-radio>
     </el-radio-group>
 </template>
