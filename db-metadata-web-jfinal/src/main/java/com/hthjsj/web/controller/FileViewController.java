@@ -7,6 +7,7 @@ import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
+import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -57,7 +58,7 @@ public class FileViewController extends Controller {
         String path = PathKit.getWebRootPath() + getPara("path", "");
 
         jsons = getTreeJson(path, refresh, DEFAULT_FILTER);
-        renderJson(jsons);
+        renderJson(Ret.ok("data", jsons));
     }
 
     /**
