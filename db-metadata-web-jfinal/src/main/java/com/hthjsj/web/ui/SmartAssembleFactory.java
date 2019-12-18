@@ -6,10 +6,10 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormFieldFactory;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 

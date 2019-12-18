@@ -2,8 +2,8 @@ package com.hthjsj.web.query;
 
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.jfinal.SqlParaExt;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.sqls.MetaSQLExtract;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;

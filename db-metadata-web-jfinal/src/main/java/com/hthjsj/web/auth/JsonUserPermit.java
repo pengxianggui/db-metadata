@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.User;
 
 import java.util.Collection;

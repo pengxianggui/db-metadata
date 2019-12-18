@@ -4,9 +4,9 @@ import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentRender;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
-import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 
 /**

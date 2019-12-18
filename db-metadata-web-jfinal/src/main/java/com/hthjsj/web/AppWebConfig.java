@@ -9,6 +9,7 @@ import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
+import com.hthjsj.web.controller.FileViewController;
 import com.hthjsj.web.ext.meta.InstanceConfigExtension;
 import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
 import com.hthjsj.web.feature.FeatureRouter;
@@ -16,6 +17,8 @@ import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
+import com.hthjsj.web.kit.Dicts;
+import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserAuthIntercept;
@@ -55,6 +58,7 @@ public class AppWebConfig extends JFinalConfig {
             me.add(new UserRouter());
         }
         me.add("/file", UploadController.class);
+        me.add("/fileview", FileViewController.class);
     }
 
     @Override

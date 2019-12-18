@@ -1,6 +1,6 @@
 package com.hthjsj.web.user.jeesite;
 
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.User;
 import com.jfinal.kit.Kv;
 

@@ -5,10 +5,10 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.component.ViewContainer;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.UtilKit;
 import com.hthjsj.web.component.form.FormField;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 
 /**

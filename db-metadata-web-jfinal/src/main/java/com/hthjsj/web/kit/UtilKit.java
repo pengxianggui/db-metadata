@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.kit;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -10,6 +10,7 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaData;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.kit.Kv;
@@ -151,12 +152,14 @@ public class UtilKit {
      */
     public static String stairsLoad(String fileName, String defaultDirectory) {
 
-//        PathKit.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
-//        PathKit.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
-//        PathKitExt.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
-//        PathKitExt.getLocationPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa
-//        PathKitExt.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
-
+        /**
+         * 路径样本:
+         *      PathKit.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
+         *      PathKit.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
+         *      PathKitExt.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
+         *      PathKitExt.getLocationPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa
+         *      PathKitExt.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
+         */
         String locationPath = PathKitExt.getLocationPath();
         // /fileName
         {

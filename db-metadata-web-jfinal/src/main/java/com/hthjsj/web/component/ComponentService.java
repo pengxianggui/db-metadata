@@ -8,7 +8,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.aop.Before;

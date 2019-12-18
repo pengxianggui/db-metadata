@@ -1,4 +1,4 @@
-package com.hthjsj.web;
+package com.hthjsj.web.kit;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;

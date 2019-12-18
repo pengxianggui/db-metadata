@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.collect.Maps;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 

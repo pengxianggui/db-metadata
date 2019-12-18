@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
 import com.hthjsj.web.user.UserAuthIntercept;
 import com.jfinal.kit.Kv;

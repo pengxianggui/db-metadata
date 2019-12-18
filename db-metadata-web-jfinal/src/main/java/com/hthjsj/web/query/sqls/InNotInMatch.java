@@ -2,7 +2,7 @@ package com.hthjsj.web.query.sqls;
 
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 

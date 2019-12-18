@@ -8,7 +8,7 @@ import com.google.common.reflect.ClassPath;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
-import com.hthjsj.web.Dicts;
+import com.hthjsj.web.kit.Dicts;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;

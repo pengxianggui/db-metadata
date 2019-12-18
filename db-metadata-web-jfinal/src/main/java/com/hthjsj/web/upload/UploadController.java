@@ -5,7 +5,7 @@ import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.UtilKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
