@@ -1,6 +1,10 @@
 package com.hthjsj.analysis.meta;
 
 import com.jfinal.kit.Kv;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p> @Date : 2019-08-23 </p>
@@ -10,10 +14,19 @@ import com.jfinal.kit.Kv;
  */
 public class MetaConfigFactory {
 
-    public static MetaObjectConfigParse createV1ObjectConfig(String objectCode, String isUUIDPri) {
+    @Getter
+    private static List<ConfigExtension> fieldExtensions;
+
+    @Getter
+    private static List<ConfigExtension> objectExtensions;
+
+    public static MetaObjectConfigParse createV1ObjectConfig(IMetaObject metaObject, String isUUIDPri) {
         Kv config = Kv.create();
         config.set("isUUIDPrimary", Boolean.parseBoolean(isUUIDPri));
-        config.set("objectCode", objectCode);
+        config.set("objectCode", metaObject.code());
+        for (ConfigExtension extension : objectExtensions) {
+            extension.config(metaObject, config);
+        }
         return new MetaObjectConfigParse(config);
     }
 
@@ -33,14 +46,26 @@ public class MetaConfigFactory {
             config.set("addStatus", MetaFieldConfigParse.NORMAL);
             config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         }
-
-        //TODO 初始化field配置时 , 名称包含file的 默认设定isFile = true
-        if (metaField.fieldCode().contains("file")) {
-            config.set("isFile", true);
-        }
-
         config.set("isListShow", true);
         config.set("isSearch", true);
+
+        for (ConfigExtension extension : fieldExtensions) {
+            extension.config(metaField, config);
+        }
         return new MetaFieldConfigParse(config);
+    }
+
+    public static void addFieldExtension(ConfigExtension extension) {
+        if (fieldExtensions == null) {
+            fieldExtensions = new ArrayList<>();
+        }
+        fieldExtensions.add(extension);
+    }
+
+    public static void addObjectExtension(ConfigExtension extension) {
+        if (objectExtensions == null) {
+            objectExtensions = new ArrayList<>();
+        }
+        objectExtensions.add(extension);
     }
 }

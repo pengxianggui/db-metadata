@@ -48,6 +48,11 @@ public class InitKit {
         jsonInstanceConfig = JSON.parseObject(instanceConfig, Feature.OrderedField);
     }
 
+    /**
+     * 加载元对象配置
+     *
+     * @return
+     */
     public InitKit importMetaObjectConfig() {
         log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
@@ -55,6 +60,11 @@ public class InitKit {
         return this;
     }
 
+    /**
+     * 加载组件实例配置
+     *
+     * @return
+     */
     public InitKit importInstanceConfig() {
         log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();

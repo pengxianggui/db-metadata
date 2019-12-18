@@ -27,7 +27,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
         metaObject.tableName(table.getTableName().toLowerCase());
         metaObject.schemaName(table.getTableSchema().toLowerCase());
         //TODO config 使用string ,jdbc驱动不支持set jsonobject
-        metaObject.config(MetaConfigFactory.createV1ObjectConfig(metaObject.code(), "true").toJson());
+        metaObject.config(MetaConfigFactory.createV1ObjectConfig(metaObject, "true").toJson());
 
         List<String> pks = new ArrayList<>();
         for (int i = 0; i < table.getColumns().size(); i++) {

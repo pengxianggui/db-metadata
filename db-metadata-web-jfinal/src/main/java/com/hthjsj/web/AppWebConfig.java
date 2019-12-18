@@ -2,17 +2,21 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
+import com.hthjsj.AnalysisManager;
 import com.hthjsj.web.auth.JsonUserPermit;
 import com.hthjsj.web.auth.MRIntercept;
 import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
+import com.hthjsj.web.ext.meta.InstanceConfigExtension;
+import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
 import com.hthjsj.web.feature.FeatureRouter;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
+import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserAuthIntercept;
 import com.hthjsj.web.user.UserRouter;
@@ -47,7 +51,9 @@ public class AppWebConfig extends JFinalConfig {
         me.setMappingSuperClass(true);
         me.add(new CoreRouter());
         me.add(new FeatureRouter());
-        me.add(new UserRouter());
+        if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
+            me.add(new UserRouter());
+        }
         me.add("/file", UploadController.class);
     }
 
@@ -68,7 +74,10 @@ public class AppWebConfig extends JFinalConfig {
 
         //component register
         Components.me().init();
+
         Dicts.me().init();
+
+        //Auto import anyConfig from json file;
         if (getPropertyToBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
             InitKit.me().importMetaObjectConfig().importInstanceConfig();
         }
@@ -79,6 +88,9 @@ public class AppWebConfig extends JFinalConfig {
             mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
             mrManager.load();
         }
+
+        AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
+        ComputeKit.addInstanceExtension(new InstanceConfigExtension());
     }
 
     @Override

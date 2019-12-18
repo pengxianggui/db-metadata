@@ -16,12 +16,12 @@ public class AttributeBuilder {
     private AttributeBuilder() {
     }
 
-    public static AttributeSteps newBuilder() {
-        return new AttributeSteps();
+    public static FatAttributeBuilder newBuilder() {
+        return new FatAttributeBuilder();
     }
 
-    public static AttributeSteps newBuilder(Kv config) {
-        return new AttributeSteps(config);
+    public static FatAttributeBuilder newBuilder(Kv config) {
+        return new FatAttributeBuilder(config);
     }
 
     interface AttrCustomMeta {
@@ -34,9 +34,9 @@ public class AttributeBuilder {
 
         AttrCustomMeta label(String label);
 
-        AttributeSteps options(List<Kv> options);
+        FatAttributeBuilder options(List<Kv> options);
 
-        AttributeSteps dataUrl(String url);
+        FatAttributeBuilder dataUrl(String url);
     }
 
     interface AttrAbility {
@@ -82,14 +82,14 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class AttributeSteps implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr {
+    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr {
 
         private Kv config = Kv.create();
 
-        public AttributeSteps() {
+        public FatAttributeBuilder() {
         }
 
-        public AttributeSteps(Kv config) {
+        public FatAttributeBuilder(Kv config) {
             this.config = config;
         }
 
@@ -99,17 +99,17 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps disabled(boolean v) {
+        public FatAttributeBuilder disabled(boolean v) {
             return setConf("disabled", v);
         }
 
         @Override
-        public AttributeSteps resizeable(String v) {
+        public FatAttributeBuilder resizeable(String v) {
             return setConf("resize", v);
         }
 
         @Override
-        public AttributeSteps clearable(boolean v) {
+        public FatAttributeBuilder clearable(boolean v) {
             return setConf("clearable", v);
         }
 
@@ -124,12 +124,12 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps maxlength(int v) {
+        public FatAttributeBuilder maxlength(int v) {
             return setConf("maxlength", v);
         }
 
         @Override
-        public AttributeSteps minlength(int v) {
+        public FatAttributeBuilder minlength(int v) {
             return setConf("minlength", v);
         }
 
@@ -172,7 +172,7 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps options(List<Kv> options) {
+        public FatAttributeBuilder options(List<Kv> options) {
             if (options != null && options.size() > 0) {
                 set("options", options);
             }
@@ -180,7 +180,7 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttributeSteps dataUrl(String url) {
+        public FatAttributeBuilder dataUrl(String url) {
             config.setIfNotBlank("data_url", url);
             return this;
         }
@@ -193,12 +193,12 @@ public class AttributeBuilder {
         /**
          * 扩展
          */
-        public AttributeSteps set(String key, Object value) {
+        public FatAttributeBuilder set(String key, Object value) {
             config.setIfNotNull(key, value);
             return this;
         }
 
-        public AttributeSteps setConf(String key, Object value) {
+        public FatAttributeBuilder setConf(String key, Object value) {
             config.putIfAbsent("conf", Kv.create());
             ((Kv) config.getAs("conf")).setIfNotNull(key, value);
             return this;

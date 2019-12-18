@@ -44,7 +44,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
         //TODO 根据表单和字段状态,计算显示属性 ReadOnly Disabled
         if (component.getContainer() instanceof FormView) {
             FormView formView = (FormView) component.getContainer();
-            AttributeBuilder.AttributeSteps builder = AttributeBuilder.newBuilder();
+            AttributeBuilder.FatAttributeBuilder builder = AttributeBuilder.newBuilder();
             if (formView.isAdd()) {
                 if (metaField.configParser().isAdd()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().addStatus()) {
