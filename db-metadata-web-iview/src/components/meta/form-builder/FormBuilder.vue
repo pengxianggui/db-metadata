@@ -57,7 +57,7 @@
                 })
             }
         },
-        created() {
+        mounted() {
             const objectCode = this.objectCode;
             if (!utils.isEmpty(objectCode)) {
                 this.loadConf(objectCode);

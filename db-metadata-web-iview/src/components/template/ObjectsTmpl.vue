@@ -27,7 +27,7 @@
                 });
             }
         },
-        created() {
+        mounted() {
             this.$axios.get(URL.OBJECT_CODE_LIST).then(resp => {
                 this.objectCodes = resp.data
             })
