@@ -30,13 +30,13 @@
                             从左侧拖拽来添加表单项
                         </div>
                         <template v-else v-for="(item, index) in formMeta.columns">
-                            <div :class="{'form-item-active': selectIndex === index}" :key="item.name"
+                            <div :key="item.name"
                                  class="form-item"
+                                 :class="{'form-item-active': selectIndex === index, 'inline': item.inline, 'width-align': item.inline}"
                                  @click="handleFormItemClick(index, $event)">
                                 <el-form-item :key="item.name"
                                               v-if="!item.hasOwnProperty('showable') || item.showable"
-                                              :label="item.label" :prop="item.name"
-                                              :class="{inline: item.inline}">
+                                              :label="item.label" :prop="item.name">
                                     <component :is="item.component_name"
                                                :meta="item"></component>
                                 </el-form-item>
@@ -205,7 +205,6 @@
         z-index: 1;
         padding: 0 0px;
         border: 1px dashed rgba(0, 0, 0, 0);
-        /*border-bottom: dotted 1px;*/
     }
 
     /*!* 遮挡区(遮挡住) *!*/
