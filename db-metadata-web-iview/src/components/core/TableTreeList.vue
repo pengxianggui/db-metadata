@@ -19,6 +19,16 @@
                                        v-bind="innerMeta['operation-bar']">删除
                             </el-button>
                         </slot>
+                        <slot name="expand-all-btn">
+                            <el-button @click="handleExpandAll" icon="el-icon-caret-bottom" type="info"
+                                       v-bind="innerMeta['operation-bar']">展开全部
+                            </el-button>
+                        </slot>
+                        <slot name="shrink-all-btn">
+                            <el-button @click="shrinkExpandAll" icon="el-icon-caret-right" type="info"
+                                       v-bind="innerMeta['operation-bar']">收起全部
+                            </el-button>
+                        </slot>
                         <slot name="suffix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
                     </el-button-group>
                 </slot>
@@ -35,7 +45,9 @@
                     @row-click="handleRowClick"
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange"
-                    @row-dblclick="$emit('row-dblclick', $event)">
+                    @row-dblclick="$emit('row-dblclick', $event)"
+                    :default-expand-all="expandAll"
+                    v-if="show">
 
                     <!-- multi select conf -->
                     <template v-if="innerMeta.multi_select">
@@ -178,7 +190,14 @@
         name: "TableTreeList",
         components: {PopMenuItem, PopMenu},
         data() {
+            const instanceConf = this.meta['conf'];
+            const defaultConf = DEFAULT.TableTreeList['conf'];
+            const defaultExpandAll = instanceConf['default-expand-all'] === true ?
+                instanceConf['default-expand-all'] : defaultConf['default-expand-all'];
+
             return {
+                show: true, // use to reRender for table
+                expandAll: defaultExpandAll,
                 innerData: [],
                 choseData: [],
                 activeData: {},
@@ -214,6 +233,20 @@
             loadChildrens: Function
         },
         methods: {
+            tableReRender() {
+                this.show = false;
+                this.$nextTick(() => {
+                    this.show = true;
+                });
+            },
+            handleExpandAll() {
+                this.expandAll = true;
+                this.tableReRender();
+            },
+            shrinkExpandAll() {
+                this.expandAll = false;
+                this.tableReRender();
+            },
             handleLoad(tree, treeNode, resolve) {
                 const isLazy = this.innerMeta['conf']['lazy'];
                 if (!isLazy) return;
@@ -329,23 +362,23 @@
                 const {primaryKey, multiMode} = this;
 
                 if (multiMode) {
-                    let tableRefName = this.innerMeta['name'];
-                    for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
-                        let choseItem = this.$refs[tableRefName]['selection'][i];
+                    let {tlRefName} = this;
+                    for (let i = 0; i < this.$refs[tlRefName]['selection'].length; i++) { // cancel chose judge
+                        let choseItem = this.$refs[tlRefName]['selection'][i];
                         if (row[primaryKey] === choseItem[primaryKey]) {
                             selected = false;
                             break
                         }
                     }
-                    this.$refs[tableRefName].toggleRowSelection(row, selected);
+                    this.$refs[tlRefName].toggleRowSelection(row, selected);
                 }
             },
             activeRow(row) {
                 const primaryKey = this.primaryKey;
                 if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
                     this.activeData = {};
-                    const refName = this.innerMeta['name'];
-                    this.$refs[refName].setCurrentRow();
+                    const {tlRefName} = this;
+                    this.$refs[tlRefName].setCurrentRow();
                 } else {
                     this.activeData = row;
                 }
@@ -511,6 +544,9 @@
                 } else {
                     return objectPrimaryKey;
                 }
+            },
+            tlRefName() {
+                return this.innerMeta['name'];
             },
             multiMode() {
                 return this.innerMeta['multi_select'];

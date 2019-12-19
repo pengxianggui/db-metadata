@@ -30,7 +30,9 @@
                         'tree-props': {
                             'children': 'children'
                         },
-                        'lazy': true
+                        'lazy': true,
+                        "stripe": true,
+                        'default-expand-all': false
                     }
                 },
                 data: [],

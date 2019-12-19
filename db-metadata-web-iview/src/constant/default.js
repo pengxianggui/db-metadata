@@ -76,6 +76,9 @@ const DEFAULT_CONF = {
                 "hasChildren": "hasChildren",
                 "children": "children"
             },
+            "default-expand-all": false,
+            "expand-row-keys": [],  // 初始展开的行, 数组中的内容为row-key指定属性对应的值
+            "indent": 16, // 树节点缩进
             "lazy": false,
             "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
             "highlight-current-row": true,
