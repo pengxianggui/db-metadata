@@ -14,7 +14,7 @@
                             </el-button>
                         </slot>
                         <slot name="batch-delete-btn" v-bind:conf="innerMeta['operation-bar']"
-                              v-bind:batchDelete="handleBatchDelete">
+                              v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
                             <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
                                        v-bind="innerMeta['operation-bar']">删除
                             </el-button>
@@ -169,7 +169,7 @@
 </template>
 
 <script>
-    import {DEFAULT, URL} from '@/constant'
+    import {CONSTANT, DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
     import PopMenu from "./PopMenu/src/PopMenu";
     import PopMenuItem from "@/components/core/PopMenu/src/PopMenuItem";
@@ -242,7 +242,7 @@
                 }
             },
             extractPrimaryValue(row) {
-                const primaryKey = this.primaryKey;
+                const {primaryKey} = this;
                 return utils.extractValue(row, primaryKey.split(',')).join('_');
             },
             handleEdit(ev, row, index) { // edit/add
@@ -326,8 +326,9 @@
             },
             choseRow(row) {
                 let selected = true;
-                const primaryKey = this.primaryKey;
-                if (this.innerMeta.multi_select) {
+                const {primaryKey, multiMode} = this;
+
+                if (multiMode) {
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
                         let choseItem = this.$refs[tableRefName]['selection'][i];
@@ -375,7 +376,7 @@
 
             // fast edit meta-data or edit ui conf ----------------------------------------------------------
             editMetaObject() {
-                let objectCode = this.innerMeta['objectCode'];
+                let {objectCode} = this.innerMeta;
                 let url = this.$compile(URL.META_OBJECT_TO_EDIT, {objectCode: objectCode});
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
@@ -389,7 +390,7 @@
                 });
             },
             editMetaField(fieldCode) {
-                let objectCode = this.innerMeta['objectCode'];
+                let {objectCode} = this.innerMeta;
                 let url = this.$compile(URL.META_FIELD_TO_EDIT, {
                     objectCode: objectCode,
                     fieldCode: fieldCode
@@ -460,8 +461,7 @@
                 });
             },
             initData() { // init business data
-                let page = this.page;
-                let data = this.data;
+                let {page, data} = this;
                 if (page !== undefined) {
                     this.setPageModel(page)
                 }
@@ -502,15 +502,18 @@
                 return this.$merge(this.meta, DEFAULT.TableTreeList);
             },
             primaryKey() {
-                const primaryKey = this.meta['objectPrimaryKey'];
-                const defaultPrimaryKey = 'id';
+                const {objectPrimaryKey} = this.meta;
+                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
 
-                if (utils.isEmpty(primaryKey)) {
+                if (utils.isEmpty(objectPrimaryKey)) {
                     console.warn('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
                     return defaultPrimaryKey;
                 } else {
-                    return primaryKey;
+                    return objectPrimaryKey;
                 }
+            },
+            multiMode() {
+                return this.innerMeta['multi_select'];
             },
             // 支持无渲染的行为插槽
             actions() {

@@ -21,3 +21,9 @@ export const SUCCESS_MSG = '操作成功';
  * @type {number[]}
  */
 export const PAGE_NUM_AREA = [5, 10, 20, 50, 100, 200];
+
+/**
+ * 默认主键字段
+ * @type {string}
+ */
+export const DEFAULT_PRIMARY_KEY = 'id';
