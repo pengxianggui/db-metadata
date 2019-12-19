@@ -4,7 +4,8 @@
             <template v-for="(item, index) in innerMeta.columns">
                 <slot :name="'form-item-' + item.name" v-bind:columnMeta="item" v-bind:value="model[item.name]">
                     <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
-                                  :label="item.label||item.name" :prop="item.name" :class="{inline: item.inline}"
+                                  :label="item.label||item.name" :prop="item.name"
+                                  :class="{'inline': item.inline, 'width-align': item.inline}"
                                   :rules="item.conf['rules']">
                         <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
                     </el-form-item>
@@ -111,5 +112,7 @@
 </script>
 
 <style scoped>
-
+    .width-align {
+        width: 400px; /* pxg_todo 临时解决控件对齐问题 */
+    }
 </style>
