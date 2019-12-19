@@ -4,7 +4,8 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta" @change="loadConf"></drop-down-box>
+                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"
+                                       @change="loadConf"></drop-down-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -101,7 +102,7 @@
                         break;
                     }
                 }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg||err);
+                    console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                     this.$message.error(err.msg);
                 })
             },
@@ -121,7 +122,7 @@
                 let componentCode = this.confModel['componentCode'];
                 let conf = this.confModel['conf'];
                 let params = {
-                    "componentCode":  componentCode
+                    "componentCode": componentCode
                 };
 
                 params[componentCode] = conf;
@@ -171,7 +172,8 @@
             }
         },
         mounted() {
-            if (!utils.isEmpty(this.componentCode)) {
+            const {componentCode} = this.confModel;
+            if (!utils.isEmpty(componentCode)) {
                 this.loadConf();
             }
         }

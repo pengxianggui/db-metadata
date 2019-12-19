@@ -4,8 +4,8 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-<!--                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"-->
-<!--                                     @change="loadConf"></drop-down-box>-->
+                        <!--                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"-->
+                        <!--                                     @change="loadConf"></drop-down-box>-->
                         <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
                         <radio-box v-model="confModel.componentCode"
                                    :options="['FormTmpl', 'TableList', 'SearchPanel']"
@@ -15,7 +15,7 @@
                 <el-col :span="6">
                     <el-form-item label="元对象">
                         <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
-                                     @change="loadConf"></drop-down-box>
+                                       @change="loadConf"></drop-down-box>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -273,7 +273,8 @@
             }
         },
         mounted() {
-            if (!utils.isEmpty(this.componentCode) && !utils.isEmpty(this.objectCode)) {
+            const {componentCode, objectCode} = this.confModel;
+            if (!utils.isEmpty(componentCode) && !utils.isEmpty(objectCode)) {
                 this.loadConf();
             }
         }
