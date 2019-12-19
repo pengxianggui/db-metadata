@@ -48,10 +48,10 @@ eg:
         <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
                 <drop-down-box :ref="schemaMeta['name']" :meta="schemaMeta" v-model="model[schemaMeta.name]"
-                               @change="refreshTables()"></drop-down-box>
+                               @change="refreshTables()" filterable></drop-down-box>
             </el-form-item>
             <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
-                <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]"></drop-down-box>
+                <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]" filterable></drop-down-box>
             </el-form-item>
             <el-form-item :label="objectMeta.label" :prop="objectMeta.name">
                 <text-box :ref="objectMeta['name']" :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>

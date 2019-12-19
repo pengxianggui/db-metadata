@@ -15,12 +15,12 @@
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.objectCode"
                                    :options="objectCodes" @change="masterSlaveConfig.master.primaryKey = null"
-                                   :filterable="true" :required="true"></drop-down-box>
+                                   filterable required></drop-down-box>
                 </el-form-item>
                 <el-form-item label="主键" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.primaryKey"
                                    :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.master.objectCode})"
-                                   required>
+                                   filterable required>
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
                         </template>
@@ -32,18 +32,19 @@
                         <el-form-item label="元对象编码" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].objectCode"
                                            @change="masterSlaveConfig.slaves[0].foreignFieldCode = null"
-                                           :options="objectCodes" :filterable="true" :required="true"></drop-down-box>
+                                           :options="objectCodes" filterable required></drop-down-box>
                         </el-form-item>
                         <el-form-item label="外键" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode"
-                                           :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.slaves[0].objectCode})">
+                                           :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.slaves[0].objectCode})"
+                                           filterable>
                                 <template #label="{option}">
                                     <span>{{option.value}}({{option.label}})</span>
                                 </template>
                             </drop-down-box>
                         </el-form-item>
                         <el-form-item label="排序" class="inline">
-                            <num-box v-model="masterSlaveConfig.slaves[0].order" required></num-box>
+                            <num-box v-model="masterSlaveConfig.slaves[0].order" controls required></num-box>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
