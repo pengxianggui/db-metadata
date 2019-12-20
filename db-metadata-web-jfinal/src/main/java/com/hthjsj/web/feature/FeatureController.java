@@ -59,12 +59,12 @@ public class FeatureController extends FrontRestController {
      * 获取树型的功能数据
      */
     public void menu() {
-        FeatureNode root = new FeatureNode("business", "", "业务模块");
+        FeatureNode root = new FeatureNode("business", "", "业务模块", null);
         TreeBuilder<FeatureNode> treeBuilder = new TreeBuilder<>();
         Collection<FeatureNode> featureNodes = new ArrayList<>();
         featureService().findAll().forEach(record -> {
             FeatureType featureType = FeatureType.V(record.getStr("type"));
-            featureNodes.add(new FeatureNode(url(featureType, record.getStr("code")), root.getId(), record.getStr("name")));
+            featureNodes.add(new FeatureNode(url(featureType, record.getStr("code")), root.getId(), record.getStr("name"), record));
         });
         treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
         renderJson(Ret.ok("data", root));
@@ -103,10 +103,11 @@ public class FeatureController extends FrontRestController {
 
         private String name;
 
-        public FeatureNode(String id, String pid, String name) {
+        public FeatureNode(String id, String pid, String name, Record node) {
             this.id = id;
             this.pid = pid;
             this.name = name;
+            this.node = node;
         }
 
         @JSONField(name = "path")
