@@ -175,9 +175,4 @@ public class OptionsKit {
 
         return result;
     }
-
-    public static void main(String[] args) {
-        System.out.println(transKeyValue(new String[] { "123", "12312", "fdsa" }));
-        System.out.println(Joiner.on(",").skipNulls().join(new String[] { "123", "12312", "fdsa", "dfa" }));
-    }
 }

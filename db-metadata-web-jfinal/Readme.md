@@ -19,9 +19,12 @@ MetaField 数据源配置
 "scopeRange": ["options1","options2","option3"],
 ```
 
-- [ ] 增加 MetaObject / MetaField 的mock手段;
-- [ ] db-metadata-analysis的数据源 目前只绑定了一个
-- [ ] db-metadata-web-jfinal 端的数据库操作,未做多数据源的指定;
+- [x] 增加 MetaObject / MetaField 的mock手段;
+    > ManualMetaObject,ManualMetaField 等支持
+- [x] db-metadata-analysis的数据源 目前只绑定了一个
+    > 多数据源支持,一个元数据主数据源,和元对象自身携带的数据源(schemaName与config数据源配置要一致)
+- [x] db-metadata-web-jfinal 端的数据库操作,未做多数据源的指定;
+    > 目前支持简单的多数据源并行,但没有良好的切换机制
 - [ ] 在实例配置阶段删除字段问题(无法彻底删除,因系统多数遍历 使用metaobject.fields)
 - [x] 推敲xxxView构建逻辑,以配置为准 还是以fields为准
     - [x] 以fields为准,则需要在metaField中对字段是否予以显示做开关
@@ -42,5 +45,6 @@ MetaField 数据源配置
 - [ ] defaultInstance.json中如何为test_table的TableList设置元对象级别的配置?目前只支持设置字段配置
 
 ##### BUG
-- [ ] searchPanel 无实例配时,会成功渲染
-- [ ] metaField config 默认返回MetaFieldConfigParse实例,@deprecated -> ImetaFieldConfig
+- [x] searchPanel 无实例配时,会成功渲染
+    > 允许使用smart自动计算的配置来支持默认渲染
+- [x] metaField config 默认返回MetaFieldConfigParse实例,@deprecated -> ImetaFieldConfig
