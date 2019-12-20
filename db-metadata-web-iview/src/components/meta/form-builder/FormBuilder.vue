@@ -3,7 +3,7 @@
         <div style="flex: 2">
             <ComponentList></ComponentList>
         </div>
-        <div style="flex: 5">
+        <div style="flex: 5;margin-left: 5px">
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
                     <drop-down-box @change="loadConf(objectCode)" placeholder="选择元对象"
@@ -12,7 +12,7 @@
                 </template>
             </WorkArea>
         </div>
-        <div style="flex: 3">
+        <div style="flex: 3;margin-left: 5px">
             <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
         </div>
     </el-container>
