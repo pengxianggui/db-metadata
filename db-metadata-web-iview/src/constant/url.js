@@ -34,7 +34,8 @@ export const MASTER_SLAVE_TO_ADD_S = '/m/ms/toAddS?objectCode={objectCode}&fc={f
 
 export const LIST_FEATURE_TYPE = '/m/list'; // 列出所有的功能类型code
 
-export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据,临时写
+export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
+export const MENU_DATA = '/menu/list';  // pxg_todo 菜单数据, for mock
 
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 
