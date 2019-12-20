@@ -2,31 +2,31 @@ package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class title:  文件树  <br/>
  * Describe:
- * 1.配置controller  me.add("/file", FileViewController.class);
+ * 1.配置controller  me.add("/file", FileController.class);
  * Created by konbluesky           <br/>
  * Date : 2016/12/20 上午1:29       <br/>
  * Project : oss    <br/>
  */
 @Slf4j
-public class FileViewController extends Controller {
+public class FileController extends Controller {
 
     /** 指定构建树时 根的默认标识(TreeBuilder和前端ztree)都需要 */
     public static final String ROOTPATH = "ROOT_PATH";
@@ -59,6 +59,25 @@ public class FileViewController extends Controller {
 
         jsons = getTreeJson(path, refresh, DEFAULT_FILTER);
         renderJson(Ret.ok("data", jsons));
+    }
+
+    /**
+     * TODO 透传文件给前端
+     */
+    public void index() {
+        String filename = getPara();
+        Preconditions.checkNotNull(filename);
+        filename += ".json";
+        if (JFinal.me().getConstants().getDevMode()) {
+            Optional<String> result = Optional.ofNullable(UtilKit.loadConfigByFile(filename));
+            if (result.isPresent()) {
+                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));
+            } else {
+                renderJson(Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
+            }
+        } else {
+            renderJson(Ret.fail().set("msg", "开发功能已关闭,不能直接通过本接口获得[" + filename + "]文件内容"));
+        }
     }
 
     /**

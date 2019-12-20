@@ -3,21 +3,23 @@ package com.hthjsj.web.upload;
 import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
+import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 import com.jfinal.upload.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.Optional;
 
 /**
+ * UploadController与FileController 共用/file 路径
+ * /file/upload -> index()
+ * /file/down -> down()
+ *
  * <p> @Date : 2019/12/4 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -27,30 +29,11 @@ import java.util.Optional;
 public class UploadController extends Controller {
 
     /**
-     * TODO 透传文件给前端
-     */
-    public void index() {
-        String filename = getPara();
-        Preconditions.checkNotNull(filename);
-        filename += ".json";
-        if (JFinal.me().getConstants().getDevMode()) {
-            Optional<String> result = Optional.ofNullable(UtilKit.loadConfigByFile(filename));
-            if (result.isPresent()) {
-                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));
-            } else {
-                renderJson(Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
-            }
-        } else {
-            renderJson(Ret.fail().set("msg", "开发功能已关闭,不能直接通过本接口获得[" + filename + "]文件内容"));
-        }
-    }
-
-    /**
      * param objectCode
      * param fieldCode
      * param file
      */
-    public void upload() {
+    public void index() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -75,19 +58,19 @@ public class UploadController extends Controller {
      * param fieldCode
      * param 业务记录 id
      */
+    @ActionKey("file/down")
     public void down() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         String id = getPara("id");
-        //TODO 2次查询,待优化
+        Preconditions.checkArgument(StrKit.notBlank(objectCode, fieldCode, id), "必传参数条件不满足:objectCode=%s,fieldCode=%s,id=%s", objectCode, fieldCode, id);
         DbMetaService dbMetaService = ServiceManager.metaService();
-        IMetaObject metaObject = dbMetaService.findByCode(objectCode);
         IMetaField metaField = dbMetaService.findFieldByCode(objectCode, fieldCode);
 
         Preconditions.checkNotNull(id, "必须指定业务记录id");
 
-        String filePath = dbMetaService.findDataFieldById(metaObject, metaField, id);
+        String filePath = dbMetaService.findDataFieldById(metaField.getParent(), metaField, id);
 
         Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
 

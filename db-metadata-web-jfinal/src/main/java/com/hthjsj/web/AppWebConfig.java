@@ -9,7 +9,7 @@ import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
-import com.hthjsj.web.controller.FileViewController;
+import com.hthjsj.web.controller.FileController;
 import com.hthjsj.web.ext.meta.CCUUConfigExtension;
 import com.hthjsj.web.ext.meta.InstanceConfigExtension;
 import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
@@ -58,8 +58,8 @@ public class AppWebConfig extends JFinalConfig {
         if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
             me.add(new UserRouter());
         }
-        me.add("/file", UploadController.class);
-        me.add("/fileview", FileViewController.class);
+        me.add("/file/upload", UploadController.class);
+        me.add("/file", FileController.class);
     }
 
     @Override
