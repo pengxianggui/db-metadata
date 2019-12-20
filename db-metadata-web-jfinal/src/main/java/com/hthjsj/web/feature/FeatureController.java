@@ -1,11 +1,13 @@
 package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryHelper;
@@ -59,6 +61,7 @@ public class FeatureController extends FrontRestController {
      * 获取树型的功能数据
      */
     public void menu() {
+        //1. 拼接功能菜单树
         FeatureNode root = new FeatureNode("business", "", "业务模块", null);
         TreeBuilder<FeatureNode> treeBuilder = new TreeBuilder<>();
         Collection<FeatureNode> featureNodes = new ArrayList<>();
@@ -66,8 +69,11 @@ public class FeatureController extends FrontRestController {
             FeatureType featureType = FeatureType.V(record.getStr("type"));
             featureNodes.add(new FeatureNode(url(featureType, record.getStr("code")), root.getId(), record.getStr("name"), record));
         });
+        JSONArray jsonRoot = new JSONArray();
         treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
-        renderJson(Ret.ok("data", new Object[] { root }));
+        jsonRoot.set(0, root);
+        jsonRoot.set(1, UtilKit.getKv(UtilKit.loadConfigByFile("sysMenu.json")));
+        renderJson(Ret.ok("data", jsonRoot));
     }
 
     private String url(FeatureType featureType, String featureCode) {
