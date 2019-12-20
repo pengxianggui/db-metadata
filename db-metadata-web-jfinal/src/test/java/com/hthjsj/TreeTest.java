@@ -29,7 +29,7 @@ public class TreeTest {
         list.add(n4);
         list.add(n5);
         list.add(n6);
-        TreeBuilder tu = new TreeBuilder();
+        TreeBuilder<Note> tu = new TreeBuilder<Note>();
         List<Note> result = tu.getChildTreeObjects(list, Integer.valueOf(0));
         System.out.println(JSON.toJSONString(result));
     }

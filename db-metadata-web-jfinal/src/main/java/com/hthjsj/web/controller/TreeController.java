@@ -37,7 +37,7 @@ public class TreeController extends Controller {
     }
 
     @Data
-    public class TreeConfig {
+    public static class TreeConfig {
 
         String objectCode;
 

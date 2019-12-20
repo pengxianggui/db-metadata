@@ -1,6 +1,7 @@
 package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.App;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.user.User;
@@ -14,6 +15,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p> @Date : 2019/12/9 </p>
@@ -25,9 +27,10 @@ import java.util.Date;
 @Before(Tx.class)
 public class FeatureService {
 
+
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
         Record record = getRecord(type, name, code, config);
-        return Db.save("meta_feature", "id", record);
+        return Db.use(App.DB_MAIN).save("meta_feature", "id", record);
     }
 
     public <T> T loadFeatureConfig(String featureCode) {
@@ -37,6 +40,10 @@ public class FeatureService {
         }
         FeatureType type = FeatureType.V(record.getStr("type"));
         return (T) JSON.parseObject(record.getStr("config"), type.configEntity);
+    }
+
+    public List<Record> findAll() {
+        return Db.use(App.DB_MAIN).findAll("meta_feature");
     }
 
     public boolean deleteFeature(String[] ids) {

@@ -21,9 +21,9 @@ public interface TreeNode<IdType, Node> {
 
     void setName(String name);
 
-    List<Node> getChildren();
+    List<TreeNode<IdType, Node>> getChildren();
 
-    void setChildren(List<Node> children);
+    void setChildren(List<TreeNode<IdType, Node>> children);
 
     Node currNode();
 }

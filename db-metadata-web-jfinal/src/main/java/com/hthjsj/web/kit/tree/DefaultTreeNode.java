@@ -14,11 +14,15 @@ import java.util.List;
  */
 public class DefaultTreeNode implements TreeNode<String, Record> {
 
-    Record node;
+    Record node = new Record();
 
-    List<Record> children;
+    List<TreeNode<String, Record>> children;
 
     TreeController.TreeConfig treeConfig;
+
+    public DefaultTreeNode(TreeController.TreeConfig treeConfig) {
+        this.treeConfig = treeConfig;
+    }
 
     @Override
     public String getId() {
@@ -51,7 +55,7 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
     }
 
     @Override
-    public List<Record> getChildren() {
+    public List<TreeNode<String, Record>> getChildren() {
         if (children == null) {
             children = new ArrayList<>();
         }
@@ -59,7 +63,7 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
     }
 
     @Override
-    public void setChildren(List<Record> children) {
+    public void setChildren(List<TreeNode<String, Record>> children) {
         this.children = children;
     }
 

@@ -121,7 +121,7 @@ public class FileController extends Controller {
         } catch (Exception e) {
             throw new RuntimeException("文件列表获取失败");
         }
-        return new TreeBuilder().getChildTreeObjects(files, ROOTPATH);
+        return new TreeBuilder<FileView>().getChildTreeObjects(files, ROOTPATH);
     }
 
     /**
@@ -191,40 +191,40 @@ public class FileController extends Controller {
     /**
      * 文件树对象
      */
-    class FileView implements TreeNode {
+    class FileView implements TreeNode<String, FileView> {
 
-        private String fname;
+        private String fileName;
 
-        private String pfname;
+        private String parentFileName;
 
         private String name;
 
-        private List children;
+        private List<FileView> children;
 
-        public FileView(String fname, String pfname, String name) {
-            this.fname = fname;
-            this.pfname = pfname;
+        public FileView(String fileName, String parentFileName, String name) {
+            this.fileName = fileName;
+            this.parentFileName = parentFileName;
             this.name = name;
         }
 
         @Override
-        public Object getId() {
-            return fname;
+        public String getId() {
+            return this.fileName;
         }
 
         @Override
-        public void setId(Object id) {
-            this.fname = (String) id;
+        public void setId(String id) {
+            this.fileName = id;
         }
 
         @Override
-        public Object getParentId() {
-            return pfname;
+        public String getParentId() {
+            return parentFileName;
         }
 
         @Override
-        public void setParentId(Object parentId) {
-            this.pfname = (String) parentId;
+        public void setParentId(String parentId) {
+            this.parentFileName = parentId;
         }
 
         @Override
@@ -248,8 +248,8 @@ public class FileController extends Controller {
         }
 
         @Override
-        public Object currNode() {
-            return null;
+        public FileView currNode() {
+            return this;
         }
     }
 }
