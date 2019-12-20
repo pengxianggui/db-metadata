@@ -699,10 +699,16 @@
               "notNull": true
             },
             {
+              "name": "code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "配置编码"
+            },
+            {
               "name": "comp_code",
               "type": "DefaultString",
               "remark": "",
-              "chnname": "组件code"
+              "chnname": "组件编码"
             },
             {
               "name": "type",

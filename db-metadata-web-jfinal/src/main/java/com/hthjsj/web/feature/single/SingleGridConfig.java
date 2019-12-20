@@ -3,6 +3,7 @@ package com.hthjsj.web.feature.single;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.feature.Feature;
+import com.hthjsj.web.feature.FeatureConfig;
 import com.jfinal.kit.Kv;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @date
  */
 @Data
-public class SingleGridConfig extends MetaData implements Feature {
+public class SingleGridConfig extends FeatureConfig {
 
     private String objectCode;
 

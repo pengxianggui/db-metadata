@@ -12,7 +12,7 @@
 -->
 <template>
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
-        <div class="el-card" style="padding: 0">
+        <div class="el-card" style="padding: 5px;">
             <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" inline
                      @keyup.enter.native="onSubmit" v-if="innerMeta.columns && innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
