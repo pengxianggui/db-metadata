@@ -129,5 +129,9 @@ https://docs.sencha.com/extjs/6.2.0
 - [ ] 表单 tabIndex
 - [ ] mysql 数据库版本8.0 不兼容
 - [ ] 脏数据,错误数据处理与提示;
-- [ ] 
 
+
+
+## RoadMap
+- server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
+- 

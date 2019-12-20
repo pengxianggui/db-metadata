@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p> Class title: </p>
+ * <p> Mysql 元数据的默认获取方法</p>
  * <p> @Describe: </p>
  * <p> @Date : 2019-08-20 </p>
  * <p> @Project : db-meta-serve</p>

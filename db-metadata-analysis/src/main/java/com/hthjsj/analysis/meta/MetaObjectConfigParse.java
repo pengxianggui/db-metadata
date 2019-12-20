@@ -49,6 +49,9 @@ public class MetaObjectConfigParse extends MetaData {
         return (T) new PointCut();
     }
 
+    /**
+     * 客户端可以按需选择实现add,update,delete,view切入点
+     */
     public DeletePointCut deletePointCut() {
         Object o = interceptor();
         if (o instanceof DeletePointCut) {

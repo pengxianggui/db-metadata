@@ -83,11 +83,6 @@ public class MetaFactory {
         return manualMetaObject;
     }
 
-    public static void main(String[] args) {
-        IMetaObject metaObject = createBySql("select uuid id, name cn  from ometa_boae", "firstObject");
-        System.out.println(metaObject);
-    }
-
     public static IMetaField createMetaField(IMetaObject parent) {
         return new MetaField(parent);
     }

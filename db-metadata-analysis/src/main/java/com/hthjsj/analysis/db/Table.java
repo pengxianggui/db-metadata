@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Table
+ * mysql: information_schema -> Tables表
+ * <p>
+ * 注:
+ * TODO :现元数据通过sql直接查询mysql.information_schema获取,耦合度高,并且只用到了部分信息,后期可以考虑通过jdbc metadata来替换;
  * <p> Class title: </p>
  * <p> @Describe: </p>
  * <p> @Date : 2019-08-20 </p>

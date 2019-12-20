@@ -1,5 +1,6 @@
 package com.hthjsj.web.user.jeesite;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.web.user.AbstractUserService;
 import com.hthjsj.web.user.UserAuthIntercept;
 import com.jfinal.plugin.activerecord.Db;
@@ -14,6 +15,8 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
+
+    private static final String JEESITE = "jeesite";
 
     @Override
     public String tokenKey() {
@@ -32,12 +35,12 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
 
     @Override
     public String cookieKey() {
-        return "jeesite";
+        return JEESITE;
     }
 
     @Override
     public JeesiteUser login(String username, String password) {
-        Record user = Db.use("jeesite").findFirst("select * from js_sys_user where user_code=? and password=?", username, password);
+        Record user = Db.use(JEESITE).findFirst("select * from js_sys_user where user_code=? and password=?", username, password);
         if (user != null) {
             JeesiteUser jeesiteUser = new JeesiteUser(user.getColumns());
             UserAuthIntercept.caches.put(jeesiteUser.userId(), jeesiteUser);
@@ -49,27 +52,31 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
     @Override
     public boolean logout(JeesiteUser user) {
         UserAuthIntercept.caches.invalidate(user.userId());
-        return false;
+        return true;
     }
 
     @Override
     public boolean logged(JeesiteUser user) {
-        return false;
+        return UserAuthIntercept.caches.getIfPresent(user.userId()) != null;
     }
 
     @Override
     public boolean isExpired(JeesiteUser user) {
-        return false;
+        return UserAuthIntercept.caches.getIfPresent(user.userId()) != null;
     }
 
     @Override
     public List<JeesiteUser> findAll() {
-        return null;
+        List<JeesiteUser> users = Lists.newArrayList();
+        Db.use(JEESITE).findAll("js_sys_user").forEach(r -> {
+            users.add(new JeesiteUser(r.getColumns()));
+        });
+        return users;
     }
 
     @Override
     public JeesiteUser findById(Object idValue) {
-        Record user = Db.use("jeesite").findFirst("select * from js_sys_user where user_code=?", idValue);
+        Record user = Db.use(JEESITE).findFirst("select * from js_sys_user where user_code=?", idValue);
         return new JeesiteUser(user.getColumns());
     }
 
