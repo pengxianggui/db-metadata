@@ -1,6 +1,7 @@
 package com.hthjsj.web.upload;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.ServiceManager;

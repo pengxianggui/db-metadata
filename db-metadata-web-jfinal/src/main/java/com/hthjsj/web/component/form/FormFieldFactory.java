@@ -111,6 +111,9 @@ public class FormFieldFactory {
             case FINDBOX:
                 FindBox findBox = new FindBox(metaField.fieldCode(), metaField.cn());
                 return create(findBox, metaField, instanceFieldConfig);
+            case IMAGEBOX:
+                ImageBox imageBox = new ImageBox(metaField.fieldCode(), metaField.cn());
+                return create(imageBox, metaField, instanceFieldConfig);
             default:
                 break;
         }

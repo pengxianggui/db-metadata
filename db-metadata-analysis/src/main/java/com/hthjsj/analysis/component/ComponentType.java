@@ -32,6 +32,7 @@ public enum ComponentType {
     FINDBOX("findbox", "查找框", "FindBox"),
     SEARCHVIEW("searchview", "搜索面板", "SearchPanel"),
     FILEBOX("filebox", "上传控件", "FileBox"),
+    IMAGEBOX("imagebox", "图片控件", "ImgBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter(AccessLevel.PUBLIC)
