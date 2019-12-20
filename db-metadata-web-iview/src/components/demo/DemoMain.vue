@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <data-list-demo></data-list-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <tree-table-tmpl style="height: 700px;"></tree-table-tmpl>
             </el-col>
         </el-row>

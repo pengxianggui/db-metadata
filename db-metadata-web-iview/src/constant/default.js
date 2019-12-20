@@ -416,9 +416,9 @@ const DEFAULT_CONF = {
         "mode": 'text/x-mysql',
         "conf": {}
     },
-    "TreeList": {
-        "component_name": "TreeList",
-        "name": "TreeList",
+    "Tree": {
+        "component_name": "Tree",
+        "name": "Tree",
         "label": "树型列表",
         "conf": {
             "node-key": "id",

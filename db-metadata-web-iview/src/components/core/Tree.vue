@@ -2,7 +2,7 @@
     <div>
         <div class="header">
             <slot name="title">
-                <h3>TreeList</h3>
+                <h3>Tree</h3>
             </slot>
         </div>
         <el-tree :ref="refName" :data="data"
@@ -28,8 +28,8 @@
     import Meta from './mixins/meta'
 
     export default {
-        mixins: [Meta(DEFAULT.TreeList)],
-        name: "TreeList",
+        mixins: [Meta(DEFAULT.Tree)],
+        name: "Tree",
         props: {
             data: {
                 type: Array,

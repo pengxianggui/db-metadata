@@ -1,10 +1,10 @@
 <template>
     <row-grid :span="[6, 18]">
         <template #left>
-            <tree-list :meta="treeMeta" :data="data"></tree-list>
+            <tree :meta="treeMeta" :data="data"></tree>
         </template>
         <template #right>
-            <table-list :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange"></table-list>
+            <table :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange"></table>
         </template>
     </row-grid>
 </template>
@@ -16,9 +16,9 @@
             return {
                 tlMeta: {},
                 treeMeta: {
-                    component_name: 'TreeList',
-                    name: 'TreeList', // 可省略, value不指定时, 则选取的值即为整个item对象
-                    label: 'TreeList',
+                    component_name: 'Tree',
+                    name: 'Tree', // 可省略, value不指定时, 则选取的值即为整个item对象
+                    label: 'Tree',
                     conf: {
                         // other options
                         props: {

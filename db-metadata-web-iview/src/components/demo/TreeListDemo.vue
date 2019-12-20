@@ -15,9 +15,9 @@
         data() {
             return {
                 meta: {
-                    component_name: 'TreeList',
-                    name: 'TreeList', // 可省略, value不指定时, 则选取的值即为整个item对象
-                    label: 'TreeList',
+                    component_name: 'Tree',
+                    name: 'Tree', // 可省略, value不指定时, 则选取的值即为整个item对象
+                    label: 'Tree',
                     conf: {
                         // other options
                         props: {
