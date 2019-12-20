@@ -4,7 +4,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.AnalysisManager;
 import com.hthjsj.web.auth.JsonUserPermit;
-import com.hthjsj.web.auth.MRIntercept;
+import com.hthjsj.web.auth.MRAuthIntercept;
 import com.hthjsj.web.auth.MRManager;
 import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
@@ -22,7 +22,7 @@ import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.upload.UploadController;
-import com.hthjsj.web.user.UserAuthIntercept;
+import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserRouter;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
@@ -104,10 +104,10 @@ public class AppWebConfig extends JFinalConfig {
         me.add(new ExceptionIntercept());
         me.add(new JsonParamIntercept());
         if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
-            me.add(new UserAuthIntercept());
+            me.add(new UserIntercept());
         }
         if (getPropertyToBoolean(AppConst.NEED_AUTH)) {
-            me.add(new MRIntercept());
+            me.add(new MRAuthIntercept());
         }
     }
 

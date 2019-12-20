@@ -1,7 +1,7 @@
 package com.hthjsj.web.user;
 
 import com.google.common.base.Preconditions;
-import com.hthjsj.web.auth.MRIntercept;
+import com.hthjsj.web.auth.MRAuthIntercept;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
@@ -16,7 +16,7 @@ import com.jfinal.kit.Ret;
  */
 public class UserController extends Controller {
 
-    @Clear(MRIntercept.class)
+    @Clear(MRAuthIntercept.class)
     public void login() {
         LoginService loginService = UserManager.me().loginService();
         String uid = getPara(loginService.loginKey());

@@ -7,7 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
-import com.hthjsj.web.user.UserAuthIntercept;
+import com.hthjsj.web.user.UserIntercept;
 import com.jfinal.kit.Kv;
 import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
     public LocalUser login(String username, String password) {
         LocalUser user = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username)).findFirst().get();
         if (user != null) {
-            UserAuthIntercept.caches.put(user.userId(), user);
+            UserIntercept.caches.put(user.userId(), user);
         }
         return user;
     }

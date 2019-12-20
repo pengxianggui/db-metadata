@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class UserAuthIntercept implements Interceptor {
+public class UserIntercept implements Interceptor {
 
     public static Cache<String, User> caches = CacheBuilder.newBuilder().maximumSize(100).build();
 

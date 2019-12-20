@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class MRIntercept implements Interceptor {
+public class MRAuthIntercept implements Interceptor {
 
     @Override
     public void intercept(Invocation inv) {
