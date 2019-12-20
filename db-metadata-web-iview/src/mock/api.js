@@ -77,11 +77,13 @@ const mockMenus = [
     },
 ];
 
-mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
+mockAxios
+    .onGet(URL.ROUTE_DATA).reply(200, {
     data: commonRoutes,
     state: 'ok'
-}).onGet(URL.MENU_DATA).reply(200, {
-    data: mockMenus,
-    state: 'ok'
 })
+//     .onGet(URL.MENU_DATA).reply(200, {
+//     data: mockMenus,
+//     state: 'ok'
+// })
     .onAny().passThrough();

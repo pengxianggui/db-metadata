@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <tree-table-tmpl style="height: 700px;"></tree-table-tmpl>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <table-form-tmpl style="height: 700px;"></table-form-tmpl>
             </el-col>
         </el-row>
@@ -129,25 +134,26 @@
                 <date-time-box-demo></date-time-box-demo>
             </el-col>
         </el-row>
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <json-box-demo></json-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <img-box-demo></img-box-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
-<!--        <el-row>-->
-<!--            <el-col :span="24">-->
-<!--                <search-bar-demo></search-bar-demo>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
+        <!--        <el-row>-->
+        <!--            <el-col :span="24">-->
+        <!--                <json-box-demo></json-box-demo>-->
+        <!--            </el-col>-->
+        <!--        </el-row>-->
+        <!--        <el-row>-->
+        <!--            <el-col :span="24">-->
+        <!--                <img-box-demo></img-box-demo>-->
+        <!--            </el-col>-->
+        <!--        </el-row>-->
+        <!--        <el-row>-->
+        <!--            <el-col :span="24">-->
+        <!--                <search-bar-demo></search-bar-demo>-->
+        <!--            </el-col>-->
+        <!--        </el-row>-->
     </div>
 </template>
 <script>
-    import TreeTableTmpl from '@/components/template/TableFormTmpl'
+    import TableFormTmpl from '@/components/template/TableFormTmpl'
+    import TreeTableTmpl from '@/components/template/TreeTableTmpl'
     // 批量注册
     const requireComponent = require.context('./', false, /\w+Demo\.(vue|js)$/);
     let demos = {};
@@ -156,16 +162,15 @@
         let cmp = requireComponent(fileName).default;
         demos[cmp.name] = cmp;
     });
+    demos[TableFormTmpl.name] = TableFormTmpl;
     demos[TreeTableTmpl.name] = TreeTableTmpl;
 
     export default {
         name: "demo",
         data() {
-            return {
-            }
+            return {}
         },
-        methods: {
-        },
+        methods: {},
         components: demos
     }
 </script>

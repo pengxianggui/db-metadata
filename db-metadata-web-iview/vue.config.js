@@ -35,10 +35,8 @@ module.exports = {
             '^\/file\/': serverProxy,
             '^\/check\/': serverProxy,
             '^\/find\/': serverProxy,
-            '^\/m\/': serverProxy,
-            '^\/fileview\/': serverProxy,
+            '^\/feature\/': serverProxy,
             '^\/route\/': serverProxy,
-            '^\/menu\/': serverProxy,
         }
     }
 };

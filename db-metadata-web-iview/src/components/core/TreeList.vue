@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="header">
+            <slot name="title">
+                <h3>TreeList</h3>
+            </slot>
+        </div>
         <el-tree :ref="refName" :data="data"
                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                  @node-click="$emit('node-click')"

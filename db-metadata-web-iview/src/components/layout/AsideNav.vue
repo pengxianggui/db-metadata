@@ -22,7 +22,7 @@
 
 <script>
     import {URL} from '@/constant'
-    import axios from 'axios'
+
     export default {
         name: "aside-nav",
         data() {
@@ -40,7 +40,7 @@
             }
         },
         mounted() {
-            axios.get(URL.MENU_DATA).then(resp => this.menus = resp.data);
+            this.$axios.safeGet(URL.MENU_DATA).then(resp => this.menus = resp.data);
         }
     }
 </script>
