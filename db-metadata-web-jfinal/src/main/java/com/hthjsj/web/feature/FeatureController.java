@@ -35,8 +35,8 @@ public class FeatureController extends FrontRestController {
         Preconditions.checkArgument(type != FeatureType.UNKNOWN, "未知的功能模板" + queryHelper.getFeatureType());
         String name = getPara("name");
         String code = getPara("code");
-        String jsonstr = getPara("config");
-        featureService().createFeature(type, name, code, JSON.parseObject(jsonstr, MasterSlaveConfig.class));
+        String jsonStr = getPara("config");
+        featureService().createFeature(type, name, code, JSON.parseObject(jsonStr, type.configEntity));
         renderJson(Ret.ok());
     }
 
@@ -44,7 +44,6 @@ public class FeatureController extends FrontRestController {
      * 功能 = ((元对象(表),元对象(视图),元对象(非表)) + 控件) * n
      */
     public void load() {
-
         QueryHelper queryHelper = new QueryHelper(this);
         String featureCode = queryHelper.getFeatureCode();
         Feature feature = featureService().loadFeatureConfig(featureCode);

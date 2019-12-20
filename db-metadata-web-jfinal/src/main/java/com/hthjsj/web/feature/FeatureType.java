@@ -1,7 +1,8 @@
 package com.hthjsj.web.feature;
 
+import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.feature.ms.MasterSlaveConfig;
-import com.hthjsj.web.feature.singleGrid.SingleGridConfig;
+import com.hthjsj.web.feature.single.SingleGridConfig;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
@@ -20,7 +21,7 @@ public enum FeatureType {
 
     String code;
 
-    Class configEntity;
+    Class<? extends MetaData> configEntity;
 
     FeatureType(String name, String code, Class configEntity) {
         this.name = name;

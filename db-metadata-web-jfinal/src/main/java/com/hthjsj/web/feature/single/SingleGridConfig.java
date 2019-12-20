@@ -1,4 +1,4 @@
-package com.hthjsj.web.feature.singleGrid;
+package com.hthjsj.web.feature.single;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.MetaData;
