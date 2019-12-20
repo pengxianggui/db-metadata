@@ -49,7 +49,7 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template slot="header">
-                                <pop-menu trigger="rightClick">
+                                <pop-menu trigger="right-click">
                                     <template #label>{{item.label || item.name}}</template>
                                     <list>
                                         <list-item @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</list-item>

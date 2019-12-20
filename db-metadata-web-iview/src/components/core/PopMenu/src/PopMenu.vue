@@ -24,7 +24,7 @@
             trigger: {
                 type: String,
                 default: 'click',
-                validator: value => ['click', 'focus', 'hover', 'rightClick'].indexOf(value) > -1
+                validator: value => ['click', 'focus', 'hover', 'right-click'].indexOf(value) > -1
             },
             placement: String
         },
@@ -36,7 +36,7 @@
         methods: {
             rightClickHander(ev) {
                 let self = this;
-                if (self.trigger === 'rightClick') {
+                if (self.trigger === 'right-click') {
                     ev.preventDefault();
                     self.visible = true;
                     let div = document.createElement('div');
@@ -51,7 +51,7 @@
         },
         computed: {
             nativeTrigger() {
-                return this.trigger !== 'rightClick' ? this.trigger : 'manual';
+                return this.trigger !== 'right-click' ? this.trigger : 'manual';
             }
         }
     }

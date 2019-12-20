@@ -21,12 +21,22 @@
                            @click="onCancel"
                            v-text="innerMeta.btns['cancel']['label']"></el-button>
             </slot>
+            <div style="float: right">
+                <pop-menu trigger="click" placement="right">
+                    <template #label><i class="el-icon-setting"></i></template>
+                    <template #default>
+                        <list>
+                            <list-item @click="editUIConf">编辑UI</list-item>
+                        </list>
+                    </template>
+                </pop-menu>
+            </div>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
+    import {DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
 
     export default {
@@ -46,6 +56,18 @@
             }
         },
         methods: {
+            editUIConf() {
+                const url = URL.RR_INSTANCE_CONF_ADD;
+                const {objectCode} = this.innerMeta;
+                let routeUrl = this.$router.resolve({
+                    path: url,
+                    query: {
+                        componentCode: 'FormTmpl',
+                        objectCode: objectCode
+                    }
+                });
+                window.open(routeUrl.href, '_blank');
+            },
             doSubmit(ev) {
                 const fn = 'submit';
                 const action = this.innerMeta['action'];

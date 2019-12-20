@@ -12,7 +12,7 @@
 -->
 <template>
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
-        <div class="el-card">
+        <div class="el-card" style="padding: 0">
             <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" inline
                      @keyup.enter.native="onSubmit" v-if="innerMeta.columns && innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
@@ -61,6 +61,16 @@
                     </slot>
                 </el-form-item>
             </el-form>
+            <div style="float: right; margin: -20px 5px 0px 0px">
+                <pop-menu trigger="click" placement="right">
+                    <template #label><i class="el-icon-setting"></i></template>
+                    <template #default>
+                        <list>
+                            <list-item @click="editUIConf">编辑UI</list-item>
+                        </list>
+                    </template>
+                </pop-menu>
+            </div>
         </div>
         <template #label>
             <slot name="label-bar">
@@ -73,7 +83,7 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
+    import {DEFAULT, URL} from '@/constant'
     import Meta from './mixins/meta'
     import util from '@/utils'
     import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
@@ -87,6 +97,18 @@
             }
         },
         methods: {
+            editUIConf() {
+                const url = URL.RR_INSTANCE_CONF_ADD;
+                const {objectCode} = this.innerMeta;
+                let routeUrl = this.$router.resolve({
+                    path: url,
+                    query: {
+                        componentCode: 'SearchPanel',
+                        objectCode: objectCode
+                    }
+                });
+                window.open(routeUrl.href, '_blank');
+            },
             onSubmit() {
                 let params = {};
                 let model = this.model;
