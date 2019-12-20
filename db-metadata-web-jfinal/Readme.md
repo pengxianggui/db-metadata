@@ -43,6 +43,8 @@ MetaField 数据源配置
 - [ ] 多数据源查询,动态切换数据源问题;
 - [x] meta_feature加入is_sys系统标示, 防止误删除
 - [ ] defaultInstance.json中如何为test_table的TableList设置元对象级别的配置?目前只支持设置字段配置
+- [ ] 系统模块的生成,走json配置文件生成功能入feature
+
 
 ##### BUG
 - [x] searchPanel 无实例配时,会成功渲染

@@ -37,6 +37,26 @@
       "path": "/main/table?objectCode=meta_dict",
       "icon": "el-icon-collection",
       "label": "字典"
+    },
+    {
+      "path": "/main/table?objectCode=change_log",
+      "icon": "el-icon-finished",
+      "label": "ChangeLog"
+    },
+    {
+      "path": "/main/table?featureCode=DbVersionSingleGrid",
+      "icon": "el-icon-paperclip",
+      "label": "DbVersion"
+    },
+    {
+      "path": "/main/demo",
+      "icon": "el-icon-menu",
+      "label": "组件概览"
+    },
+    {
+      "path": "/main/objects",
+      "icon": "el-icon-menu",
+      "label": "动态元对象"
     }
   ]
 }
