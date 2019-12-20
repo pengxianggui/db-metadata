@@ -1,6 +1,7 @@
 package com.hthjsj.web.jfinal.render;
 
 import com.jfinal.render.FileRender;
+import com.jfinal.render.RenderException;
 
 import java.io.File;
 
@@ -20,6 +21,6 @@ public class PictureRender extends FileRender {
 
     @Override
     public void render() {
-        super.render();
+        throw new RenderException("not finished!");
     }
 }
