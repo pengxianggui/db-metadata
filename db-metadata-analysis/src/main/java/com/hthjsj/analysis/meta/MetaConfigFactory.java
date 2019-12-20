@@ -24,8 +24,10 @@ public class MetaConfigFactory {
         Kv config = Kv.create();
         config.set("isUUIDPrimary", Boolean.parseBoolean(isUUIDPri));
         config.set("objectCode", metaObject.code());
-        for (ConfigExtension extension : objectExtensions) {
-            extension.config(metaObject, config);
+        if (objectExtensions != null) {
+            for (ConfigExtension extension : objectExtensions) {
+                extension.config(metaObject, config);
+            }
         }
         return new MetaObjectConfigParse(config);
     }
@@ -49,8 +51,10 @@ public class MetaConfigFactory {
         config.set("isListShow", true);
         config.set("isSearch", true);
 
-        for (ConfigExtension extension : fieldExtensions) {
-            extension.config(metaField, config);
+        if (fieldExtensions != null) {
+            for (ConfigExtension extension : fieldExtensions) {
+                extension.config(metaField, config);
+            }
         }
         return new MetaFieldConfigParse(config);
     }

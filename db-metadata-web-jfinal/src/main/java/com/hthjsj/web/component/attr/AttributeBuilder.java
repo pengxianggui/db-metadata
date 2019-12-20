@@ -26,17 +26,17 @@ public class AttributeBuilder {
 
     interface AttrCustomMeta {
 
-        AttrCustomMeta componentName(String componentCode);
-
         AttrCustomMeta componentName(ComponentType componentType);
 
         AttrCustomMeta name(String name);
 
         AttrCustomMeta label(String label);
 
-        FatAttributeBuilder options(List<Kv> options);
+        AttrCustomMeta options(List<Kv> options);
 
-        FatAttributeBuilder dataUrl(String url);
+        AttrCustomMeta dataUrl(String url);
+
+        AttrCustomMeta inline(boolean v);
     }
 
     interface AttrAbility {
@@ -149,14 +149,9 @@ public class AttributeBuilder {
         }
 
         @Override
-        public AttrCustomMeta componentName(String componentCode) {
-            config.setIfNotBlank("component_name", componentCode);
-            return this;
-        }
-
-        @Override
         public AttrCustomMeta componentName(ComponentType componentType) {
-            return componentName(componentType.getCode());
+            config.setIfNotBlank("component_name", componentType.getCode());
+            return this;
         }
 
         @Override
@@ -183,6 +178,11 @@ public class AttributeBuilder {
         public FatAttributeBuilder dataUrl(String url) {
             config.setIfNotBlank("data_url", url);
             return this;
+        }
+
+        @Override
+        public AttrCustomMeta inline(boolean v) {
+            return set("inline", v);
         }
 
         @Override

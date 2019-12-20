@@ -10,6 +10,7 @@ import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.controller.FileViewController;
+import com.hthjsj.web.ext.meta.CCUUConfigExtension;
 import com.hthjsj.web.ext.meta.InstanceConfigExtension;
 import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
 import com.hthjsj.web.feature.FeatureRouter;
@@ -95,6 +96,7 @@ public class AppWebConfig extends JFinalConfig {
 
         AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
         ComputeKit.addInstanceExtension(new InstanceConfigExtension());
+        ComputeKit.addInstanceExtension(new CCUUConfigExtension());
     }
 
     @Override

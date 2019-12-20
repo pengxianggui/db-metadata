@@ -31,9 +31,10 @@ public class ComputeKit {
         builder.name(metaField.fieldCode());
         builder.label(metaField.cn());
         log.debug("auto compute config : {}", builder.render().toJson());
-        //扩展
-        for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> configExtension : instanceExtensions) {
-            configExtension.config(metaField, builder);
+        if (instanceExtensions != null) {
+            for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> configExtension : instanceExtensions) {
+                configExtension.config(metaField, builder);
+            }
         }
 
         return builder.render();
