@@ -48,4 +48,7 @@
         margin-inline-end: 0px;
         font-weight: bold;
     }
+    .no-padding {
+        padding: 0;
+    }
 </style>

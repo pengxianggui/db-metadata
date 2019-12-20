@@ -1,5 +1,5 @@
 <template>
-    <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible">
+    <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible" popper-class="no-padding">
         <span slot="reference">
             <span @click.right="rightClickHander">
                 <slot name="label">
@@ -7,9 +7,13 @@
                 </slot>
             </span>
         </span>
-        <ul id="menu">
-            <slot name="body"></slot>
-        </ul>
+        <slot>
+            <list>
+                <template #body>
+                    <slot name="body"></slot>
+                </template>
+            </list>
+        </slot>
     </el-popover>
 </template>
 
@@ -54,9 +58,4 @@
 </script>
 
 <style scoped>
-    ul#menu {
-        list-style: none;
-        margin: 0;
-        padding: 5px;
-    }
 </style>

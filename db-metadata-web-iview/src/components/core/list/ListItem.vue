@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        name: "PopMenuItem"
+        name: "ListItem"
     }
 </script>
 

@@ -64,41 +64,36 @@
                             <template slot="header">
                                 <pop-menu trigger="rightClick">
                                     <template #label>{{item.label || item.name}}</template>
-                                    <template #body>
-                                        <pop-menu-item @click="editMetaObject">
-                                            编辑元对象({{innerMeta.objectCode}})
-                                        </pop-menu-item>
-
-                                        <pop-menu-item @click="editMetaField(item.name)">
-                                            编辑元字段({{item.name}})
-                                        </pop-menu-item>
-
-                                        <pop-menu-item @hover="getComponentCode(innerMeta.objectCode)">
+                                    <list>
+                                        <list-item @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</list-item>
+                                        <list-item @click="editMetaField(item.name)">编辑元字段({{item.name}})</list-item>
+                                        <list-item @hover="getComponentCode(innerMeta.objectCode)">
                                             <pop-menu trigger="hover" placement="right">
                                                 <template #label>编辑实例UI配置({{innerMeta.objectCode}})</template>
-                                                <template #body>
-                                                    <pop-menu-item v-for="compCode in componentCodes"
-                                                                   :key="compCode"
+                                                <template #default>
+                                                    <list>
+                                                        <list-item v-for="compCode in componentCodes" :key="compCode"
                                                                    @click="editInstanceConf(innerMeta.objectCode, compCode)">
-                                                        {{compCode}}
-                                                    </pop-menu-item>
+                                                            {{compCode}}
+                                                        </list-item>
+                                                    </list>
                                                 </template>
                                             </pop-menu>
-                                        </pop-menu-item>
-
-                                        <pop-menu-item @hover="getComponentCode(innerMeta.objectCode)">
+                                        </list-item>
+                                        <list-item @hover="getComponentCode(innerMeta.objectCode)">
                                             <pop-menu trigger="hover" placement="right">
                                                 <template #label>编辑实例字段UI配置({{item.name}})</template>
-                                                <template #body>
-                                                    <pop-menu-item v-for="compCode in componentCodes"
-                                                                   :key="compCode"
+                                                <template #default>
+                                                    <list>
+                                                        <list-item v-for="compCode in componentCodes" :key="compCode"
                                                                    @click="editInstanceFieldConf(innerMeta.objectCode, compCode, item.name)">
-                                                        {{compCode}}
-                                                    </pop-menu-item>
+                                                            {{compCode}}
+                                                        </list-item>
+                                                    </list>
                                                 </template>
                                             </pop-menu>
-                                        </pop-menu-item>
-                                    </template>
+                                        </list-item>
+                                    </list>
                                 </pop-menu>
                             </template>
                         </el-table-column>
@@ -183,12 +178,9 @@
 <script>
     import {CONSTANT, DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
-    import PopMenu from "./PopMenu/src/PopMenu";
-    import PopMenuItem from "@/components/core/PopMenu/src/PopMenuItem";
 
     export default {
         name: "TableTreeList",
-        components: {PopMenuItem, PopMenu},
         data() {
             const instanceConf = this.meta['conf'];
             const defaultConf = DEFAULT.TableTreeList['conf'];
