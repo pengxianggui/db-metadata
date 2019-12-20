@@ -18,13 +18,13 @@
                 </template>
             </table-list>
         </div>
-        
+
         <dialog-box :visible.sync="visible" title="创建元对象">
             <meta-import :meta="formMeta" @cancel="visible=false" @submit="formSubmit"></meta-import>
             <template #footer><span></span></template>
         </dialog-box>
         <dialog-box :visible.sync="featureAddVisible" title="创建功能">
-            <feature-add @ok="featureAddVisible=false" @cancel="featureAddVisible=false"></feature-add>
+            <feature-add :params="featureParams" @ok="featureAddVisible=false" @cancel="featureAddVisible=false"></feature-add>
             <template #footer><span></span></template>
         </dialog-box>
     </div>
@@ -47,6 +47,7 @@
         data() {
             return {
                 featureCode: "meta_manager",
+                featureParams: {},
 
                 master: {},
                 slave: {},  // 元对象/元字段 主子表一对一
@@ -69,6 +70,10 @@
                 this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
                     objectCode: row[primaryKey]
                 });
+                this.featureParams = {
+                    objectCode: row[primaryKey],
+                    primaryKey: primaryKey
+                }
             },
             mHandleSearch(params) {
                 this.mTlRef.getData(params);

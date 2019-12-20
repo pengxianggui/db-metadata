@@ -2,7 +2,7 @@
     <div>
         <el-form ref="featureForm" :model="feature" label-width="100px">
             <el-form-item label="功能类别">
-                <radio-box :options="featureTypes" v-model="feature.type" required></radio-box>
+                <radio-box :data-url="featureTypeUrl" v-model="feature.type" required></radio-box>
             </el-form-item>
             <el-form-item label="功能名" class="inline">
                 <text-box v-model="feature.name" required></text-box>
@@ -14,8 +14,15 @@
                 <h3>主表</h3>
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.objectCode"
-                                   :options="objectCodes" @change="masterSlaveConfig.master.primaryKey = null"
-                                   filterable required></drop-down-box>
+                                   :data-url="metaObjectCodeUrl" @change="masterSlaveConfig.master.primaryKey = null"
+                                   filterable required>
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
                 </el-form-item>
                 <el-form-item label="主键" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.primaryKey"
@@ -32,7 +39,14 @@
                         <el-form-item label="元对象编码" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].objectCode"
                                            @change="masterSlaveConfig.slaves[0].foreignFieldCode = null"
-                                           :options="objectCodes" filterable required></drop-down-box>
+                                           :data-url="metaObjectCodeUrl" filterable required>
+                                <template #options="{options}">
+                                    <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                               :value="item.code">
+                                        {{item.code}}
+                                    </el-option>
+                                </template>
+                            </drop-down-box>
                         </el-form-item>
                         <el-form-item label="外键" class="inline">
                             <drop-down-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode"
@@ -72,18 +86,25 @@
 
 <script>
     import {CONSTANT, URL} from '@/constant'
-    import DropDownBox from "@/components/core/form/DropDownBox";
-    import NumBox from "@/components/core/form/NumBox";
 
     export default {
         name: "feature-add",
-        components: {NumBox, DropDownBox},
+        props: {
+            params: {
+                type: Object
+            },
+            meta: {
+                type: Object,
+                default: function () {
+                    return {}
+                }
+            }
+        },
         data() {
             return {
                 metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
                 metaFieldCodeUrl: URL.FIELD_CODE_LIST_BY_OBJECT,
-                featureTypes: [],
-                objectCodes: [],
+                featureTypeUrl: URL.LIST_FEATURE_TYPE,
                 feature: {
                     type: 'MasterSlaveGrid',
                     name: null,
@@ -92,8 +113,8 @@
                 },
                 masterSlaveConfig: {
                     master: {
-                        objectCode: null,
-                        primaryKey: null
+                        objectCode: this.params['objectCode'],
+                        primaryKey: this.params['primaryKey']
                     },
                     slaves: [{
                         objectCode: null,
@@ -103,33 +124,15 @@
                 },
                 singleGridConfig: {
                     singleGrid: {
-                        objectCode: null
+                        objectCode: this.params['objectCode']
                     }
                 },
                 activeTab: 'first'
             }
         },
-        props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
-        },
         methods: {
             handleClick(tab, event) {
                 // todo
-            },
-            loadObjectCode() {
-                this.$axios.get(URL.OBJECT_CODE_LIST).then(resp => {
-                    this.objectCodes = resp.data.map(ele => {
-                        return {
-                            key: ele.code,
-                            value: ele.code
-                        }
-                    })
-                })
             },
             assemblyParams() {
                 let type = this.feature.type;
@@ -171,13 +174,8 @@
             }
         },
         created() {
-            this.$axios.get(URL.LIST_FEATURE_TYPE).then(resp => {
-                this.featureTypes = resp.data;
-            });
-            this.loadObjectCode();
         },
         mounted() {
-            // request business data
         },
         computed: {}
     }

@@ -192,7 +192,7 @@ export function isImageFile(file) {
 }
 
 /**
- * 若传入value为undefined, 则返回提供的默认值
+ * 若传入value为undefined, 则返回提供的默认值, 否则返回value
  * @param value
  * @param defaultValue
  * @returns {*}

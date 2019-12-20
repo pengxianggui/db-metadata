@@ -57,15 +57,21 @@ export const getSpMeta = {
 export const options = {
     props: {
         options: Array,
-        dataUrl: String
+        dataUrl: String,
+        format: Function
     },
     methods: {
         assemblyOptions(options) {
+            if (!utils.isUndefined(this.format)) {
+                return this.format(this.options);
+            }
+            if (options.every(ele => utils.isObject(ele) && ele.hasOwnProperty('key') && ele.hasOwnProperty(ele))) {
+                return options;
+            }
             if (!utils.isArray(options)) {
                 console.error('options show be Array!');
                 return [];
             }
-
             if (options.every(ele => utils.isString(ele)
                 || utils.isNumber(ele)
                 || utils.isBoolean(ele)
@@ -103,7 +109,7 @@ export const options = {
             if (url) {
                 this.$axios.safeGet(url).then(resp => {
                     // if provide format callback fn, execute callback fn
-                    let format = this.getBehavior('format');
+                    let format = utils.assertUndefined(this.format, this.getBehavior('format'));
                     this.innerOptions = format ? format(resp.data) : this.assemblyOptions(resp.data);
                     this.$emit('update:options', this.innerOptions);
                 }).catch(err => {
