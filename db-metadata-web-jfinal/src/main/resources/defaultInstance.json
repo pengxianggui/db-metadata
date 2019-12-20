@@ -22,7 +22,7 @@
     "FormTmpl": {
       "type": {
         "component_name": "DropDownBox",
-        "data_url": "/m/list",
+        "data_url": "/feature/list",
         "conf": {
           "multiple": false
         }

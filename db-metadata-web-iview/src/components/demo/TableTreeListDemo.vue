@@ -97,7 +97,7 @@
         },
         methods: {
             getData() {
-                this.$axios.get("/fileview/view?path=/target").then(resp => {
+                this.$axios.get("/file/view?path=/target").then(resp => {
                     this.data = resp.data;
                 }).catch(err => {
                     console.log(err.msg);
