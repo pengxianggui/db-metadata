@@ -53,7 +53,7 @@
             </template>
             <template v-if="feature.type === 'SingleGrid'">
                 <el-form-item label="元对象编码">
-                    <drop-down-box v-model="singleGridConfig.objectCode" :data-url="metaObjectCodeUrl">
+                    <drop-down-box v-model="singleGridConfig.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
                         <template #options="{options}">
                             <el-option v-for="item in options" :key="item.code" :label="item.code"
                                        :value="item.code">
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import {DEFAULT, URL} from '@/constant'
+    import {CONSTANT, URL} from '@/constant'
     import DropDownBox from "@/components/core/form/DropDownBox";
     import NumBox from "@/components/core/form/NumBox";
 
@@ -102,7 +102,9 @@
                     }],
                 },
                 singleGridConfig: {
-                    objectCode: null
+                    singleGrid: {
+                        objectCode: null
+                    }
                 },
                 activeTab: 'first'
             }
@@ -132,10 +134,10 @@
             assemblyParams() {
                 let type = this.feature.type;
                 switch (type) {
-                    case "MasterSlaveGrid":
+                    case CONSTANT.FEATURE_TYPE.MasterSlaveGrid:
                         this.feature.config = this.masterSlaveConfig;
                         break;
-                    case "SingleGrid":
+                    case CONSTANT.FEATURE_TYPE.SingleGrid:
                         this.feature.config = this.singleGridConfig;
                         break;
                 }

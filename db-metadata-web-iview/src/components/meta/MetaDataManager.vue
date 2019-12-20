@@ -18,12 +18,13 @@
                 </template>
             </table-list>
         </div>
-
-        <el-dialog title="创建元对象" :visible.sync="visible">
-            <meta-import v-if="formMeta" :meta="formMeta" @cancel="visible = false" @submit="formSubmit"></meta-import>
-        </el-dialog>
+        
+        <dialog-box :visible.sync="visible" title="创建元对象">
+            <meta-import :meta="formMeta" @cancel="visible=false" @submit="formSubmit"></meta-import>
+            <template #footer><span></span></template>
+        </dialog-box>
         <dialog-box :visible.sync="featureAddVisible" title="创建功能">
-            <feature-add></feature-add>
+            <feature-add @ok="featureAddVisible=false" @cancel="featureAddVisible=false"></feature-add>
             <template #footer><span></span></template>
         </dialog-box>
     </div>

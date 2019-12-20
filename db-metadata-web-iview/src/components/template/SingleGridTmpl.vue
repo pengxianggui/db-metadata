@@ -47,8 +47,8 @@
 
             if (!utils.isEmpty(featureCode)) {
                 this.loadFeature(featureCode).then(resp => {
-                    objectCode = resp.data['objectCode'];
-                    this.initMeta(objectCode);
+                    const config = resp.data['singleGrid'];
+                    this.initMeta(config.objectCode);
                 })
             } else {
                 objectCode = this.objectCode;

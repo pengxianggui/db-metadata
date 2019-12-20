@@ -27,3 +27,12 @@ export const PAGE_NUM_AREA = [5, 10, 20, 50, 100, 200];
  * @type {string}
  */
 export const DEFAULT_PRIMARY_KEY = 'id';
+
+/**
+ * 功能类别列表
+ * @type {string[]}
+ */
+export const FEATURE_TYPE = {
+    MasterSlaveGrid: 'MasterSlaveGrid',
+    SingleGrid: 'SingleGrid'
+};
