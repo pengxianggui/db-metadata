@@ -1095,6 +1095,12 @@
               "chnname": "配置"
             },
             {
+              "name": "op_config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "操作配置"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",
@@ -1173,6 +1179,134 @@
             }
           ],
           "chnname": "功能配置"
+        },
+        {
+          "title": "meta_exception",
+          "fields": [
+            {
+              "name": "id",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "主键",
+              "relationNoShow": false,
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "exp_title",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "异常名"
+            },
+            {
+              "name": "exp_chain",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "异常堆栈"
+            },
+            {
+              "name": "exp_msg",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "异常消息"
+            },
+            {
+              "name": "ext_url",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "请求url"
+            },
+            {
+              "name": "req_data",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "请求内容"
+            },
+            {
+              "name": "res_data",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "响应内容"
+            },
+            {
+              "name": "created_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_by",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "更新人"
+            },
+            {
+              "name": "updated_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "Meta异常"
         }
       ],
       "graphCanvas": {
@@ -1231,7 +1365,7 @@
       "associations": []
     }
   ],
-  "message": "0.26",
-  "version": "0.26",
-  "date": "2019/12/9 20:22:35"
+  "message": "0.28",
+  "version": "0.28",
+  "date": "2019/12/20 12:55:42"
 }

@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
@@ -75,10 +74,10 @@ public class UtilKit {
         return JSON.parseObject(json, Kv.class);
     }
 
-    public static void setUser(MetaData data) {
+    public static void setUser(Map data) {
         User user = UserThreadLocal.getUser();
-        data.set("created_by", user.userId());
-        data.set("created_time", new Date());
+        data.put("created_by", user.userId());
+        data.put("created_time", new Date());
     }
 
     public static String defaultIfBlank(String str, String defaultValue) {

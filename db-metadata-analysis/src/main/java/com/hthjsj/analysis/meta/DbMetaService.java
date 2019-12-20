@@ -83,7 +83,7 @@ public class DbMetaService {
     public IMetaField findFieldByCode(String objectCode, String fieldCode) {
         IMetaField metaField = null;
         if (StrKit.notBlank(objectCode, fieldCode)) {
-            Record field = Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=?", objectCode, fieldCode);
+            Record field = Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=? order by order_num", objectCode, fieldCode);
             if (field == null) {
                 throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
             }

@@ -36,7 +36,7 @@
                             icon: 'el-icon-s-help',
                             label: '单表CRUD'
                         }, {
-                            path: '/main/ms-table?featureCode=tcode_test',
+                            path: '/main/ms-table?featureCode=meta_manager',
                             icon: 'el-icon-s-help',
                             label: '主子表'
                         }, {

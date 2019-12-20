@@ -1095,6 +1095,12 @@
               "chnname": "配置"
             },
             {
+              "name": "op_config",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "操作配置"
+            },
+            {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",
@@ -1185,6 +1191,42 @@
               "relationNoShow": false,
               "pk": true,
               "notNull": true
+            },
+            {
+              "name": "exp_title",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "异常名"
+            },
+            {
+              "name": "exp_chain",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "异常堆栈"
+            },
+            {
+              "name": "exp_msg",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "异常消息"
+            },
+            {
+              "name": "ext_url",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "请求url"
+            },
+            {
+              "name": "req_data",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "请求内容"
+            },
+            {
+              "name": "res_data",
+              "type": "LongString",
+              "remark": "",
+              "chnname": "响应内容"
             },
             {
               "name": "created_by",
