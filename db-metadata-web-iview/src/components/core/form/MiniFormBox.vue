@@ -6,11 +6,13 @@
             </el-col>
         </el-form-item>
         <el-form-item label="开关">
-            <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
-            <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
-            <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
-            <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
-            <el-checkbox v-model="nativeValue.isFile" label="是否文件" border></el-checkbox>
+            <div class="el-checkbox-group">
+                <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
+                <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
+                <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
+                <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
+                <el-checkbox v-model="nativeValue.isFile" label="是否文件" border></el-checkbox>
+            </div>
         </el-form-item>
         <el-form-item label="新增状态">
             <el-radio-group v-model="nativeValue.addStatus">
@@ -52,6 +54,7 @@
                         </el-col>
                     </el-form-item>
                     <el-form-item label="静态数组">
+                        <br>
                         <options-input v-model="nativeValue.scopeOptions"></options-input>
                     </el-form-item>
                 </div>
@@ -132,5 +135,7 @@
 </script>
 
 <style scoped>
-
+    .el-checkbox-group > * {
+        margin: 0 10px 0 0 !important;
+    }
 </style>

@@ -203,7 +203,7 @@ const DEFAULT_CONF = {
         "inline": true,
         "default_value": 0,
         "conf": {
-            "controls": false,
+            "controls": true,
             "placeholder": "请输入数值.."
         }
     },

@@ -1,5 +1,5 @@
 <template>
-    <div class="el-card" style="height: 100%; overflow: auto;">
+    <div class="el-card container" style="height: 100%; overflow: auto; padding: 0 10px;">
         <h4 align="center">组件列表({{comps.length}})</h4>
         <el-row>
             <draggable

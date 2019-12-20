@@ -1,9 +1,8 @@
 <template>
-    <ul class="container" style="display: block;">
-        <br>
+    <ul class="container">
         <draggable v-model="nativeValue" @end="emit">
             <li v-for="(item, index) in nativeValue" :key="item.id">
-                <div :class="{'red-border': item.error}">
+                <div :class="{'red-border': item.error}" style="display: flex;">
                     <el-input v-model="item.key" @change="emit">
                         <template #prepend><label>key</label></template>
                     </el-input>
@@ -95,6 +94,7 @@
 <style scoped>
     ul.container {
         list-style: none;
+        margin: 0px;
     }
 
     ul.container li {

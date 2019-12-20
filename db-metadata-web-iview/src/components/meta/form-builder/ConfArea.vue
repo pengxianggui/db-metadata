@@ -1,39 +1,42 @@
 <template>
-    <div class="">
-        <el-tabs type="border-card">
-            <el-tab-pane label="域配置">
-                <el-form size="mini" v-if="activeFieldMeta" :key="activeFieldMeta.name">
-                    <template v-for="(value, key, index) in activeFieldMeta">
-                        <template v-if="excludes.indexOf(key) < 0">
-                            <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
-                                <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
+    <el-tabs type="border-card" style="height: 100%; overflow: auto;">
+        <el-tab-pane label="域配置" style="height: 100%;">
+            <el-form size="mini" v-if="activeFieldMeta" :key="activeFieldMeta.name" label-position="left">
+                <template v-for="(value, key, index) in activeFieldMeta">
+                    <template v-if="excludes.indexOf(key) < 0">
+                        <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
+                            <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
+                                       v-model="activeFieldMeta[key]"></component>
+                        </el-form-item>
+                        <el-form-item :key="key" :label="key" v-else>
+                            <div :key="key">
+                                <component :is="activeFieldMeta.component_name" :meta="activeFieldMeta"
                                            v-model="activeFieldMeta[key]"></component>
-                            </el-form-item>
-                            <el-form-item :key="key" :label="key" v-else>
-                                <div :key="key">
-                                    <component :is="activeFieldMeta.component_name" :meta="activeFieldMeta"
-                                               v-model="activeFieldMeta[key]"></component>
-                                </div>
-                            </el-form-item>
-                        </template>
+                            </div>
+                        </el-form-item>
                     </template>
-                </el-form>
-            </el-tab-pane>
+                </template>
+                <el-form-item label="逻辑配置">
+                    <el-card>
+                        <mini-form-box v-model="fieldConf"></mini-form-box>
+                    </el-card>
+                </el-form-item>
+            </el-form>
+        </el-tab-pane>
 
-            <el-tab-pane label="表单配置">
-                <el-form size="mini">
-                    <template v-for="(value, key, index) in formMeta">
-                        <template v-if="excludes.indexOf(key) < 0">
-                            <el-form-item :key="key" :label="key">
-                                <component :is="metaMapping[key].component_name" :meta="metaMapping[key]"
-                                           v-model="formMeta[key]"></component>
-                            </el-form-item>
-                        </template>
+        <el-tab-pane label="表单配置">
+            <el-form size="mini">
+                <template v-for="(value, key, index) in formMeta">
+                    <template v-if="excludes.indexOf(key) < 0">
+                        <el-form-item :key="key" :label="key">
+                            <component :is="metaMapping[key].component_name" :meta="metaMapping[key]"
+                                       v-model="formMeta[key]"></component>
+                        </el-form-item>
                     </template>
-                </el-form>
-            </el-tab-pane>
-        </el-tabs>
-    </div>
+                </template>
+            </el-form>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 
 <script>
@@ -78,6 +81,7 @@
         components: {JsonBox, OptionsInput},
         data() {
             return {
+                fieldConf: {},
                 excludes: EXCLUDES, // temporarily not allow customize
                 metaMapping: CUSTOM_CONF_COMPONENT_MAPPING
             }
@@ -118,14 +122,6 @@
 
 <style scoped>
     .container {
-        display: flex;
-        flex-direction: column;
         height: 100%;
-    }
-
-    .container > .el-row {
-        flex: 1;
-        padding: 20px 0;
-        overflow: auto;
     }
 </style>

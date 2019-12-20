@@ -178,7 +178,6 @@
 <style scoped>
     .container {
         height: 100%;
-        overflow: auto;
     }
 
     .header {
@@ -186,7 +185,9 @@
     }
 
     .work-area {
-        flex: 1
+        flex: 1;
+        height: 100%;
+        overflow: auto;
     }
 
     .blank-tip {

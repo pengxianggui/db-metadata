@@ -1,9 +1,9 @@
 <template>
-    <el-row :gutter="10">
-        <el-col :span="5">
+    <el-container style="height: 100%; display: flex; overflow: hidden;">
+        <div style="flex: 2">
             <ComponentList></ComponentList>
-        </el-col>
-        <el-col :span="12">
+        </div>
+        <div style="flex: 5">
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
                     <drop-down-box @change="loadConf(objectCode)" placeholder="选择元对象"
@@ -11,11 +11,11 @@
                                    v-model="objectCode" filterable></drop-down-box>
                 </template>
             </WorkArea>
-        </el-col>
-        <el-col :span="7">
+        </div>
+        <div style="flex: 3">
             <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
-        </el-col>
-    </el-row>
+        </div>
+    </el-container>
 </template>
 
 <script>

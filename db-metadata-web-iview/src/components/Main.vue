@@ -5,8 +5,8 @@
         </el-header>
         <el-container style="flex: 1; overflow: auto;">
             <aside-nav></aside-nav>
-            <el-main style="height: auto; overflow: auto;">
-<!--                <tag-nav></tag-nav>-->
+            <el-main id="main">
+                <!--                <tag-nav></tag-nav>-->
                 <router-view :key="new Date().getTime()"></router-view>
             </el-main>
         </el-container>
@@ -32,5 +32,11 @@
     .el-main {
         margin: 0px 5px 0px 5px;
         padding: 0px;
+    }
+
+    #main {
+        height: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 </style>
