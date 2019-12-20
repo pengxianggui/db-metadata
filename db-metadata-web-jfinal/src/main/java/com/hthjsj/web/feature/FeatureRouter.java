@@ -14,10 +14,10 @@ public class FeatureRouter extends Routes {
 
     @Override
     public void config() {
-        add("/m/ms", MasterSlaveController.class);
-        add("/m", FeatureController.class);
+        add("/f/ms", MasterSlaveController.class);
+        add("/f", FeatureController.class);
 
-        add("/module/masterSlave", MasterSlaveController.class);
-        add("/module", FeatureController.class);
+        add("/feature/masterSlave", MasterSlaveController.class);
+        add("/feature", FeatureController.class);
     }
 }
