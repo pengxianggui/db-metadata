@@ -67,7 +67,7 @@ public class FeatureController extends FrontRestController {
             featureNodes.add(new FeatureNode(url(featureType, record.getStr("code")), root.getId(), record.getStr("name"), record));
         });
         treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
-        renderJson(Ret.ok("data", root));
+        renderJson(Ret.ok("data", new Object[] { root }));
     }
 
     private String url(FeatureType featureType, String featureCode) {
@@ -121,6 +121,7 @@ public class FeatureController extends FrontRestController {
             this.id = id;
         }
 
+        @JSONField(serialize = false)
         @Override
         public String getParentId() {
             return this.pid;
