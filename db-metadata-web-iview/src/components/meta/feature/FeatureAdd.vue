@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="featureForm" :model="feature" label-width="100px">
+        <el-form ref="featureForm" :model="feature" label-width="120px">
             <el-form-item label="功能类别">
                 <radio-box :data-url="featureTypeUrl" v-model="feature.type" required></radio-box>
             </el-form-item>
@@ -81,7 +81,7 @@
 
             <template v-if="feature.type === 'TreeTable'">
                 <h3>Tree配置</h3>
-                <el-form-item label="元对象编码">
+                <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="treeTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
                         <template #options="{options}">
                             <el-option v-for="item in options" :key="item.code" :label="item.code"
@@ -91,7 +91,15 @@
                         </template>
                     </drop-down-box>
                 </el-form-item>
-                <el-form-item label="idKey">
+                <el-form-item label="primaryKey" class="inline">
+                    <drop-down-box v-model="treeTableConfig.tree.primaryKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})">
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="idKey" class="inline">
                     <drop-down-box v-model="treeTableConfig.tree.idKey"
                                    :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
                                    filterable required>
@@ -100,7 +108,7 @@
                         </template>
                     </drop-down-box>
                 </el-form-item>
-                <el-form-item label="pidKey">
+                <el-form-item label="pidKey" class="inline">
                     <drop-down-box v-model="treeTableConfig.tree.pidKey"
                                    :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
                                    filterable required>
@@ -109,10 +117,10 @@
                         </template>
                     </drop-down-box>
                 </el-form-item>
-                <el-form-item label="rootIdentify">
+                <el-form-item label="rootIdentify" class="inline">
                     <text-box v-model="treeTableConfig.tree.rootIdentify" required></text-box>
                 </el-form-item>
-                <el-form-item label="label">
+                <el-form-item label="label" class="inline">
                     <text-box v-model="treeTableConfig.tree.label" required></text-box>
                 </el-form-item>
                 <el-form-item label="isSync">
