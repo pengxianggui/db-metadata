@@ -420,6 +420,7 @@ const DEFAULT_CONF = {
         "component_name": "Tree",
         "name": "Tree",
         "label": "树型列表",
+        "data_url": "/tree/list/{objectCode}",
         "conf": {
             "node-key": "id",
             "highlight-current": true,

@@ -34,5 +34,6 @@ export const DEFAULT_PRIMARY_KEY = 'id';
  */
 export const FEATURE_TYPE = {
     MasterSlaveGrid: 'MasterSlaveGrid',
-    SingleGrid: 'SingleGrid'
+    SingleGrid: 'SingleGrid',
+    TreeTable: 'TreeTable'
 };

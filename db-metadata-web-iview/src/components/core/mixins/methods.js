@@ -32,6 +32,18 @@ export const getTlMeta = {
     }
 };
 
+export const getTreeMeta = {
+    methods: {
+        getTreeMeta(objectCode) {
+            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+                objectCode: objectCode,
+                componentCode: 'Tree'
+            });
+            return this.$axios.safeGet(url);
+        }
+    }
+};
+
 /**
  * 获取DataList的meta, 参数objectCode.
  * **组件实例中TableList的meta的命名必须为 dlMeta**

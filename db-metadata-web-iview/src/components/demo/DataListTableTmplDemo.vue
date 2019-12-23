@@ -1,5 +1,8 @@
 <template>
-    <data-list-table-tmpl :fc="featureCode"></data-list-table-tmpl>
+    <div>
+        <h3>DataListTableTmpl</h3>
+        <data-list-table-tmpl :fc="featureCode"></data-list-table-tmpl>
+    </div>
 </template>
 
 <script>
@@ -10,7 +13,7 @@
         components: {DataListTableTmpl},
         data() {
             return {
-                featureCode: "data-list-table"
+                featureCode: "list-table-tmpl"
             }
         }
     }

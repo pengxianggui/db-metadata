@@ -49,8 +49,8 @@
         created() {
             this.loadFeature(this.featureCode).then(resp => {
                 const feature = resp.data;
-                this.dlConf = feature['dataList'];
-                this.tlConf = feature['tableList'];
+                this.dlConf = feature['list'];
+                this.tlConf = feature['table'];
 
                 const dlObject = this.dlConf['objectCode'];
                 const tlObject = this.tlConf['objectCode'];

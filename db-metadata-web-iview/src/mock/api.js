@@ -77,34 +77,108 @@ const mockMenus = [
         }]
     },
 ];
-const dataListTableFeature = {
-    "dataList": {
+const listTableFeatureConf = {
+    "list": {
         "objectCode": "meta_object",
         "primaryKey": "code"
     },
-    "tableList": {
+    "table": {
         "objectCode": "meta_field",
         "foreignFieldCode": "object_code"
     }
 };
+const treeTableFeatureConf = {
+    "tree": {
+        "objectCode": "meta_object",
+        "primaryKey": "code"
+    },
+    "table": {
+        "objectCode": "meta_field",
+        "foreignFieldCode": "object_code"
+    }
+};
+const mockTree = [
+    {
+        "id": "1",
+        "name": "meta_object",
+        "code": "meta_object",
+        "child": [
+            {
+                "id": "1-1",
+                "name": "meta_field",
+                "code": "meta_field"
+            },
+            {
+                "id": "1-2",
+                "name": "change_log",
+                "code": "change_log"
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "name": "一级 2",
+        "child": [
+            {
+                "id": "2-1",
+                "name": "二级 2-1",
+                "child": [
+                    {
+                        "id": "2-1-1",
+                        "name": "三级 2-1-1"
+                    }
+                ]
+            },
+            {
+                "id": "2-2",
+                "name": "二级 2-2",
+                "child": [
+                    {
+                        "id": "2-2-1",
+                        "name": "三级 2-2-1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "3",
+        "name": "一级 3",
+        "child": [
+            {
+                "id": "3-1",
+                "name": "二级 3-1",
+                "child": [
+                    {
+                        "id": "3-1-1",
+                        "name": "三级 3-1-1"
+                    }
+                ]
+            },
+            {
+                "id": "3-2",
+                "name": "二级 3-2",
+                "child": [
+                    {
+                        "id": "3-2-1",
+                        "name": "三级 3-2-1"
+                    }
+                ]
+            }
+        ]
+    }
+];
 
-mockAxios
-    .onGet(URL.ROUTE_DATA).reply(200, {
+mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
     data: commonRoutes,
     state: 'ok'
-})
-//     .onGet(URL.MENU_DATA).reply(200, {
-//     data: mockMenus,
-//     state: 'ok'
-// })
-    .onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'data-list-table'})).reply(200, {
-    data: dataListTableFeature,
+}).onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'list-table-tmpl'})).reply(200, {
+    data: listTableFeatureConf,
     state: 'ok'
-})
-    .onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
-        objectCode: "meta_object",
-        componentCode: 'DataList'
-    })).reply(200, {
+}).onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
+    objectCode: "meta_object",
+    componentCode: 'DataList'
+})).reply(200, {
     data: utils.merge(
         {
             "data_url": "/table/list/meta_object",
@@ -113,6 +187,25 @@ mockAxios
             }
         },
         DEFAULT.DataList),
+    state: 'ok'
+}).onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'tree-table-tmpl'})).reply(200, {
+    data: treeTableFeatureConf,
+    state: 'ok'
+}).onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
+    objectCode: "meta_object",
+    componentCode: 'Tree'
+})).reply(200, {
+    data: utils.merge(
+        {
+            "data_url": "/tree/list/meta_object",
+            "conf": {
+                "props": {"label": "name", "children": "child"}
+            }
+        },
+        DEFAULT.Tree),
+    state: 'ok'
+}).onGet("/tree/list/meta_object").reply(200, {
+    data: mockTree,
     state: 'ok'
 })
     .onAny().passThrough();

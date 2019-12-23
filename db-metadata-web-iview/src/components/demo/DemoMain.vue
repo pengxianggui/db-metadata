@@ -11,22 +11,22 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <data-list-table-tmpl-demo></data-list-table-tmpl-demo>
+                <data-list-table-tmpl-demo style="height: 700px;"></data-list-table-tmpl-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <tree-table-tmpl-demo style="height: 700px;"></tree-table-tmpl-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <table-form-tmpl-demo style="height: 700px;"></table-form-tmpl-demo>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="24">
                 <data-list-demo></data-list-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <tree-table-tmpl style="height: 700px;"></tree-table-tmpl>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <table-form-tmpl style="height: 700px;"></table-form-tmpl>
             </el-col>
         </el-row>
         <el-row>
@@ -162,8 +162,6 @@
     </div>
 </template>
 <script>
-    import TableFormTmpl from '@/components/template/TableFormTmpl'
-    import TreeTableTmpl from '@/components/template/TreeTableTmpl'
     // 批量注册
     const requireComponent = require.context('./', false, /\w+Demo\.(vue|js)$/);
     let demos = {};
@@ -172,8 +170,6 @@
         let cmp = requireComponent(fileName).default;
         demos[cmp.name] = cmp;
     });
-    demos[TableFormTmpl.name] = TableFormTmpl;
-    demos[TreeTableTmpl.name] = TreeTableTmpl;
 
     export default {
         name: "demo",

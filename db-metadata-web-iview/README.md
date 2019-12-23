@@ -346,7 +346,8 @@
     {
       "list": {
         "objectCode": "XXX",
-        "primaryKey": "x"
+        "primaryKey": "x",
+        "label": ""
       },
       "table": {
         "objectCode": "YYY",
@@ -358,11 +359,16 @@
  ```json
     {
       "tree": {
-        "objectCode": "XXX",
-        "primaryKey": "x"
+        "objectCode": "",
+        "primaryKey": "",
+        "idKey": "",
+        "pidKey": "",
+        "rootIdentify": "",
+        "label": "",
+        "isSync": false
       },
       "table": {
-        "objectCode": "YYY",
+        "objectCode": "",
         "foreignFieldCode": "y"
       }
     }

@@ -22,7 +22,7 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
+    import {DEFAULT, CONSTANT} from '@/constant'
 
     export default {
         name: "DataList",
@@ -133,7 +133,18 @@
             },
             innerLabelProps() {
                 return utils.assertUndefined(this.labelProps, this.innerMeta['conf']['label-props'])
-            }
+            },
+            primaryKey() {
+                const {objectPrimaryKey} = this.meta;
+                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+
+                if (utils.isEmpty(objectPrimaryKey)) {
+                    console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
+                    return defaultPrimaryKey;
+                } else {
+                    return objectPrimaryKey;
+                }
+            },
         }
     }
 </script>
