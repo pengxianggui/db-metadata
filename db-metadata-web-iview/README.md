@@ -344,11 +344,24 @@
  - DataListTableTmpl
  ```json
     {
-      "dataList": {
+      "list": {
         "objectCode": "XXX",
         "primaryKey": "x"
       },
-      "tableList": {
+      "table": {
+        "objectCode": "YYY",
+        "foreignFieldCode": "y"
+      }
+    }
+ ```
+ - TreeTableTmpl
+ ```json
+    {
+      "tree": {
+        "objectCode": "XXX",
+        "primaryKey": "x"
+      },
+      "table": {
         "objectCode": "YYY",
         "foreignFieldCode": "y"
       }
