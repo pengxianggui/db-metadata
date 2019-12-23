@@ -136,3 +136,10 @@ https://docs.sencha.com/extjs/6.2.0
 ## RoadMap
 - server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
 - 
+
+
+
+## Spring 相关
+- [借助ImportBeanDefinitionRegistrar接口实现bean的动态注入](https://www.jianshu.com/p/2b993ced6a4c)
+- [jfinal-spring-boot-starter](https://github.com/ArtIsLong/jfinal-spring-boot-starter)
+- [SpringBoot完美整合Jfinal](https://www.jianshu.com/p/e7c1d069a78f)
