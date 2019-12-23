@@ -70,9 +70,11 @@
                 this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
                     objectCode: row[primaryKey]
                 });
+
+                const rowPrimaryKey = this.mTlRef.primaryKey;
                 this.featureParams = {
                     objectCode: row[primaryKey],
-                    primaryKey: primaryKey
+                    primaryKey: rowPrimaryKey
                 }
             },
             mHandleSearch(params) {
