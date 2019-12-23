@@ -339,7 +339,21 @@
         类似这样的输入都限定下拉选择；数据驱动一切，因此项目中数据的正确性至关重要，所有用户输入的入口，都必须用尽办法保证输入的正确性
  -[x] created中初始化一些meta数据, mounted初始化业务数据
   
- 
+
+### 功能模板结构(config)
+ - DataListTableTmpl
+ ```json
+    {
+      "dataList": {
+        "objectCode": "XXX",
+        "primaryKey": "x"
+      },
+      "tableList": {
+        "objectCode": "YYY",
+        "foreignFieldCode": "y"
+      }
+    }
+ ```
  
  
 ### 目录结构NEW

@@ -22,11 +22,27 @@ export const loadFeature = {
  * @type {{methods: {getTlMeta(*=): void}}}
  */
 export const getTlMeta = {
-
     methods: {
         getTlMeta(objectCode) {
             let url = this.$compile(URL.TABLE_INSTANCE_META, {
                 objectCode: objectCode
+            });
+            return this.$axios.safeGet(url);
+        }
+    }
+};
+
+/**
+ * 获取DataList的meta, 参数objectCode.
+ * **组件实例中TableList的meta的命名必须为 dlMeta**
+ * @type {{methods: {getDlMeta(*=): void}}}
+ */
+export const getDlMeta = {
+    methods: {
+        getDlMeta(objectCode) {
+            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+                objectCode: objectCode,
+                componentCode: 'DataList'
             });
             return this.$axios.safeGet(url);
         }

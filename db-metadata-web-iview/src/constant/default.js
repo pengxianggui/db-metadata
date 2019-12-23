@@ -451,6 +451,23 @@ const DEFAULT_CONF = {
             "renderContent": function (h, {node, data, store}) {
             }
         }
+    },
+    "DataList": {
+        "component_name": "DataList",
+        "name": "DataList",
+        "label": "列表",
+        "data_url": "/data/list/{objectCode}",
+        "conf": {
+            "label-props": {
+                "label": "label"
+            }
+        },
+        "pagination": { // element ui配置
+            "page-size": PAGE_NUM_AREA[0],
+            "page-sizes": PAGE_NUM_AREA,
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next"
+        }
     }
 };
 export default DEFAULT_CONF;

@@ -1,5 +1,6 @@
-import {URL} from '@/constant'
+import {DEFAULT, URL} from '@/constant'
 import commonRoutes from '@/router/commonRoute'
+import utils from '@/utils'
 
 import axios from "axios";
 import MockAdapter from 'axios-mock-adapter'
@@ -76,6 +77,16 @@ const mockMenus = [
         }]
     },
 ];
+const dataListTableFeature = {
+    "dataList": {
+        "objectCode": "meta_object",
+        "primaryKey": "code"
+    },
+    "tableList": {
+        "objectCode": "meta_field",
+        "foreignFieldCode": "object_code"
+    }
+};
 
 mockAxios
     .onGet(URL.ROUTE_DATA).reply(200, {
@@ -86,4 +97,22 @@ mockAxios
 //     data: mockMenus,
 //     state: 'ok'
 // })
+    .onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'data-list-table'})).reply(200, {
+    data: dataListTableFeature,
+    state: 'ok'
+})
+    .onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
+        objectCode: "meta_object",
+        componentCode: 'DataList'
+    })).reply(200, {
+    data: utils.merge(
+        {
+            "data_url": "/table/list/meta_object",
+            "conf": {
+                "label-props": {"label": "code"}
+            }
+        },
+        DEFAULT.DataList),
+    state: 'ok'
+})
     .onAny().passThrough();
