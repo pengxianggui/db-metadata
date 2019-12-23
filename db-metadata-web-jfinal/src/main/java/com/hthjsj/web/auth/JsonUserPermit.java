@@ -17,7 +17,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class JsonUserPermit implements MRPermit {
+public class JsonUserPermit implements MRPermit<User, MResource> {
 
     Multimap<String, String> userPermits = HashMultimap.create();
 

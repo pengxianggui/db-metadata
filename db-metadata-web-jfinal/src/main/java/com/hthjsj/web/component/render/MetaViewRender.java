@@ -40,6 +40,7 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
 
     /**
      * TABLEVIEW,SEARCHVIEW,FORMVIEW(ADD,UPDATE,DETAILS)共用的渲染逻辑;
+     * TODO 各View逻辑复杂后,拆分
      * WARN render 需要保证幂等性
      *
      * @return

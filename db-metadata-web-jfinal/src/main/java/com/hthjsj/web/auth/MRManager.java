@@ -15,12 +15,13 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class MRManager implements MRLoader, MRPermit {
+public class MRManager implements MRLoader, MRPermit<User, MResource> {
 
     private static final MRManager me = new MRManager();
 
     private MRManager() {
     }
+
     /**
      * 注册多个资源访问器
      */

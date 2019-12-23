@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *
  * <p> @author konbluesky </p>
  */
-public class RegularPermit implements MRPermit {
+public class RegularPermit implements MRPermit<User, MResource> {
 
     private Pattern pattern;
 
