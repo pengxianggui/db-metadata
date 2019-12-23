@@ -76,7 +76,7 @@ public class ComponentController extends FrontRestController {
             else {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("msg", "自动计算首次配置"));
+                renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("isAutoComputed", true));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));

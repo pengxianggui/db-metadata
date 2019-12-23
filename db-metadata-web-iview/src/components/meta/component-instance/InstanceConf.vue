@@ -40,7 +40,9 @@
                     <template v-if="confModel.componentCode && confModel.objectCode">
                         <el-row>
                             <el-col>
-                                <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}</h2>
+                                <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}<span
+                                        v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                </h2>
                                 <el-form-item>
                                     <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
                                 </el-form-item>
@@ -142,6 +144,7 @@
             this.$merge(confMeta, DEFAULT.JsonBox);
 
             return {
+                isAutoComputed: false,
                 objectMeta: objectMeta,
                 componentMeta: componentMeta,
                 confMeta: confMeta,
@@ -170,6 +173,7 @@
 
                 this.$axios.get(url).then(resp => {
                     let data = resp.data;
+                    this.isAutoComputed = resp.isAutoComputed || false;
 
                     for (let key in data) {
                         if (key === 'fields') {
