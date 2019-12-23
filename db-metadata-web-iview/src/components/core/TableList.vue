@@ -49,7 +49,7 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template slot="header">
-                                <pop-menu trigger="right-click">
+                                <pop-menu trigger="right-click" v-if="$hasAuth('ADMIN')">
                                     <template #label>{{item.label || item.name}}</template>
                                     <list>
                                         <list-item @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</list-item>
@@ -82,6 +82,7 @@
                                         </list-item>
                                     </list>
                                 </pop-menu>
+                                <span v-if="!$hasAuth('ADMIN')">{{item.label || item.name}}</span>
                             </template>
                         </el-table-column>
                     </template>

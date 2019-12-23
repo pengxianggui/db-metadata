@@ -62,7 +62,7 @@
                 </el-form-item>
             </el-form>
             <div style="float: right; margin: -20px 5px 0px 0px">
-                <pop-menu trigger="click" placement="right">
+                <pop-menu trigger="click" placement="right" v-if="$hasAuth('ADMIN')">
                     <template #label><i class="el-icon-setting"></i></template>
                     <template #default>
                         <list>

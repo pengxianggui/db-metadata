@@ -22,7 +22,7 @@
                            v-text="innerMeta.btns['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">
-                <pop-menu trigger="click" placement="right">
+                <pop-menu trigger="click" placement="right" v-if="$hasAuth('ADMIN')">
                     <template #label><i class="el-icon-setting"></i></template>
                     <template #default>
                         <list>
