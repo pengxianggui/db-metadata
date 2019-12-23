@@ -700,7 +700,7 @@
             },
             {
               "name": "code",
-              "type": "DefaultString",
+              "type": "LongKey",
               "remark": "",
               "chnname": "配置编码"
             },
