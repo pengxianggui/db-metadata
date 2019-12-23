@@ -1,13 +1,6 @@
 package com.hthjsj.analysis.db;
 
 /**
- * <p> @Date : 2019/10/21 </p>
- * <p> @Project : db-meta-serve</p>
- *
- * <p> @author konbluesky </p>
- */
-
-/**
  * Twitter的分布式自增ID雪花算法snowflake
  *
  * @author MENG

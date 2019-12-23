@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p> Class title: </p>
+ * <p> Class title: 默认Mysql Table -> MetaObject的装配实现</p>
  * <p> @Describe: </p>
  * <p> @Date : 2019/9/24 </p>
  * <p> @Project : db-meta-serve</p>

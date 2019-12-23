@@ -3,8 +3,7 @@ package com.hthjsj.analysis.db;
 import java.util.List;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
+ * <p> Class title: DB 层,表数据分解工具</p>
  * <p> @Date : 2019-08-20 </p>
  * <p> @Project : db-meta-serve</p>
  *
