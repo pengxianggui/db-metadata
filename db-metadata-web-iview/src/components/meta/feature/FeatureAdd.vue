@@ -65,6 +65,7 @@
 
                 <!-- TODO 从表后期应当支持多个子表设置 -->
             </template>
+
             <template v-if="feature.type === 'SingleGrid'">
                 <el-form-item label="元对象编码">
                     <drop-down-box v-model="singleGridConfig.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
@@ -78,17 +79,83 @@
                 </el-form-item>
             </template>
 
-            <el-button @click="onSubmit" type="primary">保存</el-button>
-            <el-button @click="onCancel">取消</el-button>
+            <template v-if="feature.type === 'TreeTable'">
+                <h3>Tree配置</h3>
+                <el-form-item label="元对象编码">
+                    <drop-down-box v-model="treeTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="idKey">
+                    <drop-down-box v-model="treeTableConfig.tree.idKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="pidKey">
+                    <drop-down-box v-model="treeTableConfig.tree.pidKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="rootIdentify">
+                    <text-box v-model="treeTableConfig.tree.rootIdentify" required></text-box>
+                </el-form-item>
+                <el-form-item label="label">
+                    <text-box v-model="treeTableConfig.tree.label" required></text-box>
+                </el-form-item>
+                <el-form-item label="isSync">
+                    <bool-box v-model="treeTableConfig.tree.isSync" required></bool-box>
+                </el-form-item>
+                <h3>Table配置</h3>
+                <el-form-item label="objectCode" class="inline">
+                    <drop-down-box v-model="treeTableConfig.table.objectCode"
+                                   :data-url="metaObjectCodeUrl" @change="treeTableConfig.table.foreignFieldCode = null"
+                                   filterable required>
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="foreignFieldCode" class="inline">
+                    <drop-down-box v-model="treeTableConfig.table.foreignFieldCode"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.table.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+            </template>
+            <el-form-item>
+                <el-button @click="onSubmit" type="primary">保存</el-button>
+                <el-button @click="onCancel">取消</el-button>
+            </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script>
     import {CONSTANT, URL} from '@/constant'
+    import TextBox from "@/components/core/form/TextBox";
 
     export default {
         name: "feature-add",
+        components: {TextBox},
         props: {
             params: {
                 type: Object
@@ -127,6 +194,40 @@
                         objectCode: this.params['objectCode']
                     }
                 },
+                treeTableConfig: {
+                    tree: {
+                        objectCode: null,
+                        idKey: null,
+                        pidKey: null,
+                        rootIdentify: null,
+                        label: null,
+                        isSync: false
+                    },
+                    table: {
+                        objectCode: null,
+                        foreignFieldCode: null
+                    }
+                },
+                listTableConf: {
+                    list: {
+                        objectCode: null,
+                        primaryKey: null
+                    },
+                    table: {
+                        objectCode: null,
+                        foreignFieldCode: null
+                    }
+                },
+                tableFormConf: {
+                    table: {
+                        objectCode: null,
+                        primaryKey: null
+                    },
+                    form: {
+                        objectCode: null,
+                        foreignFieldCode: null
+                    }
+                },
                 activeTab: 'first'
             }
         },
@@ -142,6 +243,9 @@
                         break;
                     case CONSTANT.FEATURE_TYPE.SingleGrid:
                         this.feature.config = this.singleGridConfig;
+                        break;
+                    case CONSTANT.FEATURE_TYPE.TreeTable:
+                        this.feature.config = this.treeTableConfig;
                         break;
                 }
                 return this.feature;

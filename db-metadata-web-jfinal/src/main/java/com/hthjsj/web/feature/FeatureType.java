@@ -3,6 +3,7 @@ package com.hthjsj.web.feature;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.feature.ms.MasterSlaveConfig;
 import com.hthjsj.web.feature.single.SingleGridConfig;
+import com.hthjsj.web.feature.treetable.TreeTableConfig;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
@@ -15,6 +16,7 @@ import com.jfinal.kit.StrKit;
 public enum FeatureType {
     MasterSlaveGrid("主子表", "MasterSlaveGrid", MasterSlaveConfig.class),
     SingleGrid("单表", "SingleGrid", SingleGridConfig.class),
+    TreeTable("树表", "TreeTable", TreeTableConfig.class),
     UNKNOWN("未知的功能模板", "unknown", Kv.class);
 
     String name;
