@@ -4,7 +4,9 @@
             <table-list :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange"></table-list>
         </template>
         <template #right>
-            <form-tmpl :meta="fmMeta" @ok="formSubmit"></form-tmpl>
+            <div class="el-card" style="margin-left: 5px">
+                <form-tmpl :meta="fmMeta" @ok="formSubmit"></form-tmpl>
+            </div>
         </template>
     </row-grid>
 </template>
