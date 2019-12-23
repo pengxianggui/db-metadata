@@ -137,6 +137,7 @@
     "default_value": 0,
     "conf": {
       "controls": true,
+      "controls-position": "right",
       "placeholder": "请输入数值.."
     }
   },
