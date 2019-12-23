@@ -466,7 +466,7 @@ const DEFAULT_CONF = {
             "page-size": PAGE_NUM_AREA[0],
             "page-sizes": PAGE_NUM_AREA,
             "current-page": 1,
-            "layout": "total, sizes, prev, pager, next"
+            "layout": "total, prev, pager, next"
         }
     }
 };
