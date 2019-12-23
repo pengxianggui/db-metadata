@@ -135,7 +135,10 @@ https://docs.sencha.com/extjs/6.2.0
 
 ## RoadMap
 - server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
-- 
+- 数据权限的设计
+- formbuilder 覆盖所有模板
+- springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
+
 
 
 
