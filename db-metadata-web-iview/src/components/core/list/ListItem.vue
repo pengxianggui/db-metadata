@@ -15,7 +15,9 @@
 <style scoped>
     li {
         padding: 5px;
+        line-height: 32px;
         cursor: pointer;
+        border-bottom: #EBEEF5 1px solid;
     }
 
     li:hover {

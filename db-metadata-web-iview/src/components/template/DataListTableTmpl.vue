@@ -1,18 +1,22 @@
 <template>
     <row-grid :span="[6, 18]">
         <template #left>
-            <data-list :ref="dlRefName" :meta="dlMeta" @active-change="handleActiveChange"></data-list>
+            <div class="el-card">
+                <data-list :ref="dlRefName" :meta="dlMeta" @active-change="handleActiveChange"></data-list>
+            </div>
         </template>
         <template #right>
-            <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-            <table-list :ref="tlRefName" :meta="tlMeta" :page="{ size: 5 }"></table-list>
+            <div class="el-card" style="margin-left: 5px;">
+                <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
+                <table-list :ref="tlRefName" :meta="tlMeta" :page="{ size: 5 }"></table-list>
+            </div>
         </template>
     </row-grid>
 </template>
 
 <script>
     import utils from '@/utils'
-    import {getTlMeta, getSpMeta, getDlMeta, loadFeature} from "@/components/core/mixins/methods"
+    import {getDlMeta, getSpMeta, getTlMeta, loadFeature} from "@/components/core/mixins/methods"
 
     export default {
         name: "DataListTableTmpl",
