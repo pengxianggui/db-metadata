@@ -812,7 +812,7 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "组件配置关系表"
+          "chnname": "组件配置实例表"
         },
         {
           "title": "change_log",

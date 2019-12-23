@@ -35,7 +35,7 @@ public class MetaAnalysisException extends RuntimeException {
 
     static String resolveString(String errorMsgTemplate, String... args) {
 
-        if (errorMsgTemplate.indexOf("%s") >= 0) {
+        if (errorMsgTemplate.contains("%s")) {
             errorMsgTemplate = String.format(errorMsgTemplate, args);
         }
         return errorMsgTemplate;
