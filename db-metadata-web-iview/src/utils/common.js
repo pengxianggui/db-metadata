@@ -131,19 +131,19 @@ export function extractValue(object, keys) {
 }
 
 /**
- * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回false
+ * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回空数组
  * @param value
  */
 export function convertToArray(value) {
     if (isArray(value)) return value;
 
-    if (!isString(value)) return false;
+    if (!isString(value)) return [];
     let result;
     try {
         result = JSON.parse(value);
-        return isArray(result);
+        return isArray(result) ? result : [];
     } catch (e) {
-        return false;
+        return [];
     }
 }
 
