@@ -82,7 +82,7 @@
                     </el-row>
                 </el-tab-pane>
                 <el-tab-pane v-if="confModel.componentCode=='FormTmpl'" label="表单设计">
-                    <form-builder></form-builder>
+                    <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
                 </el-tab-pane>
             </el-tabs>
 
@@ -157,6 +157,9 @@
             }
         },
         methods: {
+            handleOcChange(objectCode) {
+                this.confModel['objectCode'] = objectCode;
+            },
             loadConf: function () {
                 const {componentCode, objectCode} = this.confModel;
                 if (!componentCode || !objectCode) {

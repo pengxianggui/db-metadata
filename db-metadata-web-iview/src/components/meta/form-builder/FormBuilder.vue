@@ -6,7 +6,8 @@
         <div style="flex: 5;margin-left: 5px">
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
-                    <drop-down-box @change="loadConf(objectCode)" placeholder="选择元对象"
+                    <drop-down-box placeholder="选择元对象"
+                                   @clear="handleClear"
                                    data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
                                    v-model="objectCode" filterable></drop-down-box>
                 </template>
@@ -28,14 +29,20 @@
     export default {
         name: "FormBuilder",
         components: {ComponentList, WorkArea, ConfArea},
+        props: {
+            oc: String
+        },
         data() {
             return {
-                objectCode: this.$route.query.objectCode,
                 formMeta: this.$merge({}, DEFAULT.FormTmpl),
                 selectIndex: null
             }
         },
         methods: {
+            handleClear() {
+                this.objectCode = null;
+                this.setInitState();
+            },
             setInitState() {
                 this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
             },
@@ -44,6 +51,7 @@
                 this.selectIndex = selectIndex;
             },
             loadConf(objectCode) {
+                if (utils.isEmpty(objectCode)) return;
                 const url = this.$compile(URL.COMPONENT_INSTANCE_META, {
                     componentCode: 'FormTmpl',
                     objectCode: objectCode
@@ -59,8 +67,18 @@
         },
         mounted() {
             const objectCode = this.objectCode;
-            if (!utils.isEmpty(objectCode)) {
-                this.loadConf(objectCode);
+            this.loadConf(objectCode);
+        },
+        computed: {
+            objectCode: {
+                get() {
+                    const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
+                    this.loadConf(objectCode);
+                    return objectCode;
+                },
+                set(val) {
+                    this.$emit('oc-change', val);
+                }
             }
         }
     }
