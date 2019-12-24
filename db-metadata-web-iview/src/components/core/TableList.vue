@@ -383,6 +383,7 @@
                 this.editInstanceConf(objectCode, componentCode); // just edit the ui conf of field named fieldCode. anchor point ?
             },
             getComponentCode(objectCode) {
+                if (!utils.isEmpty(this.componentCodes)) return;
                 this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: false}))
                     .then(resp => {
                         this.componentCodes = resp.data;
