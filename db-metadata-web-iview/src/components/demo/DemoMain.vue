@@ -51,7 +51,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <tree-list-demo></tree-list-demo>
+                <tree-demo></tree-demo>
             </el-col>
         </el-row>
         <el-row>

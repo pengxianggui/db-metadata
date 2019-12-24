@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: "tree-list-demo",
+        name: "tree-demo",
         data() {
             return {
                 meta: {
@@ -28,33 +28,42 @@
                 },
                 data: [
                     {
-                        "name": "一级 1",
+                        "id": "1",
+                        "name": "meta_object",
+                        "code": "meta_object",
                         "child": [
                             {
-                                "name": "二级 1-1",
-                                "child": [
-                                    {
-                                        "name": "三级 1-1-1"
-                                    }
-                                ]
+                                "id": "1-1",
+                                "name": "meta_field",
+                                "code": "meta_field"
+                            },
+                            {
+                                "id": "1-2",
+                                "name": "change_log",
+                                "code": "change_log"
                             }
                         ]
                     },
                     {
+                        "id": "2",
                         "name": "一级 2",
                         "child": [
                             {
+                                "id": "2-1",
                                 "name": "二级 2-1",
                                 "child": [
                                     {
+                                        "id": "2-1-1",
                                         "name": "三级 2-1-1"
                                     }
                                 ]
                             },
                             {
+                                "id": "2-2",
                                 "name": "二级 2-2",
                                 "child": [
                                     {
+                                        "id": "2-2-1",
                                         "name": "三级 2-2-1"
                                     }
                                 ]
@@ -62,20 +71,25 @@
                         ]
                     },
                     {
+                        "id": "3",
                         "name": "一级 3",
                         "child": [
                             {
+                                "id": "3-1",
                                 "name": "二级 3-1",
                                 "child": [
                                     {
+                                        "id": "3-1-1",
                                         "name": "三级 3-1-1"
                                     }
                                 ]
                             },
                             {
+                                "id": "3-2",
                                 "name": "二级 3-2",
                                 "child": [
                                     {
+                                        "id": "3-2-1",
                                         "name": "三级 3-2-1"
                                     }
                                 ]
