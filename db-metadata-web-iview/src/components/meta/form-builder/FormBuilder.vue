@@ -7,6 +7,7 @@
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
                     <drop-down-box placeholder="选择元对象"
+                                   @change="handleChange"
                                    @clear="handleClear"
                                    data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
                                    v-model="objectCode" filterable></drop-down-box>
@@ -33,15 +34,23 @@
             oc: String
         },
         data() {
+            const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
             return {
                 formMeta: this.$merge({}, DEFAULT.FormTmpl),
-                selectIndex: null
+                selectIndex: null,
+                objectCode: objectCode
             }
         },
         methods: {
             handleClear() {
                 this.objectCode = null;
+                this.handleChange();
                 this.setInitState();
+            },
+            handleChange() {
+                const {objectCode} = this;
+                this.loadConf(objectCode);
+                this.$emit('oc-change', objectCode);
             },
             setInitState() {
                 this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
@@ -65,22 +74,16 @@
                 })
             }
         },
+        watch: {
+            oc(newVal) {
+                this.objectCode = newVal;
+                this.loadConf(this.objectCode);
+            }
+        },
         mounted() {
             const objectCode = this.objectCode;
             this.loadConf(objectCode);
         },
-        computed: {
-            objectCode: {
-                get() {
-                    const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
-                    this.loadConf(objectCode);
-                    return objectCode;
-                },
-                set(val) {
-                    this.$emit('oc-change', val);
-                }
-            }
-        }
     }
 </script>
 
