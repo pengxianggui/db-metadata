@@ -479,6 +479,12 @@
               "chnname": "普通字符"
             },
             {
+              "name": "col_findbox",
+              "type": "Name",
+              "remark": "",
+              "chnname": "选择框"
+            },
+            {
               "name": "col_file",
               "type": "MiddleString",
               "remark": "",
@@ -1319,51 +1325,35 @@
         "nodes": [
           {
             "shape": "table",
-            "title": "meta_field",
-            "moduleName": false,
-            "x": 210,
-            "y": 560,
-            "id": "2f6f9008"
-          },
-          {
-            "shape": "table",
-            "title": "test_table",
-            "moduleName": false,
-            "x": 1100,
-            "y": 570,
-            "id": "98215e10"
-          },
-          {
-            "shape": "table",
-            "title": "meta_component_instance",
-            "moduleName": false,
-            "x": 790,
-            "y": 580,
-            "id": "6699c16e"
-          },
-          {
-            "shape": "table",
             "title": "meta_object",
             "moduleName": false,
-            "x": 160,
-            "y": 160,
-            "id": "ac02f504"
+            "x": 620,
+            "y": 250,
+            "id": "6917ab90"
+          },
+          {
+            "shape": "table",
+            "title": "meta_field",
+            "moduleName": false,
+            "x": 960,
+            "y": 280,
+            "id": "3dd9e9ca"
           },
           {
             "shape": "table",
             "title": "meta_component",
             "moduleName": false,
-            "x": 980,
-            "y": 160,
-            "id": "da4373d8"
+            "x": 620,
+            "y": 600,
+            "id": "8bf3faef"
           },
           {
             "shape": "table",
-            "title": "meta_field:1",
+            "title": "meta_component_instance",
             "moduleName": false,
-            "x": 510,
-            "y": 200,
-            "id": "2a4ac86b"
+            "x": 950,
+            "y": 610,
+            "id": "06581d76"
           }
         ],
         "edges": []

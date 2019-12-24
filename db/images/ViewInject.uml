@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.hthjsj.analysis.component.ViewInject</OriginalElement>
+  <nodes>
+    <node x="247.0" y="1002.0">com.hthjsj.analysis.component.ComponentRender</node>
+    <node x="0.0" y="1002.0">com.hthjsj.analysis.component.ComponentType</node>
+    <node x="244.0" y="365.0">com.hthjsj.analysis.component.ViewContainer</node>
+    <node x="817.0" y="0.0">com.hthjsj.analysis.component.Component</node>
+    <node x="1400.0" y="452.0">com.hthjsj.web.component.form.DateBox</node>
+    <node x="445.0" y="1002.0">com.hthjsj.analysis.component.FieldInject</node>
+    <node x="548.0" y="718.0">com.hthjsj.web.component.TableView</node>
+    <node x="627.0" y="1002.0">com.hthjsj.analysis.component.ViewInject</node>
+    <node x="1126.0" y="452.0">com.hthjsj.web.component.form.ImageBox</node>
+    <node x="0.0" y="664.0">com.hthjsj.web.component.form.FormView</node>
+    <node x="274.0" y="773.0">com.hthjsj.web.component.SearchView</node>
+    <node x="578.0" y="452.0">com.hthjsj.web.component.form.DateTimeBox</node>
+    <node x="852.0" y="452.0">com.hthjsj.web.component.form.TextBox</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.hthjsj.web.component.form.FormView" target="com.hthjsj.analysis.component.ViewContainer">
+      <point x="0.0" y="-146.5" />
+      <point x="127.0" y="639.0" />
+      <point x="296.3333333333333" y="639.0" />
+      <point x="-104.66666666666669" y="124.5" />
+    </edge>
+    <edge source="com.hthjsj.analysis.component.ViewContainer" target="com.hthjsj.analysis.component.Component">
+      <point x="0.0" y="-124.5" />
+      <point x="401.0" y="335.0" />
+      <point x="849.4" y="335.0" />
+      <point x="-129.60000000000002" y="157.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.SearchView" target="com.hthjsj.analysis.component.ViewContainer">
+      <point x="0.0" y="-37.5" />
+      <point x="0.0" y="124.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.form.DateTimeBox" target="com.hthjsj.analysis.component.Component">
+      <point x="0.0" y="-37.5" />
+      <point x="705.0" y="345.0" />
+      <point x="914.2" y="345.0" />
+      <point x="-64.79999999999995" y="157.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.TableView" target="com.hthjsj.analysis.component.ViewContainer">
+      <point x="0.0" y="-92.5" />
+      <point x="675.0" y="639.0" />
+      <point x="505.6666666666667" y="639.0" />
+      <point x="104.66666666666669" y="124.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.form.ImageBox" target="com.hthjsj.analysis.component.Component">
+      <point x="0.0" y="-37.5" />
+      <point x="1253.0" y="345.0" />
+      <point x="1043.8" y="345.0" />
+      <point x="64.79999999999995" y="157.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.form.DateBox" target="com.hthjsj.analysis.component.Component">
+      <point x="0.0" y="-37.5" />
+      <point x="1527.0" y="335.0" />
+      <point x="1108.6" y="335.0" />
+      <point x="129.5999999999999" y="157.5" />
+    </edge>
+    <edge source="com.hthjsj.web.component.form.TextBox" target="com.hthjsj.analysis.component.Component">
+      <point x="0.0" y="-37.5" />
+      <point x="0.0" y="157.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="705.0" y="552.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,148 +1,111 @@
-# db-metadata
+# db-metadata-serve
+> 工程的缩写DBMS 与数据库的那个DBMSDBMS Database Management System）有区别，但本质又相近。（工程名字并没有仔细推敲过，主要想做一个解决crud和常规业务场景的一个引擎
+## 介绍
+>我对于快速开发框架和快速开发平台的定义,一个具备基本开发工具的整合后框架,同时具备一些基本的模块(RBAC权限,菜单,用户,字典等)的脚手架.这些框架的初衷都是想
+>让开发人员不必在重头搭建一套完备的系统后,才开始开发和自己业务相关的模块,尽可能把"公共"模块抽离,达到复用
+>
+>但现状是一个大型项目,或者系统中通常有很多子系统或子模块组成,并不是每个子模块都要具有完整的用户权限、登录、菜单管理、字典等等功能。
+>如果是在人员有限、项目规模不大、并且是从0->1这个阶段开始的话，选择任何一个开源的快速开发框架都是合适的，如果系统非0->1这个阶段，已经上线且具备一些功能了，再引入快速开发框架的意义就不是很大了
+>
+>
+#### 市面上一些主流的快速开发平台
+> 社区相对活跃,功能完备,技术栈新的
+- [jeesite](https://jeesite.gitee.io/) - [演示地址](http://demo.jeesite.com/)
+- [jeecg](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
+- [eova](http://www.jeecg.com/) - [演示地址](http://pro.eova.cn/)
 
-## 元对象 于 组件的关联设计
 
-- Eova中的页面搜索条件是与页面控件进行绑定的,页面控件的变化,会导致最后生成的sql 变化 
-    > ? 搜索条件可以反过来与DBtype进行关联,做兼容处理 -> 各种类型可以支持常规检索(值检索,范围检索,区间检索)
-- 元对象,元子段和前端控件的关系
-    > 
-    
-## 元对象多了以后 需要提供有效的管理手段
+### 功能点
+- crud 引擎
+- 各类模板配置 
+    - 主子表   
+    - 单表
+    - 树表
+- 图形样式设计
+- 多数据源
+- springboot支持
 
-## 抽象概念
+## 快速开始
+### 安装部署
+### 依赖配置
+### 集成
 
-- 组件(Component)
-    > 每个组件需要有一套默认的全局的配置;
-    - 数据展示(ViewComponent)
-        - 表格组件(依赖元对象)(TableView)
-        - 表单组件(依赖元对象)
-        - 树型组件(依赖元对象)
-        - 搜索组件(依赖元对象)(简单的可以使用穿梭框)
-    - 表单(FormView)
-        - 单选组件(元子段)FormField
-        - 多选组件(元子段)
-        - 输入组件(元子段)
-        - 业务查询组件
-        - 开关组件(元子段)
-        - 日期组件(元子段)
-        - 范围组件(元子段)
-        - 上传
-    
-    ```
-    初始化过程分开:
-    手动初始化
-    根据元对象或元子段初始化
-    
-        new  -> 手动静态组件
-             -> load全局配置
-             -> [组装器](组件+元对象)
-    ```
-    
-- 功能
-    > 功能可以是一个按钮+背后的逻辑
-    > 功能可以是一个纯背后的逻辑
-    > 功能可以是一个页面
-    ```
-    功能 = (SearchBar(Component) + UIConfig + 元对象) * n
-    功能 = Table(Component) + UIConfig + 元对象
-    功能 = 功能 * n
-    ```
-- 模板
+## 用户文档
+
+### 基础术语
+#### 元对象
+>《Thinking in Java》开篇就写到“一切皆对象”，Linux世界中“一切皆文件”，在DBMS中可以理解成一切的一切都离不开“元对象”；
+什么是元对象，“元数据”是描述数据的数据，那么元对象就是描述对象的对象,狭隘的理解，一个元对象可以代表一个“表”，“一个视图”
+
+
+#### 元子段
+#### Component
+> 组件的抽象是为了服务与前端的展示，每一个前端框架种组件都可以抽象为一个组件
 ```
-[模板 = 功能 * n]  与 [功能 = 功能 * n] 的区别?
-可以固化?
-可以打包?
-有后台接口?
-嵌入方式?
+- 数据展示(ViewComponent)
+    - 表格组件(依赖元对象)(TableView)
+    - 表单组件(依赖元对象)
+    - 树型组件(依赖元对象)
+    - 搜索组件(依赖元对象)(简单的可以使用穿梭框)
+- 表单(FormView)
+    - 单选组件(元子段)FormField
+    - 多选组件(元子段)
+    - 输入组件(元子段)
+    - 业务查询组件
+    - 开关组件(元子段)
+    - 日期组件(元子段)
+    - 范围组件(元子段)
+    - 上传组件(元子段)
 ```
-    > 模板不能直接使用
-    > 模板硬编码编辑
-    - 单表格
-    - 树表格
-    - 主子表(1:1)(1:N)
-- 元对象
-    > 新建元对象的时候,需要对元对象提供一套默认的ui配置信息;
-    - 元对象和数据组件的展示是有机结合,结合后就是功能的配置
-    - 元对象的config 应保存与UI无关的配置(是否使用uuid生成主键,是否有前置后置逻辑,默认排序,记录筛选条件等等?)
-        ```
-        主要存放针对服务端的一些配置
-        ```
-- 关于配置的继承
-
+#### Component实例
+> 单纯的组件是没有灵魂的，元对象和元字段是组件的数据灵魂
+#### 模板
+什么是模板，模板不能直接使用，模板硬编码编辑
+#### 功能
+> 功能可以是一个按钮+背后的逻辑  
+> 功能可以是一个纯背后的逻辑  
+> 功能可以是一个页面  
+> 公式:
 ```
-- 组件的全局UI配置<元对象的UI配置<功能的配置
-- 功能配置
-
-功能之间的组合???
-```
-
-```
-Extjs 的文档, 可以参考
-https://docs.sencha.com/extjs/6.2.0
+功能 = (SearchBar(Component) + UIConfig + 元对象) * n
+功能 = Table(Component) + UIConfig + 元对象
+功能 = 功能 * n
 ```
 
 
-## 元对象管理功能
 
-- 元对象的导入;
-- 元对象的确认+修改;
-- 元对象在不同组件中的配置(不同组件的行为);
-- 集中保存元对象信息,和其他数据;
+### 架构设计
 
-###  FQ
+#### 总体架构图
+> 元对象,元子段,component等概念的层次结构,对应关系 
+![](db/images/架构图.png)
+#### 通信图
+> 前端请求渲染-> 后端数据装配->配置载入->merge
+#### 数据库E-R图
+![](db/images/e-r.png)
+#### 元对象-类图
+![元对象接口](db/images/MetaObject.png)
+#### Component-类图
+![元对象接口](db/images/component.png)
 
-- 组件之间的路由? 按钮触发component? 事件触发component?
+#### 扩展
+> 为了能更好的融入其他系统，DBMS对常见的模块做了抽象，用少量的接口保证足够的灵活性
+##### 用户体系
+> 用户体系单独拎出可以作为一个庞大的子系统来开发，在DBMS种对用户做了一定抽象
 
+> 核心接口 User(用户实体接口)，LoginService（登录服务），UserService（用户查询服务）,UserFactory(工厂)
+![元对象接口](db/images/user.png)
+##### 权限体系
+>DBMS并未实现RBAC之列的权限控制模块，而是留了扩展接口
 
-`
-## 可以有的功能和思考
+>DBMS种权限核心接口是MResource(资源)，MRPermit(资源判定器),MRLoader(资源加载器)
+![元对象接口](db/images/auth.png)
 
-- [ ] 异常管理
-- [ ] 配置比对
-- [ ] 4个基础字段的传递
-- [ ] 注释生成https://blog.csdn.net/10km/article/details/78252586
-- [ ] 打包部署
-    ```
-    1. vue -> run dist
-    2. copy to javaProject/resources/static/
-    3. package -> fatjar
-    ```
-- [ ] analysis 工程的打包(基于undertow的)
-- [ ] 围绕元对象的权限模块
-- [ ] Json 比较
-    ```
-    https://github.com/5SSS/vue-json-compare
-    ```
-- [ ] Json Editor
-    ```
-    https://github.com/yourtion/vue-json-ui-editor
-    ```
-- [ ] 集成方式 
-    - frame
-    - 生成.vue?
-- [ ] 元信息的缓存,component数据的缓存,减少数据拼装动作,提高查询效率 
-- [ ] 围绕元数据产生的复杂业务场景思考
-- [ ] 表单重复提交
-- [Undertow 2.0 文档](http://undertow.io/undertow-docs/undertow-docs-2.0.0/index.html#bootstrapping-undertow)
-- [x] Json 序列化入库时 boolean 类型的值带""导致vue报错
-    > 解决:SerializerFeature.WriteNonStringValueAsString 配置引起
-- [ ] 表单 tabIndex
-- [ ] mysql 数据库版本8.0 不兼容
-- [ ] 脏数据,错误数据处理与提示;
-- Jprofiler : L-J11-Everyone#speedzodiac-327a9wrs5dxvz#463a59
+### 核心数据结构
 
-[Maven：Maven GPG Plugin](https://blog.csdn.net/en_joker/article/details/84140033)
+#### 前端
 
-## RoadMap
-- server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
-- 数据权限的设计
-- formbuilder 覆盖所有模板
-- springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
-- 耗时操作的缓存支持(ehcache+redis)
+## 原则
 
-
-
-## Spring 相关
-- [借助ImportBeanDefinitionRegistrar接口实现bean的动态注入](https://www.jianshu.com/p/2b993ced6a4c)
-- [jfinal-spring-boot-starter](https://github.com/ArtIsLong/jfinal-spring-boot-starter)
-- [SpringBoot完美整合Jfinal](https://www.jianshu.com/p/e7c1d069a78f)
+### 解决一类问题,而不是一个问题
+### 拒绝头疼医头,脚疼医脚
