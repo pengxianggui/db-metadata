@@ -25,7 +25,7 @@
                             </el-button>
                         </slot>
                         <slot name="shrink-all-btn">
-                            <el-button @click="shrinkExpandAll" icon="el-icon-caret-right" type="info"
+                            <el-button @click="handleShrinkAll" icon="el-icon-caret-right" type="info"
                                        v-bind="innerMeta['operation-bar']">收起全部
                             </el-button>
                         </slot>
@@ -236,7 +236,7 @@
                 this.expandAll = true;
                 this.tableReRender();
             },
-            shrinkExpandAll() {
+            handleShrinkAll() {
                 this.expandAll = false;
                 this.tableReRender();
             },

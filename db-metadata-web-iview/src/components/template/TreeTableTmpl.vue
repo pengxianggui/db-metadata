@@ -1,7 +1,7 @@
 <template>
     <row-grid :span="[6, 18]">
         <template #left>
-            <tree :meta="treeMeta" @active-change="handleActiveChange"></tree>
+            <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
         </template>
         <template #right>
             <table-list :ref="tlRefName" :meta="tlMeta"></table-list>
@@ -40,11 +40,14 @@
             }
         },
         methods: {
-            handleActiveChange(row) {
+            handleChoseChange(choseData) {
+                // pxg_todo
+            },
+            handleActiveChange(activeData) {
                 const {primaryKey} = this.treeConf;
 
                 this.tlMeta['data_url'] = this.$compile(this.tableUrl, {
-                    objectCode: row[primaryKey]
+                    objectCode: activeData[primaryKey]
                 });
             },
 

@@ -426,7 +426,8 @@ const DEFAULT_CONF = {
             "highlight-current": true,
             "default-expand-all": false,
             "check-on-click-node": false,
-            "show-checkbox": false,
+            "expand-on-click-node": false,
+            "show-checkbox": true,
             "default-expanded-keys": [],
             "default-checked-keys": [],
             "accordion": false,
@@ -437,6 +438,10 @@ const DEFAULT_CONF = {
                 "label": "label",
                 "children": "children"
             }
+        },
+        "operation-bar": {
+            "size": "mini",
+            "type": "primary"
         },
         "behavior": {
             "allowDrag": function (node) {

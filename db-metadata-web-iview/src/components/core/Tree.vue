@@ -1,8 +1,53 @@
 <template>
-    <div>
+    <div class="el-card">
         <div class="header">
-            <slot name="title">
-                <h3>Tree</h3>
+            <slot name="operation-bar"
+                  v-bind:conf="innerMeta['operation-bar']"
+                  v-bind:operations="{handleAdd, handleBatchDelete}">
+                <el-button-group>
+                    <slot name="prefix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
+                    <slot name="add-btn" v-bind:conf="innerMeta['operation-bar']" v-bind:add="handleAdd">
+                        <el-button @click="handleAdd" icon="el-icon-document-add"
+                                   v-bind="innerMeta['operation-bar']">新增
+                        </el-button>
+                    </slot>
+                    <slot name="batch-delete-btn" v-bind:conf="innerMeta['operation-bar']"
+                          v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
+                        <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
+                                   v-bind="innerMeta['operation-bar']">删除
+                        </el-button>
+                    </slot>
+
+                    <el-dropdown @command="handleCommand">
+                        <el-button type="primary" v-bind="innerMeta['operation-bar']">
+                            <span>节点操作</span>
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="handleExpandAll">
+                                <i class="el-icon-caret-bottom"></i>
+                                <span>展开所有</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="handleShrinkAll">
+                                <i class="el-icon-caret-right"></i>
+                                <span>收起所有</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="handleChoseAll" v-if="multiMode">
+                                <i class="el-icon-circle-check"></i>
+                                <span>全选</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="handleCleanChose" v-if="multiMode">
+                                <i class="el-icon-circle-close"></i>
+                                <span>取消全选</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="handleReverseChose" v-if="multiMode">
+                                <i class="el-icon-success"></i>
+                                <span>反选</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <slot name="suffix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
+                </el-button-group>
             </slot>
         </div>
         <el-tree :ref="refName" :data="innerData"
@@ -20,6 +65,9 @@
                 </slot>
             </template>
         </el-tree>
+        <dialog-box :visible="visible" title="节点编辑">
+            <form-tmpl :meta="formMeta"></form-tmpl>
+        </dialog-box>
     </div>
 </template>
 
@@ -39,10 +87,57 @@
                 innerData: [],
                 activeData: {},
                 choseData: [],
-                halfChoseData: []
+                halfChoseData: [],
+                formMeta: {},
+                visible: false
             }
         },
         methods: {
+            getAllNodes() {
+                const {refName} = this;
+                return this.$refs[refName].store._getAllNodes();
+            },
+            getCheckedNodes() {
+                const {refName} = this;
+                return this.$refs[refName].getCheckedNodes();
+            },
+            handleCommand(fn) {
+                if (this[fn]) this[fn]();
+            },
+            handleReverseChose() {
+                this.getAllNodes().forEach(node => node.checked = !node.checked);
+                this.$emit('chose-change', this.getCheckedNodes())
+            },
+            handleChoseAll() {
+                const {refName} = this;
+                this.$refs[refName].setCheckedNodes(this.innerData);
+                this.$emit('chose-change', this.getCheckedNodes())
+            },
+            handleCleanChose() {
+                const {refName} = this;
+                this.$refs[refName].setCheckedKeys([]);
+                this.$emit('chose-change', this.getCheckedNodes())
+            },
+            handleExpandAll() {
+                this.getAllNodes().forEach(node => node.expanded = true);
+            },
+            handleShrinkAll() {
+                this.getAllNodes().forEach(node => node.expanded = false);
+            },
+            handleAdd() {
+                const {refName} = this;
+                let currentNode = this.$refs[refName].getCurrentNode();
+                if (currentNode) {
+                    // pxg_todo 新增节点
+
+                } else {
+                    this.$message.warning('请先选择一个节点');
+                }
+
+            },
+            handleBatchDelete() {
+
+            },
             handleNodeClick(row, node, event) {
                 const {primaryKey} = this;
 
@@ -53,7 +148,6 @@
                 }
                 this.$emit('active-change', this.activeData);
             },
-
             handleNodeCheck(row, {checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys}) {
                 const {multiMode} = this;
                 if (!multiMode) return;
