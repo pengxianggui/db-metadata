@@ -27,8 +27,7 @@ public class CCUUConfigExtension implements ConfigExtension<IMetaField, Attribut
 
         if (containerType == ComponentType.TABLEVIEW) {
             MetaFieldConfigParse parse = metaObj.configParser();
-            if ("created_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_by".equalsIgnoreCase(metaObj.fieldCode())
-                    || "created_time".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())
+            if ("updated_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())
                     || "remark".equalsIgnoreCase(metaObj.fieldCode())) {
                 parse.isListShow(false);
             }
