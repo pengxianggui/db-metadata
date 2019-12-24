@@ -15,9 +15,9 @@ import java.util.List;
 public class ComputeKit {
 
     @Getter
-    private static List<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder>> instanceExtensions;
+    private static List<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> instanceExtensions;
 
-    public static Kv recommendFieldConfig(IMetaField metaField) {
+    public static Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
         /**
          * 分析元字段
          * 拼装instanceFieldConfig
@@ -32,8 +32,8 @@ public class ComputeKit {
         builder.label(metaField.cn());
         log.debug("auto compute config : {}", builder.render().toJson());
         if (instanceExtensions != null) {
-            for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> configExtension : instanceExtensions) {
-                configExtension.config(metaField, builder);
+            for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : instanceExtensions) {
+                configExtension.config(metaField, builder, componentType);
             }
         }
 

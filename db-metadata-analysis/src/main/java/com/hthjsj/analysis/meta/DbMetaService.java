@@ -126,6 +126,11 @@ public class DbMetaService {
         return moUpdated;
     }
 
+    public boolean updateMetaField(IMetaField metaField) {
+        Record record = new Record().setColumns(metaField.dataMap());
+        return Db.use(App.DB_MAIN).update("meta_field", record);
+    }
+
     public boolean deleteMetaObject(String objectCode) {
         return Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", objectCode) > 0 && Db.use(App.DB_MAIN).delete(
                 "delete from meta_field where object_code=?",

@@ -110,6 +110,10 @@ public class MetaFieldConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isListShow"));
     }
 
+    public void isListShow(boolean value) {
+        set("isListShow", value);
+    }
+
     public boolean isFile() {
         return Boolean.parseBoolean(getStr("isFile"));
         //TODO 局域路径来覆盖全局 upload.dir

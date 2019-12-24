@@ -1,5 +1,6 @@
 package com.hthjsj.analysis.meta;
 
+import com.hthjsj.analysis.component.ComponentType;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
 
@@ -26,7 +27,7 @@ public class MetaConfigFactory {
         config.set("objectCode", metaObject.code());
         if (objectExtensions != null) {
             for (ConfigExtension extension : objectExtensions) {
-                extension.config(metaObject, config);
+                extension.config(metaObject, config, ComponentType.UNKNOWN);
             }
         }
         return new MetaObjectConfigParse(config);
@@ -53,7 +54,7 @@ public class MetaConfigFactory {
 
         if (fieldExtensions != null) {
             for (ConfigExtension extension : fieldExtensions) {
-                extension.config(metaField, config);
+                extension.config(metaField, config, ComponentType.UNKNOWN);
             }
         }
         return new MetaFieldConfigParse(config);

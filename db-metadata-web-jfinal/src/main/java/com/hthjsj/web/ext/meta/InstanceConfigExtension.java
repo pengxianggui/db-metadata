@@ -18,9 +18,9 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class InstanceConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> {
+public class InstanceConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> {
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> textRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
         if (metaField.dbType().isText()) {
             if (metaField.dbTypeLength() == 1L) {
                 builder.componentName(ComponentType.BOOLBOX);
@@ -35,7 +35,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> dateRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> dateRecommend = (metaField, builder, containerType) -> {
         //日期
         if (metaField.dbType().isDate()) {
             if (metaField.dbType().isDateTime()) {
@@ -50,14 +50,14 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> numberRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> numberRecommend = (metaField, builder, containerType) -> {
         //数值
         if (metaField.dbType().isNumber()) {
             builder.componentName(ComponentType.NUMBERBOX);
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> jsonRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> jsonRecommend = (metaField, builder, containerType) -> {
         //Json
         if (metaField.dbType().isJson()) {
             builder.componentName(ComponentType.JSONBOX);
@@ -65,7 +65,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> optionsRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> optionsRecommend = (metaField, builder, containerType) -> {
         log.debug("analysis metafield config");
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.hasTranslation()) {
@@ -83,7 +83,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> commonRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> commonRecommend = (metaField, builder, containerType) -> {
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.isMultiple()) {
             builder.multiple(true);
@@ -91,7 +91,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         builder.defaultVal(metaFieldConfigParse.defaultVal());
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> uploadRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {
 
         //上传框
         if (metaField.fieldCode().contains("file")) {
@@ -101,7 +101,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> validateRecommend = (metaField, builder) -> {
+    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> validateRecommend = (metaField, builder, containerType) -> {
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
@@ -109,14 +109,14 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
     };
 
     @Override
-    public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder config) {
-        textRecommend.config(metaField, config);
-        dateRecommend.config(metaField, config);
-        numberRecommend.config(metaField, config);
-        jsonRecommend.config(metaField, config);
-        optionsRecommend.config(metaField, config);
-        commonRecommend.config(metaField, config);
-        uploadRecommend.config(metaField, config);
-        validateRecommend.config(metaField, config);
+    public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder config, ComponentType containerType) {
+        textRecommend.config(metaField, config, containerType);
+        dateRecommend.config(metaField, config, containerType);
+        numberRecommend.config(metaField, config, containerType);
+        jsonRecommend.config(metaField, config, containerType);
+        optionsRecommend.config(metaField, config, containerType);
+        commonRecommend.config(metaField, config, containerType);
+        uploadRecommend.config(metaField, config, containerType);
+        validateRecommend.config(metaField, config, containerType);
     }
 }

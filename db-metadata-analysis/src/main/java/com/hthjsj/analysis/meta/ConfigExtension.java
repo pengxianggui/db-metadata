@@ -10,7 +10,7 @@ package com.hthjsj.analysis.meta;
  *
  * <p> @author konbluesky </p>
  */
-public interface ConfigExtension<M, C> {
+public interface ConfigExtension<M, C, T> {
 
-    void config(M metaObj, C config);
+    void config(M metaObj, C config, T type);
 }

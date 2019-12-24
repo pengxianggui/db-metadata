@@ -69,8 +69,8 @@ public class UIManager {
         throw new WebException("not finished");
     }
 
-    public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter) {
-        Kv toBeUpdatedFieldInstanceConfig = ComputeKit.recommendFieldConfig(metaFieldViewAdapter.getMetaField());
+    public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter, ComponentType componentType) {
+        Kv toBeUpdatedFieldInstanceConfig = ComputeKit.recommendFieldConfig(metaFieldViewAdapter.getMetaField(), componentType);
         return update(metaFieldViewAdapter, toBeUpdatedFieldInstanceConfig);
     }
 

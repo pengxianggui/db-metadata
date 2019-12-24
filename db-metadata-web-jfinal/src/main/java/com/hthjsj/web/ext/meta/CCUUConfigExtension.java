@@ -1,7 +1,10 @@
 package com.hthjsj.web.ext.meta;
 
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.ConfigExtension;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.attr.AttributeBuilder;
 
 /**
@@ -11,13 +14,34 @@ import com.hthjsj.web.component.attr.AttributeBuilder;
  *
  * <p> @author konbluesky </p>
  */
-public class CCUUConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder> {
+public class CCUUConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> {
 
     @Override
-    public void config(IMetaField metaObj, AttributeBuilder.FatAttributeBuilder config) {
-        if ("created_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_by".equalsIgnoreCase(metaObj.fieldCode())
-                || "created_time".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())) {
-            config.inline(true);
+    public void config(IMetaField metaObj, AttributeBuilder.FatAttributeBuilder config, ComponentType containerType) {
+        if (containerType == ComponentType.FORMVIEW) {
+            if ("created_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_by".equalsIgnoreCase(metaObj.fieldCode())
+                    || "created_time".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())) {
+                config.inline(true);
+            }
+        }
+
+        if (containerType == ComponentType.TABLEVIEW) {
+            MetaFieldConfigParse parse = metaObj.configParser();
+            if ("created_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_by".equalsIgnoreCase(metaObj.fieldCode())
+                    || "created_time".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())
+                    || "remark".equalsIgnoreCase(metaObj.fieldCode())) {
+                parse.isListShow(false);
+            }
+            if (metaObj.dbType().isText()) {
+                if (metaObj.dbType().isBigText()) {
+                    parse.isListShow(false);
+                }
+                if (metaObj.dbType().isJson()) {
+                    parse.isListShow(false);
+                }
+            }
+            metaObj.config(parse.toJson());
+            ServiceManager.metaService().updateMetaField(metaObj);
         }
     }
 }

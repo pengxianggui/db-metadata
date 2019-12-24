@@ -50,7 +50,7 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);
                 MetaFieldViewAdapter metaFieldViewAdapter = metaObjectViewAdapter.getFieldAdapter(fieldCode);
-                UIManager.update(metaFieldViewAdapter);
+                UIManager.update(metaFieldViewAdapter, metaObjectViewAdapter.getComponent().componentType());
             }
         }
         return true;

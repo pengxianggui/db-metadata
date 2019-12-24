@@ -35,8 +35,8 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return Kv.create();
     }
 
-    private Kv recommendFieldConfig(IMetaField metaField) {
-        return ComputeKit.recommendFieldConfig(metaField);
+    private Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
+        return ComputeKit.recommendFieldConfig(metaField, componentType);
     }
 
     /**
@@ -48,14 +48,14 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
      *
      * @return
      */
-    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalComponentAllConfig) {
+    private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalComponentAllConfig, ComponentType componentType) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         // 读取globalConfig中的配置
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
-            Kv recommendConfig = recommendFieldConfig(field);
+            Kv recommendConfig = recommendFieldConfig(field, componentType);
             Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
             Kv fieldInstanceConfig = UtilKit.mergeUseNew(globalComponentConfig, recommendConfig);
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
@@ -88,7 +88,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         Kv levelObjectConfig = recommendObjectConfig(metaObject);
 
         // 因配置为自动计算,所以传入组件全局配置map
-        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalComponentAllConfig);
+        List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalComponentAllConfig, componentType);
 
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectConfig, fields);
     }

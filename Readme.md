@@ -129,7 +129,7 @@ https://docs.sencha.com/extjs/6.2.0
 - [ ] 表单 tabIndex
 - [ ] mysql 数据库版本8.0 不兼容
 - [ ] 脏数据,错误数据处理与提示;
-
+- Jprofiler : L-J11-Everyone#speedzodiac-327a9wrs5dxvz#463a59
 
 [Maven：Maven GPG Plugin](https://blog.csdn.net/en_joker/article/details/84140033)
 
@@ -138,7 +138,7 @@ https://docs.sencha.com/extjs/6.2.0
 - 数据权限的设计
 - formbuilder 覆盖所有模板
 - springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
-
+- 耗时操作的缓存支持(ehcache+redis)
 
 
 
