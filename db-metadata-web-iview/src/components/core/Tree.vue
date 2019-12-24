@@ -52,6 +52,7 @@
         </div>
         <el-tree :ref="refName" :data="innerData"
                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                 :props="props"
                  @node-click="handleNodeClick"
                  @node-contextmenu="$emit('node-contextmenu')"
                  @check-change="$emit('check-change')"
@@ -252,6 +253,9 @@
             },
             multiMode() {
                 return this.innerMeta['conf']['show-checkbox'];
+            },
+            props() {
+                return this.meta['conf']['props'];
             },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;

@@ -97,12 +97,22 @@ const treeTableFeatureConf = {
         "foreignFieldCode": "object_code"
     }
 };
+const treeFormFeatureConf = {
+    "tree": {
+        "objectCode": "test_table",
+        "primaryKey": "id",
+    },
+    "form": {
+        "objectCode": "test_table"
+    }
+};
+
 const mockTree = [
     {
         "id": "1",
-        "name": "meta_object",
+        "name": "meta_object1",
         "code": "meta_object",
-        "child": [
+        "children": [
             {
                 "id": "1-1",
                 "name": "meta_field",
@@ -118,11 +128,11 @@ const mockTree = [
     {
         "id": "2",
         "name": "一级 2",
-        "child": [
+        "children": [
             {
                 "id": "2-1",
                 "name": "二级 2-1",
-                "child": [
+                "children": [
                     {
                         "id": "2-1-1",
                         "name": "三级 2-1-1"
@@ -132,7 +142,7 @@ const mockTree = [
             {
                 "id": "2-2",
                 "name": "二级 2-2",
-                "child": [
+                "children": [
                     {
                         "id": "2-2-1",
                         "name": "三级 2-2-1"
@@ -144,11 +154,11 @@ const mockTree = [
     {
         "id": "3",
         "name": "一级 3",
-        "child": [
+        "children": [
             {
                 "id": "3-1",
                 "name": "二级 3-1",
-                "child": [
+                "children": [
                     {
                         "id": "3-1-1",
                         "name": "三级 3-1-1"
@@ -158,7 +168,7 @@ const mockTree = [
             {
                 "id": "3-2",
                 "name": "二级 3-2",
-                "child": [
+                "children": [
                     {
                         "id": "3-2-1",
                         "name": "三级 3-2-1"
@@ -169,10 +179,14 @@ const mockTree = [
     }
 ];
 
-mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
+mockAxios
+// 路由mock --------------------------------------------------------------------------------
+    .onGet(URL.ROUTE_DATA).reply(200, {
     data: commonRoutes,
     state: 'ok'
-}).onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'list-table-tmpl'})).reply(200, {
+})
+// list-table-tmpl mock -------------------------------------------------------------------
+    .onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'list-table-tmpl'})).reply(200, {
     data: listTableFeatureConf,
     state: 'ok'
 }).onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
@@ -188,7 +202,9 @@ mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
         },
         DEFAULT.DataList),
     state: 'ok'
-}).onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'tree-table-tmpl'})).reply(200, {
+})
+// tree-table-tmpl mock -------------------------------------------------------------------
+    .onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'tree-table-tmpl'})).reply(200, {
     data: treeTableFeatureConf,
     state: 'ok'
 }).onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
@@ -197,9 +213,13 @@ mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
 })).reply(200, {
     data: utils.merge(
         {
+            "component_name": "Tree",
+            "name": "Tree",
+            "label": "Tree",
             "data_url": "/tree/list/meta_object",
             "conf": {
-                "props": {"label": "name", "children": "child"}
+                "props": {"label": "name"},
+                "show-checkbox": true
             }
         },
         DEFAULT.Tree),
@@ -208,4 +228,10 @@ mockAxios.onGet(URL.ROUTE_DATA).reply(200, {
     data: mockTree,
     state: 'ok'
 })
+// tree-form-tmpl ------------------------------------------------------------------------
+    .onGet(utils.compile(URL.FEATURE_LOAD, {featureCode: 'tree-form-tmpl-demo'})).reply(200, {
+    data: treeFormFeatureConf,
+    state: 'ok'
+})
+// 其他放行
     .onAny().passThrough();

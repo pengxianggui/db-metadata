@@ -1,7 +1,8 @@
 <template>
     <row-grid :span="[6, 18]">
         <template #left>
-            <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
+            <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"
+                  ></tree>
         </template>
         <template #right>
             <table-list :ref="tlRefName" :meta="tlMeta"></table-list>
@@ -25,18 +26,7 @@
                 tableConf: {},
                 tlMeta: {},
                 spMeta: {},
-                treeMeta: {
-                    component_name: 'Tree',
-                    name: 'Tree', // 可省略, value不指定时, 则选取的值即为整个item对象
-                    label: 'Tree',
-                    conf: {
-                        // other options
-                        props: {
-                            label: "name",
-                            children: "child"
-                        }
-                    },
-                }
+                treeMeta: {}
             }
         },
         methods: {
@@ -89,9 +79,6 @@
             });
         },
         computed: {
-            treeRefName() {
-                return this.treeMeta['name'];
-            },
             tlRefName() {
                 return this.tlMeta['name'];
             }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>DataListTableTmpl</h3>
+        <h3>TreeTableTmplDemo</h3>
         <tree-table-tmpl :fc="featureCode"></tree-table-tmpl>
     </div>
 </template>

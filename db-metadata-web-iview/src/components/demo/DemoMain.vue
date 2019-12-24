@@ -16,6 +16,11 @@
         </el-row>
         <el-row>
             <el-col :span="24">
+                <tree-form-tmpl-demo style="height: 700px;"></tree-form-tmpl-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <tree-table-tmpl-demo style="height: 700px;"></tree-table-tmpl-demo>
             </el-col>
         </el-row>

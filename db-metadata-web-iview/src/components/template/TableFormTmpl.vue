@@ -31,13 +31,13 @@
                 const tlRefName = this.tlRefName;
                 this.$refs[tlRefName].getData();
             },
-            handleActiveChange(row) {
-                if (utils.isEmpty(row)) {
+            handleActiveChange(activeData) {
+                if (utils.isEmpty(activeData)) {
                     this.fmMeta = this.$merge({}, DEFAULT.FormTmpl);
                     return;
                 }
                 const primaryKey = this.tlMeta['objectPrimaryKey'];
-                const primaryValue = utils.extractValue(row, primaryKey.split(',')).join('_');
+                const primaryValue = utils.extractValue(activeData, primaryKey.split(',')).join('_');
                 const objectCode = this.tlMeta['objectCode'];
 
                 let url = this.$compile(URL.RECORD_TO_UPDATE, {
