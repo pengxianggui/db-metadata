@@ -341,6 +341,28 @@
   
 
 ### 功能模板结构(config)
+ - MasterSlaveTableTmpl
+ ```json
+    {
+      "master": {
+        "objectCode": "meta_object",
+        "primaryKey": "code"
+      },
+      "slaves": [
+        {
+          "objectCode": "meta_field",
+          "foreignFieldCode": "object_code",
+          "order": 1
+        },
+        {
+          "objectCode": "change_log",
+          "foreignFieldCode": "object_code",
+          "order": 2
+        }
+      ],
+      "icon": ""
+    }
+ ```
  - DataListTableTmpl
  ```json
     {
@@ -352,7 +374,8 @@
       "table": {
         "objectCode": "YYY",
         "foreignFieldCode": "y"
-      }
+      },
+      "icon": ""
     }
  ```
  - TreeTableTmpl
@@ -370,7 +393,17 @@
       "table": {
         "objectCode": "",
         "foreignFieldCode": "y"
-      }
+      },
+      "icon": ""
+    }
+ ```
+ - TableFromTmpl
+ ```json
+    {
+      "table": {
+        "objectCode": ""
+      },
+      "icon": ""
     }
  ```
  

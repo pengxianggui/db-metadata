@@ -10,6 +10,10 @@
             <el-form-item label="功能代码" class="inline">
                 <text-box v-model="feature.code" required></text-box>
             </el-form-item>
+            <el-form-item label="图标" class="inline">
+                <text-box v-model="icon"></text-box>
+            </el-form-item>
+
             <template v-if="feature.type === 'MasterSlaveGrid'">
                 <h3>主表</h3>
                 <el-form-item label="元对象编码" class="inline">
@@ -121,7 +125,13 @@
                     <text-box v-model="treeTableConfig.tree.rootIdentify" required></text-box>
                 </el-form-item>
                 <el-form-item label="label" class="inline">
-                    <text-box v-model="treeTableConfig.tree.label" required></text-box>
+                    <drop-down-box v-model="treeTableConfig.tree.label"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
                 </el-form-item>
                 <el-form-item label="isSync">
                     <bool-box v-model="treeTableConfig.tree.isSync" required></bool-box>
@@ -236,7 +246,8 @@
                         foreignFieldCode: null
                     }
                 },
-                activeTab: 'first'
+                activeTab: 'first',
+                icon: null, // 功能图标
             }
         },
         methods: {
@@ -256,6 +267,7 @@
                         this.feature.config = this.treeTableConfig;
                         break;
                 }
+                this.feature.config['icon'] = this.icon;
                 return this.feature;
             },
             doSubmit() {
