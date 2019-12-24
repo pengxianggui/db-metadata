@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "userId": "2",
+      "resources": [
+        "/table/list"
+      ]
+    }
+  ]
+}

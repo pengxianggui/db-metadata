@@ -1,0 +1,32 @@
+{
+  "meta_field": {
+    "FormTmpl": {
+      "cn": {
+        "inline": true
+      },
+      "en": {
+        "inline": true
+      },
+      "config": {
+        "conf": {
+          "size": "mini"
+        },
+        "name": "config",
+        "label": "配置",
+        "inline": false,
+        "component_name": "MiniFormBox"
+      }
+    }
+  },
+  "meta_feature": {
+    "FormTmpl": {
+      "type": {
+        "component_name": "DropDownBox",
+        "data_url": "/feature/list",
+        "conf": {
+          "multiple": false
+        }
+      }
+    }
+  }
+}

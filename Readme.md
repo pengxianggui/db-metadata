@@ -26,6 +26,23 @@
 - springboot支持
 
 ## 快速开始
+### 工程结构
+```bash
+├── arthas-output
+├── db                          # 数据库文件
+├── db-metadata-analysis        # 元数据分析工程
+├── db-metadata-parent          # Maven Root工程
+├── db-metadata-web-iview       # 前端工程 使用ElementUI，为了保留git提交记录，暂未将iview更名
+├── db-metadata-web-jfinal      # 服务端工程
+│   └── src
+├── jfinal-spring-boot-demo     # springboot-jfinal 整合 demo
+│   ├── src
+│   └── target
+└── jfinal-spring-boot-starter  # springboot-jfinal- start
+    ├── src
+    └── target
+
+```
 ### 安装部署
 ### 依赖配置
 ### 集成

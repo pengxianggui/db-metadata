@@ -1,0 +1,73 @@
+{
+  "meta_field": {
+    "is_sys": true,
+    "config": {
+      "bizInterceptor": "com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+    }
+  },
+  "meta_object": {
+    "is_sys": true,
+    "_fields": {
+      "code": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30
+        }
+      },
+      "table_name": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30
+        }
+      },
+      "schema_name": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false
+        }
+      }
+    }
+  },
+  "meta_dict": {
+    "is_sys": true
+  },
+  "meta_component": {
+    "is_sys": true
+  },
+  "meta_component_instance": {
+    "is_sys": true
+  },
+  "meta_feature": {
+    "is_sys": true
+  },
+  "test_table": {
+    "config": {
+      "objectCode": "test_table",
+      "isUUIDPrimary": true,
+      "testKey": 123
+    },
+    "_fields": {
+      "col_file": {
+        "config": {
+          "isFile": true,
+          "fileUploadPath": "/uploadPath"
+        }
+      }
+    }
+  }
+}
