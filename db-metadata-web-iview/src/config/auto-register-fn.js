@@ -2,7 +2,7 @@ import Vue from "vue";
 import axios from "../axios";
 import utils from "../utils";
 
-const authorities = ['ADMINs'];  // pxg_todo 模拟的权限
+const authorities = ['ADMIN'];  // pxg_todo 模拟的权限
 // 注册全局方法
 Vue.prototype.$axios = axios;
 Vue.prototype.$merge = utils.merge;
