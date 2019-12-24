@@ -14,7 +14,7 @@
                 <text-box v-model="icon"></text-box>
             </el-form-item>
 
-            <template v-if="feature.type === 'MasterSlaveGrid'">
+            <div v-show="feature.type === 'MasterSlaveGrid'">
                 <h3>主表</h3>
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="masterSlaveConfig.master.objectCode"
@@ -68,9 +68,9 @@
                 </el-tabs>
 
                 <!-- TODO 从表后期应当支持多个子表设置 -->
-            </template>
+            </div>
 
-            <template v-if="feature.type === 'SingleGrid'">
+            <div v-show="feature.type === 'SingleGrid'">
                 <el-form-item label="元对象编码">
                     <drop-down-box v-model="singleGridConfig.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
                         <template #options="{options}">
@@ -81,9 +81,9 @@
                         </template>
                     </drop-down-box>
                 </el-form-item>
-            </template>
+            </div>
 
-            <template v-if="feature.type === 'TreeTable'">
+            <div v-show="feature.type === 'TreeTable'">
                 <h3>Tree配置</h3>
                 <el-form-item label="元对象编码" class="inline">
                     <drop-down-box v-model="treeTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
@@ -158,7 +158,8 @@
                         </template>
                     </drop-down-box>
                 </el-form-item>
-            </template>
+            </div>
+
             <el-form-item>
                 <el-button @click="onSubmit" type="primary">保存</el-button>
                 <el-button @click="onCancel">取消</el-button>
