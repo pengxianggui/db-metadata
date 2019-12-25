@@ -204,27 +204,28 @@
             },
             extractPrimaryValue(row) {
                 const {primaryKey} = this;
-                return utils.extractValue(row, primaryKey.split(',')).join('_');
+                return utils.extractValue(row, primaryKey);
             },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
                 const primaryValue = this.extractPrimaryValue(row);
-
                 this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(primaryValue) {
-                let url;
-                if (primaryValue) {
+                let url, title;
+                if (!utils.isEmpty(primaryValue)) {
+                    title = '编辑';
+                    let primaryKey = this.primaryKey;
+                    let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                     url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
-                        primaryKey: primaryValue
+                        primaryKv: primaryKv
                     });
                 } else {
+                    title = '新增';
                     url = this.$compile(URL.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
                 }
-                this.dialog(url, {
-                    title: primaryValue ? '编辑' : '新增'
-                })
+                this.dialog(url, {title: title});
             },
             dialog(url, conf) {
                 this.$axios.get(url).then(resp => {
@@ -240,26 +241,37 @@
             handleDelete(ev, row, index) {
                 if (ev) ev.stopPropagation();
 
+                const {primaryKey} = this;
                 const primaryValue = this.extractPrimaryValue(row);
-                this.doDelete(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
+                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+
+                this.doDelete(primaryKv, ev, row, index);
             },
             // 批量删除
             handleBatchDelete(ev) {
-                const primaryValues = this.choseData.map(row => this.extractPrimaryValue(row));
+                let primaryKv = [];
+                let {primaryKey} = this;
+                this.choseData.forEach(row => {
+                    let kv = utils.spliceKvs(primaryKey, this.extractPrimaryValue(row));
+                    primaryKv.push(kv);
+                });
 
-                if (primaryValues.length > 0) {
-                    this.doDelete(primaryValues, ev);
+                if (this.choseData.length > 0) {
+                    this.doDelete(primaryKv, ev);
                     return
                 }
                 this.$message.warning('请至少选择一项!');
             },
             // default remove the assembly logic is based on primaryKey get on
-            doDelete(primaryValue) {
+            doDelete(primaryKv) {
                 let title = '确定删除此条记录?';
-                if (utils.isArray(primaryValue)) {
-                    let size = primaryValue.length;
-                    primaryValue = primaryValue.join(',');
-                    title = '确定删除选中的' + size + '条记录?';
+                let primaryKvExp;
+
+                if (utils.isArray(primaryKv)) {
+                    title = '确定删除选中的' + primaryKv.length + '条记录?';
+                    primaryKvExp = primaryKv.map(ele => "id=" + ele).join('&');
+                } else {
+                    primaryKvExp = "id=" + primaryKv;
                 }
 
                 this.$confirm(title, '提示', {
@@ -269,7 +281,7 @@
                 }).then(() => {
                     let beforeCompileUrl = this.innerMeta['delete_url'] || URL.RECORD_DELETE;
                     let afterCompileUrl = this.$compile(beforeCompileUrl,
-                        {objectCode: this.innerMeta['objectCode'], ids: primaryValue});
+                        {objectCode: this.innerMeta['objectCode'], primaryKvExp: primaryKvExp});
                     this.$axios.delete(afterCompileUrl).then(resp => {
                         this.$message.success(resp.msg);
                         this.getData();
@@ -293,7 +305,7 @@
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
                         let choseItem = this.$refs[tableRefName]['selection'][i];
-                        if (row[primaryKey] === choseItem[primaryKey]) {
+                        if (utils.allEqualOnKeys(row, choseItem, primaryKey)) {
                             selected = false;
                             break
                         }
@@ -304,7 +316,7 @@
             activeRow(row) {
                 const {primaryKey} = this;
 
-                if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
+                if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
                     this.activeData = {};
                     const refName = this.innerMeta['name'];
                     this.$refs[refName].setCurrentRow();
@@ -466,13 +478,15 @@
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
                 const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+                let primaryKey;
 
                 if (utils.isEmpty(objectPrimaryKey)) {
                     console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
-                    return defaultPrimaryKey;
+                    primaryKey = defaultPrimaryKey.split(',');
                 } else {
-                    return objectPrimaryKey;
+                    primaryKey = objectPrimaryKey.split(',');
                 }
+                return primaryKey;
             },
             multiMode() {
                 return this.innerMeta['multi_select'];

@@ -113,8 +113,8 @@ export function isEmpty(value) {
  * 则返回: [1,3];
  * 若keys为"b", 则直接返回[2]
  *
- * @param object
- * @param keys
+ * @param object Object
+ * @param keys Array
  * @return Array, 若没有找到相应的value, 则会返回空数组
  */
 export function extractValue(object, keys) {
@@ -130,6 +130,34 @@ export function extractValue(object, keys) {
             break;
     }
     return values;
+}
+
+/**
+ * 拼接kvs, 如：
+ * keys: ['a', 'b', 'c']
+ * values: ['1', 2, '3']
+ * 结果为: "a_1,b_2,c_3"
+ * @param keys
+ * @param values
+ * @param separatorBetweenKAndV 默认为"_"
+ * @param separatorBetweenKVs 默认为","
+ * @returns {string}
+ */
+export function spliceKvs(keys, values, separatorBetweenKAndV = '_', separatorBetweenKVs = ',') {
+    if (!isArray(keys) || !isArray(values)) {
+        throw "keys:" + keys + "; values:" + values + ", all should be Array!";
+    }
+    if (keys.length !== values.length) {
+        throw "keys.length not equal values.length, so can't splice.";
+    }
+
+    let kvs = [];
+    for (let i = 0; i < keys.length; i++) {
+        let key = toString(keys[i]);
+        let value = toString(values[i]);
+        kvs.push(key + separatorBetweenKAndV + value);
+    }
+    return kvs.join(separatorBetweenKVs);
 }
 
 /**
@@ -284,6 +312,29 @@ export function extractNotRepeatEle(arr, keyName) {
         }
     });
     return newArr;
+}
+
+/**
+ * 判断两个对象的属性是否全部都相同. 两个对象必须都为对象, 否则返回true;
+ * key为数组时, 必须满足key中每一个元素, object1，object2都有并且对应值都相等，才返回true;
+ * key为字符串时, 必须满足object1,object2都含有key, 并且对应值相等，才返回true;
+ * @param object1 Object
+ * @param object2 Object
+ * @param keys Array
+ * @return Boolean
+ */
+export function allEqualOnKeys(object1, object2, keys) {
+    if (!isObject(object1) || !isObject(object2)) return false;
+    if (!isArray(keys) && !isString(keys)) return false;
+
+    if (isString(keys)) {
+        if (object1.hasOwnProperty(keys) && object2.hasOwnProperty(keys)) {
+            return object1[keys] === object2[keys];
+        }
+    } else if (isArray(keys)) {
+        return keys.every(ele => object1.hasOwnProperty(ele) && object2.hasOwnProperty(ele) && (object1[ele] === object2[ele]));
+    }
+    return false;
 }
 
 /**

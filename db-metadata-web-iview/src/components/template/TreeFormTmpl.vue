@@ -11,7 +11,7 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant'
+    import {DEFAULT, URL, CONSTANT} from '@/constant'
     import {getFormMeta, getTreeMeta, loadFeature} from "@/components/core/mixins/methods"
 
     export default {
@@ -36,13 +36,14 @@
                     this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
                     return;
                 }
-                const primaryKey = this.treeMeta['objectPrimaryKey'];
-                const primaryValue = utils.extractValue(activeData, primaryKey.split(',')).join('_');
+                const primaryKey = this.primaryKey;
+                const primaryValue = utils.extractValue(activeData, primaryKey);
+                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                 const objectCode = this.treeMeta['objectCode'];
 
                 let url = this.$compile(URL.RECORD_TO_UPDATE, {
                     objectCode: objectCode,
-                    primaryKey: primaryValue
+                    primaryKv: primaryKv
                 });
                 this.$axios.get(url).then(resp => {
                     this.formMeta = resp.data;
@@ -71,6 +72,10 @@
         computed: {
             formRefName() {
                 return this.formMeta['name'];
+            },
+            primaryKey() {
+                let primaryKey = this.tlMeta.hasOwnProperty('objectPrimaryKey') ? this.tlMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
+                return primaryKey.split(',');
             }
         }
 

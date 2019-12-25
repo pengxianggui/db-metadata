@@ -64,12 +64,15 @@
             },
         },
         methods: {
-            // arrayConver(value, multiple) {
-            //     if (multiple) {
-            //         return value.map(ele => utils.convertToString(ele));
-            //     }
-            //     return utils.convertToString(value);
-            // },
+            getEleType() {
+
+            },
+            arrayConver(value, multiple) {
+                if (multiple) {
+                    return value.map(ele => utils.convertToString(ele));
+                }
+                return utils.convertToString(value);
+            },
             // arrayReverse(nativeVal, multiple) {
             //     const {eleType} = this;
             //     if (multiple) {
@@ -91,6 +94,16 @@
             nativeValue: {
                 get: function () {  // nativeValue 全部转换为string 或 string 数组
                     let multiple = (this.innerMeta.hasOwnProperty('conf') && this.innerMeta['conf']['multiple'] === true);
+                    // const isArray = utils.isArray(this.value);
+
+                    // if (isArray) {
+                    //     this.arrayConver(multiple, )
+                    // } else {
+                    //
+                    // }
+
+
+
                     if (multiple) {
                         switch (utils.typeOf(this.value)) {
                             case "[object String]":

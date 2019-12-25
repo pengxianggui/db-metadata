@@ -19,9 +19,9 @@ export const COMP_INSTANCE_CONF_DELETE = '/component/delete/{objectCode}?compone
 export const TABLE_INSTANCE_META = '/table/meta/{objectCode}'; // 表实例元数据
 export const COMPONENT_INSTANCE_META = '/component/meta?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例元数据
 
-export const RECORD_DELETE = '/table/delete?objectCode={objectCode}&ids={ids}'; // 删除记录
+export const RECORD_DELETE = '/table/delete?objectCode={objectCode}&{primaryKvExp}'; // 删除记录
 export const RECORD_TO_ADD = "/form/toAdd/{objectCode}";  // 新增记录(TO)
-export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={primaryKey}';    // 更新记录(TO)
+export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={primaryKv}';    // 更新记录(TO)
 
 export const LOAD_COMP_BY_OBJECT = '/meta/contact/{objectCode}?kv={kv}'; // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
 

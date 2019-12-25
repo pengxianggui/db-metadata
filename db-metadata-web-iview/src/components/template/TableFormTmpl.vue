@@ -13,8 +13,9 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant'
+    import {CONSTANT, DEFAULT, URL} from '@/constant'
     import {getSpMeta, getTlMeta, loadFeature} from "@/components/core/mixins/methods"
+
     export default {
         name: "TableFormTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
@@ -36,13 +37,15 @@
                     this.fmMeta = this.$merge({}, DEFAULT.FormTmpl);
                     return;
                 }
-                const primaryKey = this.tlMeta['objectPrimaryKey'];
-                const primaryValue = utils.extractValue(activeData, primaryKey.split(',')).join('_');
+                const primaryKey = this.primaryKey;
+                const primaryValue = utils.extractValue(activeData, primaryKey);
+                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+
                 const objectCode = this.tlMeta['objectCode'];
 
                 let url = this.$compile(URL.RECORD_TO_UPDATE, {
                     objectCode: objectCode,
-                    primaryKey: primaryValue
+                    primaryKv: primaryKv
                 });
                 this.$axios.get(url).then(resp => {
                     this.fmMeta = resp.data;
@@ -74,6 +77,10 @@
         computed: {
             tlRefName() {
                 return this.tlMeta['name'];
+            },
+            primaryKey() {
+                let primaryKey = this.tlMeta.hasOwnProperty('objectPrimaryKey') ? this.tlMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
+                return primaryKey.split(',');
             }
         }
     }
