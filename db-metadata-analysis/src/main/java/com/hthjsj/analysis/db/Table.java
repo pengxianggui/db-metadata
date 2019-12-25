@@ -21,9 +21,11 @@ import java.util.Map;
  */
 public class Table {
 
-    private Map<String, Object> dataMap;
     Record record;
+
     List<Column> columns;
+
+    private Map<String, Object> dataMap;
 
     public Table(Record record) {
         this.record = record;
@@ -95,6 +97,11 @@ public class Table {
         return record.getLong("DATA_FREE");
     }
 
+    /**
+     * 如表中设置了自增主键，则AUTO_INCREMENT != null,表创建成功后AUTO_INCREMENT=1
+     *
+     * @return
+     */
     public Long getAutoIncrement() {
         return record.getLong("AUTO_INCREMENT");
     }
@@ -126,5 +133,4 @@ public class Table {
     public String getTableComment() {
         return record.getStr("TABLE_COMMENT");
     }
-
 }

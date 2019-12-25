@@ -31,7 +31,7 @@ public class BusinessService {
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {
         //select metaField.fileCode() from object.tableName() where object.primarykey()=id
-        if (object.primaryKey().contains(",")) {
+        if (object.isMultiplePrimaryKey()) {
             throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
         return (T) Db.use(object.schemaName()).queryFirst("select " + metaField.fieldCode() + " from " + object.tableName() + " where " + object.primaryKey() + "=?", id);
@@ -52,7 +52,7 @@ public class BusinessService {
     }
 
     public boolean deleteData(IMetaObject object, String[] ids) {
-        if (object.primaryKey().contains(",")) {
+        if (object.isMultiplePrimaryKey()) {
             throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
         String idsString = StrKit.join(ids, "','");

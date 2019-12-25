@@ -21,9 +21,11 @@ public class MetaConfigFactory {
     @Getter
     private static List<ConfigExtension> objectExtensions;
 
-    public static MetaObjectConfigParse createV1ObjectConfig(IMetaObject metaObject, String isUUIDPri) {
+    public static MetaObjectConfigParse createV1ObjectConfig(IMetaObject metaObject) {
         Kv config = Kv.create();
-        config.set("isUUIDPrimary", Boolean.parseBoolean(isUUIDPri));
+        config.set("isUUIDPrimary", false);     //UUID
+        config.set("isNumberSequence", false);  //数字序列,雪花算法
+        config.set("isAutoIncrement", false);   //数据库自增
         config.set("objectCode", metaObject.code());
         if (objectExtensions != null) {
             for (ConfigExtension extension : objectExtensions) {

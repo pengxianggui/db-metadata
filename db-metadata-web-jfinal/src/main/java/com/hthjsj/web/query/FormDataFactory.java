@@ -39,7 +39,19 @@ public class FormDataFactory {
             try {
                 //主键处理
                 if (metaField.isPrimary() && isInsert) {
-                    formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
+                    //非联合主键时,根据策略开关(uuid或数值序列)对主键进行赋值
+                    if (!metaObject.isMultiplePrimaryKey()) {
+                        if (metaObject.configParser().isNumberSequence()) {
+                            formData.set(metaObject.primaryKey(), SnowFlake.me().nextId());
+                        }
+                        if (metaObject.configParser().isUUIDPrimary()) {
+                            formData.set(metaObject.primaryKey(), StrKit.getRandomUUID());
+                        }
+                    }
+                    //自增主键时删除主键字段,交给数据库自增,
+                    if (metaObject.configParser().isAutoIncrement()) {
+                        formData.remove(metaObject.primaryKey());
+                    }
                     continue;
                 }
                 if (castedValue != null) {

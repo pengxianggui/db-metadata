@@ -26,8 +26,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
         metaObject.name(table.getTableComment().trim());
         metaObject.tableName(table.getTableName().toLowerCase());
         metaObject.schemaName(table.getTableSchema().toLowerCase());
-        //TODO config 使用string ,jdbc驱动不支持set jsonobject
-        metaObject.config(MetaConfigFactory.createV1ObjectConfig(metaObject, "true").toJson());
+        MetaObjectConfigParse metaObjectConfigParse = MetaConfigFactory.createV1ObjectConfig(metaObject);
 
         List<String> pks = new ArrayList<>();
         for (int i = 0; i < table.getColumns().size(); i++) {
@@ -48,6 +47,13 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
             if (PRIMARY.equals(column.getColumnKey())) {
                 mf.isPrimary(true);
                 pks.add(mf.fieldCode());
+                //设置主键策略
+                if (mf.dbType().isNumber() && table.getAutoIncrement() != null) {
+                    metaObjectConfigParse.isAutoIncrement(true);
+                }
+                if (mf.dbType().isText() && table.getAutoIncrement() == null) {
+                    metaObjectConfigParse.isNumberSequence(true);
+                }
             } else {
                 mf.isPrimary(false);
             }
@@ -57,6 +63,7 @@ public class MetaObjectMysqlAssembly implements MetaObjectAssembly<Table, IMetaO
             mf.config(fieldConfig.toJson());
             metaObject.addField(mf);
         }
+        metaObject.config(metaObjectConfigParse.toJson());
         metaObject.primaryKey(StrKit.join(pks, ","));
         return metaObject;
     }

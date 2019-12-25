@@ -98,10 +98,8 @@ public class DbMetaService {
     }
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
-        if (metaObject.configParser().isUUIDPrimary()) {
-            metaObject.dataMap().put("id", SnowFlake.me().nextId());
-        }
-        boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", new Record().setColumns(metaObject.dataMap()));
+        metaObject.dataMap().put(metaObject.primaryKey(), SnowFlake.me().nextId());
+        boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
             metaObject.fields().forEach((re) -> {

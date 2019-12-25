@@ -42,6 +42,8 @@ public interface IMetaObject {
     @JSONField(name = "primaryKey")
     String primaryKey();
 
+    boolean isMultiplePrimaryKey();
+
     void primaryKey(String primaryKey);
 
     @JSONField(name = "fields")

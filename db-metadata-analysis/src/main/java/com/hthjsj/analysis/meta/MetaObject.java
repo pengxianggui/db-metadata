@@ -1,5 +1,6 @@
 package com.hthjsj.analysis.meta;
 
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
@@ -73,6 +74,11 @@ public class MetaObject implements IMetaObject {
     @Override
     public String primaryKey() {
         return record.getStr("primarys");
+    }
+
+    @Override
+    public boolean isMultiplePrimaryKey() {
+        return StrKit.isBlank(record.getStr("primarys")) && record.getStr("primarys").contains(",");
     }
 
     @Override

@@ -27,6 +27,26 @@ public class MetaObjectConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isUUIDPrimary"));
     }
 
+    public boolean isNumberSequence() {
+        return Boolean.parseBoolean(getStr("isNumberSequence"));
+    }
+
+    public boolean isAutoIncrement() {
+        return Boolean.parseBoolean(getStr("isAutoIncrement"));
+    }
+
+    public void isNumberSequence(boolean v) {
+        set("isNumberSequence", v);
+    }
+
+    public void isUUIDPrimary(boolean v) {
+        set("isUUIDPrimary", v);
+    }
+
+    public void isAutoIncrement(boolean v) {
+        set("isAutoIncrement", v);
+    }
+
     public <T extends IPointCut> T interceptor() {
         if (!StrKit.notBlank(getStr("bizInterceptor"))) {
             return (T) new PointCut();
