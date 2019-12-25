@@ -48,31 +48,64 @@
         inheritAttrs: true,
         data() {
             return {
+                eleType: 'string', // default, string|number
                 innerOptions: []
             }
         },
         props: {
-            value: [Object, String, Number, Array]
+            value: {
+                type: [Object, String, Number, Array],
+                validator: function (val) {
+                    if (utils.isArray(val)) {
+                        return val.every(ele => utils.isString(ele)) || val.every(ele => utils.isNumber(ele));
+                    }
+                    return true;
+                }
+            },
+        },
+        methods: {
+            // arrayConver(value, multiple) {
+            //     if (multiple) {
+            //         return value.map(ele => utils.convertToString(ele));
+            //     }
+            //     return utils.convertToString(value);
+            // },
+            // arrayReverse(nativeVal, multiple) {
+            //     const {eleType} = this;
+            //     if (multiple) {
+            //         let fn = eleType === 'string' ? utils.convertToString : utils.convertToNumber;
+            //         return nativeVal.map(ele => fn(ele)).join(',');
+            //     }
+            //     return utils.convertToArray(nativeVal).join(',');
+            // },
+            // numberConver(value, multiple) {
+            //     value = utils.convertToString(value);
+            //     return multiple ? [value] : value;
+            // },
+            // numberReverse(value, multiple) {
+            //     const {eleType} = this;
+            //
+            // }
         },
         computed: {
             nativeValue: {
-                get: function () {
+                get: function () {  // nativeValue 全部转换为string 或 string 数组
                     let multiple = (this.innerMeta.hasOwnProperty('conf') && this.innerMeta['conf']['multiple'] === true);
                     if (multiple) {
                         switch (utils.typeOf(this.value)) {
                             case "[object String]":
                                 return this.value.trim() === '' ? [] : this.value.split(',');
                             case "[object Array]":
-                                return this.value;
+                                return this.value.map(ele => utils.convertToString(ele));
                             case "[object Undefined]":
                                 return [];
                             case "[object Null]":
                                 return [];
                         }
                     }
-                    return this.value;
+                    return utils.convertToString(this.value);
                 },
-                set: function (val) {
+                set: function (val) {   // nativeValue按照传入的value类型做类型还原
                     let newVal = val;
                     let multiple = (this.innerMeta.hasOwnProperty('conf') && this.innerMeta['conf']['multiple'] === true);
                     if (multiple) {
@@ -82,6 +115,9 @@
                                 break;
                             case "[object Array]":
                                 newVal = val;
+                                break;
+                            case "[object Number]":
+                                newVal = utils.convertToNumber(val);
                                 break;
                         }
                     }

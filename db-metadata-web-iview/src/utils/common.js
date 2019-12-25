@@ -1,4 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
+import toString from 'lodash/toString'
+import toNumber from 'lodash/toNumber'
 
 // 常规utils方法
 
@@ -145,6 +147,28 @@ export function convertToArray(value) {
     } catch (e) {
         return [];
     }
+}
+
+/**
+ * 如果 value 不是字符串，将其转换为字符串。 null 和 undefined 将返回空字符串。
+ * toString(null);
+ * // => ''
+ *
+ * toString(-0);
+ * // => '-0'
+ *
+ * toString([1, 2, 3]);
+ * // => '1,2,3'
+ *
+ * @param value
+ * @returns {string}
+ */
+export function convertToString(value) {
+    return toString(value);
+}
+
+export function convertToNumber(value) {
+    return toNumber(value);
 }
 
 /**
