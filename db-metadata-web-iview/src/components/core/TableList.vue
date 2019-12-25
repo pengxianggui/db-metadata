@@ -279,7 +279,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let beforeCompileUrl = this.innerMeta['delete_url'] || URL.RECORD_DELETE;
+                    let beforeCompileUrl = URL.RECORD_DELETE;
                     let afterCompileUrl = this.$compile(beforeCompileUrl,
                         {objectCode: this.innerMeta['objectCode'], primaryKvExp: primaryKvExp});
                     this.$axios.delete(afterCompileUrl).then(resp => {
