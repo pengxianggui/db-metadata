@@ -46,8 +46,8 @@ public class FeatureService {
         return Db.use(App.DB_MAIN).findAll("meta_feature");
     }
 
-    public boolean deleteFeature(String[] ids) {
-        String idsString = StrKit.join(ids, "','");
+    public boolean deleteFeature(String[] featureCodes) {
+        String idsString = StrKit.join(featureCodes, "','");
         return Db.update("delete from meta_feature where code in ('" + idsString + "')") > 0;
     }
 

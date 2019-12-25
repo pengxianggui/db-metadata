@@ -98,7 +98,7 @@ public class DbMetaService {
     }
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
-        metaObject.dataMap().put(metaObject.primaryKey(), SnowFlake.me().nextId());
+        metaObject.dataMap().put("id", SnowFlake.me().nextId());
         boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
@@ -170,8 +170,8 @@ public class DbMetaService {
         return businessService.updateData(object, data);
     }
 
-    public boolean deleteData(IMetaObject object, String[] ids) {
-        return businessService.deleteData(object, ids);
+    public boolean deleteDatas(IMetaObject object, Object[] ids) {
+        return businessService.deleteDatas(object, ids);
     }
 
     public <T> T findDataFieldById(IMetaObject metaObject, IMetaField metaField, String id) {

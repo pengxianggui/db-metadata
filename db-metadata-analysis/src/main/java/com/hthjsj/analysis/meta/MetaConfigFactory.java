@@ -43,7 +43,7 @@ public class MetaConfigFactory {
         config.set("fieldCode", metaField.fieldCode());
         config.set("isMultiple", false);
 
-        //主键:新增不可见,更新只读
+        //单一主键时,主键:新增不可见,更新只读
         if (metaField.isPrimary()) {
             config.set("addStatus", MetaFieldConfigParse.DISABLE);
             config.set("updateStatus", MetaFieldConfigParse.READONLY);
@@ -51,6 +51,7 @@ public class MetaConfigFactory {
             config.set("addStatus", MetaFieldConfigParse.NORMAL);
             config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         }
+
         config.set("isListShow", true);
         config.set("isSearch", true);
 

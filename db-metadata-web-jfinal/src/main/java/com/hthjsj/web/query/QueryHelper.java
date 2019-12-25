@@ -3,13 +3,16 @@ package com.hthjsj.web.query;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
-import com.jfinal.kit.StrKit;
+import com.jfinal.kit.Okv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p> Class title: </p>
@@ -95,23 +98,55 @@ public class QueryHelper {
         return Joiner.on("&").appendTo(sb, ss).toString();
     }
 
-    public Object[] getPks(String primaryKey, String defaultKey) {
-        List<String> values = new ArrayList<>();
-        if (StrKit.notBlank(primaryKey)) {
-            String[] keys = primaryKey.split(",");
-            for (String key : keys) {
-                if (StrKit.notBlank(key)) {
-                    values.add(tp.get(key));
+    /**
+     * 前后端id传输,用"id"作为key
+     * 复合主键处理
+     * id=pk1_v1,pk2_v2&id=pk1_v1,pk2_v2
+     * id=1&id=2
+     *
+     * @param metaObject
+     * @param defaultKey
+     *
+     * @return [[v1, v2], [v1, v2]]
+     * [v1]
+     */
+    public Object[] getPks(IMetaObject metaObject, String defaultKey) {
+        List<Object[]> pks = new ArrayList<>();
+        if (metaObject.isMultiplePrimaryKey()) {
+            //pk1,pk2
+            String[] pkkeys = metaObject.primaryKey().split(",");
+            //["pk1_v1,pk2_v2","pk1_v1,pk2_v2"]
+            String[] vals = tp.getParaValues("id");
+
+            Set<Object> results = Sets.newLinkedHashSet();
+            for (String val : vals) {
+                results.clear();
+                Okv pksmap = resolvePk(val);
+                for (String key : pkkeys) {
+                    results.add(pksmap.getStr(key));
                 }
+                pks.add(results.toArray());
             }
+            //result : [[v1,v2],[v1,v2]]
+        } else {
+            pks.add(new Object[] { tp.get(metaObject.primaryKey()) });
         }
-        //FIXME hack primarykey取不到主键时,用默认key,前端支持后,取消这部分逻辑
-        if (StrKit.notBlank(defaultKey)) {
-            values.clear();
-            if (StrKit.notBlank(defaultKey)) {
-                values.add(tp.get(defaultKey));
-            }
+        return pks.toArray();
+    }
+
+    /**
+     * 拆解一条复合主键
+     *
+     * @param value "id=pk1_v1,pk2_v2"
+     *
+     * @return {pk1:v1,pk2:v2}
+     */
+    private Okv resolvePk(String value) {
+        String[] ss = value.split(",");
+        Okv params = Okv.create();
+        for (String s : ss) {
+            params.set(s.split("_")[0], s.split("_")[1]);
         }
-        return values.toArray();
+        return params;
     }
 }

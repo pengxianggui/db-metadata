@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -24,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -108,13 +108,29 @@ public class TableController extends FrontRestController {
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
     }
 
+    /**
+     * <pre>
+     * 删除逻辑:
+     *      1.获取元对象
+     *      2.拿到主键规则,策略
+     *      3.从request中解析主键
+     *      4.用service 根据业务主键删除业务数据
+     * url样例:
+     *      单主键:   http://localhost:8888/table/delete?id=1&id=2&id=3
+     *      复合主键: http://localhost:8888/table/delete?id=pk1_v1,pk2_v2&id=pk1_v1,pk2_v2
+     * </pre>
+     */
     @Override
     public void delete() {
-        String objectCode = getPara("objectCode");
-        String idss = getPara("ids");
-        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
-        Preconditions.checkArgument(!ids.isEmpty(), "无效的数据id:[%s]", ids);
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+
         IMetaObject metaObject = metaService().findByCode(objectCode);
+        Object[] ids = queryHelper.getPks(metaObject, "id");
+
+//        String idss = getPara("ids");
+//        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
+        Preconditions.checkArgument(ids.length != 0, "无效的数据id:[%s]", MoreObjects.toStringHelper(ids));
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut pointCut = metaObjectConfigParse.deletePointCut();
@@ -127,7 +143,7 @@ public class TableController extends FrontRestController {
                 boolean s = false;
                 try {
                     pointCut.deleteBefore(invocation);
-                    s = metaService().deleteData(metaObject, ids.toArray(new String[ids.size()]));
+                    s = metaService().deleteDatas(metaObject, ids);
                     pointCut.deleteAfter(s, invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());

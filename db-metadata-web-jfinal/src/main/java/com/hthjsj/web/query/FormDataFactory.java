@@ -42,11 +42,13 @@ public class FormDataFactory {
                     //非联合主键时,根据策略开关(uuid或数值序列)对主键进行赋值
                     if (!metaObject.isMultiplePrimaryKey()) {
                         if (metaObject.configParser().isNumberSequence()) {
-                            formData.set(metaObject.primaryKey(), SnowFlake.me().nextId());
+                            formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
                         }
                         if (metaObject.configParser().isUUIDPrimary()) {
-                            formData.set(metaObject.primaryKey(), StrKit.getRandomUUID());
+                            formData.set(metaField.fieldCode(), StrKit.getRandomUUID());
                         }
+                    } else {
+                        formData.set(metaField.fieldCode(), castedValue);
                     }
                     //自增主键时删除主键字段,交给数据库自增,
                     if (metaObject.configParser().isAutoIncrement()) {
@@ -79,7 +81,7 @@ public class FormDataFactory {
         for (IMetaField metaField : metaObject.fields()) {
 
             if (metaField.configParser().isFile()) {
-                if (metaObject.primaryKey().contains(",")) {
+                if (metaObject.isMultiplePrimaryKey()) {
                     throw new WebException("%s 元对象为复合主键", metaObject.code());
                 }
                 String id = record.getStr(metaObject.primaryKey());

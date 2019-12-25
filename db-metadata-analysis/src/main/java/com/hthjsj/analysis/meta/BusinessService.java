@@ -6,7 +6,6 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.jfinal.aop.Before;
 import com.jfinal.json.Json;
 import com.jfinal.kit.Kv;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
@@ -51,12 +50,38 @@ public class BusinessService {
         return status;
     }
 
-    public boolean deleteData(IMetaObject object, String[] ids) {
+    /**
+     * 删除一条记录或多条
+     * 支持复合主键的删除操作
+     * WARN:
+     * ids :[[v1, v2], [v1, v2]]
+     * [v1 v1]
+     *
+     * @param object
+     * @param ids
+     *
+     * @return
+     */
+    public boolean deleteDatas(IMetaObject object, Object[] ids) {
+        int i = 0;
         if (object.isMultiplePrimaryKey()) {
-            throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
+            for (Object pks : ids) {
+                if (pks instanceof Object[]) {
+                    boolean status = Db.use(object.schemaName()).deleteByIds(object.tableName(), object.primaryKey(), (Object[]) pks);
+                    if (status) {
+                        i++;
+                    }
+                }
+            }
+        } else {
+            for (Object pk : ids) {
+                boolean status = Db.use(object.schemaName()).deleteById(object.tableName(), object.primaryKey(), pk);
+                if (status) {
+                    i++;
+                }
+            }
         }
-        String idsString = StrKit.join(ids, "','");
-        return Db.use(object.schemaName()).update("delete from " + object.tableName() + " where " + object.primaryKey() + " in ('" + idsString + "')") > 0;
+        return ids.length == i;
     }
 
     /**

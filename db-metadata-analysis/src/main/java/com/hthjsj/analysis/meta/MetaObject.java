@@ -78,7 +78,7 @@ public class MetaObject implements IMetaObject {
 
     @Override
     public boolean isMultiplePrimaryKey() {
-        return StrKit.isBlank(record.getStr("primarys")) && record.getStr("primarys").contains(",");
+        return record.getStr("primarys") != null && record.getStr("primarys").contains(",");
     }
 
     @Override
