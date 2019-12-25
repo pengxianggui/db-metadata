@@ -4,7 +4,7 @@
     "name": "TableList",
     "label": "表格模板",
     "data_url": "/table/list/{objectCode}",
-    "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
+    "delete_url": "/table/delete?objectCode={objectCode}&{primaryKvExp}",
     "multi_select": true,
     "editable": false,
     "conf": {
