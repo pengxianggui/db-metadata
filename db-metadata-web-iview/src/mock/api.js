@@ -233,5 +233,26 @@ mockAxios
     data: treeFormFeatureConf,
     state: 'ok'
 })
+    .onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
+        objectCode: "test_table",
+        componentCode: "Tree"
+    })).reply(200, {
+    data: utils.merge(
+        {
+            "component_name": "Tree",
+            "name": "Tree",
+            "label": "Tree",
+            "data_url": "/tree/list/test_table",
+            "conf": {
+                "props": {"label": "name"},
+                "show-checkbox": true
+            }
+        },
+        DEFAULT.Tree),
+    state: 'ok'
+}).onGet("/tree/list/test_table").reply(200, {
+    data: mockTree,
+    state: 'ok'
+})
 // 其他放行
     .onAny().passThrough();

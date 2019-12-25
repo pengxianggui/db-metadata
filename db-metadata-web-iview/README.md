@@ -239,6 +239,7 @@
     -[ ] 行数据查看(form只读)目前两种方案: 1. 双击行(或添加“查看”按钮); 2. 行下拉展开详细信息
     -[ ] 更多定制化的行操作按钮可以提供一个hover的“更多”下拉菜单
     -[ ] 除了弹窗, 也需要支持右侧抽屉拉出模式——不同按钮操作下,抽屉和弹窗两种模式如何通过配置指定？
+    -[ ] 单元格render(转义)
     
  -[ ] Tree
     -[x] 多选(check)
@@ -259,6 +260,8 @@
         - 隐藏(不能看,能生成sql:    (showable: false, readonly:true, disabled: false)
         - 只读(能看,不生成sql):    (showable: true, readonly: true, disabled: true)
         - 禁用(不能看,不生成SQL:    (showable: false, readonly: true, disabled: true)
+    
+    -[ ] 表单渲染时需要整齐划一,控件的宽度统一指定;
     
  -[ ] dialog
     -[x] ~~dialog 全局配置~~
@@ -342,11 +345,11 @@
     -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件: `npm install`
- -[ ] 表单渲染时需要整齐划一,控件的宽度统一指定;
  -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单——等featureType类型较多时再采用此方案
- -[ ] 新增功能弹窗，主键的输入改成下拉选择
+ -[x] 新增功能弹窗，主键的输入改成下拉选择
  
         类似这样的输入都限定下拉选择；数据驱动一切，因此项目中数据的正确性至关重要，所有用户输入的入口，都必须用尽办法保证输入的正确性
+        
  -[x] created中初始化一些meta数据, mounted初始化业务数据
   
 

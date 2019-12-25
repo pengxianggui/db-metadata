@@ -6,11 +6,15 @@
         <div style="flex: 5;margin-left: 5px">
             <WorkArea @select="handleSelectFormItem" v-model="formMeta">
                 <template #operation-extend>
-                    <drop-down-box placeholder="选择元对象"
-                                   @change="handleChange"
-                                   @clear="handleClear"
-                                   data-url="/table/list?objectCode=meta_object&fs=code,table_name&code->key&table_name->value"
-                                   v-model="objectCode" filterable></drop-down-box>
+                    <drop-down-box placeholder="选择元对象" v-model="objectCode" :data-url="metaObjectCodeUrl"
+                                   @change="handleChange" @clear="handleClear" filterable>
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
                 </template>
             </WorkArea>
         </div>
@@ -38,7 +42,8 @@
             return {
                 formMeta: this.$merge({}, DEFAULT.FormTmpl),
                 selectIndex: null,
-                objectCode: objectCode
+                objectCode: objectCode,
+                metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
             }
         },
         methods: {

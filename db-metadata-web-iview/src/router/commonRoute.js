@@ -45,6 +45,10 @@ const children = [
         path: 'form',
         name: 'Form',
         component: 'template/FormTmpl'
+    }, {
+        path: 'tree-table',
+        name: 'treeTable',
+        component: 'template/TreeTableTmpl'
     }
 ];
 
@@ -57,7 +61,7 @@ const commonRoute = [
         path: '/main',
         name: 'main',
         component: 'Main',
-        redirect: '/main/meta-data?',
+        redirect: '/main/meta-data',
         children: children
     },
 ];
