@@ -122,7 +122,22 @@
 
 #### 前端
 
+
+
+## RoadMap
+- server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
+- 数据权限的设计,丰富MResource的实现，增加不同纬度的验证（元对象纬度，模板纬度）
+- formbuilder 覆盖常用模板
+- Jsondiff的支持
+- springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
+- 耗时操作的缓存支持(ehcache+redis)
+
 ## 原则
 
 ### 解决一类问题,而不是一个问题
 ### 拒绝头疼医头,脚疼医脚
+
+## 设计参考
+
+- Eova 
+- Extjs

@@ -97,7 +97,7 @@ https://docs.sencha.com/extjs/6.2.0
 `
 ## 可以有的功能和思考
 
-- [ ] 异常管理
+- [x] 异常管理
 - [ ] 配置比对
 - [ ] 4个基础字段的传递
 - [ ] 注释生成https://blog.csdn.net/10km/article/details/78252586
