@@ -217,6 +217,12 @@
                     title = '编辑';
                     let primaryKey = this.primaryKey;
                     let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                    //Fixme hack konbluesky
+                    if (primaryKey.length > 1 && primaryValue.length > 1) {
+                        primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                    } else {
+                        primaryKv = primaryValue[0];
+                    }
                     url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
                         primaryKv: primaryKv
@@ -243,8 +249,13 @@
 
                 const {primaryKey} = this;
                 const primaryValue = this.extractPrimaryValue(row);
-                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-
+                let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                //Fixme hack konbluesky
+                if (primaryKey.length > 1 && primaryValue.length > 1) {
+                    primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                } else {
+                    primaryKv = primaryValue[0];
+                }
                 this.doDelete(primaryKv, ev, row, index);
             },
             // 批量删除

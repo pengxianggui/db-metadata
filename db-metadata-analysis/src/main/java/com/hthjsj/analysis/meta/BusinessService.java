@@ -24,8 +24,19 @@ import java.util.Map;
 @Before(Tx.class)
 public class BusinessService {
 
+    /**
+     * 根据主键查找一条记录,支持复合主键的查询
+     * ids结构:
+     * 1. [[pk1]]
+     * 2. [[pk1,pk2]]
+     *
+     * @param object
+     * @param ids
+     *
+     * @return
+     */
     public Record findDataByIds(IMetaObject object, Object... ids) {
-        return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), ids);
+        return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), (Object[]) ids[0]);
     }
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {
@@ -64,18 +75,9 @@ public class BusinessService {
      */
     public boolean deleteDatas(IMetaObject object, Object[] ids) {
         int i = 0;
-        if (object.isMultiplePrimaryKey()) {
-            for (Object pks : ids) {
-                if (pks instanceof Object[]) {
-                    boolean status = Db.use(object.schemaName()).deleteByIds(object.tableName(), object.primaryKey(), (Object[]) pks);
-                    if (status) {
-                        i++;
-                    }
-                }
-            }
-        } else {
-            for (Object pk : ids) {
-                boolean status = Db.use(object.schemaName()).deleteById(object.tableName(), object.primaryKey(), pk);
+        for (Object pks : ids) {
+            if (pks instanceof Object[]) {
+                boolean status = Db.use(object.schemaName()).deleteByIds(object.tableName(), object.primaryKey(), (Object[]) pks);
                 if (status) {
                     i++;
                 }

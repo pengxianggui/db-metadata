@@ -30,7 +30,7 @@ export const CHECK_SQL = '/check/sql?sql={sql}';
 export const FEATURE_ADD = '/feature/doAdd?ft={featureType}'; // 添加功能类别
 export const FEATURE_LOAD = '/feature/load?fc={featureCode}'; // 加载功能配置
 
-export const MASTER_SLAVE_TO_ADD_S = '/feature/ms/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}'; // 主子表子表新增URL(TO)
+export const MASTER_SLAVE_TO_ADD_S = '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}'; // 主子表子表新增URL(TO)
 
 export const LIST_FEATURE_TYPE = '/feature/list'; // 列出所有的功能类型code
 export const MENU_DATA = '/feature/menu';  // pxg_todo 菜单数据, for mock

@@ -128,8 +128,6 @@ public class TableController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode);
         Object[] ids = queryHelper.getPks(metaObject);
 
-//        String idss = getPara("ids");
-//        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         Preconditions.checkArgument(ids.length != 0, "无效的数据id:[%s]", MoreObjects.toStringHelper(ids));
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
