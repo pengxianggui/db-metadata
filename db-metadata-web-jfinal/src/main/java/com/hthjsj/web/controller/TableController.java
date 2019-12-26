@@ -126,7 +126,7 @@ public class TableController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        Object[] ids = queryHelper.getPks(metaObject, "id");
+        Object[] ids = queryHelper.getPks(metaObject);
 
 //        String idss = getPara("ids");
 //        List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);

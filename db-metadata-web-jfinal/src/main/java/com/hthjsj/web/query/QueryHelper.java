@@ -105,12 +105,11 @@ public class QueryHelper {
      * id=1&id=2
      *
      * @param metaObject
-     * @param defaultKey
      *
      * @return [[v1, v2], [v1, v2]]
      * [v1]
      */
-    public Object[] getPks(IMetaObject metaObject, String defaultKey) {
+    public Object[] getPks(IMetaObject metaObject) {
         List<Object[]> pks = new ArrayList<>();
         if (metaObject.isMultiplePrimaryKey()) {
             //pk1,pk2
