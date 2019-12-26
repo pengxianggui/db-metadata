@@ -20,14 +20,16 @@
 - Jdk1.8
 - Guava
 - FastJson
-### 功能点
+### 能干什么
 - crud 引擎
 - 各类模板配置 
     - 主子表   
     - 单表
     - 树表
 - 图形样式设计
-- 多数据源
+- 天然支持分布式应用
+- 可当纯后端提供数据接口
+- 可前后端一起使用
 - springboot支持
 
 ## 快速开始
@@ -155,18 +157,21 @@
         
     ```
 - 丰富MResource的实现，增加不同纬度的验证（元对象纬度，模板纬度）,对Query模块的查询权限进行控制
+- 丰富对数据库视图支持ViewMetaObject,增加元对象属性设定,参考linux文件系统drwxrwxrwx
 - formbuilder 覆盖常用模板
 - Jsondiff的支持
 - springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
 - 耗时操作的缓存支持(ehcache+redis)
-
+- 对"功能"做版本控制,因功能渲染完全依靠数据配置,必须要保证发布后版本可控,目前元对象配置更新过以后,上游所有组件config会重新计算;
 ## 原则
 
 - 做一切有利于"快"的需求
 - 解决一类问题,而不是一个问题
 - 拒绝头疼医头,脚疼医脚
 
+## 约定
+
 ## 设计参考
 
-- Eova 
-- Extjs
+- Eova ,jeesite,jeecgboot,普元
+- Extjs,vue component
