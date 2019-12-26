@@ -128,7 +128,9 @@ public class QueryHelper {
             }
             //result : [[v1,v2],[v1,v2]]
         } else {
-            pks.add(new Object[] { tp.get(metaObject.primaryKey()) });
+            for (String vs : tp.getParaValues(metaObject.primaryKey())) {
+                pks.add(new Object[] { vs });
+            }
         }
         return pks.toArray();
     }
