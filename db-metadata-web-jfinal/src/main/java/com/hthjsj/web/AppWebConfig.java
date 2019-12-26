@@ -3,6 +3,7 @@ package com.hthjsj.web;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.AnalysisManager;
+import com.hthjsj.App;
 import com.hthjsj.web.auth.JsonUserPermit;
 import com.hthjsj.web.auth.MRAuthIntercept;
 import com.hthjsj.web.auth.MRManager;
@@ -20,15 +21,19 @@ import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
 import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserRouter;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
+
+import java.io.File;
 
 /**
  * <p> @Date : 2019-08-22 </p>
@@ -42,10 +47,24 @@ public class AppWebConfig extends JFinalConfig {
         UndertowServer.start(AppWebConfig.class, 8888, true);
     }
 
+    /**
+     * 配置文件初始化,顺序
+     * /config.properties
+     * /config/config.properties
+     * jar->config.properties
+     */
+    private void initProp() {
+        prop = PropKit.use(App.CONFIG_NAME);
+        File configPropFile = UtilKit.stairsLoad(App.CONFIG_NAME, "config");
+        if (configPropFile != null) {
+            prop.appendIfExists(configPropFile);
+        }
+    }
+
     @Override
     public void configConstant(Constants me) {
-        loadPropertyFile("config.properties");
-        me.setDevMode(getPropertyToBoolean("devMode", false));
+        initProp();
+        me.setDevMode(prop.getBoolean("devMode", false));
         me.setJsonFactory(new CrackFastJsonFactory());
         me.setRenderFactory(new ErrorJsonRenderFactory());
     }
@@ -83,11 +102,11 @@ public class AppWebConfig extends JFinalConfig {
         Dicts.me().init();
 
         //Auto import anyConfig from json file;
-        if (getPropertyToBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
+        if (prop.getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
             InitKit.me().importMetaObjectConfig().importInstanceConfig();
         }
 
-        if (getPropertyToBoolean(AppConst.NEED_AUTH)) {
+        if (prop.getBoolean(AppConst.NEED_AUTH)) {
             MRManager mrManager = MRManager.me();
             mrManager.addLoader(new JFinalResourceLoader());
             mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
@@ -103,10 +122,10 @@ public class AppWebConfig extends JFinalConfig {
     public void configInterceptor(Interceptors me) {
         me.add(new ExceptionIntercept());
         me.add(new JsonParamIntercept());
-        if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
+        if (prop.getBoolean(AppConst.NEED_LOGIN)) {
             me.add(new UserIntercept());
         }
-        if (getPropertyToBoolean(AppConst.NEED_AUTH)) {
+        if (prop.getBoolean(AppConst.NEED_AUTH)) {
             me.add(new MRAuthIntercept());
         }
     }

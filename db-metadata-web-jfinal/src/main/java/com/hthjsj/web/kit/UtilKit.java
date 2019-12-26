@@ -135,7 +135,20 @@ public class UtilKit {
     }
 
     public static String loadConfigByFile(String fileName) {
-        return stairsLoad(fileName, "config");
+        File file = stairsLoad(fileName, "config");
+        if (file == null) {
+            return loadContentInCurrentJar(fileName);
+        }
+        return loadFileString(file);
+    }
+
+    private static String loadFileString(File file) {
+        try {
+            return Joiner.on("").join(Files.readLines(file, Charsets.UTF_8));
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     /**
@@ -147,9 +160,9 @@ public class UtilKit {
      * @param fileName         文件名
      * @param defaultDirectory fileName读取失败后,再使用defaultDirectory目录继续读取
      *
-     * @return
+     * @return File
      */
-    public static String stairsLoad(String fileName, String defaultDirectory) {
+    public static File stairsLoad(String fileName, String... defaultDirectory) {
 
         /**
          * 路径样本:
@@ -162,34 +175,24 @@ public class UtilKit {
         String locationPath = PathKitExt.getLocationPath();
         // /fileName
         {
-            try {
-                String destFilePath = Joiner.on(File.separator).join(locationPath, fileName);
-                File f = new File(destFilePath);
-                if (f.exists()) {
-                    log.info("load success file content in {}", destFilePath);
-                    return Joiner.on("").join(Files.readLines(f, Charsets.UTF_8));
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
+            String destFilePath = Joiner.on(File.separator).join(locationPath, fileName);
+            File f = new File(destFilePath);
+            if (f.exists()) {
+                log.info("load success file content in {}", destFilePath);
+                return f;
             }
         }
-
         // /config/fileName
-        {
-            try {
-                String destFilePath = Joiner.on(File.separator).join(locationPath, defaultDirectory, fileName);
-                File f = new File(destFilePath);
-                if (f.exists()) {
-                    log.info("load success file content in {}", destFilePath);
-                    return Joiner.on("").join(Files.readLines(f, Charsets.UTF_8));
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
+        for (String d : defaultDirectory) {
+            String destFilePath = Joiner.on(File.separator).join(locationPath, d, fileName);
+            File f = new File(destFilePath);
+            if (f.exists()) {
+                log.info("load success file content in {}", destFilePath);
+                return f;
             }
         }
-
         //classpath:filename
-        return loadContentInCurrentJar(fileName);
+        return null;
     }
 
     /**
