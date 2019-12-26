@@ -106,8 +106,8 @@ public class QueryHelper {
      *
      * @param metaObject
      *
-     * @return [[v1, v2], [v1, v2]]
-     * [v1]
+     * @return 复合主键[[v1, v2], [v1, v2]]
+     * 单主键[[v1],[v2]]
      */
     public Object[] getPks(IMetaObject metaObject) {
         List<Object[]> pks = new ArrayList<>();
