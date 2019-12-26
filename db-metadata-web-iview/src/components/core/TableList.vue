@@ -275,11 +275,17 @@
                         primaryValue = this.extractPrimaryValue(row);
                         primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
                     });
-                    primaryKvExp = primaryKvExpArr.join("&");
+                    primaryKvExp = primaryKvExpArr.join('&');
                     this.doDelete(primaryKvExp, ev);
-                } else {    // 单主键, 目标: primaryKvExp="pk=v1,v2,v3"
+                } else {    // 单主键
                     primaryValue = this.choseData.map(row => row[primaryKey[0]]);
-                    primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue.join(","), '=');
+                    // 目标: primaryKvExp="pk=v1,v2,v3" or "pk=v1&pk=v2&pk=v3"
+                    // primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue.join(","), '=');
+
+                    // 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
+                    let primaryKvExpArr = primaryValue.map(value => utils.spliceKv(primaryKey[0], value, "="));
+                    primaryKvExp = primaryKvExpArr.join('&');
+
                     this.doDelete(primaryKvExp, ev);
                 }
             },
