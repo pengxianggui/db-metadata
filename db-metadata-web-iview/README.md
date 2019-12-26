@@ -350,7 +350,7 @@
  
         类似这样的输入都限定下拉选择；数据驱动一切，因此项目中数据的正确性至关重要，所有用户输入的入口，都必须用尽办法保证输入的正确性
         
- -[x] created中初始化一些meta数据, mounted初始化业务数据
+ -[x] created中初始化一些meta数据, mounted初始化业务数据 
   
 
 ### 功能模板结构(config)
@@ -431,7 +431,14 @@
       "icon": ""
     }
  ```
- 
+
+#### 系统固定模板
+1. MetaDataManager
+ -[ ] MetaDataManager为系统模板, 模板类型为主子表(MasterSlaveTableTmpl)), 但内部并基于MasterSlaveTableTmpl扩展.需要重构, 重构思路:
+    
+    1). 基于MasterSlaveTableTmpl扩展, 需要升级MasterSlaveTableTmpl使之具备这般可扩展性;
+    2). 依旧将MetaDataManager作为系统固化模板, 取消对feature的请求, 直接请求主子元对象(meta_object, meta_field), 从而取消歧义;
+  
  
 ### 目录结构NEW
     - document
