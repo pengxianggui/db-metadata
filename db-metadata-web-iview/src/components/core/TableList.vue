@@ -117,7 +117,8 @@
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
-                                        <slot name="delete-btn" v-bind:conf="innerMeta['buttons']['delete']['label']"
+                                        <slot name="delete-btn"
+                                              v-bind:conf="innerMeta['buttons']['delete']['conf']"
                                               v-bind:delete="handleDelete"
                                               v-bind:scope="scope">
                                             <el-button v-bind="innerMeta['buttons']['delete']['conf']"

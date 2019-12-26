@@ -24,7 +24,7 @@
         data() {
             const {featureCode: R_fc, objectCode: R_oc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
-            const objectCode = utils.assertUndefined(this.fc, R_oc);
+            const objectCode = utils.assertUndefined(this.oc, R_oc);
 
             return {
                 treeConf: {},
