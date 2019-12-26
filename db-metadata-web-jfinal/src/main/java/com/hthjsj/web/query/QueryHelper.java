@@ -3,7 +3,6 @@ package com.hthjsj.web.query;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.core.Controller;
@@ -12,7 +11,6 @@ import com.jfinal.kit.Okv;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p> Class title: </p>
@@ -117,7 +115,7 @@ public class QueryHelper {
             //["pk1_v1,pk2_v2","pk1_v1,pk2_v2"]
             String[] vals = tp.getParaValues("id");
 
-            Set<Object> results = Sets.newLinkedHashSet();
+            List<Object> results = Lists.newLinkedList();
             for (String val : vals) {
                 results.clear();
                 Okv pksmap = resolvePk(val);

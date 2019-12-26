@@ -7,12 +7,12 @@
 >但现状是一个大型项目,或者系统中通常有很多子系统或子模块组成,并不是每个子模块都要具有完整的用户权限、登录、菜单管理、字典等等功能。
 >如果是在人员有限、项目规模不大、并且是从0->1这个阶段开始的话，选择任何一个开源的快速开发框架都是合适的，如果系统非0->1这个阶段，已经上线且具备一些功能了，再引入快速开发框架的意义就不是很大了
 >
->
+>DMBS 的定位首先是一套功能引擎,其次才是开发平台
 #### 市面上一些主流的快速开发平台
 > 社区相对活跃,功能完备,技术栈新的
-- [jeesite](https://jeesite.gitee.io/) - [演示地址](http://demo.jeesite.com/)
-- [jeecg](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
-- [eova](http://www.jeecg.com/) - [演示地址](http://pro.eova.cn/)
+- [jeesite - https://jeesite.gitee.io/](https://jeesite.gitee.io/) - [演示地址](http://demo.jeesite.com/)
+- [jeecg - http://www.jeecg.com/](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
+- [eova - http://www.eova.cn/](http://www.eova.cn/) - [演示地址](http://pro.eova.cn/)
 
 ### 技术栈
 - JFinal
@@ -21,7 +21,7 @@
 - Guava
 - FastJson
 ### 能干什么
-- crud 引擎
+- 迅速构建一个CRUD模块
 - 各类模板配置 
     - 主子表   
     - 单表
@@ -129,7 +129,9 @@
 ### 核心数据结构
 
 #### 前端
-
+```
+ 
+```
 
 ## 技术债务
 - 系统为了获得动态能力,同时为了快速上线第一个版,底层采用了json存储配置,导致了上层数据搬运时不得不大量使用Kv对象(Map),调用链过长时很难确认当前Kv对象内部的数据
@@ -163,6 +165,8 @@
 - springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件
 - 耗时操作的缓存支持(ehcache+redis)
 - 对"功能"做版本控制,因功能渲染完全依靠数据配置,必须要保证发布后版本可控,目前元对象配置更新过以后,上游所有组件config会重新计算;
+- 目前表单仅支持单个元对象,复杂业务场景可能有同时编辑多张表的需求
+- 完善对spring容器的支持,目前还只是初步集成;
 ## 原则
 
 - 做一切有利于"快"的需求
