@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 元字段配置解析器
  * <p> @Date : 2019/11/13 </p>
  * <p> @Project : db-meta-serve</p>
  *

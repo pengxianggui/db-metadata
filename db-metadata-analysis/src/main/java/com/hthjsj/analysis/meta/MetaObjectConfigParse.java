@@ -7,6 +7,7 @@ import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 元对象配置解析器
  * <p> @Date : 2019/11/14 </p>
  * <p> @Project : db-meta-serve</p>
  *

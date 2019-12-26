@@ -6,7 +6,14 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * <p> Class title: </p>
+ * <pre>
+ * 实体作用的接口
+ * 提供实现:
+ *      MetaObject 默认实现,主要用来表示Table
+ *      ManualMetaObject 手动指定,可以根据sql生成临时用的元对象
+ * </pre>
+ *
+ * <p> @see com.hthjsj.analysis.meta.MetaFactory </p>
  * <p> @Describe: </p>
  * <p> @Date : 2019-08-20 </p>
  * <p> @Project : db-meta-serve</p>

@@ -1,6 +1,5 @@
 package com.hthjsj.analysis.meta;
 
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
@@ -9,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/9/11 </p>
  * <p> @Project : db-meta-serve</p>
  *

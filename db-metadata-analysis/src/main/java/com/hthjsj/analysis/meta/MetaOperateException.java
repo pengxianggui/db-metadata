@@ -3,7 +3,7 @@ package com.hthjsj.analysis.meta;
 import com.hthjsj.analysis.MetaAnalysisException;
 
 /**
- * 元操作
+ * 用来表示元对象操作时引起的异常;
  * <p> @Date : 2019/10/10 </p>
  * <p> @Project : db-meta-serve</p>
  *

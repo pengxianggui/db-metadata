@@ -23,6 +23,7 @@ import java.util.Map;
 
 /**
  * db types <> java types
+ * 参考开源项目 EOVA
  *
  * @author Jieven
  */
