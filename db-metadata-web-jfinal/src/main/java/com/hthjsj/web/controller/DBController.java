@@ -8,6 +8,7 @@ import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.AppConst;
 import com.hthjsj.web.component.Components;
+import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.RenderHelper;
@@ -94,6 +95,7 @@ public class DBController extends FrontRestController {
                 smartInit(metaObject, ComponentType.SEARCHVIEW);
             }
         }
+        InitKit.me().importInstanceConfig().importMetaObjectConfig();
         renderJson(Ret.ok());
     }
 

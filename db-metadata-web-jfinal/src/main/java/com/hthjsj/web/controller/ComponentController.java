@@ -18,6 +18,14 @@ import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
 
+/**
+ * 从组件视角触发提供的访问方法,主要是对配置信息的操作
+ *
+ * <p> @Date : 2019/12/26 </p>
+ * <p> @Project : db-meta-serve</p>
+ *
+ * <p> @author konbluesky </p>
+ */
 public class ComponentController extends FrontRestController {
 
     public void meta() {

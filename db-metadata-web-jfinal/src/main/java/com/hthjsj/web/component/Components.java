@@ -53,7 +53,7 @@ final public class Components {
 
     /**
      * 1. 自动scanPackage 进行注册
-     * 2. 自动依jsonTemplate.json 为准 进行组件配置更新
+     * 2. 自动依jsonTemplate.json 为准 进行组件配置更新(开发模式下)
      */
     public void init() {
         autoRegister();

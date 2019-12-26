@@ -14,7 +14,12 @@
 - [jeecg](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
 - [eova](http://www.jeecg.com/) - [演示地址](http://pro.eova.cn/)
 
-
+### 技术栈
+- JFinal
+- Mysql 5.7 / Druid 
+- Jdk1.8
+- Guava
+- FastJson
 ### 功能点
 - crud 引擎
 - 各类模板配置 
@@ -30,7 +35,7 @@
 ```bash
 ├── arthas-output
 ├── db                          # 数据库文件
-├── db-metadata-analysis        # 元数据分析工程
+├── db-metadata-analysis        # 元数据分析工程,元对象的构建,基于元对象的操作
 ├── db-metadata-parent          # Maven Root工程
 ├── db-metadata-web-iview       # 前端工程 使用ElementUI，为了保留git提交记录，暂未将iview更名
 ├── db-metadata-web-jfinal      # 服务端工程
@@ -77,7 +82,7 @@
 #### Component实例
 > 单纯的组件是没有灵魂的，元对象和元字段是组件的数据灵魂
 #### 模板
-什么是模板，模板不能直接使用，模板硬编码编辑
+什么是模板，模板是各种前端组件的集合,模板不能直接使用，模板硬编码编辑
 #### 功能
 > 功能可以是一个按钮+背后的逻辑  
 > 功能可以是一个纯背后的逻辑  
@@ -104,7 +109,8 @@
 ![元对象接口](db/images/MetaObject.png)
 #### Component-类图
 ![元对象接口](db/images/component.png)
-
+#### Query模块
+![](db/images/IQueryCondition.png)
 #### 扩展
 > 为了能更好的融入其他系统，DBMS对常见的模块做了抽象，用少量的接口保证足够的灵活性
 ##### 用户体系
@@ -123,10 +129,32 @@
 #### 前端
 
 
+## 技术债务
+- 系统为了获得动态能力,同时为了快速上线第一个版,底层采用了json存储配置,导致了上层数据搬运时不得不大量使用Kv对象(Map),调用链过长时很难确认当前Kv对象内部的数据
+为代码阅读和调试带来了成本和风险
+    > 在数据结构稳定后,关键的配置使用具体的模型来存放
+- DB上配置信息存放在json字段,虽保证了灵活度,但是不利于检索,Mysql5.7对于Json字段的支持有限
+- 元对象config,字段config,component.config,实例config,为了做到各层独立,分别设置了不同作用,不同意义的配置信息.在开始接触的时候对于这些
+配置信息需要消化的成本太高,而且config未做结构校验,很可能在功能大面积爆发时出现无用无效的脏字段
+- 
 
 ## RoadMap
 - server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
-- 数据权限的设计,丰富MResource的实现，增加不同纬度的验证（元对象纬度，模板纬度）
+- 数据权限的设计
+    > 以元对象为基础,配合自定义的模板脚本片段,生成带有权限过滤内容的sql,以此来做数据权限
+    ```
+        模板片段可以内置类似User,Group,Company等对象
+        权限判断可能是
+        if(user.role.is('组长'))
+            return Query,Add,Update
+        if(user.role.is('小弟'))
+            return Query
+        查看小组下的数据可能是
+        if(user.role.is('组长')&&user.role.has(query))
+            return create_by in GroupIds
+        
+    ```
+- 丰富MResource的实现，增加不同纬度的验证（元对象纬度，模板纬度）,对Query模块的查询权限进行控制
 - formbuilder 覆盖常用模板
 - Jsondiff的支持
 - springboot 深度集成(用spring完全接管datasource),充分支持spring方式创建router,controller,intercepter等jfinal组件

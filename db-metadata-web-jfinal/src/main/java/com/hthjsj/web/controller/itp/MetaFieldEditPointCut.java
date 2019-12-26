@@ -14,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
- * 元子段编辑拦截器
+ * 元子段编辑拦截器,类的调用配置在
+ * MetaObject.config -> bizInterceptor 字段中
  * <p> @Date : 2019/12/3 </p>
  * <p> @Project : db-meta-serve</p>
  *
