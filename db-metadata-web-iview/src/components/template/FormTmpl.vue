@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import FormTmpl from "@/components/core/FormTmpl";
 
     export default {
@@ -14,29 +15,26 @@
         components: {
             "FormBox": FormTmpl
         },
+        props: {
+            metaUrl: {
+                type: String,
+                require: true
+            }
+        },
         data() {
+            const {R_url} = this.$route.query;
+            const url = utils.assertUndefined(this.metaUrl, R_url);
             return {
-                objectCode: this.$route.query.objectCode,
+                url: url,
                 meta: {}
             }
         },
-        methods: {
-            getMeta() {
-                let url = this.$compile('/form/toUpdate?objectCode={objectCode}', {
-                    objectCode: this.objectCode
-                });
-
-                this.$axios.get(url).then(resp => {
-                    this.meta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg);
-                    this.$message.error(err.msg);
-                })
-            },
-        },
         created() {
-            this.getMeta();
-        },
+            const {url} = this;
+            this.$axios.get(url).then(resp => {
+                this.meta = resp.data;
+            });
+        }
     }
 </script>
 

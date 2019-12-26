@@ -3,6 +3,7 @@
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="master['name']" :meta="master.tlMeta" @active-change="handleActiveChange"
+                        @chose-change="handleChoseChange"
                         :page="{ size: 5 }"></table-list>
         </div>
         <el-divider></el-divider>
@@ -29,15 +30,23 @@
     export default {
         name: "MasterSlaveTableTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
+        props: {
+            fc: String,
+        },
         data() {
+            const {featureCode: R_fc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
             return {
-                featureCode: this.$route.query.featureCode,
+                featureCode: featureCode,
                 master: {},
                 slaves: [],
                 activeMData: {},
             }
         },
         methods: {
+            handleChoseChange(rows) {
+                // pxg_todo 多选主表(master)时, 子表(slaves)的默认行为(待定)
+            },
             handleActiveChange(row) {
                 let primaryKey = this.master['primaryKey'];
                 this.activeMData = row;

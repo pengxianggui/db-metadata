@@ -9,7 +9,7 @@ const DEFAULT_CONF = {
         "name": "TableList",
         "label": "表格模板",
         "data_url": "/table/list/{objectCode}", // required
-        "delete_url": '/table/delete?objectCode={objectCode}&ids={ids}',
+        "delete_url": '/table/delete?objectCode={objectCode}&{primaryKvExp}',
         "multi_select": true, //多选
         "editable": false,
         "conf": {

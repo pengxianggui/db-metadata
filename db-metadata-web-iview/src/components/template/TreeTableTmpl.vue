@@ -2,7 +2,7 @@
     <row-grid :span="[6, 18]">
         <template #left>
             <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"
-                  ></tree>
+            ></tree>
         </template>
         <template #right>
             <table-list :ref="tlRefName" :meta="tlMeta"></table-list>
@@ -17,9 +17,13 @@
     export default {
         name: "TreeTableTmpl",
         mixins: [getTlMeta, getSpMeta, getTreeMeta, loadFeature],
-        props: ["fc"],
+        props: {
+            fc: String
+        },
         data() {
-            const featureCode = utils.assertUndefined(this.fc, this.$route.query.featureCode);
+            const {featureCode: R_fc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
+
             return {
                 featureCode: featureCode,
                 treeConf: {},
@@ -30,28 +34,17 @@
             }
         },
         methods: {
-            handleChoseChange(choseData) {
-                // pxg_todo
+            handleChoseChange(rows) {
+                // pxg_todo 多选树节点时, table的默认行为(待定)
             },
-            handleActiveChange(activeData) {
+            handleActiveChange(row) {
                 const {primaryKey} = this.treeConf;
 
                 this.tlMeta['data_url'] = this.$compile(this.tableUrl, {
-                    objectCode: activeData[primaryKey]
+                    objectCode: row[primaryKey]
                 });
             },
-
-        },
-        created() {
-            this.loadFeature(this.featureCode).then(resp => {
-                const feature = resp.data;
-                this.treeConf = feature['tree'];
-                this.tableConf = feature['table'];
-
-                const treeObjectCode = this.treeConf['objectCode'];
-                const tableObjectCode = this.tableConf['objectCode'];
-                const foreignFieldCode = this.tableConf['foreignFieldCode'];
-
+            initMeta(treeObjectCode, tableObjectCode) {
                 this.getTreeMeta(treeObjectCode).then(resp => {
                     this.treeMeta = resp.data;
                 }).catch(err => {
@@ -68,6 +61,7 @@
 
                 this.getTlMeta(tableObjectCode).then(resp => {
                     let tlMeta = resp.data;
+                    const {foreignFieldCode} = this.tableConf;
                     const data_url = tlMeta['data_url'] + '?' + foreignFieldCode + '={objectCode}'; // pxg_todo 关联方式
                     tlMeta['data_url'] = data_url;
                     this.tableUrl = data_url;
@@ -76,6 +70,19 @@
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
+            }
+        },
+        created() {
+            const {featureCode} = this;
+
+            this.loadFeature(featureCode).then(resp => {
+                const feature = resp.data;
+                this.treeConf = feature['tree'];
+                this.tableConf = feature['table'];
+
+                const treeObjectCode = this.treeConf['objectCode'];
+                const tableObjectCode = this.tableConf['objectCode'];
+                this.initMeta(treeObjectCode, tableObjectCode);
             });
         },
         computed: {

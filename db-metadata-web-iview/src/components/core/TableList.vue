@@ -249,40 +249,50 @@
 
                 const {primaryKey} = this;
                 const primaryValue = this.extractPrimaryValue(row);
-                let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                let primaryKvExp;
                 //Fixme hack konbluesky
-                if (primaryKey.length > 1 && primaryValue.length > 1) {
-                    primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-                } else {
-                    primaryKv = primaryValue[0];
+                if (primaryKey.length > 1 && primaryValue.length > 1) { // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2"
+                    primaryKvExp = 'id=' + utils.spliceKvs(primaryKey, primaryValue);
+                } else {    // 单主键, 目标: primaryKvExp="pk=v"
+                    primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue[0], '=');
                 }
-                this.doDelete(primaryKv, ev, row, index);
+                this.doDelete(primaryKvExp, ev, row, index);
             },
             // 批量删除
             handleBatchDelete(ev) {
-                let primaryKv = [];
-                let {primaryKey} = this;
-                this.choseData.forEach(row => {
-                    let kv = utils.spliceKvs(primaryKey, this.extractPrimaryValue(row));
-                    primaryKv.push(kv);
-                });
-
-                if (this.choseData.length > 0) {
-                    this.doDelete(primaryKv, ev);
-                    return
+                if (this.choseData.length <= 0) {
+                    this.$message.warning('请至少选择一项!');
+                    return;
                 }
-                this.$message.warning('请至少选择一项!');
-            },
-            // default remove the assembly logic is based on primaryKey get on
-            doDelete(primaryKv) {
-                let title = '确定删除此条记录?';
+
+                let {primaryKey} = this;
+                let primaryValue;
                 let primaryKvExp;
 
-                if (utils.isArray(primaryKv)) {
-                    title = '确定删除选中的' + primaryKv.length + '条记录?';
-                    primaryKvExp = primaryKv.map(ele => "id=" + ele).join('&');
-                } else {
-                    primaryKvExp = "id=" + primaryKv;
+                if (primaryKey.length > 1) {    // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4"
+                    let primaryKvExpArr = [];
+                    this.choseData.forEach(row => {
+                        primaryValue = this.extractPrimaryValue(row);
+                        primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
+                    });
+                    primaryKvExp = primaryKvExpArr.join("&");
+                    this.doDelete(primaryKvExp, ev);
+                } else {    // 单主键, 目标: primaryKvExp="pk=v1,v2,v3"
+                    primaryValue = this.choseData.map(row => row[primaryKey[0]]);
+                    primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue.join(","), '=');
+                    this.doDelete(primaryKvExp, ev);
+                }
+            },
+            /**
+             * default remove the assembly logic is based on primaryKey get on
+             * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
+             */
+            doDelete(primaryKvExp) {
+                let title = '确定删除此条记录?';
+                const RECORD_SIZE = this.choseData.length;
+
+                if (RECORD_SIZE > 1) {
+                    title = '确定删除选中的' + RECORD_SIZE + '条记录?';
                 }
 
                 this.$confirm(title, '提示', {

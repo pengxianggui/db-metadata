@@ -12,10 +12,17 @@
     export default {
         name: "SingleGridTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
+        props: {
+            fc: String,
+            oc: String
+        },
         data() {
+            const {featureCode: R_fc, objectCode: R_oc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
+            const objectCode = utils.assertUndefined(this.oc, R_oc);
             return {
-                featureCode: this.$route.query.featureCode,
-                objectCode: this.$route.query.objectCode,
+                featureCode: featureCode,
+                objectCode: objectCode,
                 tlMeta: {},
                 spMeta: {}
             }
@@ -42,8 +49,7 @@
             }
         },
         created() {
-            const featureCode = this.featureCode;
-            let objectCode;
+            const {featureCode, objectCode} = this;
 
             if (!utils.isEmpty(featureCode)) {
                 this.loadFeature(featureCode).then(resp => {
@@ -51,7 +57,6 @@
                     this.initMeta(config.objectCode);
                 })
             } else {
-                objectCode = this.objectCode;
                 this.initMeta(objectCode);
             }
         },

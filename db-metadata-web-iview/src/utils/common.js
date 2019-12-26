@@ -160,6 +160,13 @@ export function spliceKvs(keys, values, separatorBetweenKAndV = '_', separatorBe
     return kvs.join(separatorBetweenKVs);
 }
 
+export function spliceKv(key, value, separatorBetweenKAndV = '_') {
+    if (!isString(key) || !isString(value)) {
+        throw "key:" + key + "; value:" + value + ", all should be String!";
+    }
+    return key + separatorBetweenKAndV + value;
+}
+
 /**
  * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回空数组
  * @param value

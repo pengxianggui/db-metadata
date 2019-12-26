@@ -18,26 +18,34 @@
         name: "TreeFormTmpl",
         mixins: [getFormMeta, getTreeMeta, loadFeature],
         props: {
-            fc: String
+            fc: String,
+            oc: String
         },
         data() {
-            const featureCode = utils.assertUndefined(this.fc, this.$route.query.featureCode);
+            const {featureCode: R_fc, objectCode: R_oc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
+            const objectCode = utils.assertUndefined(this.fc, R_oc);
+
             return {
                 treeConf: {},
                 formConf: {},
                 treeMeta: {},
                 formMeta: {},
-                featureCode: featureCode
+                featureCode: featureCode,
+                objectCode: objectCode
             }
         },
         methods: {
-            handleActiveChange(activeData) {
-                if (utils.isEmpty(activeData)) {
+            handleChoseChange(rows) {
+                // pxg_todo 树多选的默认行为
+            },
+            handleActiveChange(row) {
+                if (utils.isEmpty(row)) {
                     this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
                     return;
                 }
                 const primaryKey = this.primaryKey;
-                const primaryValue = utils.extractValue(activeData, primaryKey);
+                const primaryValue = utils.extractValue(row, primaryKey);
                 const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                 const objectCode = this.treeMeta['objectCode'];
 
@@ -49,25 +57,29 @@
                     this.formMeta = resp.data;
                 });
             },
-            handleChoseChange(choseData) {
-                // pxg_todo
-            }
-        },
-        created() {
-            this.loadFeature(this.featureCode).then(resp => {
-                const feature = resp.data;
-                this.treeConf = feature['tree'];
-                this.formConf = feature['form'];
-
-                const treeObjectCode = this.treeConf['objectCode'];
-
-                this.getTreeMeta(treeObjectCode).then(resp => {
+            initMeta(objectCode) {
+                this.getTreeMeta(objectCode).then(resp => {
                     this.treeMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
-            });
+            }
+        },
+        created() {
+            const {featureCode, objectCode} = this;
+            if (!utils.isEmpty(featureCode)) {
+                this.loadFeature(this.featureCode).then(resp => {
+                    const feature = resp.data;
+                    this.treeConf = feature['tree'];
+                    this.formConf = feature['form'];
+
+                    const {treeObjectCode} = this.treeConf;
+                    this.initMeta(treeObjectCode);
+                });
+            } else {
+                this.initMeta(objectCode);
+            }
         },
         computed: {
             formRefName() {

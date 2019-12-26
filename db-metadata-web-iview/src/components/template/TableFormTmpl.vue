@@ -19,10 +19,17 @@
     export default {
         name: "TableFormTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
+        props: {
+            fc: String,
+            oc: String
+        },
         data() {
+            const {featureCode: R_fc, objectCode: R_oc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
+            const objectCode = utils.assertUndefined(this.fc, R_oc);
             return {
-                featureCode: null,
-                objectCode: 'test_table',
+                featureCode: featureCode,
+                objectCode: objectCode,
                 fmMeta: {},
                 tlMeta: {}
             }
@@ -32,13 +39,16 @@
                 const tlRefName = this.tlRefName;
                 this.$refs[tlRefName].getData();
             },
-            handleActiveChange(activeData) {
-                if (utils.isEmpty(activeData)) {
+            handleChoseChange(rows) {
+                // pxg_todo
+            },
+            handleActiveChange(row) {
+                if (utils.isEmpty(row)) {
                     this.fmMeta = this.$merge({}, DEFAULT.FormTmpl);
                     return;
                 }
                 const primaryKey = this.primaryKey;
-                const primaryValue = utils.extractValue(activeData, primaryKey);
+                const primaryValue = utils.extractValue(row, primaryKey);
                 const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
 
                 const objectCode = this.tlMeta['objectCode'];

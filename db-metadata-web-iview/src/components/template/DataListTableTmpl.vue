@@ -2,7 +2,8 @@
     <row-grid :span="[6, 18]">
         <template #left>
             <div class="el-card">
-                <data-list :ref="dlRefName" :meta="dlMeta" @active-change="handleActiveChange"></data-list>
+                <data-list :ref="dlRefName" :meta="dlMeta" @active-change="handleActiveChange"
+                           @chose-change="handleChoseChange"></data-list>
             </div>
         </template>
         <template #right>
@@ -21,9 +22,12 @@
     export default {
         name: "DataListTableTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta, getDlMeta],
-        props: ["fc"],
+        props: {
+            fc: String
+        },
         data() {
-            const featureCode = utils.assertUndefined(this.fc, this.$route.query.featureCode);
+            const {featureCode: R_fc} = this.$route.query;
+            const featureCode = utils.assertUndefined(this.fc, R_fc);
             return {
                 featureCode: featureCode,
                 dlConf: {},
@@ -35,6 +39,9 @@
             }
         },
         methods: {
+            handleChoseChange(rows) {
+                // pxg_todo
+            },
             handleActiveChange(row) {
                 const {primaryKey} = this.dlConf;
 
@@ -43,35 +50,27 @@
                 });
             },
             handleSearch(params) {
-
-            }
-        },
-        created() {
-            this.loadFeature(this.featureCode).then(resp => {
-                const feature = resp.data;
-                this.dlConf = feature['list'];
-                this.tlConf = feature['table'];
-
-                const dlObject = this.dlConf['objectCode'];
-                const tlObject = this.tlConf['objectCode'];
-                const foreignFieldCode = this.tlConf['foreignFieldCode'];
-
-                this.getDlMeta(dlObject).then(resp => {
+                const tableRefName = this.tableRefName;
+                this.$refs[tableRefName].getData(params);
+            },
+            initMeta(dlObjectCode, tlObjectCode) {
+                this.getDlMeta(dlObjectCode).then(resp => {
                     this.dlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getSpMeta(dlObject).then(resp => {
+                this.getSpMeta(dlObjectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getTlMeta(tlObject).then(resp => {
+                this.getTlMeta(tlObjectCode).then(resp => {
                     let tlMeta = resp.data;
+                    const {foreignFieldCode} = this.tlConf;
                     const data_url = tlMeta['data_url'] + '?' + foreignFieldCode + '={objectCode}'; // pxg_todo 关联方式
                     tlMeta['data_url'] = data_url;
                     this.tableUrl = data_url;
@@ -80,6 +79,17 @@
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
+            }
+        },
+        created() {
+            this.loadFeature(this.featureCode).then(resp => {
+                const feature = resp.data;
+                this.dlConf = feature['list'];
+                this.tlConf = feature['table'];
+                const dlObjectCode = this.dlConf['objectCode'];
+                const tlObjectCode = this.tlConf['objectCode'];
+                
+                this.initMeta(dlObjectCode, tlObjectCode);
             });
         },
         computed: {
