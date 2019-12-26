@@ -2,12 +2,23 @@
     <div>
         <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" @active-change="handleActiveChange" :page="{ size: 5 }">
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :page="{ size: 5 }"
+                        @active-change="handleActiveChange" @chose-change="handleChoseChange">
                 <template #prefix-btn="{conf}">
                     <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
                 </template>
                 <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="visible=true">创建元对象</el-button>
+                </template>
+
+                <template #batch-delete-btn="{conf}">
+                    <el-button @click="handleBatchDelete" type="danger" icon="el-icon-delete-solid"
+                               v-bind="conf">删除
+                    </el-button>
+                </template>
+
+                <template #delete-btn="{scope, conf}">
+                    <el-button v-bind="conf" @click="handleDelete($event, scope.row)"></el-button>
                 </template>
             </table-list>
 
@@ -24,7 +35,8 @@
             <template #footer><span></span></template>
         </dialog-box>
         <dialog-box :visible.sync="featureAddVisible" title="创建功能">
-            <feature-add :params="featureParams" @ok="featureAddVisible=false" @cancel="featureAddVisible=false"></feature-add>
+            <feature-add :params="featureParams" @ok="featureAddVisible=false"
+                         @cancel="featureAddVisible=false"></feature-add>
             <template #footer><span></span></template>
         </dialog-box>
     </div>
@@ -55,6 +67,7 @@
                 mSpMeta: {},
                 mTlMeta: {},
                 activeMData: {},
+                choseMData: [],
                 sSpMeta: {},
                 sTlMeta: {},
                 sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
@@ -64,6 +77,9 @@
             }
         },
         methods: {
+            handleChoseChange(rows) {
+                this.choseMData = rows;
+            },
             handleActiveChange(row) {
                 let primaryKey = this.master['primaryKey'];
                 this.activeMData = row;
@@ -153,19 +169,25 @@
                 });
                 this.$refs[this.sTlMeta['name']].dialog(url);
             },
-            doDelete(ids, ev, row, index) {
-                let objectCodes;
-                if (Array.isArray(ids)) {
-                    const objectCodeArr = this.mTlRef.innerChoseData.map(row => row.code);
-                    objectCodes = objectCodeArr.join(',');
-                } else {
-                    objectCodes = row.code;
-                }
+            handleDelete(ev, row) {
+                let objectCodes = row.code;
                 let title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
                 let url = this.$compile(URL.META_OBJECT_DELETE, {
                     objectCode: objectCodes
                 });
+                this.doDelete(url, title);
+            },
+            handleBatchDelete() {
+                const objectCodeArr = this.choseMData.map(row => row.code);
+                const objectCodes = objectCodeArr.join(',');
 
+                let title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
+                let url = this.$compile(URL.META_OBJECT_DELETE, {
+                    objectCode: objectCodes
+                });
+                this.doDelete(url, title);
+            },
+            doDelete(url, title) {
                 this.$confirm(title, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -196,9 +218,6 @@
                 // 获取主表TableList 组件meta
                 this.getTlMeta(mObjectCode).then(resp => {
                     this.mTlMeta = resp.data;
-                    this.$nextTick(() => {
-                        this.mTlRef.doDelete = this.doDelete; // override doDelete
-                    });
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
