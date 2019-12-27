@@ -12,13 +12,13 @@
                 </template>
 
                 <template #batch-delete-btn="{conf}">
-                    <el-button @click="handleBatchDelete" type="danger" icon="el-icon-delete-solid"
+                    <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
                                v-bind="conf">删除
                     </el-button>
                 </template>
 
                 <template #delete-btn="{scope, conf}">
-                    <el-button v-bind="conf" @click="handleDelete($event, scope.row)"></el-button>
+                    <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
                 </template>
             </table-list>
 
@@ -169,25 +169,17 @@
                 });
                 this.$refs[this.sTlMeta['name']].dialog(url);
             },
-            handleDelete(ev, row) {
-                let objectCodes = row.code;
-                let title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
-                let url = this.$compile(URL.META_OBJECT_DELETE, {
-                    objectCode: objectCodes
-                });
-                this.doDelete(url, title);
-            },
-            handleBatchDelete() {
-                const objectCodeArr = this.choseMData.map(row => row.code);
-                const objectCodes = objectCodeArr.join(',');
+            handleDelete(row) {
+                let title, objectCodes, url;
+                if (utils.isUndefined(row)) {
+                    const objectCodeArr = this.choseMData.map(row => row.code);
+                    objectCodes = objectCodeArr.join(',');
+                } else {
+                    objectCodes = row.code;
+                }
+                title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
+                url = this.$compile(URL.META_OBJECT_DELETE, {objectCode: objectCodes});
 
-                let title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
-                let url = this.$compile(URL.META_OBJECT_DELETE, {
-                    objectCode: objectCodes
-                });
-                this.doDelete(url, title);
-            },
-            doDelete(url, title) {
                 this.$confirm(title, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

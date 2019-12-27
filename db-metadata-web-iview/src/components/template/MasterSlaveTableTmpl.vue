@@ -3,8 +3,7 @@
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="master['name']" :meta="master.tlMeta" @active-change="handleActiveChange"
-                        @chose-change="handleChoseChange"
-                        :page="{ size: 5 }"></table-list>
+                        @chose-change="handleChoseChange" :page="{ size: 5 }"></table-list>
         </div>
         <el-divider></el-divider>
         <div class="el-card">
