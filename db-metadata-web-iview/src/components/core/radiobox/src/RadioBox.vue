@@ -1,0 +1,38 @@
+<template>
+    <el-radio-group v-model="nativeValue">
+        <el-radio v-for="item in innerOptions"
+                  :key="item.key"
+                  :label="item.value"
+                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                  @change="$emit('change')">
+            <slot name="label" v-bind:option="item">
+                {{item.key}}
+            </slot>
+        </el-radio>
+    </el-radio-group>
+</template>
+
+<script>
+    import {DEFAULT} from '@/constant'
+    import Meta from '../../mixins/meta'
+    import {options} from "../../mixins/methods";
+    import Val from '../../mixins/value'
+
+    export default {
+        mixins: [Meta(DEFAULT.RadioBox), Val(), options],
+        name: "RadioBox",
+        label: "单选框",
+        data() {
+            return {
+                innerOptions: []
+            }
+        },
+        props: {
+            value: [Object, String, Number]
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

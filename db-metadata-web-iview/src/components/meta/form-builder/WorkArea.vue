@@ -63,7 +63,7 @@
     import draggable from 'vuedraggable'
     import FormTmpl from "../../core/FormTmpl";
     import {DEFAULT, URL} from '@/constant'
-    import DropDownBox from "@/components/core/form/DropDownBox";
+    import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
 
     export default {
         name: "WorkArea",

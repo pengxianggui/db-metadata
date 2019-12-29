@@ -43,7 +43,6 @@
     import {DEFAULT, URL} from "@/constant";
     import utils from '@/utils'
     import OptionsInput from './relate/OptionsInput'
-    import JsonBox from "@/components/core/form/JsonBox";
 
     const CUSTOM_CONF_COMPONENT_MAPPING = {
         name: DEFAULT.TextBox,
@@ -78,7 +77,7 @@
             value: Object,
             selectIndex: Number
         },
-        components: {JsonBox, OptionsInput},
+        components: {OptionsInput},
         data() {
             return {
                 fieldConf: {},

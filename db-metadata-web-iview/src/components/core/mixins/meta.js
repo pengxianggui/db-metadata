@@ -1,3 +1,5 @@
+import utils from '@/utils'
+
 const behaviorKey = 'behavior';
 
 /**
@@ -16,7 +18,7 @@ export default function (defaultMeta) {
         },
         methods: {
             getBehavior(name) {
-                if(this.innerMeta.hasOwnProperty(behaviorKey)
+                if (this.innerMeta.hasOwnProperty(behaviorKey)
                     && this.innerMeta[behaviorKey].hasOwnProperty(name)) {
                     return this.innerMeta[behaviorKey][name];
                 }
@@ -25,7 +27,7 @@ export default function (defaultMeta) {
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, defaultMeta||{});
+                return this.$merge(this.meta, utils.assertUndefined(defaultMeta, {}));
             }
         }
     }

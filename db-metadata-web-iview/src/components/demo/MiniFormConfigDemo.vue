@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import MiniFormBox from '../core/form/MiniFormBox'
+    import MiniFormBox from '../core/miniformbox/src/MiniFormBox'
 
     export default {
         name: "MiniFormConfigDemo",

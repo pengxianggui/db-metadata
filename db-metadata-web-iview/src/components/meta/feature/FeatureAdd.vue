@@ -170,11 +170,9 @@
 
 <script>
     import {CONSTANT, URL} from '@/constant'
-    import TextBox from "@/components/core/form/TextBox";
 
     export default {
         name: "feature-add",
-        components: {TextBox},
         props: {
             params: {
                 type: Object
