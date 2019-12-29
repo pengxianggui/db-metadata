@@ -178,6 +178,8 @@
 <style scoped>
     .container {
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .header {
@@ -186,7 +188,6 @@
 
     .work-area {
         flex: 1;
-        height: 100%;
         overflow: auto;
     }
 

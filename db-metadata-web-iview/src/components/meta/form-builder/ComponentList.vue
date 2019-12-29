@@ -3,12 +3,12 @@
         <h4 align="center">组件列表({{comps.length}})</h4>
         <el-row>
             <draggable
-                    :clone="addFormItem"
-                    :group="{ name: 'form', pull: 'clone', put: false }"
-                    :list="comps"
-                    @end="handleMoveEnd"
-                    @start="handleMoveStart"
-                    :sort="false">
+                :clone="addFormItem"
+                :group="{ name: 'form', pull: 'clone', put: false }"
+                :list="comps"
+                @end="handleMoveEnd"
+                @start="handleMoveStart"
+                :sort="false">
                 <el-col v-for="comp of comps" :key="comp.name" class="el-card">
                     <el-tooltip class="item" effect="dark" :content="comp.name" :open-delay=1000 placement="top-start">
                         <span><i class="el-icon-receiving"></i><span>{{comp.label}}</span></span>
@@ -20,9 +20,24 @@
 </template>
 
 <script>
-    import components from '@/components/core/form'
     import draggable from 'vuedraggable'
     import {DEFAULT} from '@/constant'
+    import BoolBox from '@/components/core/boolbox'
+    import CheckBox from '@/components/core/checkbox'
+    import DateBox from '@/components/core/datebox'
+    import DateTimeBox from '@/components/core/datetimebox'
+    import DropDownBox from '@/components/core/dropdownbox'
+    import FileBox from '@/components/core/filebox'
+    import ImgBox from '@/components/core/imgbox'
+    import JsonBox from '@/components/core/jsonbox'
+    import FindBox from '@/components/core/findbox'
+    import NumBox from '@/components/core/numbox'
+    import PassBox from '@/components/core/passbox'
+    import RadioBox from '@/components/core/radiobox'
+    import SqlBox from '@/components/core/sqlbox'
+    import TextAreaBox from '@/components/core/textareabox'
+    import TextBox from '@/components/core/textbox'
+    import TimeBox from '@/components/core/timebox'
 
 
     export default {
@@ -33,7 +48,10 @@
         data() {
             return {
                 globalId: 0,
-                comps: components
+                comps: [
+                    TextBox, TextAreaBox, PassBox, NumBox, BoolBox, CheckBox, RadioBox, DropDownBox,
+                    DateBox, DateTimeBox, TimeBox, FindBox, FileBox, ImgBox, JsonBox, SqlBox
+                ]
             }
         },
         methods: {
