@@ -75,7 +75,7 @@
 <script>
     import utils from '@/utils'
     import {DEFAULT, CONSTANT} from '@/constant'
-    import Meta from './mixins/meta'
+    import Meta from '../../mixins/meta'
 
     export default {
         mixins: [Meta(DEFAULT.Tree)],

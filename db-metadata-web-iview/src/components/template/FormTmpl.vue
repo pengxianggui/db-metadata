@@ -8,7 +8,7 @@
 
 <script>
     import utils from '@/utils'
-    import FormTmpl from "@/components/core/FormTmpl";
+    import FormTmpl from "@/components/core/form/src/FormTmpl";
 
     export default {
         name: "FormTmpl",

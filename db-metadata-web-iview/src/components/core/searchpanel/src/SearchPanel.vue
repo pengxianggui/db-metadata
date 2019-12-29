@@ -84,7 +84,7 @@
 
 <script>
     import {DEFAULT, URL} from '@/constant'
-    import Meta from './mixins/meta'
+    import Meta from '../../mixins/meta'
     import util from '@/utils'
     import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
 

@@ -61,7 +61,7 @@
 <script>
     import utils from '@/utils'
     import draggable from 'vuedraggable'
-    import FormTmpl from "../../core/FormTmpl";
+    import FormTmpl from "../../core/form/src/FormTmpl";
     import {DEFAULT, URL} from '@/constant'
     import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
 

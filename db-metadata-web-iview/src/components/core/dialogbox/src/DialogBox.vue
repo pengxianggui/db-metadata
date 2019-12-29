@@ -24,7 +24,7 @@
 
 <script>
     import {DEFAULT} from '@/constant'
-    import Meta from './mixins/meta'
+    import Meta from '../../mixins/meta'
 
     export default {
         mixins: [Meta(DEFAULT.DialogBox)],
