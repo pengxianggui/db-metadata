@@ -172,6 +172,9 @@
 - 做一切有利于"快"的需求
 - 解决一类问题,而不是一个问题
 - 拒绝头疼医头,脚疼医脚
+- 计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决
+    > Any problem  in computer science can be solved by anther layer of indirection.  
+     https://cloud.tencent.com/developer/article/1491973
 
 ## 约定
 

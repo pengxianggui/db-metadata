@@ -6,6 +6,7 @@ import com.hthjsj.analysis.component.ViewContainer;
 import com.jfinal.kit.Kv;
 
 /**
+ * 搜索面板,目前与表格展示控件一起使用
  * <p> @Date : 2019/11/26 </p>
  * <p> @Project : db-meta-serve</p>
  *

@@ -7,8 +7,7 @@ import com.jfinal.kit.Kv;
 import lombok.Data;
 
 /**
- * <p> Class title: 表格显示控件</p>
- * <p> @Describe: </p>
+ * <p> 表格显示控件</p>
  * <p> @Date : 2019/10/9 </p>
  * <p> @Project : db-meta-serve</p>
  *

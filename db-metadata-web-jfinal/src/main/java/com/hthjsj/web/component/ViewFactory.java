@@ -11,6 +11,7 @@ import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 容器类组件的构建工厂
  * <p> @Date : 2019/10/21 </p>
  * <p> @Project : db-meta-serve</p>
  *

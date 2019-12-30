@@ -98,7 +98,7 @@ public class AppWebConfig extends JFinalConfig {
 
         //component register
         Components.me().init();
-
+        //dictionary register
         Dicts.me().init();
 
         //Auto import anyConfig from json file;
