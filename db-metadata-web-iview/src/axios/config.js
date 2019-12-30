@@ -1,5 +1,5 @@
-import {CONSTANT} from "../constant";
+import config from '@/../config'
 
 export default {
-    baseURL: CONSTANT.BASE_URL
+    baseURL: config.apiBaseUrl
 }

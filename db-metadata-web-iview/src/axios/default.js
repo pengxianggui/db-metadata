@@ -2,10 +2,10 @@ import axios from 'axios'
 import {s_format, e_format} from "./responseExchange";
 import config from "./config";
 
-axios.defaults = config;
+let instance = axios.create(config);
 
 // 添加一个请求拦截器
-axios.interceptors.request.use(config => {
+instance.interceptors.request.use(config => {
         return config
     },
     err => {
@@ -14,7 +14,7 @@ axios.interceptors.request.use(config => {
     });
 
 // 响应拦截器
-axios.interceptors.response.use(res => {
+instance.interceptors.response.use(res => {
     if (!s_format(res)) {
         return Promise.reject(res.data);
     }
@@ -25,4 +25,4 @@ axios.interceptors.response.use(res => {
     return Promise.reject(err)
 });
 
-export default axios
+export default instance

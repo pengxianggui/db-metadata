@@ -33,7 +33,7 @@ export const FEATURE_LOAD = '/feature/load?fc={featureCode}'; // 加载功能配
 export const MASTER_SLAVE_TO_ADD_S = '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}'; // 主子表子表新增URL(TO)
 
 export const LIST_FEATURE_TYPE = '/feature/list'; // 列出所有的功能类型code
-export const MENU_DATA = '/feature/menu';  // pxg_todo 菜单数据, for mock
+export const MENU_DATA = '/feature/menu';
 export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
 
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------

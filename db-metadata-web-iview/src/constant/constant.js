@@ -1,10 +1,4 @@
 /**
- * axios baseURL
- * @type {string}
- */
-export const BASE_URL = '/';
-
-/**
  * 统一默认的错误信息（当服务端不给msg时指定）
  * @type {string}
  */
