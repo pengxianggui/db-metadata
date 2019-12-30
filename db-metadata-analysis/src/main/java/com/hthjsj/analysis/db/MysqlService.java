@@ -37,10 +37,11 @@ public class MysqlService implements DbService {
         Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
 
         List<Record> records = null;
+        String showTablesSql = "select * from information_schema.tables where table_schema=? ";
         if (schemaName.isPresent()) {
-            records = Db.use(schema).find("select * from information_schema.tables where table_schema=? ", schema);
+            records = Db.use(schema).find(showTablesSql, schema);
         } else {
-            records = Db.use(App.DB_MAIN).find("select * from information_schema.tables where table_schema=? ", schema);
+            records = Db.use(App.DB_MAIN).find(showTablesSql, schema);
         }
 
         if (records == null || records.isEmpty()) {
@@ -59,10 +60,11 @@ public class MysqlService implements DbService {
     public Table getTable(String schema, String tableName) {
         Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
         Record record = null;
+        String getTableSql = "select * from information_schema.tables where table_schema=? and table_name=?";
         if (schemaName.isPresent()) {
-            record = Db.use(schema).findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
+            record = Db.use(schema).findFirst(getTableSql, schema, tableName);
         } else {
-            record = Db.use(App.DB_MAIN).findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
+            record = Db.use(App.DB_MAIN).findFirst(getTableSql, schema, tableName);
         }
         Table table = new Table(record);
         return table.setColumns(getColumns(schema, tableName));
@@ -75,10 +77,11 @@ public class MysqlService implements DbService {
         Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
 
         List<Record> records = null;
+        String showColumns = "select * from information_schema.columns where table_schema=? and table_name=?";
         if (schemaName.isPresent()) {
-            records = Db.use(App.DB_MAIN).find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
+            records = Db.use(App.DB_MAIN).find(showColumns, schema, tableName);
         } else {
-            records = Db.use(App.DB_MAIN).find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
+            records = Db.use(App.DB_MAIN).find(showColumns, schema, tableName);
         }
         List<Column> result = new ArrayList<>();
         for (Record record : records) {
