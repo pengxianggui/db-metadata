@@ -33,7 +33,7 @@ public class MysqlService implements DbService {
             throw new MetaAnalysisException("必须指定schema");
         }
 
-        //多数据源下,从
+        //多数据源下,找到schema对应的dbConfig
         Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
 
         List<Record> records = null;
