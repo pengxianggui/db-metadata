@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +33,15 @@ public class MysqlService implements DbService {
             throw new MetaAnalysisException("必须指定schema");
         }
 
-        List<Record> records = Db.use(App.DB_MAIN).find("select * from information_schema.tables where table_schema=? ", schema);
+        //多数据源下,从
+        Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
+
+        List<Record> records = null;
+        if (schemaName.isPresent()) {
+            records = Db.use(schema).find("select * from information_schema.tables where table_schema=? ", schema);
+        } else {
+            records = Db.use(App.DB_MAIN).find("select * from information_schema.tables where table_schema=? ", schema);
+        }
 
         if (records == null || records.isEmpty()) {
             throw new MetaAnalysisException("未查询到[%s]下的表数据", schema);
