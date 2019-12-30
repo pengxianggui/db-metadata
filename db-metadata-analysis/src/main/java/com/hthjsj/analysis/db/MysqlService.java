@@ -79,7 +79,7 @@ public class MysqlService implements DbService {
         List<Record> records = null;
         String showColumns = "select * from information_schema.columns where table_schema=? and table_name=?";
         if (schemaName.isPresent()) {
-            records = Db.use(App.DB_MAIN).find(showColumns, schema, tableName);
+            records = Db.use(schema).find(showColumns, schema, tableName);
         } else {
             records = Db.use(App.DB_MAIN).find(showColumns, schema, tableName);
         }
