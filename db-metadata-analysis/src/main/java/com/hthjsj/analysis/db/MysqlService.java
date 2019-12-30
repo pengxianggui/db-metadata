@@ -57,14 +57,29 @@ public class MysqlService implements DbService {
 
     @Override
     public Table getTable(String schema, String tableName) {
-        Record record = Db.use(App.DB_MAIN).findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
+        Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
+        Record record = null;
+        if (schemaName.isPresent()) {
+            record = Db.use(schema).findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
+        } else {
+            record = Db.use(App.DB_MAIN).findFirst("select * from information_schema.tables where table_schema=? and table_name=?", schema, tableName);
+        }
         Table table = new Table(record);
         return table.setColumns(getColumns(schema, tableName));
     }
 
     @Override
     public List<Column> getColumns(String schema, String tableName) {
-        List<Record> records = Db.use(App.DB_MAIN).find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
+
+        //多数据源下,找到schema对应的dbConfig
+        Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
+
+        List<Record> records = null;
+        if (schemaName.isPresent()) {
+            records = Db.use(App.DB_MAIN).find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
+        } else {
+            records = Db.use(App.DB_MAIN).find("select * from information_schema.columns where table_schema=? and table_name=?", schema, tableName);
+        }
         List<Column> result = new ArrayList<>();
         for (Record record : records) {
             result.add(new Column(record.getColumns()));
