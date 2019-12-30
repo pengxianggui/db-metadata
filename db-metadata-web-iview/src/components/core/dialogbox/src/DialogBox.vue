@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
 
@@ -58,7 +59,7 @@
                 }
             },
             innerTitle() {
-                return this.title || this.innerMeta.conf['title']
+                return utils.assertUndefined(this.title, this.innerMeta['conf']['title']);
             }
         }
     };

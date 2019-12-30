@@ -46,6 +46,9 @@
             }
         },
         methods: {
+            cleanValue() {
+                this.nativeValue = null;
+            },
             setTip(state, msg) {
                 this.tip['state'] = state;
                 this.tip['msg'] = msg;
@@ -82,6 +85,9 @@
             editor.on('change', function (instance) {
                 let newVal = instance.getValue();
                 self.cacheValue = newVal;
+                if (newVal === null || newVal.trim() === '') {
+                    self.cleanValue();
+                }
 
                 if (!self.innerMeta['check']) { // needn't be checked
                     self.nativeValue = newVal;

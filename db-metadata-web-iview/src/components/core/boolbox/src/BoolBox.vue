@@ -21,8 +21,7 @@
                 type: [Boolean, Number, String],
                 validator: function (val) {
                     let result = expand.indexOf(val) >= 0;
-                    if (!result)
-                        console.error('BoolBox support a value as list: %o', expand);
+                    if (!result) console.error('BoolBox support a value as list: %o', expand);
                     return result;
                 }
             }

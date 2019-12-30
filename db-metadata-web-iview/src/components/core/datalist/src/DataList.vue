@@ -69,26 +69,28 @@
                 if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
             getData(params) {
+                let {innerMeta, pageModel} = this;
                 if (!utils.isObject(params)) params = {};
 
-                if (!this.innerMeta.hasOwnProperty('data_url')) {
+                if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
-                let url = this.innerMeta['data_url'];
+                const {data_url: url} = innerMeta;
+                const {index, size} = pageModel;
 
                 Object.assign(params, {
-                    'p': this.pageModel['index'],
-                    's': this.pageModel['size']
+                    'p': index,
+                    's': size
                 });
 
                 this.$axios.safeGet(url, {
                     params: params
                 }).then(resp => {
                     this.innerData = resp.data;
-                    this.$emit("update:data", resp.data);
-                    if (resp.hasOwnProperty('page')) {
+                    this.$emit("data-change", resp.data);
+                    if (utils.hasProp(resp, 'page')) {
                         this.setPageModel(resp['page']);
                     }
                 }).catch(err => {
@@ -96,17 +98,17 @@
                 });
             },
             initData() { // init business data
-                let {page, data} = this;    // pxg_todo set page for DataList?
+                let {page, data, innerMeta} = this;
 
-                if (page !== undefined) {
+                if (!utils.isUndefined(page)) {
                     this.setPageModel(page)
                 }
 
-                if (data !== undefined) {
+                if (!utils.isUndefined(page)) {
                     this.innerData = data;
                     return;
                 }
-                if (this.innerMeta.hasOwnProperty('data_url')) {
+                if (utils.hasProp(innerMeta, 'data_url')) {
                     this.getData();
                     return;
                 }

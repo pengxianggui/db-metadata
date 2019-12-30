@@ -10,10 +10,15 @@
 </template>
 
 <script>
+    import utils from '@/utils'
+
     export default {
         name: "RowGrid",
         props: {
-            span: Array
+            span: {
+                type: Array,
+                validator: (value) => value.length === 2 && value.every(ele => utils.isNumber(ele))
+            }
         },
         computed: {
             leftSpan() {

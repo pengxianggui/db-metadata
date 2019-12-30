@@ -73,33 +73,34 @@
                 window.open(routeUrl.href, '_blank');
             },
             doSubmit(ev) {
-                const fn = 'submit';
-                const action = this.innerMeta['action'];
-                let params = this.model;
+                let {innerMeta, model: params} = this;
+                const {action, objectCode} = innerMeta;
 
-                if (this.$listeners.hasOwnProperty(fn)) {
-                    this.$emit(fn, params);
-                } else {
-                    let url = this.$compile(action, {objectCode: this.innerMeta['objectCode']});
-                    params['objectCode'] = this.innerMeta['objectCode'];
-                    utils.joinArrInObj(params);
-                    this.$axios.post(url, params).then(resp => {
-                        this.$emit('ok', params); //  default callback
-                        this.$message.success(resp.msg);
-                    }).catch(err => {
-                        this.$message.error(err.msg);
-                    })
-                }
+                let url = this.$compile(action, {objectCode: objectCode});
+                params['objectCode'] = objectCode;
+                
+                utils.joinArrInObj(params);
+                this.$axios.post(url, params).then(resp => {
+                    this.$emit('ok', params); //  default callback
+                    this.$message.success(resp.msg);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                })
             },
             onSubmit(ev) {
-                const refName = this.innerMeta['name'];
-                this.$refs[refName].validate((valid) => {
-                    if (valid) {
-                        this.doSubmit(ev) // do submit
-                    } else {
-                        return false;
-                    }
-                });
+                const {name: refName} = this.innerMeta;
+                const fn = 'submit';
+                if (this.$listeners.hasOwnProperty(fn)) {
+                    this.$emit(fn, this.model);
+                } else {
+                    this.$refs[refName].validate((valid) => {
+                        if (valid) {
+                            this.doSubmit(ev) // do submit
+                        } else {
+                            return false;
+                        }
+                    });
+                }
             },
             onCancel: function (event) {
                 if (this.$listeners.cancel) {
@@ -112,7 +113,7 @@
                 let columns = utils.isArray(meta.columns) ? meta.columns : [];
 
                 // pxg_todo 编辑/新增 模式根据是否含有record字段 && record非空
-                this.isEdit = meta.hasOwnProperty('record');
+                this.isEdit = utils.hasProp(meta, 'record');
 
                 if (this.isEdit) {
                     let record = utils.isObject(meta['record']) ? meta['record'] : {};

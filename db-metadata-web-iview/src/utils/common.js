@@ -212,9 +212,8 @@ export function convertToNumber(value) {
  * @param arr 数组
  * @param separator 分隔符号, 字符串, 默认为 ","
  */
-export function joinArr(val, separator) {
-    separator = (separator === undefined) ? ',' : separator;
-    if (isArray(val) && val.every(item => !isArray(item) && !isObject(item))) {
+export function joinArr(val, separator = ',') {
+    if (isArray(val) && val.every(item => !isArray(item) && !isObject(item) && !isFunction(item))) {
         return val.join(separator)
     }
     return val;
@@ -222,15 +221,23 @@ export function joinArr(val, separator) {
 
 /**
  * 将对象中所有值为数组(数组必须为基本类型数组,即不含有对象和数组元素的数组)的值转为分隔符分隔的字符串.
- * 此方法会改变val值
+ * 此方法会改变val值. 如:
+ * val: {
+ *     'a': 1,
+ *     'b': [1,2],
+ *     'c': ['A', 'B']
+ * }
+ * 返回: {
+ *     'a': 1,
+ *     'b': '1,2'
+ *     'c': 'A,B'
+ * }
  * @param val   对象值
  * @param separator 分隔符, 默认为 ","
  * @param deep 是否需要对val进行深度遍历, 默认为false, 即只处理一层
  * @returns {*} 返回处理后的val
  */
-export function joinArrInObj(val, separator, deep) {
-    separator = (separator === undefined) ? ',' : separator;
-    deep = (deep === true) ? true : false;
+export function joinArrInObj(val, separator = ',', deep = false) {
     if (isObject(val)) {
         for (let key in val) {
             if (deep && isObject(val[key])) {
@@ -371,4 +378,15 @@ export function markNotRepeatEle(arr, keyName, notRepeatCallback, repeatCallback
 
 export function deepClone(val) {
     return cloneDeep(val);  // API: http://lodash.think2011.net/cloneDeep, Or other API function of lodash. It's useful
+}
+
+/**
+ * 判断对象是否含有某个属性
+ * @param object
+ * @param key
+ */
+export function hasProp(object, key) {
+    if (!isObject(object)) return false;
+
+    return object.hasOwnProperty(key);
 }

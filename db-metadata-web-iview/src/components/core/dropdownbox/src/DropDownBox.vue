@@ -67,7 +67,7 @@
         computed: {
             multiple() {    // is multiple value
                 let {innerMeta} = this;
-                return (innerMeta.hasOwnProperty('conf') && innerMeta['conf']['multiple'] === true);
+                return (utils.hasProp(innerMeta, 'conf') && innerMeta['conf']['multiple'] === true);
             }
         }
     }
