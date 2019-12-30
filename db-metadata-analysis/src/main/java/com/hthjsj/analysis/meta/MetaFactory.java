@@ -72,7 +72,7 @@ public class MetaFactory {
             manualMetaObject.addField(manualMetaField);
             //指定主键
             if ("id".equalsIgnoreCase(name) || "id".equalsIgnoreCase(label)) {
-                manualMetaObject.primaryKey("id");
+                manualMetaObject.primaryKey(name);
             }
         }
         if (!StrKit.notBlank(manualMetaObject.primaryKey())) {
