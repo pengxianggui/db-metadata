@@ -2,32 +2,31 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import {URL} from '@/constant'
+import axios from '../axios'
 import utils from '@/utils'
-import axios from 'axios'
 
 Vue.use(Router);
 
 const router = new Router({
-    // model: 'history',
+    // model: 'history', // hash or history
     routes: []
 });
 
 const routesKey = 'router';
 let routes;
+// setRoutesToLocalStorage(routesKey, null); // pxg_todo 调试阶段先每次清空
 
-// localStorage.removeItem(routesKey); // 调试阶段先每次清空
 router.beforeEach((to, from, next) => {
     if (utils.isEmpty(routes)) {
-        if (utils.isEmpty(getRoutesFromLocalStorage(routesKey))) {
+        routes = getRoutesFromLocalStorage(routesKey);
+        if (utils.isEmpty(routes)) {
             axios.get(URL.ROUTE_DATA).then(resp => {
                 routes = resp.data;
-                // routes = commonRoute;
                 setRoutesToLocalStorage(routesKey, routes);
-                routerGo(to, next);
+                routerGo(to, next, routes);
             });
         } else {
-            routes = getRoutesFromLocalStorage(routesKey);
-            routerGo(to, next);
+            routerGo(to, next, routes);
         }
     } else {
         next()
@@ -42,7 +41,7 @@ function setRoutesToLocalStorage(routesKey, routes) {
     window.localStorage.setItem(routesKey, JSON.stringify(routes));
 }
 
-function routerGo(to, next) {
+function routerGo(to, next, routes) {
     routes = dealWithRoutes(routes);
     router.addRoutes(routes);
     next({...to, replace: true});
