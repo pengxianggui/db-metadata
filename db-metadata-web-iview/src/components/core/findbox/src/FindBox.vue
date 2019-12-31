@@ -38,11 +38,12 @@
         },
         methods: {
             handlerClick(ev) {
-                if (ev)
-                    ev.stopPropagation();
-                let url = this.innerMeta['data_url'];
+                if (ev) ev.stopPropagation();
+                const {innerMeta} = this;
+                const {data_url: url} = innerMeta;
+
                 if (!url) {
-                    console.error('data_url is required property, and not nullable. meta: %o', this.innerMeta);
+                    console.error('data_url is required property, and not nullable. meta: %o', innerMeta);
                     return;
                 }
                 this.$axios.get(url).then(resp => {
@@ -50,7 +51,7 @@
                     this.findPanelMeta.component_name = 'FindPanel';
                     this.dialogVisible = true;
                 }).catch(err => {
-                    console.error(err.msg);
+                    console.error(err);
                     this.$message.error(err.msg);
                 });
             },
@@ -63,8 +64,7 @@
                 this.dialogVisible = false;
             },
             handlerClear(ev) {
-                if (ev)
-                    ev.stopPropagation();
+                if (ev) ev.stopPropagation();
                 this.$emit('clear', ev);
             }
         }

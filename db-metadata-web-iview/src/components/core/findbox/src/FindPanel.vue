@@ -7,8 +7,9 @@
         </el-row>
         <el-row>
             <el-col>
-                <table-list :ref="tlMeta['name']" :meta="tlMeta" :active-data.sync="choseData"
-                    @row-dblclick="ok">
+                <table-list :ref="tlMeta['name']" :meta="tlMeta" :active-data="activeData"
+                            @active-change="handlerActiveChange"
+                            @row-dblclick="handleRowDbClick">
                     <template #operation-bar><span></span></template>
                     <template #buttons><span></span></template>
                     <template #operation-column><span></span></template>
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {DEFAULT} from '@/constant'
 
     export default {
@@ -45,28 +47,30 @@
         },
         data() {
             return {
-                choseData: {}
+                activeData: {}
             }
         },
         methods: {
+            handleRowDbClick(row) {
+                this.activeData = row;
+                this.ok();
+            },
+            handlerActiveChange(row) {
+                this.activeData = row;
+            },
             handlerSearch(params) {
                 this.$refs[this.tlMeta['name']].getData(params); // refresh table data
             },
-            assemblyFeedbackValue(data, primaryKeys) {
-                let feedBackValue;
-                feedBackValue = data[primaryKeys];  // 不考虑联合组件
-                return feedBackValue;
-            },
             ok() {
-                if (!this.choseData) {
+                const {activeData, tlMeta} = this;
+                if (!activeData) {
                     this.$message.warning('请选择数据.');
                     return;
                 }
+                const {objectPrimaryKey} = tlMeta;
+                const feedBackValue = utils.extractValue(activeData, objectPrimaryKey);
 
-                const objectPrimaryKey = this.tlMeta['objectPrimaryKey'];
-                const feedBackValue = this.assemblyFeedbackValue(this.choseData, objectPrimaryKey);
-
-                this.$emit('ok', feedBackValue); // feedback choseData
+                this.$emit('ok', feedBackValue[0]); // feedback activeData
             },
             cancel() {
                 this.$emit('cancel', 'clean'); // feedback clean
