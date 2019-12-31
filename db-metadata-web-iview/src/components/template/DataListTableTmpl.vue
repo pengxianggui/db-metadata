@@ -9,7 +9,7 @@
         <template #right>
             <div class="el-card" style="margin-left: 5px;">
                 <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-                <table-list :ref="tlRefName" :meta="tlMeta" :page="{ size: 5 }"></table-list>
+                <table-list :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams" :page="{ size: 5 }"></table-list>
             </div>
         </template>
     </row-grid>
@@ -35,6 +35,7 @@
                 dlMeta: {},
                 spMeta: {},
                 tlMeta: {},
+                filterParams: {},
                 tableUrl: null
             }
         },
@@ -50,8 +51,11 @@
                 });
             },
             handleSearch(params) {
-                const tableRefName = this.tableRefName;
-                this.$refs[tableRefName].getData(params);
+                const {tableRefName} = this;
+                this.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs[tableRefName].getData();
+                });
             },
             initMeta(dlObjectCode, tlObjectCode) {
                 this.getDlMeta(dlObjectCode).then(resp => {
@@ -88,7 +92,7 @@
                 this.tlConf = feature['table'];
                 const dlObjectCode = this.dlConf['objectCode'];
                 const tlObjectCode = this.tlConf['objectCode'];
-                
+
                 this.initMeta(dlObjectCode, tlObjectCode);
             });
         },

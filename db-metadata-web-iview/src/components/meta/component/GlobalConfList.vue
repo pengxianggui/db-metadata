@@ -1,7 +1,7 @@
 <template>
     <div>
-        <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-list :ref="tlMeta['name']" :meta="tlMeta">
+        <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
+        <table-list :ref="refName" :meta="tlMeta" :filter-params="filterParams">
             <template #add-btn="{conf}">
                 <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
@@ -27,12 +27,17 @@
             return {
                 objectCode: "meta_component",
                 tlMeta: {},
+                filterParams: {},
                 spMeta: {}
             }
         },
         methods: {
             handleSearch(params) {
-                this.$refs[this.tlMeta['name']].getData(params);
+                const {refName} = this;
+                this.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs[refName].getData();
+                });
             },
             addConf() {
                 this.$router.push(URL.R_GOBAL_CONF_ADD);
@@ -64,8 +69,8 @@
             });
         },
         computed: {
-            ref() {
-                return this.$refs[this.tlMeta['name']];
+            refName() {
+                return this.tlMeta['name'];
             }
         }
     }

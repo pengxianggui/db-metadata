@@ -7,7 +7,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <table-list :ref="tlMeta['name']" :meta="tlMeta" :active-data="activeData"
+                <table-list :ref="refName" :meta="tlMeta" :filter-params="filterParams" :active-data="activeData"
                             @active-change="handlerActiveChange"
                             @row-dblclick="handleRowDbClick">
                     <template #operation-bar><span></span></template>
@@ -47,7 +47,8 @@
         },
         data() {
             return {
-                activeData: {}
+                activeData: {},
+                filterParams: {}
             }
         },
         methods: {
@@ -59,7 +60,11 @@
                 this.activeData = row;
             },
             handlerSearch(params) {
-                this.$refs[this.tlMeta['name']].getData(params); // refresh table data
+                const {refName} = this;
+                this.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs[refName].getData(); // refresh table data
+                });
             },
             ok() {
                 const {activeData, tlMeta} = this;
@@ -87,6 +92,9 @@
                 meta.component_name = 'TableList';
                 meta.multi_select = false; // pxg_todo 暂不支持多选
                 return meta;
+            },
+            refName() {
+                return this.tlMeta['name'];
             }
         }
     }

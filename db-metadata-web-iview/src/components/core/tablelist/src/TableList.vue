@@ -152,6 +152,7 @@
                 innerData: [],
                 choseData: [],
                 activeData: {},
+                sortParams: {},
                 pageModel: {
                     size: 10,
                     index: 1,
@@ -164,7 +165,8 @@
         },
         props: {
             data: Array,
-            page: Object
+            page: Object,
+            filterParams: Object    // 搜索面板过滤参数
         },
         methods: {
             handleSelectionChange(selection) {
@@ -319,10 +321,10 @@
             sortChange(param) {
                 let {column, prop, order} = param;
                 if (column.sortable === 'custom') { // 判断是否远程排序
-                    let sortKey = prop + '_st';
-                    let params = {};
-                    params[sortKey] = (order === 'ascending' ? 'asc' : 'desc');
-                    this.getData(params);
+                    const sortParams = {}, sortKey = prop + '_st';
+                    sortParams[sortKey] = (order === 'ascending' ? 'asc' : 'desc');
+                    this.sortParams = sortParams;
+                    this.getData();
                 }
             },
             setPage(index) {
@@ -339,22 +341,23 @@
                 if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
             // get business data
-            getData(params) {
-                const {innerMeta, pageModel} = this;
+            getData() {
+                const {innerMeta, pageModel, filterParams, sortParams} = this;
 
-                if (!utils.isObject(params)) params = {};
                 if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
+                let params = {};
                 const {data_url: url} = innerMeta;
                 const {index, size} = pageModel;
                 const columnNames = (innerMeta['columns'] || [])
                     .filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
 
-                Object.assign(params, {
+                utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
+                utils.mergeObject(params, filterParams, sortParams, {
                     'fs': columnNames.join(','),
                     'p': index,
                     's': size
@@ -406,15 +409,8 @@
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
                 const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
-                let primaryKey;
-
-                if (utils.isEmpty(objectPrimaryKey)) {
-                    console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
-                    primaryKey = defaultPrimaryKey.split(',');
-                } else {
-                    primaryKey = objectPrimaryKey.split(',');
-                }
-                return primaryKey;
+                let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
+                return primaryKey.split(',');
             },
             multiMode() {
                 return this.innerMeta['multi_select'];

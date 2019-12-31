@@ -1,7 +1,7 @@
 <template>
     <div class="el-card">
         <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-list :ref="tableRefName" :meta="tlMeta"></table-list>
+        <table-list :ref="tableRefName" :meta="tlMeta" :filter-params="filterParams"></table-list>
     </div>
 </template>
 
@@ -24,13 +24,17 @@
                 featureCode: featureCode,
                 objectCode: objectCode,
                 tlMeta: {},
-                spMeta: {}
+                spMeta: {},
+                filterParams: {}
             }
         },
         methods: {
             handleSearch(params) {
                 const tableRefName = this.tableRefName;
-                this.$refs[tableRefName].getData(params);
+                this.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs[tableRefName].getData();
+                })
             },
             initMeta(objectCode) {
                 this.getTlMeta(objectCode).then(resp => {

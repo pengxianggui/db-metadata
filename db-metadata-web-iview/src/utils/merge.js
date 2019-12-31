@@ -96,3 +96,38 @@ function set(self, obj, key, value) {
         obj[key] = value;
     }
 }
+
+/**
+ * 合并两个数组, 两个数组成员都必须是简单类型. 将targetArr合并到sourceArr, 如何sourceArr中已有, 则跳过。如:
+ * sourceArr: [1,2,3]
+ * targetArr: [3,4]
+ * 则合并后, sourceArr变为[1,2,3,4]
+ * @param sourceArr
+ * @param targetArr
+ */
+export function mergeArray(sourceArr, targetArr) {
+    if (!common.isArray(sourceArr) || !common.isArray(targetArr)) {
+        return sourceArr;
+    }
+    targetArr.filter(ele => sourceArr.indexOf(ele) === -1).forEach(ele => sourceArr.push(ele));
+    return sourceArr;
+}
+
+/**
+ * 将一个或多个对象依次向一个原对象上合并， 并返回元对象，此方法会改变sourceObject
+ * @param sourceObject
+ * @param targets
+ * @returns {*}
+ */
+export function mergeObject(sourceObject, ...targets) {
+    if (!common.isObject(sourceObject)) {
+        return sourceObject;
+    }
+
+    targets.forEach(target => {
+        if (common.isObject(target)) {
+            Object.assign(sourceObject, target);
+        }
+    });
+    return sourceObject;
+}

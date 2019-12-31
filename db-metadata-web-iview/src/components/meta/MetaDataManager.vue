@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :page="{ size: 5 }"
+            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :filter-params="mfilterParams" :page="{ size: 5 }"
                         @active-change="handleActiveChange" @chose-change="handleChoseChange">
                 <template #prefix-btn="{conf}">
                     <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
@@ -23,7 +23,7 @@
             </table-list>
 
             <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
-            <table-list :ref="sTlMeta['name']" :meta="sTlMeta" :page="{ size: 5 }">
+            <table-list :ref="sTlMeta['name']" :meta="sTlMeta" :filter-params="sfilterParams" :page="{ size: 5 }">
                 <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="handleAdd">新增</el-button>
                 </template>
@@ -66,10 +66,12 @@
 
                 mSpMeta: {},
                 mTlMeta: {},
+                mfilterParams: {},
                 activeMData: {},
                 choseMData: [],
                 sSpMeta: {},
                 sTlMeta: {},
+                sfilterParams: {},
                 sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
                 visible: false,
                 formMeta: {},
@@ -94,10 +96,16 @@
                 }
             },
             mHandleSearch(params) {
-                this.mTlRef.getData(params);
+                this.mfilterParams = params;
+                this.$nextTick(() => {
+                    this.mTlRef.getData();
+                });
             },
             sHandleSearch(params) {
-                this.sTlRef.getData(params);
+                this.sfilterParams = params;
+                this.$nextTick(() => {
+                    this.sTlRef.getData(params);
+                });
             },
             getFormMeta() {
                 this.$axios.get(URL.META_OBJECT_TO_ADD).then(resp => {

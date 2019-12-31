@@ -169,6 +169,7 @@
                 innerData: [],
                 choseData: [],
                 activeData: {},
+                sortParams: {},
                 pageModel: {
                     size: 10,
                     index: 1,
@@ -182,6 +183,7 @@
         props: {
             data: Array,
             page: Object,
+            filterParams: Object,   // 搜索面板过滤参数
             treeProps: {
                 type: Object,
                 default: function () {
@@ -337,10 +339,10 @@
             sortChange(param) {
                 let {column, prop, order} = param;
                 if (column.sortable === 'custom') { // 判断是否远程排序
-                    let sortKey = prop + '_st';
-                    let params = {};
-                    params[sortKey] = (order === 'ascending' ? 'asc' : 'desc');
-                    this.getData(params);
+                    const sortParams = {}, sortKey = prop + '_st';
+                    sortParams[sortKey] = (order === 'ascending' ? 'asc' : 'desc');
+                    this.sortParams = sortParams;
+                    this.getData();
                 }
             },
             setPage(index) {
@@ -358,24 +360,26 @@
             },
 
             // get business data
-            getData(params) {
-                if (!utils.isObject(params)) params = {};
+            getData() {
+                const {innerMeta, pageModel, filterParams, sortParams} = this;
 
-                if (!this.innerMeta.hasOwnProperty('data_url')) {
+                if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
-                let columnNames = (this.innerMeta['columns'] || [])
-                    .filter(column => column.hasOwnProperty('showable') && column['showable'])
+                let params = {};
+                const {data_url: url} = innerMeta;
+                const {index, size} = pageModel;
+                const columnNames = (innerMeta['columns'] || [])
+                    .filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
 
-                let url = this.innerMeta['data_url'];
-
-                Object.assign(params, {
+                utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
+                utils.mergeObject(params, filterParams, sortParams, {
                     'fs': columnNames.join(','),
-                    'p': this.pageModel['index'],
-                    's': this.pageModel['size']
+                    'p': index,
+                    's': size
                 });
 
                 this.$axios.safeGet(url, {

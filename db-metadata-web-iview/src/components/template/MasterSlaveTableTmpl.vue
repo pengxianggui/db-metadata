@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="master['name']" :meta="master.tlMeta" @active-change="handleActiveChange"
+            <table-list :ref="master['name']" :meta="master.tlMeta" :filter-params="filterParams" @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }"></table-list>
         </div>
         <el-divider></el-divider>
@@ -10,7 +10,7 @@
             <el-tabs type="border-card">
                 <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">
                     <search-panel :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-panel>
-                    <table-list :ref="slave['name']" :meta="slave.tlMeta" :page="{ size: 5 }">
+                    <table-list :ref="slave['name']" :meta="slave.tlMeta" :filter-params="slave.filterParams" :page="{ size: 5 }">
                         <template #add-btn="{conf}">
                             <el-button v-bind="conf" @click="handleAdd(slave)">新增</el-button>
                         </template>
@@ -36,6 +36,7 @@
             const {featureCode: R_fc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
             return {
+                filterParams: {},
                 featureCode: featureCode,
                 master: {},
                 slaves: [],
@@ -53,13 +54,19 @@
             },
             mHandleSearch(params) {
                 const refName = this.master['name'];
-                this.$refs[refName].getData(params);
+                this.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs[refName].getData();
+                });
             },
             sHandleSearch(slave, params) {
-                let param = params[0];
                 const refName = slave['name'];
                 let ref = this.$refs[refName][0];
-                ref.getData(param);
+                debugger;
+                this.$set(slave, 'filterParams', params[0]);
+                this.$nextTick(() => {
+                    ref.getData();
+                });
             },
             handleAdd(slave) {
                 if (utils.isEmpty(this.activeMData)) {
