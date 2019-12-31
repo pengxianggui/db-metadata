@@ -22,25 +22,22 @@
                            v-text="innerMeta.btns['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">
-                <pop-menu trigger="click" placement="right" v-if="$hasAuth('ADMIN')">
+                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="FormTmpl">
                     <template #label><i class="el-icon-setting"></i></template>
-                    <template #default>
-                        <list>
-                            <list-item @click="editUIConf">编辑UI</list-item>
-                        </list>
-                    </template>
-                </pop-menu>
+                </meta-easy-edit>
             </div>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
-    import {DEFAULT, URL} from '@/constant'
+    import {DEFAULT} from '@/constant'
+    import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import utils from '@/utils'
 
     export default {
         name: "FormTmpl",
+        components: {MetaEasyEdit},
         data() {
             return {
                 model: {},
@@ -60,25 +57,13 @@
                 let rules = item.hasOwnProperty('conf') ? item.conf['rules'] : [];
                 return utils.isEmpty(rules) ? [] : rules;
             },
-            editUIConf() {
-                const url = URL.RR_INSTANCE_CONF_ADD;
-                const {objectCode} = this.innerMeta;
-                let routeUrl = this.$router.resolve({
-                    path: url,
-                    query: {
-                        componentCode: 'FormTmpl',
-                        objectCode: objectCode
-                    }
-                });
-                window.open(routeUrl.href, '_blank');
-            },
             doSubmit(ev) {
                 let {innerMeta, model: params} = this;
                 const {action, objectCode} = innerMeta;
 
                 let url = this.$compile(action, {objectCode: objectCode});
                 params['objectCode'] = objectCode;
-                
+
                 utils.joinArrInObj(params);
                 this.$axios.post(url, params).then(resp => {
                     this.$emit('ok', params); //  default callback

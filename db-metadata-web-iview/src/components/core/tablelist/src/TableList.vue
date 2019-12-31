@@ -24,6 +24,7 @@
                 </slot>
             </el-col>
         </el-row>
+
         <el-row>
             <el-col :span="24">
                 <el-table
@@ -49,40 +50,10 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template slot="header">
-                                <pop-menu trigger="right-click" v-if="$hasAuth('ADMIN')">
+                                <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
+                                                :label="item.label || item.name" :all="true">
                                     <template #label>{{item.label || item.name}}</template>
-                                    <list>
-                                        <list-item @click="editMetaObject">编辑元对象({{innerMeta.objectCode}})</list-item>
-                                        <list-item @click="editMetaField(item.name)">编辑元字段({{item.name}})</list-item>
-                                        <list-item @hover="getComponentCode(innerMeta.objectCode)">
-                                            <pop-menu trigger="hover" placement="right">
-                                                <template #label>编辑实例UI配置({{innerMeta.objectCode}})</template>
-                                                <template #default>
-                                                    <list>
-                                                        <list-item v-for="compCode in componentCodes" :key="compCode"
-                                                                   @click="editInstanceConf(innerMeta.objectCode, compCode)">
-                                                            {{compCode}}
-                                                        </list-item>
-                                                    </list>
-                                                </template>
-                                            </pop-menu>
-                                        </list-item>
-                                        <list-item @hover="getComponentCode(innerMeta.objectCode)">
-                                            <pop-menu trigger="hover" placement="right">
-                                                <template #label>编辑实例字段UI配置({{item.name}})</template>
-                                                <template #default>
-                                                    <list>
-                                                        <list-item v-for="compCode in componentCodes" :key="compCode"
-                                                                   @click="editInstanceFieldConf(innerMeta.objectCode, compCode, item.name)">
-                                                            {{compCode}}
-                                                        </list-item>
-                                                    </list>
-                                                </template>
-                                            </pop-menu>
-                                        </list-item>
-                                    </list>
-                                </pop-menu>
-                                <span v-if="!$hasAuth('ADMIN')">{{item.label || item.name}}</span>
+                                </meta-easy-edit>
                             </template>
                         </el-table-column>
                     </template>
@@ -136,6 +107,7 @@
                 </el-table>
             </el-col>
         </el-row>
+
         <el-row v-if="pageModel" style="margin-top: 5px;">
             <el-col>
                 <!-- pagination bar -->
@@ -165,11 +137,16 @@
 </template>
 
 <script>
-    import {CONSTANT, DEFAULT, URL} from '@/constant'
     import utils from '@/utils'
+    import {CONSTANT, DEFAULT, URL} from '@/constant'
+    import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
+    import Meta from '../../mixins/meta'
+    import assembleMeta from './assembleMeta'
 
     export default {
         name: "TableList",
+        mixins: [Meta(DEFAULT.TableList, assembleMeta)],
+        components: {MetaEasyEdit},
         data() {
             return {
                 innerData: [],
@@ -183,16 +160,9 @@
                 dialogComponentMea: {}, // 弹窗内包含的组件元对象
                 dialogMeta: {}, // 弹窗组件元对象
                 dialogVisible: false,   // 弹窗显隐
-                componentCodes: [], // 当前objectCode 配置过的所有componentCode(容器层, 及元对象层)
             }
         },
         props: {
-            meta: {
-                type: Object,
-                default: function () {
-                    return {};
-                }
-            },
             data: Array,
             page: Object
         },
@@ -203,27 +173,25 @@
                     this.$emit('chose-change', selection);
                 }
             },
-            extractPrimaryValue(row) {
-                const {primaryKey} = this;
-                return utils.extractValue(row, primaryKey);
-            },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
-                const primaryValue = this.extractPrimaryValue(row);
+                const {primaryKey} = this;
+                const primaryValue = utils.extractValue(row, primaryKey);
+
                 this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(primaryValue) {
                 let url, title;
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKey = this.primaryKey;
-                    let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-                    //Fixme hack konbluesky
-                    if (primaryKey.length > 1 && primaryValue.length > 1) {
-                        primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-                    } else {
+                    let primaryKey = this.primaryKey, primaryKv;
+
+                    if (primaryKey.length <= 1) {
                         primaryKv = primaryValue[0];
+                    } else {
+                        primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                     }
+
                     url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
                         primaryKv: primaryKv
@@ -249,9 +217,8 @@
                 if (ev) ev.stopPropagation();
 
                 const {primaryKey} = this;
-                const primaryValue = this.extractPrimaryValue(row);
+                const primaryValue = utils.extractValue(row, primaryKey);
                 let primaryKvExp;
-                //Fixme hack konbluesky
                 if (primaryKey.length > 1 && primaryValue.length > 1) { // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2"
                     primaryKvExp = 'id=' + utils.spliceKvs(primaryKey, primaryValue);
                 } else {    // 单主键, 目标: primaryKvExp="pk=v"
@@ -273,17 +240,13 @@
                 if (primaryKey.length > 1) {    // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4"
                     let primaryKvExpArr = [];
                     this.choseData.forEach(row => {
-                        primaryValue = this.extractPrimaryValue(row);
+                        primaryValue = utils.extractValue(row, primaryKey);
                         primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
                     });
                     primaryKvExp = primaryKvExpArr.join('&');
                     this.doDelete(primaryKvExp, ev);
-                } else {    // 单主键
+                } else {    // 单主键 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
                     primaryValue = this.choseData.map(row => row[primaryKey[0]]);
-                    // 目标: primaryKvExp="pk=v1,v2,v3" or "pk=v1&pk=v2&pk=v3"
-                    // primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue.join(","), '=');
-
-                    // 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
                     let primaryKvExpArr = primaryValue.map(value => utils.spliceKv(primaryKey[0], value, "="));
                     primaryKvExp = primaryKvExpArr.join('&');
 
@@ -375,87 +338,34 @@
                 if (!utils.isEmpty(index)) this.pageModel['index'] = parseInt(index);
                 if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
-
-            // fast edit meta-data or edit ui conf ----------------------------------------------------------
-            editMetaObject() {
-                let {objectCode} = this.innerMeta;
-                let url = this.$compile(URL.META_OBJECT_TO_EDIT, {objectCode: objectCode});
-                this.$axios.get(url).then(resp => {
-                    this.dialogComponentMea = resp.data;
-                    this.dialogMeta = {
-                        component_name: "DialogBox",
-                        conf: {
-                            title: "编辑元对象:" + objectCode
-                        }
-                    };
-                    this.dialogVisible = true
-                });
-            },
-            editMetaField(fieldCode) {
-                let {objectCode} = this.innerMeta;
-                let url = this.$compile(URL.META_FIELD_TO_EDIT, {
-                    objectCode: objectCode,
-                    fieldCode: fieldCode
-                });
-                this.$axios.get(url).then(resp => {
-                    this.dialogComponentMea = resp.data;
-                    this.dialogMeta = {
-                        component_name: "DialogBox",
-                        conf: {
-                            title: "编辑元字段:" + fieldCode
-                        }
-                    };
-                    this.dialogVisible = true
-                });
-            },
-            editInstanceConf(objectCode, componentCode) {
-                let url = URL.RR_INSTANCE_CONF_ADD;
-                let routeUrl = this.$router.resolve({
-                    path: url,
-                    query: {
-                        componentCode: componentCode,
-                        objectCode: objectCode
-                    }
-                });
-                window.open(routeUrl.href, '_blank');
-            },
-            editInstanceFieldConf(objectCode, componentCode, fieldCode) {
-                this.editInstanceConf(objectCode, componentCode); // just edit the ui conf of field named fieldCode. anchor point ?
-            },
-            getComponentCode(objectCode) {
-                if (!utils.isEmpty(this.componentCodes)) return;
-                this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: false}))
-                    .then(resp => {
-                        this.componentCodes = resp.data;
-                    })
-            },
             // get business data
             getData(params) {
-                if (!utils.isObject(params)) params = {};
+                const {innerMeta, pageModel} = this;
 
-                if (!this.innerMeta.hasOwnProperty('data_url')) {
+                if (!utils.isObject(params)) params = {};
+                if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
-                let columnNames = (this.innerMeta['columns'] || [])
-                    .filter(column => column.hasOwnProperty('showable') && column['showable'])
+                const {data_url: url} = innerMeta;
+                const {index, size} = pageModel;
+                const columnNames = (innerMeta['columns'] || [])
+                    .filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
-
-                let url = this.innerMeta['data_url'];
 
                 Object.assign(params, {
                     'fs': columnNames.join(','),
-                    'p': this.pageModel['index'],
-                    's': this.pageModel['size']
+                    'p': index,
+                    's': size
                 });
 
                 this.$axios.safeGet(url, {
                     params: params
                 }).then(resp => {
                     this.innerData = resp.data;
-                    this.$emit("update:data", resp.data);
-                    if (resp.hasOwnProperty('page')) {
+                    this.$emit("data-change", resp.data);
+                    if (utils.hasProp(resp, 'page')) {
                         this.setPageModel(resp['page']);
                     }
                 }).catch(err => {
@@ -464,10 +374,10 @@
             },
             initData() { // init business data
                 let {page, data} = this;
-                if (page !== undefined) {
+                if (!utils.isUndefined(page)) {
                     this.setPageModel(page)
                 }
-                if (data !== undefined) {
+                if (!utils.isUndefined(data)) {
                     this.innerData = data;
                     return;
                 }
@@ -476,7 +386,7 @@
                     return;
                 }
                 console.error("data or data_url in meta provide one at least!")
-            },
+            }
         },
         watch: {
             'data': function (newVal, oldVal) {
@@ -493,16 +403,6 @@
             this.initData();
         },
         computed: {
-            innerMeta() {
-                if (this.meta.hasOwnProperty('columns')) { // init column.showable of columns
-                    this.meta['columns'].forEach(item => {
-                        if (!item.hasOwnProperty('showable')) { // default true
-                            item.showable = true;
-                        }
-                    });
-                }
-                return this.$merge(this.meta, DEFAULT.TableList);
-            },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
                 const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
@@ -519,7 +419,7 @@
             multiMode() {
                 return this.innerMeta['multi_select'];
             },
-            // 支持无渲染的行为插槽
+            // 支持无渲染的行为插槽 pxg_todo
             actions() {
                 const {doDelete} = this;
                 return {doDelete};

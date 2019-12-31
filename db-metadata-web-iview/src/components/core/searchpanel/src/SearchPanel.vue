@@ -62,14 +62,9 @@
                 </el-form-item>
             </el-form>
             <div style="float: right; margin: -20px 5px 0px 0px">
-                <pop-menu trigger="click" placement="right" v-if="$hasAuth('ADMIN')">
+                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="SearchPanel">
                     <template #label><i class="el-icon-setting"></i></template>
-                    <template #default>
-                        <list>
-                            <list-item @click="editUIConf">编辑UI</list-item>
-                        </list>
-                    </template>
-                </pop-menu>
+                </meta-easy-edit>
             </div>
         </div>
         <template #label>
@@ -83,32 +78,22 @@
 </template>
 
 <script>
-    import {DEFAULT, URL} from '@/constant'
-    import Meta from '../../mixins/meta'
+    import {DEFAULT} from '@/constant'
     import util from '@/utils'
+    import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
+    import Meta from '../../mixins/meta'
     import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
 
     export default {
         name: "SearchPanel",
         mixins: [Meta(DEFAULT.SearchPanel)],
+        components: {MetaEasyEdit},
         data() {
             return {
                 model: {}
             }
         },
         methods: {
-            editUIConf() {
-                const url = URL.RR_INSTANCE_CONF_ADD;
-                const {objectCode} = this.innerMeta;
-                let routeUrl = this.$router.resolve({
-                    path: url,
-                    query: {
-                        componentCode: 'SearchPanel',
-                        objectCode: objectCode
-                    }
-                });
-                window.open(routeUrl.href, '_blank');
-            },
             onSubmit() {
                 let params = {};
                 let model = this.model;

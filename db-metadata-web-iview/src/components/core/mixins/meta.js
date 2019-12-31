@@ -6,7 +6,7 @@ const behaviorKey = 'behavior';
  * meta mixins
  * @returns {{computed: {innerMeta(): *}, methods: {executeBehavior(*, *=): (*|undefined)}, props: {meta: {default: (function(): {}), type: ObjectConstructor}}}|*}
  */
-export default function (defaultMeta) {
+export default function (defaultMeta, assembleMetaFn) {
     return {
         props: {
             meta: {
@@ -27,7 +27,11 @@ export default function (defaultMeta) {
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, utils.assertUndefined(defaultMeta, {}));
+                let mergedMeta = this.$merge(this.meta, utils.assertUndefined(defaultMeta, {}));
+                if (utils.isFunction(assembleMetaFn)) {
+                    return assembleMetaFn.call(this, mergedMeta);
+                }
+                return mergedMeta;
             }
         }
     }
