@@ -130,6 +130,7 @@ https://docs.sencha.com/extjs/6.2.0
 - [ ] mysql 数据库版本8.0 不兼容
 - [ ] 脏数据,错误数据处理与提示;
 - Jprofiler : L-J11-Everyone#speedzodiac-327a9wrs5dxvz#463a59
+- componentInstanceCode的支持,通过code检索实例配置; 
 
 [Maven：Maven GPG Plugin](https://blog.csdn.net/en_joker/article/details/84140033)
 
@@ -146,3 +147,4 @@ https://docs.sencha.com/extjs/6.2.0
 - [借助ImportBeanDefinitionRegistrar接口实现bean的动态注入](https://www.jianshu.com/p/2b993ced6a4c)
 - [jfinal-spring-boot-starter](https://github.com/ArtIsLong/jfinal-spring-boot-starter)
 - [SpringBoot完美整合Jfinal](https://www.jianshu.com/p/e7c1d069a78f)
+- [Spring Boot 自动配置之@Enable*与@Import注解](https://www.jianshu.com/p/5710cb6711d8)

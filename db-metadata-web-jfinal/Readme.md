@@ -45,7 +45,7 @@ MetaField 数据源配置
 - [ ] defaultInstance.json中如何为test_table的TableList设置元对象级别的配置?目前只支持设置字段配置
 - [ ] 系统模块的生成,走json配置文件生成功能入feature
 - [ ] 在UploadController 增加图片预览逻辑;
-
+- [ ] 元对象增加默认排序
 ##### BUG
 - [x] searchPanel 无实例配时,会成功渲染
     > 允许使用smart自动计算的配置来支持默认渲染

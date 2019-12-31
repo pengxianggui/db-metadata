@@ -25,22 +25,22 @@ public class CCUUConfigExtension implements ConfigExtension<IMetaField, Attribut
             }
         }
 
-        if (containerType == ComponentType.TABLEVIEW) {
-            MetaFieldConfigParse parse = metaObj.configParser();
-            if ("updated_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())
-                    || "remark".equalsIgnoreCase(metaObj.fieldCode())) {
-                parse.isListShow(false);
-            }
-            if (metaObj.dbType().isText()) {
-                if (metaObj.dbType().isBigText()) {
-                    parse.isListShow(false);
-                }
-                if (metaObj.dbType().isJson()) {
-                    parse.isListShow(false);
-                }
-            }
-            metaObj.config(parse.toJson());
-            ServiceManager.metaService().updateMetaField(metaObj);
-        }
+//        if (containerType == ComponentType.TABLEVIEW) {
+//            MetaFieldConfigParse parse = metaObj.configParser();
+//            if ("updated_by".equalsIgnoreCase(metaObj.fieldCode()) || "updated_time".equalsIgnoreCase(metaObj.fieldCode())
+//                    || "remark".equalsIgnoreCase(metaObj.fieldCode())) {
+//                parse.isListShow(false);
+//            }
+//            if (metaObj.dbType().isText()) {
+//                if (metaObj.dbType().isBigText()) {
+//                    parse.isListShow(false);
+//                }
+//                if (metaObj.dbType().isJson()) {
+//                    parse.isListShow(false);
+//                }
+//            }
+//            metaObj.config(parse.toJson());
+//            ServiceManager.metaService().updateMetaField(metaObj);
+//        }
     }
 }
