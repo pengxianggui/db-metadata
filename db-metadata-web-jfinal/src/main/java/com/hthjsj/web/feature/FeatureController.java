@@ -166,5 +166,14 @@ public class FeatureController extends FrontRestController {
         public Record currNode() {
             return node;
         }
+
+        @JSONField(name = "icon")
+        public String getIcon() {
+            if (node != null) {
+                Kv k = UtilKit.getKv(node.getStr("config"));
+                return k.containsKey("icon") ? k.getStr("icon") : "";
+            }
+            return "";
+        }
     }
 }
