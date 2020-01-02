@@ -14,7 +14,7 @@
             </el-row>
         </div>
         <div class="work-area">
-            <form-tmpl :ref="formMeta.name" :meta="formMeta">
+            <form-view :ref="formMeta.name" :meta="formMeta">
                 <template #form-item>
                     <draggable
                         :animation="200"
@@ -53,7 +53,7 @@
                         </template>
                     </draggable>
                 </template>
-            </form-tmpl>
+            </form-view>
         </div>
     </div>
 </template>
@@ -61,7 +61,7 @@
 <script>
     import utils from '@/utils'
     import draggable from 'vuedraggable'
-    import FormTmpl from "../../core/form/src/FormTmpl";
+    import FormView from "../../core/form/src/FormView";
     import {DEFAULT, URL} from '@/constant'
     import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
 
@@ -69,7 +69,7 @@
         name: "WorkArea",
         components: {
             DropDownBox,
-            FormTmpl,
+            FormView,
             draggable
         },
         props: {
@@ -128,7 +128,7 @@
             submitForm() {
                 // this.$message.error("submitForm action not finished!");
 
-                const componentCode = 'FormTmpl';
+                const componentCode = 'FormView';
                 const objectCode = this.formMeta.objectCode;
                 let params = {
                     componentCode: componentCode,

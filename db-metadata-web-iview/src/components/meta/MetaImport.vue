@@ -140,7 +140,7 @@ eg:
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, DEFAULT.FormTmpl);
+                return this.$merge(this.meta, DEFAULT.FormView);
             },
             schemaMeta: function() {
                 return this.meta['columns'][0]

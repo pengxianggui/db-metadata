@@ -43,10 +43,10 @@ public class JsonTest {
     }
 
     public static void mergeTest() {
-        String str1 = "{\n" + "  \"meta_field\": {\n" + "    \"FormTmpl\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
+        String str1 = "{\n" + "  \"meta_field\": {\n" + "    \"FormView\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
                 + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置1\",\n" + "        \"inline\": false,\n"
                 + "        \"component_name\": \"MiniFormBox\"\n" + "      }\n" + "    }\n" + "  }\n" + "}\n";
-        String str2 = "{\n" + "  \"meta_field\": {\n" + "    \"FormTmpl\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
+        String str2 = "{\n" + "  \"meta_field\": {\n" + "    \"FormView\": {\n" + "      \"config\": {\n" + "        \"conf\": {\n" + "          \"size\": \"mini\"\n"
                 + "        },\n" + "        \"name\": \"config\",\n" + "        \"label\": \"配置12\",\n" + "        \"inline\": true,\n"
                 + "        \"component_name\": \"_MiniFOrmBox\",\"dfjie\":\"extention11\"\n" + "      }\n" + "    }\n" + "  }\n" + "}\n";
         JSONObject json1 = JSON.parseObject(str1);

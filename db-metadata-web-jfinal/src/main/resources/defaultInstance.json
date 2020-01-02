@@ -1,6 +1,6 @@
 {
   "meta_field": {
-    "FormTmpl": {
+    "FormView": {
       "cn": {
         "inline": true
       },
@@ -19,7 +19,7 @@
     }
   },
   "meta_feature": {
-    "FormTmpl": {
+    "FormView": {
       "type": {
         "component_name": "DropDownBox",
         "data_url": "/feature/list",

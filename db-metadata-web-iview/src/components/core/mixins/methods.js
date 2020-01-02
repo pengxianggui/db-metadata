@@ -49,7 +49,7 @@ export const getFormMeta = {
         getFormMeta(objectCode) {
             let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
-                componentCode: 'FormTmpl'
+                componentCode: 'FormView'
             });
             return this.$axios.safeGet(url);
         }

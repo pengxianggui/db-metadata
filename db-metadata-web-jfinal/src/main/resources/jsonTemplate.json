@@ -238,9 +238,9 @@
     },
     "columns": []
   },
-  "FormTmpl": {
-    "component_name": "FormTmpl",
-    "name": "FormTmpl",
+  "FormView": {
+    "component_name": "FormView",
+    "name": "FormView",
     "label": "表单模板",
     "conf": {
       "label-width": "100px",

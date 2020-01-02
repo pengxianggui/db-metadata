@@ -22,7 +22,7 @@
                            v-text="innerMeta.btns['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">
-                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="FormTmpl">
+                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="FormView">
                     <template #label><i class="el-icon-setting"></i></template>
                 </meta-easy-edit>
             </div>
@@ -36,7 +36,7 @@
     import utils from '@/utils'
 
     export default {
-        name: "FormTmpl",
+        name: "FormView",
         components: {MetaEasyEdit},
         data() {
             return {
@@ -115,7 +115,7 @@
         computed: {
             innerMeta() {
                 let newMeta = utils.deepClone(this.meta);
-                this.$merge(newMeta, DEFAULT.FormTmpl);
+                this.$merge(newMeta, DEFAULT.FormView);
                 this.assemblyModel(newMeta);
                 return newMeta;
             },

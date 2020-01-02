@@ -12,7 +12,7 @@ import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
 import FindPanel from './core/findpanel'
-import FormTmpl from './core/form'
+import FormBox from './core/form'
 import RowGrid from './core/grid'
 import ImgBox from './core/imgbox'
 import JsonBox from './core/jsonbox'
@@ -33,7 +33,13 @@ import TimeBox from './core/timebox'
 import ZTogglePanel from './core/ztogglepanel'
 
 // 模板组件
-// import DataListTableTmpl from './template/DataListTableTmpl'
+import DataListTableTmpl from './template/DataListTableTmpl'
+import FormTmpl from './template/FormTmpl'
+import MasterSlaveTableTmpl from './template/MasterSlaveTableTmpl'
+import SingleGridTmpl from './template/SingleGridTmpl'
+import TableFormTmpl from './template/TableFormTmpl'
+import TreeFormTmpl from './template/TreeFormTmpl'
+import TreeTableTmpl from './template/TreeTableTmpl'
 
 import RegisterGlobalFn from '@/config/auto-register-fn'
 
@@ -48,7 +54,7 @@ const components = [
     FileBox,
     FindBox,
     FindPanel,
-    FormTmpl,
+    FormBox,
     RowGrid,
     ImgBox,
     JsonBox,
@@ -66,7 +72,15 @@ const components = [
     TextAreaBox,
     TextBox,
     TimeBox,
-    ZTogglePanel
+    ZTogglePanel,
+
+    DataListTableTmpl,
+    FormTmpl,
+    MasterSlaveTableTmpl,
+    SingleGridTmpl,
+    TableFormTmpl,
+    TreeFormTmpl,
+    TreeTableTmpl
 ];
 
 const install = function (Vue, opts = {}) {
@@ -95,7 +109,7 @@ export default {
     FileBox,
     FindBox,
     FindPanel,
-    FormTmpl,
+    FormBox,
     RowGrid,
     ImgBox,
     JsonBox,
@@ -113,5 +127,13 @@ export default {
     TextAreaBox,
     TextBox,
     TimeBox,
-    ZTogglePanel
+    ZTogglePanel,
+
+    DataListTableTmpl,
+    FormTmpl,
+    MasterSlaveTableTmpl,
+    SingleGridTmpl,
+    TableFormTmpl,
+    TreeFormTmpl,
+    TreeTableTmpl
 }

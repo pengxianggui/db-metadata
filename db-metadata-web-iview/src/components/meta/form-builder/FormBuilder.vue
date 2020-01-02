@@ -40,7 +40,7 @@
         data() {
             const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
             return {
-                formMeta: this.$merge({}, DEFAULT.FormTmpl),
+                formMeta: this.$merge({}, DEFAULT.FormView),
                 selectIndex: null,
                 objectCode: objectCode,
                 metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
@@ -58,7 +58,7 @@
                 this.$emit('oc-change', objectCode);
             },
             setInitState() {
-                this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
+                this.formMeta = this.$merge({}, DEFAULT.FormView);
             },
             handleSelectFormItem(formMeta, selectIndex) {
                 this.formMeta = formMeta;
@@ -67,7 +67,7 @@
             loadConf(objectCode) {
                 if (utils.isEmpty(objectCode)) return;
                 const url = this.$compile(URL.COMPONENT_INSTANCE_META, {
-                    componentCode: 'FormTmpl',
+                    componentCode: 'FormView',
                     objectCode: objectCode
                 });
                 this.$axios.safeGet(url).then(resp => {

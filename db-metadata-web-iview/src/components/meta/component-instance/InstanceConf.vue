@@ -8,7 +8,7 @@
                         <!--                                     @change="loadConf"></drop-down-box>-->
                         <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
                         <radio-box v-model="confModel.componentCode"
-                                   :options="['FormTmpl', 'TableList', 'SearchPanel']"
+                                   :options="['FormView', 'TableList', 'SearchPanel']"
                                    @change="loadConf"></radio-box>
                     </el-form-item>
                 </el-col>
@@ -81,7 +81,7 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane v-if="confModel.componentCode=='FormTmpl'" label="表单设计">
+                <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
                     <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
                 </el-tab-pane>
             </el-tabs>

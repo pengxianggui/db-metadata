@@ -20,7 +20,7 @@ public enum ComponentType {
     DATEBOX("datebox", "日期框", "DateBox"),
     DATETIMEBOX("datetimebox", "日期时间框", "DateTimeBox"),
     DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
-    FORMVIEW("formview", "表单组件", "FormTmpl"),
+    FORMVIEW("formview", "表单组件", "FormView"),
     NUMBERBOX("numberbox", "数值框", "NumBox"),
     RADIOBOX("radiobox", "单选框", "RadioBox"),
     TABLEVIEW("tableview", "表格组件", "TableList"),

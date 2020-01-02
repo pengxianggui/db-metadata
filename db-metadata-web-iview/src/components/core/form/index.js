@@ -1,7 +1,7 @@
-import FormTmpl from './src/FormTmpl'
+import FormView from './src/FormView'
 
-FormTmpl.install = function (Vue) {
-    Vue.component(FormTmpl.name, FormTmpl);
+FormView.install = function (Vue) {
+    Vue.component(FormView.name, FormView);
 };
 
-export default FormTmpl;
+export default FormView;

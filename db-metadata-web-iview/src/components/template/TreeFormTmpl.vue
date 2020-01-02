@@ -41,7 +41,7 @@
             },
             handleActiveChange(row) {
                 if (utils.isEmpty(row)) {
-                    this.formMeta = this.$merge({}, DEFAULT.FormTmpl);
+                    this.formMeta = this.$merge({}, DEFAULT.FormView);
                     return;
                 }
                 const primaryKey = this.primaryKey;

@@ -72,7 +72,7 @@ let mapping = {
         "ele": Table,
         "includes": []
     },
-    "FormTmpl": {
+    "FormView": {
         "ele": Form,
         "includes": []
     },

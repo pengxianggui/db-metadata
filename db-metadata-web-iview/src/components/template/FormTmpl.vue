@@ -3,17 +3,17 @@
     ps: @/components/core/FormTmpl应该更名为FormBox
 -->
 <template>
-    <FormBox :ref="meta['name']" :meta="meta"></FormBox>
+    <form-view :ref="meta['name']" :meta="meta"></form-view>
 </template>
 
 <script>
     import utils from '@/utils'
-    import FormTmpl from "@/components/core/form/src/FormTmpl";
+    import FormView from "@/components/core/form/src/FormView";
 
     export default {
         name: "FormTmpl",
         components: {
-            "FormBox": FormTmpl
+            FormView
         },
         props: {
             metaUrl: {
