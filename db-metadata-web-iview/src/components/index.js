@@ -1,5 +1,9 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// import VueI18n from 'vue-i18n'
+// import zh_CN from 'element-ui/lib/locale/lang/zh-CN'
+// import zh_TW from 'element-ui/lib/locale/lang/zh-TW'
+// import en from 'element-ui/lib/locale/lang/en'
 
 // 功能组件
 import BoolBox from './core/boolbox'
@@ -42,7 +46,6 @@ import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 
 import RegisterGlobalFn from '@/config/auto-register-fn'
-import {URL} from '@/constant'
 
 const components = [
     BoolBox,
@@ -84,12 +87,28 @@ const components = [
     TreeTableTmpl
 ];
 
+// const messages = {
+//     'zh-CN': zh_CN,
+//     'zh-TW': zh_TW,
+//     'en': en
+// };
+
 const install = function (Vue, opts = {}) {
+    // Vue.use(VueI18n);
+    //
+    // const i18n = new VueI18n({
+    //     locale: opts.locale || 'zh-CN',
+    //     messages
+    // });
+    //
+    // if (!opts.i18n) opts.i18n = (path, options) => i18n.t(path, options);
+
     Vue.use(ElementUI, opts);
+
     // 全局方法
     Vue.use(RegisterGlobalFn, opts);
-    Vue.prototype.$URL = URL;   // url常亮
 
+    // 注册全局组件库
     components.forEach(component => {
         Vue.component(component.name, component);
     });

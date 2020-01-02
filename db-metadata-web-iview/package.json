@@ -1,6 +1,6 @@
 {
   "name": "db-metadata-web-iview",
-  "version": "0.1.5",
+  "version": "0.1.12",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/meta-element.common.js",
   "keywords": ["metadata", "component", "lib"],
@@ -24,7 +24,8 @@
     "vue": "^2.6.10",
     "vue-json-editor": "^1.4.0",
     "vue-router": "^3.1.3",
-    "vuedraggable": "^2.23.0"
+    "vuedraggable": "^2.23.0",
+    "vue-i18n": "^7.8.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
