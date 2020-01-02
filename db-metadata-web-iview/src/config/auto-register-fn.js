@@ -1,24 +1,26 @@
 import axios from "../axios";
 import utils from "../utils";
 
-const authorities = ['ADMIN'];  // pxg_todo 模拟的权限
-
 let RegisterGlobalFn = {};
-RegisterGlobalFn.install = function (Vue) {
+RegisterGlobalFn.install = function (Vue, opts = {}) {
 
     // 注册全局方法
-    Vue.prototype.$axios = axios;
+    Vue.prototype.$axios = axios(opts['axios']);    // {axios: {}} // 对axios进行配置, 如baseURL等
     Vue.prototype.$merge = utils.merge;
     Vue.prototype.$reverseMerge = utils.reverseMerge;
     Vue.prototype.$compile = utils.compile;
     Vue.prototype.$dialog = utils.dialog;
 
+    let authorities = utils.assertEmpty(opts['authorities'], []);
+    let upperAuthorities = authorities.filter(ele => utils.isString(ele)).map(ele => ele.toUpperCase());
     Vue.prototype.$hasAuth = function (permissions) {
+
         if (utils.isArray(permissions)) {
-            return permissions.every(ele => authorities.indexOf(ele))
+            return permissions.filter(ele => utils.isString(ele))
+                .every(ele => upperAuthorities.indexOf(ele.toUpperCase()))
         }
         if (utils.isString(permissions)) {
-            return authorities.indexOf(permissions) > -1;
+            return upperAuthorities.indexOf(permissions.toUpperCase()) > -1;
         }
         return false;
     };

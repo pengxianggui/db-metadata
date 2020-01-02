@@ -269,6 +269,17 @@ export function assertUndefined(value, defaultValue) {
 }
 
 /**
+ * 若传入的value为empty(null, undefined, [], {}, 空字符串(空格也算)), 则返回defaultValue, 否则返回value
+ * @param value
+ * @param defaultValue
+ * @returns {*}
+ */
+export function assertEmpty(value, defaultValue) {
+    if (isEmpty(value)) return defaultValue;
+    return value;
+}
+
+/**
  * 提取数组中不重复的元素(重复规则看keyName), 只保留重复中的第一个. 返回提取后的新数组。例如:
  * 指定:
  * arr: [

@@ -1,3 +1,7 @@
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+// 功能组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import DataList from './core/datalist'
@@ -7,6 +11,7 @@ import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
+import FindPanel from './core/findpanel'
 import FormTmpl from './core/form'
 import RowGrid from './core/grid'
 import ImgBox from './core/imgbox'
@@ -27,6 +32,9 @@ import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
 import ZTogglePanel from './core/ztogglepanel'
 
+// 模板组件
+// import DataListTableTmpl from './template/DataListTableTmpl'
+
 import RegisterGlobalFn from '@/config/auto-register-fn'
 
 const components = [
@@ -39,6 +47,7 @@ const components = [
     DropDownBox,
     FileBox,
     FindBox,
+    FindPanel,
     FormTmpl,
     RowGrid,
     ImgBox,
@@ -61,16 +70,13 @@ const components = [
 ];
 
 const install = function (Vue, opts = {}) {
-    // locale.use(opts.locale);
-    // locale.i18n(opts.i18n);
+    Vue.use(ElementUI, opts);
+    // 全局方法
+    Vue.use(RegisterGlobalFn, opts);
 
     components.forEach(component => {
         Vue.component(component.name, component);
     });
-
-    // Vue.use(Loading.directive);
-    // 全局方法
-    Vue.use(RegisterGlobalFn);
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -88,6 +94,7 @@ export default {
     DropDownBox,
     FileBox,
     FindBox,
+    FindPanel,
     FormTmpl,
     RowGrid,
     ImgBox,

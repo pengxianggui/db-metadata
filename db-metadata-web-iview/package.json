@@ -1,7 +1,12 @@
 {
   "name": "db-metadata-web-iview",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.5",
+  "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
+  "main": "lib/meta-element.common.js",
+  "keywords": ["metadata", "component", "lib"],
+  "author": "pengxianggui",
+  "private": false,
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
@@ -53,5 +58,9 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
+  ],
+  "files": [
+    "lib/",
+    "README.md"
   ]
 }
