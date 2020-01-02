@@ -42,6 +42,7 @@ import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 
 import RegisterGlobalFn from '@/config/auto-register-fn'
+import {URL} from '@/constant'
 
 const components = [
     BoolBox,
@@ -87,6 +88,7 @@ const install = function (Vue, opts = {}) {
     Vue.use(ElementUI, opts);
     // 全局方法
     Vue.use(RegisterGlobalFn, opts);
+    Vue.prototype.$URL = URL;   // url常亮
 
     components.forEach(component => {
         Vue.component(component.name, component);
