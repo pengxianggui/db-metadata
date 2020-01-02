@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +22,11 @@ public class UserIntercept implements Interceptor {
 
     public static Cache<String, User> caches = CacheBuilder.newBuilder().maximumSize(100).build();
 
-    static User user = new User() {
+    static User staticUser = new User() {
 
         @Override
         public String userId() {
-            return "db-meta-web-jfinal";
+            return "db-meta-web-devUser";
         }
 
         @Override
@@ -59,6 +60,7 @@ public class UserIntercept implements Interceptor {
          *  > 已登录和过期 ,用两种状态表示, 用是否过期来表示用户是否登录虽然也可以,但是语义不明确
          * 4. 放行后更新用户过期时间.
          */
+        User user = null;
         try {
             //只对登录放行
             if (inv.getActionKey().startsWith(UserRouter.URL_LOGIN)) {
@@ -67,7 +69,13 @@ public class UserIntercept implements Interceptor {
             }
 
             LoginService<User> loginService = UserManager.me().loginService();
-            User user = loginService.getUser(inv.getController().getRequest());
+            user = loginService.getUser(inv.getController().getRequest());
+            //开发模式时 指定开发用户
+            if (JFinal.me().getConstants().getDevMode()) {
+                if (user == null) {
+                    user = staticUser;
+                }
+            }
             if (user != null) {
                 UserThreadLocal.setUser(user);
                 inv.invoke();

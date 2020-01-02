@@ -74,10 +74,20 @@ public class UtilKit {
         return JSON.parseObject(json, Kv.class);
     }
 
-    public static void setUser(Map data) {
+    public static void setCreateUser(Map data) {
         User user = UserThreadLocal.getUser();
-        data.put("created_by", user.userId());
-        data.put("created_time", new Date());
+        if (user != null) {
+            data.put("created_by", user.userId());
+            data.put("created_time", new Date());
+        }
+    }
+
+    public static void setUpdateUser(Map data) {
+        User user = UserThreadLocal.getUser();
+        if (user != null) {
+            data.put("updated_by", user.userId());
+            data.put("updated_time", new Date());
+        }
     }
 
     public static String defaultIfBlank(String str, String defaultValue) {

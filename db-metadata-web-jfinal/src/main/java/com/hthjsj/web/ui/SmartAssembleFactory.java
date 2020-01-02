@@ -94,6 +94,12 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     }
 
     @Override
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode) {
+        //TODO
+        throw new WebException("This is not to be implemented!");
+    }
+
+    @Override
     public boolean reCompute(IMetaField metaField, Component fieldComponent, Kv toBeUpdatedFieldInstanceConfig) {
         throw new WebException("This is not intended to be implemented!");
     }

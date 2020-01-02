@@ -6,6 +6,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.kit.UtilKit;
@@ -91,6 +92,12 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig, globalComponentAllConfig);
 
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectInstanceConfig, fields);
+    }
+
+    @Override
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode) {
+        //TODO
+        throw new WebException("This is not to be implemented!");
     }
 
     @Override

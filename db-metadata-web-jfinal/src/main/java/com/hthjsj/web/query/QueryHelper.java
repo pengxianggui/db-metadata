@@ -75,6 +75,10 @@ public class QueryHelper {
         return ComponentType.V(tp.getPara("compType", tp.getPara("componentType")));
     }
 
+    public String getInstanceCode() {
+        return tp.getPara("ic", tp.getPara("instanceCode"));
+    }
+
     public String[] getObjectCodes() {
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
     }

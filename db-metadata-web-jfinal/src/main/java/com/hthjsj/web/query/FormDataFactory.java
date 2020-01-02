@@ -73,7 +73,14 @@ public class FormDataFactory {
             }
         }
 
-//        UtilKit.setUser(formData);
+        //此处设置updateby和time字段,系统相关的表都有ccuu四个字段
+        if (metaObject.isSystem()) {
+            if (isInsert) {
+                UtilKit.setCreateUser(formData);
+            } else {
+                UtilKit.setUpdateUser(formData);
+            }
+        }
         return formData;
     }
 
