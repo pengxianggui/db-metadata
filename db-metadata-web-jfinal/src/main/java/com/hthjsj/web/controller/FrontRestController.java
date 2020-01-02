@@ -20,7 +20,7 @@ import java.util.Arrays;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class FrontRestController extends Controller implements FrontRest {
+public class FrontRestController extends Controller implements FrontRest {
 
     protected DbMetaService metaService() {
         return ServiceManager.metaService();
