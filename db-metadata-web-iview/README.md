@@ -1,4 +1,71 @@
-# db-metadata-web-iview
+# meta-element
+
+> 数据驱动的前端组件库(基于`Vue + elementUI`).需要配合后端(db-metadata-service)使用, 形成快速开发平台.以表驱动一套完整的业务模块.　
+需要做的仅仅是做一些配置.或开发自己的模板. 后端地址: [db-metadata-service]()
+
+## 使用方式
+1. iframe嵌入: 基于fatjar(前段整合进后端中), 具体使用参见后端说明
+2. 代码集成(npm install): 前端组件已经发布至npm,　可以下载使用,　基于组件库(配合后端接口)快速开发业务模块;
+
+### iframe引入
+在fatjar项目中创建对应的元对象和菜单功能后, 访问对应的url,　即可渲染既定的模板实例.　如:
+
+```html
+<iframe style="width: 100%; height: 100%;" src="http://localhost:8080/#/table?featureCode=iot_dict" frameborder="0"></iframe>
+```
+其中src的值需要参考系统支持的[内置模板]().
+
+### 代码集成
+1.`cdn`
+```javascript
+
+```
+
+2.`npm`
+
+(1). 下载
+```bash
+npm i meta-element -S
+# 或
+yarn add meta-element
+```
+
+(2). 安装
+```javascript
+import Vue from 'vue'
+import metaElement from 'meta-element'
+const config = {
+   axios: {
+       bashURL: ''
+   },
+   authorities: ['ADMIN'],
+   // ...
+};
+Vue.use(metaElement, config)
+```
+> 由于`meta-element`内部使用`element`, `axios`等,　因此有关配置用户可通过`config`自定义.
+更多关于自定义配置的说明参见[配置说明]()
+
+(3). 使用
+
+使用参见[组件库]()
+
+## 配置说明
+- axios : axios配置对象,　由于meta-element内部会进行axios请求, api接口的根路径需要通过此进行配置,　以及一些其他关于axios的配置。
+- authorities: meta-element内置了Vue全局方法$hasAuth,　并且内部部分组件需要进行权限控制, 此属性是内部鉴权的角色依据.
+- 其他...
+
+
+## 组件库
+
+### 表单控件
+#### `BoolBox`
+> 布尔框
+
+
+
+
+
 
 ### 表单设计器
 
