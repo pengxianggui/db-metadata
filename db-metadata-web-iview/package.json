@@ -1,5 +1,5 @@
 {
-  "name": "db-metadata-web-iview",
+  "name": "meta-element",
   "version": "0.1.12",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/meta-element.common.js",
