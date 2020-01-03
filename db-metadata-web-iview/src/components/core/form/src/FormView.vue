@@ -14,12 +14,12 @@
         </slot>
         <el-form-item v-if="innerMeta.columns.length > 0">
             <slot name="action" v-bind:model="model">
-                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']"
+                <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
                            @click="onSubmit"
-                           v-text="innerMeta.btns['submit']['label']"></el-button>
-                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']"
+                           v-text="buttonsConf['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="buttonsConf['cancel']['conf']"
                            @click="onCancel"
-                           v-text="innerMeta.btns['cancel']['label']"></el-button>
+                           v-text="buttonsConf['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">
                 <meta-easy-edit :object-code="innerMeta.objectCode" component-code="FormView">
@@ -122,6 +122,9 @@
             rules() {
                 let rules = this.innerMeta.hasOwnProperty('conf') ? this.innerMeta['conf']['rules'] : {};
                 return utils.isEmpty(rules) ? {} : rules;
+            },
+            buttonsConf() {
+                return this.innerMeta['buttons'];
             }
         }
     }

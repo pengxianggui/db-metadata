@@ -4,22 +4,22 @@
             <el-col :span="24">
                 <!-- operation bar -->
                 <slot name="operation-bar"
-                      v-bind:conf="innerMeta['operation-bar']"
+                      v-bind:conf="operationBarConf"
                       v-bind:operations="{handleAdd, handleBatchDelete}">
                     <el-button-group>
-                        <slot name="prefix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
-                        <slot name="add-btn" v-bind:conf="innerMeta['operation-bar']" v-bind:add="handleAdd">
+                        <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
+                        <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd">
                             <el-button @click="handleAdd" icon="el-icon-document-add"
-                                       v-bind="innerMeta['operation-bar']">新增
+                                       v-bind="operationBarConf">新增
                             </el-button>
                         </slot>
-                        <slot name="batch-delete-btn" v-bind:conf="innerMeta['operation-bar']"
+                        <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
                               v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
                             <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                       v-bind="innerMeta['operation-bar']">删除
+                                       v-bind="operationBarConf">删除
                             </el-button>
                         </slot>
-                        <slot name="suffix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
+                        <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
                     </el-button-group>
                 </slot>
             </el-col>
@@ -33,7 +33,7 @@
                     :data="innerData"
                     v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                     @row-click="handleRowClick"
-                    @row-dblclick="$emit('row-dblclick', $event)"
+                    @row-dblclick="handleRowDbClick"
                     @sort-change="sortChange"
                     @selection-change="handleSelectionChange">
 
@@ -75,29 +75,29 @@
                             </template>
                             <template slot-scope="scope">
                                 <slot name="buttons"
-                                      v-bind:conf="innerMeta['buttons']"
+                                      v-bind:conf="buttonsConf"
                                       v-bind:scope="scope">
                                     <el-button-group>
                                         <slot name="inner-before-extend-btn"
-                                              v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                              v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:scope="scope"></slot>
-                                        <slot name="edit-btn" v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                        <slot name="edit-btn" v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:edit="handleEdit"
                                               v-bind:scope="scope">
-                                            <el-button v-bind="innerMeta['buttons']['edit']['conf']"
+                                            <el-button v-bind="buttonsConf['edit']['conf']"
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
                                         <slot name="delete-btn"
-                                              v-bind:conf="innerMeta['buttons']['delete']['conf']"
+                                              v-bind:conf="buttonsConf['delete']['conf']"
                                               v-bind:delete="handleDelete"
                                               v-bind:scope="scope">
-                                            <el-button v-bind="innerMeta['buttons']['delete']['conf']"
+                                            <el-button v-bind="buttonsConf['delete']['conf']"
                                                        @click="handleDelete($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
                                         <slot name="inner-after-extend-btn"
-                                              v-bind:conf="innerMeta['buttons']['edit']['conf']"
+                                              v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:scope="scope"></slot>
                                     </el-button-group>
                                 </slot>
@@ -174,6 +174,7 @@
                     this.choseData = selection;
                     this.$emit('chose-change', selection);
                 }
+                this.$emit('selection-change', selection)
             },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
@@ -288,7 +289,11 @@
                 this.doEdit();
             },
             handleRowClick(row, col, event) {
+                this.$emit('row-click', {row, col, event});
                 event.ctrlKey ? this.choseRow(row) : this.activeRow(row);
+            },
+            handleRowDbClick(row, col, event) {
+                this.$emit('row-dblclick', {row, col, event});
             },
             choseRow(row) {
                 let selected = true;
@@ -414,6 +419,12 @@
             },
             multiMode() {
                 return this.innerMeta['multi_select'];
+            },
+            operationBarConf() {
+                return this.innerMeta['operation-bar'];
+            },
+            buttonsConf() {
+                return this.innerMeta['buttons'];
             },
             // 支持无渲染的行为插槽 pxg_todo
             actions() {

@@ -350,7 +350,7 @@ const DEFAULT_CONF = {
         //         // ...
         //     }
         // }
-        "btns": {
+        "buttons": {
             "submit": {
                 "label": "提交",
                 "conf": {

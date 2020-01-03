@@ -2,24 +2,24 @@
     <div class="el-card">
         <div class="header">
             <slot name="operation-bar"
-                  v-bind:conf="innerMeta['operation-bar']"
+                  v-bind:conf="operationBarConf"
                   v-bind:operations="{handleAdd, handleBatchDelete}">
                 <el-button-group>
-                    <slot name="prefix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
-                    <slot name="add-btn" v-bind:conf="innerMeta['operation-bar']" v-bind:add="handleAdd">
+                    <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
+                    <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd">
                         <el-button @click="handleAdd" icon="el-icon-document-add"
-                                   v-bind="innerMeta['operation-bar']">新增
+                                   v-bind="operationBarConf">新增
                         </el-button>
                     </slot>
-                    <slot name="batch-delete-btn" v-bind:conf="innerMeta['operation-bar']"
+                    <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
                           v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
                         <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                   v-bind="innerMeta['operation-bar']">删除
+                                   v-bind="operationBarConf">删除
                         </el-button>
                     </slot>
 
                     <el-dropdown @command="handleCommand">
-                        <el-button type="primary" v-bind="innerMeta['operation-bar']">
+                        <el-button type="primary" v-bind="operationBarConf">
                             <span>节点操作</span>
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -46,7 +46,7 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <slot name="suffix-btn" v-bind:conf="innerMeta['operation-bar']"></slot>
+                    <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
                 </el-button-group>
             </slot>
         </div>
@@ -256,6 +256,9 @@
             },
             props() {
                 return this.meta['conf']['props'];
+            },
+            operationBarConf() {
+                return this.innerMeta['operation-bar'];
             },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
