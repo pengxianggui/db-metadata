@@ -3,7 +3,7 @@
         <el-tab-pane label="域配置" style="height: 100%;">
             <el-form size="mini" v-if="activeFieldMeta" :key="activeFieldMeta.name" label-position="left">
                 <template v-for="(value, key, index) in activeFieldMeta">
-                    <template v-if="excludes.indexOf(key) < 0">
+                    <template v-if="editableJudge(activeFieldMeta.component_name, key)">
                         <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
                             <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
                                        v-model="activeFieldMeta[key]"></component>
@@ -22,14 +22,17 @@
                     </el-card>
                 </el-form-item>
             </el-form>
+            <div v-else class="blank-tip">
+                请先选择一个字段
+            </div>
         </el-tab-pane>
 
         <el-tab-pane label="表单配置">
             <el-form size="mini">
                 <template v-for="(value, key, index) in formMeta">
-                    <template v-if="excludes.indexOf(key) < 0">
+                    <template v-if="editableJudge(formMeta.component_name, key)">
                         <el-form-item :key="key" :label="key">
-                            <component :is="metaMapping[key].component_name" :meta="metaMapping[key]"
+                            <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
                                        v-model="formMeta[key]"></component>
                         </el-form-item>
                     </template>
@@ -40,36 +43,11 @@
 </template>
 
 <script>
-    import {DEFAULT, URL} from "@/constant";
-    import utils from '@/utils'
+    import {DEFAULT} from "@/constant";
     import OptionsInput from './relate/OptionsInput'
+    import confFilter from './relate/confFilter'
+    import confComponentMapping from './relate/confComponentMapping'
 
-    const CUSTOM_CONF_COMPONENT_MAPPING = {
-        name: DEFAULT.TextBox,
-        label: DEFAULT.TextBox,
-        component_name: utils.merge({data_url: URL.COMPONENT_CODE_LIST}, DEFAULT.DropDownBox),
-        conf: DEFAULT.JsonBox,
-        inline: DEFAULT.BoolBox,
-        data_url: DEFAULT.TextBox,
-        delete_url: DEFAULT.TextBox,
-        multi_select: DEFAULT.BoolBox,
-        editable: DEFAULT.BoolBox,
-        options: {
-            component_name: 'OptionsInput'
-        },
-        group: DEFAULT.BoolBox,
-        expand: DEFAULT.BoolBox,
-        "label-position": utils.merge({
-            options: ['top-center', 'top-left', 'top-right', 'bottom-center', 'bottom-left', 'bottom-right']
-        }, DEFAULT.DropDownBox),
-        action: DEFAULT.TextBox,
-        check: DEFAULT.BoolBox,
-        check_url: DEFAULT.TextBox,
-        theme: utils.merge({options: ['default', 'ambiance']}, DEFAULT.RadioBox),
-        lineNumbers: DEFAULT.BoolBox,
-        mode: utils.merge({options: ['text/x-mysql']}, DEFAULT.DropDownBox)
-    };
-    const EXCLUDES = ['columns', 'btns', 'name', 'group', 'objectCode', 'objectPrimaryKey'];
 
     export default {
         name: "ConfArea",
@@ -81,11 +59,13 @@
         data() {
             return {
                 fieldConf: {},
-                excludes: EXCLUDES, // temporarily not allow customize
-                metaMapping: CUSTOM_CONF_COMPONENT_MAPPING
+                metaMapping: confComponentMapping
             }
         },
         methods: {
+            editableJudge(componentName, key) {
+                return confFilter(componentName, key);
+            },
             getShowComponentName(key) {
                 const metaMapping = this.metaMapping;
                 if (metaMapping.hasOwnProperty(key)) {
@@ -122,5 +102,13 @@
 <style scoped>
     .container {
         height: 100%;
+    }
+    .blank-tip {
+        height: 400px;
+        line-height: 400px;
+        text-align: center;
+        border: 1px solid #eee;
+        margin: 5px 0;
+        color: #999999;
     }
 </style>

@@ -5,9 +5,13 @@ const name = "db-metadata-web";
 const serverProxy = {
     target: 'http://localhost:8888',
     // target: 'http://192.168.110.67:8888',
-    pathRewrite: {'^/': ''},
+    pathRewrite: {'^/meta': ''},
     changeOrigin: true
 };
+
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+emitter.setMaxListeners(20);
 
 module.exports = {
     publicPath: config.publicPath,
@@ -31,17 +35,18 @@ module.exports = {
         sockHost: 'localhost',
         // proxy: 'http://192.168.110.67:8888'
         proxy: {
-            '^\/db\/': serverProxy,
-            '^\/meta\/': serverProxy,
-            '^\/component\/': serverProxy,
-            '^\/table\/': serverProxy,
-            '^\/form\/': serverProxy,
-            '^\/dict\/': serverProxy,
-            '^\/file\/': serverProxy,
-            '^\/check\/': serverProxy,
-            '^\/find\/': serverProxy,
-            '^\/feature\/': serverProxy,
-            '^\/route\/': serverProxy,
+            '^\/meta\/': serverProxy,   // 超过11个node会提示MaxListenersExceededWarning
+            // '^\/db\/': serverProxy,
+            // '^\/meta\/': serverProxy,
+            // '^\/component\/': serverProxy,
+            // '^\/table\/': serverProxy,
+            // '^\/form\/': serverProxy,
+            // '^\/dict\/': serverProxy,
+            // '^\/file\/': serverProxy,
+            // '^\/check\/': serverProxy,
+            // '^\/find\/': serverProxy,
+            // '^\/feature\/': serverProxy,
+            // '^\/route\/': serverProxy,
         }
     }
 };
