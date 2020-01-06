@@ -2,7 +2,7 @@
     <ul class="container">
         <draggable v-model="nativeValue" @end="emit">
             <li v-for="(item, index) in nativeValue" :key="item.id">
-                <div :class="{'red-border': item.error}" style="display: flex;">
+                <div :class="{'red-border': item.error}" style="white-space: nowrap">
                     <el-input v-model="item.key" @change="emit">
                         <template #prepend><label>key</label></template>
                     </el-input>
