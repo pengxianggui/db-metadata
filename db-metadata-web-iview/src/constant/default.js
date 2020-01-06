@@ -42,6 +42,9 @@ const DEFAULT_CONF = {
             "size": "mini",
             "type": "primary"
         },
+        "operation-column": {
+            "fixed": false
+        },
         "buttons": {
             "edit": {
                 "label": "编辑",

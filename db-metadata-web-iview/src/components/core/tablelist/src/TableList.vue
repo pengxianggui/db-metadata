@@ -57,8 +57,9 @@
                             </template>
                         </el-table-column>
                     </template>
+
                     <slot name="operation-column">
-                        <el-table-column width="180">
+                        <el-table-column width="180" v-bind="operationColumnConf">
                             <template #header>
                                 <span>
                                     <span>操作</span>
@@ -422,6 +423,9 @@
             },
             operationBarConf() {
                 return this.innerMeta['operation-bar'];
+            },
+            operationColumnConf() {
+                return utils.mergeObject({}, this.innerMeta['operation-column'], this.$attrs['operation-column-conf']);
             },
             buttonsConf() {
                 return this.innerMeta['buttons'];

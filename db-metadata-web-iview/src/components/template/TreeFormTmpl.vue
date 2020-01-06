@@ -74,7 +74,7 @@
                     this.treeConf = feature['tree'];
                     this.formConf = feature['form'];
 
-                    const {treeObjectCode} = this.treeConf;
+                    const {objectCode:treeObjectCode} = this.treeConf;
                     this.initMeta(treeObjectCode);
                 });
             } else {
@@ -86,7 +86,7 @@
                 return this.formMeta['name'];
             },
             primaryKey() {
-                let primaryKey = this.tlMeta.hasOwnProperty('objectPrimaryKey') ? this.tlMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
+                let primaryKey = this.treeMeta.hasOwnProperty('objectPrimaryKey') ? this.treeMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
                 return primaryKey.split(',');
             }
         }

@@ -6,7 +6,8 @@
                                @change="refreshTables()" filterable></drop-down-box>
             </el-form-item>
             <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
-                <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]" filterable></drop-down-box>
+                <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]"
+                               @change="handleTableChange" filterable></drop-down-box>
             </el-form-item>
             <el-form-item :label="objectMeta.label" :prop="objectMeta.name">
                 <text-box :ref="objectMeta['name']" :meta="objectMeta" v-model="model[objectMeta.name]"></text-box>
@@ -55,6 +56,10 @@
                 this.model[tableKey] = null;
                 let url = this.$compile(tableUrl, this.model);
                 this.$refs[tableKey].getOptions(url);
+            },
+            handleTableChange(tableName) {
+                this.model[this.objectMeta.name] = tableName;
+                this.model[this.codeMeta.name] = tableName;
             },
             doSubmit() {
                 const params = this.model;

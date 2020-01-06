@@ -104,7 +104,7 @@
                     this.setPageModel(page)
                 }
 
-                if (!utils.isUndefined(page)) {
+                if (!utils.isUndefined(data)) {
                     this.innerData = data;
                     return;
                 }

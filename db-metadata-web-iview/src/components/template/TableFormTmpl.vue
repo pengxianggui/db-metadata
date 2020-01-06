@@ -49,13 +49,12 @@
                 }
                 const primaryKey = this.primaryKey;
                 const primaryValue = utils.extractValue(row, primaryKey);
-                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
 
                 const objectCode = this.tlMeta['objectCode'];
 
                 let url = this.$compile(URL.RECORD_TO_UPDATE, {
                     objectCode: objectCode,
-                    primaryKv: primaryKv
+                    primaryKv: primaryValue
                 });
                 this.$axios.get(url).then(resp => {
                     this.fmMeta = resp.data;

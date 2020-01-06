@@ -246,7 +246,8 @@ mockAxios
             "conf": {
                 "props": {"label": "name"},
                 "show-checkbox": true
-            }
+            },
+            "objectCode": 'test_table'
         },
         DEFAULT.Tree),
     state: 'ok'
