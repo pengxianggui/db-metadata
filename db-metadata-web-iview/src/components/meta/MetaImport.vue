@@ -1,48 +1,3 @@
-<!--
-# meta
-eg:
-    {
-        name: "formName",
-        action: '/save', // form action (url)
-        conf: {
-            "label-width": '80px',
-            size: 'medium', // medium|small|mini
-            model: {
-                username: '',
-                // ...
-            },
-            rules: {
-                username: [{required: true, message: '用户名必填', trigger: 'blur'}],
-                // ...
-            },
-            // ...
-        },
-        columns: [{
-            component_name: 'TextBox',
-            name: 'username',
-            label: '用户名',
-            conf: {
-                clearable: true,
-                placeholder: "请输入姓名..",
-                // ...
-            }
-        }],
-        btns: {
-            submit: {
-                label: '提交',
-                conf: {
-                    // ... support conf of el-button
-                }
-            },
-            cancel: {
-                label: '取消',
-                conf: {
-                    // ... support conf of el-button
-                }
-            }
-        }
-    }
--->
 <template>
     <div>
         <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
@@ -60,10 +15,10 @@ eg:
                 <text-box :ref="codeMeta['name']" :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
-                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.btns['submit']['conf']" @click="onSubmit"
-                           v-text="innerMeta.btns['submit']['label']"></el-button>
-                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.btns['cancel']['conf']" @click="onCancel"
-                           v-text="innerMeta.btns['cancel']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.buttons['submit']['conf']" @click="onSubmit"
+                           v-text="innerMeta.buttons['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.buttons['cancel']['conf']" @click="onCancel"
+                           v-text="innerMeta.buttons['cancel']['label']"></el-button>
             </el-form-item>
         </el-form>
     </div>
