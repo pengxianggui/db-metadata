@@ -49,6 +49,18 @@ const children = [
         path: 'tree-table',
         name: 'treeTable',
         component: 'template/TreeTableTmpl'
+    }, {
+        path: 'list-table',
+        name: 'listTable',
+        component: 'template/DataListTableTmpl'
+    }, {
+        path: 'table-form',
+        name: 'tableForm',
+        component: 'template/TableFormTmpl'
+    }, {
+        path: 'tree-form',
+        name: 'treeForm',
+        component: 'template/TreeFormTmpl'
     }
 ];
 
