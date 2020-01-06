@@ -4,7 +4,7 @@
             <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
         </template>
         <template #right>
-            <form-tmpl :ref="formRefName" :meta="formMeta"></form-tmpl>
+            <form-view :ref="formRefName" :meta="formMeta"></form-view>
         </template>
     </row-grid>
 </template>

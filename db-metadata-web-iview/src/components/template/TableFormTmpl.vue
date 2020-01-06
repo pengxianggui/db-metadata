@@ -5,7 +5,7 @@
         </template>
         <template #right>
             <div class="el-card" style="margin-left: 5px">
-                <form-tmpl :meta="fmMeta" @ok="formSubmit"></form-tmpl>
+                <form-view :meta="fmMeta" @ok="formSubmit"></form-view>
             </div>
         </template>
     </row-grid>

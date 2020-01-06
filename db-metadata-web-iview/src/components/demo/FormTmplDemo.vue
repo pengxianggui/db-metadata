@@ -15,7 +15,7 @@
             return {
                 model: {
                     meta: {
-                        component_name: 'form-tmpl',
+                        component_name: 'form-view',
                         name: 'demoForm',
                         label: '测试表单',
                         action: '/demo/save',
