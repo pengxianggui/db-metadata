@@ -2,7 +2,7 @@
     <el-tabs type="border-card" style="height: 100%; overflow: auto;">
         <el-tab-pane label="域配置" style="height: 100%;">
             <el-form size="mini" v-if="activeFieldMeta" :key="activeFieldMeta.name" label-position="left">
-                <template v-for="(value, key, index) in activeFieldMeta">
+                <template v-for="(value, key) in activeFieldMeta">
                     <template v-if="editableJudge(activeFieldMeta.component_name, key)">
                         <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
                             <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
@@ -29,7 +29,7 @@
 
         <el-tab-pane label="表单配置">
             <el-form size="mini">
-                <template v-for="(value, key, index) in formMeta">
+                <template v-for="(value, key) in formMeta">
                     <template v-if="editableJudge(formMeta.component_name, key)">
                         <el-form-item :key="key" :label="key">
                             <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
@@ -76,8 +76,7 @@
         },
         watch: {
             formMeta: {
-                handler: function (newVal, oldVal) {
-                    console.log('formMeta..update..');
+                handler: function (newVal) {
                     this.$emit('input', newVal);
                 },
                 deep: true

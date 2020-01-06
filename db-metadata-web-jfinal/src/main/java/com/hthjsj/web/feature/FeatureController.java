@@ -169,11 +169,12 @@ public class FeatureController extends FrontRestController {
 
         @JSONField(name = "icon")
         public String getIcon() {
+            String defaultIcon = "el-icon-menu";
             if (node != null) {
                 Kv k = UtilKit.getKv(node.getStr("config"));
-                return k.containsKey("icon") ? k.getStr("icon") : "";
+                return k.containsKey("icon") ? k.getStr("icon") : defaultIcon;
             }
-            return "";
+            return defaultIcon;
         }
     }
 }

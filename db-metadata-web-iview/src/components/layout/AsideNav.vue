@@ -4,7 +4,7 @@
             <el-button :icon="isCollapse ? 'el-icon-arrow-right':'el-icon-arrow-left'" size="mini"
                        @click="isCollapse = !isCollapse"></el-button>
         </div>
-        <el-menu :default-active="$route.fullPath" :router="true" active-text-color
+        <el-menu :default-active="$route.fullPath" :router="true" active-text-color unique-opened
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse" id="aside-menu">
             <el-submenu v-for="item in menus" :index="item.path" :key="item.path">
                 <template #title>
