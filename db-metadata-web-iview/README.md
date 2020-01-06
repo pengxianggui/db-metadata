@@ -62,6 +62,189 @@ Vue.use(metaElement, config)
 #### `BoolBox`
 > 布尔框
 
+##### 概述
+布尔框(BoolBox)支持true/false两个值,　此外对传入值进行了默认扩展(暂不支持用户自定义扩展)，额外支持如下值：
+```
+false, true,
+"false", "true",
+0, 1,
+"0", "1",
+"f", "t",
+null, true,
+undefined, true 
+```
+按照分组,　内部自动映射false/true　值,　例如:
+```html
+<bool-box v-model="value"></bool-box>
+```
+当value值为字符串"f"时, 会认为是false,　当勾选后,　value的值为字符串"t".
+##### Meta Data
+> 组件渲染依靠的组件元数据
+```json
+{
+    "component_name": "BoolBox",
+    "name": "BoolBox",
+    "label": "布尔框",
+    "default_value": false,
+    "inline": true,
+    "conf": {}
+}
+```
+
+##### Attribute
+
+|参数|说明|类型|可选值|默认值|
+|----|----|----|----|----|
+|v-model|绑定值|string/number/boolean|false, true; "false", "true"; 0, 1; "0", "1"; "f", "t"; null, true;　undefined, true|false|
+|其他|参考elementUI `CheckBox`组件|
+
+##### Events
+|事件名称|说明|回调参数|
+|---|---|---|
+|change|绑定值发生变化时触发|更新后的值|
+
+#### `CheckBox`
+> 多选框
+
+##### 概述
+传入值接受数组和字符串,　如果是字符串,　则必须是英文逗号分隔的基本类型字符串;
+选项数据有三个来源(按优先级依次递减):
+1. 直接传入options属性: <check-box :options="options"></checkbox>
+2. 直接传入dataUrl属性: <check-box :data-url="url"></checkbox> , url响应的资源必须是key-value对象组成的数组
+3. 在元数据中定义options, 如: 
+    ```json
+    {
+       "options": [{"key":  "选项一", "value":  1}, {"key":  "选项二", "value":  2}]
+    }
+    ```
+4. 在元数据中定义了data_url属性, 如:
+    ```json
+    {
+       "data_url": "/dict/yn"
+    }
+    ```
+> 无论是通过元数据定义data_url还是通过dom属性直接定义data-url,　改url接口响应的数据必须是由key-value对象组成的数组. 如果不是,　也可以通过
+在dom上定义　`:format="format"`, 通过定义
+
+##### Meta data
+```json
+{
+    "component_name": "CheckBox",
+    "name": "CheckBox",
+    "label": "多选框",
+    "inline": true,
+    "data_url": "/dict/yn",
+    "options": [
+        {"key":"选项一", "value":  "1"},
+        {"key":"选项二", "value":  "0"}
+    ],
+    "conf": {}
+}
+```
+
+##### Attribute
+|参数|说明|类型|可选值|默认值|
+|----|----|----|----|----|
+|v-model|绑定值, 当为字符串时,　必须是由英文逗号分割的多个值|string/array|-|-|
+|data-url|选项数据的api接口，该接口必须返回由{"key":"选项一", "value":  "1"}组成的数组|string|-|-|
+|options|选项数据, 必须是由{"key":"选项一", "value":  "1"}组成的数组|array|-|-|
+|format|格式化函数, 对选项数据进行格式化, 使之符合key-value的对象数组|Function|-|-|
+|其他|参见ElementUI Check|-|-|-|
+
+##### Events
+|事件名称|说明|回调参数|
+|---|---|---|
+|change|绑定值发生变化时触发|更新后的值|
+
+
+#### `DropDownBox`
+> 下拉框
+#####　概述
+下拉选项组件。
+`DropDownBox`可以接受的值有`String, Number, Array`; `DropDownBox`的元数据中有个属性为`conf.multiple`, 当为`true`时,
+表示下拉框为多选, 此时`DropDownBox`会将传入的值转换为字符串数组,规则如下: value为String, 则通过","拆分为数组, value为Number, 直接转换为字符串,并放入空数组中;
+当value为Array时, 转换内部每个成员为String类型。
+当`conf.multiple`值为`false`, 传入的value会被转换为String.
+
+如果配置了MetaData中的group为true, 则表示选项数据为分组模式. options的数据结构不再是：
+    [{"key":"选项一", "value":  "1"},{"key":"选项二", "value":  "2"}];
+而是调整为： 
+    [{"key":"阿里巴巴", "value": "1", "group": "五百强公司"}, {"key":"中国石油", "value": "2", "group": "五百强公司"}, {"key":"华为", "value": "2"}];
+则这两个选项将被放入到一个选项组(五百强公司)中, 而”华为”将被放入到一个默认分组中(其他)
+
+##### Meta Data
+```json
+{
+    "component_name": "DropDownBox",
+    "name": "DropDownBox",
+    "label": "下拉框",
+    "inline": true,
+    "group": false,
+    "data_url": "/dict/yn",
+    "options": [
+        {"key":"选项一", "value":  "1"},{"key":"选项二", "value":  "2"}
+    ],
+    "conf": {
+        "clearable": true,
+        "multiple": false
+//         更多配置参见element UI Select选择器
+    }
+}
+```
+
+##### Attribute
+
+|参数|说明|类型|可选值|默认值|
+|----|----|----|----|----|
+|v-model|绑定值. 详细见概述|object, string, number, array|-|-|
+|data-url|选项数据的api接口，该接口必须返回由{"key":"选项一", "value":  "1"}组成的数组|string|-|-|
+|options|选项数据, 必须是由{"key":"选项一", "value":  "1"}组成的数组|array|-|-|
+|format|格式化函数, 对选项数据进行格式化, 使之符合key-value的对象数组|Function|-|-|
+|其他|参见ElementUI Check|-|-|-|
+
+##### Events
+|事件名称|说明|回调参数|
+|---|---|---|
+|change|绑定值发生变化时触发|更新后的值|
+|remove-tag|多选模式下移除tag时触发|移除的tag值|
+|clear|可清空的单选模式下用户点击清空按钮时触发|-|
+|blur|当 input 失去焦点时触发|(event: Event)|
+|focus|当 input 获得焦点时触发|(event: Event)|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

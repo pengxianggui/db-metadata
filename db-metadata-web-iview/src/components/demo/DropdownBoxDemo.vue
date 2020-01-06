@@ -26,20 +26,25 @@
                             multiple: true
                         },
                         options: [{
-                            label: "五百强公司",
-                            options: [{
-                                'key': '航天恒嘉',
-                                'value': '1'
-                            }, {
-                                'key': '中国石化',
-                                'value': '2'
-                            }, {
-                                'key': '阿里巴巴',
-                                'value': '3'
-                            }, {
-                                'key': '小米科技',
-                                'value': '4'
-                            }]
+                            'key': '航天恒嘉',
+                            'value': '1',
+                            'group': "世界五百强"
+                        }, {
+                            'key': '中国移动',
+                            'value': '2',
+                            'group': "SB公司"
+                        }, {
+                            'key': '阿里巴巴',
+                            'value': '3',
+                            'group': "世界五百强"
+                        }, {
+                            'key': '小米科技',
+                            'value': '4',
+                            'group': "手机厂商"
+                        }, {
+                            'key': '华为公司',
+                            'value': '5',
+                            'group': "手机厂商"
                         }]
                     }
                 }

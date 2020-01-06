@@ -105,7 +105,7 @@ export const options = {
             if (!utils.isUndefined(this.format)) {
                 return this.format(this.options);
             }
-            if (options.every(ele => utils.isObject(ele) && ele.hasOwnProperty('key') && ele.hasOwnProperty(ele))) {
+            if (options.every(ele => utils.isObject(ele) && ele.hasOwnProperty('key') && ele.hasOwnProperty('value'))) {
                 return options;
             }
             if (!utils.isArray(options)) {

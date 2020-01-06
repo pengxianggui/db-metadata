@@ -18,7 +18,7 @@
         </template>
         <template v-else>
             <el-option-group
-                v-for="group in innerOptions"
+                v-for="group in groupify(innerOptions)"
                 :key="group.label"
                 :label="group.label">
                 <slot name="options" v-bind:options="innerOptions">
@@ -55,7 +55,7 @@
         },
         props: {
             value: {
-                type: [Object, String, Number, Array],
+                type: [String, Number, Array],
                 validator: function (val) {
                     if (utils.isArray(val)) {
                         return val.every(ele => utils.isString(ele)) || val.every(ele => utils.isNumber(ele));
@@ -63,6 +63,31 @@
                     return true;
                 }
             },
+        },
+        methods: {
+            groupify(options) {
+                let groupOptions = [];
+                let groups = {};
+                options.forEach(ele => {
+                    let groupName = utils.hasProp(ele, 'group') ? ele['group'] : '其它';
+
+                    let seted = utils.hasProp(groups, groupName);
+                    if (seted) {
+                        groups[groupName].push(ele);
+                    } else {
+                        groups[groupName] = [ele];
+                    }
+                });
+
+                for (let key in groups) {
+                    groupOptions.push({
+                        "label": key,
+                        "options": groups[key]
+                    });
+                }
+
+                return groupOptions;
+            }
         },
         computed: {
             multiple() {    // is multiple value
