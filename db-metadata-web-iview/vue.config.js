@@ -9,10 +9,6 @@ const serverProxy = {
     changeOrigin: true
 };
 
-const EventEmitter = require('events');
-const emitter = new EventEmitter();
-emitter.setMaxListeners(20);
-
 module.exports = {
     publicPath: config.publicPath,
     outputDir: 'dist',
