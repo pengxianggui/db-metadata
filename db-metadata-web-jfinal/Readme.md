@@ -40,6 +40,7 @@ MetaField 数据源配置
   还是放在功能(模板)纬度    
     ```
 - [ ] 简易的数据权限(基于4个字段,可以利用sqlparse 动态追加 sql)
+    > [利用druid数据源的SQL解析器构建数据权限模块](https://blog.csdn.net/weixin_30624825/article/details/95331046)
 - [ ] 多数据源查询,动态切换数据源问题;
 - [x] meta_feature加入is_sys系统标示, 防止误删除
 - [ ] defaultInstance.json中如何为test_table的TableList设置元对象级别的配置?目前只支持设置字段配置

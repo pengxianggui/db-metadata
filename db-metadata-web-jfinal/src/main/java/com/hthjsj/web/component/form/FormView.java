@@ -95,7 +95,6 @@ public class FormView extends ViewContainer {
     protected void renderCustomMeta(Kv meta) {
         meta.putIfAbsent("name", name);
         meta.setIfNotBlank("formType", formType);
-        //TODO
         meta.setIfNotBlank("action", action);
         meta.putIfAbsent("component_name", type());
     }

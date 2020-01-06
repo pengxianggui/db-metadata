@@ -7,6 +7,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.json.Json;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,10 @@ public class BusinessService {
         return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), (Object[]) ids[0]);
     }
 
+    public Page<Record> paginate(Integer pageIndex, Integer pageSize, IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
+        return Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, select, sqlExceptSelect, paras);
+    }
+
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {
         //select metaField.fileCode() from object.tableName() where object.primarykey()=id
         if (object.isMultiplePrimaryKey()) {
@@ -54,7 +59,6 @@ public class BusinessService {
     }
 
     public boolean updateData(IMetaObject object, MetaData data) {
-        // TODO support single primaryKey;
         Record old = Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), data.getPks(object.primaryKey()));
         boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
         buriedPoint(object, old.getColumns(), data);

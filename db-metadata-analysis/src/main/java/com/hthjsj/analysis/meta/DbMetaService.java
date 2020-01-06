@@ -7,6 +7,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.jfinal.plugin.activerecord.tx.TxConfig;
@@ -184,5 +185,9 @@ public class DbMetaService {
 
     public Record findDataByIds(IMetaObject object, Object... ids) {
         return businessService.findDataByIds(object, ids);
+    }
+
+    public Page<Record> paginate(Integer pageIndex, Integer pageSize, IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
+        return businessService.paginate(pageIndex, pageSize, metaObject, select, sqlExceptSelect, paras);
     }
 }

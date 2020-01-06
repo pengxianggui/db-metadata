@@ -76,7 +76,7 @@ public class TableController extends FrontRestController {
 
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
-        Page<Record> result = Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
+        Page<Record> result = metaService().paginate(pageIndex, pageSize, metaObject, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
 
         /**
          * escape field value;

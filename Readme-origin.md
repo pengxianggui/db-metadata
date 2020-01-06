@@ -148,3 +148,4 @@ https://docs.sencha.com/extjs/6.2.0
 - [jfinal-spring-boot-starter](https://github.com/ArtIsLong/jfinal-spring-boot-starter)
 - [SpringBoot完美整合Jfinal](https://www.jianshu.com/p/e7c1d069a78f)
 - [Spring Boot 自动配置之@Enable*与@Import注解](https://www.jianshu.com/p/5710cb6711d8)
+- [12.17.1 JSON Function Reference](https://dev.mysql.com/doc/refman/5.7/en/json-function-reference.html)
