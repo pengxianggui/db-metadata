@@ -15,11 +15,3 @@ export function converKv1 (data) {
     }
     return arr;
 }
-
-// const converKv2 = function (data) {
-//     // ...
-// }
-//
-// export default {
-//     converKv1,
-// }

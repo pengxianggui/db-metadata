@@ -9,7 +9,7 @@
         <template v-if="!innerMeta.group">
             <slot name="options" v-bind:options="innerOptions">
                 <el-option v-for="item in innerOptions" :key="item.value" :label="item.key"
-                           :value="item.value">
+                           :value="item.value | stringify">
                     <slot name="label" v-bind:option="item">
                         {{item.key}}
                     </slot>
@@ -23,7 +23,7 @@
                 :label="group.label">
                 <slot name="options" v-bind:options="innerOptions">
                     <el-option v-for="item in group.options" :key="item.value" :label="item.key"
-                               :value="item.value ? item.value : item">
+                               :value="(item.value ? item.value : item) | stringify">
                         <slot name="label" v-bind:options="item">
                             {{item.key}}
                         </slot>
@@ -55,14 +55,8 @@
         },
         props: {
             value: {
-                type: [String, Number, Array],
-                validator: function (val) {
-                    if (utils.isArray(val)) {
-                        return val.every(ele => utils.isString(ele)) || val.every(ele => utils.isNumber(ele));
-                    }
-                    return true;
-                }
-            },
+                type: [String, Number, Boolean, Array]  // DropDownBox可能是单选, 也可能是多选
+            }
         },
         methods: {
             groupify(options) {
@@ -71,8 +65,8 @@
                 options.forEach(ele => {
                     let groupName = utils.hasProp(ele, 'group') ? ele['group'] : '其它';
 
-                    let seted = utils.hasProp(groups, groupName);
-                    if (seted) {
+                    let hasKey = utils.hasProp(groups, groupName);
+                    if (hasKey) {
                         groups[groupName].push(ele);
                     } else {
                         groups[groupName] = [ele];

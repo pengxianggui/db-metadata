@@ -30,7 +30,7 @@
         <el-tab-pane label="表单配置">
             <el-form size="mini">
                 <template v-for="(value, key) in formMeta">
-                    <template v-if="editableJudge(formMeta.component_name, key)">
+                    <template v-if="editableJudge('FormView', key)">
                         <el-form-item :key="key" :label="key">
                             <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
                                        v-model="formMeta[key]"></component>

@@ -22,8 +22,8 @@ import ImgBox from './core/imgbox'
 import JsonBox from './core/jsonbox'
 import List from './core/list'
 import ListItem from './core/listitem'
+import {MiniFormObject, MiniFormField} from './core/meta'
 import MiniFormBox from './core/miniformbox'
-import {MiniFormField, MiniFormObject} from './core/meta'
 import NumBox from './core/numbox'
 import PassBox from './core/passbox'
 import PopMenu from './core/popmenu'
@@ -35,6 +35,7 @@ import TableTreeList from './core/tabletreelist'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
+import Tree from './core/tree'
 import ZTogglePanel from './core/ztogglepanel'
 
 // 模板组件
@@ -46,7 +47,8 @@ import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 
-import RegisterGlobalFn from '@/config/auto-register-fn'
+import GlobalFn from '@/config/auto-register-fn'
+import GlobalFilter from '@/config/auto-register-filter'
 
 const components = [
     BoolBox,
@@ -75,6 +77,7 @@ const components = [
     SearchPanel,
     SqlBox,
     TableList,
+    Tree,
     TableTreeList,
     TextAreaBox,
     TextBox,
@@ -108,8 +111,8 @@ const install = function (Vue, opts = {}) {
 
     Vue.use(ElementUI, opts);
 
-    // 全局方法
-    Vue.use(RegisterGlobalFn, opts);
+    Vue.use(GlobalFn, opts);    // 全局方法
+    Vue.use(GlobalFilter, opts);    // 全局过滤器
 
     // 注册全局组件库
     components.forEach(component => {
@@ -149,6 +152,7 @@ export default {
     SearchPanel,
     SqlBox,
     TableList,
+    Tree,
     TableTreeList,
     TextAreaBox,
     TextBox,

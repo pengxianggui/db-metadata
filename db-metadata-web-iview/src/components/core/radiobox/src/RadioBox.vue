@@ -2,7 +2,7 @@
     <el-radio-group v-model="nativeValue">
         <el-radio v-for="item in innerOptions"
                   :key="item.key"
-                  :label="item.value"
+                  :label="item.value | stringify"
                   v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                   @change="$emit('change')">
             <slot name="label" v-bind:option="item">
@@ -17,9 +17,10 @@
     import Meta from '../../mixins/meta'
     import {options} from "../../mixins/methods";
     import Val from '../../mixins/value'
+    import conver from './conver'
 
     export default {
-        mixins: [Meta(DEFAULT.RadioBox), Val(), options],
+        mixins: [Meta(DEFAULT.RadioBox), Val(conver), options],
         name: "RadioBox",
         label: "单选框",
         data() {
@@ -28,8 +29,8 @@
             }
         },
         props: {
-            value: [Object, String, Number]
-        },
+            value: [String, Number, Boolean]
+        }
     }
 </script>
 

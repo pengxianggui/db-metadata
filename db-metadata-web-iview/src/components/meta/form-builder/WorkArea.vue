@@ -36,7 +36,7 @@
                                  @click="handleFormItemClick(index, $event)">
                                 <el-form-item :key="item.name"
                                               v-if="!item.hasOwnProperty('showable') || item.showable"
-                                              :label="item.label" :prop="item.name">
+                                              :label="item.label||item.name" :prop="item.name">
                                     <component :is="item.component_name"
                                                :meta="item"></component>
                                 </el-form-item>

@@ -17,7 +17,7 @@
         data() {
             return {
                 model: {
-                    value: ['1', '2'],
+                    value: [1, '2'],
                     meta: {
                         name: "DropDownBoxDemo",
                         component_name: 'DropDownBox',
@@ -27,7 +27,7 @@
                         },
                         options: [{
                             'key': '航天恒嘉',
-                            'value': '1',
+                            'value': 1,
                             'group': "世界五百强"
                         }, {
                             'key': '中国移动',
@@ -35,7 +35,7 @@
                             'group': "SB公司"
                         }, {
                             'key': '阿里巴巴',
-                            'value': '3',
+                            'value': 3,
                             'group': "世界五百强"
                         }, {
                             'key': '小米科技',
@@ -43,7 +43,7 @@
                             'group': "手机厂商"
                         }, {
                             'key': '华为公司',
-                            'value': '5',
+                            'value': 5,
                             'group': "手机厂商"
                         }]
                     }

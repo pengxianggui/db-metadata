@@ -159,20 +159,20 @@ export const options = {
         }
     },
     watch: {
-        'options': function (newVal, oldVal) {
+        'options': function () {
             this.initOptions();
         },
-        'dataUrl': function (newVal, oldVal) {
+        'dataUrl': function () {
             this.initOptions();
         },
-        'innerMeta.options': function (newVal, oldVal) {
+        'innerMeta.options': function () {
             this.initOptions();
         },
-        'innerMeta.data_url': function (newVal, oldVal) {
+        'innerMeta.data_url': function () {
             this.initOptions();
         },
     },
     mounted() {
         this.initOptions();
-    },
+    }
 };

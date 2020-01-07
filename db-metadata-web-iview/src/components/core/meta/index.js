@@ -6,4 +6,4 @@ MiniFormField.install = function (Vue) {
     Vue.component(MiniFormObject.name, MiniFormObject);
 };
 
-export default {MiniFormField, MiniFormObject};
+export {MiniFormField, MiniFormObject};

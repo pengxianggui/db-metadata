@@ -2,7 +2,7 @@
     <el-checkbox-group v-model="nativeValue">
         <el-checkbox v-for="item in innerOptions"
                      :key="item.key"
-                     :label="item.value"
+                     :label="item.value | stringify"
                      v-bind="$reverseMerge(innerMeta.conf, $attrs)">
             <slot name="label" v-bind:option="item">
                 {{item.key}}
