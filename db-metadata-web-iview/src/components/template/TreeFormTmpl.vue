@@ -46,12 +46,11 @@
                 }
                 const primaryKey = this.primaryKey;
                 const primaryValue = utils.extractValue(row, primaryKey);
-                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                 const objectCode = this.treeMeta['objectCode'];
 
                 let url = this.$compile(URL.RECORD_TO_UPDATE, {
                     objectCode: objectCode,
-                    primaryKv: primaryKv
+                    primaryKv: primaryValue
                 });
                 this.$axios.get(url).then(resp => {
                     this.formMeta = resp.data;

@@ -99,27 +99,27 @@ const treeTableFeatureConf = {
 };
 const treeFormFeatureConf = {
     "tree": {
-        "objectCode": "test_table",
+        "objectCode": "meta_object",
         "primaryKey": "id",
     },
     "form": {
-        "objectCode": "test_table"
+        "objectCode": "meta_object"
     }
 };
 
 const mockTree = [
     {
-        "id": "1",
+        "id": "410126905489100800",
         "name": "meta_object1",
         "code": "meta_object",
         "children": [
             {
-                "id": "1-1",
+                "id": "410126905245831168",
                 "name": "meta_field",
                 "code": "meta_field"
             },
             {
-                "id": "1-2",
+                "id": "410126904214032384",
                 "name": "change_log",
                 "code": "change_log"
             }
@@ -234,7 +234,7 @@ mockAxios
     state: 'ok'
 })
     .onGet(utils.compile(URL.COMPONENT_INSTANCE_META, {
-        objectCode: "test_table",
+        objectCode: "meta_object",
         componentCode: "Tree"
     })).reply(200, {
     data: utils.merge(
@@ -242,16 +242,16 @@ mockAxios
             "component_name": "Tree",
             "name": "Tree",
             "label": "Tree",
-            "data_url": "/tree/list/test_table",
+            "data_url": "/tree/list/meta_object",
             "conf": {
                 "props": {"label": "name"},
                 "show-checkbox": true
             },
-            "objectCode": 'test_table'
+            "objectCode": 'meta_object'
         },
         DEFAULT.Tree),
     state: 'ok'
-}).onGet("/tree/list/test_table").reply(200, {
+}).onGet("/tree/list/meta_object").reply(200, {
     data: mockTree,
     state: 'ok'
 })
