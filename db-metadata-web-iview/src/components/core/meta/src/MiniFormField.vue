@@ -67,10 +67,9 @@
     import utils from '@/utils'
     import OptionsInput from '@/components/meta/form-builder/relate/OptionsInput'
 
-    // PXG_TODO 改为通用型迷你表单控件
     export default {
-        name: "MiniFormBox",
-        label: "迷你表单",
+        name: "MiniFormField",
+        label: "元字段Config迷你表单",
         description: "输入控件的一种,JsonBox的表单表现形式",
         components: {
             OptionsInput

@@ -23,6 +23,7 @@ import JsonBox from './core/jsonbox'
 import List from './core/list'
 import ListItem from './core/listitem'
 import MiniFormBox from './core/miniformbox'
+import {MiniFormField, MiniFormObject} from './core/meta'
 import NumBox from './core/numbox'
 import PassBox from './core/passbox'
 import PopMenu from './core/popmenu'
@@ -65,6 +66,8 @@ const components = [
     List,
     ListItem,
     MiniFormBox,
+    MiniFormObject,
+    MiniFormField,
     NumBox,
     PassBox,
     PopMenu,
@@ -137,6 +140,8 @@ export default {
     List,
     ListItem,
     MiniFormBox,
+    MiniFormObject,
+    MiniFormField,
     NumBox,
     PassBox,
     PopMenu,
