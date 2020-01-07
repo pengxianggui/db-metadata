@@ -3,7 +3,26 @@
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
             <table-list :ref="master['name']" :meta="master.tlMeta" :filter-params="filterParams" @active-change="handleActiveChange"
-                        @chose-change="handleChoseChange" :page="{ size: 5 }"></table-list>
+                        @chose-change="handleChoseChange" :page="{ size: 5 }">
+                <template #prefix-btn="{conf}">
+                    <slot name="prefix-btn" v-bind:conf="conf"></slot>
+                </template>
+                <template #add-btn="{conf, add}">
+                    <slot name="add-btn" v-bind:conf="conf" v-bind:add="add"></slot>
+                </template>
+                <template #batch-delete-btn="{conf, batchDelete}">
+                    <slot name="batch-delete-btn" v-bind:conf="conf"
+                          v-bind:batchDelete="batchDelete">
+                    </slot>
+                </template>
+                <template #suffix-btn="{conf}">
+                    <slot name="suffix-btn" v-bind:conf="conf"></slot>
+                </template>
+
+                <template #buttons="{scope, conf}">
+                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+            </table-list>
         </div>
         <el-divider></el-divider>
         <div class="el-card">

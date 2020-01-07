@@ -3,7 +3,11 @@
     ps: @/components/core/FormTmpl应该更名为FormBox
 -->
 <template>
-    <form-view :ref="meta['name']" :meta="meta"></form-view>
+    <form-view :ref="meta['name']" :meta="meta">
+        <template #action="{model, conf}">
+            <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+        </template>
+    </form-view>
 </template>
 
 <script>

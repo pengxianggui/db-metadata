@@ -43,7 +43,7 @@ const DEFAULT_CONF = {
             "type": "primary"
         },
         "operation-column": {
-            "fixed": false
+            "fixed": 'right'
         },
         "buttons": {
             "edit": {

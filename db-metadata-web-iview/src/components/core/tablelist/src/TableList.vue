@@ -14,9 +14,9 @@
                             </el-button>
                         </slot>
                         <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
-                              v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
+                              v-bind:batchDelete="handleBatchDelete">
                             <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                       v-bind="operationBarConf">删除
+                                       v-bind="operationBarConf" v-if="multiMode">删除
                             </el-button>
                         </slot>
                         <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>

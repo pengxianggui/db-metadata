@@ -1,7 +1,26 @@
 <template>
     <row-grid :span="[14, 10]">
         <template #left>
-            <table-list :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange"></table-list>
+            <table-list :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange">
+                <template #prefix-btn="{conf}">
+                    <slot name="prefix-btn" v-bind:conf="conf"></slot>
+                </template>
+                <template #add-btn="{conf, add}">
+                    <slot name="add-btn" v-bind:conf="conf" v-bind:add="add"></slot>
+                </template>
+                <template #batch-delete-btn="{conf, batchDelete}">
+                    <slot name="batch-delete-btn" v-bind:conf="conf"
+                          v-bind:batchDelete="batchDelete">
+                    </slot>
+                </template>
+                <template #suffix-btn="{conf}">
+                    <slot name="suffix-btn" v-bind:conf="conf"></slot>
+                </template>
+
+                <template #buttons="{scope, conf}">
+                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+            </table-list>
         </template>
         <template #right>
             <div class="el-card" style="margin-left: 5px">
