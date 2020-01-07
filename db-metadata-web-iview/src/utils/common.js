@@ -184,6 +184,19 @@ export function convertToArray(value) {
     }
 }
 
+export function convertToObject(value) {
+    if (isObject(value)) return value;
+
+    if (!isString(value)) return {};
+    let result;
+    try {
+        result = JSON.parse(value);
+        return isObject(result) ? result : {};
+    } catch (e) {
+        return {};
+    }
+}
+
 /**
  * 如果 value 不是字符串，将其转换为字符串。 null 和 undefined 将返回空字符串。
  * toString(null);

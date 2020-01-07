@@ -112,7 +112,11 @@
                 let value = self.value;
 
                 if (typeof value === 'string') {
-                    value = JSON.parse(value);
+                    try {
+                        value = JSON.parse(value);
+                    } catch (e) {
+                        value = {}
+                    }
                 }
 
                 Object.keys(self.config).forEach(key => {
@@ -124,7 +128,10 @@
                 return self.config;
             },
             hasTranslation() {
-                let value = utils.isString(this.value) ? JSON.parse(this.value) : this.value;
+                let {value} = this;
+                if (utils.isString(value)) {
+                    value = utils.convertToObject(value);
+                }
                 return (utils.isString(value.scopeSql) && value.scopeSql.trim() !== '')
                     || (utils.isArray(value.scopeOptions) && value.scopeOptions.length > 0)
             }
