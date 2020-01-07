@@ -5,6 +5,7 @@
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
               @clear="$emit('clear', $event)"
+              @input="$emit('input', $event)"
     >
         <template #prefix>
             <slot name="prefix"></slot>
