@@ -4,7 +4,11 @@
             <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
         </template>
         <template #right>
-            <form-view :ref="formRefName" :meta="formMeta"></form-view>
+            <form-view :ref="formRefName" :meta="formMeta">
+                <template #action="{model, conf}">
+                    <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+                </template>
+            </form-view>
         </template>
     </row-grid>
 </template>

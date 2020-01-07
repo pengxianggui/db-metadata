@@ -24,7 +24,11 @@
         </template>
         <template #right>
             <div class="el-card" style="margin-left: 5px">
-                <form-view :meta="fmMeta" @ok="formSubmit"></form-view>
+                <form-view :meta="fmMeta" @ok="formSubmit">
+                    <template #action="{model, conf}">
+                        <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+                    </template>
+                </form-view>
             </div>
         </template>
     </row-grid>
