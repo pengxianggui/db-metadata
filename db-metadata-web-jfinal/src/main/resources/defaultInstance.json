@@ -18,6 +18,19 @@
       }
     }
   },
+  "meta_object": {
+    "FormView": {
+      "config": {
+        "conf": {
+          "size": "mini"
+        },
+        "name": "config",
+        "label": "配置",
+        "inline": false,
+        "component_name": "MiniFormObject"
+      }
+    }
+  },
   "meta_feature": {
     "FormView": {
       "type": {
