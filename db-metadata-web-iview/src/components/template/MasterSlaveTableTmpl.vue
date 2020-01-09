@@ -2,7 +2,8 @@
     <div>
         <div class="el-card">
             <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="master['name']" :meta="master.tlMeta" :filter-params="filterParams" @active-change="handleActiveChange"
+            <table-list :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
+                        @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }">
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>
@@ -30,7 +31,8 @@
             <el-tabs type="border-card">
                 <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">
                     <search-panel :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-panel>
-                    <table-list :ref="slave['name']" :meta="slave.tlMeta" :filter-params="slave.filterParams" :page="{ size: 5 }">
+                    <table-list :ref="slave['objectCode']" :meta="slave.tlMeta" :filter-params="slave.filterParams"
+                                :page="{ size: 5 }">
                         <template #add-btn="{conf}">
                             <el-button v-bind="conf" @click="handleAdd(slave)">新增</el-button>
                         </template>
@@ -41,9 +43,27 @@
         <!-- single slave -->
         <div class="el-card" v-if="slaves.length === 1">
             <search-panel :meta="slaves[0].spMeta" @search="sHandleSearch(slaves[0], arguments)"></search-panel>
-            <table-list :ref="slaves[0]['name']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams" :page="{ size: 5 }">
+            <table-list :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
+                        :page="{ size: 5 }">
+                <template #prefix-btn="{conf}">
+                    <slot name="s-prefix-btn" v-bind:conf="conf"></slot>
+                </template>
                 <template #add-btn="{conf}">
-                    <el-button v-bind="conf" @click="handleAdd(slaves[0])">新增</el-button>
+                    <slot name="s-add-btn" v-bind:conf="conf">
+                        <el-button v-bind="conf" @click="handleAdd(slaves[0])">新增</el-button>
+                    </slot>
+                </template>
+                <template #batch-delete-btn="{conf, batchDelete}">
+                    <slot name="s-batch-delete-btn" v-bind:conf="conf"
+                          v-bind:batchDelete="batchDelete">
+                    </slot>
+                </template>
+                <template #suffix-btn="{conf}">
+                    <slot name="s-suffix-btn" v-bind:conf="conf"></slot>
+                </template>
+
+                <template #buttons="{scope, conf}">
+                    <slot name="s-buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
             </table-list>
         </div>
@@ -82,16 +102,16 @@
                 this.refreshSlaves(row[primaryKey]);
             },
             mHandleSearch(params) {
-                const refName = this.master['name'];
+                const refName = this.master['objectCode'];
                 this.filterParams = params;
                 this.$nextTick(() => {
                     this.$refs[refName].getData();
                 });
             },
             sHandleSearch(slave, params) {
-                const refName = slave['name'];
-                let ref = this.$refs[refName][0];
-                debugger;
+                const {$refs} = this;
+                const refName = slave['objectCode'];
+                let ref = utils.isArray($refs[refName]) ? $refs[refName][0] : $refs[refName];
                 this.$set(slave, 'filterParams', params[0]);
                 this.$nextTick(() => {
                     ref.getData();
@@ -103,12 +123,14 @@
                     return;
                 }
 
-                const featureCode = this.featureCode;
+                const {$refs, featureCode, activeMData, master} = this;
                 const sObjectCode = slave.objectCode;
+                const refName = slave.objectCode;
                 const foreignKeyName = slave['foreignFieldCode'];
-                const foreignKeyValue = this.activeMData[this.master['primaryKey']];
-                const refName = slave['name'];
-                let ref = this.$refs[refName][0];
+                const foreignKeyValue = activeMData[master['primaryKey']];
+
+                // 主子一对一时, this.$refs[refName]为对象, 主子一对多时, 该结果为数组?
+                let ref = utils.isArray($refs[refName]) ? $refs[refName][0] : $refs[refName];
 
                 const url = this.$compile(URL.MASTER_SLAVE_TO_ADD_S, {
                     objectCode: sObjectCode,
@@ -137,7 +159,6 @@
                 this.getTlMeta(mObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     this.$set(this.master, 'tlMeta', tlMeta);
-                    this.$set(this.master, 'name', tlMeta['name']);
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
@@ -164,7 +185,6 @@
                         tlMeta['data_url'] = data_url;
 
                         this.$set(slave, 'tlMeta', tlMeta);
-                        this.$set(slave, 'name', tlMeta['name'] + '_' + i);
                         this.$set(slave, 'tableUrl', data_url); // 暂存
                     }).catch(err => {
                         console.error('[ERROR] msg: %s', err.msg);
