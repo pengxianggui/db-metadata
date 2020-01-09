@@ -25,7 +25,8 @@
             </table-list>
         </div>
         <el-divider></el-divider>
-        <div class="el-card">
+        <!-- multi slave -->
+        <div class="el-card" v-if="slaves.length > 1">
             <el-tabs type="border-card">
                 <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">
                     <search-panel :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-panel>
@@ -36,6 +37,15 @@
                     </table-list>
                 </el-tab-pane>
             </el-tabs>
+        </div>
+        <!-- single slave -->
+        <div class="el-card" v-if="slaves.length === 1">
+            <search-panel :meta="slaves[0].spMeta" @search="sHandleSearch(slaves[0], arguments)"></search-panel>
+            <table-list :ref="slaves[0]['name']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams" :page="{ size: 5 }">
+                <template #add-btn="{conf}">
+                    <el-button v-bind="conf" @click="handleAdd(slaves[0])">新增</el-button>
+                </template>
+            </table-list>
         </div>
     </div>
 </template>
