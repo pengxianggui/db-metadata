@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p> Class title: </p>
  * <p> @Describe: </p>
  * <p> @Date : 2019/10/16 </p>
  * <p> @Project : db-meta-serve</p>
@@ -21,12 +20,12 @@ public class SortMatch extends MetaSQLExtract {
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
 
-        String sort_suffix = "st";
-        String sortByDesc = " desc ";
-        //TODO 排序优化
-        String value = (String) httpParams.get(sort_suffix);
-        if (StrKit.notBlank(value)) {
-            values.put(" order by ", value + sortByDesc);
+        String sort_suffix = "_st";
+        String fileCode = metaField.fieldCode();
+        String value = (String) httpParams.get(fileCode + sort_suffix);
+        if (StrKit.notBlank(value) && ("desc".equalsIgnoreCase(value) || "asc".equalsIgnoreCase(value))) {
+            setMutiple(true);
+            values.put(fileCode, value);
         }
     }
 

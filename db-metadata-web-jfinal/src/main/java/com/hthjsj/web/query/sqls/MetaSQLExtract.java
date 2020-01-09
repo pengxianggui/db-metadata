@@ -16,10 +16,20 @@ public abstract class MetaSQLExtract implements SQLExtract {
 
     public static final String SQL_PREFIX = "sql_";
 
+    private boolean mutiple = false;
+
     public abstract void init(IMetaField metaField, Map<String, Object> httpParams);
 
     @Override
     public void loadOfHttpParams(Map<String, Object> httpParams) {
 
+    }
+
+    public boolean isMutiple() {
+        return mutiple;
+    }
+
+    public void setMutiple(boolean m) {
+        mutiple = m;
     }
 }

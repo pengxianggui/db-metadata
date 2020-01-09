@@ -1,16 +1,20 @@
 package com.hthjsj.web.query;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.sqls.MetaSQLExtract;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,18 +71,24 @@ public class QueryConditionForMetaObject implements IQueryCondition {
         Map<String, Object> params = UtilKit.toObjectFlat(httpParams);
         SqlParaExt sqlParaExt = new SqlParaExt();
 
+        //保存 从http中传来的参数 处理后的sql片段
         Okv conds = Okv.create();
-
+        //TODO 保存多值处理结果,SortMatch用,硬编码逻辑,需要修复
+        Kv mutipleValueMap = Kv.create();
         buildSelect(sqlParaExt, metaFields);
 
         for (IMetaField field : metaObject.fields()) {
 
             for (Class<? extends MetaSQLExtract> mClass : QueryParses.me().parseter) {
                 try {
-                    //TODO 待优化,每个请求解析参数时,会创建大量的Extract实例,性能较差
+                    //TODO 待优化,每个请求解析参数时,会创建大量的Extract实例,性能差
                     MetaSQLExtract metaSQLBuilder = mClass.newInstance();
                     metaSQLBuilder.init(field, params);
-                    conds.putAll(metaSQLBuilder.result());
+                    if (metaSQLBuilder.isMutiple()) {
+                        mutipleValueMap.set(metaSQLBuilder.result());
+                    } else {
+                        conds.putAll(metaSQLBuilder.result());
+                    }
                 } catch (InstantiationException e) {
                     log.error(e.getMessage(), e);
                 } catch (IllegalAccessException e) {
@@ -86,7 +96,18 @@ public class QueryConditionForMetaObject implements IQueryCondition {
                 }
             }
         }
-
+        //order by 逻辑;
+        if (!mutipleValueMap.isEmpty()) {
+            List<String> orderItem = Lists.newArrayList();
+            // k->v : a->desc
+            // k->v : b->asc
+            // k->v : c->desc
+            mutipleValueMap.forEach((key, value) -> {
+                orderItem.add(key + " " + value);
+            });
+            // order by "a desc,b asc,c desc"
+            conds.put(" order by ", Joiner.on(",").skipNulls().join(orderItem.toArray()));
+        }
         log.debug("SQL conditions: {}\n\n\t\tmetaObject:{},fields:{},excludeFields:{}", conds, fields, efields);
         return buildExceptSelect(conds, sqlParaExt, metaObject);
     }
