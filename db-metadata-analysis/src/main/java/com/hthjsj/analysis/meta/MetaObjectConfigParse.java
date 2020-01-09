@@ -48,6 +48,26 @@ public class MetaObjectConfigParse extends MetaData {
         set("isAutoIncrement", v);
     }
 
+    /**
+     * 排序
+     */
+    public String orderBy() {
+        if (StrKit.notBlank(getStr("orderBy"))) {
+            return getStr("orderBy").replaceFirst("order by", "");
+        }
+        return "";
+    }
+
+    /**
+     * where 条件
+     */
+    public String where() {
+        if (StrKit.notBlank(getStr("where"))) {
+            return getStr("where").replaceFirst("where", "");
+        }
+        return "";
+    }
+
     public <T extends IPointCut> T interceptor() {
         if (!StrKit.notBlank(getStr("bizInterceptor"))) {
             return (T) new PointCut();

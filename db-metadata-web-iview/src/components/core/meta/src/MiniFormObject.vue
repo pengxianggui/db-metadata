@@ -12,17 +12,27 @@
                 <el-checkbox v-model="nativeValue.isAutoIncrement" label="自动生成" border></el-checkbox>
             </div>
         </el-form-item>
+        <el-form-item label="排序规则(SQL)">
+            <el-col :span="6">
+                <el-input placeholder="默认排序规则: columnA desc,columnB asc" v-model="nativeValue.orderBy"></el-input>
+            </el-col>
+        </el-form-item>
+        <el-form-item label="过滤规则(SQL)">
+            <el-col :span="6">
+                <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
+            </el-col>
+        </el-form-item>
     </el-form>
 </template>
 
 <script>
     import utils from '@/utils'
+
     export default {
         name: "MiniFormObject",
         label: "元对象Config迷你表单",
         description: "输入控件的一种,JsonBox的表单表现形式",
-        components: {
-        },
+        components: {},
         props: {
             value: {
                 type: [Object, String],
@@ -37,7 +47,9 @@
                     objectCode: null,
                     isUUIDPrimary: false,
                     isNumberSequence: false,
-                    isAutoIncrement: false
+                    isAutoIncrement: false,
+                    orderBy: null,
+                    where: null
                 }
             }
         },
