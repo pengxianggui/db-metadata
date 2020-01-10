@@ -1,3 +1,15 @@
+<!--
+    {
+        component_name: 'MiniFormBox',
+        name: 'MiniFormBox',
+        label: '迷你表单框',
+        conf: {},
+        columns: [
+
+        ]
+    }
+-->
+
 <template>
     <el-form ref="sub_form" :model="nativeValue" size="mini">
         <el-form-item label="默认值">

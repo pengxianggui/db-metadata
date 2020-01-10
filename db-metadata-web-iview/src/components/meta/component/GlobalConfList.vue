@@ -44,7 +44,7 @@
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
-                let componentCode = row['comp_code'];
+                let componentCode = row['code'];
                 this.$router.push({
                     path: 'global-conf',
                     query: {

@@ -37,11 +37,13 @@
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
+                let code = row['code'];
                 let componentCode = row['comp_code'];
                 let objectCode = row['dest_object'];
                 this.$router.push({
                     path: 'instance-conf',
                     query: {
+                        code: code,
                         componentCode: componentCode,
                         objectCode: objectCode
                     }

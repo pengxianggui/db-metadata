@@ -149,6 +149,7 @@
                 componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
+                    code: this.$route.query.code,
                     componentCode: this.$route.query.componentCode,
                     objectCode: this.$route.query.objectCode,
                     conf: {}, // conf of metaObject
@@ -215,9 +216,9 @@
                     return;
                 }
 
-                let componentCode = this.confModel['componentCode'];
-                let objectCode = this.confModel['objectCode'];
+                const {code, componentCode, objectCode} = this.confModel;
                 let params = {
+                    code: code,
                     componentCode: componentCode,
                     objectCode: objectCode
                 };
@@ -242,9 +243,9 @@
                     return;
                 }
 
-                let componentCode = this.confModel['componentCode'];
-                let objectCode = this.confModel['objectCode'];
+                const {code, componentCode, objectCode} = this.confModel;
                 let params = {
+                    code: code,
                     componentCode: componentCode,
                     objectCode: objectCode
                 };
