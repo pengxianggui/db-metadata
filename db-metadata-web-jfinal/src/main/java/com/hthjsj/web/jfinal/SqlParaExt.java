@@ -37,7 +37,7 @@ public class SqlParaExt extends SqlPara {
     }
 
     public String getFromWhere() {
-        return getFrom() + getWhereExcept() + getOrderBy();
+        return getFrom() + getWhereExcept();
     }
 
     public String getOrderBy() {
