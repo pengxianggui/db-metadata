@@ -5,6 +5,8 @@
             <table-list :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
                         @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }">
+
+                <!-- 主表操作栏扩展插槽 -->
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>
                 </template>
@@ -20,8 +22,18 @@
                     <slot name="suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
-                <template #buttons="{scope, conf}">
-                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <!-- 主表单条纪录操作扩展插槽 -->
+                <template #inner-before-extend-btn="{scope, conf}">
+                    <slot name="inner-before-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #edit-btn="{scope, conf, edit}">
+                    <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #delete-btn="{scope, conf}">
+                    <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #inner-after-extend-btn="{scope, conf}">
+                    <slot name="inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
             </table-list>
         </div>
@@ -45,6 +57,8 @@
             <search-panel :meta="slaves[0].spMeta" @search="sHandleSearch(slaves[0], arguments)"></search-panel>
             <table-list :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
                         :page="{ size: 5 }">
+
+                <!-- 子表操作栏扩展插槽 -->
                 <template #prefix-btn="{conf}">
                     <slot name="s-prefix-btn" v-bind:conf="conf"></slot>
                 </template>
@@ -62,8 +76,18 @@
                     <slot name="s-suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
-                <template #buttons="{scope, conf}">
-                    <slot name="s-buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <!-- 子表单条纪录操作扩展插槽 -->
+                <template #inner-before-extend-btn="{scope, conf}">
+                    <slot name="s-inner-before-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #edit-btn="{scope, conf, edit}">
+                    <slot name="s-edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #delete-btn="{scope, conf}">
+                    <slot name="s-delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                </template>
+                <template #inner-after-extend-btn="{scope, conf}">
+                    <slot name="s-inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
             </table-list>
         </div>
@@ -95,11 +119,22 @@
         methods: {
             handleChoseChange(rows) {
                 // pxg_todo 多选主表(master)时, 子表(slaves)的默认行为(待定)
+                const {master, $refs} = this;
+                this.$emit('m-chose-change', {
+                    rows: rows,
+                    primaryKey: $refs[master['objectCode']].primaryKey,
+                    objectCode: master['objectCode']
+                });
             },
             handleActiveChange(row) {
-                let primaryKey = this.master['primaryKey'];
+                const {master} = this;
                 this.activeMData = row;
-                this.refreshSlaves(row[primaryKey]);
+                this.refreshSlavesData();
+                this.$emit('m-active-change', {
+                    row: row,   // 主表选中的单条记录
+                    masterObjectCode: master['objectCode'],   // 主表的元对象编码
+                    masterPrimaryKey: master['primaryKey']    // 主表的关联主键
+                });
             },
             mHandleSearch(params) {
                 const refName = this.master['objectCode'];
@@ -140,7 +175,15 @@
                 });
                 ref.dialog(url);
             },
-            refreshSlaves(objectCode) {
+            refreshMasterData() {   // 刷新master的业务数据
+                const {master, $refs} = this;
+                const refName = master['objectCode'];
+                $refs[refName].getData();
+            },
+            refreshSlavesData() {   // 刷新所有slave的业务数据
+                const {master, activeMData} = this;
+                const primaryKey = master['primaryKey'];
+                const objectCode = activeMData[primaryKey];
                 this.slaves.forEach(slave => {
                     let url = this.$compile(slave['tableUrl'], {objectCode: objectCode});
                     slave.tlMeta['data_url'] = url;

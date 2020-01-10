@@ -1,34 +1,25 @@
 <template>
     <div>
-        <div class="el-card">
-            <search-panel :meta="mSpMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="mTlMeta['name']" :meta="mTlMeta" :filter-params="mfilterParams" :page="{ size: 5 }"
-                        @active-change="handleActiveChange" @chose-change="handleChoseChange">
-                <template #prefix-btn="{conf}">
-                    <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
-                </template>
-                <template #add-btn="{conf}">
-                    <el-button v-bind="conf" @click="visible=true">创建元对象</el-button>
-                </template>
+        <master-slave-table-tmpl :ref="featureCode" :fc="featureCode"
+                                 @m-active-change="handleMActiveChange"
+                                 @m-chose-change="handleMChoseChange">
+            <template #prefix-btn="{conf}">
+                <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
+            </template>
+            <template #add-btn="{conf}">
+                <el-button v-bind="conf" @click="visible=true">创建元对象</el-button>
+            </template>
 
-                <template #batch-delete-btn="{conf}">
-                    <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
-                               v-bind="conf">删除
-                    </el-button>
-                </template>
+            <template #batch-delete-btn="{conf}">
+                <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
+                           v-bind="conf">删除
+                </el-button>
+            </template>
 
-                <template #delete-btn="{scope, conf}">
-                    <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
-                </template>
-            </table-list>
-
-            <search-panel :meta="sSpMeta" @search="sHandleSearch"></search-panel>
-            <table-list :ref="sTlMeta['name']" :meta="sTlMeta" :filter-params="sfilterParams" :page="{ size: 5 }">
-                <template #add-btn="{conf}">
-                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
-                </template>
-            </table-list>
-        </div>
+            <template #delete-btn="{scope, conf}">
+                <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
+            </template>
+        </master-slave-table-tmpl>
 
         <dialog-box :visible.sync="visible" title="创建元对象">
             <meta-import :meta="formMeta" @cancel="visible=false" @submit="formSubmit"></meta-import>
@@ -61,58 +52,20 @@
                 featureCode: "meta_manager",
                 featureParams: {},
 
-                master: {},
-                slave: {},  // 元对象/元字段 主子表一对一
-
-                mSpMeta: {},
-                mTlMeta: {},
-                mfilterParams: {},
-                activeMData: {},
                 choseMData: [],
-                sSpMeta: {},
-                sTlMeta: {},
-                sfilterParams: {},
-                sTableUrl: null, // 初始sTlMeta['data_url']的暂存变量
                 visible: false,
                 formMeta: {},
                 featureAddVisible: false
             }
         },
         methods: {
-            handleChoseChange(rows) {
+            handleMChoseChange({rows}) {
                 this.choseMData = rows;
             },
-            handleActiveChange(row) {
-                let primaryKey = this.master['primaryKey'];
-                this.activeMData = row;
-                this.sTlMeta['data_url'] = this.$compile(this.sTableUrl, {
-                    objectCode: row[primaryKey]
-                });
-
-                const rowPrimaryKey = this.mTlRef.primaryKey;
+            handleMActiveChange({row, masterPrimaryKey}) {
                 this.featureParams = {
-                    objectCode: row[primaryKey],
-                    primaryKey: rowPrimaryKey
+                    objectCode: row[masterPrimaryKey]
                 }
-            },
-            mHandleSearch(params) {
-                this.mfilterParams = params;
-                this.$nextTick(() => {
-                    this.mTlRef.getData();
-                });
-            },
-            sHandleSearch(params) {
-                this.sfilterParams = params;
-                this.$nextTick(() => {
-                    this.sTlRef.getData(params);
-                });
-            },
-            getFormMeta() {
-                this.$axios.get(URL.META_OBJECT_TO_ADD).then(resp => {
-                    this.formMeta = resp.data
-                }).catch(err => {
-                    this.$message.error(err.msg);
-                })
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
@@ -143,46 +96,28 @@
                 });
             },
             formSubmit(formModel) {
-                this.$axios.post(this.formMeta.action, formModel).then(resp => {
+                const {$refs, $axios, featureCode, formMeta} = this;
+                $axios.post(formMeta.action, formModel).then(resp => {
                     this.$message.success(resp.msg);
                     let objectCode = formModel['objectCode'];
                     this.visible = false;
-                    this.refreshMasterTableData();
+                    // refresh master
+                    $refs[featureCode].refreshMasterData();
                     this.jumpToConf(objectCode);
                 }).catch(err => {
                     this.$message.error(err.msg);
                 })
             },
-            refreshMasterTableData() {
-                this.mTlRef.getData();
-            },
-            refreshSlaveTableData() {
-                this.sTlRef.getData();
-            },
-            handleAdd() {
-                const sObjectCode = this.slave['objectCode'];
-                const featureCode = this.featureCode;
-                const foreignKeyName = this.slave['foreignFieldCode'];
-                const foreignKeyValue = this.activeMData[this.master['primaryKey']];
-
-                if (utils.isEmpty(this.activeMData)) {
-                    this.$message.warning('请先选择一条主表记录', '提示');
-                    return;
-                }
-                const url = this.$compile(URL.MASTER_SLAVE_TO_ADD_S, {
-                    objectCode: sObjectCode,
-                    featureCode: featureCode,
-                    foreignKeyName: foreignKeyName,
-                    foreignKeyValue: foreignKeyValue
-                });
-                this.$refs[this.sTlMeta['name']].dialog(url);
-            },
             handleDelete(row) {
                 let title, objectCodes, url;
-                if (utils.isUndefined(row)) {
+                if (utils.isUndefined(row)) {   // 批量删除
                     const objectCodeArr = this.choseMData.map(row => row.code);
+                    if (utils.isEmpty(objectCodeArr)) {
+                        this.$message.warning('请至少选择一项!');
+                        return;
+                    }
                     objectCodes = objectCodeArr.join(',');
-                } else {
+                } else {    // 单行删除
                     objectCodes = row.code;
                 }
                 title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
@@ -194,10 +129,12 @@
                     type: 'warning',
                     dangerouslyUseHTMLString: true
                 }).then(() => {
-                    this.$axios.delete(url).then(resp => {
+                    const {$axios, $refs, featureCode} = this;
+                    $axios.delete(url).then(resp => {
                         this.$message.success(resp.msg);
-                        this.refreshMasterTableData();
-                        this.refreshSlaveTableData();
+                        // refresh master,slave data
+                        $refs[featureCode].refreshMasterData();
+                        $refs[featureCode].refreshSlavesData();
                     }).catch(err => {
                         this.$message.error(err.msg);
                     });
@@ -205,56 +142,11 @@
             }
         },
         created() {
-            this.getFormMeta();
-
-            this.loadFeature(this.featureCode).then(resp => {
-                const feature = resp.data;
-                this.master = feature['master'];
-                this.slave = feature['slaves'][0]; // 元对象/元字段 主子表一对一
-
-                const mObjectCode = this.master['objectCode'];
-                const sObjectCode = this.slave['objectCode'];
-
-                // 获取主表TableList 组件meta
-                this.getTlMeta(mObjectCode).then(resp => {
-                    this.mTlMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
-                });
-                // 获取主表SearchPanel 组件meta
-                this.getSpMeta(mObjectCode).then(resp => {
-                    this.mSpMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
-                });
-                // 获取从表TableList 组件meta
-                this.getTlMeta(sObjectCode).then(resp => {
-                    let foreignFieldKey = this.slave['foreignFieldCode'];
-                    this.sTlMeta = resp.data;
-                    this.sTableUrl = this.sTlMeta['data_url'] + '?' + foreignFieldKey + '={objectCode}';
-                    this.sTlMeta['data_url'] = this.sTableUrl;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
-                });
-                // 获取从表SearchPanel 组件meta
-                this.getSpMeta(sObjectCode).then(resp => {
-                    this.sSpMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
-                });
-            });
-        },
-        computed: {
-            mTlRef() {
-                return this.$refs[this.mTlMeta['name']];
-            },
-            sTlRef() {
-                return this.$refs[this.sTlMeta['name']];
-            }
+            this.$axios.get(URL.META_OBJECT_TO_ADD).then(resp => {
+                this.formMeta = resp.data
+            }).catch(err => {
+                this.$message.error(err.msg);
+            })
         }
     }
 </script>
