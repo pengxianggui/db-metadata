@@ -44,6 +44,11 @@
       "label": "ChangeLog"
     },
     {
+      "path": "/main/table?objectCode=meta_exception",
+      "icon": "el-icon-warning",
+      "label": "Meta异常"
+    },
+    {
       "path": "/main/table?featureCode=DbVersionSingleGrid",
       "icon": "el-icon-paperclip",
       "label": "DbVersion"
