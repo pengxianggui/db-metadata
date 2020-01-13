@@ -55,263 +55,10 @@ Vue.use(metaElement, config)
 - authorities: meta-element内置了Vue全局方法$hasAuth,　并且内部部分组件需要进行权限控制, 此属性是内部鉴权的角色依据.
 - 其他...
 
-
 ## 组件库
+查看[《组件库说明》](./document/组件库说明.md)
 
-### 表单控件
-#### `BoolBox`
-> 布尔框
-
-##### 概述
-布尔框(BoolBox)支持true/false两个值,　此外对传入值进行了默认扩展(暂不支持用户自定义扩展)，额外支持如下值：
-```
-false, true,
-"false", "true",
-0, 1,
-"0", "1",
-"f", "t",
-null, true,
-undefined, true 
-```
-按照分组,　内部自动映射false/true　值,　例如:
-```html
-<bool-box v-model="value"></bool-box>
-```
-当value值为字符串"f"时, 会认为是false,　当勾选后,　value的值为字符串"t".
-##### Meta Data
-> 组件渲染依靠的组件元数据
-```json
-{
-    "component_name": "BoolBox",
-    "name": "BoolBox",
-    "label": "布尔框",
-    "default_value": false,
-    "inline": true,
-    "conf": {}
-}
-```
-
-##### Attribute
-
-|参数|说明|类型|可选值|默认值|
-|----|----|----|----|----|
-|v-model|绑定值|string/number/boolean|false, true; "false", "true"; 0, 1; "0", "1"; "f", "t"; null, true;　undefined, true|false|
-|其他|参考elementUI `CheckBox`组件|
-
-##### Events
-|事件名称|说明|回调参数|
-|---|---|---|
-|change|绑定值发生变化时触发|更新后的值|
-
-#### `CheckBox`
-> 多选框
-
-##### 概述
-传入值接受数组和字符串,　如果是字符串,　则必须是英文逗号分隔的基本类型字符串; 如果是数组，则数组成员会在内部被转换为String类型.
-
-选项数据有三个来源(按优先级依次递减):
-1. 直接传入options属性: <check-box :options="options"></checkbox>
-2. 直接传入dataUrl属性: <check-box :data-url="url"></checkbox> , url响应的资源必须是key-value对象组成的数组
-3. 在元数据中定义options, 如: 
-    ```json
-    {
-       "options": [{"key":  "选项一", "value":  1}, {"key":  "选项二", "value":  2}]
-    }
-    ```
-4. 在元数据中定义了data_url属性, 如:
-    ```json
-    {
-       "data_url": "/dict/yn"
-    }
-    ```
-> 无论是通过元数据定义data_url还是通过dom属性直接定义data-url,　改url接口响应的数据必须是由key-value对象组成的数组. 如果不是,　也可以通过
-在dom上定义　`:format="format"`, 通过定义
-
-> 选项数据的value值也会在内部被转换为String类型， 以保证值和选项都为String类型
-
-##### Meta data
-```json
-{
-    "component_name": "CheckBox",
-    "name": "CheckBox",
-    "label": "多选框",
-    "inline": true,
-    "data_url": "/dict/yn",
-    "options": [
-        {"key":"选项一", "value":  "1"},
-        {"key":"选项二", "value":  "0"}
-    ],
-    "conf": {}
-}
-```
-
-##### Attribute
-|参数|说明|类型|可选值|默认值|
-|----|----|----|----|----|
-|v-model|绑定值, 当为字符串时,　必须是由英文逗号分割的多个值|string/array|-|-|
-|data-url|选项数据的api接口，该接口必须返回由{"key":"选项一", "value":  "1"}组成的数组|string|-|-|
-|options|选项数据, 必须是由{"key":"选项一", "value":  "1"}组成的数组|array|-|-|
-|format|格式化函数, 对选项数据进行格式化, 使之符合key-value的对象数组|Function|-|-|
-|其他|参见ElementUI Check|-|-|-|
-
-##### Events
-|事件名称|说明|回调参数|
-|---|---|---|
-|change|绑定值发生变化时触发|更新后的值|
-
-
-#### `DropDownBox`
-> 下拉框
-#####　概述
-下拉选项组件。
-`DropDownBox`可以接受的值有`String, Number, Boolean, Array`; `DropDownBox`的元数据中有个属性为`conf.multiple`, 当为`true`时,
-表示下拉框为多选, 此时`DropDownBox`会将传入的值转换为字符串数组,规则如下: value为String, 则通过","拆分为数组(因此你可以传入"a,b,c"来表示多值), 
-value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当value为Array时, 转换内部每个成员为String类型。
-当`conf.multiple`值为`false`, 传入的value会被转换为String.
-
-> 选项数据的value值也会在内部被转换为String类型， 以保证值和选项都为String类型
-
-如果配置了MetaData中的group为true, 则表示选项数据为分组模式. options的数据结构不再是：
-    [{"key":"选项一", "value":  "1"},{"key":"选项二", "value":  "2"}];
-而是调整为： 
-    [{"key":"阿里巴巴", "value": "1", "group": "五百强公司"}, {"key":"中国石油", "value": "2", "group": "五百强公司"}, {"key":"华为", "value": "2"}];
-则这两个选项将被放入到一个选项组(五百强公司)中, 而”华为”将被放入到一个默认分组中(其他)
-
-##### Meta Data
-```json
-{
-    "component_name": "DropDownBox",
-    "name": "DropDownBox",
-    "label": "下拉框",
-    "inline": true,
-    "group": false,
-    "data_url": "/dict/yn",
-    "options": [
-        {"key":"选项一", "value":  "1"},{"key":"选项二", "value":  "2"}
-    ],
-    "conf": {
-        "clearable": true,
-        "multiple": false
-//         更多配置参见element UI Select选择器
-    }
-}
-```
-
-##### Attribute
-
-|参数|说明|类型|可选值|默认值|
-|----|----|----|----|----|
-|v-model|绑定值. 详细见概述|string, number, boolean, array|-|-|
-|data-url|选项数据的api接口，该接口必须返回由{"key":"选项一", "value":  "1"}组成的数组|string|-|-|
-|options|选项数据, 必须是由{"key":"选项一", "value":  "1"}组成的数组|array|-|-|
-|format|格式化函数, 对选项数据进行格式化, 使之符合key-value的对象数组|Function|-|-|
-|其他|参见ElementUI Check|-|-|-|
-
-##### Events
-|事件名称|说明|回调参数|
-|---|---|---|
-|change|绑定值发生变化时触发|更新后的值|
-|remove-tag|多选模式下移除tag时触发|移除的tag值|
-|clear|可清空的单选模式下用户点击清空按钮时触发|-|
-|blur|当 input 失去焦点时触发|(event: Event)|
-|focus|当 input 获得焦点时触发|(event: Event)|
-
-
-#### `RadioBox`
-> 单选框
-##### 概述
-单选框和多选框(CheckBox)唯一的不同之处在于不接受数组, 可以接收`Boolean, Number, String`类型, 都会在内部转换为String类型。
-选项数据和多选框一致。
-> 选项数据的value值也会在内部被转换为String类型， 以保证值和选项都为String类型
-
-##### `Meta Data`
-```json
-{
-    "component_name": "RadioBox",
-    "name": "RadioBox",
-    "label": "单选框",
-    "inline": true,
-    "data_url": "/dict/yn",
-    "options": [
-        {"key":"选项一", "value":  "1"}, {"key":"选项二", "value":  "2"}
-    ],
-    "conf": {}  // conf里支持element UI Radio的属性配置
-}
-```
-
-##### Attribute
-
-|参数|说明|类型|可选值|默认值|
-|----|----|----|----|----|
-|v-model|绑定值. 详细见概述|string, number, boolean|-|-|
-|data-url|选项数据的api接口，该接口必须返回由{"key":"选项一", "value":  "1"}组成的数组|string|-|-|
-|options|选项数据, 必须是由{"key":"选项一", "value":  "1"}组成的数组|array|-|-|
-|format|格式化函数, 对选项数据进行格式化, 使之符合key-value的对象数组|Function|-|-|
-|其他|参见ElementUI Check|-|-|-|
-
-##### Events
-|事件名称|说明|回调参数|
-|---|---|---|
-|change|绑定值发生变化时触发|更新后的值|
-
-
-#### `TextBox`
-> 文本框
-
-##### 概述
-文本框基于element input.
-
-##### Meta Data
-```json
-{
-    "component_name": "TextBox",
-    "name": "TextBox",
-    "label": "文本框",
-    "inline": false,  // 此属性在表单中生效，表示表单项是否是内联元素(inline)
-    "conf": {
-        "placeholder": "请输入内容..",
-        "clearable": true,
-        // 更多配置见elementUI input
-    }
-}
-```
-
-##### Attribute
-
-|参数|说明|类型|可选值|默认值|
-|----|----|----|----|----|
-|v-model|绑定值. 详细见概述|string, number|-|-|
-|其他|参见ElementUI Check|-|-|-|
-
-##### Events
-|事件名称|说明|回调参数|
-|---|---|---|
-|change|绑定值发生变化时触发|更新后的值|
-|input|当 input 值发生改变时触发|更新后的值|
-|clear|可清空的单选模式下用户点击清空按钮时触发|-|
-|blur|当 input 失去焦点时触发|(event: Event)|
-|focus|当 input 获得焦点时触发|(event: Event)|
-
-##### slot
-|name|说明|
-|---|---|
-|prefix|输入框头部内容，只对 type="text" 有效|
-|suffix|输入框尾部内容，只对 type="text" 有效|
-|prepend|输入框前置内容，只对 type="text" 有效|
-|append|输入框后置内容，只对 type="text" 有效|
-
-
-#### `TextAreaBox`
-> 文本域
-##### 概述
-文本域也是基于elementUI input 实现. 只是在TextBox基础上内置了`type="textarea"`. 虽然本可以复用TextBox,
-但出于TextArea有独立的业务控件含义, 我们将它拆出来作为一个独立的表单控件. 我们认为这是有价值的.
-
-##### `Meta Data`
-
-
-
-
+## 资料
 ### 表单设计器
 
 - [form-create](https://github.com/xaboy/form-create)
@@ -319,97 +66,9 @@ value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当val
 
 - [form-design](https://github.com/vincentzyc/form-design)
 
-#### 表单组件元对象设计
-```json
-{
-        "name": "FormTmpl",
-        "label": "表单模板",
-        "component_name": "FormTmpl",
-        "action": "/form/doAdd/{objectCode}",
-        "conf": {
-            "label-width": "100px",
-            "size": "medium",
-            "disabled": false,
-            "rules": {
-                "id": [{"required": true, "message": "必填字段", "trigger": "blur"}]
-            }
-        },
-        "columns": [
-            {
-                "name": "id",
-                "label": "ID",
-                "component_name": "TextBox",
-                "inline": false,
-                "showable": true,
-                "index": 1,
-                "default_value": 1,
-    
-                "conf": {
-                    "clearable": true,
-                    "placeholder": "请输入..",
-                    "readonly": true,
-                    "disabled": false
-                }
-            }
-        ],
-        "btns": {
-            "submit": {
-                "label": "提交",
-                "conf": {
-                    "type": "primary"
-                }
-            },
-            "cancel": {
-                "label": "取消",
-                "conf": {
-                }
-            }
-        }
-    }
-```
+## 说明
 
-### 表格设计
-
-#### 表格组件元对象设计
-```json
-{
-        "name": "TableList",
-        "label": "表格模板",
-        "component_name": "TableList",
-        "data_url": "/table/list/{objectCode}",
-        "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
-        "multi_select": true,
-        "editable": false,
-        "conf": {
-            "default-sort": {"prop": "id", "order": "descending"},
-            "highlight-current-row": true,
-            "size": "medium"
-        },
-        "columns": [
-            {
-                "name": "name",
-                "label": "label",
-                "component_name": "TextBox",
-                "editable": false,
-                "searchable": true,
-                "index": 1,
-                
-                "conf": {
-                    "width": "50",
-                    "sortable": true
-                }
-            }
-        ],
-        "pagination": {
-            "page-size": 10,
-            "page-sizes": [10, 20, 50, 100, 200],
-            "current-page": 1,
-            "layout": "total, sizes, prev, pager, next, jumper"
-        }
-    }
-```
-
-### 所有组件默认处理的响应数据格式为
+### 响应数据格式为
 ```
 {
     state: String,
@@ -418,23 +77,6 @@ value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当val
     data: [Object, Array]
 }
 ```
-
-
-- [ ] 全局局部方法 约定;
-    - data() 中变量的格式统一约定
-       ```
-       如组件公共属性:name,label 
-       用来绑定form的数据对象使用model命名?
-       data() {
-            return {
-                model: {},
-                tableOptions: [],
-                schemaOptions: []
-            }
-        }
-       ```
-- [x] 异步加载数据的组件,指定默认值
-- [ ] 表格中的批量编辑
 
 ### 概念
 - 元组件： 支持传入组件元数据, 构建组件内部业务逻辑, 传入不同组件元数据, 组件表现不同；
@@ -475,7 +117,7 @@ value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当val
     
 - 业务组件: 特定功能下的业务组件；
 
-### TODO
+## TODO
  -[x] meta-Manager 默认不加载
  -[x] 每个需要meta的组件都需要传入objectCode, 在meta的一级属性上添加
  -[x] 组件meta数据准备和组件渲染顺序, 是否应该支持异步渲染组件？
@@ -665,7 +307,7 @@ value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当val
  -[x] created中初始化一些meta数据, mounted初始化业务数据 
   
 
-### 功能模板结构(config)
+## 功能模板结构(config)
  - MasterSlaveTableTmpl
  ```json
     {
@@ -778,3 +420,12 @@ value为Number或Boolean, 直接转换为字符串,并放入空数组中; 当val
   ```
     解决办法：将别名设置的部分抽取出来放到单独的配置文件`alias.config.js`，再配置IDE, WebPack->webpack configuration file 设置为alias.config.js即可。
   ```
+  
+  
+## ChangeLog
+### 0.1.2
+1. 添加`IconBox`
+2. 取消FindPanel的导出, 仅在FindBox中使用
+3. 更新merge.js中的打印日志级别
+4. 增加内置模板的扩展插槽, 使内置模板具备基本的扩展能力
+5. 修复其他小缺陷
