@@ -437,7 +437,7 @@
             buttonsConf() {
                 return this.innerMeta['buttons'];
             },
-            // 支持无渲染的行为插槽 pxg_todo
+            // 支持无渲染的行为插槽
             actions() {
                 const {doDelete} = this;
                 return {doDelete};

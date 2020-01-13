@@ -1,7 +1,7 @@
 import utils from '@/utils'
 
 export default {
-    bind: function (el, binding, vnode) {
+    update: function (el, binding, vnode) {
         const {scope, item: column} = binding.value;
         const value = scope.row[column.name];
         if (column.render) {
