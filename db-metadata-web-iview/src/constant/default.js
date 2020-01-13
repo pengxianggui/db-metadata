@@ -379,6 +379,11 @@ const DEFAULT_CONF = {
             "placeholder": "戳我展开搜索面板.."
         }
     },
+    "IconBox": {
+        "component_name": "IconBox",
+        "name": "IconBox",
+        "label": "图标框"
+    },
     "FindPanel": {
         "component_name": "FindPanel",
         "name": "FindPanel",

@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <icon-box-demo></icon-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <data-list-table-tmpl-demo style="height: 700px;"></data-list-table-tmpl-demo>
             </el-col>
         </el-row>
@@ -179,7 +184,9 @@
     export default {
         name: "demo",
         data() {
-            return {}
+            return {
+                icon: ''
+            }
         },
         methods: {},
         components: demos

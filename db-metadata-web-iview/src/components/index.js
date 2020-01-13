@@ -15,9 +15,9 @@ import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
-import FindPanel from './core/findpanel'
 import FormBox from './core/form'
 import RowGrid from './core/grid'
+import IconBox from './core/iconbox'
 import ImgBox from './core/imgbox'
 import JsonBox from './core/jsonbox'
 import List from './core/list'
@@ -60,9 +60,9 @@ const components = [
     DropDownBox,
     FileBox,
     FindBox,
-    FindPanel,
     FormBox,
     RowGrid,
+    IconBox,
     ImgBox,
     JsonBox,
     List,
@@ -135,9 +135,9 @@ export default {
     DropDownBox,
     FileBox,
     FindBox,
-    FindPanel,
     FormBox,
     RowGrid,
+    IconBox,
     ImgBox,
     JsonBox,
     List,

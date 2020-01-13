@@ -21,11 +21,13 @@
     import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import FindPanel from './FindPanel'
 
     export default {
         mixins: [Meta(DEFAULT.FindBox), Val()],
         name: "FindBox",
         label: "查找框",
+        components: {FindPanel},
         props: {
             value: String
         },

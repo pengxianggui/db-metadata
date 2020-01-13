@@ -11,7 +11,7 @@
                 <text-box v-model="feature.code" required></text-box>
             </el-form-item>
             <el-form-item label="图标" class="inline">
-                <text-box v-model="icon"></text-box>
+                <icon-box v-model="icon"></icon-box>
             </el-form-item>
 
             <div v-show="feature.type === 'MasterSlaveGrid'">

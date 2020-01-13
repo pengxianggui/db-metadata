@@ -1,0 +1,64 @@
+<template>
+    <div>
+        <el-input v-model="nativeValue"
+                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                  :name="innerMeta.name"
+                  @blur="$emit('blur', $event)"
+                  @focus="$emit('focus', $event)"
+                  @change="$emit('change', $event)"
+                  @clear="handlerClear($event)"
+                  v-on:click.native="handlerClick($event)"
+                  :prefix-icon="nativeValue"
+                  suffix-icon="el-icon-search"
+                  placeholder="点击选择图标" clearable>
+        </el-input>
+        <dialog-box :visible.sync="dialogVisible">
+            <icon-panel @selected="selectIcon"></icon-panel>
+            <template #footer>
+                <span class="tip">tips: 双击图标回选</span>
+            </template>
+        </dialog-box>
+    </div>
+</template>
+<script>
+    import {DEFAULT} from '@/constant'
+    import IconPanel from './IconPanel'
+    import Meta from '../../mixins/meta'
+    import Val from '../../mixins/value'
+
+    export default {
+        name: 'IconBox',
+        mixins: [Meta(DEFAULT.IconBox), Val()],
+        components: {
+            IconPanel
+        },
+        props: {
+            value: String
+        },
+        data () {
+            return {
+                dialogVisible: false
+            }
+        },
+        methods: {
+            handlerClear(ev) {
+                if (ev) ev.stopPropagation();
+                this.$emit('clear', ev);
+            },
+            handlerClick(ev) {
+                if (ev) ev.stopPropagation();
+                this.dialogVisible = true;
+            },
+            selectIcon(value) {
+                this.nativeValue = value;
+                this.dialogVisible = false;
+            }
+        }
+    }
+</script>
+<style>
+    .tip {
+        font-size: 12px;
+        color: #999999;
+    }
+</style>

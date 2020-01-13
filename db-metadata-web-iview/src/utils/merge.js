@@ -13,12 +13,12 @@ export function merge(opt1, opt2, deep) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
-        console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
+        console.warn("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
         return common.deepClone(opt1);
     }
 
     if (opt1 === null || !common.isObject(opt1)) {
-        console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
+        console.warn("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
         return common.deepClone(opt2);
     }
 
@@ -53,12 +53,12 @@ export function reverseMerge(opt1, opt2, deep) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
-        console.error("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
+        console.warn("typeof opt2: %s , must be 'object' and should not be a null value.", opt2);
         return common.deepClone(opt1);
     }
 
     if (opt1 === null || !common.isObject(opt1)) {
-        console.error("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
+        console.warn("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
         return common.deepClone(opt2);
     }
 
