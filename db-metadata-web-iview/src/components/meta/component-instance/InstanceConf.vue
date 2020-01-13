@@ -4,8 +4,6 @@
             <el-row :gutter="12">
                 <el-col :span="6">
                     <el-form-item label="组件">
-                        <!--                        <drop-down-box v-model="confModel.componentCode" :meta="componentMeta"-->
-                        <!--                                     @change="loadConf"></drop-down-box>-->
                         <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
                         <radio-box v-model="confModel.componentCode"
                                    :options="['FormView', 'TableList', 'SearchPanel']"
@@ -41,7 +39,8 @@
                         <el-row>
                             <el-col>
                                 <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}<span
-                                        v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                    v-if="isAutoComputed"
+                                    style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
                                 </h2>
                                 <el-form-item>
                                     <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
@@ -100,15 +99,6 @@
         name: "InstanceConf",
         components: {FormBuilder},
         data() {
-            let componentMeta = {
-                name: "component",
-                label: "组件",
-                data_url: URL.COMPONENT_CODE_LIST,
-                group: false,
-                conf: {
-                    "filterable": true,
-                }
-            };
             let objectMeta = {
                 name: "object",
                 label: "元对象",
@@ -140,13 +130,11 @@
             };
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
-            this.$merge(componentMeta, DEFAULT.DropDownBox);
             this.$merge(confMeta, DEFAULT.JsonBox);
 
             return {
                 isAutoComputed: false,
                 objectMeta: objectMeta,
-                componentMeta: componentMeta,
                 confMeta: confMeta,
                 confModel: {
                     code: this.$route.query.code,
@@ -183,7 +171,7 @@
                         if (key === 'fields') {
                             let fConf = data[key];
                             for (let fConfKey in fConf) {
-                                let fConfVal = fConf[fConfKey].replace(/\\/g, "");
+                                let fConfVal = fConf[fConfKey];//.replace(/\\/g, "");
                                 let fConfValJson = JSON.parse(fConfVal);
                                 fConfValJson['conf'] = fConfValJson['conf'] || {};
                                 this.$merge(fConfValJson['conf'] || {}, EleProps(fConfValJson['component_name']));

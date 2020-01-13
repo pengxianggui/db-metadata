@@ -49,11 +49,14 @@
                                          :prop="item.name"
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
-                            <template slot="header">
+                            <template #header>
                                 <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
                                                 :label="item.label || item.name" :all="true">
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
+                            </template>
+                            <template #default="scope">
+                                <span v-render-cell="{scope, item}">{{scope.row[item.name]}}</span>
                             </template>
                         </el-table-column>
                     </template>
@@ -143,6 +146,7 @@
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
+    import renderCell from './renderCell'
 
     export default {
         name: "TableList",
@@ -168,6 +172,9 @@
             data: Array,
             page: Object,
             filterParams: Object    // 搜索面板过滤参数
+        },
+        directives: {
+            'render-cell': renderCell
         },
         methods: {
             handleSelectionChange(selection) {
