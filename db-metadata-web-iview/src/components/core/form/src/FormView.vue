@@ -15,10 +15,10 @@
         <el-form-item v-if="innerMeta.columns.length > 0">
             <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf">
                 <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
-                           @click="onSubmit"
+                           @click="$emit('submit')"
                            v-text="buttonsConf['submit']['label']"></el-button>
                 <el-button :id="innerMeta.name + 'cancel'" v-bind="buttonsConf['cancel']['conf']"
-                           @click="onCancel"
+                           @click="$emit('cancel')"
                            v-text="buttonsConf['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">
@@ -27,6 +27,14 @@
                 </meta-easy-edit>
             </div>
         </el-form-item>
+
+        <!-- render-less behavior slot -->
+        <slot name="bhv-cancel" :on="on" :actions="actions">
+            <cancel v-bind="{on, actions}"></cancel>
+        </slot>
+        <slot name="bhv-submit" :on="on" :actions="actions">
+            <submit v-bind="{on, actions}"></submit>
+        </slot>
     </el-form>
 </template>
 
@@ -34,10 +42,11 @@
     import {DEFAULT} from '@/constant'
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import utils from '@/utils'
+    import DefaultBehaviors from './defaultBehaviors'
 
     export default {
         name: "FormView",
-        components: {MetaEasyEdit},
+        components: {MetaEasyEdit, ...DefaultBehaviors},
         data() {
             return {
                 model: {},
@@ -87,17 +96,14 @@
                     });
                 }
             },
-            onCancel: function (event) {
-                if (this.$listeners.cancel) {
-                    this.$emit('cancel', event);
-
-                }
+            onCancel: function (ev) {
+                console.log('FormView default onCancel behavior.');
             },
             assemblyModel(meta) {
                 this.model = {};
                 let columns = utils.isArray(meta.columns) ? meta.columns : [];
 
-                // pxg_todo 编辑/新增 模式根据是否含有record字段 && record非空
+                // 编辑/新增 模式根据是否含有record字段 && record非空
                 this.isEdit = utils.hasProp(meta, 'record');
 
                 if (this.isEdit) {
@@ -125,6 +131,14 @@
             },
             buttonsConf() {
                 return this.innerMeta['buttons'];
+            },
+            // 支持无渲染的行为插槽
+            actions() {
+                const {onSubmit, doSubmit, onCancel} = this;
+                return {onSubmit, doSubmit, onCancel};
+            },
+            on() {
+                return this.$on.bind(this);
             }
         }
     }

@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <form-view-demo></form-view-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <icon-box-demo></icon-box-demo>
             </el-col>
         </el-row>
@@ -72,11 +77,6 @@
         <el-row>
             <el-col :span="24">
                 <dynamic-route-demo></dynamic-route-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <form-tmpl-demo></form-tmpl-demo>
             </el-col>
         </el-row>
         <el-row>
