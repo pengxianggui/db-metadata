@@ -34,7 +34,6 @@ public class AppJFinalConfig extends DefaultJFinalConfig {
 
     @Override
     public void configRoute(Routes me) {
-//        super.configRoute(me);
         appWebConfig.configRoute(me);
         me.add("/spring-boot", IndexController.class);
     }
