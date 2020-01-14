@@ -40,13 +40,18 @@ export default {
              */
 
             if (meta.render) {
-                const render = utils.strToFn(meta.render);
-                return render(h, value);
+                try {
+                    const render = utils.strToFn(meta.render);
+                    return render(h, value);
+                } catch (e) {
+                    console.error('the render(in field meta) is not function, meta: %o, value: %s, will show original value', meta, value);
+                    return h('span', null, value);
+                }
             }
             return h('span', null, value);
         } else {
             // pxg_todo 编辑模式, 即 多行编辑, 根据meta和value, 渲染表单控件
-            
+
         }
     },
     create() {

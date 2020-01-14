@@ -433,9 +433,8 @@ export function hasProp(object, key) {
  * @returns Function
  */
 export function strToFn(fnStr) {
-    if (isEmpty(fnStr)) return;
     if (isFunction(fnStr)) return fnStr;
-    if (!isString(fnStr)) return;
+    if (!isString(fnStr) || isEmpty(fnStr)) throw "fnStr is not a valid string";
 
     const firstCurlyBraces = fnStr.indexOf('{');
     const lastCurlyBraces = fnStr.lastIndexOf('}');
