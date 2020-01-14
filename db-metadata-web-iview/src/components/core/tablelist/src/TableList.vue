@@ -56,7 +56,7 @@
                                 </meta-easy-edit>
                             </template>
                             <template #default="scope">
-                                <span v-render-cell="{scope, item}">{{scope.row[item.name]}}</span>
+                                <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
                             </template>
                         </el-table-column>
                     </template>
@@ -146,14 +146,15 @@
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
-    import renderCell from './renderCell'
+    import TableCell from './tableCell'
 
     export default {
         name: "TableList",
         mixins: [Meta(DEFAULT.TableList, assembleMeta)],
-        components: {MetaEasyEdit},
+        components: {MetaEasyEdit, TableCell},
         data() {
             return {
+                multiEdit: false, // 多行编辑模式
                 innerData: [],
                 choseData: [],
                 activeData: {},
@@ -172,9 +173,6 @@
             data: Array,
             page: Object,
             filterParams: Object    // 搜索面板过滤参数
-        },
-        directives: {
-            'render-cell': renderCell
         },
         methods: {
             handleSelectionChange(selection) {

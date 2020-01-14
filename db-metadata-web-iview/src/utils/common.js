@@ -414,3 +414,35 @@ export function hasProp(object, key) {
 
     return object.hasOwnProperty(key);
 }
+
+/**
+ * 提取函数字符串中函数体. 如, 有以下**字符串**:
+ *
+ *   function(h, value) {
+ *       return h("span", {
+ *           attrs: {
+ *               style: "color: red",
+ *           }
+ *       }, value);
+ *   }
+ *
+ *
+ *
+ *
+ * @param fnStr
+ * @returns Function
+ */
+export function strToFn(fnStr) {
+    if (isEmpty(fnStr)) return;
+    if (isFunction(fnStr)) return fnStr;
+    if (!isString(fnStr)) return;
+
+    const firstCurlyBraces = fnStr.indexOf('{');
+    const lastCurlyBraces = fnStr.lastIndexOf('}');
+    const fnBody = fnStr.substring(firstCurlyBraces + 1, lastCurlyBraces);
+
+    const firstParentheses = fnStr.indexOf('(');
+    const lastParentheses = fnStr.indexOf(')');
+    const params = fnStr.substring(firstParentheses + 1, lastParentheses);
+    return new Function(...params.split(","), fnBody);
+}
