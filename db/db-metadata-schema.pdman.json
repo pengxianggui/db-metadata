@@ -577,7 +577,7 @@
               "chnname": "目标对象"
             },
             {
-              "name": "label",
+              "name": "name",
               "type": "DefaultString",
               "remark": "",
               "chnname": "描述"
