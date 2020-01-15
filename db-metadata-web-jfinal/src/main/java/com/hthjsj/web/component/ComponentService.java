@@ -166,20 +166,21 @@ public class ComponentService {
      *
      * @return
      */
-    public Kv loadObjectConfigFlat(String instanceCode) {
+    public ComponentInstanceConfig loadObjectConfig(String instanceCode) {
         String sql = "select * from " + META_COMPONENT_INSTANCE + " where code=?";
         List<Record> records = Db.use(App.DB_MAIN).find(sql, instanceCode);
-        Kv config = Kv.create();
+        Kv objectConfig = Kv.create();
+        Kv fieldsMap = Kv.create();
         records.forEach(record -> {
             if (record.getStr("config").contains(".")) {
                 String s = record.getStr("dest_object").split("\\.")[1];
-                config.set(s, record.getStr("config"));
+                fieldsMap.set(s, record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
-                config.set(record.getStr("dest_object"), record.getStr("config"));
+                objectConfig.set(record.getStr("dest_object"), record.getStr("config"));
             }
         });
-        return config;
+        return new ComponentInstanceConfig(objectConfig, fieldsMap);
     }
 
     /**
@@ -259,7 +260,7 @@ public class ComponentService {
      *
      * @param component
      * @param object
-     * @param config
+     * @param componentInstanceConfig
      *
      * @return
      */

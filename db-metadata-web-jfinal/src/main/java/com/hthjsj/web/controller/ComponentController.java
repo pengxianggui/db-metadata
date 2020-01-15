@@ -60,15 +60,24 @@ public class ComponentController extends FrontRestController {
         renderJson(Ret.ok("data", results));
     }
 
+    /**
+     * 获取实例配置,2种方式
+     * 1. objectCode + componentCode
+     * 2. instanceCode
+     */
     public void load() {
-        /**
-         * object Code
-         * component Type
-         */
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
+        String instanceCode = queryHelper.getInstanceCode();
 
+        // instanceCode 获取
+        if (StrKit.notBlank(instanceCode)) {
+            renderJson(Ret.ok("data", componentService().loadObjectConfig(instanceCode)));
+            return;
+        }
+
+        // objectCode + componentCode
         if (StrKit.notBlank(compCode, objectCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
             //已存在的配置
