@@ -92,8 +92,8 @@
 <script>
     import utils from '@/utils'
     import {DEFAULT, URL} from '@/constant';
-    import EleProps from '@/config/element-props'
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
+    import extractConfig from './extractConfig'
 
     let objectMeta = {
         name: "object",
@@ -125,24 +125,6 @@
         }
     };
 
-    /*
-     * extract config from source map configs. Internal conversion for string to object. [field: conf]
-     */
-    const extractConfig = function (configMap, key) {
-        let config, configStr;
-        try {
-            configStr = utils.convertToString(configMap[key]);
-            config = JSON.parse(configStr);
-        } catch (e) {
-            config = {};
-            console.error("The string can't be parsed by JSON: o%", JSON.stringify(configStr));
-            console.error(e);
-        }
-        config['conf'] = utils.convertToObject(config['conf']);
-        this.$merge(config['conf'], EleProps(config['component_name']));
-        return config;
-    };
-
     export default {
         name: "InstanceConf",
         components: {FormBuilder},
@@ -158,6 +140,7 @@
                 confMeta: confMeta,
                 confModel: {
                     instanceCode: utils.assertUndefined(ic, instanceCode),
+                    instanceName: null,
                     componentCode: componentCode,
                     objectCode: objectCode,
                     conf: {}, // conf of metaObject
@@ -186,21 +169,18 @@
                 });
 
                 $axios.get(url).then(resp => {
-                    let {data, isAutoComputed = false} = resp;
+                    let {data} = resp;
+                    let {isAutoComputed = false, instanceCode, instanceName, fieldsMap} = data;
                     this.isAutoComputed = isAutoComputed;
 
+                    this.confModel['instanceCode'] = instanceCode;
+                    this.confModel['instanceName'] = instanceName;
                     // extract object config
                     this.confModel['conf'] = extractConfig.call(this, data, objectCode, true);
 
-                    for (let key in data) {
-                        // extract field config
-                        if (key === 'fieldsMap') {
-                            let fieldsMap = data[key];
-                            for (let fieldName in fieldsMap) {
-                                this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
-                            }
-                            continue;
-                        }
+                    // extract field config
+                    for (let fieldName in fieldsMap) {
+                        this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
                     }
                 }).catch(err => {
                     console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
