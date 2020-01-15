@@ -17,6 +17,7 @@
 </template>
 
 <script>
+    import utils from '@/utils'
     import {URL} from '@/constant'
     import {getSpMeta, getTlMeta} from "@/components/core/mixins/methods"
 
@@ -37,7 +38,7 @@
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
-                let code = row['code'];
+                let code = utils.convertToString(row['code']);
                 let componentCode = row['comp_code'];
                 let objectCode = row['dest_object'];
                 this.$router.push({
