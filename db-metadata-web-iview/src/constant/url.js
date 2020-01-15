@@ -13,7 +13,7 @@ export const COMP_CONF_UPDATE = '/component/doUpdate'; // 组件(默认|实例)�
 export const COMP_CONF_ADD = '/component/doAdd';   // 组件(默认|实例)配置新增
 export const COMP_GOBAL_CONF_LOAD = '/component/load?componentCode={componentCode}';    // 组件默认配置加载
 export const COMP_GOBAL_CONF_DELETE = '/component/delete?componentCode={componentCode}';    // 组件默认配置删除
-export const COMP_INSTANCE_CONF_LOAD = '/component/load?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例配置加载
+export const COMP_INSTANCE_CONF_LOAD = '/component/load?componentCode={componentCode}&objectCode={objectCode}&instanceCode={instanceCode}'; // 组件实例配置加载
 export const COMP_INSTANCE_CONF_DELETE = '/component/delete/{objectCode}?componentCode={componentCode}'; // 组件实例配置删除
 
 export const TABLE_INSTANCE_META = '/table/meta/{objectCode}'; // 表实例元数据

@@ -1,34 +1,38 @@
 <template>
     <div class="el-card">
-        <el-form :model="confModel" label-width="80px" class="demo-form-inline" style="height: 100%">
+        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" class="demo-form-inline"
+                 style="height: 100%">
             <el-row :gutter="12">
-                <el-col :span="6">
-                    <el-form-item label="组件">
+                <el-col>
+                    <el-form-item label="组件" prop="componentCode" class="inline">
                         <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
-                        <radio-box v-model="confModel.componentCode"
-                                   :options="['FormView', 'TableList', 'SearchPanel']"
-                                   @change="loadConf"></radio-box>
+                        <radio-box v-model="confModel.componentCode" :options="['FormView', 'TableList', 'SearchPanel']"
+                                   :disabled="isEdit"></radio-box>
                     </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item label="元对象">
+                    <el-form-item label="元对象" prop="objectCode" class="inline">
                         <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
-                                       @change="loadConf"></drop-down-box>
+                                       :disabled="isEdit"></drop-down-box>
                     </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item>
-                        <el-button @click="deleteConf">删除配置</el-button>
+                    <el-form-item label="实例编码" prop="instanceCode" class="inline">
+                        <text-box v-model="confModel.instanceCode" :disabled="isEdit"></text-box>
+                    </el-form-item>
+                    <el-form-item label="实例描述">
+                        <text-area-box v-model="confModel.instanceName"></text-area-box>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">提交</el-button>
-                        <el-button type="primary" @click="preview">预览</el-button>
-                        <el-button type="warning" @click="onUpdate">更新</el-button>
-                        <el-button @click="onCancel">返回</el-button>
+                        <div style="display: flex">
+                            <el-button type="primary" @click="preview">预览</el-button>
+                            <el-button type="primary" @click="onSubmit">提交</el-button>
+                            <el-button type="warning" @click="onUpdate">更新</el-button>
+                            <el-button type="primary" @click="loadConf">自动计算</el-button>
+                            <span style="flex: 1"></span>
+                            <el-button @click="onCancel">返回</el-button>
+                            <el-button @click="deleteConf" type="danger">删除配置</el-button>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -72,8 +76,8 @@
                     <el-row>
                         <el-col>
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmit">提交</el-button>
                                 <el-button type="primary" @click="preview">预览</el-button>
+                                <el-button type="primary" @click="onSubmit">提交</el-button>
                                 <el-button type="warning" @click="onUpdate">更新</el-button>
                                 <el-button @click="onCancel">返回</el-button>
                             </el-form-item>
@@ -129,22 +133,29 @@
         name: "InstanceConf",
         components: {FormBuilder},
         data() {
-            const {ic, instanceCode, componentCode, objectCode} = this.$route.query;
+            const {instanceCode, componentCode, objectCode} = this.$route.query;
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
             this.$merge(confMeta, DEFAULT.JsonBox);
+            const isEdit = !utils.isEmpty(instanceCode) || (!utils.isEmpty(componentCode) && !utils.isEmpty(objectCode));
 
             return {
+                isEdit: isEdit,
                 isAutoComputed: false,
                 objectMeta: objectMeta,
                 confMeta: confMeta,
                 confModel: {
-                    instanceCode: utils.assertUndefined(ic, instanceCode),
+                    instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
                     componentCode: componentCode,
                     objectCode: objectCode,
                     conf: {}, // conf of metaObject
                     fConf: {} // conf of fieldsMap
+                },
+                rules: {
+                    instanceCode: [{required: true, message: '请设置一个唯一配置编码', trigger: 'blur'}],
+                    componentCode: [{required: true, message: '请选择组件', trigger: 'blur'}],
+                    objectCode: [{required: true, message: '请选择元对象', trigger: 'blur'}]
                 }
             }
         },
@@ -158,94 +169,115 @@
             },
             loadConf: function () {
                 this.initConf();
-                const {confModel: {componentCode, objectCode}, $axios} = this;
-                if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
-                    return;
-                }
+                const {confModel: {instanceCode, componentCode, objectCode}, $axios} = this;
+                this.$refs['InstanceConf'].validate((valid) => {
+                    if (valid) {
+                        const url = this.$compile(URL.COMP_INSTANCE_CONF_LOAD, {
+                            instanceCode: instanceCode,
+                            objectCode: objectCode,
+                            componentCode: componentCode
+                        });
 
-                const url = this.$compile(URL.COMP_INSTANCE_CONF_LOAD, {
-                    objectCode: objectCode,
-                    componentCode: componentCode
-                });
+                        $axios.safeGet(url).then(resp => {
+                            let {data} = resp;
+                            let {isAutoComputed = false, instanceCode, instanceName, fieldsMap} = data;
+                            this.isAutoComputed = isAutoComputed;
 
-                $axios.get(url).then(resp => {
-                    let {data} = resp;
-                    let {isAutoComputed = false, instanceCode, instanceName, fieldsMap} = data;
-                    this.isAutoComputed = isAutoComputed;
+                            this.confModel['instanceCode'] = instanceCode;
+                            this.confModel['instanceName'] = instanceName;
+                            // extract object config
+                            this.confModel['conf'] = extractConfig.call(this, data, objectCode, true);
 
-                    this.confModel['instanceCode'] = instanceCode;
-                    this.confModel['instanceName'] = instanceName;
-                    // extract object config
-                    this.confModel['conf'] = extractConfig.call(this, data, objectCode, true);
-
-                    // extract field config
-                    for (let fieldName in fieldsMap) {
-                        this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
+                            // extract field config
+                            for (let fieldName in fieldsMap) {
+                                this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
+                            }
+                        }).catch(err => {
+                            console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
+                            this.$message.error(err.msg);
+                        })
+                    } else {
+                        this.$message.warning('请填写必填项')
                     }
-                }).catch(err => {
-                    console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
-                    this.$message.error(err.msg);
-                })
+                });
             },
             deleteConf: function () {
-                let url = this.$compile(URL.COMP_INSTANCE_CONF_DELETE, this.confModel);
-                this.$axios.delete(url).then(resp => {
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                this.$confirm('确定删除当前配置? 此操作无法撤销!', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let url = this.$compile(URL.COMP_INSTANCE_CONF_DELETE, this.confModel);
+                    this.$axios.delete(url).then(resp => {
+                        this.$message.success(resp.msg);
+                    }).catch(err => {
+                        this.$message.error(err.msg);
+                    })
                 })
             },
             onSubmit: function () {
-                const {instanceCode, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+                this.$refs['InstanceConf'].validate((valid) => {
+                    if (valid) {
+                        const {instanceCode, instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
 
-                if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
-                    this.$message.warning('必须选定组件和元对象');
-                    return;
-                }
+                        if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
+                            this.$message.warning('必须选定组件和元对象');
+                            return;
+                        }
 
-                let params = {
-                    instanceCode: instanceCode,
-                    componentCode: componentCode,
-                    objectCode: objectCode,
-                    fieldsMap: fieldsConf
-                };
-                params[objectCode] = objectConf;
+                        let params = {
+                            instanceCode: instanceCode,
+                            instanceName: instanceName,
+                            componentCode: componentCode,
+                            objectCode: objectCode,
+                            fieldsMap: fieldsConf
+                        };
+                        params[objectCode] = objectConf;
 
-                this.$axios({
-                    method: 'POST',
-                    url: URL.COMP_CONF_ADD,
-                    data: params
-                }).then(resp => {
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
-                })
+                        this.$axios({
+                            method: 'POST',
+                            url: URL.COMP_CONF_ADD,
+                            data: params
+                        }).then(resp => {
+                            this.$message.success(resp.msg);
+                        }).catch(err => {
+                            this.$message.error(err.msg);
+                        })
+                    } else {
+                        this.$message.warning('请填写必填项');
+                    }
+                });
             },
             onUpdate: function () {
-                const {instanceCode, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+                this.$refs['InstanceConf'].validate((valid) => {
+                    if (valid) {
+                        const {instanceCode, instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
 
-                if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
-                    this.$message.warning('必须选定组件和元对象');
-                    return;
-                }
+                        if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
+                            this.$message.warning('必须选定组件和元对象');
+                            return;
+                        }
 
-                let params = {
-                    instanceCode: instanceCode,
-                    componentCode: componentCode,
-                    objectCode: objectCode,
-                    fieldsMap: fieldsConf
-                };
-                params[objectCode] = objectConf;
+                        let params = {
+                            instanceCode: instanceCode,
+                            instanceName: instanceName,
+                            componentCode: componentCode,
+                            objectCode: objectCode,
+                            fieldsMap: fieldsConf
+                        };
+                        params[objectCode] = objectConf;
 
-                this.$axios({
-                    method: 'POST',
-                    url: URL.COMP_CONF_UPDATE,
-                    data: params
-                }).then(resp => {
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
-                })
+                        this.$axios({
+                            method: 'POST',
+                            url: URL.COMP_CONF_UPDATE,
+                            data: params
+                        }).then(resp => {
+                            this.$message.success(resp.msg);
+                        }).catch(err => {
+                            this.$message.error(err.msg);
+                        })
+                    }
+                });
             },
             onCancel: function () {
                 this.$router.back();
@@ -265,10 +297,10 @@
             }
         },
         mounted() {
-            const {componentCode, objectCode} = this.confModel;
+            const {instanceCode} = this.confModel;
 
             this.initConf();
-            if (!utils.isEmpty(componentCode) && !utils.isEmpty(objectCode)) {
+            if (!utils.isEmpty(instanceCode)) {
                 this.loadConf();
             }
         }
