@@ -147,14 +147,18 @@
             }
         },
         methods: {
+            initConf() {
+                this.confModel['conf'] = {};
+                this.confModel['fConf'] = {};
+            },
             handleOcChange(objectCode) {
                 this.confModel['objectCode'] = objectCode;
             },
             loadConf: function () {
+                this.initConf();
                 const {componentCode, objectCode} = this.confModel;
+
                 if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
-                    this.confModel['conf'] = {};
-                    this.confModel['fConf'] = {};
                     return;
                 }
 
@@ -180,7 +184,8 @@
                             continue;
                         }
 
-                        let confVal = utils.convertToString(data[key]).replace(/\\/g, "");
+                        // let confVal = utils.convertToString(data[key]).replace(/\\/g, "");
+                        let confVal = data[key].replace(/\\/g, "");
                         let confValJson = JSON.parse(confVal);
                         confValJson['conf'] = confValJson['conf'] || {};
                         this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
@@ -269,6 +274,8 @@
         },
         mounted() {
             const {componentCode, objectCode} = this.confModel;
+
+            this.initConf();
             if (!utils.isEmpty(componentCode) && !utils.isEmpty(objectCode)) {
                 this.loadConf();
             }
