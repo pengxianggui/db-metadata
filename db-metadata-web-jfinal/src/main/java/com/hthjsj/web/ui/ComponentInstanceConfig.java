@@ -2,6 +2,7 @@ package com.hthjsj.web.ui;
 
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
+import lombok.Getter;
 
 /**
  * <pre>
@@ -22,20 +23,42 @@ import com.jfinal.kit.Kv;
  */
 public class ComponentInstanceConfig extends Kv {
 
+    @Getter
+    String instanceCode;
+
+    @Getter
+    String instanceName;
+
+    String objectCode;
+
     Kv self;
 
     Kv fieldsMap;
 
-    public ComponentInstanceConfig(Kv config, String objectCode) {
+    private ComponentInstanceConfig(Kv config, String objectCode, String instanceCode, String instanceName) {
         this.self = UtilKit.getKv(config, objectCode);
         this.fieldsMap = UtilKit.getKv(config, "fieldsMap");
-        this.set(self).set("fieldsMap", fieldsMap);
+        this.objectCode = objectCode;
+        this.instanceCode = instanceCode;
+        this.instanceName = instanceName;
+        this.set(self).set("fieldsMap", fieldsMap).set("instanceCode", instanceCode).set("instanceName", instanceName);
     }
 
-    public ComponentInstanceConfig(Kv objectConfig, Kv fieldsMap) {
+    private ComponentInstanceConfig(Kv objectConfig, Kv fieldsMap, String objectCode, String instanceCode, String instanceName) {
         this.self = objectConfig;
         this.fieldsMap = fieldsMap;
-        this.set(self).set("fieldsMap", fieldsMap);
+        this.objectCode = objectCode;
+        this.instanceCode = instanceCode;
+        this.instanceName = instanceName;
+        this.set(self).set("fieldsMap", fieldsMap).set("instanceCode", instanceCode).set("instanceName", instanceName);
+    }
+
+    public static ComponentInstanceConfig New(Kv config, String objectCode, String instanceCode, String instanceName) {
+        return new ComponentInstanceConfig(config, objectCode, instanceCode, instanceName);
+    }
+
+    public static ComponentInstanceConfig Load(Kv objectConfig, Kv fieldsMap, String objectCode, String instanceCode, String instanceName) {
+        return new ComponentInstanceConfig(objectConfig, fieldsMap, objectCode, instanceCode, instanceName);
     }
 
     public Kv getObjectConfig() {

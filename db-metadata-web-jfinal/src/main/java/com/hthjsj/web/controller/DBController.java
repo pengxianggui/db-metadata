@@ -9,7 +9,9 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.AppConst;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.kit.InitKit;
-import com.hthjsj.web.ui.*;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.OptionsKit;
+import com.hthjsj.web.ui.UIManager;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
 import com.jfinal.core.JFinal;
@@ -104,7 +106,6 @@ public class DBController extends FrontRestController {
      */
     private void smartInit(IMetaObject metaObject, ComponentType componentType) {
         MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, componentType);
-        ComponentInstanceConfig componentInstanceConfig = RenderHelper.renderComponentInstanceConfig(metaObjectIViewAdapter);
-        componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, componentInstanceConfig);
+        componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
     }
 }

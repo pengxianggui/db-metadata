@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p> Class title: </p>
@@ -139,10 +140,6 @@ public class ComponentService {
         return record;
     }
 
-    public String loadObjectConfig(String componentCode, String destCode) {
-        return loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
-    }
-
     public List<ComponentType> loadTypesByObjectCode(String objectCode) {
         List<String> codes = Db.use(App.DB_MAIN).query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
                                                        INSTANCE.META_OBJECT.toString(),
@@ -171,16 +168,20 @@ public class ComponentService {
         List<Record> records = Db.use(App.DB_MAIN).find(sql, instanceCode);
         Kv objectConfig = Kv.create();
         Kv fieldsMap = Kv.create();
+        AtomicReference<String> objectCode = null;
+        AtomicReference<String> instanceName = null;
         records.forEach(record -> {
             if (record.getStr("config").contains(".")) {
                 String s = record.getStr("dest_object").split("\\.")[1];
                 fieldsMap.set(s, record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
-                objectConfig.set(record.getStr("dest_object"), record.getStr("config"));
+                objectCode.set(record.getStr("dest_object"));
+                instanceName.set(record.getStr("label"));
+                objectConfig.set(objectCode, record.getStr("config"));
             }
         });
-        return new ComponentInstanceConfig(objectConfig, fieldsMap);
+        return ComponentInstanceConfig.Load(objectConfig, fieldsMap, objectCode.get(), instanceCode, instanceName.get());
     }
 
     /**
@@ -193,66 +194,59 @@ public class ComponentService {
      *
      * @return
      */
-    public ComponentInstanceConfig loadObjectConfigFlat(String componentCode, String destCode) {
+    public ComponentInstanceConfig loadObjectConfig(String componentCode, String destCode) {
         //load single object config
-        String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
+        Record objectConfig = Db.use(App.DB_MAIN).findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?",
+                                                            componentCode,
+                                                            destCode,
+                                                            INSTANCE.META_OBJECT.toString());
         //ensure return avalible value, like "" , "{}"
-        Kv objConf = Kv.by(destCode, StrKit.isBlank(objectConfig) ? Maps.newHashMapWithExpectedSize(0) : objectConfig);
-        return new ComponentInstanceConfig(objConf, loadFieldsConfigMap(componentCode, destCode));
-    }
+        String strConfig = objectConfig.getStr("config");
+        Kv objConf = Kv.by(destCode, StrKit.isBlank(strConfig) ? Maps.newHashMapWithExpectedSize(0) : strConfig);
 
-    public Kv loadFieldsConfigMap(String componentCode, String destCode) {
-        Kv kv = Kv.create();
-        List<Record> fields = loadFieldsConfig(componentCode, destCode);
+        Kv fieldsMap = Kv.create();
+        List<Record> fields = Db.use(App.DB_MAIN).find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
+                                                       componentCode,
+                                                       destCode,
+                                                       INSTANCE.META_FIELD.toString());
         for (Record record : fields) {
             String s = record.getStr("dest_object").split("\\.")[1];
-            kv.set(s, record.getStr("config"));
+            fieldsMap.set(s, record.getStr("config"));
         }
-        return kv;
+
+        String instanceCode = objectConfig.getStr("code");
+        String instanceName = objectConfig.getStr("name");
+        return ComponentInstanceConfig.Load(objConf, fieldsMap, destCode, instanceCode, instanceName);
     }
 
-    public List<Record> loadFieldsConfig(String componentCode, String destCode) {
-        return Db.use(App.DB_MAIN).find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
-                                        componentCode,
-                                        destCode,
-                                        INSTANCE.META_FIELD.toString());
-    }
-
-    private String loadConfig(String componentCode, String destCode, String type) {
-        return Db.use(App.DB_MAIN).queryStr("select config from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?",
-                                            componentCode,
-                                            destCode,
-                                            type);
-    }
-
-    private boolean newObjectSelfConfig(Component component, String objectCode, Kv config) {
-        Record record = getRecord(component, objectCode, INSTANCE.META_OBJECT, config);
-        return Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
-    }
-
-    public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig instanceAllConfig) {
+    public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
         /**
          * new objectConfig
          * foreach fieldsConfig
          */
-        newObjectSelfConfig(component, object.code(), instanceAllConfig.getObjectConfig());
+        Record record = getRecord(component,
+                                  object.code(),
+                                  componentInstanceConfig.getInstanceCode(),
+                                  componentInstanceConfig.getInstanceName(),
+                                  INSTANCE.META_OBJECT,
+                                  componentInstanceConfig.getObjectConfig());
+        Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
 
         List<Record> fieldRecords = Lists.newArrayList();
-        Kv fieldsMap = instanceAllConfig.getFieldsMap();
+        Kv fieldsMap = componentInstanceConfig.getFieldsMap();
         object.fields().forEach(f -> {
             Kv fkv = UtilKit.getKv(fieldsMap, f.fieldCode());
-            fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
+            fieldRecords.add(getFieldConfigRecord(component,
+                                                  object.code(),
+                                                  f.fieldCode(),
+                                                  componentInstanceConfig.getInstanceCode(),
+                                                  componentInstanceConfig.getInstanceName(),
+                                                  fkv));
         });
 
         Db.use(App.DB_MAIN).batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
-    }
-
-    public boolean newFieldConfig(Component component, String objectCode, String fieldCode, Kv config) {
-        Kv fkv = UtilKit.getKv(config, fieldCode);
-        Record fieldRecord = getFieldConfigRecord(component, objectCode, fieldCode, fkv);
-        return Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, fieldRecord);
     }
 
     /**
@@ -268,14 +262,25 @@ public class ComponentService {
 
         deleteObjectConfig(component.code(), object.code(), false);
 
-        newObjectSelfConfig(component, object.code(), componentInstanceConfig.getObjectConfig());
+        Record record = getRecord(component,
+                                  object.code(),
+                                  componentInstanceConfig.getInstanceCode(),
+                                  componentInstanceConfig.getInstanceName(),
+                                  INSTANCE.META_OBJECT,
+                                  componentInstanceConfig.getObjectConfig());
+        Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
 
         Collection<IMetaField> fields = object.fields();
 
         List<Record> fieldRecords = Lists.newArrayList();
         fields.forEach(f -> {
             Kv fkv = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), f.fieldCode());
-            fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
+            fieldRecords.add(getFieldConfigRecord(component,
+                                                  object.code(),
+                                                  f.fieldCode(),
+                                                  componentInstanceConfig.getInstanceCode(),
+                                                  componentInstanceConfig.getInstanceName(),
+                                                  fkv));
         });
 
         Db.use(App.DB_MAIN).batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
@@ -304,9 +309,9 @@ public class ComponentService {
         return Db.use(App.DB_MAIN).update(META_COMPONENT_INSTANCE, fieldInstance);
     }
 
-    private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, Kv config) {
+    private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, String instanceCodoe, String instanceName, Kv config) {
         String dest_code = objectCode + "." + fieldCode;
-        return getRecord(component, dest_code, INSTANCE.META_FIELD, config);
+        return getRecord(component, dest_code, instanceCodoe, instanceName, INSTANCE.META_FIELD, config);
     }
 
     /**
@@ -352,9 +357,15 @@ public class ComponentService {
         return loadObjectConfig(componentCode, objectCode) != null;
     }
 
-    private Record getRecord(Component component, String specificCode, INSTANCE specific, Kv config) {
+    public boolean hasObjectConfig(String instanceCode) {
+        return loadObjectConfig(instanceCode) != null;
+    }
+
+    private Record getRecord(Component component, String specificCode, String instanceCode, String instanceName, INSTANCE specific, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
+        record.set("code", instanceCode);
+        record.set("name", instanceName);
         record.set("comp_code", component.type());
         record.set("type", specific.toString());
         record.set("dest_object", specificCode);

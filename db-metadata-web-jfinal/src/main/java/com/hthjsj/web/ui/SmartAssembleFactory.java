@@ -1,5 +1,6 @@
 package com.hthjsj.web.ui;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
@@ -85,12 +86,20 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         //某一组件全局配置
         Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());
 
-        Kv levelObjectConfig = recommendObjectConfig(metaObject);
 
         // 因配置为自动计算,所以传入组件全局配置map
         List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalComponentAllConfig, componentType);
+        Kv fieldsMap = Kv.create();
+        fields.forEach(m -> {
+            fieldsMap.set(m.getMetaField().fieldCode(), m.getFieldInstanceConfig().toJson());
+        });
 
-        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectConfig, fields);
+        ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(Kv.by(metaObject.code(), "{}"),
+                                                                                       fieldsMap,
+                                                                                       metaObject.code(),
+                                                                                       Joiner.on(".").join(metaObject.code(), componentType.getCode()),
+                                                                                       "自动计算配置");
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }
 
     @Override

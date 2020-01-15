@@ -8,7 +8,6 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.render.MetaViewRender;
 import com.hthjsj.web.ui.ComponentInstanceConfig;
-import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ViewFactory {
 
     public static TableView tableView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.TABLEVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TABLEVIEW.getCode(), metaObject.code());
         return tableView(metaObject, instanceFlatConfig);
     }
 
@@ -34,7 +33,7 @@ public class ViewFactory {
     }
 
     public static FormView formView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.getCode(), metaObject.code());
         return formView(metaObject, instanceFlatConfig);
     }
 
@@ -47,7 +46,7 @@ public class ViewFactory {
     }
 
     public static SearchView searchView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.SEARCHVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.SEARCHVIEW.getCode(), metaObject.code());
         return searchView(metaObject, instanceFlatConfig);
     }
 

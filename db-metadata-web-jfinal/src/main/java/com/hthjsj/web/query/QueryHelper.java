@@ -79,6 +79,10 @@ public class QueryHelper {
         return tp.getPara("ic", tp.getPara("instanceCode"));
     }
 
+    public String getInstanceName() {
+        return tp.getPara("in", tp.getPara("instanceName"));
+    }
+
     public String[] getObjectCodes() {
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
     }

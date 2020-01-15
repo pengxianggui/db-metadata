@@ -36,8 +36,8 @@ public class ComponentTest {
 
     public static void loadFieldsConfigMap(TableView tableView) {
         ComponentService componentService = Aop.get(ComponentService.class);
-        Kv kv = componentService.loadFieldsConfigMap(tableView.type(), "object_code_admin111");
-        System.out.println(kv.toJson());
+//        Kv kv = componentService.loadFieldsConfigMap(tableView.type(), "object_code_admin111");
+//        System.out.println(kv.toJson());
     }
 
     public static void init(MetaObject metaObject) {

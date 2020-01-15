@@ -7,7 +7,10 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
-import com.hthjsj.web.ui.*;
+import com.hthjsj.web.ui.ComponentInstanceConfig;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
+import com.hthjsj.web.ui.OptionsKit;
+import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -84,13 +87,13 @@ public class ComponentController extends FrontRestController {
             if (componentService().hasObjectConfig(compCode, objectCode)) {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderComponentInstanceConfig(metaObjectViewAdapter)));
+                renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig()));
             }
             //自动计算的配置
             else {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderComponentInstanceConfig(metaObjectViewAdapter)).set("isAutoComputed", true));
+                renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
@@ -131,16 +134,17 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-
+        String instanceCode = queryHelper.getInstanceCode();
+        String instanceName = queryHelper.getInstanceName();
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
-        if (StrKit.notBlank(compCode, objectCode)) {
+        if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             if (componentService().hasObjectConfig(compCode, objectCode)) {
                 renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
                 return;
             }
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = new ComponentInstanceConfig(config, metaObject.code());
+            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config, metaObject.code(), instanceCode, instanceName);
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -157,12 +161,13 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-
+        String instanceCode = queryHelper.getInstanceCode();
+        String instanceName = queryHelper.getInstanceName();
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
-        if (StrKit.notBlank(compCode, objectCode)) {
+        if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = new ComponentInstanceConfig(config, metaObject.code());
+            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config, metaObject.code(), instanceCode, instanceName);
             componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));

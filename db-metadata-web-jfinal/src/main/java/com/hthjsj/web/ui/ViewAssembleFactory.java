@@ -84,15 +84,13 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         //某一组件全局配置
         Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());
         //完整的实例配置,元对象级+字段级
-        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
-        //对象级配置
-        Kv levelObjectInstanceConfig = componentInstanceConfig.getObjectConfig();
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(componentType.getCode(), metaObject.code());
 
         Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType, componentInstanceConfig);
 
         List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), componentInstanceConfig, globalComponentAllConfig);
 
-        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectInstanceConfig, fields);
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }
 
     @Override
