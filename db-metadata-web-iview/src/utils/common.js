@@ -416,6 +416,23 @@ export function hasProp(object, key) {
 }
 
 /**
+ * 断言对象中是否含有某个或某些属性, 传入多个断言属性, 从左到右, 只要存在一个, 立马返回这个属性名
+ * @param object
+ * @param keys
+ * @returns {boolean|*}
+ */
+export function assertProp(object, ...keys) {
+    if (!isObject(object)) return false;
+
+    for (let i = 0; i < keys.length; i++) {
+        if (hasProp(object, keys[i])) {
+            return keys[i];
+        }
+    }
+    return false;
+}
+
+/**
  * 提取函数字符串中函数体. 如, 有以下**字符串**:
  *
  *   function(h, value) {

@@ -128,6 +128,7 @@
                     mode: 'code',
                 }
             };
+            const {ic, instanceCode, componentCode, objectCode} = this.$route.query;
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
             this.$merge(confMeta, DEFAULT.JsonBox);
@@ -137,11 +138,11 @@
                 objectMeta: objectMeta,
                 confMeta: confMeta,
                 confModel: {
-                    code: this.$route.query.code,
-                    componentCode: this.$route.query.componentCode,
-                    objectCode: this.$route.query.objectCode,
+                    instanceCode: utils.assertUndefined(ic, instanceCode),
+                    componentCode: componentCode,
+                    objectCode: objectCode,
                     conf: {}, // conf of metaObject
-                    fConf: {} // conf of fields
+                    fConf: {} // conf of fieldsMap
                 }
             }
         },
@@ -151,8 +152,7 @@
             },
             loadConf: function () {
                 const {componentCode, objectCode} = this.confModel;
-                if (!componentCode || !objectCode) {
-
+                if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
                     this.confModel['conf'] = {};
                     this.confModel['fConf'] = {};
                     return;
@@ -168,18 +168,19 @@
                     this.isAutoComputed = resp.isAutoComputed || false;
 
                     for (let key in data) {
-                        if (key === 'fields') {
-                            let fConf = data[key];
-                            for (let fConfKey in fConf) {
-                                let fConfVal = fConf[fConfKey];//.replace(/\\/g, "");
-                                let fConfValJson = JSON.parse(fConfVal);
+                        if (key === 'fieldsMap') {
+                            let fieldsMap = data[key];
+                            for (let fieldName in fieldsMap) {
+                                let fieldConf = fieldsMap[fieldName];//.replace(/\\/g, "");
+                                let fConfValJson = JSON.parse(fieldConf);
                                 fConfValJson['conf'] = fConfValJson['conf'] || {};
                                 this.$merge(fConfValJson['conf'] || {}, EleProps(fConfValJson['component_name']));
-                                this.$set(this.confModel['fConf'], fConfKey, fConfValJson);
+                                this.$set(this.confModel['fConf'], fieldName, fConfValJson);
                             }
                             continue;
                         }
-                        let confVal = data[key].replace(/\\/g, "");
+
+                        let confVal = utils.convertToString(data[key]).replace(/\\/g, "");
                         let confValJson = JSON.parse(confVal);
                         confValJson['conf'] = confValJson['conf'] || {};
                         this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
@@ -199,21 +200,20 @@
                 })
             },
             onSubmit: function () {
-                if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
+                const {instanceCode, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+
+                if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
                     this.$message.warning('必须选定组件和元对象');
                     return;
                 }
 
-                const {code, componentCode, objectCode} = this.confModel;
                 let params = {
-                    code: code,
+                    instanceCode: instanceCode,
                     componentCode: componentCode,
-                    objectCode: objectCode
+                    objectCode: objectCode,
+                    fieldsMap: fieldsConf
                 };
-                params[objectCode] = this.confModel['conf'];
-                for (let fConfKey in this.confModel['fConf']) {
-                    params[fConfKey] = this.confModel['fConf'][fConfKey];
-                }
+                params[objectCode] = objectConf;
 
                 this.$axios({
                     method: 'POST',
@@ -226,21 +226,20 @@
                 })
             },
             onUpdate: function () {
+                const {instanceCode, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+
                 if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
                     this.$message.warning('必须选定组件和元对象');
                     return;
                 }
 
-                const {code, componentCode, objectCode} = this.confModel;
                 let params = {
-                    code: code,
+                    instanceCode: instanceCode,
                     componentCode: componentCode,
-                    objectCode: objectCode
+                    objectCode: objectCode,
+                    fieldsMap: fieldsConf
                 };
-                params[objectCode] = this.confModel['conf'];
-                for (let fConfKey in this.confModel['fConf']) {
-                    params[fConfKey] = this.confModel['fConf'][fConfKey];
-                }
+                params[objectCode] = objectConf;
 
                 this.$axios({
                     method: 'POST',
