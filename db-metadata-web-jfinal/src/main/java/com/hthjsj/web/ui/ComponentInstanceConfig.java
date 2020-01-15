@@ -18,11 +18,13 @@ public class ComponentInstanceConfig extends Kv {
     public ComponentInstanceConfig(Kv config, String objectCode) {
         this.self = UtilKit.getKv(config, objectCode);
         this.fieldsMap = UtilKit.getKv(config, "fieldsMap");
+        this.set(self).set("fieldsMap", fieldsMap);
     }
 
     public ComponentInstanceConfig(Kv objectConfig, Kv fieldsMap) {
         this.self = objectConfig;
         this.fieldsMap = fieldsMap;
+        this.set(self).set("fieldsMap", fieldsMap);
     }
 
     public Kv getObjectConfig() {

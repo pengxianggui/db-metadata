@@ -28,10 +28,11 @@ public class RenderHelper {
      * @return
      */
     public static ComponentInstanceConfig renderComponentInstanceConfig(MetaObjectViewAdapter metaObjectViewAdapter) {
+        Kv objectConfig = Kv.by(metaObjectViewAdapter.getMetaObject().code(), metaObjectViewAdapter.getInstanceConfig());
         Kv fieldsMap = Kv.create();
         metaObjectViewAdapter.getFieldsMap().forEach((key, value) -> {
             fieldsMap.set(key, value.getFieldInstanceConfig().toJson());
         });
-        return new ComponentInstanceConfig(metaObjectViewAdapter.getInstanceConfig(), fieldsMap);
+        return new ComponentInstanceConfig(objectConfig, fieldsMap);
     }
 }
