@@ -62,8 +62,8 @@ public class UtilKit {
         return result != null ? result : Kv.create();
     }
 
-    public static List<Kv> getKvs(Kv kv, String key) {
-        return getKvs(kv.getStr(key));
+    public static List<Kv> getKvs(Kv kvSource, String key) {
+        return getKvs(kvSource.getStr(key));
     }
 
     public static List<Kv> getKvs(String jsonArray) {

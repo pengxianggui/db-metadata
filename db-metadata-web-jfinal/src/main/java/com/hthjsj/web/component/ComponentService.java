@@ -10,6 +10,7 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.aop.Before;
@@ -237,16 +238,17 @@ public class ComponentService {
         return Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
     }
 
-    public boolean newObjectConfig(Component component, IMetaObject object, Kv instanceAllConfig) {
+    public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig instanceAllConfig) {
         /**
          * new objectConfig
          * foreach fieldsConfig
          */
-        newObjectSelfConfig(component, object.code(), UtilKit.getKv(instanceAllConfig, object.code()));
+        newObjectSelfConfig(component, object.code(), instanceAllConfig.getObjectConfig());
 
         List<Record> fieldRecords = Lists.newArrayList();
+        Kv fieldsMap = instanceAllConfig.getFieldsMap();
         object.fields().forEach(f -> {
-            Kv fkv = UtilKit.getKv(instanceAllConfig, f.fieldCode());
+            Kv fkv = UtilKit.getKv(fieldsMap, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 

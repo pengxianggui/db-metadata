@@ -7,10 +7,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
-import com.hthjsj.web.ui.MetaObjectViewAdapter;
-import com.hthjsj.web.ui.OptionsKit;
-import com.hthjsj.web.ui.RenderHelper;
-import com.hthjsj.web.ui.UIManager;
+import com.hthjsj.web.ui.*;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -78,13 +75,13 @@ public class ComponentController extends FrontRestController {
             if (componentService().hasObjectConfig(compCode, objectCode)) {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)));
+                renderJson(Ret.ok("data", RenderHelper.renderComponentInstanceConfig(metaObjectViewAdapter)));
             }
             //自动计算的配置
             else {
 
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", RenderHelper.renderObjectFieldsMap(metaObjectViewAdapter)).set("isAutoComputed", true));
+                renderJson(Ret.ok("data", RenderHelper.renderComponentInstanceConfig(metaObjectViewAdapter)).set("isAutoComputed", true));
             }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
@@ -95,7 +92,7 @@ public class ComponentController extends FrontRestController {
          * {
          *   "data": {
          *     "test_table": "{\"component_name\":\"FormView\",\"name\":\"test_table_form\",\"conf\":{\"size\":\"medium\",\"label-width\":\"100px\"},\"label\":\"测试表\"}",
-         *     "fields": {
+         *     "fieldsMap": {
          *       "col_int": "{\"component_name\":\"NumBox\",\"name\":\"col_int\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列1\"}",
          *       "created_time": "{\"component_name\":\"DateTimeBox\",\"name\":\"col_created_time\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列9\"}",
          *       "updated_time": "{\"component_name\":\"DateTimeBox\",\"name\":\"col_updated_time\",\"conf\":{\"clearable\":\"true\"},\"label\":\"列11\"}",
@@ -134,7 +131,8 @@ public class ComponentController extends FrontRestController {
                 return;
             }
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            componentService().newObjectConfig(component, metaObject, config);
+            ComponentInstanceConfig componentInstanceConfig = new ComponentInstanceConfig(config, metaObject.code());
+            componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
