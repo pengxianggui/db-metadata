@@ -94,7 +94,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
             fieldsMap.set(m.getMetaField().fieldCode(), m.getFieldInstanceConfig().toJson());
         });
 
-        ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(Kv.by(metaObject.code(), "{}"),
+        ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(Kv.by(metaObject.code(), Kv.create()),
                                                                                        fieldsMap,
                                                                                        metaObject.code(),
                                                                                        Joiner.on(".").join(metaObject.code(), componentType.getCode()),
