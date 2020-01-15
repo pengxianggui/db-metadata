@@ -43,7 +43,7 @@
                 this.$router.push({
                     path: 'instance-conf',
                     query: {
-                        code: code,
+                        ic: code,
                         componentCode: componentCode,
                         objectCode: objectCode
                     }

@@ -184,6 +184,13 @@ export function convertToArray(value) {
     }
 }
 
+/**
+ * 将值转为对象, 若是对象则直接返回该值;
+ * 若为字符串则尝试转换为Object,转换成功则返回转换后对象, 转换失败则返回空对象;
+ * 若是其他类型, 则直接返回空对象
+ * @param value
+ * @returns {{}|*}
+ */
 export function convertToObject(value) {
     if (isObject(value)) return value;
 
@@ -193,6 +200,7 @@ export function convertToObject(value) {
         result = JSON.parse(value);
         return isObject(result) ? result : {};
     } catch (e) {
+        console.error("value can't be conver to Object, attention please. value: o%", value);
         return {};
     }
 }
@@ -289,6 +297,17 @@ export function assertUndefined(value, defaultValue) {
  */
 export function assertEmpty(value, defaultValue) {
     if (isEmpty(value)) return defaultValue;
+    return value;
+}
+
+/**
+ * 若传入的value不为Object类型, 则返回defaultValue, 否则返回value
+ * @param value
+ * @param defaultValue
+ * @returns {*}
+ */
+export function assertObject(value, defaultValue) {
+    if (!isObject(value)) return defaultValue;
     return value;
 }
 

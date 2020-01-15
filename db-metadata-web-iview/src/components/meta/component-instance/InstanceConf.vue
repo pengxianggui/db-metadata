@@ -95,39 +95,58 @@
     import EleProps from '@/config/element-props'
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
 
+    let objectMeta = {
+        name: "object",
+        label: "元对象",
+        data_url: URL.OBJECT_CODE_LIST,
+        group: false,
+        conf: {
+            "filterable": true,
+            "clearable": true
+        },
+        behavior: {
+            format: function (data) {
+                let arr = [];
+                for (let i = 0; i < data.length; i++) {
+                    arr.push({
+                        key: data[i].code,
+                        value: data[i].code
+                    })
+                }
+                return arr;
+            }
+        }
+    };
+    let confMeta = {
+        name: "conf",
+        label: "配置",
+        conf: {
+            mode: 'code',
+        }
+    };
+
+    /*
+     * extract config from source map configs. Internal conversion for string to object. [field: conf]
+     */
+    const extractConfig = function (configMap, key) {
+        let config, configStr;
+        try {
+            configStr = utils.convertToString(configMap[key]);
+            config = JSON.parse(configStr);
+        } catch (e) {
+            config = {};
+            console.error("The string can't be parsed by JSON: o%", JSON.stringify(configStr));
+            console.error(e);
+        }
+        config['conf'] = utils.convertToObject(config['conf']);
+        this.$merge(config['conf'], EleProps(config['component_name']));
+        return config;
+    };
+
     export default {
         name: "InstanceConf",
         components: {FormBuilder},
         data() {
-            let objectMeta = {
-                name: "object",
-                label: "元对象",
-                data_url: URL.OBJECT_CODE_LIST,
-                group: false,
-                conf: {
-                    "filterable": true,
-                    "clearable": true
-                },
-                behavior: {
-                    format: function (data) {
-                        let arr = [];
-                        for (let i = 0; i < data.length; i++) {
-                            arr.push({
-                                key: data[i].code,
-                                value: data[i].code
-                            })
-                        }
-                        return arr;
-                    }
-                }
-            };
-            let confMeta = {
-                name: "conf",
-                label: "配置",
-                conf: {
-                    mode: 'code',
-                }
-            };
             const {ic, instanceCode, componentCode, objectCode} = this.$route.query;
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
@@ -156,8 +175,7 @@
             },
             loadConf: function () {
                 this.initConf();
-                const {componentCode, objectCode} = this.confModel;
-
+                const {confModel: {componentCode, objectCode}, $axios} = this;
                 if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
                     return;
                 }
@@ -167,29 +185,22 @@
                     componentCode: componentCode
                 });
 
-                this.$axios.get(url).then(resp => {
-                    let data = resp.data;
-                    this.isAutoComputed = resp.isAutoComputed || false;
+                $axios.get(url).then(resp => {
+                    let {data, isAutoComputed = false} = resp;
+                    this.isAutoComputed = isAutoComputed;
+
+                    // extract object config
+                    this.confModel['conf'] = extractConfig.call(this, data, objectCode, true);
 
                     for (let key in data) {
+                        // extract field config
                         if (key === 'fieldsMap') {
                             let fieldsMap = data[key];
                             for (let fieldName in fieldsMap) {
-                                let fieldConf = fieldsMap[fieldName];//.replace(/\\/g, "");
-                                let fConfValJson = JSON.parse(fieldConf);
-                                fConfValJson['conf'] = fConfValJson['conf'] || {};
-                                this.$merge(fConfValJson['conf'] || {}, EleProps(fConfValJson['component_name']));
-                                this.$set(this.confModel['fConf'], fieldName, fConfValJson);
+                                this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
                             }
                             continue;
                         }
-
-                        // let confVal = utils.convertToString(data[key]).replace(/\\/g, "");
-                        let confVal = data[key].replace(/\\/g, "");
-                        let confValJson = JSON.parse(confVal);
-                        confValJson['conf'] = confValJson['conf'] || {};
-                        this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
-                        this.confModel['conf'] = confValJson;
                     }
                 }).catch(err => {
                     console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
@@ -260,10 +271,11 @@
                 this.$router.back();
             },
             preview: function () {
-                let meta = this.confModel['conf'];
+                const {confModel: {conf, fConf}} = this;
+                let meta = conf;
                 meta.columns = [];
-                for (let key in this.confModel['fConf']) {
-                    let item = this.confModel['fConf'][key];
+                for (let key in fConf) {
+                    let item = fConf[key];
                     meta.columns.push(item);
                 }
 

@@ -1,4 +1,4 @@
-import {camelCaseTo} from '../utils/common.js'
+import utils from '../utils'
 import {
     Checkbox,
     Input,
@@ -86,7 +86,10 @@ let mapping = {
     },
 
     // custom...
-    // "JsonBox": null,
+    "JsonBox": {
+        "ele": null,
+        "includes": []
+    },
     // "ZTogglePanel": null,
 };
 
@@ -104,23 +107,25 @@ let mapping = {
  * @constructor
  */
 export default function EleProps(componentName) {
-    let elProps = {};
-    if (!mapping.hasOwnProperty(componentName)) {
-        console.warn("组件类型不正确,无法获取element原生属性信息. componentName: %s", componentName);
+    if (!utils.isString(componentName)) return {};
+    if (!utils.hasProp(mapping, componentName)) {
+        console.warn("组件类型不正确. componentName: %s", componentName);
         return {};
     }
     let element = mapping[componentName];
-    let elComponent = element['ele'];
-    let includes = element['includes'];
-
-    if (!elComponent.hasOwnProperty('props')) {
+    let {ele: elComponent} = element;
+    if (utils.isEmpty(elComponent)) { // custom component
         return {};
     }
 
-    for (let key in elComponent.props) {
+    let finalProps = {}, {props: elProps = {}} = elComponent;
+    let includes = element['includes'];
+
+    for (let key in elProps) {
         if (includes.indexOf(key) < 0)
             continue;
-        let obj = elComponent.props[key];
+
+        let obj = elProps[key];
         let type = obj['type'];
         let defaultV;
 
@@ -135,8 +140,8 @@ export default function EleProps(componentName) {
                 console.log("element component[%o], the type of prop[%s] is: %o", elComponent, key, type);
             }
         }
-        elProps[camelCaseTo(key, '-')] = defaultV;
+        finalProps[utils.camelCaseTo(key, '-')] = defaultV;
     }
 
-    return elProps;
+    return finalProps;
 }
