@@ -554,7 +554,7 @@
             },
             {
               "name": "code",
-              "type": "LongKey",
+              "type": "ShortString",
               "remark": "",
               "chnname": "配置编码"
             },
@@ -578,7 +578,7 @@
             },
             {
               "name": "name",
-              "type": "DefaultString",
+              "type": "ShortString",
               "remark": "",
               "chnname": "描述"
             },

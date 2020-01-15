@@ -11,6 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 元子段纬度的组件配置计算工具
+ * 计算某一元子段+某类型组件时的前端配置
+ * <p> @Project : db-meta-serve</p>
+ *
+ * <p> @author konbluesky </p>
+ */
 @Slf4j
 public class ComputeKit {
 
