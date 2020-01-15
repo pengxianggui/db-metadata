@@ -6,6 +6,7 @@ import com.jfinal.kit.Kv;
 import java.util.List;
 
 /**
+ * 属性构建工具,主要用于构建Element控件的自定属性
  * <p> @Date : 2019/11/6 </p>
  * <p> @Project : db-meta-serve</p>
  *
