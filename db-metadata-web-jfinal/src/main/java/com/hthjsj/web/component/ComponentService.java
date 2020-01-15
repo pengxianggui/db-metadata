@@ -1,6 +1,7 @@
 package com.hthjsj.web.component;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hthjsj.App;
@@ -354,11 +355,11 @@ public class ComponentService {
     }
 
     public boolean hasObjectConfig(String componentCode, String objectCode) {
-        return loadObjectConfig(componentCode, objectCode) != null;
+        return hasObjectConfig(Joiner.on(".").join(objectCode, componentCode));
     }
 
     public boolean hasObjectConfig(String instanceCode) {
-        return loadObjectConfig(instanceCode) != null;
+        return Db.use(App.DB_MAIN).queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 1;
     }
 
     private Record getRecord(Component component, String specificCode, String instanceCode, String instanceName, INSTANCE specific, Kv config) {
