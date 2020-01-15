@@ -153,7 +153,8 @@ public class ComponentController extends FrontRestController {
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            componentService().updateObjectConfig(component, metaObject, config);
+            ComponentInstanceConfig componentInstanceConfig = new ComponentInstanceConfig(config, metaObject.code());
+            componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }

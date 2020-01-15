@@ -35,16 +35,17 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
      * 计算元子段列 实例配置,组装成MetaFieldViewAdapter对象
      *
      * @param fields
-     * @param allLevelConfig 完整的实例配置,元对象级+字段级
+     * @param componentInstanceConfig  完整的实例配置,元对象级+字段级
+     * @param globalComponentAllConfig 所有组件的全局配置
      *
      * @return
      */
-    private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, Kv allLevelConfig, Kv globalComponentAllConfig) {
+    private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, ComponentInstanceConfig componentInstanceConfig, Kv globalComponentAllConfig) {
 
         List<MetaFieldViewAdapter> metaFields = Lists.newArrayList();
 
         for (IMetaField field : fields) {
-            Kv fieldInstanceConfig = UtilKit.getKv(allLevelConfig, field.fieldCode());
+            Kv fieldInstanceConfig = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), field.fieldCode());
             //TODO 配置为空时,该字段则不存在实例配置
             if (!fieldInstanceConfig.isEmpty()) {
                 Component fieldComponent = FormFieldFactory.createFormField(field, fieldInstanceConfig);
@@ -83,13 +84,13 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
         //某一组件全局配置
         Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());
         //完整的实例配置,元对象级+字段级
-        Kv allLevelConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfigFlat(componentType.getCode(), metaObject.code());
         //对象级配置
-        Kv levelObjectInstanceConfig = UtilKit.getKv(allLevelConfig, metaObject.code());
+        Kv levelObjectInstanceConfig = componentInstanceConfig.getObjectConfig();
 
-        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType, allLevelConfig);
+        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentType, componentInstanceConfig);
 
-        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), allLevelConfig, globalComponentAllConfig);
+        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), componentInstanceConfig, globalComponentAllConfig);
 
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, levelObjectInstanceConfig, fields);
     }

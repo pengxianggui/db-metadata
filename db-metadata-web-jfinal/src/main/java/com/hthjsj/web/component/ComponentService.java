@@ -185,13 +185,6 @@ public class ComponentService {
     /**
      * <pre>
      *  加载某元对象与控件实例的配置信息
-     * FIXME: 元对象code与字段code 不能重复;
-     *
-     *          [key]               [value]
-     *      meta_object_abc_code	{"component_name":"BoolBox","name":"BoolBox","conf":{},"label":"布尔框"}
-     *      fieldCode1	            {"component_name":"DropDownBox","name":"DropDownBox","conf":{"clearable":true},"label":"下拉框","group":false}
-     *      fieldCode2	            {"columns":[],"component_name":"FormView","name":"FormView","action":"/save","btns":{"cancel":{"conf":{},"label":"取消"},"submit":{"conf":{"type":"primary"},"label":"提交"}},"conf":{"size":"medium","rules":{},"label-width":"100px"},"label":"表单模板"}
-     *      fieldCode3	            {"component_name":"TextBox","name":"TextBox","conf":{"clearable":true,"placeholder":"请输入内容.."},"label":"文本框"}
      * </pre>
      *
      * @param componentCode
@@ -199,14 +192,12 @@ public class ComponentService {
      *
      * @return
      */
-    public Kv loadObjectConfigFlat(String componentCode, String destCode) {
+    public ComponentInstanceConfig loadObjectConfigFlat(String componentCode, String destCode) {
         //load single object config
         String objectConfig = loadConfig(componentCode, destCode, INSTANCE.META_OBJECT.toString());
         //ensure return avalible value, like "" , "{}"
         Kv objConf = Kv.by(destCode, StrKit.isBlank(objectConfig) ? Maps.newHashMapWithExpectedSize(0) : objectConfig);
-        //load fields config
-        objConf.set(loadFieldsConfigMap(componentCode, destCode));
-        return objConf;
+        return new ComponentInstanceConfig(objConf, loadFieldsConfigMap(componentCode, destCode));
     }
 
     public Kv loadFieldsConfigMap(String componentCode, String destCode) {
@@ -272,17 +263,17 @@ public class ComponentService {
      *
      * @return
      */
-    public boolean updateObjectConfig(Component component, IMetaObject object, Kv config) {
+    public boolean updateObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
 
         deleteObjectConfig(component.code(), object.code(), false);
 
-        newObjectSelfConfig(component, object.code(), UtilKit.getKv(config, object.code()));
+        newObjectSelfConfig(component, object.code(), componentInstanceConfig.getObjectConfig());
 
         Collection<IMetaField> fields = object.fields();
 
         List<Record> fieldRecords = Lists.newArrayList();
         fields.forEach(f -> {
-            Kv fkv = UtilKit.getKv(config, f.fieldCode());
+            Kv fkv = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component, object.code(), f.fieldCode(), fkv));
         });
 

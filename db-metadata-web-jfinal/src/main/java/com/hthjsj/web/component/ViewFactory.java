@@ -7,6 +7,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.render.MetaViewRender;
+import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ViewFactory {
 
     public static TableView tableView(IMetaObject metaObject) {
-        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.TABLEVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.TABLEVIEW.getCode(), metaObject.code());
         return tableView(metaObject, instanceFlatConfig);
     }
 
-    public static TableView tableView(IMetaObject metaObject, Kv instanceFlatConfig) {
+    public static TableView tableView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
         TableView tableView = new TableView(metaObject.code(), metaObject.name());
         ComponentRender<TableView> componentRender = new MetaViewRender<TableView>(metaObject, tableView, instanceFlatConfig);
         tableView.setRender(componentRender);
@@ -33,11 +34,11 @@ public class ViewFactory {
     }
 
     public static FormView formView(IMetaObject metaObject) {
-        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.FORMVIEW.getCode(), metaObject.code());
         return formView(metaObject, instanceFlatConfig);
     }
 
-    public static FormView formView(IMetaObject metaObject, Kv instanceFlatConfig) {
+    public static FormView formView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
 
         FormView formView = new FormView(metaObject.code(), metaObject.name());
         ComponentRender<FormView> componentRender = new MetaViewRender<FormView>(metaObject, formView, instanceFlatConfig);
@@ -46,11 +47,11 @@ public class ViewFactory {
     }
 
     public static SearchView searchView(IMetaObject metaObject) {
-        Kv instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.SEARCHVIEW.getCode(), metaObject.code());
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfigFlat(ComponentType.SEARCHVIEW.getCode(), metaObject.code());
         return searchView(metaObject, instanceFlatConfig);
     }
 
-    public static SearchView searchView(IMetaObject metaObject, Kv instanceFlatConfig) {
+    public static SearchView searchView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
         SearchView searchView = new SearchView(metaObject.code() + ComponentType.SEARCHVIEW.getCode(), metaObject.name());
         searchView.setRender(new MetaViewRender<SearchView>(metaObject, searchView, instanceFlatConfig));
         return searchView;
@@ -73,7 +74,7 @@ public class ViewFactory {
         return component;
     }
 
-    public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType, Kv instanceFlatConfig) {
+    public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType, ComponentInstanceConfig instanceFlatConfig) {
         Component component = null;
         switch (componentType) {
             case FORMVIEW:

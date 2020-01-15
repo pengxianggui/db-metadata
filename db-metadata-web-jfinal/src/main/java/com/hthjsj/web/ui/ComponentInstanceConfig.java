@@ -4,6 +4,17 @@ import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 
 /**
+ * <pre>
+ *    Data structure:
+ *    {
+ *        meta_object_code_abc:{config object},
+ *        fieldsMap:{
+ *             meta_field1:{config object},
+ *             meta_field2:{config object},
+ *             meta_field3:{config object}
+ *        }
+ *    }
+ * </pre>
  * <p> @Date : 2020/1/15 </p>
  * <p> @Project : db-meta-serve</p>
  *
