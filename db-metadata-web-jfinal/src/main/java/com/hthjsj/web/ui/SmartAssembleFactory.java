@@ -36,6 +36,11 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     private Kv recommendObjectConfig(IMetaObject metaObject, ComponentType componentType) {
         AttributeBuilder.FatAttributeBuilder builder = new AttributeBuilder.FatAttributeBuilder();
         builder.componentName(componentType);
+        switch (componentType) {
+            case TABLEVIEW:
+                builder.dataUrl("/table/list/" + metaObject.code());
+                break;
+        }
         return builder.render();
     }
 
