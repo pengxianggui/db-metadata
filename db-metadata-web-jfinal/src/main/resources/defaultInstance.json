@@ -14,7 +14,7 @@
         "name": "config",
         "label": "配置",
         "inline": false,
-        "component_name": "MiniFormBox"
+        "component_name": "MiniFormField"
       }
     }
   },
