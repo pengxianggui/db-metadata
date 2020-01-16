@@ -105,9 +105,10 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
 
         String instanceCode = Joiner.on(".").join(metaObject.code(), componentType.getCode());
-
         Kv objectConfig = Kv.by(metaObject.code(), recommendObjectConfig(metaObject, componentType));
+
         ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(objectConfig, fieldsMap, metaObject.code(), instanceCode, "自动计算配置");
+
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }
 

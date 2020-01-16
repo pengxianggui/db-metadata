@@ -61,8 +61,14 @@ public class ComponentInstanceConfig extends Kv {
         return new ComponentInstanceConfig(objectConfig, fieldsMap, objectCode, instanceCode, instanceName);
     }
 
+    /**
+     * expect : {component_name: "TableList", delete_url: "/table/delete/meta_component_instance",…}
+     * actual : meta_component_instance: {component_name: "TableList", delete_url: "/table/delete/meta_component_instance",…}
+     *
+     * @return
+     */
     public Kv getObjectConfig() {
-        return self;
+        return UtilKit.getKv(self, objectCode);
     }
 
     public Kv getFieldsMap() {
