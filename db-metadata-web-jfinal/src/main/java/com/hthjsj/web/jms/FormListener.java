@@ -15,11 +15,15 @@ public class FormListener implements EventListener<FormMessage> {
     public void handler(FormMessage formMessage) {
         if (formMessage.getType().equalsIgnoreCase("add")) {
             ExtensibleListenerManager.me().getAddFormListeners().forEach(f -> {
-                f.handler(formMessage.getInvocation());
+                if (f.isHit(formMessage.getInvocation())) {
+                    f.handler(formMessage.getInvocation());
+                }
             });
         } else if (formMessage.getType().equalsIgnoreCase("update")) {
             ExtensibleListenerManager.me().getUpdateFormListeners().forEach(f -> {
-                f.handler(formMessage.getInvocation());
+                if (f.isHit(formMessage.getInvocation())) {
+                    f.handler(formMessage.getInvocation());
+                }
             });
         }
     }
