@@ -33,7 +33,8 @@
     "SearchPanel": {
       "schema_name": {
         "component_name": "DropDownBox",
-        "data_url": "/db/index"
+        "data_url": "/db/index",
+        "filterable": true
       }
     }
   },
@@ -43,7 +44,8 @@
         "component_name": "DropDownBox",
         "data_url": "/feature/list",
         "conf": {
-          "multiple": false
+          "multiple": false,
+          "filterable": true
         }
       }
     }
@@ -61,7 +63,8 @@
         "component_name": "DropDownBox",
         "data_url": "/component/list",
         "conf": {
-          "multiple": false
+          "multiple": false,
+          "filterable": true
         }
       }
     },
@@ -70,7 +73,8 @@
         "component_name": "DropDownBox",
         "data_url": "/component/list",
         "conf": {
-          "multiple": false
+          "multiple": false,
+          "filterable": true
         }
       }
     }
