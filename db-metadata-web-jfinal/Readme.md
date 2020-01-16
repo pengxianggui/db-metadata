@@ -41,12 +41,13 @@ MetaField 数据源配置
     ```
 - [ ] 简易的数据权限(基于4个字段,可以利用sqlparse 动态追加 sql)
     > [利用druid数据源的SQL解析器构建数据权限模块](https://blog.csdn.net/weixin_30624825/article/details/95331046)
-- [ ] 多数据源查询,动态切换数据源问题;
+- [x] 多数据源查询,动态切换数据源问题;
 - [x] meta_feature加入is_sys系统标示, 防止误删除
 - [ ] defaultInstance.json中如何为test_table的TableList设置元对象级别的配置?目前只支持设置字段配置
 - [ ] 系统模块的生成,走json配置文件生成功能入feature
 - [ ] 在UploadController 增加图片预览逻辑;
-- [ ] 元对象增加默认排序
+- [x] 元对象增加默认排序
+- [ ] dicts字典自动导入到数据库
 ##### BUG
 - [x] searchPanel 无实例配时,会成功渲染
     > 允许使用smart自动计算的配置来支持默认渲染
