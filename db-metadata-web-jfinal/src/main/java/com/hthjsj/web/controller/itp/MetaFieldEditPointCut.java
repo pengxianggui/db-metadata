@@ -32,12 +32,11 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
     /**
      * 此处更新的是meta_field的记录,但是需要级联计算的是,该条记录中指向的[元对象,元子段]
      *
-     * @param result
      * @param invocation
      */
     @Override
-    public boolean updateAfter(boolean result, AopInvocation invocation) {
-        if (result) {
+    public boolean updateAfter(AopInvocation invocation) {
+        if (invocation.isPreOperateStatus()) {
             log.info("MetaFieldEditPointCut.updateAfter run");
             MetaData formData = invocation.getFormData();
             //获取表单数据中的

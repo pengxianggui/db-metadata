@@ -19,6 +19,10 @@ import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
+import com.hthjsj.web.jms.EventKit;
+import com.hthjsj.web.jms.ExtensibleListenerManager;
+import com.hthjsj.web.jms.FormListener;
+import com.hthjsj.web.jms.TestFormExtensibleListener;
 import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.kit.UtilKit;
@@ -101,6 +105,9 @@ public class AppWebConfig extends JFinalConfig {
         //dictionary register
         Dicts.me().init();
 
+        EventKit.init(false, "db-event-bus");
+        EventKit.register(new FormListener());
+        ExtensibleListenerManager.me().addFormListeners(new TestFormExtensibleListener());
         //Auto import anyConfig from json file;
         if (prop.getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
             InitKit.me().importMetaObjectConfig().importInstanceConfig();

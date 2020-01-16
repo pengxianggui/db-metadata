@@ -9,8 +9,6 @@ import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
-import com.hthjsj.web.component.TableView;
-import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
@@ -141,7 +139,8 @@ public class TableController extends FrontRestController {
                 try {
                     pointCut.deleteBefore(invocation);
                     s = metaService().deleteDatas(metaObject, ids);
-                    pointCut.deleteAfter(s, invocation);
+                    invocation.setPreOperateStatus(s);
+                    pointCut.deleteAfter(invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);

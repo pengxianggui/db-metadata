@@ -8,6 +8,8 @@ import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.jms.EventKit;
+import com.hthjsj.web.jms.FormMessage;
 import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
@@ -70,7 +72,8 @@ public class FormController extends FrontRestController {
                 try {
                     pointCut.addBefore(invocation);
                     s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
-                    pointCut.addAfter(s, invocation);
+                    invocation.setPreOperateStatus(s);
+                    pointCut.addAfter(invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
@@ -79,6 +82,8 @@ public class FormController extends FrontRestController {
                 return s;
             }
         });
+
+        EventKit.post(FormMessage.AddMessage(invocation));
 
         renderJson(status ? Ret.ok() : Ret.fail());
     }
@@ -122,7 +127,8 @@ public class FormController extends FrontRestController {
                 try {
                     pointCut.updateBefore(invocation);
                     s = metaService().updateData(invocation.getMetaObject(), invocation.getFormData());
-                    pointCut.updateAfter(s, invocation);
+                    invocation.setPreOperateStatus(s);
+                    pointCut.updateAfter(invocation);
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
@@ -131,7 +137,7 @@ public class FormController extends FrontRestController {
                 return s;
             }
         });
-
+        EventKit.post(FormMessage.UpdateMessage(invocation));
         renderJson(status ? Ret.ok() : Ret.fail());
     }
 
