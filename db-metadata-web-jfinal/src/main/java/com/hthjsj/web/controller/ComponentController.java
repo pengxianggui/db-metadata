@@ -76,7 +76,13 @@ public class ComponentController extends FrontRestController {
 
         // instanceCode 获取
         if (StrKit.notBlank(instanceCode)) {
-            renderJson(Ret.ok("data", componentService().loadObjectConfig(instanceCode)));
+            if (componentService().hasObjectConfig(instanceCode)) {
+                renderJson(Ret.ok("data", componentService().loadObjectConfig(instanceCode)));
+            } else {
+                IMetaObject metaObject = metaService().findByCode(objectCode);
+                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
+                renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
+            }
             return;
         }
 
