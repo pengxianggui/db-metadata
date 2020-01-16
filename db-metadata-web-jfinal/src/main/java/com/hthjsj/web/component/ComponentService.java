@@ -178,7 +178,7 @@ public class ComponentService {
                 fieldsMap.set(ss[1], record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
-                instanceName.set(record.getStr("label"));
+                instanceName.set(record.getStr("name"));
                 objectConfig.set(objectCode, record.getStr("config"));
             }
         });

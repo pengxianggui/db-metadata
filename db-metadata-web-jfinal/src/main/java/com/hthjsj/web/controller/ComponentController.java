@@ -144,7 +144,7 @@ public class ComponentController extends FrontRestController {
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
 
-        Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
+        Kv config = getKv();
         Component component = ViewFactory.createEmptyViewComponent(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
@@ -172,7 +172,7 @@ public class ComponentController extends FrontRestController {
         String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
-        Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
+        Kv config = getKv();
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);

@@ -35,9 +35,9 @@ public class ComponentInstanceConfig extends Kv {
 
     Kv fieldsMap;
 
-    private ComponentInstanceConfig(Kv config, String objectCode, String instanceCode, String instanceName) {
-        this.self = UtilKit.getKv(config, objectCode);
-        this.fieldsMap = UtilKit.getKv(config, "fieldsMap");
+    private ComponentInstanceConfig(Kv configs, String objectCode, String instanceCode, String instanceName) {
+        this.self = Kv.by(objectCode, UtilKit.getKv(configs.getStr(objectCode)));
+        this.fieldsMap = UtilKit.getKv(configs, "fieldsMap");
         this.objectCode = objectCode;
         this.instanceCode = instanceCode;
         this.instanceName = instanceName;
