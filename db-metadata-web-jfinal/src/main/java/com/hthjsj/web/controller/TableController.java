@@ -41,13 +41,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public class TableController extends FrontRestController {
 
-    public void meta() {
-        String objectCode = new QueryHelper(this).getObjectCode();
-        IMetaObject metaObject = metaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
-        renderJson(Ret.ok("data", tableView.toKv()));
-    }
-
     @Override
     public void list() {
         /**
