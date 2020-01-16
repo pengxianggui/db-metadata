@@ -29,6 +29,12 @@
         "inline": false,
         "component_name": "MiniFormObject"
       }
+    },
+    "SearchPanel": {
+      "schema_name": {
+        "component_name": "DropDownBox",
+        "data_url": "/db/index"
+      }
     }
   },
   "meta_feature": {
@@ -36,6 +42,40 @@
       "type": {
         "component_name": "DropDownBox",
         "data_url": "/feature/list",
+        "conf": {
+          "multiple": false
+        }
+      }
+    }
+  },
+  "meta_component_instance": {
+    "FormView": {
+      "type": {
+        "component_name": "DropDownBox",
+        "data_url": "/dict/metaType",
+        "conf": {
+          "multiple": false
+        }
+      },
+      "comp_code": {
+        "component_name": "DropDownBox",
+        "data_url": "/component/list",
+        "conf": {
+          "multiple": false
+        }
+      }
+    },
+    "SearchPanel": {
+      "type": {
+        "component_name": "DropDownBox",
+        "data_url": "/dict/metaType",
+        "conf": {
+          "multiple": false
+        }
+      },
+      "comp_code": {
+        "component_name": "DropDownBox",
+        "data_url": "/component/list",
         "conf": {
           "multiple": false
         }

@@ -3,15 +3,99 @@
     "is_sys": true,
     "config": {
       "bizInterceptor": "com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "is_primary": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "object_code": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "order_num": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "db_type": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "db_type_length": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "java_type": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "config": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      }
     }
   },
   "meta_object": {
     "is_sys": true,
     "_fields": {
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "primarys": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "is_sys": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "config": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
       "code": {
         "config": {
           "addStatus": 30,
-          "updateStatus": 30
+          "updateStatus": 30,
+          "isSearch": true
         }
       },
       "table_name": {
@@ -28,17 +112,20 @@
       },
       "updated_by": {
         "config": {
-          "isListShow": false
+          "isListShow": false,
+          "isSearch": false
         }
       },
       "updated_time": {
         "config": {
-          "isListShow": false
+          "isListShow": false,
+          "isSearch": false
         }
       },
       "remark": {
         "config": {
-          "isListShow": false
+          "isListShow": false,
+          "isSearch": false
         }
       }
     }
@@ -49,8 +136,82 @@
   "meta_component": {
     "is_sys": true
   },
+  "meta_component": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_component",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "config": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false
+        }
+      }
+    }
+  },
   "meta_component_instance": {
-    "is_sys": true
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_component_instance",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "config": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "name": {
+        "config": {
+          "isSearch": false
+        }
+      }
+    }
   },
   "meta_feature": {
     "is_sys": true

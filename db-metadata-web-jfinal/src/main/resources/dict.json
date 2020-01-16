@@ -18,5 +18,15 @@
       "key": "否",
       "value": 0
     }
+  ],
+  "metaType": [
+    {
+      "key": "对象配置",
+      "value": "META_OBJECT"
+    },
+    {
+      "key": "字段配置",
+      "value": "META_FIELD"
+    }
   ]
 }

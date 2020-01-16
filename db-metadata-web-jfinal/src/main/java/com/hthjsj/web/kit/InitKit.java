@@ -72,6 +72,7 @@ public class InitKit {
         for (IMetaObject metaObject : lists) {
             //TODO 只自动覆盖FORMVIEW
             resolveMetaComponentInstance(metaObject, ComponentType.FORMVIEW);
+            resolveMetaComponentInstance(metaObject, ComponentType.SEARCHVIEW);
         }
         return this;
     }
