@@ -24,6 +24,8 @@ public class AopInvocation {
 
     private Kv httpParams;
 
+    private boolean preOperateStatus = false;
+
     public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
         this.metaObject = metaObject;
         this.formData = formData;

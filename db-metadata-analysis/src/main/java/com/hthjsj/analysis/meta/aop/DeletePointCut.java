@@ -10,5 +10,5 @@ public interface DeletePointCut extends IPointCut {
 
     void deleteBefore(AopInvocation invocation);
 
-    void deleteAfter(boolean result, AopInvocation invocation);
+    void deleteAfter(AopInvocation invocation);
 }

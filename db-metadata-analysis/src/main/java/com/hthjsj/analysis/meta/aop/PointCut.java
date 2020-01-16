@@ -18,7 +18,7 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     }
 
     @Override
-    public boolean addAfter(boolean result, AopInvocation invocation) {
+    public boolean addAfter(AopInvocation invocation) {
         log.error("this is addAfter");
         return false;
     }
@@ -29,7 +29,7 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     }
 
     @Override
-    public void deleteAfter(boolean result, AopInvocation invocation) {
+    public void deleteAfter(AopInvocation invocation) {
         log.error("this is deleteAfter!");
     }
 
@@ -40,7 +40,7 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     }
 
     @Override
-    public boolean updateAfter(boolean result, AopInvocation invocation) {
+    public boolean updateAfter(AopInvocation invocation) {
         log.error("this is updateAfter!");
         return false;
     }

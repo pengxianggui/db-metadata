@@ -10,5 +10,5 @@ public interface UpdatePointCut extends IPointCut {
 
     boolean updateBefore(AopInvocation invocation);
 
-    boolean updateAfter(boolean result, AopInvocation invocation);
+    boolean updateAfter(AopInvocation invocation);
 }

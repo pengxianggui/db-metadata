@@ -30,5 +30,5 @@ public interface AddPointCut extends IPointCut {
 //        }
 //    }
 
-    boolean addAfter(boolean result, AopInvocation invocation);
+    boolean addAfter(AopInvocation invocation);
 }
