@@ -9,6 +9,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
@@ -32,8 +33,10 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
-    private Kv recommendObjectConfig(IMetaObject metaObject) {
-        return Kv.create();
+    private Kv recommendObjectConfig(IMetaObject metaObject, ComponentType componentType) {
+        AttributeBuilder.FatAttributeBuilder builder = new AttributeBuilder.FatAttributeBuilder();
+        builder.componentName(componentType);
+        return builder.render();
     }
 
     private Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
@@ -94,11 +97,11 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
             fieldsMap.set(m.getMetaField().fieldCode(), m.getFieldInstanceConfig().toJson());
         });
 
-        ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(Kv.by(metaObject.code(), Kv.create()),
-                                                                                       fieldsMap,
-                                                                                       metaObject.code(),
-                                                                                       Joiner.on(".").join(metaObject.code(), componentType.getCode()),
-                                                                                       "自动计算配置");
+
+        String instanceCode = Joiner.on(".").join(metaObject.code(), componentType.getCode());
+
+        Kv objectConfig = Kv.by(metaObject.code(), recommendObjectConfig(metaObject, componentType));
+        ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(objectConfig, fieldsMap, metaObject.code(), instanceCode, "自动计算配置");
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }
 
