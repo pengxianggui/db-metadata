@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 09/01/2020 14:02:01
+ Date: 16/01/2020 14:32:41
 */
 
 SET NAMES utf8mb4;
@@ -79,11 +79,11 @@ DROP TABLE IF EXISTS `meta_component_instance`;
 CREATE TABLE `meta_component_instance`
 (
     `id`           varchar(32) NOT NULL COMMENT '主键',
-    `code`         varchar(64)  DEFAULT NULL COMMENT '配置编码',
+    `code`         varchar(128) DEFAULT NULL COMMENT '配置编码',
     `comp_code`    varchar(32)  DEFAULT NULL COMMENT '组件编码',
     `type`         varchar(32)  DEFAULT NULL COMMENT '类型',
     `dest_object`  varchar(128) DEFAULT NULL COMMENT '目标对象',
-    `label`        varchar(32)  DEFAULT NULL COMMENT '描述',
+    `name`         varchar(128) DEFAULT NULL COMMENT '描述',
     `config`       json         DEFAULT NULL COMMENT '配置',
     `created_by`   varchar(64)  DEFAULT NULL COMMENT '创建人',
     `created_time` datetime     DEFAULT NULL COMMENT '创建时间',
@@ -121,16 +121,18 @@ DROP TABLE IF EXISTS `meta_dict`;
 CREATE TABLE `meta_dict`
 (
     `id`           varchar(32) NOT NULL COMMENT '主键',
-    `pid`          varchar(64)   DEFAULT NULL COMMENT '父层标志',
-    `paths`        varchar(1024) DEFAULT NULL COMMENT '路径',
-    `path_names`   varchar(1024) DEFAULT NULL COMMENT '路径名称',
-    `name`         varchar(32)   DEFAULT NULL COMMENT '名称',
-    `value`        varchar(32)   DEFAULT NULL COMMENT '值',
-    `created_time` datetime      DEFAULT NULL COMMENT '创建时间',
-    `created_by`   varchar(64)   DEFAULT NULL COMMENT '创建人',
-    `updated_by`   varchar(64)   DEFAULT NULL COMMENT '更新人',
-    `updated_time` datetime      DEFAULT NULL COMMENT '更新时间',
-    `remark`       varchar(32)   DEFAULT NULL COMMENT '备注',
+    `pid`          varchar(32)  DEFAULT NULL COMMENT '父层标志',
+    `dict_type`    varchar(64)  DEFAULT NULL COMMENT '字典类别',
+    `is_sys`       varchar(1)   DEFAULT '0' COMMENT '是否系统默认',
+    `name`         varchar(128) DEFAULT NULL COMMENT '名称',
+    `value`        varchar(128) DEFAULT NULL COMMENT '值',
+    `live_flag`    varchar(1)   DEFAULT '1' COMMENT '有效',
+    `order_num`    varchar(32)  DEFAULT NULL COMMENT '排序',
+    `created_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `created_by`   varchar(64)  DEFAULT NULL COMMENT '创建人',
+    `updated_by`   varchar(64)  DEFAULT NULL COMMENT '更新人',
+    `updated_time` datetime     DEFAULT NULL COMMENT '更新时间',
+    `remark`       varchar(32)  DEFAULT NULL COMMENT '备注',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='字典表 ';
