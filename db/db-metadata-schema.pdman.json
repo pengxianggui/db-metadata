@@ -810,45 +810,59 @@
             },
             {
               "name": "pid",
-              "type": "LongKey",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "父层标志"
             },
             {
-              "name": "paths",
-              "type": "MiddleString",
+              "name": "dict_type",
+              "type": "LongKey",
               "remark": "",
-              "chnname": "路径"
+              "chnname": "字典类别"
             },
             {
-              "name": "path_names",
-              "type": "MiddleString",
+              "name": "is_sys",
+              "type": "YesNo",
               "remark": "",
-              "chnname": "路径名称"
+              "chnname": "是否系统默认",
+              "defaultValue": "0"
             },
             {
               "name": "name",
-              "type": "DefaultString",
+              "type": "ShortString",
               "remark": "",
               "chnname": "名称"
             },
             {
               "name": "value",
-              "type": "DefaultString",
+              "type": "ShortString",
               "remark": "",
               "chnname": "值"
             },
             {
-              "name": "created_time",
-              "type": "DateTime",
+              "name": "live_flag",
+              "type": "YesNo",
               "remark": "",
-              "chnname": "创建时间"
+              "chnname": "有效",
+              "defaultValue": "1"
+            },
+            {
+              "name": "order_num",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "排序"
             },
             {
               "name": "created_by",
               "type": "LongKey",
               "remark": "",
               "chnname": "创建人"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
             },
             {
               "name": "updated_by",
