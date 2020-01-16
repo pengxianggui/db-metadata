@@ -68,7 +68,7 @@ public class ComponentInstanceConfig extends Kv {
      * @return
      */
     public Kv getObjectConfig() {
-        return UtilKit.getKv(self, objectCode);
+        return self.getAs(objectCode);
     }
 
     public Kv getFieldsMap() {
