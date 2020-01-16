@@ -66,13 +66,6 @@
       }
     },
     "SearchPanel": {
-      "type": {
-        "component_name": "DropDownBox",
-        "data_url": "/dict/metaType",
-        "conf": {
-          "multiple": false
-        }
-      },
       "comp_code": {
         "component_name": "DropDownBox",
         "data_url": "/component/list",

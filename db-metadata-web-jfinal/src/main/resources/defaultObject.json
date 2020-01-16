@@ -177,7 +177,8 @@
     "config": {
       "objectCode": "meta_component_instance",
       "isNumberSequence": true,
-      "orderBy": "created_time desc"
+      "orderBy": "created_time desc",
+      "where": "type='META_OBJECT'"
     },
     "_fields": {
       "config": {
@@ -207,6 +208,11 @@
         }
       },
       "name": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "type": {
         "config": {
           "isSearch": false
         }
