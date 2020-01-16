@@ -46,7 +46,7 @@
                                                 style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
                                         </h2>
                                         <el-form-item>
-                                            <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
+                                            <mini-form-box v-model="confModel.conf" class="shadow"></mini-form-box>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -59,17 +59,13 @@
                                 <el-col :span="12">
                                     <el-form-item>
                                         <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                                  :meta="confMeta"
-                                                  mode="form"></json-box>
+                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]" class="shadow"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
                                     <el-form-item>
                                         <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                                  :meta="confMeta"
-                                                  mode="form"></json-box>
+                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]" class="shadow"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -127,13 +123,6 @@
             }
         }
     };
-    let confMeta = {
-        name: "conf",
-        label: "配置",
-        conf: {
-            mode: 'code',
-        }
-    };
 
     export default {
         name: "InstanceConf",
@@ -142,14 +131,12 @@
             const {instanceCode, componentCode, objectCode} = this.$route.query;
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
-            this.$merge(confMeta, DEFAULT.JsonBox);
             const isEdit = !utils.isEmpty(instanceCode);
 
             return {
                 isEdit: isEdit,
                 isAutoComputed: false,
                 objectMeta: objectMeta,
-                confMeta: confMeta,
                 confModel: {
                     instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
@@ -290,14 +277,14 @@
             },
             preview: function () {
                 const {confModel: {conf, fConf}} = this;
-                let meta = conf;
+                let meta = utils.deepClone(conf);
                 meta.columns = [];
                 for (let key in fConf) {
                     let item = fConf[key];
                     meta.columns.push(item);
                 }
 
-                this.$dialog(utils.deepClone(meta), null, {
+                this.$dialog(meta, null, {
                     title: '预览'
                 })
             }
@@ -321,5 +308,8 @@
         border: 1px solid #eee;
         margin: 5px 0;
         color: #999999;
+    }
+    .shadow {
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     }
 </style>

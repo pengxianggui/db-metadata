@@ -11,7 +11,7 @@
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
-    
+
     export default {
         mixins: [Meta(DEFAULT.JsonBox), Val(conver)],
         name: "JsonBox",
@@ -20,7 +20,7 @@
             vueJsonEditor
         },
         props: {
-            value: [Object, String],
+            value: [Object, String, Array],
             mode: String
         },
     };

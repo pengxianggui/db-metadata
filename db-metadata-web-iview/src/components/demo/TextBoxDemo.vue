@@ -26,7 +26,6 @@
         methods: {
             blurHandler(ev) {
                 ev.target.style.color = 'red';
-                console.log(ev.target.value);
             }
         }
     }

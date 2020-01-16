@@ -11,6 +11,11 @@
     <div>
         <el-row>
             <el-col :span="24">
+                <mini-form-box-demo></mini-form-box-demo>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
                 <form-view-demo></form-view-demo>
             </el-col>
         </el-row>

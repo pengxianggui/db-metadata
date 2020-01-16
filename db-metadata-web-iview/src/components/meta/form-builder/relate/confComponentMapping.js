@@ -9,7 +9,7 @@ const CUSTOM_CONF_COMPONENT_MAPPING = {
     name: DEFAULT.TextBox,
     label: DEFAULT.TextBox,
     component_name: utils.merge({data_url: URL.COMPONENT_CODE_LIST}, DEFAULT.DropDownBox),
-    conf: DEFAULT.JsonBox,
+    conf: DEFAULT.MiniFormBox,
     inline: DEFAULT.BoolBox,
     data_url: DEFAULT.TextBox,
     delete_url: DEFAULT.TextBox,

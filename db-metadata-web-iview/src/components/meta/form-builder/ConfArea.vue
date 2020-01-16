@@ -18,7 +18,7 @@
                 </template>
                 <el-form-item label="逻辑配置">
                     <el-card>
-                        <mini-form-box v-model="fieldConf"></mini-form-box>
+                        <mini-form-field v-model="fieldConf"></mini-form-field>
                     </el-card>
                 </el-form-item>
             </el-form>
