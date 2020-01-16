@@ -172,12 +172,12 @@ public class ComponentService {
         AtomicReference<String> objectCode = new AtomicReference<>();
         AtomicReference<String> instanceName = new AtomicReference<>();
         records.forEach(record -> {
-            if (record.getStr("config").contains(".")) {
-                String s = record.getStr("dest_object").split("\\.")[1];
-                fieldsMap.set(s, record.getStr("config"));
+            if (record.getStr("dest_object").contains(".")) {
+                String[] ss = record.getStr("dest_object").split("\\.");
+                objectCode.set(ss[0]);
+                fieldsMap.set(ss[1], record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
-                objectCode.set(record.getStr("dest_object"));
                 instanceName.set(record.getStr("label"));
                 objectConfig.set(objectCode, record.getStr("config"));
             }
