@@ -140,12 +140,15 @@ public class ComponentController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
+
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
+
         Kv config = Kv.create().set(UtilKit.toObjectFlat(getRequest().getParameterMap()));
         Component component = ViewFactory.createEmptyViewComponent(compCode);
+
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
-            if (componentService().hasObjectConfig(compCode, objectCode)) {
+            if (componentService().hasObjectConfig(instanceCode) || componentService().hasObjectConfig(compCode, objectCode)) {
                 renderJson(Ret.fail("msg", String.format("%s-%s配置信息已存在,先执行删除操作;", compCode, objectCode)));
                 return;
             }

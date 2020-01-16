@@ -16,11 +16,11 @@ import com.jfinal.kit.Kv;
  */
 public class FormView extends ViewContainer {
 
-    public static final String ADD = "add";
+    private static final String ADD = "add";
 
-    public static final String UPDATE = "update";
+    private static final String UPDATE = "update";
 
-    public static final String VIEW = "view";
+    private static final String VIEW = "view";
 
     String action;
 
