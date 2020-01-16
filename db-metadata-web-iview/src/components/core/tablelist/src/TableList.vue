@@ -279,10 +279,9 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let beforeCompileUrl = URL.RECORD_DELETE;
-                    let afterCompileUrl = this.$compile(beforeCompileUrl,
-                        {objectCode: this.innerMeta['objectCode'], primaryKvExp: primaryKvExp});
-                    this.$axios.delete(afterCompileUrl).then(resp => {
+                    const {delete_url} = this.innerMeta;
+                    const url = delete_url + '?' + primaryKvExp;
+                    this.$axios.delete(url).then(resp => {
                         this.$message.success(resp.msg);
                         this.getData();
                     }).catch(err => {
@@ -353,28 +352,26 @@
             },
             // get business data
             getData() {
-                const {innerMeta, pageModel, filterParams, sortParams} = this;
+                const {innerMeta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey} = this;
 
-                if (!utils.hasProp(innerMeta, 'data_url')) {
+                if (utils.isEmpty(data_url)) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
                 let params = {};
-                const {data_url: url} = innerMeta;
                 const {index, size} = pageModel;
-                const columnNames = (innerMeta['columns'] || [])
-                    .filter(column => utils.hasProp(column, 'showable') && column['showable'])
+                const columnNames = columns.filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
 
-                utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
+                utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
                 utils.mergeObject(params, filterParams, sortParams, {
                     'fs': columnNames.join(','),
                     'p': index,
                     's': size
                 });
 
-                this.$axios.safeGet(url, {
+                this.$axios.safeGet(data_url, {
                     params: params
                 }).then(resp => {
                     this.innerData = resp.data;

@@ -1,94 +1,100 @@
 <template>
     <div class="el-card">
-        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" class="demo-form-inline"
-                 style="height: 100%">
-            <el-row :gutter="12">
-                <el-col>
-                    <el-form-item label="组件" prop="componentCode" class="inline">
-                        <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
-                        <radio-box v-model="confModel.componentCode" :options="['FormView', 'TableList', 'SearchPanel']"
-                                   :disabled="isEdit"></radio-box>
-                    </el-form-item>
-                    <el-form-item label="元对象" prop="objectCode" class="inline">
-                        <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
-                                       :disabled="isEdit"></drop-down-box>
-                    </el-form-item>
-                    <el-form-item label="实例编码" prop="instanceCode" class="inline">
-                        <text-box v-model="confModel.instanceCode" :disabled="isEdit"></text-box>
-                    </el-form-item>
-                    <el-form-item label="实例描述">
-                        <text-area-box v-model="confModel.instanceName"></text-area-box>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col>
-                    <el-form-item>
-                        <div style="display: flex">
-                            <el-button type="primary" @click="preview">预览</el-button>
-                            <el-button type="primary" @click="onSubmit">提交</el-button>
-                            <el-button type="warning" @click="onUpdate">更新</el-button>
-                            <el-button type="primary" @click="loadConf">自动计算</el-button>
-                            <span style="flex: 1"></span>
-                            <el-button @click="onCancel">返回</el-button>
-                            <el-button @click="deleteConf" type="danger">删除配置</el-button>
+        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" class=""
+                 style="height: 100%; display: flex; flex-direction: column;">
+            <div>
+                <el-form-item label="组件" prop="componentCode" class="inline">
+                    <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
+                    <radio-box v-model="confModel.componentCode" :options="['FormView', 'TableList', 'SearchPanel']"
+                               :disabled="isEdit"></radio-box>
+                </el-form-item>
+                <el-form-item label="元对象" prop="objectCode" class="inline">
+                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
+                                   :disabled="isEdit"></drop-down-box>
+                </el-form-item>
+                <el-form-item label="实例编码" prop="instanceCode" class="inline">
+                    <text-box v-model="confModel.instanceCode" :disabled="isEdit"></text-box>
+                </el-form-item>
+                <el-form-item label="实例描述">
+                    <text-area-box v-model="confModel.instanceName"></text-area-box>
+                </el-form-item>
+            </div>
+            <div>
+                <el-form-item>
+                    <div style="display: flex">
+                        <el-button type="primary" @click="preview">预览</el-button>
+                        <el-button type="primary" @click="onSubmit" v-if="!isEdit">提交</el-button>
+                        <el-button type="warning" @click="onUpdate" v-else>更新</el-button>
+                        <el-button type="primary" @click="loadConf" v-if="!isEdit">导入自动计算配置</el-button>
+                        <span style="flex: 1"></span>
+                        <el-button @click="onCancel">返回</el-button>
+                        <el-button @click="deleteConf" type="danger" v-if="isEdit">删除配置</el-button>
+                    </div>
+                </el-form-item>
+            </div>
+            <div style="flex: 1;">
+                <el-tabs type="border-card">
+                    <!--                <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">-->
+                    <el-tab-pane label="高级配置">
+                        <div>
+                            <template v-if="confModel.componentCode && confModel.objectCode">
+                                <el-row>
+                                    <el-col>
+                                        <h2 align="center">元对象:{{confModel.objectCode}} 模板:
+                                            {{confModel.componentCode}}<span
+                                                v-if="isAutoComputed"
+                                                style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                        </h2>
+                                        <el-form-item>
+                                            <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </template>
+                            <template v-else>
+                                <div class="blank-tip">请先选择一个组件</div>
+                            </template>
+                            <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key"
+                                    v-if="index%2==0">
+                                <el-col :span="12">
+                                    <el-form-item>
+                                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
+                                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
+                                                  :meta="confMeta"
+                                                  mode="form"></json-box>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
+                                    <el-form-item>
+                                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
+                                        <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
+                                                  :meta="confMeta"
+                                                  mode="form"></json-box>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col>
+                                    <el-form-item>
+                                        <div style="display: flex">
+                                            <el-button type="primary" @click="preview">预览</el-button>
+                                            <el-button type="primary" @click="onSubmit" v-if="!isEdit">提交</el-button>
+                                            <el-button type="warning" @click="onUpdate" v-else>更新</el-button>
+                                            <el-button type="primary" @click="loadConf" v-if="!isEdit">导入自动计算配置
+                                            </el-button>
+                                            <span style="flex: 1"></span>
+                                            <el-button @click="onCancel">返回</el-button>
+                                        </div>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
                         </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-tabs type="border-card">
-                <!--                <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">-->
-                <el-tab-pane label="高级配置">
-                    <template v-if="confModel.componentCode && confModel.objectCode">
-                        <el-row>
-                            <el-col>
-                                <h2 align="center">元对象:{{confModel.objectCode}} 模板: {{confModel.componentCode}}<span
-                                    v-if="isAutoComputed"
-                                    style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
-                                </h2>
-                                <el-form-item>
-                                    <json-box v-model="confModel.conf" :meta="confMeta" mode="form"></json-box>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </template>
-                    <template v-else>
-                        <div class="blank-tip">请先选择一个组件</div>
-                    </template>
-                    <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key" v-if="index%2==0">
-                        <el-col :span="12">
-                            <el-form-item>
-                                <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                                <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                          :meta="confMeta"
-                                          mode="form"></json-box>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
-                            <el-form-item>
-                                <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                                <json-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                          :meta="confMeta"
-                                          mode="form"></json-box>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col>
-                            <el-form-item>
-                                <el-button type="primary" @click="preview">预览</el-button>
-                                <el-button type="primary" @click="onSubmit">提交</el-button>
-                                <el-button type="warning" @click="onUpdate">更新</el-button>
-                                <el-button @click="onCancel">返回</el-button>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-tab-pane>
-                <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
-                    <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
-                </el-tab-pane>
-            </el-tabs>
-
+                    </el-tab-pane>
+                    <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
+                        <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
         </el-form>
     </div>
 </template>
@@ -137,7 +143,7 @@
 
             this.$merge(objectMeta, DEFAULT.DropDownBox);
             this.$merge(confMeta, DEFAULT.JsonBox);
-            const isEdit = !utils.isEmpty(instanceCode) || (!utils.isEmpty(componentCode) && !utils.isEmpty(objectCode));
+            const isEdit = !utils.isEmpty(instanceCode);
 
             return {
                 isEdit: isEdit,
@@ -291,7 +297,7 @@
                     meta.columns.push(item);
                 }
 
-                this.$dialog(meta, null, {
+                this.$dialog(utils.deepClone(meta), null, {
                     title: '预览'
                 })
             }

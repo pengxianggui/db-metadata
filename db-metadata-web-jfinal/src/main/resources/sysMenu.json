@@ -9,7 +9,7 @@
       "label": "功能维护"
     },
     {
-      "path": "/main/meta-data",
+      "path": "/main/meta-data?featureCode=meta_manager",
       "icon": "el-icon-warning",
       "label": "元数据管理"
     },

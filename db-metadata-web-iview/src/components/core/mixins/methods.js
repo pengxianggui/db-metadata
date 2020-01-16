@@ -24,8 +24,9 @@ export const loadFeature = {
 export const getTlMeta = {
     methods: {
         getTlMeta(objectCode) {
-            let url = this.$compile(URL.TABLE_INSTANCE_META, {
-                objectCode: objectCode
+            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+                objectCode: objectCode,
+                componentCode: 'TableList'
             });
             return this.$axios.safeGet(url);
         }
