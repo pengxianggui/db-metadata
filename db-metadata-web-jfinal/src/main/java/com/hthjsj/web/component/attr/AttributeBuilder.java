@@ -37,6 +37,8 @@ public class AttributeBuilder {
 
         AttrCustomMeta dataUrl(String url);
 
+        AttrCustomMeta deleteUrl(String url);
+
         AttrCustomMeta inline(boolean v);
     }
 
@@ -179,6 +181,11 @@ public class AttributeBuilder {
         public FatAttributeBuilder dataUrl(String url) {
             config.setIfNotBlank("data_url", url);
             return this;
+        }
+
+        @Override
+        public AttrCustomMeta deleteUrl(String url) {
+            return set("delete_url", url);
         }
 
         @Override

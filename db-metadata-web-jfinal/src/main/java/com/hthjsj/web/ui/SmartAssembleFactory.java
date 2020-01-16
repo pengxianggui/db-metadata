@@ -39,6 +39,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         switch (componentType) {
             case TABLEVIEW:
                 builder.dataUrl("/table/list/" + metaObject.code());
+                builder.deleteUrl("/table/delete/" + metaObject.code());
                 break;
         }
         return builder.render();
