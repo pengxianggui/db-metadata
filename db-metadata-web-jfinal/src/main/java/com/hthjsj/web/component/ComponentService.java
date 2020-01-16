@@ -169,8 +169,8 @@ public class ComponentService {
         List<Record> records = Db.use(App.DB_MAIN).find(sql, instanceCode);
         Kv objectConfig = Kv.create();
         Kv fieldsMap = Kv.create();
-        AtomicReference<String> objectCode = null;
-        AtomicReference<String> instanceName = null;
+        AtomicReference<String> objectCode = new AtomicReference<>();
+        AtomicReference<String> instanceName = new AtomicReference<>();
         records.forEach(record -> {
             if (record.getStr("config").contains(".")) {
                 String s = record.getStr("dest_object").split("\\.")[1];
