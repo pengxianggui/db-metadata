@@ -31,7 +31,7 @@ module.exports = {
         sockHost: 'localhost',
         // proxy: 'http://192.168.110.67:8888'
         proxy: {
-            '^\/meta\/': serverProxy,   // 超过11个node会提示MaxListenersExceededWarning
+            '^/meta/': serverProxy,   // 超过11个node会提示MaxListenersExceededWarning
             // '^\/db\/': serverProxy,
             // '^\/meta\/': serverProxy,
             // '^\/component\/': serverProxy,
