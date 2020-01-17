@@ -15,7 +15,6 @@ import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -85,9 +84,6 @@ public class FindBoxController extends FrontRestController {
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
-        Integer pageIndex = queryHelper.getPageIndex();
-        Integer pageSize = queryHelper.getPageSize();
-
         String includeFieldStr = getPara("fs", getPara("fields", ""));
         String excludeFieldStr = getPara("efs", getPara("exfields", ""));
         boolean raw = getParaToBoolean("raw", false);
@@ -102,10 +98,12 @@ public class FindBoxController extends FrontRestController {
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
 
-        //Sql 语句默认使用 元对象的数据源;
-        String dbConfig = StrKit.defaultIfBlank(metaField.configParser().dbConfig(), metaObject.schemaName());
-//        AnalysisConfig.me().getDbSources().stream().filter(s -> schemaName.equalsIgnoreCase(s.configName())).findFirst().get();
-        Page<Record> result = metaService().paginate(pageIndex, pageSize, metaObject, sqlPara.getSelect(), sqlPara.getFromWhere(), sqlPara.getPara());
+        Page<Record> result = metaService().paginate(queryHelper.getPageIndex(),
+                                                     queryHelper.getPageSize(),
+                                                     metaObject,
+                                                     sqlPara.getSelect(),
+                                                     sqlPara.getFromWhere(),
+                                                     sqlPara.getPara());
 
         /**
          * escape field value;
