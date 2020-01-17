@@ -429,3 +429,11 @@ Vue.use(metaElement, config)
 3. 更新merge.js中的打印日志级别
 4. 增加内置模板的扩展插槽, 使内置模板具备基本的扩展能力
 5. 修复其他小缺陷
+
+### 0.1.3
+1. `TableList` 单元格自定义渲染扩展, 可在meta中设置render属性, 属性值为函数字符串, 详细参见组件描述;
+2. 无渲染行为插槽应用于`FormView`, 可通过无渲染行为插槽扩展`FormView`默认的提交和取消行为;
+3. 组件实例配置引入`instanceCode`概念, 原先`comp_code`和`dest_object`不再表示唯一键, 慢慢过渡到使用`instanceCode`作为唯一键;
+    > 一个元对象在FormView上可能不止一套配置
+4. 添加`MiniFormBox`, 详见组件描述;
+5. 添加`CodeBox`, 详见组件描述;

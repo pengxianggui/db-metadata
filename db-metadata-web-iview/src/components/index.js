@@ -5,9 +5,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import zh_TW from 'element-ui/lib/locale/lang/zh-TW'
 // import en from 'element-ui/lib/locale/lang/en'
 
-// 功能组件
+// 核心组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
+import CodeBox from './core/codebox'
 import DataList from './core/datalist'
 import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
@@ -53,6 +54,7 @@ import GlobalFilter from '@/config/auto-register-filter'
 const components = [
     BoolBox,
     CheckBox,
+    CodeBox,
     DataList,
     DateBox,
     DateTimeBox,
@@ -128,6 +130,7 @@ export default {
     install,
     BoolBox,
     CheckBox,
+    CodeBox,
     DataList,
     DateBox,
     DateTimeBox,

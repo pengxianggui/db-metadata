@@ -6,7 +6,7 @@ import JsonBox from "../../jsonbox"
 import MiniFormBox from './MiniFormBox'
 import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
 
-const type2Component = function (type) {
+const type2Component = function (type, value) {
     switch (type) {
         case "[object String]":
             return TextBox.name;
@@ -15,6 +15,9 @@ const type2Component = function (type) {
         case "[object Boolean]":
             return BoolBox.name;
         case "[object Object]":
+            if (Object.keys(value).length === 0) {    // 空对象, 空对象时, 该值用JsonBox交互
+                return JsonBox.name;
+            }
             return MiniFormBox.name;
         case "[object Array]":
             return JsonBox.name;
@@ -23,9 +26,13 @@ const type2Component = function (type) {
     }
 };
 
+/**
+ * @deprecated
+ * @param componentName
+ * @param name
+ * @returns {{component_name: string, name: *, conf: {filterable: boolean}, label: *, data_url: string}|{mode: string, component_name: string, name: *, label: *}|{component_name: *, name: *, label: *}}
+ */
 const buildMeta = function (componentName, name) {
-    // pxg_todo 待完善, 类似于name如果是'component_name', 则给一个完美的meta
-
     if (name === 'component_name') {
         return {
             component_name: DropDownBox.name,
@@ -70,12 +77,21 @@ export default function (mergedMeta) {
         return mergedMeta;
     }
 
+    if (!utils.isEmpty(mergedMeta.columns)) { // mergedMeta存在对value中键值的meta定义时, 系统不进行干预
+        return mergedMeta;
+    }
+
+    // 否则, 系统根据value中的键值对, 自行构建控件meta
     let columns = [];
     for (let key in value) {
         let type = utils.typeOf(value[key]);
-        let component_name = type2Component(type);
+        let component_name = type2Component(type, value[key]);
 
-        columns.push(buildMeta(component_name, key));
+        columns.push({
+            component_name: component_name,
+            name: key,
+            label: key
+        });
     }
 
     this.$set(mergedMeta, 'columns', columns);

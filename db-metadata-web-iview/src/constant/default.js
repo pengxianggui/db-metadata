@@ -424,6 +424,26 @@ const DEFAULT_CONF = {
         "mode": 'text/x-mysql',
         "conf": {}
     },
+    "CodeBox": {
+        "component_name": "CodeBox",
+        "name": "CodeBox",
+        "label": "代码编辑框",
+        "width": "auto",
+        "height": "120px",
+        "show-theme-chose": true,
+        "show-mode-chose": true,
+        "themes": ["darcula", "material", "ambiance", "elegant", "eclipse", "idea"],
+        "modes": ["text/javascript", "text/html", "text/css", "text/x-vue", "text/markdown"],
+        "conf": {   // codemirror config
+            "theme": "darcula",
+            "mode": "text/javascript",
+            "lineNumbers": true,
+            "indentWithTabs": true,
+            "smartIndent": true,
+            "matchBrackets": true,
+            "extraKeys": {'Ctrl': 'autocomplete'}, //自定义快捷键
+        }
+    },
     "Tree": {
         "component_name": "Tree",
         "name": "Tree",

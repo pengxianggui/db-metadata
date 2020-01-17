@@ -17,7 +17,6 @@
     import Val from '../../mixins/value'
     import assembleMeta from './assembleMeta'
 
-    // PXG_TODO 改为通用型迷你表单控件
     export default {
         name: "MiniFormBox",
         label: "迷你表单",
