@@ -29,15 +29,6 @@
                     return {}
                 }
             }
-        },
-        data() {
-            return {
-            }
-        },
-        updated() {
-
-        },
-        created() {
         }
     }
 </script>

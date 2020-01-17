@@ -4,7 +4,6 @@ import NumBox from "../../numbox"
 import BoolBox from "../../boolbox"
 import JsonBox from "../../jsonbox"
 import MiniFormBox from './MiniFormBox'
-import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
 
 const type2Component = function (type, value) {
     switch (type) {
@@ -26,50 +25,6 @@ const type2Component = function (type, value) {
     }
 };
 
-/**
- * @deprecated
- * @param componentName
- * @param name
- * @returns {{component_name: string, name: *, conf: {filterable: boolean}, label: *, data_url: string}|{mode: string, component_name: string, name: *, label: *}|{component_name: *, name: *, label: *}}
- */
-const buildMeta = function (componentName, name) {
-    if (name === 'component_name') {
-        return {
-            component_name: DropDownBox.name,
-            name: name,
-            label: name,
-            data_url: '/component/list',
-            conf: {
-                filterable: true
-            }
-        }
-    }
-
-    if (name === 'conf') {
-        return {
-            component_name: MiniFormBox.name,
-            name: name,
-            label: name,
-            mode: 'form'
-        }
-    }
-
-    if (name === 'rules') {
-        return {
-            component_name: JsonBox.name,
-            name: name,
-            label: name,
-            mode: 'form'
-        }
-    }
-
-    return {
-        component_name: componentName,
-        name: name,
-        label: name
-    }
-};
-
 export default function (mergedMeta) {
     const {value} = this;
 
@@ -86,7 +41,6 @@ export default function (mergedMeta) {
     for (let key in value) {
         let type = utils.typeOf(value[key]);
         let component_name = type2Component(type, value[key]);
-
         columns.push({
             component_name: component_name,
             name: key,

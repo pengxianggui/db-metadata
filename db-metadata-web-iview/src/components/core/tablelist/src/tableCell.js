@@ -39,7 +39,7 @@ export default {
                 2. value: 即单元格原本需要展示的值
              */
 
-            if (meta.render) {
+            if (!utils.isEmpty(meta.render)) {
                 try {
                     const render = utils.strToFn(meta.render);
                     return render(h, value);

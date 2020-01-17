@@ -43,7 +43,8 @@
                                         style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
                                 </h2>
                                 <el-form-item>
-                                    <mini-form-box v-model="confModel.conf" class="shadow"></mini-form-box>
+                                    <mini-form-box v-model="confModel.conf" class="shadow"
+                                                   :meta="buildMiniFormMeta(confModel.objectCode, confModel.conf)"></mini-form-box>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -56,14 +57,16 @@
                                     <el-form-item>
                                         <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
                                         <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                                       class="shadow"></mini-form-box>
+                                                       class="shadow" :meta="buildMiniFormMeta(key,
+                                                       confModel.fConf[Object.keys(confModel.fConf)[index]])"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
                                     <el-form-item>
                                         <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
                                         <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                                       class="shadow"></mini-form-box>
+                                                       class="shadow" :meta="buildMiniFormMeta(key,
+                                                       confModel.fConf[Object.keys(confModel.fConf)[index+1]])"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                             </template>
@@ -98,6 +101,7 @@
     import {DEFAULT, URL} from '@/constant';
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
     import extractConfig from './extractConfig'
+    import buildMeta from '../buildMeta'
 
     let objectMeta = {
         name: "object",
@@ -285,6 +289,9 @@
                 this.$dialog(meta, null, {
                     title: '预览'
                 })
+            },
+            buildMiniFormMeta(key, value) {
+                return buildMeta(value);
             }
         },
         mounted() {

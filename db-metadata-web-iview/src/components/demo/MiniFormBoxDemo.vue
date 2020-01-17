@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{meta.component_name}}: </h2>
-        <component :is="meta.component_name" v-model="value" :meta="meta"></component>
+        <component :is="meta.component_name" v-model="value" :meta="buildMeta(value)"></component>
         <br>
         值为: {{value}}
         <z-toggle-panel>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+    import buildMeta from '@/components/meta/buildMeta'
     export default {
         name: "mini-form-box-demo",
         data() {
@@ -43,6 +44,11 @@
                         // other options
                     }
                 }
+            }
+        },
+        methods: {
+            buildMeta(value) {
+                return buildMeta('MiniFormBox', value);
             }
         }
     }

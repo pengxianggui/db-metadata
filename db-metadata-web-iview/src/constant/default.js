@@ -12,6 +12,7 @@ const DEFAULT_CONF = {
         "delete_url": '/table/delete/{objectCode}?{primaryKvExp}',
         "multi_select": true, //多选
         "editable": false,
+        "render": null,
         "conf": {
             "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
             "highlight-current-row": true,
