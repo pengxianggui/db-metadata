@@ -437,3 +437,4 @@ Vue.use(metaElement, config)
     > 一个元对象在FormView上可能不止一套配置
 4. 添加`MiniFormBox`, 详见组件描述;
 5. 添加`CodeBox`, 详见组件描述;
+6. `MiniFormBox`支持以`JsonBox`形态展示并编辑数据

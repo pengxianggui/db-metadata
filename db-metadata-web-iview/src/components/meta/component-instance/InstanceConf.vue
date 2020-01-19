@@ -1,7 +1,6 @@
 <template>
-    <div class="el-card">
-        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" class=""
-                 style="height: 100%; display: flex; flex-direction: column;">
+    <el-container direction="vertical" class="el-card" style="height: 100%;">
+        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" style="height: 100%; display: flex; flex-direction: column;">
             <div>
                 <el-form-item label="组件" prop="componentCode" class="inline">
                     <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
@@ -18,8 +17,6 @@
                 <el-form-item label="实例描述">
                     <text-area-box v-model="confModel.instanceName"></text-area-box>
                 </el-form-item>
-            </div>
-            <div>
                 <el-form-item>
                     <div style="display: flex">
                         <el-button type="primary" @click="preview">预览</el-button>
@@ -32,7 +29,7 @@
                     </div>
                 </el-form-item>
             </div>
-            <div style="flex: 1;">
+            <div style="flex: 1; overflow: auto;">
                 <el-tabs type="border-card">
                     <el-tab-pane label="高级配置">
                         <el-row v-if="confModel.componentCode && confModel.objectCode">
@@ -71,21 +68,6 @@
                                 </el-col>
                             </template>
                         </el-row>
-                        <el-row>
-                            <el-col>
-                                <el-form-item>
-                                    <div style="display: flex">
-                                        <el-button type="primary" @click="preview">预览</el-button>
-                                        <el-button type="primary" @click="onSubmit" v-if="!isEdit">提交</el-button>
-                                        <el-button type="warning" @click="onUpdate" v-else>更新</el-button>
-                                        <el-button type="primary" @click="loadConf" v-if="!isEdit">导入自动计算配置
-                                        </el-button>
-                                        <span style="flex: 1"></span>
-                                        <el-button @click="onCancel">返回</el-button>
-                                    </div>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
                     </el-tab-pane>
                     <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
                         <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
@@ -93,7 +75,7 @@
                 </el-tabs>
             </div>
         </el-form>
-    </div>
+    </el-container>
 </template>
 
 <script>

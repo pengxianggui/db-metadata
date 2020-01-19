@@ -21,7 +21,8 @@ const specials = {
     "render": {
         component_name: CodeBox.name,
         name: 'render',
-        label: 'render'
+        label: 'render',
+        height: "250px"
     }
 };
 
