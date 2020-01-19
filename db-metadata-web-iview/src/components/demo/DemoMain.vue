@@ -81,11 +81,6 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <mini-form-config-demo></mini-form-config-demo>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
                 <dynamic-route-demo></dynamic-route-demo>
             </el-col>
         </el-row>

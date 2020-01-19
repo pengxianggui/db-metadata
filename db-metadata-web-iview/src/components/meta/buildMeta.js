@@ -60,18 +60,18 @@ function buildMetaByObject(key, value) {
         value: value
     };
 
-    if (utils.isEmpty(value)) { // 空对象采用JsonBox展示
-        defaultMeta = DEFAULT.JsonBox;
-        meta.component_name = JsonBox.name;
-    } else {
-        defaultMeta = DEFAULT.MiniFormBox;
-        meta.component_name = MiniFormBox.name;
-        meta.columns = [];
-        let keys = Object.keys(value);
-        for (let i = 0; i < keys.length; i++) {
-            meta.columns.push(buildMeta(keys[i], value[keys[i]]));
-        }
+    // if (utils.isEmpty(value)) { // 空对象采用JsonBox展示
+    //     defaultMeta = DEFAULT.JsonBox;
+    //     meta.component_name = JsonBox.name;
+    // } else {
+    defaultMeta = DEFAULT.MiniFormBox;
+    meta.component_name = MiniFormBox.name;
+    meta.columns = [];
+    let keys = Object.keys(value);
+    for (let i = 0; i < keys.length; i++) {
+        meta.columns.push(buildMeta(keys[i], value[keys[i]]));
     }
+    // }
     return utils.merge(meta, defaultMeta);
 }
 
