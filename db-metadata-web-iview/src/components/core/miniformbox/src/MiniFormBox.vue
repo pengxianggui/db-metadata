@@ -8,7 +8,12 @@
         <!--                    </el-form-item>-->
         <!--            </template>-->
         <!--        </el-form>-->
-        <component :is="formType ? 'mini-form': 'json-box'" :meta="innerMeta" v-model="nativeValue"></component>
+        <template v-if="formType">
+            <mini-form :meta="innerMeta" v-model="nativeValue"></mini-form>
+        </template>
+        <template v-else>
+            <json-box v-model="nativeValue" mode="code"></json-box>
+        </template>
         <div style="display: flex;">
             <span style="flex: 1"></span>
             <el-button size="mini" icon="el-icon-guide" circle @click="changeType"></el-button>
