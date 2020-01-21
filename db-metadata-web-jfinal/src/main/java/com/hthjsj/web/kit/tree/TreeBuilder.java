@@ -17,8 +17,6 @@ import java.util.List;
 @Slf4j
 public class TreeBuilder<Node extends TreeNode> {
 
-    List<Node> returnList = new ArrayList<>();
-
     /**
      * 构建一级树
      *

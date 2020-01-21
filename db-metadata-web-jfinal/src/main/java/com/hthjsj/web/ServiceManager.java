@@ -3,6 +3,7 @@ package com.hthjsj.web;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
+import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.hthjsj.web.upload.LocalUploadService;
 import com.hthjsj.web.upload.UploadService;
@@ -33,6 +34,10 @@ public class ServiceManager {
 
     public static FeatureService featureService() {
         return Aop.get(FeatureService.class);
+    }
+
+    public static TreeService treeService() {
+        return Aop.get(TreeService.class);
     }
 
     public static SqlAnalysis sqlAnalysis() {

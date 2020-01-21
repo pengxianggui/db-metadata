@@ -1,7 +1,15 @@
 package com.hthjsj.web.controller;
 
+import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.kit.tree.TreeConfig;
+import com.hthjsj.web.kit.tree.TreeNode;
+import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.Controller;
-import lombok.Data;
+import com.jfinal.plugin.activerecord.Record;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * 处理树型结构请求
@@ -16,7 +24,22 @@ import lombok.Data;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class TreeController extends Controller {
+
+    /**
+     * test:
+     * objectCode=js_sys_area
+     * config -> getConfig()
+     */
+    public void index() {
+
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAll(metaObject, getConfig());
+        renderJson(tree);
+    }
 
     /**
      * 组装树型数据逻辑
@@ -33,22 +56,12 @@ public class TreeController extends Controller {
     }
 
     private TreeConfig getConfig() {
-        return new TreeConfig();
-    }
-
-    @Data
-    public static class TreeConfig {
-
-        String objectCode;
-
-        String idKey;
-
-        String pidKey;
-
-        String rootIdentify;
-
-        String label;
-
-        boolean isSync = false;
+        TreeConfig treeConfig = new TreeConfig();
+        treeConfig.setIdKey("area_code");
+        treeConfig.setPidKey("parent_code");
+        treeConfig.setRootIdentify("0");
+        treeConfig.setSync(false);
+        treeConfig.setLabel("area_name");
+        return treeConfig;
     }
 }

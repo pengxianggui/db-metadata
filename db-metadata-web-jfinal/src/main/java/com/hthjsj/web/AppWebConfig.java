@@ -11,6 +11,7 @@ import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.controller.FileController;
+import com.hthjsj.web.controller.TreeController;
 import com.hthjsj.web.ext.meta.CCUUConfigExtension;
 import com.hthjsj.web.ext.meta.InstanceConfigExtension;
 import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
@@ -83,6 +84,7 @@ public class AppWebConfig extends JFinalConfig {
         }
         me.add("/file/upload", UploadController.class);
         me.add("/file", FileController.class);
+        me.add("/tree", TreeController.class);
     }
 
     @Override

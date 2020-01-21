@@ -52,3 +52,6 @@ MetaField 数据源配置
 - [x] searchPanel 无实例配时,会成功渲染
     > 允许使用smart自动计算的配置来支持默认渲染
 - [x] metaField config 默认返回MetaFieldConfigParse实例,@deprecated -> ImetaFieldConfig
+
+##### 其他
+- [JMS规范](https://docs.oracle.com/cd/E19688-01/817-5020-10/overview.html#46007)

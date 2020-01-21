@@ -1,6 +1,5 @@
 package com.hthjsj.web.kit.tree;
 
-import com.hthjsj.web.controller.TreeController;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
@@ -18,10 +17,11 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
 
     List<TreeNode<String, Record>> children;
 
-    TreeController.TreeConfig treeConfig;
+    TreeConfig treeConfig;
 
-    public DefaultTreeNode(TreeController.TreeConfig treeConfig) {
+    public DefaultTreeNode(TreeConfig treeConfig, Record record) {
         this.treeConfig = treeConfig;
+        this.node = record;
     }
 
     @Override
