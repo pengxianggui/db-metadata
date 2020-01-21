@@ -1,18 +1,15 @@
 <template>
     <el-container direction="vertical" class="el-card" style="height: 100%;">
-        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px" style="height: 100%; display: flex; flex-direction: column;">
+        <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px"
+                 style="height: 100%; display: flex; flex-direction: column;">
             <div>
+                <el-form-item label="元对象" prop="objectCode" class="inline">
+                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"></drop-down-box>
+                </el-form-item>
                 <el-form-item label="组件" prop="componentCode" class="inline">
                     <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
-                    <radio-box v-model="confModel.componentCode" :options="['FormView', 'TableList', 'SearchPanel']"
-                               :disabled="isEdit"></radio-box>
-                </el-form-item>
-                <el-form-item label="元对象" prop="objectCode" class="inline">
-                    <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"
-                                   :disabled="isEdit"></drop-down-box>
-                </el-form-item>
-                <el-form-item label="实例编码" prop="instanceCode" class="inline">
-                    <text-box v-model="confModel.instanceCode" :disabled="isEdit"></text-box>
+                    <radio-box v-model="confModel.componentCode"
+                               :options="['FormView', 'TableList', 'SearchPanel']"></radio-box>
                 </el-form-item>
                 <el-form-item label="实例描述">
                     <text-area-box v-model="confModel.instanceName"></text-area-box>
@@ -20,12 +17,10 @@
                 <el-form-item>
                     <div style="display: flex">
                         <el-button type="primary" @click="preview">预览</el-button>
-                        <el-button type="primary" @click="onSubmit" v-if="!isEdit">提交</el-button>
-                        <el-button type="warning" @click="onUpdate" v-else>更新</el-button>
-                        <el-button type="primary" @click="loadConf" v-if="!isEdit">导入自动计算配置</el-button>
+                        <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button type="primary" @click="loadConf">导入自动计算配置</el-button>
                         <span style="flex: 1"></span>
                         <el-button @click="onCancel">返回</el-button>
-                        <el-button @click="deleteConf" type="danger" v-if="isEdit">删除配置</el-button>
                     </div>
                 </el-form-item>
             </div>
@@ -112,17 +107,13 @@
         name: "InstanceConf",
         components: {FormBuilder},
         data() {
-            const {instanceCode, componentCode, objectCode} = this.$route.query;
-
+            const {componentCode, objectCode} = this.$route.query;
             this.$merge(objectMeta, DEFAULT.DropDownBox);
-            const isEdit = !utils.isEmpty(instanceCode);
 
             return {
-                isEdit: isEdit,
                 isAutoComputed: false,
                 objectMeta: objectMeta,
                 confModel: {
-                    instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
                     componentCode: componentCode,
                     objectCode: objectCode,
@@ -130,7 +121,6 @@
                     fConf: {} // conf of fieldsMap
                 },
                 rules: {
-                    instanceCode: [{required: true, message: '请设置一个唯一配置编码', trigger: 'blur'}],
                     componentCode: [{required: true, message: '请选择组件', trigger: 'blur'}],
                     objectCode: [{required: true, message: '请选择元对象', trigger: 'blur'}]
                 }
@@ -146,11 +136,10 @@
             },
             loadConf: function () {
                 this.initConf();
-                const {confModel: {instanceCode, componentCode, objectCode}, $axios} = this;
+                const {confModel: {componentCode, objectCode}, $axios} = this;
                 this.$refs['InstanceConf'].validate((valid) => {
                     if (valid) {
-                        const url = this.$compile(URL.COMP_INSTANCE_CONF_LOAD, {
-                            instanceCode: instanceCode,
+                        const url = this.$compile(URL.COMP_INSTANCE_CONF_LOAD_NEW, {
                             objectCode: objectCode,
                             componentCode: componentCode
                         });
@@ -192,67 +181,41 @@
                     })
                 })
             },
-            onSubmit: function () {
+            onSubmit: function () { // 新增
                 this.$refs['InstanceConf'].validate((valid) => {
                     if (valid) {
-                        const {instanceCode, instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+                        const {instanceCode: defaultInstanceCode} = this.confModel;
+                        this.$prompt('请为这套配置设定一个唯一编码, 如不输入, 则默认为:' + defaultInstanceCode, {}).then(data => {
+                            const {instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
+                            const instanceCode = utils.assertEmpty(data.value, defaultInstanceCode);
 
-                        if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
-                            this.$message.warning('必须选定组件和元对象');
-                            return;
-                        }
+                            if (utils.isEmpty(componentCode) || utils.isEmpty(objectCode)) {
+                                this.$message.warning('必须选定组件和元对象');
+                                return;
+                            }
 
-                        let params = {
-                            instanceCode: instanceCode,
-                            instanceName: instanceName,
-                            componentCode: componentCode,
-                            objectCode: objectCode,
-                            fieldsMap: fieldsConf
-                        };
-                        params[objectCode] = objectConf;
+                            let params = {
+                                instanceCode: instanceCode,
+                                instanceName: instanceName,
+                                componentCode: componentCode,
+                                objectCode: objectCode,
+                                fieldsMap: fieldsConf
+                            };
+                            params[objectCode] = objectConf;
 
-                        this.$axios({
-                            method: 'POST',
-                            url: URL.COMP_CONF_ADD,
-                            data: params
-                        }).then(resp => {
-                            this.$message.success(resp.msg);
-                        }).catch(err => {
-                            this.$message.error(err.msg);
-                        })
+                            this.$axios({
+                                method: 'POST',
+                                url: URL.COMP_CONF_ADD,
+                                data: params
+                            }).then(resp => {
+                                this.$message.success(resp.msg);
+                            }).catch(err => {
+                                this.$message.error(err.msg);
+                            })
+                        }).catch(() => {
+                        });
                     } else {
                         this.$message.warning('请填写必填项');
-                    }
-                });
-            },
-            onUpdate: function () {
-                this.$refs['InstanceConf'].validate((valid) => {
-                    if (valid) {
-                        const {instanceCode, instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel;
-
-                        if (!this.confModel['componentCode'] || !this.confModel['objectCode']) {
-                            this.$message.warning('必须选定组件和元对象');
-                            return;
-                        }
-
-                        let params = {
-                            instanceCode: instanceCode,
-                            instanceName: instanceName,
-                            componentCode: componentCode,
-                            objectCode: objectCode,
-                            fieldsMap: fieldsConf
-                        };
-                        params[objectCode] = objectConf;
-
-                        this.$axios({
-                            method: 'POST',
-                            url: URL.COMP_CONF_UPDATE,
-                            data: params
-                        }).then(resp => {
-                            this.$message.success(resp.msg);
-                        }).catch(err => {
-                            this.$message.error(err.msg);
-                        })
                     }
                 });
             },

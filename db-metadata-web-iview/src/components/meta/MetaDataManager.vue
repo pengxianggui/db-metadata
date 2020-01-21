@@ -69,7 +69,8 @@
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
-                let url = this.$compile(URL.R_INSTANCE_CONF_EDIT, {
+                //
+                let url = this.$compile(URL.R_INSTANCE_CONF_NEW, {
                     componentCode: 'TableList',
                     objectCode: objectCode
                 });

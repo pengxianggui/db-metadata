@@ -13,7 +13,8 @@ export const COMP_CONF_UPDATE = '/component/doUpdate'; // 组件(默认|实例)�
 export const COMP_CONF_ADD = '/component/doAdd';   // 组件(默认|实例)配置新增
 export const COMP_GOBAL_CONF_LOAD = '/component/load?componentCode={componentCode}';    // 组件默认配置加载
 export const COMP_GOBAL_CONF_DELETE = '/component/delete?componentCode={componentCode}';    // 组件默认配置删除
-export const COMP_INSTANCE_CONF_LOAD = '/component/load?componentCode={componentCode}&objectCode={objectCode}&instanceCode={instanceCode}'; // 组件实例配置加载
+export const COMP_INSTANCE_CONF_LOAD_EDIT = '/component/load?componentCode={componentCode}&objectCode={objectCode}&instanceCode={instanceCode}'; // 组件实例配置加载
+export const COMP_INSTANCE_CONF_LOAD_NEW = '/component/load?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例配置加载[自动计算-新增时]
 export const COMP_INSTANCE_CONF_DELETE = '/component/delete/{objectCode}?componentCode={componentCode}'; // 组件实例配置删除
 
 export const COMPONENT_INSTANCE_META = '/component/meta?componentCode={componentCode}&objectCode={objectCode}'; // 组件实例元数据
@@ -38,8 +39,8 @@ export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
 
 //  [路由URL]-START --------------------------------------------------------------------------------------------------
 export const R_GOBAL_CONF_ADD = '/main/global-conf';    // 组件默认配置界面[新增]
-export const R_INSTANCE_CONF_ADD = '/main/instance-conf';   // 组件实例配置界面[新增]
-export const R_INSTANCE_CONF_EDIT = '/main/instance-conf?componentCode={componentCode}&objectCode={objectCode}';    // 组件实例配置界面[编辑]
+export const R_INSTANCE_CONF_NEW = '/main/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}';   // 组件实例配置界面[新增]
+export const R_INSTANCE_CONF_EDIT = '/main/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}';    // 组件实例配置界面[编辑]
 
 // 根路由(RR)
 export const RR_INSTANCE_CONF_ADD = '/instance-conf';   // 组件默认配置界面[新增]

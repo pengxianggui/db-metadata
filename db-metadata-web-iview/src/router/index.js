@@ -4,6 +4,7 @@ import Main from '@/components/Main'
 import {URL} from '@/constant'
 import axios from '../axios'
 import utils from '@/utils'
+import commonRoute from './commonRoute'
 
 Vue.use(Router);
 
@@ -20,11 +21,16 @@ router.beforeEach((to, from, next) => {
     if (utils.isEmpty(routes)) {
         routes = getRoutesFromLocalStorage(routesKey);
         if (utils.isEmpty(routes)) {
-            axios.get(URL.ROUTE_DATA).then(resp => {
-                routes = resp.data;
-                setRoutesToLocalStorage(routesKey, routes);
-                routerGo(to, next, routes);
-            });
+
+            routes = commonRoute;
+            setRoutesToLocalStorage(routesKey, routes);
+            routerGo(to, next, routes);
+
+            // axios.get(URL.ROUTE_DATA).then(resp => {
+            //     routes = resp.data;
+            //     setRoutesToLocalStorage(routesKey, routes);
+            //     routerGo(to, next, routes);
+            // });
         } else {
             routerGo(to, next, routes);
         }

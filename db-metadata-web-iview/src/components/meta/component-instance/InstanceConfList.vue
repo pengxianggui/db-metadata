@@ -34,21 +34,23 @@
         },
         methods: {
             addConf() {
-                this.$router.push(URL.R_INSTANCE_CONF_ADD);
+                const url = utils.compile(URL.R_INSTANCE_CONF_NEW, {
+                    componentCode: '',
+                    objectCode: ''
+                });
+                this.$router.push(url);
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
                 let instanceCode = utils.convertToString(row['code']);
-                let componentCode = row['comp_code'];
-                let objectCode = row['dest_object'];
-                this.$router.push({
-                    path: 'instance-conf',
-                    query: {
-                        instanceCode: instanceCode,
-                        componentCode: componentCode,
-                        objectCode: objectCode
-                    }
-                })
+                let componentCode = utils.convertToString(row['comp_code']);
+                let objectCode = utils.convertToString(row['dest_object']);
+                const url = utils.compile(URL.R_INSTANCE_CONF_EDIT, {
+                    instanceCode: instanceCode,
+                    componentCode: componentCode,
+                    objectCode: objectCode
+                });
+                this.$router.push(url);
             },
             handleSearch(params) {
                 const {refName} = this;

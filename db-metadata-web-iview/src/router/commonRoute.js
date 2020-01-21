@@ -18,9 +18,13 @@ const children = [
         name: 'MetaComponentInstance',
         component: 'meta/component-instance/InstanceConfList'
     }, {
-        path: 'instance-conf',
-        name: 'InstanceConf',
-        component: 'meta/component-instance/InstanceConf'
+        path: 'instance-conf-new',
+        name: 'InstanceConfNew',
+        component: 'meta/component-instance/InstanceConfNew'
+    }, {
+        path: 'instance-conf-edit',
+        name: 'InstanceConfEdit',
+        component: 'meta/component-instance/InstanceConfEdit'
     }, {
         path: 'form-builder',
         name: 'FormBuilder',
