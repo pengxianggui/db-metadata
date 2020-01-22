@@ -3,6 +3,7 @@ package com.hthjsj.web.kit.tree;
 import lombok.Data;
 
 /**
+ * 构建树用config
  * <p> @Date : 2020/1/21 </p>
  * <p> @Project : db-meta-serve</p>
  *

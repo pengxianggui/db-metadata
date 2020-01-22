@@ -9,6 +9,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 
 /**
+ * 此类修改后,需前端FeatureAdd.vue 同步变更
  * <p> @Date : 2019/12/9 </p>
  * <p> @Project : db-meta-serve</p>
  *

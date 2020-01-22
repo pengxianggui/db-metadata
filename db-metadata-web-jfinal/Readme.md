@@ -48,6 +48,7 @@ MetaField 数据源配置
 - [ ] 在UploadController 增加图片预览逻辑;
 - [x] 元对象增加默认排序
 - [ ] dicts字典自动导入到数据库
+- [ ] 缓存的支持
 ##### BUG
 - [x] searchPanel 无实例配时,会成功渲染
     > 允许使用smart自动计算的配置来支持默认渲染
