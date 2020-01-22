@@ -24,6 +24,8 @@ export const RECORD_TO_ADD = "/form/toAdd/{objectCode}";  // 新增记录(TO)
 export const RECORD_TO_UPDATE = '/form/toUpdate/{objectCode}?id={primaryKv}';    // 更新记录(TO)
 
 export const LOAD_COMP_BY_OBJECT = '/meta/contact/{objectCode}?kv={kv}'; // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
+export const LOAD_INSTANCE_CODE_BY_OBJECT_COMP = '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}'; // 根据查询在objectCode+componentCode下的所有实例配置
+export const LOAD_INSTANCE_CODE_BY_OBJECT = '/component/contact?objectCode={objectCode}&kv={kv}'; // 根据查询在objectCode下的所有实例配置
 
 export const CHECK_SQL = '/check/sql?sql={sql}';
 
@@ -44,7 +46,7 @@ export const R_INSTANCE_CONF_NEW = '/main/instance-conf-new?objectCode={objectCo
 export const R_INSTANCE_CONF_EDIT = '/main/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}';    // 组件实例配置界面[编辑]
 
 // 根路由(RR)
-export const RR_INSTANCE_CONF_ADD = '/instance-conf';   // 组件默认配置界面[新增]
+export const RR_INSTANCE_CONF_ADD = '/instance-conf-edit';   // 组件默认配置界面[新增]
 
 
 //  [路由URL]-END --------------------------------------------------------------------------------------------------
