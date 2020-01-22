@@ -85,6 +85,12 @@ public class FeatureController extends FrontRestController {
             case SingleGrid:
                 prefix = "/table";
                 break;
+            case TreeInTable:
+                prefix = "/tree/in";
+                break;
+            case TreeAndTable:
+                prefix = "/tree/and";
+                break;
         }
         return "/main" + prefix + "?featureCode=" + featureCode;
     }

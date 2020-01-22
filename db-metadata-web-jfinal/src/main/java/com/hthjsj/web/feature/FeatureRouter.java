@@ -1,6 +1,7 @@
 package com.hthjsj.web.feature;
 
 import com.hthjsj.web.feature.ms.MasterSlaveController;
+import com.hthjsj.web.feature.tree.TreeController;
 import com.jfinal.config.Routes;
 
 /**
@@ -14,9 +15,11 @@ public class FeatureRouter extends Routes {
 
     @Override
     public void config() {
+        add("/f/t", TreeController.class);
         add("/f/ms", MasterSlaveController.class);
         add("/f", FeatureController.class);
 
+        add("/feature/tree", TreeController.class);
         add("/feature/masterSlave", MasterSlaveController.class);
         add("/feature", FeatureController.class);
     }

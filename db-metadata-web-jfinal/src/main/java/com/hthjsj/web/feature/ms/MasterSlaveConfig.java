@@ -2,8 +2,6 @@ package com.hthjsj.web.feature.ms;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.web.feature.Feature;
 import com.hthjsj.web.feature.FeatureConfig;
 import com.jfinal.kit.Kv;
 import lombok.Data;
@@ -28,14 +26,6 @@ public class MasterSlaveConfig extends FeatureConfig {
     private Master master;
 
     private List<Slave> slaves;
-
-    public String masterCode() {
-        return getMaster().getObjectCode();
-    }
-
-    public String masterKey() {
-        return getMaster().getPrimaryKey();
-    }
 
     public Slave get(int i) {
         return getSlaves().get(i);
@@ -77,6 +67,8 @@ public class MasterSlaveConfig extends FeatureConfig {
         private String objectCode;
 
         private String primaryKey;
+
+        private String instanceCode;
     }
 
     @Data
@@ -85,6 +77,8 @@ public class MasterSlaveConfig extends FeatureConfig {
         private String objectCode;
 
         private String foreignFieldCode;
+
+        private String instanceCode;
 
         private int order;
     }

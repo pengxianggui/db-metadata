@@ -1,4 +1,4 @@
-package com.hthjsj.web.controller;
+package com.hthjsj.web.feature.tree;
 
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
