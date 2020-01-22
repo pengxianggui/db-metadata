@@ -7,27 +7,27 @@
                     <list>
                         <list-item @click="editMetaObject">编辑元对象({{objectCode}})</list-item>
                         <list-item @click="editMetaField">编辑元字段({{fieldCode}})</list-item>
-                        <list-item @hover="getComponentCode">
+                        <list-item @hover="getInstanceCode">
                             <pop-menu trigger="hover" placement="right">
                                 <template #label>编辑实例UI配置({{objectCode}})</template>
                                 <template #default>
                                     <list>
-                                        <list-item v-for="compCode in componentCodes" :key="compCode"
-                                                   @click="editInstanceConf(compCode)">
-                                            {{compCode}}
+                                        <list-item v-for="ic in instanceCodes" :key="ic"
+                                                   @click="editInstanceConf(ic)">
+                                            {{ic}}
                                         </list-item>
                                     </list>
                                 </template>
                             </pop-menu>
                         </list-item>
-                        <list-item @hover="getComponentCode">
+                        <list-item @hover="getInstanceCode">
                             <pop-menu trigger="hover" placement="right">
                                 <template #label>编辑实例字段UI配置({{fieldCode}})</template>
                                 <template #default>
                                     <list>
-                                        <list-item v-for="compCode in componentCodes" :key="compCode"
-                                                   @click="editInstanceFieldConf(compCode)">
-                                            {{compCode}}
+                                        <list-item v-for="ic in instanceCodes" :key="ic"
+                                                   @click="editInstanceConf(ic)">
+                                            {{ic}}
                                         </list-item>
                                     </list>
                                 </template>
@@ -88,6 +88,7 @@
                 dialogMeta: {}, // 弹窗组件元对象
                 dialogVisible: false,   // 弹窗显隐
                 componentCodes: [], // 当前objectCode 配置过的所有componentCode(容器层, 及元对象层)
+                instanceCodes: []   // 当前objectCode + componentCode组合的所有 instanceCodes
             }
         },
         methods: {
@@ -108,6 +109,19 @@
                     .then(resp => {
                         this.componentCodes = resp.data;
                     })
+            },
+            getInstanceCode() {
+                const {objectCode, instanceCodes, componentCode} = this;
+                if (!utils.isEmpty(instanceCodes)) return; // 避免重复请求
+                if (!this.checkObjectCode()) return;
+
+                this.$axios.get(this.$compile(URL.LOAD_INSTANCE_CODE_BY_OBJECT_COMP, {
+                    objectCode: objectCode,
+                    componentCode: componentCode,
+                    kv: false
+                })).then(resp => {
+                    this.instanceCodes = resp.data;
+                });
             },
             editMetaObject() {
                 let {objectCode} = this;
@@ -144,17 +158,17 @@
                     this.dialogVisible = true
                 });
             },
-            editInstanceConf(componentCode) {
+            editInstanceConf(ic) {
                 const {objectCode, componentCode: compCode} = this;
-                componentCode = utils.assertUndefined(componentCode, compCode);
                 if (!this.checkObjectCode()) return;
 
                 const url = URL.RR_INSTANCE_CONF_ADD;
                 const routeUrl = this.$router.resolve({
                     path: url,
                     query: {
-                        componentCode: componentCode,
-                        objectCode: objectCode
+                        componentCode: compCode,
+                        objectCode: objectCode,
+                        instanceCode: ic
                     }
                 });
                 window.open(routeUrl.href, '_blank');

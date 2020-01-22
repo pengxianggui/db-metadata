@@ -51,7 +51,7 @@
                                          show-overflow-tooltip>
                             <template #header>
                                 <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
-                                                :label="item.label || item.name" :all="true">
+                                                :label="item.label || item.name" :all="true" component-code="TableList">
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
                             </template>
