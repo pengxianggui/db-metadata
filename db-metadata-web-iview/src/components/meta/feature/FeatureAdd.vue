@@ -13,6 +13,9 @@
             <el-form-item label="图标" class="inline">
                 <icon-box v-model="icon"></icon-box>
             </el-form-item>
+            <el-form-item label="instanceCode" class="inline">
+                <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
+            </el-form-item>
 
             <div v-show="feature.type === 'MasterSlaveGrid'">
                 <h3>主表</h3>
@@ -189,11 +192,13 @@
                 metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
                 metaFieldCodeUrl: URL.FIELD_CODE_LIST_BY_OBJECT,
                 featureTypeUrl: URL.LIST_FEATURE_TYPE,
+                instanceCodeUrl: URL.INSTANCE_CODE_LIST,
                 feature: {
                     type: 'MasterSlaveGrid',
                     name: null,
                     code: null,
-                    config: null
+                    config: null,
+                    instanceCode: null
                 },
                 masterSlaveConfig: {
                     master: {
