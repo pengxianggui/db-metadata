@@ -267,7 +267,10 @@
                     case CONSTANT.FEATURE_TYPE.SingleGrid:
                         this.feature.config = this.singleGridConfig;
                         break;
-                    case CONSTANT.FEATURE_TYPE.TreeTable:
+                    case CONSTANT.FEATURE_TYPE.TreeInTable:
+                        this.feature.config = this.treeTableConfig;
+                        break;
+                    case CONSTANT.FEATURE_TYPE.TreeAndTable:
                         this.feature.config = this.treeTableConfig;
                         break;
                 }
