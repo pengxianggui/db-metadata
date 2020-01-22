@@ -18,6 +18,8 @@ public class TreeInTableConfig extends FeatureConfig {
 
     private String objectCode;
 
+    private String instanceCode;
+
     private TreeConfig treeConfig;
 
     @Override

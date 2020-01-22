@@ -2,7 +2,6 @@ package com.hthjsj.web.feature.tree;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.web.feature.FeatureConfig;
-import com.hthjsj.web.kit.tree.TreeConfig;
 import com.jfinal.kit.Kv;
 
 import java.util.List;
