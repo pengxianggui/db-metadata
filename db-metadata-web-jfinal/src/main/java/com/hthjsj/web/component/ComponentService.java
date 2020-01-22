@@ -95,7 +95,7 @@ public class ComponentService {
     }
 
     public List<Record> loadComponents() {
-        return Db.findAll(META_COMPONENT);
+        return Db.use(App.DB_MAIN).findAll(META_COMPONENT);
     }
 
     /**
@@ -152,8 +152,26 @@ public class ComponentService {
         return types;
     }
 
-    public List<String> loadObjectsByType(String typeCode) {
-        return Db.query("select dest_object from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=?", typeCode, INSTANCE.META_OBJECT.toString());
+    /**
+     * 根据元对象+组件类型 获得所有instanceCode
+     * 注: type=Unknow时不参加条件拼接
+     *
+     * @param objectCode
+     * @param type
+     *
+     * @return
+     */
+    public List<String> loadInstanceCodeByObjectCode(String objectCode, ComponentType type) {
+        if (type == ComponentType.UNKNOWN) {
+            return Db.use(App.DB_MAIN).query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and type=?",
+                                             objectCode,
+                                             INSTANCE.META_OBJECT.toString());
+        } else {
+            return Db.use(App.DB_MAIN).query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and comp_code=? and type=?",
+                                             objectCode,
+                                             type.getCode(),
+                                             INSTANCE.META_OBJECT.toString());
+        }
     }
 
     /**

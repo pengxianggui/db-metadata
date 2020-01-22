@@ -43,9 +43,11 @@ public class ComponentController extends FrontRestController {
      * 返回某Component的关联元对象实例
      */
     public void contact() {
-        String componentCode = new QueryHelper(this).getComponentCode();
+        QueryHelper queryHelper = new QueryHelper(this);
+        String componentCode = queryHelper.getComponentCode();
+        String objectCode = queryHelper.getObjectCode();
         boolean kv = getBoolean("kv", false);
-        List<String> result = componentService().loadObjectsByType(componentCode);
+        List<String> result = componentService().loadInstanceCodeByObjectCode(objectCode, ComponentType.V(componentCode));
         if (kv) {
             renderJson(Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0]))));
             return;
