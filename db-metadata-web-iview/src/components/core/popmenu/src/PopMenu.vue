@@ -1,5 +1,6 @@
 <template>
-    <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible" popper-class="no-padding">
+    <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible"
+                popper-class="no-padding" v-bind="$attrs" @show="$emit('show')">
         <span slot="reference">
             <span @click.right="rightClickHander">
                 <slot name="label">

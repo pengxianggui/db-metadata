@@ -44,11 +44,12 @@
                 </dialog-box>
             </template>
             <template v-else>
-                <pop-menu trigger="click" placement="right">
+                <pop-menu trigger="click" placement="right" @show="getInstanceCode">
                     <template #label><i class="el-icon-setting"></i></template>
                     <template #default>
                         <list>
-                            <list-item @click="editInstanceConf">编辑UI</list-item>
+                            <list-item v-for="ic in instanceCodes" :key="ic"
+                                       @click="editInstanceConf(ic)">{{ic}}</list-item>
                         </list>
                     </template>
                 </pop-menu>
@@ -111,6 +112,7 @@
                     })
             },
             getInstanceCode() {
+                console.log('sss');
                 const {objectCode, instanceCodes, componentCode} = this;
                 if (!utils.isEmpty(instanceCodes)) return; // 避免重复请求
                 if (!this.checkObjectCode()) return;
