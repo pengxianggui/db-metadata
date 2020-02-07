@@ -308,7 +308,16 @@ Vue.use(metaElement, config)
   
 
 ## 功能模板结构(config)
- - MasterSlaveTableTmpl
+ - SingleGridTableTmpl —— 单表模板：普通表
+ ```json
+    {
+      "icon": "el-icon-s-grid", 
+      "singleGrid": {
+        "objectCode": "test_table"
+      }
+    }
+ ```
+ - MasterSlaveTableTmpl —— 主子表模板
  ```json
     {
       "master": {
@@ -330,7 +339,7 @@ Vue.use(metaElement, config)
       "icon": ""
     }
  ```
- - DataListTableTmpl
+ - DataListTableTmpl —— 左侧列表-右侧单表模板
  ```json
     {
       "list": {
@@ -345,7 +354,16 @@ Vue.use(metaElement, config)
       "icon": ""
     }
  ```
- - TreeTableTmpl
+ - TreeSingleGridTmpl —— 单表模板：可展开的树表
+ ```json
+    {
+        "icon": "el-icon-s-management",
+        "table": {
+            "objectCode": "YYY"
+        }
+    }
+ ```
+ - TreeTableTmpl —— 左侧树-右侧表模板
  ```json
     {
       "tree": {
@@ -364,7 +382,7 @@ Vue.use(metaElement, config)
       "icon": ""
     }
  ```
- - TableFromTmpl
+ - TableFromTmpl —— 左侧表-右侧表单模板
  ```json
     {
       "table": {
@@ -373,7 +391,7 @@ Vue.use(metaElement, config)
       "icon": ""
     }
  ```
- - TreeFormTmpl
+ - TreeFormTmpl —— 左侧树-右侧表单模板
  ```json
     {
       "tree": {

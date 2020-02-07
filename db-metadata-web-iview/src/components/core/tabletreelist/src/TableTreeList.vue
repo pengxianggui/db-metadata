@@ -158,14 +158,14 @@
         mixins: [Meta(DEFAULT.TableTreeList, assembleMeta)],
         components: {MetaEasyEdit},
         data() {
-            const instanceConf = this.meta['conf'];
-            const defaultConf = DEFAULT.TableTreeList['conf'];
-            const defaultExpandAll = instanceConf['default-expand-all'] === true ?
-                instanceConf['default-expand-all'] : defaultConf['default-expand-all'];
+            // 利用解构赋值防止空指针
+            const {conf: {'default-expand-all': instanceExpandAll} = {}} = this.meta;
+            const {conf: {'default-expand-all': defaultExpandAll} = {}} = DEFAULT.TableTreeList;
+            const expandAll = utils.assertUndefined(instanceExpandAll, defaultExpandAll);
 
             return {
                 show: true, // use to reRender for table
-                expandAll: defaultExpandAll,
+                expandAll: expandAll,
                 innerData: [],
                 choseData: [],
                 activeData: {},

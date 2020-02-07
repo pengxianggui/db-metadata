@@ -50,8 +50,12 @@ const children = [
         name: 'Form',
         component: 'template/FormTmpl'
     }, {
-        path: 'tree-table',
-        name: 'treeTable',
+        path: 'tree/in',
+        name: 'treeInTable',
+        component: 'template/TreeSingleGridTmpl'
+    }, {
+        path: 'tree/and',
+        name: 'treeAndTable',
         component: 'template/TreeTableTmpl'
     }, {
         path: 'list-table',
