@@ -359,7 +359,9 @@ Vue.use(metaElement, config)
     {
         "icon": "el-icon-s-management",
         "table": {
-            "objectCode": "YYY"
+            "objectCode": "YYY",
+            "primaryKey": "id",
+            "foreignKey": "pid"
         }
     }
  ```

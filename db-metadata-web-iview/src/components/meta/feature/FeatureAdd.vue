@@ -86,10 +86,12 @@
                 </el-form-item>
             </div>
 
-            <div v-show="feature.type === 'TreeTable'">
-                <h3>Tree配置</h3>
-                <el-form-item label="元对象编码" class="inline">
-                    <drop-down-box v-model="treeTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
+            <div v-show="feature.type === 'TreeInTable'">
+                <h3>Table配置</h3>
+                <el-form-item label="objectCode" class="inline">
+                    <drop-down-box v-model="treeInTableConfig.table.objectCode"
+                                   :data-url="metaObjectCodeUrl" @change="treeInTableConfig.table.foreignFieldCode = null"
+                                   filterable required>
                         <template #options="{options}">
                             <el-option v-for="item in options" :key="item.code" :label="item.code"
                                        :value="item.code">
@@ -99,16 +101,48 @@
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="primaryKey" class="inline">
-                    <drop-down-box v-model="treeTableConfig.tree.primaryKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})">
+                    <drop-down-box v-model="treeInTableConfig.table.primaryKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeInTableConfig.table.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="foreignFieldCode" class="inline">
+                    <drop-down-box v-model="treeInTableConfig.table.foreignFieldCode"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeInTableConfig.table.objectCode})"
+                                   filterable required>
+                        <template #label="{option}">
+                            <span>{{option.value}}({{option.label}})</span>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+            </div>
+
+            <div v-show="feature.type === 'TreeAndTable'">
+                <h3>Tree配置</h3>
+                <el-form-item label="元对象编码" class="inline">
+                    <drop-down-box v-model="treeAndTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
+                        <template #options="{options}">
+                            <el-option v-for="item in options" :key="item.code" :label="item.code"
+                                       :value="item.code">
+                                {{item.code}}
+                            </el-option>
+                        </template>
+                    </drop-down-box>
+                </el-form-item>
+                <el-form-item label="primaryKey" class="inline">
+                    <drop-down-box v-model="treeAndTableConfig.tree.primaryKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})">
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
                         </template>
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="idKey" class="inline">
-                    <drop-down-box v-model="treeTableConfig.tree.idKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                    <drop-down-box v-model="treeAndTableConfig.tree.idKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
                                    filterable required>
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
@@ -116,8 +150,8 @@
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="pidKey" class="inline">
-                    <drop-down-box v-model="treeTableConfig.tree.pidKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                    <drop-down-box v-model="treeAndTableConfig.tree.pidKey"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
                                    filterable required>
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
@@ -125,11 +159,11 @@
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="rootIdentify" class="inline">
-                    <text-box v-model="treeTableConfig.tree.rootIdentify" required></text-box>
+                    <text-box v-model="treeAndTableConfig.tree.rootIdentify" required></text-box>
                 </el-form-item>
                 <el-form-item label="label" class="inline">
-                    <drop-down-box v-model="treeTableConfig.tree.label"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.tree.objectCode})"
+                    <drop-down-box v-model="treeAndTableConfig.tree.label"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
                                    filterable required>
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
@@ -137,12 +171,12 @@
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="isSync">
-                    <bool-box v-model="treeTableConfig.tree.isSync" required></bool-box>
+                    <bool-box v-model="treeAndTableConfig.tree.isSync" required></bool-box>
                 </el-form-item>
                 <h3>Table配置</h3>
                 <el-form-item label="objectCode" class="inline">
-                    <drop-down-box v-model="treeTableConfig.table.objectCode"
-                                   :data-url="metaObjectCodeUrl" @change="treeTableConfig.table.foreignFieldCode = null"
+                    <drop-down-box v-model="treeAndTableConfig.table.objectCode"
+                                   :data-url="metaObjectCodeUrl" @change="treeAndTableConfig.table.foreignFieldCode = null"
                                    filterable required>
                         <template #options="{options}">
                             <el-option v-for="item in options" :key="item.code" :label="item.code"
@@ -153,8 +187,8 @@
                     </drop-down-box>
                 </el-form-item>
                 <el-form-item label="foreignFieldCode" class="inline">
-                    <drop-down-box v-model="treeTableConfig.table.foreignFieldCode"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeTableConfig.table.objectCode})"
+                    <drop-down-box v-model="treeAndTableConfig.table.foreignFieldCode"
+                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.table.objectCode})"
                                    filterable required>
                         <template #label="{option}">
                             <span>{{option.value}}({{option.label}})</span>
@@ -216,7 +250,14 @@
                         objectCode: this.params['objectCode']
                     }
                 },
-                treeTableConfig: {
+                treeInTableConfig: {
+                    table: {
+                        objectCode: this.params['objectCode'],
+                        primaryKey: null,
+                        foreignFieldCode: null
+                    }
+                },
+                treeAndTableConfig: {
                     tree: {
                         objectCode: null,
                         idKey: null,
@@ -226,7 +267,7 @@
                         isSync: false
                     },
                     table: {
-                        objectCode: null,
+                        objectCode: this.params['objectCode'],
                         foreignFieldCode: null
                     }
                 },
@@ -268,10 +309,10 @@
                         this.feature.config = this.singleGridConfig;
                         break;
                     case CONSTANT.FEATURE_TYPE.TreeInTable:
-                        this.feature.config = this.treeTableConfig;
+                        this.feature.config = this.treeInTableConfig;
                         break;
                     case CONSTANT.FEATURE_TYPE.TreeAndTable:
-                        this.feature.config = this.treeTableConfig;
+                        this.feature.config = this.treeAndTableConfig;
                         break;
                 }
                 this.feature.config['icon'] = this.icon;

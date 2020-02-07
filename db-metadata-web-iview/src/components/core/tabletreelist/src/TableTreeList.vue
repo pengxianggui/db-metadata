@@ -243,15 +243,23 @@
             },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
-                const primaryValue = this.extractPrimaryValue(row);
+                const {primaryKey} = this;
+                const primaryValue = utils.extractValue(row, primaryKey);
+
                 this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(primaryValue) {
                 let url, title;
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKey = this.primaryKey;
-                    let primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                    let primaryKey = this.primaryKey, primaryKv;
+
+                    if (primaryKey.length <= 1) {
+                        primaryKv = primaryValue[0];
+                    } else {
+                        primaryKv = utils.spliceKvs(primaryKey, primaryValue);
+                    }
+
                     url = this.$compile(URL.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
                         primaryKv: primaryKv
