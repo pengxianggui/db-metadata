@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <el-form-item label="元对象编码">
+    <el-form>
+        <el-form-item label="元对象编码" prop="objectCode" required>
             <drop-down-box v-model="config.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
                 <template #options="{options}">
                     <el-option v-for="item in options" :key="item.code" :label="item.code"
@@ -10,7 +10,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-    </div>
+    </el-form>
 </template>
 
 <script>

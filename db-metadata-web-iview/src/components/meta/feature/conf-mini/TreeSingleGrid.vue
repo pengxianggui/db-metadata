@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <el-form>
         <h3>Table配置</h3>
-        <el-form-item label="objectCode" class="inline">
+        <el-form-item label="objectCode" class="inline" prop="objectCode" required>
             <drop-down-box v-model="config.table.objectCode"
                            :data-url="metaObjectCodeUrl" @change="config.table.foreignFieldCode = null"
                            filterable required>
@@ -13,7 +13,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="primaryKey" class="inline">
+        <el-form-item label="primaryKey" class="inline" prop="primaryKey" required>
             <drop-down-box v-model="config.table.primaryKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -22,7 +22,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="foreignFieldCode" class="inline">
+        <el-form-item label="foreignFieldCode" class="inline" prop="foreignFieldCode" required>
             <drop-down-box v-model="config.table.foreignFieldCode"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -31,7 +31,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-    </div>
+    </el-form>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <el-form>
         <h3>主表</h3>
-        <el-form-item label="元对象编码" class="inline">
+        <el-form-item label="元对象编码" class="inline" prop="objectCode" required>
             <drop-down-box v-model="config.master.objectCode"
                            :data-url="metaObjectCodeUrl" @change="config.master.primaryKey = null"
                            filterable required>
@@ -13,7 +13,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="主键" class="inline">
+        <el-form-item label="主键" class="inline" prop="primaryKey" required>
             <drop-down-box v-model="config.master.primaryKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.master.objectCode})"
                            filterable required>
@@ -51,7 +51,7 @@
                 </el-form-item>
             </el-tab-pane>
         </el-tabs>
-    </div>
+    </el-form>
 </template>
 
 <script>

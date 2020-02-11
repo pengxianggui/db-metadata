@@ -1,41 +1,41 @@
 <template>
     <div>
         <el-form ref="featureForm" :model="feature" label-width="120px">
-            <el-form-item label="功能类别">
-                <radio-box :data-url="featureTypeUrl" v-model="feature.type" required></radio-box>
+            <el-form-item label="功能类别" prop="type" required>
+                <radio-box :data-url="featureTypeUrl" v-model="feature.type"></radio-box>
             </el-form-item>
-            <el-form-item label="功能名" class="inline">
-                <text-box v-model="feature.name" required></text-box>
+            <el-form-item label="功能名" class="inline" prop="name" required>
+                <text-box v-model="feature.name"></text-box>
             </el-form-item>
-            <el-form-item label="功能代码" class="inline">
-                <text-box v-model="feature.code" required></text-box>
+            <el-form-item label="功能代码" class="inline" prop="code" required>
+                <text-box v-model="feature.code"></text-box>
             </el-form-item>
-            <el-form-item label="图标" class="inline">
+            <el-form-item label="图标" class="inline" prop="icon">
                 <icon-box v-model="icon"></icon-box>
             </el-form-item>
-            <el-form-item label="instanceCode" class="inline">
+            <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>
                 <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
             </el-form-item>
 
-            <div v-show="feature.type === 'MasterSlaveGrid'">
+            <div v-show="feature.type === FEATURE_TYPE.MasterSlaveGrid">
                 <MasterSlaveGrid ref="masterSlaveGrid" :oc="objectCode" :pk="primaryKey"></MasterSlaveGrid>
                 <!-- TODO 从表后期应当支持多个子表设置 -->
             </div>
 
-            <div v-show="feature.type === 'SingleGrid'">
+            <div v-show="feature.type === FEATURE_TYPE.SingleGrid">
                 <SingleGrid ref="singleGrid" :oc="objectCode"></SingleGrid>
             </div>
 
-            <div v-show="feature.type === 'TreeInTable'">
+            <div v-show="feature.type === FEATURE_TYPE.TreeSingleGrid">
                 <TreeSingleGrid ref="treeSingleGrid" :oc="objectCode"></TreeSingleGrid>
             </div>
 
-            <div v-show="feature.type === 'TreeAndTable'">
+            <div v-show="feature.type === FEATURE_TYPE.TreeAndSingleGrid">
                 <TreeAndSingleGrid ref="treeAndSingleGrid" :oc="objectCode"></TreeAndSingleGrid>
             </div>
 
             <el-form-item>
-                <el-button @click="onSubmit" type="primary">保存</el-button>
+                <el-button @click="onSubmit('featureForm')" type="primary">保存</el-button>
                 <el-button @click="onCancel">取消</el-button>
             </el-form-item>
         </el-form>
@@ -66,12 +66,13 @@
         },
         data() {
             return {
+                FEATURE_TYPE: CONSTANT.FEATURE_TYPE,
                 objectCode: this.params['objectCode'],
                 primaryKey: this.params['primaryKey'],
                 featureTypeUrl: URL.LIST_FEATURE_TYPE,
                 instanceCodeUrl: URL.INSTANCE_CODE_LIST,
                 feature: {
-                    type: 'MasterSlaveGrid',
+                    type: CONSTANT.FEATURE_TYPE['SingleGrid'],
                     name: null,
                     code: null,
                     config: null,
@@ -106,16 +107,16 @@
                 const {$refs, feature} = this;
                 const {type: featureType} = feature;
                 switch (featureType) {
-                    case CONSTANT.FEATURE_TYPE.MasterSlaveGrid:
+                    case CONSTANT.FEATURE_TYPE['MasterSlaveGrid']:
                         this.feature.config = $refs['masterSlaveGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE.SingleGrid:
+                    case CONSTANT.FEATURE_TYPE['SingleGrid']:
                         this.feature.config = $refs['singleGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE.TreeInTable:
+                    case CONSTANT.FEATURE_TYPE['TreeSingleGrid']:
                         this.feature.config = $refs['treeSingleGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE.TreeAndTable:
+                    case CONSTANT.FEATURE_TYPE['TreeAndSingleGrid']:
                         this.feature.config = $refs['treeAndSingleGrid'].config;
                         break;
                 }
@@ -135,11 +136,10 @@
                     this.$message.error(err.msg);
                 })
             },
-            onSubmit(event) {
-                const name = 'featureForm';
-                this.$refs[name].validate((valid) => {
+            onSubmit(formName) {
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.doSubmit(event) // submit
+                        this.doSubmit() // submit
                     } else {
                         return false;
                     }
