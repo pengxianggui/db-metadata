@@ -18,183 +18,20 @@
             </el-form-item>
 
             <div v-show="feature.type === 'MasterSlaveGrid'">
-                <h3>主表</h3>
-                <el-form-item label="元对象编码" class="inline">
-                    <drop-down-box v-model="masterSlaveConfig.master.objectCode"
-                                   :data-url="metaObjectCodeUrl" @change="masterSlaveConfig.master.primaryKey = null"
-                                   filterable required>
-                        <template #options="{options}">
-                            <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                       :value="item.code">
-                                {{item.code}}
-                            </el-option>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="主键" class="inline">
-                    <drop-down-box v-model="masterSlaveConfig.master.primaryKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.master.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-
-                <el-tabs v-model="activeTab" @tab-click="handleClick">
-                    <el-tab-pane label="从表1" name="first">
-                        <el-form-item label="元对象编码" class="inline">
-                            <drop-down-box v-model="masterSlaveConfig.slaves[0].objectCode"
-                                           @change="masterSlaveConfig.slaves[0].foreignFieldCode = null"
-                                           :data-url="metaObjectCodeUrl" filterable required>
-                                <template #options="{options}">
-                                    <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                               :value="item.code">
-                                        {{item.code}}
-                                    </el-option>
-                                </template>
-                            </drop-down-box>
-                        </el-form-item>
-                        <el-form-item label="外键" class="inline">
-                            <drop-down-box v-model="masterSlaveConfig.slaves[0].foreignFieldCode"
-                                           :data-url="$compile(metaFieldCodeUrl, {objectCode: masterSlaveConfig.slaves[0].objectCode})"
-                                           filterable>
-                                <template #label="{option}">
-                                    <span>{{option.value}}({{option.label}})</span>
-                                </template>
-                            </drop-down-box>
-                        </el-form-item>
-                        <el-form-item label="排序" class="inline">
-                            <num-box v-model="masterSlaveConfig.slaves[0].order" controls required></num-box>
-                        </el-form-item>
-                    </el-tab-pane>
-                </el-tabs>
-
+                <MasterSlaveGrid ref="masterSlaveGrid" :oc="objectCode" :pk="primaryKey"></MasterSlaveGrid>
                 <!-- TODO 从表后期应当支持多个子表设置 -->
             </div>
 
             <div v-show="feature.type === 'SingleGrid'">
-                <el-form-item label="元对象编码">
-                    <drop-down-box v-model="singleGridConfig.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
-                        <template #options="{options}">
-                            <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                       :value="item.code">
-                                {{item.code}}
-                            </el-option>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
+                <SingleGrid ref="singleGrid" :oc="objectCode"></SingleGrid>
             </div>
 
             <div v-show="feature.type === 'TreeInTable'">
-                <h3>Table配置</h3>
-                <el-form-item label="objectCode" class="inline">
-                    <drop-down-box v-model="treeInTableConfig.table.objectCode"
-                                   :data-url="metaObjectCodeUrl" @change="treeInTableConfig.table.foreignFieldCode = null"
-                                   filterable required>
-                        <template #options="{options}">
-                            <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                       :value="item.code">
-                                {{item.code}}
-                            </el-option>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="primaryKey" class="inline">
-                    <drop-down-box v-model="treeInTableConfig.table.primaryKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeInTableConfig.table.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="foreignFieldCode" class="inline">
-                    <drop-down-box v-model="treeInTableConfig.table.foreignFieldCode"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeInTableConfig.table.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
+                <TreeSingleGrid ref="treeSingleGrid" :oc="objectCode"></TreeSingleGrid>
             </div>
 
             <div v-show="feature.type === 'TreeAndTable'">
-                <h3>Tree配置</h3>
-                <el-form-item label="元对象编码" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.tree.objectCode" :data-url="metaObjectCodeUrl">
-                        <template #options="{options}">
-                            <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                       :value="item.code">
-                                {{item.code}}
-                            </el-option>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="primaryKey" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.tree.primaryKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})">
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="idKey" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.tree.idKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="pidKey" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.tree.pidKey"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="rootIdentify" class="inline">
-                    <text-box v-model="treeAndTableConfig.tree.rootIdentify" required></text-box>
-                </el-form-item>
-                <el-form-item label="label" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.tree.label"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.tree.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="isSync">
-                    <bool-box v-model="treeAndTableConfig.tree.isSync" required></bool-box>
-                </el-form-item>
-                <h3>Table配置</h3>
-                <el-form-item label="objectCode" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.table.objectCode"
-                                   :data-url="metaObjectCodeUrl" @change="treeAndTableConfig.table.foreignFieldCode = null"
-                                   filterable required>
-                        <template #options="{options}">
-                            <el-option v-for="item in options" :key="item.code" :label="item.code"
-                                       :value="item.code">
-                                {{item.code}}
-                            </el-option>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
-                <el-form-item label="foreignFieldCode" class="inline">
-                    <drop-down-box v-model="treeAndTableConfig.table.foreignFieldCode"
-                                   :data-url="$compile(metaFieldCodeUrl, {objectCode: treeAndTableConfig.table.objectCode})"
-                                   filterable required>
-                        <template #label="{option}">
-                            <span>{{option.value}}({{option.label}})</span>
-                        </template>
-                    </drop-down-box>
-                </el-form-item>
+                <TreeAndSingleGrid ref="treeAndSingleGrid" :oc="objectCode"></TreeAndSingleGrid>
             </div>
 
             <el-form-item>
@@ -207,9 +44,15 @@
 
 <script>
     import {CONSTANT, URL} from '@/constant'
+    import MasterSlaveGrid from './conf-mini/MasterSlaveGrid'
+    import SingleGrid from './conf-mini/SingleGrid'
+    import TreeSingleGrid from './conf-mini/TreeSingleGrid'
+    import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
+
 
     export default {
         name: "feature-add",
+        components: {MasterSlaveGrid, SingleGrid, TreeSingleGrid, TreeAndSingleGrid},
         props: {
             params: {
                 type: Object
@@ -223,8 +66,8 @@
         },
         data() {
             return {
-                metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
-                metaFieldCodeUrl: URL.FIELD_CODE_LIST_BY_OBJECT,
+                objectCode: this.params['objectCode'],
+                primaryKey: this.params['primaryKey'],
                 featureTypeUrl: URL.LIST_FEATURE_TYPE,
                 instanceCodeUrl: URL.INSTANCE_CODE_LIST,
                 feature: {
@@ -234,93 +77,54 @@
                     config: null,
                     instanceCode: null
                 },
-                masterSlaveConfig: {
-                    master: {
-                        objectCode: this.params['objectCode'],
-                        primaryKey: this.params['primaryKey']
-                    },
-                    slaves: [{
-                        objectCode: null,
-                        foreignFieldCode: null,
-                        order: 0
-                    }],
-                },
-                singleGridConfig: {
-                    singleGrid: {
-                        objectCode: this.params['objectCode']
-                    }
-                },
-                treeInTableConfig: {
-                    table: {
-                        objectCode: this.params['objectCode'],
-                        primaryKey: null,
-                        foreignFieldCode: null
-                    }
-                },
-                treeAndTableConfig: {
-                    tree: {
-                        objectCode: null,
-                        idKey: null,
-                        pidKey: null,
-                        rootIdentify: null,
-                        label: null,
-                        isSync: false
-                    },
-                    table: {
-                        objectCode: this.params['objectCode'],
-                        foreignFieldCode: null
-                    }
-                },
-                listTableConf: {
-                    list: {
-                        objectCode: null,
-                        primaryKey: null
-                    },
-                    table: {
-                        objectCode: null,
-                        foreignFieldCode: null
-                    }
-                },
-                tableFormConf: {
-                    table: {
-                        objectCode: null,
-                        primaryKey: null
-                    },
-                    form: {
-                        objectCode: null,
-                        foreignFieldCode: null
-                    }
-                },
-                activeTab: 'first',
                 icon: null, // 功能图标
+                // listTableConf: {
+                //     list: {
+                //         objectCode: null,
+                //         primaryKey: null
+                //     },
+                //     table: {
+                //         objectCode: null,
+                //         foreignFieldCode: null
+                //     }
+                // },
+                // tableFormConf: {
+                //     table: {
+                //         objectCode: null,
+                //         primaryKey: null
+                //     },
+                //     form: {
+                //         objectCode: null,
+                //         foreignFieldCode: null
+                //     }
+                // },
+                // activeTab: 'first',
             }
         },
         methods: {
-            handleClick(tab, event) {
-                // todo
-            },
-            assemblyParams() {
-                let type = this.feature.type;
-                switch (type) {
+            assembleParams() {
+                const {$refs, feature} = this;
+                const {type: featureType} = feature;
+                switch (featureType) {
                     case CONSTANT.FEATURE_TYPE.MasterSlaveGrid:
-                        this.feature.config = this.masterSlaveConfig;
+                        this.feature.config = $refs['masterSlaveGrid'].config;
                         break;
                     case CONSTANT.FEATURE_TYPE.SingleGrid:
-                        this.feature.config = this.singleGridConfig;
+                        this.feature.config = $refs['singleGrid'].config;
                         break;
                     case CONSTANT.FEATURE_TYPE.TreeInTable:
-                        this.feature.config = this.treeInTableConfig;
+                        this.feature.config = $refs['treeSingleGrid'].config;
                         break;
                     case CONSTANT.FEATURE_TYPE.TreeAndTable:
-                        this.feature.config = this.treeAndTableConfig;
+                        this.feature.config = $refs['treeAndSingleGrid'].config;
                         break;
                 }
                 this.feature.config['icon'] = this.icon;
                 return this.feature;
             },
             doSubmit() {
-                let params = this.assemblyParams();
-                const featureType = this.feature.type;
+                const params = this.assembleParams();
+                const {type: featureType} = params;
                 let url = this.$compile(URL.FEATURE_ADD, {
                     featureType: featureType
                 });
