@@ -465,3 +465,6 @@ Vue.use(metaElement, config)
 ### 0.1.5
 1. 纠正FormView的注册名(FormBox => FormView)
 2. 修复FormBuilder预览错误
+
+### 0.2.0
+修复部分问题
