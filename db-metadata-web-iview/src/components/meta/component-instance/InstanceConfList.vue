@@ -24,6 +24,16 @@
     export default {
         name: "InstanceConfList",
         mixins: [getTlMeta, getSpMeta],
+        props: {
+            newRouteUrl: {
+                type: String,
+                default: URL.R_INSTANCE_CONF_NEW
+            },
+            editRouteUrl: {
+                type: String,
+                default: URL.R_INSTANCE_CONF_EDIT
+            }
+        },
         data() {
             return {
                 objectCode: "meta_component_instance",
@@ -34,7 +44,7 @@
         },
         methods: {
             addConf() {
-                const url = utils.compile(URL.R_INSTANCE_CONF_NEW, {
+                const url = utils.compile(this.newRouteUrl, {
                     componentCode: '',
                     objectCode: ''
                 });
@@ -45,7 +55,7 @@
                 let instanceCode = utils.convertToString(row['code']);
                 let componentCode = utils.convertToString(row['comp_code']);
                 let objectCode = utils.convertToString(row['dest_object']);
-                const url = utils.compile(URL.R_INSTANCE_CONF_EDIT, {
+                const url = utils.compile(this.editRouteUrl, {
                     instanceCode: instanceCode,
                     componentCode: componentCode,
                     objectCode: objectCode

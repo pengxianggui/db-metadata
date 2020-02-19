@@ -1,9 +1,5 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-// import VueI18n from 'vue-i18n'
-// import zh_CN from 'element-ui/lib/locale/lang/zh-CN'
-// import zh_TW from 'element-ui/lib/locale/lang/zh-TW'
-// import en from 'element-ui/lib/locale/lang/en'
 
 // 核心组件
 import BoolBox from './core/boolbox'
@@ -16,7 +12,7 @@ import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
-import FormBox from './core/form'
+import FormView from './core/form'
 import RowGrid from './core/grid'
 import IconBox from './core/iconbox'
 import ImgBox from './core/imgbox'
@@ -48,10 +44,20 @@ import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 
+// meta 组件
+import MetaDataManager from "@/components/meta/MetaDataManager";
+import FormBuilder from '@/components/meta/form-builder'
+import GlobalConfList from "@/components/meta/component/GlobalConfList";
+import GlobalConf from "@/components/meta/component/GlobalConf";
+import InstanceConfList from "@/components/meta/component-instance/InstanceConfList";
+import InstanceConfEdit from "@/components/meta/component-instance/InstanceConfEdit";
+import InstanceConfNew from "@/components/meta/component-instance/InstanceConfNew";
+
 import GlobalFn from '@/config/auto-register-fn'
 import GlobalFilter from '@/config/auto-register-filter'
 
-const components = [
+const components = {
+    // atom or container
     BoolBox,
     CheckBox,
     CodeBox,
@@ -62,7 +68,7 @@ const components = [
     DropDownBox,
     FileBox,
     FindBox,
-    FormBox,
+    FormView,
     RowGrid,
     IconBox,
     ImgBox,
@@ -86,39 +92,36 @@ const components = [
     TimeBox,
     ZTogglePanel,
 
+    // tmpl
     DataListTableTmpl,
     FormTmpl,
     MasterSlaveTableTmpl,
     SingleGridTmpl,
     TableFormTmpl,
     TreeFormTmpl,
-    TreeTableTmpl
-];
+    TreeTableTmpl,
 
-// const messages = {
-//     'zh-CN': zh_CN,
-//     'zh-TW': zh_TW,
-//     'en': en
-// };
+    // meta
+    MetaDataManager,
+    FormBuilder,
+    GlobalConfList,
+    GlobalConf,
+    InstanceConfList,
+    InstanceConfEdit,
+    InstanceConfNew
+};
 
+const CompLib = Object.assign({}, components);
 const install = function (Vue, opts = {}) {
-    // Vue.use(VueI18n);
-    //
-    // const i18n = new VueI18n({
-    //     locale: opts.locale || 'zh-CN',
-    //     messages
-    // });
-    //
-    // if (!opts.i18n) opts.i18n = (path, options) => i18n.t(path, options);
+    if (install.installed) return;
 
     Vue.use(ElementUI, opts);
-
     Vue.use(GlobalFn, opts);    // 全局方法
     Vue.use(GlobalFilter, opts);    // 全局过滤器
 
     // 注册全局组件库
-    components.forEach(component => {
-        Vue.component(component.name, component);
+    Object.keys(components).forEach(component => {
+        Vue.component(component, components[component]);
     });
 };
 
@@ -126,8 +129,13 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
 
-export default {
-    install,
+CompLib.install = install;
+
+// 全局引用
+export default CompLib;
+
+// 输出各个组件,支持按需引用
+export {
     BoolBox,
     CheckBox,
     CodeBox,
@@ -138,7 +146,7 @@ export default {
     DropDownBox,
     FileBox,
     FindBox,
-    FormBox,
+    FormView,
     RowGrid,
     IconBox,
     ImgBox,
@@ -168,5 +176,13 @@ export default {
     SingleGridTmpl,
     TableFormTmpl,
     TreeFormTmpl,
-    TreeTableTmpl
+    TreeTableTmpl,
+
+    MetaDataManager,
+    FormBuilder,
+    GlobalConfList,
+    GlobalConf,
+    InstanceConfList,
+    InstanceConfEdit,
+    InstanceConfNew
 }

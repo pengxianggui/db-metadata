@@ -458,3 +458,10 @@ Vue.use(metaElement, config)
 4. 添加`MiniFormBox`, 详见组件描述;
 5. 添加`CodeBox`, 详见组件描述;
 6. `MiniFormBox`支持以`JsonBox`形态展示并编辑数据
+
+### 0.1.4
+1. 导出meta管理组件
+
+### 0.1.5
+1. 纠正FormView的注册名(FormBox => FormView)
+2. 修复FormBuilder预览错误

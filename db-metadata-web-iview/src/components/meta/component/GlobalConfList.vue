@@ -23,6 +23,16 @@
     export default {
         name: "GlobalConfList",
         mixins: [getTlMeta, getSpMeta],
+        props: {
+            newRouteUrl: {
+                type: String,
+                default: URL.R_GOBAL_CONF_ADD
+            },
+            editRouteUrl: {
+                type: String,
+                default: URL.R_GOBAL_CONF_EDIT
+            }
+        },
         data() {
             return {
                 objectCode: "meta_component",
@@ -40,13 +50,14 @@
                 });
             },
             addConf() {
-                this.$router.push(URL.R_GOBAL_CONF_ADD);
+                this.$router.push(this.newRouteUrl);
             },
             handlerConf(ev, row, index) {
                 if (ev) ev.stopPropagation();
                 let componentCode = row['code'];
+                // const url =
                 this.$router.push({
-                    path: 'global-conf',
+                    path: this.editRouteUrl,
                     query: {
                         componentCode: componentCode
                     }

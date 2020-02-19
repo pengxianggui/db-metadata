@@ -42,6 +42,7 @@ export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
 
 //  [路由URL]-START --------------------------------------------------------------------------------------------------
 export const R_GOBAL_CONF_ADD = '/main/global-conf';    // 组件默认配置界面[新增]
+export const R_GOBAL_CONF_EDIT = '/main/global-conf';
 export const R_INSTANCE_CONF_NEW = '/main/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}';   // 组件实例配置界面[新增]
 export const R_INSTANCE_CONF_EDIT = '/main/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}';    // 组件实例配置界面[编辑]
 

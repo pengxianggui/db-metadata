@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import {DEFAULT} from '@/constant'
+import utils from '@/utils';
 
 /**
  * Dynamic Content dialog box
@@ -29,7 +30,7 @@ export function dialog(meta, data, conf) {
                     visible: true,
                     innerMeta: meta,
                     data: data,
-                    conf: this.$merge(conf, DEFAULT.DialogBox['conf'])
+                    conf: utils.merge(conf, DEFAULT.DialogBox['conf'])
                 }
             },
             methods: {
