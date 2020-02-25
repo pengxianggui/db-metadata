@@ -1,7 +1,7 @@
 <template>
     <div class="el-card">
         <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-tree-list :ref="tableRefName" :meta="tlMeta" :filter-params="filterParams">
+        <table-tree-list :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
             <template #prefix-btn="{conf}">
                 <slot name="prefix-btn" v-bind:conf="conf"></slot>
             </template>
@@ -62,11 +62,15 @@
             }
         },
         methods: {
+            refresh() {
+                const {$refs, tlRefName} = this;
+                $refs[tlRefName].getData();
+            },
             handleSearch(params) {
-                const tableRefName = this.tableRefName;
+                const tlRefName = this.tlRefName;
                 this.filterParams = params;
                 this.$nextTick(() => {
-                    this.$refs[tableRefName].getData();
+                    this.$refs[tlRefName].getData();
                 })
             },
             initMeta(objectCode) {
@@ -98,7 +102,7 @@
             }
         },
         computed: {
-            tableRefName() {
+            tlRefName() {
                 return this.tlMeta['name'];
             }
         }

@@ -58,6 +58,10 @@
             }
         },
         methods: {
+            refresh() {
+                const {$refs, tlRefName} = this;
+                $refs[tlRefName].getData();
+            },
             formSubmit() {
                 const tlRefName = this.tlRefName;
                 this.$refs[tlRefName].getData();

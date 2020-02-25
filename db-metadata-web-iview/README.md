@@ -468,3 +468,6 @@ Vue.use(metaElement, config)
 
 ### 0.2.0
 修复部分问题
+
+### 0.2.1
+1. 新增表格类别模板的刷新API;

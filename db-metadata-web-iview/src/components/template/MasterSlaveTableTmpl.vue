@@ -117,6 +117,10 @@
             }
         },
         methods: {
+            refresh() {
+                this.refreshMasterData();
+                this.refreshSlavesData();
+            },
             handleChoseChange(rows) {
                 // pxg_todo 多选主表(master)时, 子表(slaves)的默认行为(待定)
                 const {master, $refs} = this;

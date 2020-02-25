@@ -59,6 +59,10 @@
             }
         },
         methods: {
+            refresh() {
+                const {$refs, tlRefName} = this;
+                $refs[tlRefName].getData();
+            },
             handleChoseChange(rows) {
                 // pxg_todo
             },

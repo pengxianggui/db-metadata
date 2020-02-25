@@ -53,6 +53,10 @@
             }
         },
         methods: {
+            refresh() {
+                const {$refs, tlRefName} = this;
+                $refs[tlRefName].getData();
+            },
             handleChoseChange(rows) {
                 // pxg_todo 多选树节点时, table的默认行为(待定)
             },
