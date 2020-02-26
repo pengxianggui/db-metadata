@@ -73,14 +73,6 @@ public class DbMetaService {
         return metaObject;
     }
 
-    public List<IMetaObject> findByCodes(String... objectCodes) {
-        List<IMetaObject> result = new ArrayList<>();
-        for (String objectCode : objectCodes) {
-            result.add(findByCode(objectCode));
-        }
-        return result;
-    }
-
     public IMetaField findFieldByCode(String objectCode, String fieldCode) {
         IMetaField metaField = null;
         if (StrKit.notBlank(objectCode, fieldCode)) {
