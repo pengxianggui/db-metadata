@@ -2,6 +2,7 @@ package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -98,7 +99,7 @@ public class EasyMatch extends MetaSQLExtract {
             }
 
             if (v != null) {
-                values.put(SQL_PREFIX + metaField.en() + ss[1], v);
+                values.put(SQL_PREFIX + MetaSqlKit.discernColumns(metaField.en()) + ss[1], v);
             }
         }
     }

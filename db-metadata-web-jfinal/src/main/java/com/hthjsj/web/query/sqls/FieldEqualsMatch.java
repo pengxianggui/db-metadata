@@ -2,6 +2,7 @@ package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class FieldEqualsMatch extends MetaSQLExtract {
         }
 
         if (httpParams.get(metaField.en()) != null) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + "=?", value);
+            values.put(SQL_PREFIX + MetaSqlKit.discernColumns(metaField.fieldCode()) + "=?", value);
         }
     }
 

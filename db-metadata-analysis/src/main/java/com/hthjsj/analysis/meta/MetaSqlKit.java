@@ -2,6 +2,8 @@ package com.hthjsj.analysis.meta;
 
 import com.alibaba.druid.sql.builder.SQLSelectBuilder;
 import com.alibaba.druid.sql.builder.impl.SQLSelectBuilderImpl;
+import com.alibaba.druid.sql.parser.Keywords;
+import com.alibaba.druid.sql.parser.Token;
 import com.alibaba.druid.util.JdbcConstants;
 import com.jfinal.kit.StrKit;
 
@@ -42,5 +44,21 @@ public class MetaSqlKit {
             }
         }
         return " from " + sqlSelectBuilder.toString().split("(?i)from")[1];
+    }
+
+    /**
+     * 列名如果时Sql关键字,需要用``包装
+     * 如正常的Column命名 直接返回
+     *
+     * @param columnName
+     *
+     * @return
+     */
+    public static String discernColumns(String columnName) {
+        Token token = Keywords.DEFAULT_KEYWORDS.getKeyword(columnName.toUpperCase());
+        if (Keywords.DEFAULT_KEYWORDS.containsValue(token)) {
+            return "`" + columnName + "`";
+        }
+        return columnName;
     }
 }

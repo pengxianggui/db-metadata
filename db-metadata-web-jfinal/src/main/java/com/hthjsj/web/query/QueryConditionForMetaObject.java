@@ -1,9 +1,12 @@
 package com.hthjsj.web.query;
 
+import com.alibaba.druid.sql.parser.Keywords;
+import com.alibaba.druid.sql.parser.Token;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.sqls.MetaSQLExtract;
@@ -116,9 +119,11 @@ public class QueryConditionForMetaObject implements IQueryCondition {
         //遍历处理后的metafield
         Iterator<IMetaField> destIterator = metaFields.iterator();
         StringBuilder sqlSelect = new StringBuilder("select *");
+
         while (destIterator.hasNext()) {
             IMetaField metaField = destIterator.next();
-            sqlSelect.append(",").append(metaField.en()).append(" ");
+            String column = MetaSqlKit.discernColumns(metaField.fieldCode());
+            sqlSelect.append(",").append(column).append(" ");
         }
         sqlParaExt.setSelect(sqlSelect.toString().replaceFirst("\\*,", ""));
         log.debug("select sql:{}", sqlParaExt.getSelect());

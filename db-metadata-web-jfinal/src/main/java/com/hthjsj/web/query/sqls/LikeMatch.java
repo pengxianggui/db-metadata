@@ -1,6 +1,7 @@
 package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,16 +38,17 @@ public class LikeMatch extends MetaSQLExtract {
     @Override
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
         Optional<Object> value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE));
+        String fieldCode = MetaSqlKit.discernColumns(metaField.fieldCode());
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE, value.get());
+            values.put(SQL_PREFIX + fieldCode + LIKE, value.get());
         }
         value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_RIGHT));
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_RIGHT, value.get());
+            values.put(SQL_PREFIX + fieldCode + LIKE_RIGHT, value.get());
         }
         value = Optional.ofNullable(httpParams.get(metaField.fieldCode() + SUFFIX_LIKE_LEFT));
         if (value.isPresent()) {
-            values.put(SQL_PREFIX + metaField.fieldCode() + LIKE_LEFT, value.get());
+            values.put(SQL_PREFIX + fieldCode + LIKE_LEFT, value.get());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.hthjsj.web.query.sqls;
 
 import com.hthjsj.analysis.meta.IMetaField;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.jfinal.kit.StrKit;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class SortMatch extends MetaSQLExtract {
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
 
         String sort_suffix = "_st";
-        String fileCode = metaField.fieldCode();
+        String fileCode = MetaSqlKit.discernColumns(metaField.fieldCode());
         String value = (String) httpParams.get(fileCode + sort_suffix);
         if (StrKit.notBlank(value) && ("desc".equalsIgnoreCase(value) || "asc".equalsIgnoreCase(value))) {
             setMutiple(true);
