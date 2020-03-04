@@ -170,7 +170,7 @@ public class MetaController extends FrontRestController {
         boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());
         log.info("{} 元对象删除 {}", objectCode, deleteStatus);
         //2. 重新导入
-        metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
+        metaObject = metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
         //3. 删除元对象配置
         if (deleteInstanceConfig) {
             log.info("{} 删除前端实例配置", objectCode);
