@@ -168,9 +168,13 @@ public class MetaController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode);
         //1. 删除元对象
         boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());
-        log.info("{} 元对象删除 {}", objectCode, deleteStatus);
+        log.info("{} 元对象删除,元子段:{}个,结果:{}", objectCode, metaObject.fields().size(), deleteStatus);
+
         //2. 重新导入
         metaObject = metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
+        boolean newInsertStatus = metaService().saveMetaObject(metaObject, true);
+        log.info("重新插入{}元对象,元字段:{}个,结果:{}", metaObject.code(), metaObject.fields().size(), newInsertStatus);
+
         //3. 删除元对象配置
         if (deleteInstanceConfig) {
             log.info("{} 删除前端实例配置", objectCode);
