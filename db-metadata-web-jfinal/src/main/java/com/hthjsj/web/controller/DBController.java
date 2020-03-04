@@ -88,24 +88,14 @@ public class DBController extends FrontRestController {
                 IMetaObject metaObject = metaService().importFromTable("metadata", t.getTableName());
                 metaService().saveMetaObject(metaObject, true);
                 metaObject = metaService().findByCode(t.getTableName());
-
-                smartInit(metaObject, ComponentType.TABLEVIEW);
-                smartInit(metaObject, ComponentType.FORMVIEW);
-                smartInit(metaObject, ComponentType.SEARCHVIEW);
+                //自动初始化一些控件
+                for (ComponentType type : Components.me().getAutoInitComponents()) {
+                    MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+                    componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+                }
             }
         }
         InitKit.me().importInstanceConfig().importMetaObjectConfig();
         renderJson(Ret.ok());
-    }
-
-    /**
-     * 自动初始化 元对象*view配置;
-     *
-     * @param metaObject
-     * @param componentType
-     */
-    private void smartInit(IMetaObject metaObject, ComponentType componentType) {
-        MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, componentType);
-        componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.AnalysisManager;
 import com.hthjsj.App;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.auth.JsonUserPermit;
 import com.hthjsj.web.auth.MRAuthIntercept;
 import com.hthjsj.web.auth.MRManager;
@@ -11,7 +12,6 @@ import com.hthjsj.web.auth.jfinal.JFinalResourceLoader;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.controller.FileController;
-import com.hthjsj.web.feature.tree.TreeController;
 import com.hthjsj.web.ext.meta.CCUUConfigExtension;
 import com.hthjsj.web.ext.meta.InstanceConfigExtension;
 import com.hthjsj.web.ext.meta.MetaFieldConfigExtension;
@@ -103,6 +103,7 @@ public class AppWebConfig extends JFinalConfig {
 
         //component register
         Components.me().init();
+        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
         //dictionary register
         Dicts.me().init();
 

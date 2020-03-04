@@ -2,18 +2,24 @@ package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.DropDownBox;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
+import com.hthjsj.web.ui.UIManager;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -68,7 +74,7 @@ public class MetaController extends FrontRestController {
      */
     public void fields() {
         log.error("接口废弃 -> /table/meta");
-//        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
+        //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
         String objectCode = new QueryHelper(this).getObjectCode("meta_field");
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
@@ -139,6 +145,49 @@ public class MetaController extends FrontRestController {
             log.info("删除元对象{}实例配置", metaObject.code());
             componentService().deleteObjectAll(objectCode);
         }
+        renderJson(Ret.ok());
+    }
+
+    /**
+     * 重新导入元对象
+     */
+    @Before(Tx.class)
+    public void resetImport() {
+        /**
+         * 1. 重新解析元对象对应的Table
+         * 2. 删除原元对象
+         *
+         * ext:
+         * 3. [可选]重新导入元对象
+         * 4. [可选]对已经有的配置是否进行重新计算
+         */
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        boolean deleteInstanceConfig = getParaToBoolean("deleteInstanceConfig", false);
+        boolean autoImport = getParaToBoolean("autoImport", false);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
+        //1. 删除元对象
+        boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());
+        log.info("{} 元对象删除 {}", objectCode, deleteStatus);
+        //2. 重新导入
+        metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
+        //3. 删除元对象配置
+        if (deleteInstanceConfig) {
+            log.info("{} 删除前端实例配置", objectCode);
+            componentService().deleteObjectAll(metaObject.code());
+        }
+
+        if (autoImport) {
+            log.info("{} 删除前端实例配置,并准备重新计算前端配置", objectCode);
+            componentService().deleteObjectAll(metaObject.code());
+            //自动初始化一些控件
+            for (ComponentType type : Components.me().getAutoInitComponents()) {
+                log.info("计算 {} - {} 配置", metaObject.code(), type.getCode());
+                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+            }
+        }
+
         renderJson(Ret.ok());
     }
 

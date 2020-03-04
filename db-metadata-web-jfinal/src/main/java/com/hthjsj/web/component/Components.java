@@ -37,6 +37,8 @@ final public class Components {
 
     private final Map<ComponentType, Class<? extends Component>> registry = new HashMap<>();
 
+    private List<ComponentType> autoInitComponents = new ArrayList<>();
+
     public static Components me() {
         return me;
     }
@@ -49,6 +51,15 @@ final public class Components {
 
     public Map<ComponentType, Class<? extends Component>> getRegistry() {
         return registry;
+    }
+
+    public List<ComponentType> getAutoInitComponents() {
+        return autoInitComponents;
+    }
+
+    public Components addAutoInitComponents(ComponentType type) {
+        autoInitComponents.add(type);
+        return this;
     }
 
     /**
