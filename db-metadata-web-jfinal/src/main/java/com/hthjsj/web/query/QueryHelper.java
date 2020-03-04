@@ -105,10 +105,16 @@ public class QueryHelper {
     }
 
     /**
-     * 前后端id传输,用"id"作为key
+     * 前后端id传输,用"id"作为key,
      * 复合主键处理
-     * id=pk1_v1,pk2_v2&id=pk1_v1,pk2_v2
-     * id=1&id=2
+     * <pre>
+     * 单条记录:
+     *      id=pk1_v1,pk2_v2
+     *      id=1
+     * 多条记录:
+     *      id=pk1_v1,pk2_v2&id=pk1_v1,pk2_v2
+     *      id=1&id=2
+     * </pre>
      *
      * @param metaObject
      *
@@ -126,7 +132,7 @@ public class QueryHelper {
             List<Object> results = Lists.newLinkedList();
             for (String val : vals) {
                 results.clear();
-                Okv pksmap = resolvePk(val);
+                Okv pksmap = resolvePk(val, pkkeys);
                 for (String key : pkkeys) {
                     results.add(pksmap.getStr(key));
                 }
@@ -148,11 +154,15 @@ public class QueryHelper {
      *
      * @return {pk1:v1,pk2:v2}
      */
-    private Okv resolvePk(String value) {
+    private Okv resolvePk(String value, String[] pkkeys) {
         String[] ss = value.split(",");
         Okv params = Okv.create();
-        for (String s : ss) {
-            params.set(s.split("_")[0], s.split("_")[1]);
+        for (String key : pkkeys) {
+            for (String s : ss) {
+                if (s.startsWith(key)) {
+                    params.set(key, s.replaceFirst(key + "_", ""));
+                }
+            }
         }
         return params;
     }
