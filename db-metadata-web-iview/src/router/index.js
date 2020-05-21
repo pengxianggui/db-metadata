@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
-import {URL} from '@/constant'
-import axios from '../axios'
 import utils from '@/utils'
 import commonRoute from './commonRoute'
 

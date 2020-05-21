@@ -1,6 +1,5 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
 // 核心组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -19,7 +18,7 @@ import ImgBox from './core/imgbox'
 import JsonBox from './core/jsonbox'
 import List from './core/list'
 import ListItem from './core/listitem'
-import {MiniFormObject, MiniFormField} from './core/meta'
+import {MiniFormField, MiniFormObject} from './core/meta'
 import MiniFormBox from './core/miniformbox'
 import NumBox from './core/numbox'
 import PassBox from './core/passbox'
@@ -34,7 +33,6 @@ import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
 import Tree from './core/tree'
 import ZTogglePanel from './core/ztogglepanel'
-
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
@@ -43,7 +41,6 @@ import SingleGridTmpl from './template/SingleGridTmpl'
 import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
-
 // meta 组件
 import MetaDataManager from "@/components/meta/MetaDataManager";
 import FormBuilder from '@/components/meta/form-builder'
@@ -52,9 +49,9 @@ import GlobalConf from "@/components/meta/component/GlobalConf";
 import InstanceConfList from "@/components/meta/component-instance/InstanceConfList";
 import InstanceConfEdit from "@/components/meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "@/components/meta/component-instance/InstanceConfNew";
-
-import GlobalFn from '@/config/auto-register-fn'
-import GlobalFilter from '@/config/auto-register-filter'
+import GlobalFnRegister from '@/config/fn-register'
+import GlobalFilterRegister from '@/config/filter-register'
+import {DEFAULT, URL} from '@/constant'
 
 const components = {
     // atom or container
@@ -115,9 +112,18 @@ const CompLib = Object.assign({}, components);
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
+    Vue.prototype.$metaElement = {};
     Vue.use(ElementUI, opts);
-    Vue.use(GlobalFn, opts);    // 全局方法
-    Vue.use(GlobalFilter, opts);    // 全局过滤器
+    Vue.use({
+        install: function (Vue, opts = {}) {
+            Vue.prototype.$metaElement = {
+                DEFAULT_CONF: DEFAULT,
+                URL: URL
+            }
+        }
+    }, opts);
+    Vue.use(GlobalFnRegister, opts);    // 全局方法
+    Vue.use(GlobalFilterRegister, opts);    // 全局过滤器
 
     // 注册全局组件库
     Object.keys(components).forEach(component => {

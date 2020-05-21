@@ -471,3 +471,10 @@ Vue.use(metaElement, config)
 
 ### 0.2.1
 1. 新增表格类别模板的刷新API;
+
+### 0.2.2
+1. 将组件的默认UI配置导出;
+2. 将全局函数和全局变量放到Vue.prototype.$metaElement变量下,避免和自定义函数/变量 或 第三方冲突;
+
+### 0.2.3
+1. 导出的全局函数纠正-挂载到Vue.prototype实例上， 全局变量挂载到Vue.prototype.$metaElement上
