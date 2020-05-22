@@ -16,7 +16,7 @@
                         <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
                               v-bind:batchDelete="handleBatchDelete">
                             <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                       v-bind="operationBarConf" v-if="multiMode">删除
+                                       v-bind="operationBarConf" v-if="multiSelect">删除
                             </el-button>
                         </slot>
                         <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
@@ -38,7 +38,7 @@
                     @selection-change="handleSelectionChange">
 
                     <!-- multi select conf -->
-                    <template v-if="multiMode">
+                    <template v-if="multiSelect">
                         <el-table-column type="selection" width="55"></el-table-column>
                     </template>
 
@@ -61,7 +61,7 @@
                         </el-table-column>
                     </template>
 
-                    <slot name="operation-column">
+                    <slot name="operation-column" v-if="operationColMode">
                         <el-table-column width="180" v-bind="operationColumnConf">
                             <template #header>
                                 <span>
@@ -176,7 +176,7 @@
         },
         methods: {
             handleSelectionChange(selection) {
-                if (this.multiMode) {
+                if (this.multiSelect) {
                     this.choseData = selection;
                     this.$emit('chose-change', selection);
                 }
@@ -302,9 +302,9 @@
             },
             choseRow(row) {
                 let selected = true;
-                const {primaryKey, multiMode} = this;
+                const {primaryKey, multiSelect} = this;
 
-                if (multiMode) {
+                if (multiSelect) {
                     let tableRefName = this.innerMeta['name'];
                     for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
                         let choseItem = this.$refs[tableRefName]['selection'][i];
@@ -420,8 +420,17 @@
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
             },
-            multiMode() {
-                return this.innerMeta['multi_select'];
+            multiSelect() {
+                const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
+                if (multiSelect !== undefined) return multiSelect;
+                if (multi_select != undefined) return multi_select;
+                return true;
+            },
+            operationColMode() {
+                const {$attrs: {'operation-col-mode': operationColMode}, innerMeta: {operation_col_mode}} = this;
+                if (operationColMode !== undefined) return operationColMode;
+                if (operation_col_mode !== undefined) return operation_col_mode;
+                return true;
             },
             operationBarConf() {
                 return this.innerMeta['operation-bar'];

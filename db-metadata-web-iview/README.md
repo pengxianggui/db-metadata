@@ -478,3 +478,11 @@ Vue.use(metaElement, config)
 
 ### 0.2.3
 1. 导出的全局函数纠正-挂载到Vue.prototype实例上， 全局变量挂载到Vue.prototype.$metaElement上
+
+### 0.2.4
+1. TableList 支持 直接通过属性配置 多选框显隐、操作列显隐
+
+|方式|key|类型|优先级|
+|---|---|---|---|
+|标签属性配置|multi-select|Boolean|最高|
+|meta属性配置|multi_select|Boolean|其次|
