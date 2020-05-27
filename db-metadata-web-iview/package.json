@@ -15,7 +15,8 @@
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib --name meta-element --dest lib src/components/index.js"
+    "lib": "vue-cli-service build --target lib --name meta-element --dest lib src/components/index.js",
+    "release": "npm run lib && npm publish --registry https://registry.npmjs.org/"
   },
   "dependencies": {
     "axios": "^0.19.0",
