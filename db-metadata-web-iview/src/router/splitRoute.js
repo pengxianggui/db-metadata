@@ -72,7 +72,7 @@ const children = [
     }
 ];
 
-const commonRoute = [
+const splitRoute = [
     {
         path: '/',
         name: 'Main',
@@ -92,6 +92,6 @@ export let globalRoute = children.map(route => {
     item.name = 'G_' + route.name;
     return item;
 });
-commonRoute.unshift(...globalRoute);
+splitRoute.unshift(...globalRoute);
 
-export default commonRoute
+export default splitRoute

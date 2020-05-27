@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import {globalRoute} from '@/router/commonRoute'
+    import {globalRoute} from '@/router/splitRoute'
 
     export default {
         name: "DynamicRouteDemo",

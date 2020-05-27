@@ -296,7 +296,7 @@ Vue.use(metaElement, config)
         }
         ```
     -[ ] ~~支持element原生属性的配置改为表单输入, 表单的构建建立在对element原生控件props的准确获取.~~
-    -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从commonRoute.js中参考
+    -[x] 支持iframe可跳转至业务组件, url传参(?componentCode=&objectCode=), 组件接受的路由参数可从splitRoute.js中参考
  -[x] FormBuilder 表单项/表单 属性编辑转换为表单(element ui 配置简化采用JsonBox)
  -[ ] 组件复用方式, 如何方便、可靠的提供给其他应用复用组件: `npm install`
  -[ ] meta_feature中的config字段需要根据featureType加载不同的mini表单——等featureType类型较多时再采用此方案
@@ -486,3 +486,6 @@ Vue.use(metaElement, config)
 |---|---|---|---|
 |标签属性配置|multi-select|Boolean|最高|
 |meta属性配置|multi_select|Boolean|其次|
+
+### 0.2.5
+1. 新增 tags 组件

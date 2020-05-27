@@ -19,7 +19,7 @@
                     "component_name": "FindBox",
                     "name": "FindBox",
                     "label": "查找框",
-                    "data_url": "/find/meta/test_table?f=col_checkbox", // 这个data_url响应的是FindPanel的meta, 也可是TableList的meta
+                    "data_url": "/find/meta/test_table?f=col_findbox", // 这个data_url响应的是FindPanel的meta, 也可是TableList的meta
                     // "data_url": "/find/sql", // 这个data_url响应的是FindPanel的meta, 也可是TableList的meta
                     "conf": {
                         "clearable": true,

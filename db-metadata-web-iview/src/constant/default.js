@@ -503,6 +503,20 @@ const DEFAULT_CONF = {
             "current-page": 1,
             "layout": "total, prev, pager, next"
         }
+    },
+    "PersonBox": {
+        "component_name": "PersonBox",
+        "name": "PersonBox",
+        "label": "人员选择"
+    },
+    "Tags": {
+        "component_name": "Tags",
+        "name": "Tags",
+        "label": "标签列表",
+        "props": {
+            "label": "label",
+            "id": "id"
+        }
     }
 };
 export default DEFAULT_CONF;

@@ -2,13 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import utils from '@/utils'
-import commonRoute from './commonRoute'
+import splitRoute from './splitRoute'
+import routers from './routes'
 
 Vue.use(Router);
 
 const router = new Router({
     // model: 'history', // hash or history
-    routes: []
+    routes: routers
 });
 
 const routesKey = 'router';
@@ -20,7 +21,7 @@ router.beforeEach((to, from, next) => {
         routes = getRoutesFromLocalStorage(routesKey);
         if (utils.isEmpty(routes)) {
 
-            routes = commonRoute;
+            routes = splitRoute;
             setRoutesToLocalStorage(routesKey, routes);
             routerGo(to, next, routes);
 

@@ -1,9 +1,13 @@
 {
   "name": "meta-element",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/meta-element.common.js",
-  "keywords": ["metadata", "component", "lib"],
+  "keywords": [
+    "metadata",
+    "component",
+    "lib"
+  ],
   "author": "pengxianggui",
   "private": false,
   "license": "MIT",
@@ -35,7 +39,9 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^7.1.0"
   },
   "eslintConfig": {
     "root": true,

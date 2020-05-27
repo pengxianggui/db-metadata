@@ -1,5 +1,5 @@
 import {DEFAULT, URL} from '@/constant'
-import commonRoutes from '@/router/commonRoute'
+import splitRoute from '@/router/splitRoute'
 import utils from '@/utils'
 
 import axios from "axios";
@@ -183,7 +183,7 @@ const mockTree = [
 mockAxios
 // 路由mock --------------------------------------------------------------------------------
     .onGet(URL.ROUTE_DATA).reply(200, {
-    data: commonRoutes,
+    data: splitRoute,
     state: 'ok'
 })
 // list-table-tmpl mock -------------------------------------------------------------------

@@ -26,6 +26,7 @@ import PopMenu from './core/popmenu'
 import RadioBox from './core/radiobox'
 import SearchPanel from './core/searchpanel'
 import SqlBox from './core/sqlbox'
+import Tags from './core/tags'
 import TableList from './core/tablelist'
 import TableTreeList from './core/tabletreelist'
 import TextAreaBox from './core/textareabox'
@@ -81,6 +82,7 @@ const components = {
     RadioBox,
     SearchPanel,
     SqlBox,
+    Tags,
     TableList,
     Tree,
     TableTreeList,
@@ -115,7 +117,7 @@ const install = function (Vue, opts = {}) {
     Vue.prototype.$metaElement = {};
     Vue.use(ElementUI, opts);
     Vue.use({
-        install: function (Vue, opts = {}) {
+        install: function (Vue) {
             Vue.prototype.$metaElement = {
                 DEFAULT_CONF: DEFAULT,
                 URL: URL
@@ -168,6 +170,7 @@ export {
     RadioBox,
     SearchPanel,
     SqlBox,
+    Tags,
     TableList,
     Tree,
     TableTreeList,
