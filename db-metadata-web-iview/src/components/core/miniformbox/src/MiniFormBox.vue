@@ -9,7 +9,8 @@
         <!--            </template>-->
         <!--        </el-form>-->
         <template v-if="formType">
-            <mini-form :meta="innerMeta" v-model="nativeValue"></mini-form>
+            <mini-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :meta="innerMeta"
+                       v-model="nativeValue"></mini-form>
         </template>
         <template v-else>
             <json-box v-model="nativeValue" mode="code"></json-box>

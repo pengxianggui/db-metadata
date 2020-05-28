@@ -31,7 +31,8 @@ function buildMetaByString(key, value) {
         component_name: TextBox.name,
         name: key,
         label: key,
-        value: value
+        value: value,
+        inline: false
     }
 }
 
@@ -40,7 +41,8 @@ function buildMetaByNumber(key, value) {
         component_name: NumBox.name,
         name: key,
         label: key,
-        value: value
+        value: value,
+        inline: false
     }
 }
 
@@ -49,7 +51,8 @@ function buildMetaByBoolean(key, value) {
         component_name: BoolBox.name,
         name: key,
         label: key,
-        value: value
+        value: value,
+        inline: false
     }
 }
 
@@ -58,7 +61,8 @@ function buildMetaByObject(key, value) {
     let meta = {
         name: key,
         label: key,
-        value: value
+        value: value,
+        inline: false
     };
 
     // if (utils.isEmpty(value)) { // 空对象采用JsonBox展示

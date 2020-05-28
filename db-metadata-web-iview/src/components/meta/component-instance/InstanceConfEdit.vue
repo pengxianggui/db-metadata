@@ -40,7 +40,7 @@
                                 </h2>
                                 <el-form-item>
                                     <mini-form-box v-model="confModel.conf" class="shadow"
-                                                   :meta="buildMiniFormMeta(confModel.objectCode, confModel.conf)"></mini-form-box>
+                                                   :meta="objConfMeta"></mini-form-box>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -52,17 +52,19 @@
                                 <el-col :span="12">
                                     <el-form-item>
                                         <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                                       class="shadow" :meta="buildMiniFormMeta(key,
-                                                       confModel.fConf[Object.keys(confModel.fConf)[index]])"></mini-form-box>
+                                        <mini-form-box :inline="false"
+                                                       v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
+                                                       class="shadow"
+                                                       :meta="fieldsConfMeta[Object.keys(confModel.fConf)[index]]"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
                                     <el-form-item>
                                         <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                                       class="shadow" :meta="buildMiniFormMeta(key,
-                                                       confModel.fConf[Object.keys(confModel.fConf)[index+1]])"></mini-form-box>
+                                        <mini-form-box :inline="false"
+                                                       v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
+                                                       class="shadow"
+                                                       :meta="fieldsConfMeta[Object.keys(confModel.fConf)[index]]"></mini-form-box>
                                     </el-form-item>
                                 </el-col>
                             </template>
@@ -118,6 +120,8 @@
             return {
                 isAutoComputed: false,
                 objectMeta: objectMeta,
+                objConfMeta: {}, // 构建元对象配置表单的元数据
+                fieldsConfMeta: {}, // 构建元字段配置表单的元数据
                 confModel: {
                     instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
@@ -166,6 +170,7 @@
                             for (let fieldName in fieldsMap) {
                                 this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
                             }
+                            this.buildAllMeta(this.confModel['conf'], this.confModel['fConf']);
                         }).catch(err => {
                             console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                             this.$message.error(err.msg);
@@ -273,8 +278,11 @@
                     title: '预览'
                 })
             },
-            buildMiniFormMeta(key, value) {
-                return buildMeta(value);
+            buildAllMeta(objConf, fieldsConf) {
+                this.objConfMeta = {};
+                this.fieldsConfMeta = {};
+                this.objConfMeta = buildMeta(objConf);
+                Object.keys(fieldsConf).forEach(f => this.fieldsConfMeta[f] = buildMeta(fieldsConf[f], f))
             }
         },
         mounted() {
