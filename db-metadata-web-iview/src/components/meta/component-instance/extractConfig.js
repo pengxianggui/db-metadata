@@ -21,4 +21,4 @@ export default function (configMap, key) {
     config['conf'] = utils.convertToObject(config['conf']);
     this.$merge(config['conf'], EleProps(config['component_name']));
     return config;
-};
+}

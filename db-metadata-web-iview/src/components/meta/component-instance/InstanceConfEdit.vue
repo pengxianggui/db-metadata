@@ -23,7 +23,7 @@
                         <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
                         <span style="flex: 1"></span>
-                        <el-button @click="onCancel">返回</el-button>
+                        <el-button @click="$router.go(-1)">返回</el-button>
                         <el-button @click="deleteConf" type="danger">删除配置</el-button>
                     </div>
                 </el-form-item>
@@ -34,13 +34,13 @@
                     <el-tab-pane label="高级配置">
                         <div id="conf-panel">
                             <!--                            hash 模式下无法使用锚点-->
-                            <!--                            <div id="conf-menu">-->
-                            <!--                                <ul>-->
-                            <!--                                    <li v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
-                            <!--                                        <a :href="'#' + key">{{index+1}}.{{key}}</a>-->
-                            <!--                                    </li>-->
-                            <!--                                </ul>-->
-                            <!--                            </div>-->
+                            <!--                                                        <div id="conf-menu">-->
+                            <!--                                                            <ul>-->
+                            <!--                                                                <li v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
+                            <!--                                                                    <a :href="'#' + key">{{index+1}}.{{key}}</a>-->
+                            <!--                                                                </li>-->
+                            <!--                                                            </ul>-->
+                            <!--                                                        </div>-->
                             <div id="conf-content">
                                 <el-row v-if="confModel.componentCode && confModel.objectCode">
                                     <el-col>
@@ -51,7 +51,9 @@
                                         </h2>
                                         <el-form-item>
                                             <mini-form-box v-model="confModel.conf" class="shadow"
-                                                           :meta="objConfMeta"></mini-form-box>
+                                                           :meta="objConfMeta" :show-change-type="true"
+                                                           @json-change="() => buildObjectConfMeta(confModel.conf)"
+                                            ></mini-form-box>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -65,7 +67,9 @@
                                         <el-form-item>
                                             <h1 :name="key">{{index+1}}.{{key}}</h1>
                                             <mini-form-box v-model="confModel.fConf[key]" class="shadow"
-                                                           :meta="fieldsConfMeta[key]"></mini-form-box>
+                                                           :meta="fieldsConfMeta[key]" :show-change-type="true"
+                                                           @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
+                                            </mini-form-box>
                                         </el-form-item>
                                     </div>
                                 </div>
@@ -122,8 +126,8 @@
             return {
                 isAutoComputed: false,
                 objectMeta: objectMeta,
-                objConfMeta: {}, // 构建元对象配置表单的元数据
-                fieldsConfMeta: {}, // 构建元字段配置表单的元数据
+                objConfMeta: {}, // 构建元对象配置迷你表单的元数据
+                fieldsConfMeta: {}, // 构建元字段配置迷你表单的元数据
                 confModel: {
                     instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
@@ -169,10 +173,12 @@
                             this.confModel['conf'] = extractConfig.call(this, data, objectCode, true);
 
                             // extract field config
-                            for (let fieldName in fieldsMap) {
-                                this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
-                            }
-                            this.buildAllMeta(this.confModel['conf'], this.confModel['fConf']);
+                            Object.keys(fieldsMap).forEach(key =>
+                                this.$set(this.confModel['fConf'], key, extractConfig.call(this, fieldsMap, key)));
+                            // build object conf meta
+                            this.buildObjectConfMeta(this.confModel['conf']);
+                            // build fields conf meta
+                            Object.keys(this.confModel['fConf']).forEach(key => this.buildFieldConfMeta(this.confModel['fConf'][key], key));
                         }).catch(err => {
                             console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                             this.$message.error(err.msg);
@@ -264,9 +270,6 @@
                     }
                 });
             },
-            onCancel: function () {
-                this.$router.back();
-            },
             preview: function () {
                 const {confModel: {conf, fConf}} = this;
                 let meta = utils.deepClone(conf);
@@ -280,11 +283,11 @@
                     title: '预览'
                 })
             },
-            buildAllMeta(objConf, fieldsConf) {
-                this.objConfMeta = {};
-                this.fieldsConfMeta = {};
-                this.objConfMeta = buildMeta(objConf);
-                Object.keys(fieldsConf).forEach(f => this.fieldsConfMeta[f] = buildMeta(fieldsConf[f], f))
+            buildObjectConfMeta(value) {
+                this.objConfMeta = buildMeta(value);
+            },
+            buildFieldConfMeta(value, key) {
+                this.fieldsConfMeta[key] = buildMeta(value, key);
             }
         },
         mounted() {
@@ -322,7 +325,8 @@
 
     .field-conf-parent {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: auto;
     }
 
     #conf-panel {

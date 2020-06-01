@@ -1,21 +1,13 @@
 <template>
     <div class="el-card">
-        <!--        <el-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="value" size="mini">-->
-        <!--            <template v-for="(item, index) in innerMeta.columns">-->
-        <!--                    <el-form-item :key="item.name + index" :label="item.label||item.name" :prop="item.name"-->
-        <!--                                  :class="{'inline': item.inline, 'width-align': item.inline}">-->
-        <!--                        <component :is="item.component_name" v-model="value[item.name]" :meta="item"></component>-->
-        <!--                    </el-form-item>-->
-        <!--            </template>-->
-        <!--        </el-form>-->
         <template v-if="formType">
             <mini-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :meta="innerMeta"
                        v-model="nativeValue"></mini-form>
         </template>
         <template v-else>
-            <json-box v-model="nativeValue" mode="code"></json-box>
+            <json-box v-model="nativeValue" mode="code" @input="$emit('json-change')"></json-box>
         </template>
-        <div style="display: flex;">
+        <div style="display: flex;" v-if="showChangeType">
             <span style="flex: 1"></span>
             <el-button size="mini" icon="el-icon-guide" circle @click="changeType"></el-button>
         </div>
@@ -35,9 +27,11 @@
         props: {
             value: {
                 type: [Object, String],
-                default: function () {
-                    return {}
-                }
+                default: () => {}
+            },
+            showChangeType: {
+                type: Boolean,
+                default: () => false
             }
         },
         components: {
@@ -52,6 +46,7 @@
             changeType() {
                 const {formType} = this;
                 this.formType = !formType;
+                this.$emit('change-type', this.formType); // hook
             }
         }
 
