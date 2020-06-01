@@ -2,7 +2,7 @@
     <el-container direction="vertical" class="el-card" style="height: 100%;">
         <el-form ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px"
                  style="height: 100%; display: flex; flex-direction: column;">
-            <div>
+            <div class="top-fields">
                 <el-form-item label="实例编码" prop="instanceCode" class="inline">
                     <text-box v-model="confModel.instanceCode" disabled></text-box>
                 </el-form-item>
@@ -28,47 +28,49 @@
                     </div>
                 </el-form-item>
             </div>
-            <div style="flex: 1; overflow: auto;">
+
+            <div style="flex: 1; overflow: auto">
                 <el-tabs type="border-card">
                     <el-tab-pane label="高级配置">
-                        <el-row v-if="confModel.componentCode && confModel.objectCode">
-                            <el-col>
-                                <h2 align="center">元对象:{{confModel.objectCode}} 模板:
-                                    {{confModel.componentCode}}<span
-                                        v-if="isAutoComputed"
-                                        style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
-                                </h2>
-                                <el-form-item>
-                                    <mini-form-box v-model="confModel.conf" class="shadow"
-                                                   :meta="objConfMeta"></mini-form-box>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row v-else>
-                            <div class="blank-tip">请先选择一个组件</div>
-                        </el-row>
-                        <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key">
-                            <template v-if="index%2==0">
-                                <el-col :span="12">
-                                    <el-form-item>
-                                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                                        <mini-form-box :inline="false"
-                                                       v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                                       class="shadow"
-                                                       :meta="fieldsConfMeta[Object.keys(confModel.fConf)[index]]"></mini-form-box>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
-                                    <el-form-item>
-                                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                                        <mini-form-box :inline="false"
-                                                       v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                                       class="shadow"
-                                                       :meta="fieldsConfMeta[Object.keys(confModel.fConf)[index]]"></mini-form-box>
-                                    </el-form-item>
-                                </el-col>
-                            </template>
-                        </el-row>
+                        <div id="conf-panel">
+                            <!--                            hash 模式下无法使用锚点-->
+                            <!--                            <div id="conf-menu">-->
+                            <!--                                <ul>-->
+                            <!--                                    <li v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
+                            <!--                                        <a :href="'#' + key">{{index+1}}.{{key}}</a>-->
+                            <!--                                    </li>-->
+                            <!--                                </ul>-->
+                            <!--                            </div>-->
+                            <div id="conf-content">
+                                <el-row v-if="confModel.componentCode && confModel.objectCode">
+                                    <el-col>
+                                        <h2 align="center">元对象:{{confModel.objectCode}} 模板:
+                                            {{confModel.componentCode}}<span
+                                                v-if="isAutoComputed"
+                                                style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                        </h2>
+                                        <el-form-item>
+                                            <mini-form-box v-model="confModel.conf" class="shadow"
+                                                           :meta="objConfMeta"></mini-form-box>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row v-else>
+                                    <div class="blank-tip">请先选择一个组件</div>
+                                </el-row>
+
+                                <div class="field-conf-parent">
+                                    <div class="field-conf" v-for="(key, index) in Object.keys(confModel.fConf)"
+                                         :key="key">
+                                        <el-form-item>
+                                            <h1 :name="key">{{index+1}}.{{key}}</h1>
+                                            <mini-form-box v-model="confModel.fConf[key]" class="shadow"
+                                                           :meta="fieldsConfMeta[key]"></mini-form-box>
+                                        </el-form-item>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </el-tab-pane>
                     <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
                         <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
@@ -296,7 +298,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .blank-tip {
         height: 400px;
         line-height: 400px;
@@ -308,5 +310,36 @@
 
     .shadow {
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    }
+
+    .top-fields {
+        height: 200px;
+
+        .inline {
+            display: inline-block;
+        }
+    }
+
+    .field-conf-parent {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #conf-panel {
+        display: flex;
+
+        #conf-menu {
+            width: 150px;
+
+            & ul {
+                padding: 0;
+                list-style: none;
+            }
+        }
+
+        #conf-content {
+            flex: 1;
+            overflow: auto;
+        }
     }
 </style>
