@@ -14,6 +14,7 @@ Vue.use(MetaElement, {
 });
 
 Vue.config.productionTip = false;
+Vue.prototype.NODE_ENV = process.env.NODE_ENV;
 
 new Vue({
     router,
