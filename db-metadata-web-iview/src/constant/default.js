@@ -481,10 +481,10 @@ const DEFAULT_CONF = {
             },
             "filterNodeMethod": function (value, data, node) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data && data.label.indexOf(value) !== -1;
             },
-            "renderContent": function (h, {node, data, store}) {
-            }
+            // "renderContent": function (h, {node, data, store}) {
+            // }
         }
     },
     "DataList": {

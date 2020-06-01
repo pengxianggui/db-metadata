@@ -481,3 +481,23 @@ export function strToFn(fnStr) {
     const params = fnStr.substring(firstParentheses + 1, lastParentheses);
     return new Function(...params.split(","), fnBody);
 }
+
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
+export function param2Obj(url) {
+    const search = url.split('?')[1]
+    if (!search) {
+        return {}
+    }
+    return JSON.parse(
+        '{"' +
+        decodeURIComponent(search)
+            .replace(/"/g, '\\"')
+            .replace(/&/g, '","')
+            .replace(/=/g, '":"')
+            .replace(/\+/g, ' ') +
+        '"}'
+    )
+}

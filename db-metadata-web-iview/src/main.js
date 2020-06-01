@@ -1,10 +1,14 @@
 import Vue from 'vue'
-import '@/mock/api'
 import App from './App.vue'
 import router from './router'
 import config from '../config'
+import {mockXHR} from '../mock'
 
 import MetaElement from './components'
+
+if (process.env.NODE_ENV === 'development') {
+    mockXHR()
+}
 
 Vue.use(MetaElement, {
     authorities: ['ADMIN'],
