@@ -109,7 +109,7 @@ let mapping = {
 export default function EleProps(componentName) {
     if (!utils.isString(componentName)) return {};
     if (!utils.hasProp(mapping, componentName)) {
-        console.warn("组件类型不正确. componentName: %s", componentName);
+        console.error("组件类型不正确, 不存在此组件类型. componentName: %s", componentName);
         return {};
     }
     let element = mapping[componentName];

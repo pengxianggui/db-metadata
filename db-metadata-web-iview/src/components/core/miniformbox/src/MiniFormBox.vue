@@ -9,7 +9,10 @@
         </template>
         <div style="display: flex;" v-if="showChangeType">
             <span style="flex: 1"></span>
-            <el-button size="mini" icon="el-icon-guide" circle @click="changeType"></el-button>
+            <slot name="button-expand" v-bind:value="nativeValue"></slot>
+            <span>
+                <el-button size="mini" icon="el-icon-guide" circle @click="changeType"></el-button>
+            </span>
         </div>
     </div>
 </template>
@@ -27,7 +30,8 @@
         props: {
             value: {
                 type: [Object, String],
-                default: () => {}
+                default: () => {
+                }
             },
             showChangeType: {
                 type: Boolean,

@@ -69,6 +69,14 @@
                                             <mini-form-box v-model="confModel.fConf[key]" class="shadow"
                                                            :meta="fieldsConfMeta[key]" :show-change-type="true"
                                                            @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
+                                                <template #button-expand="{value}">
+                                                    <el-popover placement="right" trigger="click">
+                                                        <ui-conf-tip
+                                                            :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
+                                                        <el-button slot="reference" size="mini" icon="el-icon-question"
+                                                                   circle></el-button>
+                                                    </el-popover>
+                                                </template>
                                             </mini-form-box>
                                         </el-form-item>
                                     </div>
@@ -89,6 +97,7 @@
     import utils from '@/utils'
     import {DEFAULT, URL} from '@/constant';
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
+    import UiConfTip from '@/components/meta/component-instance/ext/UiConfTip'
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
 
@@ -117,7 +126,7 @@
 
     export default {
         name: "InstanceConf",
-        components: {FormBuilder},
+        components: {FormBuilder, UiConfTip},
         data() {
             const {instanceCode, componentCode, objectCode} = this.$route.query;
 
