@@ -4,11 +4,11 @@ export const ConfDesc = `
     |component_name|渲染组件名|string|组件列表|-|
     |name|name属性|string|-|-|
     |label|该实例标签名,表现为表单域的label|string|-|-|
+    |conf|codemirror的原生配置项|object|-|-|
     |width|宽度(必须带上px单位)|string|-|-|
     |height|高度(必须带上px单位)|string|-|-|
     |show-theme-chose|是否显示主题选择按钮|boolean|true/false|false|
     |models|可供选择的编辑器模式|array|["darcula", "material", "ambiance", "elegant", "eclipse", "idea"]|-|
-    |conf|codemirror的原生配置项|object|-|-|
 `;
 
 export default {

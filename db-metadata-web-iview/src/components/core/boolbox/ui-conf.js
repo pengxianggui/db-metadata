@@ -1,13 +1,14 @@
 import APPConf from '@/config'
 
-export const ConfDesc = {
-    'component_name': '选择组件列表',
-    'name': '实例名, 即该组件实例的name, 一般认为就是字段名',
-    'label': '该实例标签名,表现为表单域的label',
-    'default_value': '默认为false',
-    'inline': '是否为内联元素, 为true则表示该控件不会独占一行, 若表单中下一个控件的此元素值也为true, 则表现为两个控件位列一行',
-    'conf': '配置对象, 其中的具体配置支持 ElementUI(' + APPConf.elementVersion + ')中 el-checkbox的配置'
-};
+export const ConfDesc = `
+    |配置项|说明|类型|可选值|默认值|
+    |-----|---|----|----|-----|
+    |component_name|渲染组件名|string|组件列表|-|
+    |name|name属性|string|-|-|
+    |label|该实例标签名,表现为表单域的label|string|-|-|
+    |conf|ElementUI(` + APPConf.elementVersion + `)中el-checkbox的原生配置项|object|-|-|
+    |inline|声明为内敛元素,当存在于FormView中时有效|boolean|true/false|false|
+`;
 
 export default {
     'component_name': 'BoolBox',
