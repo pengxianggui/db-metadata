@@ -3,7 +3,7 @@ import utils from '@/utils'
 
 const jumpOut = [
     {
-        path: '/instance-conf-edit',
+        path: 'instance-conf-edit',
         label: "组件实例编辑",
         hidden: true,
         name: 'InstanceConfEdit',
