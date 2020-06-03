@@ -6,22 +6,27 @@
         </div>
         <el-menu :default-active="$route.fullPath" :router="true" active-text-color unique-opened
                  @open="handleOpen" @close="handleClose" :collapse="isCollapse" id="aside-menu">
-            <el-submenu v-for="item in menus" :index="item.path" :key="item.path">
-                <template #title>
-                    <i :class="item.icon"></i>
-                    <span v-text="item.label"></span>
-                </template>
-                <el-menu-item v-for="subItem in item.children" :index="subItem.path" :key="subItem.path">
-                    <i :class="subItem.icon"></i>
-                    <span slot="title" v-text="subItem.label"></span>
-                </el-menu-item>
-            </el-submenu>
+            <template v-for="item in menus">
+                <el-submenu :index="item.path" :key="item.path" v-if="!item.hidden">
+                    <template #title>
+                        <i :class="item.icon"></i>
+                        <span v-text="item.label"></span>
+                    </template>
+                    <template v-for="subItem in item.children" >
+                        <el-menu-item v-if="!subItem.hidden" :index="subItem.path" :key="subItem.path">
+                            <i :class="subItem.icon"></i>
+                            <span slot="title" v-text="subItem.label"></span>
+                        </el-menu-item>
+                    </template>
+                </el-submenu>
+            </template>
         </el-menu>
     </div>
 </template>
 
 <script>
     import {URL} from '@/constant'
+    import MetaRoutes from '@/router/metaRoutes'
 
     export default {
         name: "aside-nav",
@@ -40,7 +45,10 @@
             }
         },
         mounted() {
-            this.$axios.safeGet(URL.MENU_DATA).then(resp => this.menus = resp.data);
+            this.$axios.safeGet(URL.MENU_DATA).then(resp => {
+                this.menus = resp.data
+                this.menus.push(...MetaRoutes)
+            });
         }
     }
 </script>

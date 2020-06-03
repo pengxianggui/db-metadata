@@ -5,7 +5,7 @@ import component from './modules/component'
 import feature from './modules/feature'
 
 const mocks = [
-    ...menu,
+    // ...menu,
     ...component,
     ...feature
 ];

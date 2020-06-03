@@ -36,7 +36,7 @@ export const MASTER_SLAVE_TO_ADD_S = '/feature/masterSlave/toAddS?objectCode={ob
 
 export const LIST_FEATURE_TYPE = '/feature/list'; // 列出所有的功能类型code
 export const MENU_DATA = '/feature/menu';
-export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
+// export const ROUTE_DATA = '/route/list'; // pxg_todo 路由数据, for mock
 
 //  [接口URL]-END ----------------------------------------------------------------------------------------------------
 
