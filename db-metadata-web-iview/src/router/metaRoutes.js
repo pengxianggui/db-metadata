@@ -1,5 +1,5 @@
 import Main from '@/components/Main'
-import utils from "@/utils";
+import utils from '@/utils'
 
 const jumpOut = [
     {
@@ -14,7 +14,7 @@ const jumpOut = [
 const routes = [
     {
         path: '/main',
-        name: 'maintain',
+        name: 'main',
         label: '平台维护',
         icon: "el-icon-s-tools",
         component: Main,

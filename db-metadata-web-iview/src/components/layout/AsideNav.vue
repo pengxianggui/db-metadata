@@ -12,7 +12,7 @@
                         <i :class="item.icon"></i>
                         <span v-text="item.label"></span>
                     </template>
-                    <template v-for="subItem in item.children" >
+                    <template v-for="subItem in item.children">
                         <el-menu-item v-if="!subItem.hidden" :index="subItem.path" :key="subItem.path">
                             <i :class="subItem.icon"></i>
                             <span slot="title" v-text="subItem.label"></span>
@@ -26,7 +26,7 @@
 
 <script>
     import {URL} from '@/constant'
-    import MetaRoutes from '@/router/metaRoutes'
+    import {routes} from '@/router'
 
     export default {
         name: "aside-nav",
@@ -46,8 +46,9 @@
         },
         mounted() {
             this.$axios.safeGet(URL.MENU_DATA).then(resp => {
-                this.menus = resp.data
-                this.menus.push(...MetaRoutes)
+                const dynamicRoutes = resp.data;
+                this.menus.push(...dynamicRoutes);
+                this.menus.push(...routes);
             });
         }
     }

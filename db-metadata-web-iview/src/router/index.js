@@ -1,20 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
-import staticRoutes from './staticRoutes'
 import metaRoutes from './metaRoutes'
 import templateRoutes from './templateRoutes'
+import staticRoutes from './staticRoutes'
 
 Vue.use(Router);
 
-const routes = [
+export const routes = [
     {
         path: '/',
-        redirect: '/main/meta-data',
+        component: Main,
+        redirect: '/dashboard',
+        hidden: true,
+        children: [
+            {
+                path: 'dashboard',
+                component: () => import('@/components/meta/MetaDataManager'),
+                name: 'Dashboard',
+                label: 'Dashboard'
+            },
+        ]
     },
-    ...staticRoutes,
     ...metaRoutes,
-    ...templateRoutes
+    ...templateRoutes,
+    ...staticRoutes
 ];
 
 const router = new Router({
