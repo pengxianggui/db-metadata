@@ -1,5 +1,5 @@
 <template>
-    <el-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="value" size="mini">
+    <el-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="value" size="mini" label-width="120px">
         <template v-for="(item, index) in innerMeta.columns">
             <el-form-item :key="item.name + index" :label="item.label||item.name" :prop="item.name"
                           :class="{'inline': item.inline, 'width-align': item.inline}">
