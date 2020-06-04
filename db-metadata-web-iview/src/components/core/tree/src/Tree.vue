@@ -50,7 +50,7 @@
                 </el-button-group>
             </slot>
         </div>
-        <el-tree :ref="refName" :data="innerData"
+        <el-tree :ref="innerMeta['name']" :data="innerData"
                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                  :props="props"
                  @node-click="handleNodeClick"
@@ -74,7 +74,7 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, CONSTANT} from '@/constant'
+    import {CONSTANT, DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
 
     export default {
@@ -95,12 +95,10 @@
         },
         methods: {
             getAllNodes() {
-                const {refName} = this;
-                return this.$refs[refName].store._getAllNodes();
+                return this.ref.store._getAllNodes();
             },
             getCheckedNodes() {
-                const {refName} = this;
-                return this.$refs[refName].getCheckedNodes();
+                return this.ref.getCheckedNodes();
             },
             handleCommand(fn) {
                 if (this[fn]) this[fn]();
@@ -110,13 +108,11 @@
                 this.$emit('chose-change', this.getCheckedNodes())
             },
             handleChoseAll() {
-                const {refName} = this;
-                this.$refs[refName].setCheckedNodes(this.innerData);
+                this.ref.setCheckedNodes(this.innerData);
                 this.$emit('chose-change', this.getCheckedNodes())
             },
             handleCleanChose() {
-                const {refName} = this;
-                this.$refs[refName].setCheckedKeys([]);
+                this.ref.setCheckedKeys([]);
                 this.$emit('chose-change', this.getCheckedNodes())
             },
             handleExpandAll() {
@@ -126,8 +122,7 @@
                 this.getAllNodes().forEach(node => node.expanded = false);
             },
             handleAdd() {
-                const {refName} = this;
-                let currentNode = this.$refs[refName].getCurrentNode();
+                let currentNode = this.ref.getCurrentNode();
                 if (currentNode) {
                     // pxg_todo 新增节点
 
@@ -159,8 +154,7 @@
             },
 
             filter(value) {
-                const {refName} = this;
-                this.$ref[refName].filter(value);
+                this.ref.filter(value);
             },
             getChechedNodes() {
                 return this.ref.getCheckedNodes();
@@ -176,6 +170,9 @@
             },
             getHalfCheckedKeys() {
                 return this.ref.getHalfCheckedKeys();
+            },
+            setCurrentKey(key) {
+                return this.ref.setCurrentKey(key);
             },
             getCurrentKey() {
                 return this.ref.getCurrentKey();
@@ -245,11 +242,12 @@
             this.initData();
         },
         computed: {
+            ref() {
+                const {name} = this.innerMeta;
+                return this.$refs[name];
+            },
             innerMeta() {
                 return this.$merge(this.meta, DEFAULT.Tree);
-            },
-            refName() {
-                return this.innerMeta['name'];
             },
             multiMode() {
                 return this.innerMeta['conf']['show-checkbox'];
