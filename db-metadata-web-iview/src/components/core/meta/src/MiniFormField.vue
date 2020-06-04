@@ -1,5 +1,6 @@
 <template>
-    <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label" label-position="left">
+    <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label shadow-border "
+             label-position="right" label-width="80px">
         <el-form-item label="默认值">
             <el-col :span="6">
                 <el-input v-model="nativeValue.defaultVal" size="mini"></el-input>
@@ -138,5 +139,11 @@
 
     .align-to-label {
         margin-top: 5px;
+    }
+
+    .shadow-border {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        padding: 15px 0px 5px 5px;
+
     }
 </style>
