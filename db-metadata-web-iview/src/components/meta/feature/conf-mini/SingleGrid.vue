@@ -1,5 +1,6 @@
 <template>
     <el-form>
+        <el-divider content-position="left">单表配置</el-divider>
         <el-form-item label="元对象编码" prop="objectCode" required>
             <drop-down-box v-model="config.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
                 <template #options="{options}">

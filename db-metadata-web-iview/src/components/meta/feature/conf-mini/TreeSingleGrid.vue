@@ -1,6 +1,6 @@
 <template>
     <el-form>
-        <h3>Table配置</h3>
+        <el-divider content-position="left">Table配置</el-divider>
         <el-form-item label="objectCode" class="inline" prop="objectCode" required>
             <drop-down-box v-model="config.table.objectCode"
                            :data-url="metaObjectCodeUrl" @change="config.table.foreignFieldCode = null"

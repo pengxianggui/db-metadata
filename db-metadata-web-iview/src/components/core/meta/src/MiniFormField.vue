@@ -1,11 +1,11 @@
 <template>
-    <el-form ref="sub_form" :model="nativeValue" size="mini">
+    <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label" label-position="left">
         <el-form-item label="默认值">
             <el-col :span="6">
                 <el-input v-model="nativeValue.defaultVal" size="mini"></el-input>
             </el-col>
         </el-form-item>
-        <el-form-item label="开关">
+        <el-form-item label="开关设置">
             <div class="el-checkbox-group">
                 <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
                 <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
@@ -134,5 +134,9 @@
 <style scoped>
     .el-checkbox-group > * {
         margin: 0 10px 0 0 !important;
+    }
+
+    .align-to-label {
+        margin-top: 5px;
     }
 </style>

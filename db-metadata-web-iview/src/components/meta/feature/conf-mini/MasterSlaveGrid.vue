@@ -1,6 +1,6 @@
 <template>
     <el-form>
-        <h3>主表</h3>
+        <el-divider content-position="left">主表配置</el-divider>
         <el-form-item label="元对象编码" class="inline" prop="objectCode" required>
             <drop-down-box v-model="config.master.objectCode"
                            :data-url="metaObjectCodeUrl" @change="config.master.primaryKey = null"

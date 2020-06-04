@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="sub_form" :model="nativeValue" size="mini">
+    <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label">
         <el-form-item label="元对象编码">
             <el-col :span="6">
                 <el-input v-model="nativeValue.objectCode" size="mini" readonly></el-input>
@@ -85,5 +85,7 @@
 </script>
 
 <style scoped>
-
+    .align-to-label {
+        margin-top: 5px;
+    }
 </style>

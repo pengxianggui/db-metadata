@@ -1,6 +1,6 @@
 <template>
     <el-form>
-        <h3>Tree配置</h3>
+        <el-divider content-position="left">Tree配置</el-divider>
         <el-form-item label="元对象编码" class="inline">
             <drop-down-box v-model="config.tree.objectCode" :data-url="metaObjectCodeUrl">
                 <template #options="{options}">
