@@ -52,8 +52,16 @@
                                         <el-form-item>
                                             <mini-form-box v-model="confModel.conf" class="shadow"
                                                            :meta="objConfMeta" :show-change-type="true"
-                                                           @json-change="() => buildObjectConfMeta(confModel.conf)"
-                                            ></mini-form-box>
+                                                           @json-change="() => buildObjectConfMeta(confModel.conf)">
+                                                <template #button-expand="{value}">
+                                                    <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
+                                                        <ui-conf-tip
+                                                            :component-name="confModel.conf['component_name']"></ui-conf-tip>
+                                                        <el-button slot="reference" size="mini" icon="el-icon-question"
+                                                                   circle></el-button>
+                                                    </el-popover>
+                                                </template>
+                                            </mini-form-box>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -70,7 +78,7 @@
                                                            :meta="fieldsConfMeta[key]" :show-change-type="true"
                                                            @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
                                                 <template #button-expand="{value}">
-                                                    <el-popover placement="right" trigger="click">
+                                                    <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
                                                         <ui-conf-tip
                                                             :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
                                                         <el-button slot="reference" size="mini" icon="el-icon-question"
@@ -354,5 +362,10 @@
             flex: 1;
             overflow: auto;
         }
+    }
+</style>
+<style>
+    .ui-conf-tip-popper {
+        box-shadow: 4px 12px 26px 0 rgba(0,0,0,0.2)
     }
 </style>

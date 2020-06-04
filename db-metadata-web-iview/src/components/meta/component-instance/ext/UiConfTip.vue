@@ -1,8 +1,8 @@
 <template>
-    <el-card>
+    <div>
         <h2>{{componentName}}</h2>
         <vue-markdown :source="getSourceCode(componentName)"></vue-markdown>
-    </el-card>
+    </div>
 </template>
 
 <script>
@@ -17,7 +17,8 @@
         props: {
             componentName: {
                 type: String,
-                required: true
+                required: true,
+                default: () => ''
             }
         },
         data() {

@@ -8,11 +8,11 @@
             <json-box v-model="nativeValue" mode="code" @input="$emit('json-change')"></json-box>
         </template>
         <div style="display: flex;" v-if="showChangeType">
-            <span style="flex: 1"></span>
-            <slot name="button-expand" v-bind:value="nativeValue"></slot>
             <span>
                 <el-button size="mini" icon="el-icon-guide" circle @click="changeType"></el-button>
             </span>
+            <slot name="button-expand" v-bind:value="nativeValue"></slot>
+            <span style="flex: 1"></span>
         </div>
     </div>
 </template>
