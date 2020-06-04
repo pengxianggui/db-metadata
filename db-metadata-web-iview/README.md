@@ -494,3 +494,10 @@ Vue.use(metaElement, config)
 1. 修复InstanceConfEdit编辑时会会反复发起组件列表请求（原因：任意修改配置内容,会影响meta的生成——因为meta的生成依赖于该配置项的value值,从而触发迷你表单重新构建）。解决办法：将配置加载后一次性构建整个meta
 2. UIConfig 配置界面布局实现优化(by gird布局);MiniFormBox切换展示状态时,保持数据双向同步正常，同时基于value刷新MiniFormBox的meta时,避免频繁刷新组件列表接口;
 3. 为UIConfig添加帮助提示内容容器. 提示内容需要再专门统一撰写;
+
+### 0.2.9
+1. 修复Tree组件中缺陷
+2. 调整label-width宽度
+
+### 0.2.10
+1. DataList 提供默认渲染插槽

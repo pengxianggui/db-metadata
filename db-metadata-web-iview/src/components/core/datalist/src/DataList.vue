@@ -4,7 +4,9 @@
             <list-item v-for="(item, index) in innerData" :key="index"
                        :class="{'active': index === activeIndex}"
                        @click="handleClick(item, index, $event)">
-                <span>{{item[innerLabelProps.label]}}</span>
+                <slot v-bind:item="item">
+                    <span>{{item[innerLabelProps.label]}}</span>
+                </slot>
             </list-item>
         </list>
         <slot name="pagination" v-bind:pageModel="pageModel">
