@@ -501,3 +501,6 @@ Vue.use(metaElement, config)
 
 ### 0.2.10
 1. DataList 提供默认渲染插槽
+
+### 0.2.11
+1. 元对象逻辑Conf中新增bizInterceptor配置项
