@@ -20,10 +20,8 @@
             <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
         </el-form-item>
         <el-form-item label="业务拦截器">
-            <el-col :span="12">
-                <el-input placeholder="配置业务拦截器 完整的包名, 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
-                          v-model="nativeValue.bizInterceptor"></el-input>
-            </el-col>
+            <el-input placeholder="配置业务拦截器 完整的包名, 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+                      v-model="nativeValue.bizInterceptor"></el-input>
         </el-form-item>
     </el-form>
 </template>
@@ -54,7 +52,6 @@
                     bizInterceptor: '',
                     orderBy: null,
                     where: null,
-                    bizInterceptor: null
                 }
             }
         },
