@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MetaObjectConfigParse extends MetaData {
 
+    private static final PointCut EMPTY_POINT_CUT = new PointCut();
+
     MetaObjectConfigParse(Kv config) {
         set(config);
     }
@@ -70,7 +72,7 @@ public class MetaObjectConfigParse extends MetaData {
 
     public <T extends IPointCut> T interceptor() {
         if (!StrKit.notBlank(getStr("bizInterceptor"))) {
-            return (T) new PointCut();
+            return (T) EMPTY_POINT_CUT;
         }
 
         T clazz = null;
@@ -87,7 +89,7 @@ public class MetaObjectConfigParse extends MetaData {
             log.error("元对象 {},未配置拦截器.", getStr("objectCode"));
         }
         log.warn("元对象{},使用默认拦截器{}", getStr("objectCode"), PointCut.class);
-        return (T) new PointCut();
+        return (T) EMPTY_POINT_CUT;
     }
 
     /**
@@ -98,7 +100,7 @@ public class MetaObjectConfigParse extends MetaData {
         if (o instanceof DeletePointCut) {
             return (DeletePointCut) o;
         }
-        return new PointCut();
+        return EMPTY_POINT_CUT;
     }
 
     public AddPointCut addPointCut() {
@@ -106,7 +108,7 @@ public class MetaObjectConfigParse extends MetaData {
         if (o instanceof AddPointCut) {
             return (AddPointCut) o;
         }
-        return new PointCut();
+        return EMPTY_POINT_CUT;
     }
 
     public UpdatePointCut updatePointCut() {
@@ -114,7 +116,7 @@ public class MetaObjectConfigParse extends MetaData {
         if (o instanceof UpdatePointCut) {
             return (UpdatePointCut) o;
         }
-        return new PointCut();
+        return EMPTY_POINT_CUT;
     }
 
     public ViewPointCut viewPointCut() {
@@ -122,6 +124,6 @@ public class MetaObjectConfigParse extends MetaData {
         if (o instanceof ViewPointCut) {
             return (ViewPointCut) o;
         }
-        return new PointCut();
+        return EMPTY_POINT_CUT;
     }
 }
