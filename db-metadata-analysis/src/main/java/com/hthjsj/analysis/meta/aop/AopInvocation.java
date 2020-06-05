@@ -24,6 +24,9 @@ public class AopInvocation {
 
     private Kv httpParams;
 
+    /**
+     * 用来标记前置操作状态是否完成,如上一个动作是save or update;
+     */
     private boolean preOperateStatus = false;
 
     public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
