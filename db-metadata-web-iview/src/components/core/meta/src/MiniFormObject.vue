@@ -14,14 +14,13 @@
             </div>
         </el-form-item>
         <el-form-item label="排序规则(SQL)">
-            <el-col :span="6">
-                <el-input placeholder="默认排序规则: columnA desc,columnB asc" v-model="nativeValue.orderBy"></el-input>
-            </el-col>
+            <el-input placeholder="默认排序规则: columnA desc,columnB asc" v-model="nativeValue.orderBy"></el-input>
         </el-form-item>
         <el-form-item label="过滤规则(SQL)">
-            <el-col :span="6">
-                <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
-            </el-col>
+            <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
+        </el-form-item>
+        <el-form-item label="业务拦截器">
+            <el-input type="textarea" placeholder="请输入类的全路径" v-model="nativeValue.bizInterceptor"></el-input>
         </el-form-item>
         <el-form-item label="业务拦截器">
             <el-col :span="12">
@@ -57,7 +56,8 @@
                     isAutoIncrement: false,
                     bizInterceptor: '',
                     orderBy: null,
-                    where: null
+                    where: null,
+                    bizInterceptor: null
                 }
             }
         },
@@ -99,7 +99,7 @@
 
     .shadow-border {
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-        padding: 15px 0px 5px 5px;
+        padding: 15px 5px 5px 5px;
 
     }
 </style>
