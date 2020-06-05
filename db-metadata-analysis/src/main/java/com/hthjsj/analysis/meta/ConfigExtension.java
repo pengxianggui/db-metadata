@@ -5,6 +5,12 @@ package com.hthjsj.analysis.meta;
  * 使用方:
  * 1. MetaConfigFactory
  * 2. ComputedKit
+ *
+ * <pre>
+ *     M : MetaObject | MetaField
+ *     C : xxxConfigBuilder
+ *     T : ComponentType
+ * </pre>
  * <p> @Date : 2019/12/18 </p>
  * <p> @Project : db-meta-serve</p>
  *
