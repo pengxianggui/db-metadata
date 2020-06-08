@@ -87,6 +87,7 @@ public class MetaObjectConfigParse extends MetaData {
             log.error(e.getMessage(), e);
         } catch (NullPointerException e) {
             log.error("元对象 {},未配置拦截器.", getStr("objectCode"));
+            log.error(e.getMessage(), e);
         }
         log.warn("元对象{},使用默认拦截器{}", getStr("objectCode"), PointCut.class);
         return (T) EMPTY_POINT_CUT;
