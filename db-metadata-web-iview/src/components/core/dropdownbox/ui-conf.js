@@ -1,4 +1,4 @@
-import APPConf from '@/config'
+import {elementVersion} from "@/config";
 
 export const ConfDesc = `
     |配置项|说明|类型|可选值|默认值|
@@ -10,7 +10,7 @@ export const ConfDesc = `
     |group|是否为分组模式, 注意若为分组模式, 则options选项数据必须为element支持的分组结构|boolean|true/false|false|
     |data_url|选项列表的数据接口, 请配置url. 注意响应的数据格式应当是数组, 数组内容为{key:value}对象, 当group为true时, 数据结构是不一样的|string|-|-|
     |options|配置选项数据, 应当为一个数组, 数组内容为{key: value}对象(当group为true时,结构有所不同). 注意当data_url和options同时存在时, data_url拥有更高优先级|array|-|-|
-    |conf|ElementUI(` + APPConf.elementVersion + `)中el-select的原生配置项|object|-|-|
+    |conf|ElementUI(` + elementVersion + `)中el-select的原生配置项|object|-|-|
 `;
 
 export default {

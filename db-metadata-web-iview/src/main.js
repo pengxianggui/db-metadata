@@ -14,6 +14,13 @@ Vue.use(MetaElement, {
     authorities: ['ADMIN'],
     axios: {
         baseURL: config.apiBaseUrl + 'meta'   // default
+    },
+    routeUrl: {
+        // R_GOBAL_CONF_ADD: '/main/global-conf'
+        // TODO 将路由配置全部提供覆盖机制
+    },
+    restUrl: {
+        // TODO rest接口提供覆盖机制
     }
 });
 

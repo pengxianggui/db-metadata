@@ -52,7 +52,8 @@ import InstanceConfEdit from "@/components/meta/component-instance/InstanceConfE
 import InstanceConfNew from "@/components/meta/component-instance/InstanceConfNew";
 import GlobalFnRegister from '@/config/fn-register'
 import GlobalFilterRegister from '@/config/filter-register'
-import {DEFAULT, URL} from '@/constant'
+import {reverseMerge} from "@/utils/merge";
+import {restUrl, routeUrl} from '@/constant/url'
 
 const components = {
     // atom or container
@@ -114,16 +115,26 @@ const CompLib = Object.assign({}, components);
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
-    Vue.prototype.$metaElement = {};
+    // Vue.prototype.$metaElement = {};
     Vue.use(ElementUI, opts);
-    Vue.use({
-        install: function (Vue) {
-            Vue.prototype.$metaElement = {
-                DEFAULT_CONF: DEFAULT,
-                URL: URL
-            }
-        }
-    }, opts);
+    if (opts.routeUrl) {
+        reverseMerge(routeUrl, opts.routeUrl, false);
+        reverseMerge(restUrl, opts.restUrl, false);
+    }
+    // Vue.use({
+    //     install: function (Vue) {
+    //         Vue.prototype.$metaElement = {
+    //             // DEFAULT_META_CONF: {
+    //             //
+    //             // },
+    //             URL: {}
+    //
+    //             // DEFAULT_CONF: DEFAULT,
+    //             // URL: URL
+    //         }
+    //     }
+    // }, opts);
+
     Vue.use(GlobalFnRegister, opts);    // 全局方法
     Vue.use(GlobalFilterRegister, opts);    // 全局过滤器
 

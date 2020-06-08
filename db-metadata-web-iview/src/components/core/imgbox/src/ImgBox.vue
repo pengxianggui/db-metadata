@@ -1,15 +1,15 @@
 <template>
     <div>
         <el-upload
-            v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-success="handleOnSuccess"
-            :before-remove="beforeRemove"
-            :on-exceed="handleExceed"
-            :before-upload="handleBeforeUpload"
-            accept="image/*"
-            :file-list="fileList">
+                v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+                :on-success="handleOnSuccess"
+                :before-remove="beforeRemove"
+                :on-exceed="handleExceed"
+                :before-upload="handleBeforeUpload"
+                accept="image/*"
+                :file-list="fileList">
             <i class="el-icon-plus"></i>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible">
@@ -19,13 +19,13 @@
 </template>
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.ImgBox), Val(conver)],
+        mixins: [Meta(DefaultMeta), Val(conver)],
         name: 'ImgBox',
         label: '图片上传框',
         props: {

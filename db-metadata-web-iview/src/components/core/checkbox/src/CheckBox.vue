@@ -12,15 +12,15 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import {options} from "../../mixins/methods";
     import Val from '../../mixins/value'
     import conver from './conver'
     import reverse from './reverse'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.CheckBox), Val(conver, reverse), options],
+        mixins: [Meta(DefaultMeta), Val(conver, reverse), options],
         name: "CheckBox",
         label: "复选框",
         data() {

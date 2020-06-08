@@ -39,10 +39,10 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import utils from '@/utils'
     import DefaultBehaviors from './defaultBehaviors'
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: "FormView",
@@ -121,7 +121,7 @@
         computed: {
             innerMeta() {
                 let newMeta = utils.deepClone(this.meta);
-                this.$merge(newMeta, DEFAULT.FormView);
+                this.$merge(newMeta, DefaultMeta);
                 this.assemblyModel(newMeta);
                 return newMeta;
             },

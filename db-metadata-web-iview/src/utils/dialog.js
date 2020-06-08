@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {DEFAULT} from '@/constant'
 import utils from '@/utils';
+import DefaultDialogBoxMeta from '@/components/core/dialogbox/ui-conf'
 
 /**
  * Dynamic Content dialog box
@@ -16,7 +16,7 @@ export function dialog(meta, data, conf) {
             template: `
                 <el-dialog :visible.sync="visible" v-bind="conf" center>
                     <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
-                     @ok="ok" @cancel="cancel"></component>
+                               @ok="ok" @cancel="cancel"></component>
                     <slot name="footer" v-if="conf.showButtons">
                         <div class="dialog-footer" style="margin-top: 10px; text-align: center">
                             <el-button @click="visible = false">取 消</el-button>
@@ -30,7 +30,7 @@ export function dialog(meta, data, conf) {
                     visible: true,
                     innerMeta: meta,
                     data: data,
-                    conf: utils.merge(conf, DEFAULT.DialogBox['conf'])
+                    conf: utils.merge(conf, DefaultDialogBoxMeta['conf'])
                 }
             },
             methods: {

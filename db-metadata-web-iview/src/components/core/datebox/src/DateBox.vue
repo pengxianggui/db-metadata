@@ -7,12 +7,12 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.DateBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         name: "DateBox",
         label: "日期框",
         props: {

@@ -24,7 +24,8 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, CONSTANT} from '@/constant'
+    import {defaultPrimaryKey} from "@/config";
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: "DataList",
@@ -133,14 +134,14 @@
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, DEFAULT.DataList);
+                return this.$merge(this.meta, DefaultMeta);
             },
             innerLabelProps() {
                 return utils.assertUndefined(this.labelProps, this.innerMeta['conf']['label-props'])
             },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+                const defaultPrimaryKey = defaultPrimaryKey;
 
                 if (utils.isEmpty(objectPrimaryKey)) {
                     console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);

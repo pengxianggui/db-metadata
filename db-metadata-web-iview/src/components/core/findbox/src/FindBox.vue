@@ -18,13 +18,13 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import FindPanel from './FindPanel'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.FindBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         name: "FindBox",
         label: "查找框",
         components: {FindPanel},

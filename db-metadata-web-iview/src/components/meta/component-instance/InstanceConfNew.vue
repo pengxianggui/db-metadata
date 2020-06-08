@@ -31,8 +31,8 @@
                             <el-col>
                                 <h2 align="center">元对象:{{confModel.objectCode}} 模板:
                                     {{confModel.componentCode}}<span
-                                        v-if="isAutoComputed"
-                                        style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                            v-if="isAutoComputed"
+                                            style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
                                 </h2>
                                 <el-form-item>
                                     <mini-form-box v-model="confModel.conf" class="shadow"
@@ -75,10 +75,11 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant';
+    import {URL} from '@/constant';
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
+    import DefaultDropDownBoxMeta from '@/components/core/dropdownbox/ui-conf'
 
     let objectMeta = {
         name: "object",
@@ -108,7 +109,7 @@
         components: {FormBuilder},
         data() {
             const {componentCode, objectCode} = this.$route.query;
-            this.$merge(objectMeta, DEFAULT.DropDownBox);
+            this.$merge(objectMeta, DefaultDropDownBoxMeta);
 
             return {
                 isAutoComputed: false,

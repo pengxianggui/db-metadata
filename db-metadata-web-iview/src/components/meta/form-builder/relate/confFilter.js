@@ -1,4 +1,4 @@
-import {DEFAULT} from "@/constant";
+import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
 const FORM_EXCLUDES = ['columns', 'buttons', 'name', 'group', 'objectCode', 'objectPrimaryKey', 'component_name'];
 const FIELD_EXCLUDES = ['name', 'group', 'objectCode', 'objectPrimaryKey'];
@@ -10,7 +10,7 @@ const FIELD_EXCLUDES = ['name', 'group', 'objectCode', 'objectPrimaryKey'];
  * @param key
  */
 export default function (componentName, key) {
-    if (componentName === DEFAULT.FormView.component_name) {
+    if (componentName === DefaultFormViewMeta.component_name) {
         return FORM_EXCLUDES.indexOf(key) > -1 ? false : true;
     } else {
         return FIELD_EXCLUDES.indexOf(key) > -1 ? false : true;

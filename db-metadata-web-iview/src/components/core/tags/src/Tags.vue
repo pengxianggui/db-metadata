@@ -13,12 +13,13 @@
 <script>
     import utils from '@/utils'
     import Val from '../../mixins/value'
-    import {CONSTANT, DEFAULT} from '@/constant'
+    import {defaultPrimaryKey} from '@/config'
     import Meta from '../../mixins/meta'
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: "Tags",
-        mixins: [Meta(DEFAULT.Tags), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         props: {
             value: [String, Array],
             hiddenInput: {
@@ -49,7 +50,7 @@
         computed: {
             primaryKey() {
                 const {props: {id: objectPrimaryKey}} = this.innerMeta;
-                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+                const defaultPrimaryKey = defaultPrimaryKey;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
             }

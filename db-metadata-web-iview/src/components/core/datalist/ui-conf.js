@@ -1,4 +1,4 @@
-import {PAGE_NUM_AREA} from "@/constant/constant";
+import {pageNumArea} from '@/config'
 
 export const ConfDesc = `
     |配置项|说明|类型|可选值|默认值|
@@ -7,7 +7,7 @@ export const ConfDesc = `
     |name|name属性|string|-|-|
     |label|该实例标签名,表现为表单域的label|string|-|-|
     |conf|codemirror的原生配置项|object|-|-|
-    |pagination|分页配置对象|object|-|{'page-size': ` + PAGE_NUM_AREA[0] + `, 'page-sizes': ` + PAGE_NUM_AREA + `, 'current-size': 1, 'layout': 'total, prev, pager, next'}|
+    |pagination|分页配置对象|object|-|{'page-size': ` + pageNumArea[0] + `, 'page-sizes': ` + pageNumArea + `, 'current-size': 1, 'layout': 'total, prev, pager, next'}|
 `;
 
 export default {
@@ -21,8 +21,8 @@ export default {
         }
     },
     "pagination": { // element ui配置
-        "page-size": PAGE_NUM_AREA[0],
-        "page-sizes": PAGE_NUM_AREA,
+        "page-size": pageNumArea[0],
+        "page-sizes": pageNumArea,
         "current-page": 1,
         "layout": "total, prev, pager, next"
     }

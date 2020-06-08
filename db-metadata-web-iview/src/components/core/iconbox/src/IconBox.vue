@@ -21,21 +21,21 @@
     </div>
 </template>
 <script>
-    import {DEFAULT} from '@/constant'
     import IconPanel from './IconPanel'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: 'IconBox',
-        mixins: [Meta(DEFAULT.IconBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         components: {
             IconPanel
         },
         props: {
             value: String
         },
-        data () {
+        data() {
             return {
                 dialogVisible: false
             }

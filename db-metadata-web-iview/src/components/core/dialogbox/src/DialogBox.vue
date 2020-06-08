@@ -24,11 +24,11 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
+    import DefaultMeta from '../ui-conf'
     import Meta from '../../mixins/meta'
 
     export default {
-        mixins: [Meta(DEFAULT.DialogBox)],
+        mixins: [Meta(DefaultMeta)],
         props: {
             visible: Boolean,
             title: String,

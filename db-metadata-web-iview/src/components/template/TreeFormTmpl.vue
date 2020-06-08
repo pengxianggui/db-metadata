@@ -15,8 +15,10 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL, CONSTANT} from '@/constant'
+    import {URL} from '@/constant'
+    import {defaultPrimaryKey} from "@/config";
     import {getFormMeta, getTreeMeta, loadFeature} from "@/components/core/mixins/methods"
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "TreeFormTmpl",
@@ -45,7 +47,7 @@
             },
             handleActiveChange(row) {
                 if (utils.isEmpty(row)) {
-                    this.formMeta = this.$merge({}, DEFAULT.FormView);
+                    this.formMeta = this.$merge({}, DefaultFormViewMeta);
                     return;
                 }
                 const primaryKey = this.primaryKey;
@@ -77,7 +79,7 @@
                     this.treeConf = feature['tree'];
                     this.formConf = feature['form'];
 
-                    const {objectCode:treeObjectCode} = this.treeConf;
+                    const {objectCode: treeObjectCode} = this.treeConf;
                     this.initMeta(treeObjectCode);
                 });
             } else {
@@ -89,7 +91,7 @@
                 return this.formMeta['name'];
             },
             primaryKey() {
-                let primaryKey = this.treeMeta.hasOwnProperty('objectPrimaryKey') ? this.treeMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
+                let primaryKey = this.treeMeta.hasOwnProperty('objectPrimaryKey') ? this.treeMeta['objectPrimaryKey'] : defaultPrimaryKey;
                 return primaryKey.split(',');
             }
         }

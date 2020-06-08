@@ -3,12 +3,12 @@
         <h4 align="center">组件列表({{comps.length}})</h4>
         <el-row>
             <draggable
-                :clone="addFormItem"
-                :group="{ name: 'form', pull: 'clone', put: false }"
-                :list="comps"
-                @end="handleMoveEnd"
-                @start="handleMoveStart"
-                :sort="false">
+                    :clone="addFormItem"
+                    :group="{ name: 'form', pull: 'clone', put: false }"
+                    :list="comps"
+                    @end="handleMoveEnd"
+                    @start="handleMoveStart"
+                    :sort="false">
                 <el-col v-for="comp of comps" :key="comp.name" class="el-card">
                     <el-tooltip class="item" effect="dark" :content="comp.name" :open-delay=1000 placement="top-start">
                         <span><i class="el-icon-receiving"></i><span>{{comp.label}}</span></span>
@@ -21,7 +21,7 @@
 
 <script>
     import draggable from 'vuedraggable'
-    import {DEFAULT} from '@/constant'
+    import {defaultMeta} from '@/components/core/index'
     import BoolBox from '@/components/core/boolbox'
     import CheckBox from '@/components/core/checkbox'
     import DateBox from '@/components/core/datebox'
@@ -61,7 +61,7 @@
                     name: name + this.globalId++,
                     label: label
                 };
-                this.$merge(meta, DEFAULT[name]);
+                this.$merge(meta, defaultMeta[name]);
                 return meta;
             },
             handleMoveEnd() {

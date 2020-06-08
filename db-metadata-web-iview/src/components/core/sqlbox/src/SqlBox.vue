@@ -16,7 +16,8 @@
 </template>
 
 <script>
-    import {DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
+    import DefaultMeta from '../ui-conf'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import CodeMirror from 'codemirror/lib/codemirror'
@@ -32,7 +33,7 @@
     export default {
         name: "SqlBox",
         label: "SQL编辑框",
-        mixins: [Meta(DEFAULT.SqlBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         props: {
             value: String
         },

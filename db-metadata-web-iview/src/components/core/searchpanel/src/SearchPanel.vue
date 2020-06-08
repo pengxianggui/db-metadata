@@ -78,15 +78,16 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import util from '@/utils'
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import {SEARCH_PANEL_CONF as symbols} from '@/config/component_conf'
+    import DefaultMeta from '../ui-conf'
+    import {defaultMeta} from '@/components/core/index'
 
     export default {
         name: "SearchPanel",
-        mixins: [Meta(DEFAULT.SearchPanel)],
+        mixins: [Meta(DefaultMeta)],
         components: {MetaEasyEdit},
         data() {
             return {
@@ -132,7 +133,7 @@
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
                         let componentName = item.component_name;
-                        this.$merge(item, DEFAULT[componentName]); // merge column
+                        this.$merge(item, defaultMeta[componentName]); // merge column
                         let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
                         this.$set(this.model, item.name, {
                             value: null,
@@ -154,7 +155,7 @@
         },
         computed: {
             innerMeta() {
-                let meta = this.$merge(this.meta, DEFAULT.SearchPanel);
+                let meta = this.$merge(this.meta, DefaultMeta);
                 this.assemblyModel(meta);
                 return meta;
             }

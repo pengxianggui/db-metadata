@@ -1,4 +1,4 @@
-import APPConf from '@/config'
+import {elementVersion} from "@/config";
 
 export const ConfDesc = `
     |配置项|说明|类型|可选值|默认值|
@@ -8,7 +8,7 @@ export const ConfDesc = `
     |label|该实例标签名,表现为表单域的label|string|-|-|
     |expand|是否默认展开搜索面板|boolean|true/false|false|
     |label-position|收缩开展开关按钮位置|string|top-left/top-center/top-right/bottom-left/bottom-center/bottom-right|top-center|
-    |conf|ElementUI(` + APPConf.elementVersion + `)中el-form的原生配置项|object|-|-|
+    |conf|ElementUI(` + elementVersion + `)中el-form的原生配置项|object|-|-|
 `;
 
 export default {

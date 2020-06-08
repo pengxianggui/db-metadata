@@ -7,7 +7,7 @@ import {CONSTANT} from "../constant";
  */
 export function s_format(res) {
     const fail = res.data && res.data.state !== 'ok';
-    const defaultMsg = fail ? CONSTANT.ERROR_MSG : CONSTANT.SUCCESS_MSG;
+    const defaultMsg = fail ? '发生错误' : '操作成功';
     res.data.msg = res.data.msg || defaultMsg;
     return !fail;
 }

@@ -37,17 +37,17 @@
         <el-row>
             <el-col :span="24">
                 <el-table
-                    :id="innerMeta.name"
-                    :ref="innerMeta.name"
-                    :data="innerData"
-                    :load="handleLoad"
-                    v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                    @row-click="handleRowClick"
-                    @sort-change="sortChange"
-                    @selection-change="handleSelectionChange"
-                    @row-dblclick="$emit('row-dblclick', $event)"
-                    :default-expand-all="expandAll"
-                    v-if="show">
+                        :id="innerMeta.name"
+                        :ref="innerMeta.name"
+                        :data="innerData"
+                        :load="handleLoad"
+                        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                        @row-click="handleRowClick"
+                        @sort-change="sortChange"
+                        @selection-change="handleSelectionChange"
+                        @row-dblclick="$emit('row-dblclick', $event)"
+                        :default-expand-all="expandAll"
+                        v-if="show">
 
                     <!-- multi select conf -->
                     <template v-if="innerMeta.multi_select">
@@ -147,20 +147,22 @@
 </template>
 
 <script>
-    import {CONSTANT, DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
+    import {defaultPrimaryKey} from "@/config";
     import utils from '@/utils'
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: "TableTreeList",
-        mixins: [Meta(DEFAULT.TableTreeList, assembleMeta)],
+        mixins: [Meta(DefaultMeta, assembleMeta)],
         components: {MetaEasyEdit},
         data() {
             // 利用解构赋值防止空指针
             const {conf: {'default-expand-all': instanceExpandAll} = {}} = this.meta;
-            const {conf: {'default-expand-all': defaultExpandAll} = {}} = DEFAULT.TableTreeList;
+            const {conf: {'default-expand-all': defaultExpandAll} = {}} = DefaultMeta;
             const expandAll = utils.assertUndefined(instanceExpandAll, defaultExpandAll);
 
             return {
@@ -435,7 +437,7 @@
         computed: {
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+                const defaultPrimaryKey = defaultPrimaryKey;
                 let primaryKey;
 
                 if (utils.isEmpty(objectPrimaryKey)) {

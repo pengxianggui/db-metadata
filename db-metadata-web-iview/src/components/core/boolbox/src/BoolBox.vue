@@ -5,15 +5,15 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
     import reverse from './reverse'
     import expand from './expand'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.BoolBox), Val(conver, reverse)],
+        mixins: [Meta(DefaultMeta), Val(conver, reverse)],
         name: "BoolBox",
         label: "布尔框",
         props: {

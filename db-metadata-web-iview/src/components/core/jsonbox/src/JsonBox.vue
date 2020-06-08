@@ -6,14 +6,14 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import vueJsonEditor from 'vue-json-editor'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.JsonBox), Val(conver)],
+        mixins: [Meta(DefaultMeta), Val(conver)],
         name: "JsonBox",
         label: "Json框",
         components: {

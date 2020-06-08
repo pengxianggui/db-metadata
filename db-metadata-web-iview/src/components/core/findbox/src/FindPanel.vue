@@ -33,7 +33,8 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
+    import DefaultTableListMeta from '@/components/core/tablelist/ui-conf';
+    import DefaultSearchPanelMeta from '@/components/core/searchpanel/ui-conf';
 
     export default {
         name: "FindPanel",
@@ -83,12 +84,12 @@
         },
         computed: {
             spMeta() {
-                let meta = this.$merge(this.meta.search, DEFAULT.SearchPanel);
+                let meta = this.$merge(this.meta.search, DefaultSearchPanelMeta);
                 meta.component_name = 'SearchPanel';
                 return meta;
             },
             tlMeta() {
-                let meta = this.$merge(this.meta.table, DEFAULT.TableList);
+                let meta = this.$merge(this.meta.table, DefaultTableListMeta);
                 meta.component_name = 'TableList';
                 meta.multi_select = false; // pxg_todo 暂不支持多选
                 return meta;

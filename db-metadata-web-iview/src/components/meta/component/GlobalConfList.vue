@@ -19,6 +19,7 @@
 <script>
     import {URL} from '@/constant'
     import {getSpMeta, getTlMeta} from "@/components/core/mixins/methods"
+    import {routeUrl} from '@/constant/url'
 
     export default {
         name: "GlobalConfList",
@@ -26,7 +27,7 @@
         props: {
             newRouteUrl: {
                 type: String,
-                default: URL.R_GOBAL_CONF_ADD
+                default: () => routeUrl.R_GOBAL_CONF_ADD
             },
             editRouteUrl: {
                 type: String,

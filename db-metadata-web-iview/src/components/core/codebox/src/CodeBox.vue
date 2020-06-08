@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
+    import DefaultMeta from '../ui-conf'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import assembleMeta from './assembleMeta'
@@ -29,7 +29,7 @@
     export default {
         name: "CodeBox",
         label: "SQL编辑框",
-        mixins: [Meta(DEFAULT.CodeBox, assembleMeta), Val()],
+        mixins: [Meta(DefaultMeta, assembleMeta), Val()],
         props: {
             value: String
         },

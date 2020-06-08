@@ -16,9 +16,11 @@
                 <text-box :ref="codeMeta['name']" :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
-                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.buttons['submit']['conf']" @click="onSubmit"
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.buttons['submit']['conf']"
+                           @click="onSubmit"
                            v-text="innerMeta.buttons['submit']['label']"></el-button>
-                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.buttons['cancel']['conf']" @click="onCancel"
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.buttons['cancel']['conf']"
+                           @click="onCancel"
                            v-text="innerMeta.buttons['cancel']['label']"></el-button>
             </el-form-item>
         </el-form>
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "meta-import",
@@ -100,18 +102,18 @@
         },
         computed: {
             innerMeta() {
-                return this.$merge(this.meta, DEFAULT.FormView);
+                return this.$merge(this.meta, DefaultFormViewMeta);
             },
-            schemaMeta: function() {
+            schemaMeta: function () {
                 return this.meta['columns'][0]
             },
-            tableMeta: function() {
+            tableMeta: function () {
                 return this.meta['columns'][1]
             },
-            objectMeta: function() {
+            objectMeta: function () {
                 return this.meta['columns'][2]
             },
-            codeMeta: function() {
+            codeMeta: function () {
                 return this.meta['columns'][3]
             },
         }

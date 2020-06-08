@@ -1,5 +1,4 @@
 import utils from "@/utils";
-import {DEFAULT} from "@/constant";
 import TextBox from "@/components/core/textbox";
 import NumBox from "@/components/core/numbox";
 import BoolBox from "@/components/core/boolbox";
@@ -7,6 +6,7 @@ import DropDownBox from "@/components/core/dropdownbox";
 import CodeBox from "@/components/core/codebox";
 import JsonBox from "@/components/core/jsonbox";
 import MiniFormBox from '@/components/core/miniformbox'
+import DefaultMiniFormBoxMeta from '@/components/core/miniformbox/ui-conf'
 
 const specials = {
     "component_name": {
@@ -69,7 +69,7 @@ function buildMetaByObject(key, value) {
     //     defaultMeta = DEFAULT.JsonBox;
     //     meta.component_name = JsonBox.name;
     // } else {
-    defaultMeta = DEFAULT.MiniFormBox;
+    defaultMeta = DefaultMiniFormBoxMeta;
     meta.component_name = MiniFormBox.name;
     meta.columns = [];
     let keys = Object.keys(value);

@@ -43,12 +43,18 @@
 </template>
 
 <script>
-    import {CONSTANT, URL} from '@/constant'
+    import {URL} from '@/constant'
     import MasterSlaveGrid from './conf-mini/MasterSlaveGrid'
     import SingleGrid from './conf-mini/SingleGrid'
     import TreeSingleGrid from './conf-mini/TreeSingleGrid'
     import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
 
+    const FEATURE_TYPE = {
+        MasterSlaveGrid: 'MasterSlaveGrid',
+        SingleGrid: 'SingleGrid',
+        TreeSingleGrid: 'TreeInTable',
+        TreeAndSingleGrid: 'TreeAndTable'
+    };
 
     export default {
         name: "feature-add",
@@ -66,13 +72,13 @@
         },
         data() {
             return {
-                FEATURE_TYPE: CONSTANT.FEATURE_TYPE,
+                FEATURE_TYPE: FEATURE_TYPE,
                 objectCode: this.params['objectCode'],
                 primaryKey: this.params['primaryKey'],
                 featureTypeUrl: URL.LIST_FEATURE_TYPE,
                 instanceCodeUrl: URL.INSTANCE_CODE_LIST,
                 feature: {
-                    type: CONSTANT.FEATURE_TYPE['SingleGrid'],
+                    type: FEATURE_TYPE['SingleGrid'],
                     name: null,
                     code: null,
                     config: null,
@@ -107,16 +113,16 @@
                 const {$refs, feature} = this;
                 const {type: featureType} = feature;
                 switch (featureType) {
-                    case CONSTANT.FEATURE_TYPE['MasterSlaveGrid']:
+                    case FEATURE_TYPE['MasterSlaveGrid']:
                         this.feature.config = $refs['masterSlaveGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE['SingleGrid']:
+                    case FEATURE_TYPE['SingleGrid']:
                         this.feature.config = $refs['singleGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE['TreeSingleGrid']:
+                    case FEATURE_TYPE['TreeSingleGrid']:
                         this.feature.config = $refs['treeSingleGrid'].config;
                         break;
-                    case CONSTANT.FEATURE_TYPE['TreeAndSingleGrid']:
+                    case FEATURE_TYPE['TreeAndSingleGrid']:
                         this.feature.config = $refs['treeAndSingleGrid'].config;
                         break;
                 }

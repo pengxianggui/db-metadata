@@ -1,16 +1,16 @@
 const descs = require.context('./', true, /ui-conf\.(js)$/);
-const uiConfDesc = {};
+const metaDesc = {};
 
 descs.keys().forEach(fileName => {
     let item = descs(fileName);
-    uiConfDesc[item.default['component_name']] = item['ConfDesc'];
+    metaDesc[item.default['component_name']] = item['ConfDesc'];
 });
 
-export {uiConfDesc};
-
-const defaultUiConf = {};
+const defaultMeta = {};
 
 descs.keys().forEach(fileName => {
     let item = descs(fileName);
-    defaultUiConf[item.default['component_name']] = item.default;
+    defaultMeta[item.default['component_name']] = item.default;
 });
+
+export {metaDesc, defaultMeta};

@@ -1,12 +1,12 @@
 <template>
     <el-upload
-        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :on-success="handleOnSuccess"
-        :before-remove="beforeRemove"
-        :on-exceed="handleExceed"
-        :file-list="fileList">
+            v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-success="handleOnSuccess"
+            :before-remove="beforeRemove"
+            :on-exceed="handleExceed"
+            :file-list="fileList">
         <el-button size="mini" icon="el-icon-upload" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip" v-text="innerMeta.conf['tip']"></div>
     </el-upload>
@@ -14,13 +14,13 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.FileBox), Val(conver)],
+        mixins: [Meta(DefaultMeta), Val(conver)],
         name: "FileBox",
         label: "文件上传框",
         props: {

@@ -23,12 +23,12 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.TextBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         name: "TextBox",
         label: "文本框",
         props: {

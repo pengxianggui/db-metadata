@@ -36,8 +36,10 @@
 
 <script>
     import utils from '@/utils'
-    import {CONSTANT, DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
+    import {defaultPrimaryKey} from '@/config'
     import {getSpMeta, getTlMeta, loadFeature} from "@/components/core/mixins/methods"
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "TableFormTmpl",
@@ -71,7 +73,7 @@
             },
             handleActiveChange(row) {
                 if (utils.isEmpty(row)) {
-                    this.fmMeta = this.$merge({}, DEFAULT.FormView);
+                    this.fmMeta = this.$merge({}, DefaultFormViewMeta);
                     return;
                 }
                 const primaryKey = this.primaryKey;
@@ -115,7 +117,7 @@
                 return this.tlMeta['name'];
             },
             primaryKey() {
-                let primaryKey = this.tlMeta.hasOwnProperty('objectPrimaryKey') ? this.tlMeta['objectPrimaryKey'] : CONSTANT.DEFAULT_PRIMARY_KEY;
+                let primaryKey = this.tlMeta.hasOwnProperty('objectPrimaryKey') ? this.tlMeta['objectPrimaryKey'] : defaultPrimaryKey;
                 return primaryKey.split(',');
             }
         }

@@ -7,7 +7,7 @@
 
 <script>
     import VueMarkdown from 'vue-markdown'
-    import {uiConfDesc} from "@/components/core";
+    import {metaDesc} from "@/components/core";
 
     export default {
         name: "UiConfTip",
@@ -23,12 +23,12 @@
         },
         data() {
             return {
-                uiConfDescs: uiConfDesc,
+                metaDesc: metaDesc,
             }
         },
         methods: {
             getSourceCode(componentName) {
-                const confDesc = this.uiConfDescs[componentName];
+                const confDesc = this.metaDesc[componentName];
                 return confDesc;
             }
         }

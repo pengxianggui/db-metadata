@@ -6,12 +6,12 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.TimeBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         name: "TimeBox",
         label: "时间框",
         props: {

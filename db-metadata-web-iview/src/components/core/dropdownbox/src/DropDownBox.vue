@@ -18,9 +18,9 @@
         </template>
         <template v-else>
             <el-option-group
-                v-for="group in groupify(innerOptions)"
-                :key="group.label"
-                :label="group.label">
+                    v-for="group in groupify(innerOptions)"
+                    :key="group.label"
+                    :label="group.label">
                 <slot name="options" v-bind:options="innerOptions">
                     <el-option v-for="item in group.options" :key="item.value" :label="item.key||item.value"
                                :value="(item.value ? item.value : item) | stringify">
@@ -36,15 +36,15 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import {options} from "../../mixins/methods";
     import Val from '../../mixins/value'
     import conver from './conver'
     import reverse from './reverse'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.DropDownBox), Val(conver, reverse), options],
+        mixins: [Meta(DefaultMeta), Val(conver, reverse), options],
         name: "DropDownBox",
         label: "下拉框",
         inheritAttrs: true,

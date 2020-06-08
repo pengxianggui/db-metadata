@@ -43,10 +43,10 @@
 </template>
 
 <script>
-    import {DEFAULT} from "@/constant";
     import OptionsInput from './relate/OptionsInput'
     import confFilter from './relate/confFilter'
     import confComponentMapping from './relate/confComponentMapping'
+    import DefaultTextBoxMeta from '@/components/core/textbox/ui-conf'
 
 
     export default {
@@ -71,7 +71,7 @@
                 if (metaMapping.hasOwnProperty(key)) {
                     return metaMapping[key].component_name;
                 }
-                return DEFAULT.TextBox.component_name;
+                return DefaultTextBoxMeta.component_name;
             }
         },
         watch: {
@@ -102,6 +102,7 @@
     .container {
         height: 100%;
     }
+
     .blank-tip {
         height: 400px;
         line-height: 400px;

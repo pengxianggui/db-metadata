@@ -19,14 +19,14 @@
 
 <script>
     import Core from './core'
-    import {DEFAULT} from "@/constant";
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import assembleMeta from './assembleMeta'
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "MiniFormBox",
-        mixins: [Meta(DEFAULT.FormView, assembleMeta), Val()],
+        mixins: [Meta(DefaultFormViewMeta, assembleMeta), Val()],
         props: {
             value: {
                 type: [Object, String],

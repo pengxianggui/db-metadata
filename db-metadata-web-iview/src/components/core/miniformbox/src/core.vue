@@ -10,15 +10,15 @@
 </template>
 
 <script>
-    import {DEFAULT} from "@/constant";
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "MiniForm",
         label: "迷你表单",
         description: "输入控件的一种,JsonBox的表单表现形式",
-        mixins: [Meta(DEFAULT.FormView), Val()],
+        mixins: [Meta(DefaultFormViewMeta), Val()],
         props: {
             value: {
                 type: [Object, String],

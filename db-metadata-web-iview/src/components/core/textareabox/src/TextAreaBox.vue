@@ -11,12 +11,12 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.TextAreaBox), Val()],
+        mixins: [Meta(DefaultMeta), Val()],
         name: "TextAreaBox",
         label: "文本域",
         props: {

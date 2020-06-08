@@ -46,17 +46,18 @@
                                     <el-col>
                                         <h2 align="center">元对象:{{confModel.objectCode}} 模板:
                                             {{confModel.componentCode}}<span
-                                                v-if="isAutoComputed"
-                                                style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+                                                    v-if="isAutoComputed"
+                                                    style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
                                         </h2>
                                         <el-form-item>
                                             <mini-form-box v-model="confModel.conf" class="shadow"
                                                            :meta="objConfMeta" :show-change-type="true"
                                                            @json-change="() => buildObjectConfMeta(confModel.conf)">
                                                 <template #button-expand="{value}">
-                                                    <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
+                                                    <el-popover placement="right" trigger="click"
+                                                                popper-class="ui-conf-tip-popper">
                                                         <ui-conf-tip
-                                                            :component-name="confModel.conf['component_name']"></ui-conf-tip>
+                                                                :component-name="confModel.conf['component_name']"></ui-conf-tip>
                                                         <el-button slot="reference" size="mini" icon="el-icon-question"
                                                                    circle></el-button>
                                                     </el-popover>
@@ -78,9 +79,10 @@
                                                            :meta="fieldsConfMeta[key]" :show-change-type="true"
                                                            @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
                                                 <template #button-expand="{value}">
-                                                    <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
+                                                    <el-popover placement="right" trigger="click"
+                                                                popper-class="ui-conf-tip-popper">
                                                         <ui-conf-tip
-                                                            :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
+                                                                :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
                                                         <el-button slot="reference" size="mini" icon="el-icon-question"
                                                                    circle></el-button>
                                                     </el-popover>
@@ -103,11 +105,12 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant';
+    import {URL} from '@/constant';
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
     import UiConfTip from '@/components/meta/component-instance/ext/UiConfTip'
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
+    import DefaultDropDownBoxMeta from '@/components/core/dropdownbox/ui-conf'
 
     let objectMeta = {
         name: "object",
@@ -138,7 +141,7 @@
         data() {
             const {instanceCode, componentCode, objectCode} = this.$route.query;
 
-            this.$merge(objectMeta, DEFAULT.DropDownBox);
+            this.$merge(objectMeta, DefaultDropDownBoxMeta);
 
             return {
                 isAutoComputed: false,
@@ -366,6 +369,6 @@
 </style>
 <style>
     .ui-conf-tip-popper {
-        box-shadow: 4px 12px 26px 0 rgba(0,0,0,0.2)
+        box-shadow: 4px 12px 26px 0 rgba(0, 0, 0, 0.2)
     }
 </style>

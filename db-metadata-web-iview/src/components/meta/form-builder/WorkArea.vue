@@ -17,15 +17,15 @@
             <form-view :ref="formMeta.name" :meta="formMeta">
                 <template #form-item>
                     <draggable
-                        :animation="200"
-                        :disabled="false"
-                        :list="formMeta.columns"
-                        @add="handleAdd"
-                        @end="handleMoveEnd"
-                        @start="handleMoveStart"
-                        group="form"
-                        style="padding: 5px;border: 1px dotted grey;"
-                        tag="el-row">
+                            :animation="200"
+                            :disabled="false"
+                            :list="formMeta.columns"
+                            @add="handleAdd"
+                            @end="handleMoveEnd"
+                            @start="handleMoveStart"
+                            group="form"
+                            style="padding: 5px;border: 1px dotted grey;"
+                            tag="el-row">
                         <div v-if="formMeta.columns.length === 0" class="blank-tip">
                             从左侧拖拽来添加表单项
                         </div>
@@ -41,13 +41,13 @@
                                                :meta="item"></component>
                                 </el-form-item>
                                 <el-button
-                                    @click.stop="handleDelete(index)"
-                                    class="form-item-delete-btn"
-                                    icon="el-icon-delete"
-                                    size="mini"
-                                    style="border-radius: 0"
-                                    type="primary"
-                                    v-if="selectIndex === index"
+                                        @click.stop="handleDelete(index)"
+                                        class="form-item-delete-btn"
+                                        icon="el-icon-delete"
+                                        size="mini"
+                                        style="border-radius: 0"
+                                        type="primary"
+                                        v-if="selectIndex === index"
                                 ></el-button>
                             </div>
                         </template>
@@ -62,8 +62,9 @@
     import utils from '@/utils'
     import draggable from 'vuedraggable'
     import FormView from "../../core/form/src/FormView";
-    import {DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
     import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
+    import DefaultJsonBoxMeta from "@/components/core/jsonbox/ui-conf";
 
     export default {
         name: "WorkArea",
@@ -116,7 +117,7 @@
                 this.selectIndex = index
             },
             jsonView() {
-                this.$dialog(DEFAULT.JsonBox, this.formMeta, {
+                this.$dialog(DefaultJsonBoxMeta, this.formMeta, {
                     title: "Json预览"
                 })
             },

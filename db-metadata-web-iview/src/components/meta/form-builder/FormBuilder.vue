@@ -26,10 +26,11 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
     import ComponentList from './ComponentList'
     import WorkArea from './WorkArea'
     import ConfArea from './ConfArea'
+    import DefaultFormViewMeta from '@/components/core/form/ui-conf'
 
     export default {
         name: "FormBuilder",
@@ -40,7 +41,7 @@
         data() {
             const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
             return {
-                formMeta: this.$merge({}, DEFAULT.FormView),
+                formMeta: this.$merge({}, DefaultFormViewMeta),
                 selectIndex: null,
                 objectCode: objectCode,
                 metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
@@ -58,7 +59,7 @@
                 this.$emit('oc-change', objectCode);
             },
             setInitState() {
-                this.formMeta = this.$merge({}, DEFAULT.FormView);
+                this.formMeta = this.$merge({}, DefaultFormViewMeta);
             },
             handleSelectFormItem(formMeta, selectIndex) {
                 this.formMeta = formMeta;

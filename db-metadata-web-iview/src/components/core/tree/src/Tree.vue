@@ -74,11 +74,12 @@
 
 <script>
     import utils from '@/utils'
-    import {CONSTANT, DEFAULT} from '@/constant'
+    import {defaultPrimaryKey} from '@/config'
     import Meta from '../../mixins/meta'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.Tree)],
+        mixins: [Meta(DefaultMeta)],
         name: "Tree",
         props: {
             data: Array
@@ -247,7 +248,7 @@
                 return this.$refs[name];
             },
             innerMeta() {
-                return this.$merge(this.meta, DEFAULT.Tree);
+                return this.$merge(this.meta, DefaultMeta);
             },
             multiMode() {
                 return this.innerMeta['conf']['show-checkbox'];
@@ -260,7 +261,7 @@
             },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
+                const defaultPrimaryKey = defaultPrimaryKey;
 
                 if (utils.isEmpty(objectPrimaryKey)) {
                     console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);

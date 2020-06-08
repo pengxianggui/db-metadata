@@ -28,14 +28,14 @@
         <el-row>
             <el-col :span="24">
                 <el-table
-                    :id="innerMeta.name"
-                    :ref="innerMeta.name"
-                    :data="innerData"
-                    v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                    @row-click="handleRowClick"
-                    @row-dblclick="handleRowDbClick"
-                    @sort-change="sortChange"
-                    @selection-change="handleSelectionChange">
+                        :id="innerMeta.name"
+                        :ref="innerMeta.name"
+                        :data="innerData"
+                        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                        @row-click="handleRowClick"
+                        @row-dblclick="handleRowDbClick"
+                        @sort-change="sortChange"
+                        @selection-change="handleSelectionChange">
 
                     <!-- multi select conf -->
                     <template v-if="multiSelect">
@@ -142,15 +142,17 @@
 
 <script>
     import utils from '@/utils'
-    import {CONSTANT, DEFAULT, URL} from '@/constant'
+    import {URL} from '@/constant'
+    import {defaultPrimaryKey} from "@/config";
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
     import TableCell from './tableCell'
+    import DefaultMeta from '../ui-conf'
 
     export default {
         name: "TableList",
-        mixins: [Meta(DEFAULT.TableList, assembleMeta)],
+        mixins: [Meta(DefaultMeta, assembleMeta)],
         components: {MetaEasyEdit, TableCell},
         data() {
             return {
@@ -416,7 +418,6 @@
         computed: {
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = CONSTANT.DEFAULT_PRIMARY_KEY;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
             },

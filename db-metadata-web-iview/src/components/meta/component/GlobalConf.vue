@@ -44,8 +44,10 @@
 
 <script>
     import utils from '@/utils'
-    import {DEFAULT, URL} from '@/constant';
+    import {URL} from '@/constant';
     import EleProps from '@/config/element-props'
+    import DefaultDropDownBoxMeta from '@/components/core/dropdownbox/ui-conf'
+    import DefaultJsonBoxMeta from '@/components/core/jsonbox/ui-conf'
 
     export default {
         name: "GlobalConf",
@@ -66,8 +68,8 @@
                     mode: 'code',
                 }
             };
-            this.$merge(componentMeta, DEFAULT.DropDownBox);
-            this.$merge(confMeta, DEFAULT.JsonBox);
+            this.$merge(componentMeta, DefaultDropDownBoxMeta);
+            this.$merge(confMeta, DefaultJsonBoxMeta);
             return {
                 componentMeta: componentMeta,
                 confMeta: confMeta,

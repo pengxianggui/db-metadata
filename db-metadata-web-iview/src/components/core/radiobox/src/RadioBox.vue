@@ -13,14 +13,14 @@
 </template>
 
 <script>
-    import {DEFAULT} from '@/constant'
     import Meta from '../../mixins/meta'
     import {options} from "../../mixins/methods";
     import Val from '../../mixins/value'
     import conver from './conver'
+    import DefaultMeta from '../ui-conf'
 
     export default {
-        mixins: [Meta(DEFAULT.RadioBox), Val(conver), options],
+        mixins: [Meta(DefaultMeta), Val(conver), options],
         name: "RadioBox",
         label: "单选框",
         data() {
