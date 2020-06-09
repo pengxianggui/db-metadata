@@ -29,12 +29,12 @@
         </el-form-item>
 
         <!-- render-less behavior slot -->
-        <slot name="bhv-cancel" :on="on" :actions="actions">
-            <cancel v-bind="{on, actions}"></cancel>
-        </slot>
-        <slot name="bhv-submit" :on="on" :actions="actions">
-            <submit v-bind="{on, actions}"></submit>
-        </slot>
+        <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
+        <!--            <cancel v-bind="{on, actions}"></cancel>-->
+        <!--        </slot>-->
+        <!--        <slot name="bhv-submit" :on="on" :actions="actions">-->
+        <!--            <submit v-bind="{on, actions}"></submit>-->
+        <!--        </slot>-->
     </el-form>
 </template>
 
@@ -133,13 +133,13 @@
                 return this.innerMeta['buttons'];
             },
             // 支持无渲染的行为插槽
-            actions() {
-                const {onSubmit, doSubmit, onCancel} = this;
-                return {onSubmit, doSubmit, onCancel};
-            },
-            on() {
-                return this.$on.bind(this);
-            }
+            // actions() {
+            //     const {onSubmit, doSubmit, onCancel} = this;
+            //     return {onSubmit, doSubmit, onCancel};
+            // },
+            // on() {
+            //     return this.$on.bind(this);
+            // }
         }
     }
 </script>
