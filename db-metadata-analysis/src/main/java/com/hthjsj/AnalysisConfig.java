@@ -36,9 +36,9 @@ public class AnalysisConfig {
 
     private static final AnalysisConfig me = new AnalysisConfig();
 
-    private List<DBSource> dbSources = new ArrayList<>();
+    private final List<DBSource> dbSources = new ArrayList<>();
 
-    private Plugins plugins = new Plugins();
+    private final Plugins plugins = new Plugins();
 
     public void initDefaultDbSource() {
         //init main database resource
@@ -116,9 +116,9 @@ public class AnalysisConfig {
             DruidPlugin dp_info = new DruidPlugin(url, username, password);
 
             Log4jFilter log4jFilter = new Log4jFilter();
-            log4jFilter.setStatementLogEnabled(true);
-            log4jFilter.setStatementLogErrorEnabled(true);
-            log4jFilter.setStatementExecutableSqlLogEnable(true);
+            log4jFilter.setStatementLogEnabled(false);
+            log4jFilter.setStatementLogErrorEnabled(false);
+            log4jFilter.setStatementExecutableSqlLogEnable(false);
             dp_info.addFilter(log4jFilter);
 
             WallFilter wallFilter = new WallFilter();
