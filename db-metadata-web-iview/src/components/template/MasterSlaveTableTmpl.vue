@@ -97,7 +97,7 @@
 <script>
     import utils from '@/utils'
     import {getSpMeta, getTlMeta, loadFeature} from "@/components/core/mixins/methods"
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
 
     export default {
         name: "MasterSlaveTableTmpl",
@@ -171,7 +171,7 @@
                 // 主子一对一时, this.$refs[refName]为对象, 主子一对多时, 该结果为数组?
                 let ref = utils.isArray($refs[refName]) ? $refs[refName][0] : $refs[refName];
 
-                const url = this.$compile(URL.MASTER_SLAVE_TO_ADD_S, {
+                const url = this.$compile(restUrl.MASTER_SLAVE_TO_ADD_S, {
                     objectCode: sObjectCode,
                     featureCode: featureCode,
                     foreignKeyName: foreignKeyName,

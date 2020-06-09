@@ -26,7 +26,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import ComponentList from './ComponentList'
     import WorkArea from './WorkArea'
     import ConfArea from './ConfArea'
@@ -44,7 +44,7 @@
                 formMeta: this.$merge({}, DefaultFormViewMeta),
                 selectIndex: null,
                 objectCode: objectCode,
-                metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
+                metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
             }
         },
         methods: {
@@ -67,7 +67,7 @@
             },
             loadConf(objectCode) {
                 if (utils.isEmpty(objectCode)) return;
-                const url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+                const url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                     componentCode: 'FormView',
                     objectCode: objectCode
                 });

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import {routes} from '@/router'
 
     export default {
@@ -45,7 +45,7 @@
             }
         },
         mounted() {
-            this.$axios.safeGet(URL.MENU_DATA).then(resp => {
+            this.$axios.safeGet(restUrl.MENU_DATA).then(resp => {
                 const dynamicRoutes = resp.data;
                 this.menus.push(...dynamicRoutes);
                 this.menus.push(...routes);

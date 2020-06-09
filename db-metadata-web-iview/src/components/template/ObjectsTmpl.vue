@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {URL} from '@/constant';
+    import {restUrl} from "@/constant/url";
 
     export default {
         name: "ObjectsTmpl",
@@ -28,7 +28,7 @@
             }
         },
         mounted() {
-            this.$axios.get(URL.OBJECT_CODE_LIST).then(resp => {
+            this.$axios.get(restUrl.OBJECT_CODE_LIST).then(resp => {
                 this.objectCodes = resp.data
             })
         }

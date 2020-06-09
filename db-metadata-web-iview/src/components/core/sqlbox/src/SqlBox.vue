@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import DefaultMeta from '../ui-conf'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
@@ -55,7 +55,7 @@
                 this.tip['msg'] = msg;
             },
             checkSql(value) {
-                this.$axios.get(this.$compile(URL.CHECK_SQL, {sql: value})).then(resp => {
+                this.$axios.get(this.$compile(restUrl.CHECK_SQL, {sql: value})).then(resp => {
                     if (resp.state === 'ok') {
                         this.setTip(resp.state, resp.msg);
                         this.nativeValue = value;

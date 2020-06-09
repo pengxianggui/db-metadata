@@ -119,21 +119,10 @@ const install = function (Vue, opts = {}) {
     Vue.use(ElementUI, opts);
     if (opts.routeUrl) {
         reverseMerge(routeUrl, opts.routeUrl, false);
+    }
+    if (opts.restUrl) {
         reverseMerge(restUrl, opts.restUrl, false);
     }
-    // Vue.use({
-    //     install: function (Vue) {
-    //         Vue.prototype.$metaElement = {
-    //             // DEFAULT_META_CONF: {
-    //             //
-    //             // },
-    //             URL: {}
-    //
-    //             // DEFAULT_CONF: DEFAULT,
-    //             // URL: URL
-    //         }
-    //     }
-    // }, opts);
 
     Vue.use(GlobalFnRegister, opts);    // 全局方法
     Vue.use(GlobalFilterRegister, opts);    // 全局过滤器

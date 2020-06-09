@@ -15,7 +15,8 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
+
     export default {
         name: "SingleGrid",
         props: {
@@ -29,7 +30,7 @@
                         objectCode: objectCode
                     }
                 },
-                metaObjectCodeUrl: URL.OBJECT_CODE_LIST
+                metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST
             }
         },
         updated() {

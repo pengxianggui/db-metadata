@@ -75,7 +75,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant';
+    import {restUrl} from "@/constant/url";
     import FormBuilder from "@/components/meta/form-builder/FormBuilder";
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
@@ -84,7 +84,7 @@
     let objectMeta = {
         name: "object",
         label: "元对象",
-        data_url: URL.OBJECT_CODE_LIST,
+        data_url: restUrl.OBJECT_CODE_LIST,
         group: false,
         conf: {
             "filterable": true,
@@ -140,7 +140,7 @@
                 const {confModel: {componentCode, objectCode}, $axios} = this;
                 this.$refs['InstanceConf'].validate((valid) => {
                     if (valid) {
-                        const url = this.$compile(URL.COMP_INSTANCE_CONF_LOAD_NEW, {
+                        const url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_NEW, {
                             objectCode: objectCode,
                             componentCode: componentCode
                         });
@@ -174,7 +174,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let url = this.$compile(URL.COMP_INSTANCE_CONF_DELETE, this.confModel);
+                    let url = this.$compile(restUrl.COMP_INSTANCE_CONF_DELETE, this.confModel);
                     this.$axios.delete(url).then(resp => {
                         this.$message.success(resp.msg);
                     }).catch(err => {
@@ -206,7 +206,7 @@
 
                             this.$axios({
                                 method: 'POST',
-                                url: URL.COMP_CONF_ADD,
+                                url: restUrl.COMP_CONF_ADD,
                                 data: params
                             }).then(resp => {
                                 this.$message.success(resp.msg);

@@ -18,7 +18,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
+    import {routeUrl} from "@/constant/url";
     import {getSpMeta, getTlMeta} from "@/components/core/mixins/methods"
 
     export default {
@@ -27,11 +27,11 @@
         props: {
             newRouteUrl: {
                 type: String,
-                default: URL.R_INSTANCE_CONF_NEW
+                default: routeUrl.R_INSTANCE_CONF_NEW
             },
             editRouteUrl: {
                 type: String,
-                default: URL.R_INSTANCE_CONF_EDIT
+                default: routeUrl.R_INSTANCE_CONF_EDIT
             }
         },
         data() {

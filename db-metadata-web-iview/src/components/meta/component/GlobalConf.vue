@@ -44,7 +44,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant';
+    import {restUrl} from "@/constant/url";
     import EleProps from '@/config/element-props'
     import DefaultDropDownBoxMeta from '@/components/core/dropdownbox/ui-conf'
     import DefaultJsonBoxMeta from '@/components/core/jsonbox/ui-conf'
@@ -55,7 +55,7 @@
             let componentMeta = {
                 name: "component",
                 label: "组件",
-                data_url: URL.COMPONENT_CODE_LIST,
+                data_url: restUrl.COMPONENT_CODE_LIST,
                 group: false,
                 conf: {
                     "filterable": true,
@@ -88,7 +88,7 @@
                     return;
                 }
 
-                const url = this.$compile(URL.COMP_GOBAL_CONF_LOAD, {
+                const url = this.$compile(restUrl.COMP_GOBAL_CONF_LOAD, {
                     componentCode: componentCode
                 });
 
@@ -109,7 +109,7 @@
                 })
             },
             deleteConf: function () {
-                let url = this.$compile(URL.COMP_GOBAL_CONF_DELETE, this.confModel);
+                let url = this.$compile(restUrl.COMP_GOBAL_CONF_DELETE, this.confModel);
                 this.$axios.delete(url).then(resp => {
                     this.$message.success(resp.msg);
                 }).catch(err => {
@@ -131,7 +131,7 @@
 
                 this.$axios({
                     method: 'POST',
-                    url: URL.COMP_CONF_ADD,
+                    url: restUrl.COMP_CONF_ADD,
                     data: params
                 }).then(resp => {
                     this.$message.success(resp.msg);
@@ -153,7 +153,7 @@
 
                 this.$axios({
                     method: 'POST',
-                    url: URL.COMP_CONF_UPDATE,
+                    url: restUrl.COMP_CONF_UPDATE,
                     data: params
                 }).then(resp => {
                     this.$message.success(resp.msg);

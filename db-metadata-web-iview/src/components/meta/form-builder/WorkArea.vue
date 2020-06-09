@@ -62,7 +62,7 @@
     import utils from '@/utils'
     import draggable from 'vuedraggable'
     import FormView from "../../core/form/src/FormView";
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import DropDownBox from "@/components/core/dropdownbox/src/DropDownBox";
     import DefaultJsonBoxMeta from "@/components/core/jsonbox/ui-conf";
 
@@ -147,7 +147,7 @@
 
                 this.$axios({
                     method: 'POST',
-                    url: URL.COMP_CONF_UPDATE,
+                    url: restUrl.COMP_CONF_UPDATE,
                     data: params
                 }).then(resp => {
                     this.$message.success(resp.msg);

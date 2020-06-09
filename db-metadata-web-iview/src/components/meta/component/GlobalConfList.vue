@@ -17,7 +17,6 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
     import {getSpMeta, getTlMeta} from "@/components/core/mixins/methods"
     import {routeUrl} from '@/constant/url'
 
@@ -31,7 +30,7 @@
             },
             editRouteUrl: {
                 type: String,
-                default: URL.R_GOBAL_CONF_EDIT
+                default: routeUrl.R_GOBAL_CONF_EDIT
             }
         },
         data() {

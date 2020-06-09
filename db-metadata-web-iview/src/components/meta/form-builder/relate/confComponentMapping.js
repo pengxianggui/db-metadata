@@ -1,4 +1,4 @@
-import {URL} from "@/constant";
+import {restUrl} from "@/constant/url";
 import utils from '@/utils'
 import DefaultBoolBoxMeta from '@/components/core/boolbox/ui-conf'
 import DefaultRadioBoxMeta from '@/components/core/radiobox/ui-conf'
@@ -13,7 +13,7 @@ import DefaultMinFormBoxMeta from '@/components/core/miniformbox/ui-conf'
 const CUSTOM_CONF_COMPONENT_MAPPING = {
     name: DefaultTextBoxMeta,
     label: DefaultTextBoxMeta,
-    component_name: utils.merge({data_url: URL.COMPONENT_CODE_LIST}, DefaultDropDownBoxMeta),
+    component_name: utils.merge({data_url: restUrl.COMPONENT_CODE_LIST}, DefaultDropDownBoxMeta),
     conf: DefaultMinFormBoxMeta,
     inline: DefaultBoolBoxMeta,
     data_url: DefaultTextBoxMeta,

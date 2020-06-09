@@ -49,7 +49,8 @@
                     <template #default>
                         <list>
                             <list-item v-for="ic in instanceCodes" :key="ic"
-                                       @click="editInstanceConf(ic)">{{ic}}</list-item>
+                                       @click="editInstanceConf(ic)">{{ic}}
+                            </list-item>
                         </list>
                     </template>
                 </pop-menu>
@@ -61,7 +62,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
+    import {restUrl, routeUrl} from "@/constant/url";
 
     export default {
         name: "MetaEasyEdit",
@@ -106,7 +107,7 @@
                 if (!utils.isEmpty(componentCodes)) return;
                 if (!this.checkObjectCode()) return;
 
-                this.$axios.get(this.$compile(URL.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: false}))
+                this.$axios.get(this.$compile(restUrl.LOAD_COMP_BY_OBJECT, {objectCode: objectCode, kv: false}))
                     .then(resp => {
                         this.componentCodes = resp.data;
                     })
@@ -117,7 +118,7 @@
                 if (!utils.isEmpty(instanceCodes)) return; // 避免重复请求
                 if (!this.checkObjectCode()) return;
 
-                this.$axios.get(this.$compile(URL.LOAD_INSTANCE_CODE_BY_OBJECT_COMP, {
+                this.$axios.get(this.$compile(restUrl.LOAD_INSTANCE_CODE_BY_OBJECT_COMP, {
                     objectCode: objectCode,
                     componentCode: componentCode,
                     kv: false
@@ -129,7 +130,7 @@
                 let {objectCode} = this;
                 if (!this.checkObjectCode()) return;
 
-                let url = this.$compile(URL.META_OBJECT_TO_EDIT, {objectCode: objectCode});
+                let url = this.$compile(restUrl.META_OBJECT_TO_EDIT, {objectCode: objectCode});
                 this.$axios.get(url).then(resp => {
                     this.dialogComponentMea = resp.data;
                     this.dialogMeta = {
@@ -145,7 +146,7 @@
                 let {objectCode, fieldCode} = this;
                 if (!this.checkObjectCode()) return;
 
-                let url = this.$compile(URL.META_FIELD_TO_EDIT, {
+                let url = this.$compile(restUrl.META_FIELD_TO_EDIT, {
                     objectCode: objectCode,
                     fieldCode: fieldCode
                 });
@@ -164,8 +165,8 @@
                 const {objectCode, componentCode: compCode} = this;
                 if (!this.checkObjectCode()) return;
 
-                const url = URL.RR_INSTANCE_CONF_ADD;
-                const routeUrl = this.$router.resolve({
+                const url = routeUrl.RR_INSTANCE_CONF_ADD;
+                const finalRouteUrl = this.$router.resolve({
                     path: url,
                     query: {
                         componentCode: compCode,
@@ -173,7 +174,7 @@
                         instanceCode: ic
                     }
                 });
-                window.open(routeUrl.href, '_blank');
+                window.open(finalRouteUrl.href, '_blank');
             },
             editInstanceFieldConf(componentCode) {
                 this.editInstanceConf(componentCode); // just edit the ui conf of field named fieldCode. anchor point ?

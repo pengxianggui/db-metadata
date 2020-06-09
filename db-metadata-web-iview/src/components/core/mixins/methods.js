@@ -1,5 +1,5 @@
 import utils from '@/utils'
-import {URL} from '@/constant'
+import {restUrl} from "@/constant/url";
 
 /**
  * 加载功能配置
@@ -8,7 +8,7 @@ import {URL} from '@/constant'
 export const loadFeature = {
     methods: {
         loadFeature(featureCode) {
-            let url = this.$compile(URL.FEATURE_LOAD, {
+            let url = this.$compile(restUrl.FEATURE_LOAD, {
                 featureCode: featureCode
             });
             return this.$axios.safeGet(url);
@@ -24,7 +24,7 @@ export const loadFeature = {
 export const getTlMeta = {
     methods: {
         getTlMeta(objectCode) {
-            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
                 componentCode: 'TableList'
             });
@@ -36,7 +36,7 @@ export const getTlMeta = {
 export const getTreeMeta = {
     methods: {
         getTreeMeta(objectCode) {
-            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
                 componentCode: 'Tree'
             });
@@ -48,7 +48,7 @@ export const getTreeMeta = {
 export const getFormMeta = {
     methods: {
         getFormMeta(objectCode) {
-            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
                 componentCode: 'FormView'
             });
@@ -65,7 +65,7 @@ export const getFormMeta = {
 export const getDlMeta = {
     methods: {
         getDlMeta(objectCode) {
-            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
                 componentCode: 'DataList'
             });
@@ -82,7 +82,7 @@ export const getDlMeta = {
 export const getSpMeta = {
     methods: {
         getSpMeta(objectCode) {
-            let url = this.$compile(URL.COMPONENT_INSTANCE_META, {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 componentCode: 'SearchPanel',
                 objectCode: objectCode
             });

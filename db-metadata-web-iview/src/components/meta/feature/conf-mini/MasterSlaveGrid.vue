@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
 
     export default {
         name: "MasterSlaveGrid",
@@ -77,8 +77,8 @@
                         order: 0
                     }]
                 },
-                metaObjectCodeUrl: URL.OBJECT_CODE_LIST,
-                metaFieldCodeUrl: URL.FIELD_CODE_LIST_BY_OBJECT,
+                metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
+                metaFieldCodeUrl: restUrl.FIELD_CODE_LIST_BY_OBJECT,
                 activeTab: 'first',
             }
         },

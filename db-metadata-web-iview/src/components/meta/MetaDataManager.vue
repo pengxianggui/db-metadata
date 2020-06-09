@@ -35,8 +35,8 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
-    import {loadFeature, getTlMeta, getSpMeta} from "../core/mixins/methods"
+    import {restUrl, routeUrl} from "@/constant/url";
+    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
     import FeatureAdd from './feature/FeatureAdd'
 
@@ -70,7 +70,7 @@
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
                 //
-                let url = this.$compile(URL.R_INSTANCE_CONF_NEW, {
+                let url = this.$compile(routeUrl.R_INSTANCE_CONF_NEW, {
                     componentCode: 'TableList',
                     objectCode: objectCode
                 });
@@ -122,7 +122,7 @@
                     objectCodes = row.code;
                 }
                 title = '<div style="overflow: auto;">确定删除如下元对象? ' + objectCodes + '</div>';
-                url = this.$compile(URL.META_OBJECT_DELETE, {objectCode: objectCodes});
+                url = this.$compile(restUrl.META_OBJECT_DELETE, {objectCode: objectCodes});
 
                 this.$confirm(title, '提示', {
                     confirmButtonText: '确定',
@@ -143,7 +143,7 @@
             }
         },
         created() {
-            this.$axios.get(URL.META_OBJECT_TO_ADD).then(resp => {
+            this.$axios.get(restUrl.META_OBJECT_TO_ADD).then(resp => {
                 this.formMeta = resp.data
             }).catch(err => {
                 this.$message.error(err.msg);

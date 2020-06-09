@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import MasterSlaveGrid from './conf-mini/MasterSlaveGrid'
     import SingleGrid from './conf-mini/SingleGrid'
     import TreeSingleGrid from './conf-mini/TreeSingleGrid'
@@ -75,8 +75,8 @@
                 FEATURE_TYPE: FEATURE_TYPE,
                 objectCode: this.params['objectCode'],
                 primaryKey: this.params['primaryKey'],
-                featureTypeUrl: URL.LIST_FEATURE_TYPE,
-                instanceCodeUrl: URL.INSTANCE_CODE_LIST,
+                featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
+                instanceCodeUrl: restUrl.INSTANCE_CODE_LIST,
                 feature: {
                     type: FEATURE_TYPE['SingleGrid'],
                     name: null,
@@ -132,7 +132,7 @@
             doSubmit() {
                 const params = this.assembleParams();
                 const {type: featureType} = params;
-                let url = this.$compile(URL.FEATURE_ADD, {
+                let url = this.$compile(restUrl.FEATURE_ADD, {
                     featureType: featureType
                 });
                 this.$axios.post(url, params).then(resp => {

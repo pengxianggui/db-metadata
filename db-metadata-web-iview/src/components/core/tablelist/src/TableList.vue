@@ -142,7 +142,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
+    import {restUrl} from "@/constant/url";
     import {defaultPrimaryKey} from "@/config";
     import MetaEasyEdit from '@/components/meta/relate/MetaEasyEdit'
     import Meta from '../../mixins/meta'
@@ -203,13 +203,13 @@
                         primaryKv = utils.spliceKvs(primaryKey, primaryValue);
                     }
 
-                    url = this.$compile(URL.RECORD_TO_UPDATE, {
+                    url = this.$compile(restUrl.RECORD_TO_UPDATE, {
                         objectCode: this.innerMeta['objectCode'],
                         primaryKv: primaryKv
                     });
                 } else {
                     title = '新增';
-                    url = this.$compile(URL.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
                 }
                 this.dialog(url, {title: title});
             },

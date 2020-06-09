@@ -15,10 +15,10 @@
         <el-form-item v-if="innerMeta.columns.length > 0">
             <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf">
                 <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
-                           @click="$emit('submit')"
+                           @click="onSubmit"
                            v-text="buttonsConf['submit']['label']"></el-button>
                 <el-button :id="innerMeta.name + 'cancel'" v-bind="buttonsConf['cancel']['conf']"
-                           @click="$emit('cancel')"
+                           @click="onCancel"
                            v-text="buttonsConf['cancel']['label']"></el-button>
             </slot>
             <div style="float: right">

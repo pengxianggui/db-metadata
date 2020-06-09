@@ -15,7 +15,7 @@
 
 <script>
     import utils from '@/utils'
-    import {URL} from '@/constant'
+    import {restUrl} from '@/constant/url'
     import {defaultPrimaryKey} from "@/config";
     import {getFormMeta, getTreeMeta, loadFeature} from "@/components/core/mixins/methods"
     import DefaultFormViewMeta from '@/components/core/form/ui-conf'
@@ -54,7 +54,7 @@
                 const primaryValue = utils.extractValue(row, primaryKey);
                 const objectCode = this.treeMeta['objectCode'];
 
-                let url = this.$compile(URL.RECORD_TO_UPDATE, {
+                let url = this.$compile(restUrl.RECORD_TO_UPDATE, {
                     objectCode: objectCode,
                     primaryKv: primaryValue
                 });
