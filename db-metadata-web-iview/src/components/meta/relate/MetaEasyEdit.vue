@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="$hasAuth('ADMIN')">
+        <template v-if="$hasAuth('ADMIN') && objectCode">
             <template v-if="all">
                 <pop-menu trigger="right-click">
                     <template #label>{{label}}</template>
