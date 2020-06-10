@@ -30,7 +30,7 @@
             },
             editRouteUrl: {
                 type: String,
-                default: routeUrl.R_GOBAL_CONF_EDIT
+                default: () => routeUrl.R_GOBAL_CONF_EDIT
             }
         },
         data() {

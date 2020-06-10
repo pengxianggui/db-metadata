@@ -9,7 +9,7 @@ import Vue from 'vue'
  * @param deep 是否深拷贝模式, 默认true
  * @returns {} 返回merge后的opt1的深拷贝对象
  */
-export function merge(opt1, opt2, deep) {
+export function merge(opt1, opt2, deep = true) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
@@ -21,8 +21,6 @@ export function merge(opt1, opt2, deep) {
         console.warn("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
         return common.deepClone(opt2);
     }
-
-    deep = (deep === undefined); // 默认deep模式
 
     let deepMerge = function (obj1, obj2) {
         if (!common.isObject(obj1) || !common.isObject(obj2)) return;
@@ -49,7 +47,7 @@ export function merge(opt1, opt2, deep) {
  * @param deep 是否深拷贝模式, 默认true
  * @returns {} 返回merge后的opt1的深拷贝对象
  */
-export function reverseMerge(opt1, opt2, deep) {
+export function reverseMerge(opt1, opt2, deep = true) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
@@ -61,8 +59,6 @@ export function reverseMerge(opt1, opt2, deep) {
         console.warn("typeof opt1: %s , must be 'object' and should not be a null value.", opt1);
         return common.deepClone(opt2);
     }
-
-    deep = (deep === undefined); // 默认deep模式
 
     let deepMerge = function (obj1, obj2) {
         for (let key in obj2) {

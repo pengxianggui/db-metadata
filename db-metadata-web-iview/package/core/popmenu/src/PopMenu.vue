@@ -24,7 +24,7 @@
         props: {
             trigger: {
                 type: String,
-                default: 'click',
+                default: () => 'click',
                 validator: value => ['click', 'focus', 'hover', 'right-click'].indexOf(value) > -1
             },
             placement: String

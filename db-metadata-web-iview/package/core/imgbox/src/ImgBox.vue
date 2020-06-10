@@ -31,9 +31,7 @@
         props: {
             value: {
                 type: [Array, String],  // String could be convert to Array
-                default: function () {
-                    return []
-                },
+                default: () => [],
                 validator: function (val) {
                     if (utils.isArray(val)) {
                         return val.every(item => item.hasOwnProperty('name') && item.hasOwnProperty('url')) // return true when val.length = 0

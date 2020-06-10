@@ -1,7 +1,7 @@
 <template>
     <div class="input tags-wrap">
         <div class="tags" v-for="(item, $index) in nativeValue" :key="item[primaryKey]">
-            <span class="content">{{item[innerMeta.label]}}</span>
+            <span class="content">{{item[labelKey]}}</span>
             <span class="del" @click="del($index, $event)">&times;</span>
         </div>
         <input v-if="!hiddenInput" class="tags-input" type="label" placeholder="标签，按 enter 创建" v-model="text"
@@ -50,9 +50,12 @@
         computed: {
             primaryKey() {
                 const {props: {id: objectPrimaryKey}} = this.innerMeta;
-                const defaultPrimaryKey = defaultPrimaryKey;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
+            },
+            labelKey() {
+                const {props: {label}} = this.innerMeta;
+                return label;
             }
         }
     }

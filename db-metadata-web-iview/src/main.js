@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import MetaElement from '../package/index'
+import MetaElement from '../package/index' // 如果将index省略, 则会发生下面Vue.use无法正常调用的异常情况
 import router from './router'
 import config from '../config'
 import {mockXHR} from '../mock'

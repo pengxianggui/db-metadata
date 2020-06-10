@@ -56,9 +56,7 @@
         props: {
             meta: {
                 type: Object,
-                default: function () {
-                    return {}
-                }
+                default: () => {}
             }
         },
         methods: {
@@ -97,7 +95,12 @@
                 }
             },
             onCancel: function (ev) {
-                console.log('FormView default onCancel behavior.');
+                const fn = 'cancel';
+                if (this.$listeners.hasOwnProperty(fn)) {
+                    this.$emit(fn, this.model);
+                } else {
+                    console.log('FormView default onCancel behavior.');
+                }
             },
             assemblyModel(meta) {
                 this.model = {};

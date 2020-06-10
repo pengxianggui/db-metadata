@@ -94,7 +94,7 @@ const components = [
     TimeBox,
     ZTogglePanel,
 
-    // tmpl
+    // template
     DataListTableTmpl,
     FormTmpl,
     MasterSlaveTableTmpl,
@@ -137,6 +137,11 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
     install,
+    utils,
+    routeUrl,
+    restUrl,
+
+    // atom or container
     BoolBox,
     CheckBox,
     CodeBox,
@@ -173,6 +178,7 @@ export default {
     TimeBox,
     ZTogglePanel,
 
+    // template
     DataListTableTmpl,
     FormTmpl,
     MasterSlaveTableTmpl,
@@ -181,14 +187,73 @@ export default {
     TreeFormTmpl,
     TreeTableTmpl,
 
+    // meta
     MetaDataManager,
     FormBuilder,
     GlobalConfList,
     GlobalConf,
     InstanceConfList,
     InstanceConfEdit,
-    InstanceConfNew,
+    InstanceConfNew
+}
+
+export {
     utils,
     routeUrl,
-    restUrl
+    restUrl,
+
+    // atom or container
+    BoolBox,
+    CheckBox,
+    CodeBox,
+    DataList,
+    DateBox,
+    DateTimeBox,
+    DialogBox,
+    DropDownBox,
+    FileBox,
+    FindBox,
+    FormView,
+    RowGrid,
+    IconBox,
+    ImgBox,
+    JsonBox,
+    List,
+    ListItem,
+    MiniFormBox,
+    MiniFormObject,
+    MiniFormField,
+    MetaEasyEdit,
+    NumBox,
+    PassBox,
+    PopMenu,
+    RadioBox,
+    SearchPanel,
+    SqlBox,
+    Tags,
+    TableList,
+    Tree,
+    TableTreeList,
+    TextAreaBox,
+    TextBox,
+    TimeBox,
+    ZTogglePanel,
+
+    // template
+    DataListTableTmpl,
+    FormTmpl,
+    MasterSlaveTableTmpl,
+    SingleGridTmpl,
+    TableFormTmpl,
+    TreeFormTmpl,
+    TreeTableTmpl,
+
+    // meta
+    MetaDataManager,
+    FormBuilder,
+    GlobalConfList,
+    GlobalConf,
+    InstanceConfList,
+    InstanceConfEdit,
+    InstanceConfNew
 }

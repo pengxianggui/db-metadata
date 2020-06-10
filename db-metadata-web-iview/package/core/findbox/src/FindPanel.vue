@@ -41,9 +41,7 @@
         props: {
             meta: {
                 type: Object,
-                default: function () {
-                    return {}
-                }
+                default: () => {}
             }
         },
         data() {

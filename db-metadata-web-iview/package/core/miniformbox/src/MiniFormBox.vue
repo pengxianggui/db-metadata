@@ -30,8 +30,7 @@
         props: {
             value: {
                 type: [Object, String],
-                default: () => {
-                }
+                default: () => {}
             },
             showChangeType: {
                 type: Boolean,

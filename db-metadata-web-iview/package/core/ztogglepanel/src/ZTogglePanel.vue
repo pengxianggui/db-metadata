@@ -22,14 +22,14 @@
         props: {
             labelPosition: {
                 type: String,
-                default: "bottom-center",
+                default: () => "bottom-center",
                 validator: function (value) {
                     return ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"].indexOf(value) >= 0;
                 }
             },
             defaultOpen: {
                 type: Boolean,
-                default: false
+                default: () => false
             }
         },
         data() {
