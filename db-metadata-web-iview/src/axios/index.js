@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {e_format, s_format} from "./responseExchange";
 import config from "./config";
-import utils from '@/utils'
+import utils from '../../package/utils'
 
 export default function (opts = {}) {
     utils.merge(opts, config);

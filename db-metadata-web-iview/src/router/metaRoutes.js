@@ -1,5 +1,5 @@
 import Main from '@/components/Main'
-import utils from '@/utils'
+import utils from '@/../package/utils'
 
 const jumpOut = [
     {
@@ -7,7 +7,7 @@ const jumpOut = [
         label: "组件实例编辑",
         hidden: true,
         name: 'InstanceConfEdit',
-        component: () => import('@/components/meta/component-instance/InstanceConfEdit')
+        component: () => import('@/../package/meta/component-instance/InstanceConfEdit')
     }
 ];
 
@@ -25,7 +25,7 @@ const routes = [
                 name: 'Metadata',
                 label: "元数据管理",
                 icon: "el-icon-warning",
-                component: () => import('@/components/meta/MetaDataManager')
+                component: () => import('@/../package/meta/MetaDataManager')
             }, {
                 path: 'feature',
                 name: 'Feature',
@@ -34,39 +34,39 @@ const routes = [
                     oc: 'meta_feature'
                 },
                 icon: 'el-icon-warning-outline',
-                component: () => import('@/components/template/SingleGridTmpl')
+                component: () => import('@/../package/template/SingleGridTmpl')
             }, {
                 path: 'meta-component',
                 name: 'MetaComponent',
                 label: "组件全局配置",
                 icon: "el-icon-star-off",
-                component: () => import('@/components/meta/component/GlobalConfList')
+                component: () => import('@/../package/meta/component/GlobalConfList')
             }, {
                 path: 'global-conf',
                 name: 'GlobalConf',
                 label: "组件全局配置",
                 icon: "el-icon-star-off",
                 hidden: true,
-                component: () => import('@/components/meta/component/GlobalConf')
+                component: () => import('@/../package/meta/component/GlobalConf')
             }, {
                 path: 'meta-component-instance',
                 name: 'MetaComponentInstance',
                 label: "组件实例配置",
                 icon: "el-icon-star-on",
-                component: () => import('@/components/meta/component-instance/InstanceConfList')
+                component: () => import('@/../package/meta/component-instance/InstanceConfList')
             }, {
                 path: 'instance-conf-new',
                 name: 'InstanceConfNew',
                 label: "组件实例配置",
                 icon: "el-icon-star-off",
                 hidden: true,
-                component: () => import('@/components/meta/component-instance/InstanceConfNew')
+                component: () => import('@/../package/meta/component-instance/InstanceConfNew')
             }, {
                 path: 'form-builder',
                 name: 'FormBuilder',
                 label: "表单构建",
                 icon: "el-icon-s-order",
-                component: () => import('@/components/meta/form-builder')
+                component: () => import('@/../package/meta/form-builder')
             }, {
                 path: 'meta-conf',
                 name: 'MetaConf',
@@ -75,7 +75,7 @@ const routes = [
                 props: {
                     oc: 'meta_conf'
                 },
-                component: () => import('@/components/template/SingleGridTmpl')
+                component: () => import('@/../package/template/SingleGridTmpl')
             }, {
                 path: 'meta-dict',
                 name: 'MetaDict',
@@ -84,7 +84,7 @@ const routes = [
                 props: {
                     oc: 'meta_dict'
                 },
-                component: () => import('@/components/template/SingleGridTmpl')
+                component: () => import('@/../package/template/SingleGridTmpl')
             }, {
                 path: 'meta-exception',
                 name: 'MetaException',
@@ -93,7 +93,7 @@ const routes = [
                 props: {
                     oc: 'meta_exception'
                 },
-                component: () => import('@/components/template/SingleGridTmpl')
+                component: () => import('@/../package/template/SingleGridTmpl')
             }, {
                 path: 'meta-version',
                 name: 'MetaVersion',
@@ -102,13 +102,13 @@ const routes = [
                 props: {
                     fc: 'DbVersionSingleGrid'
                 },
-                component: () => import('@/components/template/SingleGridTmpl')
+                component: () => import('@/../package/template/SingleGridTmpl')
             }, {
                 path: 'objects',
                 name: 'objects',
                 label: "动态元对象",
                 icon: "el-icon-menu",
-                component: () => import('@/components/template/ObjectsTmpl')
+                component: () => import('@/../package/template/ObjectsTmpl')
             }, {
                 path: 'demo',
                 name: 'Demo',

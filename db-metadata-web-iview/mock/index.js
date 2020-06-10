@@ -1,11 +1,9 @@
-import utils from '@/utils'
+import utils from '@/../package/utils'
 import Mock from 'mockjs'
-import menu from './modules/menu'
 import component from './modules/component'
 import feature from './modules/feature'
 
 const mocks = [
-    // ...menu,
     ...component,
     ...feature
 ];

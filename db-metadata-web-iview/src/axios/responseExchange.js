@@ -1,5 +1,3 @@
-import {CONSTANT} from "../constant";
-
 /**
  * 请求正常下响应数据的统一格式处理（msg保证）
  * @param res

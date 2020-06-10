@@ -1,5 +1,5 @@
-import {DEFAULT} from "@/constant";
-import utils from "@/utils";
+import {defaultMeta} from "../../package/core/index";
+import utils from "../../package/utils";
 
 const componentMetas = {
     'meta_object&DataList': {
@@ -101,7 +101,7 @@ export default [
         response: config => {
             const {objectCode: oc, componentCode: cc} = config.query;
             console.log('mock: /component/meta, oc: %s, cc: %s', oc, cc);
-            const data = utils.merge(componentMetas[oc + '&' + cc], DEFAULT[cc]);
+            const data = utils.merge(componentMetas[oc + '&' + cc], defaultMeta[cc]);
             debugger;
             return {
                 code: 200,

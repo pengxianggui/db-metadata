@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import {restUrl} from "@/constant/url";
+    import {restUrl} from '@/../package/constant/url'
     import {routes} from '@/router'
 
     export default {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import TreeTableTmpl from '@/components/template/TreeTableTmpl'
+    import TreeTableTmpl from '@/../package/template/TreeTableTmpl'
     export default {
         name: "TreeTableTmplDemo",
         components: {TreeTableTmpl},

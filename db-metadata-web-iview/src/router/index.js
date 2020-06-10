@@ -16,7 +16,7 @@ export const routes = [
         children: [
             {
                 path: 'dashboard',
-                component: () => import('@/components/meta/MetaDataManager'),
+                component: () => import('@/../package/meta/MetaDataManager'),
                 name: 'Dashboard',
                 label: 'Dashboard'
             },

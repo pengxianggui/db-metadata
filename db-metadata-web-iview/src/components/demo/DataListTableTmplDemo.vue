@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import DataListTableTmpl from '@/components/template/DataListTableTmpl'
+    import DataListTableTmpl from '@/../package/template/DataListTableTmpl'
 
     export default {
         name: "DataListTableTmplDemo",

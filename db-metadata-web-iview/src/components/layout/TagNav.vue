@@ -8,9 +8,7 @@
 <script>
     export default {
         name: "TagNav",
-        props: {
-
-        },
+        props: {},
         data() {
             return {
                 activeName: 'first'

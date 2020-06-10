@@ -7,7 +7,8 @@
 </template>
 
 <script>
-    import buildMeta from '@/components/meta/buildMeta'
+    import buildMeta from '@/../package/meta/buildMeta'
+
     export default {
         name: "WorkSpace",
         data() {

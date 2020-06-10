@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import TreeFormTmpl from '@/components/template/TreeFormTmpl'
+    import TreeFormTmpl from '@/../package/template/TreeFormTmpl'
     export default {
         name: "TreeFormTmplDemo",
         components: {TreeFormTmpl},

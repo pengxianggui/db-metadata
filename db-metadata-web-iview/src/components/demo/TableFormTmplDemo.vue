@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import TableFormTmpl from '@/components/template/TableFormTmpl'
+    import TableFormTmpl from '@/../package/template/TableFormTmpl'
 
     export default {
         name: "TableFormTmplDemo",
