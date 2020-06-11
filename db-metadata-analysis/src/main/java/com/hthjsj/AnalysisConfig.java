@@ -34,11 +34,17 @@ public class AnalysisConfig {
 
     public static final String SUFFIX_BIZ_PASSWORD = ".jdbc.password";
 
+    public static final String SUFFIX_BIZ_PERMISSION = ".jdbc.permission";
+
     private static final AnalysisConfig me = new AnalysisConfig();
 
     private final List<DBSource> dbSources = new ArrayList<>();
 
     private final Plugins plugins = new Plugins();
+
+    public static AnalysisConfig me() {
+        return me;
+    }
 
     public void initDefaultDbSource() {
         //init main database resource
@@ -46,6 +52,7 @@ public class AnalysisConfig {
                                            getProp().get(App.DB_MAIN_URL),
                                            getProp().get(App.DB_MAIN_USERNAME),
                                            getProp().get(App.DB_MAIN_PASSWORD),
+                                           DbSourceConfig.Permission.RW,
                                            plugins);
         dbSources.add(mainSource);
 
@@ -56,17 +63,17 @@ public class AnalysisConfig {
                 String url = getProp().get(dbName + SUFFIX_BIZ_URL);
                 String username = getProp().get(dbName + SUFFIX_BIZ_USERNAME);
                 String password = getProp().get(dbName + SUFFIX_BIZ_PASSWORD);
-                if (StrKit.isBlank(url) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
-                    throw new MetaAnalysisException("业务数据库配置信息有误\n\t[dbname:\"%s\",url:\"%s\",user:\"%s\",pwd:\"%s\"]", dbName, url, username,
-                                                    password);
+                String permissionString = getProp().get(dbName + SUFFIX_BIZ_PERMISSION);
+                DbSourceConfig.Permission permission = DbSourceConfig.Permission.get(permissionString);
+                if (permission == DbSourceConfig.Permission.UNKNOW) {
+                    throw new MetaAnalysisException("%s 数据库的权限设置有误,当前配置项 [%s] ;支持的配置项:[r,w,rw]", dbName, permissionString);
                 }
-                dbSources.add(new DBSource(dbName, url, username, password, plugins));
+                if (StrKit.isBlank(url) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
+                    throw new MetaAnalysisException("业务数据库配置信息有误\n\t[dbname:\"%s\",url:\"%s\",user:\"%s\",pwd:\"%s\"]", dbName, url, username, password);
+                }
+                dbSources.add(new DBSource(dbName, url, username, password, permission, plugins));
             }
         }
-    }
-
-    public static AnalysisConfig me() {
-        return me;
     }
 
     public List<IPlugin> getPlugins() {
@@ -92,17 +99,42 @@ public class AnalysisConfig {
         String configName();
 
         void init(Plugins me);
+
+        Permission getPermission();
+
+        enum Permission {
+            UNKNOW,
+            R,//读
+            W,//写
+            RW;//读写
+
+            static Permission get(String s) {
+                if (StrKit.isBlank(s)) {
+                    return R;
+                }
+                if (s.toLowerCase().equals("r"))
+                    return R;
+                else if (s.toLowerCase().equals("w"))
+                    return W;
+                else if (s.toLowerCase().equals("rw"))
+                    return RW;
+                return UNKNOW;
+            }
+        }
     }
 
     public class DBSource implements DbSourceConfig {
 
         String configName, url, username, password;
 
-        public DBSource(String configName, String jdbcUrl, String username, String password, Plugins plugins) {
+        Permission permission;
+
+        public DBSource(String configName, String jdbcUrl, String username, String password, Permission permission, Plugins plugins) {
             this.configName = configName;
             this.url = jdbcUrl;
             this.username = username;
             this.password = password;
+            this.permission = permission;
             init(plugins);
         }
 
@@ -133,6 +165,11 @@ public class AnalysisConfig {
 
 
             me.add(dp_info).add(arp_info);
+        }
+
+        @Override
+        public Permission getPermission() {
+            return permission;
         }
     }
 }
