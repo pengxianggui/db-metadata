@@ -52,9 +52,12 @@ import InstanceConfList from "./meta/component-instance/InstanceConfList";
 import InstanceConfEdit from "./meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "./meta/component-instance/InstanceConfNew";
 
+import {autoLoadingGlobalComponent} from './register/dynamic-component'
 import GlobalFnRegister from './register/fn-register'
 import GlobalFilterRegister from './register/filter-register'
 import {restUrl, routeUrl} from './constant/url'
+
+autoLoadingGlobalComponent()
 
 const components = [
     // atom or container

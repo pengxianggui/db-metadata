@@ -67,17 +67,21 @@ public class FeatureController extends FrontRestController {
         Collection<FeatureNode> featureNodes = new ArrayList<>();
         featureService().findAll().forEach(record -> {
             FeatureType featureType = FeatureType.V(record.getStr("type"));
-            featureNodes.add(new FeatureNode(url(featureType, record.getStr("code")), root.getId(), record.getStr("name"), record));
+            String code = record.getStr("code");
+            FeatureConfig featureConfig = featureService().loadFeatureConfig(code);
+            featureNodes.add(new FeatureNode(url(featureType, code, featureConfig), root.getId(), record.getStr("name"), record));
         });
         JSONArray jsonRoot = new JSONArray();
         treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
         jsonRoot.set(0, root);
-        jsonRoot.set(1, UtilKit.getKv(UtilKit.loadConfigByFile("sysMenu.json")));
         renderJson(Ret.ok("data", jsonRoot));
     }
 
-    private String url(FeatureType featureType, String featureCode) {
+    private String url(FeatureType featureType, String featureCode, FeatureConfig config) {
         String prefix = "";
+        if (config.hasRouter()) {
+            return "/main/cover/" + config.componentName() + "?featureCode=" + featureCode;
+        }
         switch (featureType) {
             case MasterSlaveGrid:
                 prefix = "/ms-table";

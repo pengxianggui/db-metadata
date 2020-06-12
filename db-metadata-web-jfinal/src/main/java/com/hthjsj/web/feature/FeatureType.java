@@ -16,21 +16,24 @@ import com.jfinal.kit.StrKit;
  * <p> @author konbluesky </p>
  */
 public enum FeatureType {
-    MasterSlaveGrid("主子表", "MasterSlaveGrid", MasterSlaveConfig.class),
-    SingleGrid("单表", "SingleGrid", SingleGridConfig.class),
-    TreeInTable("树型表", "TreeInTable", TreeInTableConfig.class),
-    TreeAndTable("树和表", "TreeAndTable", TreeAndTableConfig.class),
-    UNKNOWN("未知的功能模板", "unknown", Kv.class);
+    MasterSlaveGrid("主子表", "MasterSlaveGrid", "MasterSlaveTableTmpl", MasterSlaveConfig.class),
+    SingleGrid("单表", "SingleGrid", "SingleGridTmpl", SingleGridConfig.class),
+    TreeInTable("树型表", "TreeInTable", "TreeSingleGridTmpl", TreeInTableConfig.class),
+    TreeAndTable("树和表", "TreeAndTable", "TreeTableTmpl", TreeAndTableConfig.class),
+    UNKNOWN("未知的功能模板", "unknown", "unknown", Kv.class);
 
     String name;
 
     String code;
 
+    String componentName;
+
     Class<? extends MetaData> configEntity;
 
-    FeatureType(String name, String code, Class configEntity) {
+    FeatureType(String name, String code, String componentName, Class configEntity) {
         this.name = name;
         this.code = code;
+        this.componentName = componentName;
         this.configEntity = configEntity;
     }
 
@@ -38,7 +41,7 @@ public enum FeatureType {
         if (StrKit.isBlank(s))
             return UNKNOWN;
         for (FeatureType t : FeatureType.values()) {
-            if (s.equalsIgnoreCase(t.code.toLowerCase()) || s.equalsIgnoreCase(t.name.toLowerCase())) {
+            if (s.equalsIgnoreCase(t.code.toLowerCase()) || s.equalsIgnoreCase(t.name.toLowerCase()) || s.equalsIgnoreCase(t.componentName.toLowerCase())) {
                 return t;
             }
         }

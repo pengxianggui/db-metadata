@@ -13,4 +13,18 @@ public abstract class FeatureConfig extends MetaData implements Feature {
     protected String icon() {
         return getStr("icon");
     }
+
+    /**
+     * 前端Component默认按照FeatureType.code来路由
+     * 如果有单独的需求需要对通过hasRouter & componentName
+     *
+     * @return
+     */
+    public boolean hasRouter() {
+        return getBoolean("hasRouter") == null ? false : getBoolean("hasRouter");
+    }
+
+    public String componentName() {
+        return getStr("componentName");
+    }
 }

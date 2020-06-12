@@ -11,10 +11,25 @@
                 <text-box v-model="feature.code"></text-box>
             </el-form-item>
             <el-form-item label="图标" class="inline" prop="icon">
-                <icon-box v-model="icon"></icon-box>
+                <icon-box v-model="feature.icon"></icon-box>
             </el-form-item>
             <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>
                 <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
+            </el-form-item>
+
+            <el-form-item label="独立路由" class="inline" prop="config.componentName" required>
+                <el-tooltip effect="dark" placement="top">
+                    <div slot="content">
+                        独立路由是指,选择了指定功能后,需要在前端文件单独路由的选项
+                    </div>
+                    <i class="el-icon-question"></i>
+                </el-tooltip>
+                <el-radio v-model="feature.config.hasRouter" :label=false>否</el-radio>
+                <el-radio v-model="feature.config.hasRouter" :label=true>是</el-radio>
+                <template v-if="feature.config.hasRouter">
+                    <text-box v-model="feature.config.componentName"
+                              placeholder="输入指定的Component名称与Router注册时相同"></text-box>
+                </template>
             </el-form-item>
 
             <div v-show="feature.type === FEATURE_TYPE.MasterSlaveGrid">
@@ -65,7 +80,8 @@
             },
             meta: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                }
             }
         },
         data() {
@@ -79,10 +95,15 @@
                     type: FEATURE_TYPE['SingleGrid'],
                     name: null,
                     code: null,
-                    config: null,
-                    instanceCode: null
+                    config: {
+                        //是否指定特殊的ComponentName
+                        hasRouter: false,
+                        componentName: '',
+                        icon: ''// 功能图标,
+                    },
+                    instanceCode: null,
+
                 },
-                icon: null, // 功能图标
                 // listTableConf: {
                 //     list: {
                 //         objectCode: null,
@@ -112,19 +133,18 @@
                 const {type: featureType} = feature;
                 switch (featureType) {
                     case FEATURE_TYPE['MasterSlaveGrid']:
-                        this.feature.config = $refs['masterSlaveGrid'].config;
+                        this.feature.config = $merge(this.feature.config, $refs['masterSlaveGrid'].config);
                         break;
                     case FEATURE_TYPE['SingleGrid']:
-                        this.feature.config = $refs['singleGrid'].config;
+                        this.feature.config = $merge(this.feature.config, $refs['singleGrid'].config);
                         break;
                     case FEATURE_TYPE['TreeSingleGrid']:
-                        this.feature.config = $refs['treeSingleGrid'].config;
+                        this.feature.config = $merge(this.feature.config, $refs['treeSingleGrid'].config);
                         break;
                     case FEATURE_TYPE['TreeAndSingleGrid']:
-                        this.feature.config = $refs['treeAndSingleGrid'].config;
+                        this.feature.config = $merge(this.feature.config, $refs['treeAndSingleGrid'].config);
                         break;
                 }
-                this.feature.config['icon'] = this.icon;
                 return this.feature;
             },
             doSubmit() {
