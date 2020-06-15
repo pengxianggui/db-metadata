@@ -10,12 +10,12 @@ import com.hthjsj.web.user.local.LocalUserFactory;
  */
 public class UserManager {
 
-    private static UserManager me = new UserManager();
+    private static final UserManager me = new UserManager();
 
     private UserFactory userFactory;
 
     public static UserManager me() {
-        if (me.getUserFactory() == null) {
+        if (me.userFactory == null) {
             me.userFactory = new LocalUserFactory();
         }
         return me;
@@ -26,14 +26,14 @@ public class UserManager {
     }
 
     public void setUserFactory(UserFactory userFactory) {
-        me().setUserFactory(userFactory);
+        userFactory = userFactory;
     }
 
     public UserService userService() {
-        return me().getUserFactory().createService();
+        return getUserFactory().createService();
     }
 
     public LoginService loginService() {
-        return me().getUserFactory().loginService();
+        return getUserFactory().loginService();
     }
 }
