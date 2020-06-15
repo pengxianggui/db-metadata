@@ -94,6 +94,7 @@ public class FindBoxController extends FrontRestController {
         if (metaField.configParser().isSql()) {
             String sql = metaField.configParser().scopeSql();
             metaObject = MetaFactory.createBySql(sql, objectCode);
+            metaObject.schemaName(metaField.configParser().dbConfig());
         }
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
