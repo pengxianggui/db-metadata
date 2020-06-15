@@ -134,16 +134,16 @@
                 const {type: featureType} = feature;
                 switch (featureType) {
                     case FEATURE_TYPE['MasterSlaveGrid']:
-                        this.feature.config = $merge(this.feature.config, $refs['masterSlaveGrid'].config);
+                        this.feature.config = this.$merge(this.feature.config, $refs['masterSlaveGrid'].config);
                         break;
                     case FEATURE_TYPE['SingleGrid']:
-                        this.feature.config = $merge(this.feature.config, $refs['singleGrid'].config);
+                        this.feature.config = this.$merge(this.feature.config, $refs['singleGrid'].config);
                         break;
                     case FEATURE_TYPE['TreeSingleGrid']:
-                        this.feature.config = $merge(this.feature.config, $refs['treeSingleGrid'].config);
+                        this.feature.config = this.$merge(this.feature.config, $refs['treeSingleGrid'].config);
                         break;
                     case FEATURE_TYPE['TreeAndSingleGrid']:
-                        this.feature.config = $merge(this.feature.config, $refs['treeAndSingleGrid'].config);
+                        this.feature.config = this.$merge(this.feature.config, $refs['treeAndSingleGrid'].config);
                         break;
                 }
                 return this.feature;
