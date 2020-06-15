@@ -17,7 +17,7 @@
                 <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
             </el-form-item>
 
-            <el-form-item label="独立路由" class="inline" prop="config.componentName" required>
+            <el-form-item label="独立路由" class="inline" prop="config.hasRouter" required>
                 <el-tooltip effect="dark" placement="top">
                     <div slot="content">
                         独立路由是指,选择了指定功能后,需要在前端文件单独路由的选项
@@ -26,10 +26,11 @@
                 </el-tooltip>
                 <el-radio v-model="feature.config.hasRouter" :label=false>否</el-radio>
                 <el-radio v-model="feature.config.hasRouter" :label=true>是</el-radio>
-                <template v-if="feature.config.hasRouter">
-                    <text-box v-model="feature.config.componentName"
-                              placeholder="输入指定的Component名称与Router注册时相同"></text-box>
-                </template>
+            </el-form-item>
+
+            <el-form-item v-if="feature.config.hasRouter" prop="config.componentName" required>
+                <text-box v-model="feature.config.componentName"
+                          placeholder="输入指定的Component名称与Router注册时相同"></text-box>
             </el-form-item>
 
             <div v-show="feature.type === FEATURE_TYPE.MasterSlaveGrid">
