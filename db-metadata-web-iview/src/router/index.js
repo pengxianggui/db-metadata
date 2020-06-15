@@ -4,7 +4,7 @@ import Main from '@/components/Main'
 import metaRoutes from './metaRoutes'
 import templateRoutes from './templateRoutes'
 import staticRoutes from './staticRoutes'
-import dynamicRoutes from '../../package/register/dynamic-router'
+// import dynamicRoutes from '../../package/register/dynamic-router'
 
 Vue.use(Router);
 
@@ -26,7 +26,7 @@ export const routes = [
     ...metaRoutes,
     ...templateRoutes,
     ...staticRoutes,
-    ...dynamicRoutes
+    // ...dynamicRoutes
 ];
 
 const router = new Router({
