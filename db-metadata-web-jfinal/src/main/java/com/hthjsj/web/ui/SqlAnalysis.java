@@ -11,7 +11,6 @@ import com.alibaba.druid.sql.parser.ParserException;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.util.JdbcConstants;
-import com.google.common.base.Preconditions;
 import com.hthjsj.web.WebException;
 import lombok.Data;
 
@@ -63,7 +62,7 @@ public class SqlAnalysis {
         ParseModel parseModel = new ParseModel(sqlStatementParser.parseStatement());
         MySqlSchemaStatVisitor mySqlSchemaStatVisitor = new MySqlSchemaStatVisitor();
         parseModel.getSelectStatement().accept(mySqlSchemaStatVisitor);
-        Preconditions.checkArgument(parseModel.getQuery().getSelectList().size() == 2, "该sql只允许返回2列内容");
+//        Preconditions.checkArgument(parseModel.getQuery().getSelectList().size() == 2, "该sql只允许返回2列内容");
         int i = 0;
         for (SQLSelectItem item : parseModel.getQuery().getSelectList()) {
             if ("id".equalsIgnoreCase(item.getExpr().toString()) || "id".equalsIgnoreCase(item.getAlias())) {
