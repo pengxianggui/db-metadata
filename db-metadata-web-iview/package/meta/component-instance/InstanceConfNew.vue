@@ -105,7 +105,7 @@
     };
 
     export default {
-        name: "InstanceConf",
+        name: "InstanceConfNew",
         components: {FormBuilder},
         data() {
             const {componentCode, objectCode} = this.$route.query;

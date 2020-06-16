@@ -43,7 +43,7 @@
     import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
 
     export default {
-        name: "SingleGridTmpl",
+        name: "TreeSingleGridTmpl",
         mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
             fc: String,

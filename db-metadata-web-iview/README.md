@@ -512,3 +512,5 @@ Vue.use(metaElement, config)
 ### 0.2.25
 FindBox修复双击回选无效的bug;
 
+### 0.2.28
+规范部分组件name, 和文件名相同

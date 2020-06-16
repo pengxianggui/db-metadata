@@ -31,7 +31,7 @@
     import DefaultFormViewMeta from '../core/form/ui-conf'
 
     export default {
-        name: "meta-import",
+        name: "MetaImport",
         data() {
             return {
                 model: {},
@@ -40,7 +40,8 @@
         props: {
             meta: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                }
             }
         },
         methods: {

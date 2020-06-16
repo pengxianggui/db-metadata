@@ -73,7 +73,7 @@
     };
 
     export default {
-        name: "feature-add",
+        name: "FeatureAdd",
         components: {MasterSlaveGrid, SingleGrid, TreeSingleGrid, TreeAndSingleGrid},
         props: {
             params: {
