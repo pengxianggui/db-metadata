@@ -261,7 +261,6 @@
             },
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = defaultPrimaryKey;
 
                 if (utils.isEmpty(objectPrimaryKey)) {
                     console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
