@@ -507,3 +507,8 @@ Vue.use(metaElement, config)
 
 ### 0.2.13
 将URL常量提供自定义覆盖的口子, 允许鹊桥覆盖一些url, 包括restUrl和routeUrl; 移除无效文件
+
+
+### 0.2.25
+FindBox修复双击回选无效的bug;
+

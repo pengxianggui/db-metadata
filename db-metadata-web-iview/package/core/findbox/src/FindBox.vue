@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import utils from '../../../utils'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import FindPanel from './FindPanel'
@@ -29,7 +30,7 @@
         label: "查找框",
         components: {FindPanel},
         props: {
-            value: String
+            value: [String, Number, Array]
         },
         data() {
             return {
@@ -57,8 +58,17 @@
                     this.$message.error(err.msg);
                 });
             },
-            handlerOk(value) {
-                this.nativeValue = value;
+            handlerOk(row) {
+                const {table: tableMeta} = this.findPanelMeta;
+                const {objectPrimaryKey} = tableMeta;
+                const feedBackValue = utils.extractValue(row, objectPrimaryKey);
+                if (this.$listeners.hasOwnProperty('ok')) {
+                    this.$emit('ok', {row, meta: tableMeta});
+                    this.dialogVisible = false;
+                    return;
+                }
+
+                this.nativeValue = feedBackValue[0];
                 this.dialogVisible = false;
             },
             handlerCancel() {

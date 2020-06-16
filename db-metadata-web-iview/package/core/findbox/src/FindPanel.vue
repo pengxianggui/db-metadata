@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    import utils from '../../../utils'
     import DefaultTableListMeta from '../../tablelist/ui-conf';
     import DefaultSearchPanelMeta from '../../searchpanel/ui-conf';
 
@@ -41,7 +40,8 @@
         props: {
             meta: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                }
             }
         },
         data() {
@@ -51,7 +51,7 @@
             }
         },
         methods: {
-            handleRowDbClick(row) {
+            handleRowDbClick({row, column, event}) {
                 this.activeData = row;
                 this.ok();
             },
@@ -66,15 +66,13 @@
                 });
             },
             ok() {
-                const {activeData, tlMeta} = this;
+                const {activeData} = this;
                 if (!activeData) {
                     this.$message.warning('请选择数据.');
                     return;
                 }
-                const {objectPrimaryKey} = tlMeta;
-                const feedBackValue = utils.extractValue(activeData, objectPrimaryKey);
 
-                this.$emit('ok', feedBackValue[0]); // feedback activeData
+                this.$emit('ok', activeData); // feedback activeData
             },
             cancel() {
                 this.$emit('cancel', 'clean'); // feedback clean
