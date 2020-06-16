@@ -13,6 +13,7 @@ import com.hthjsj.web.component.attr.AttributeBuilder;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -27,7 +28,7 @@ import java.util.List;
 @Slf4j
 public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
-    private static MetaViewAdapterFactory me = new SmartAssembleFactory();
+    private static final MetaViewAdapterFactory me = new SmartAssembleFactory();
 
     public static MetaViewAdapterFactory me() {
         return me;
@@ -98,7 +99,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
         // 因配置为自动计算,所以传入组件全局配置map
         List<MetaFieldViewAdapter> fields = analysisFields(metaObject.fields(), globalComponentAllConfig, componentType);
-        Kv fieldsMap = Kv.create();
+        Okv fieldsMap = Okv.create();
         fields.forEach(m -> {
             fieldsMap.set(m.getMetaField().fieldCode(), m.getFieldInstanceConfig().toJson());
         });

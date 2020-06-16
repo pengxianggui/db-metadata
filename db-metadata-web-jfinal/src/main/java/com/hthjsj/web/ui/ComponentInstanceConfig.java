@@ -2,6 +2,7 @@ package com.hthjsj.web.ui;
 
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 import lombok.Getter;
 
 /**
@@ -33,18 +34,18 @@ public class ComponentInstanceConfig extends Kv {
 
     Kv self;
 
-    Kv fieldsMap;
+    Okv fieldsMap;
 
     private ComponentInstanceConfig(Kv configs, String objectCode, String instanceCode, String instanceName) {
         this.self = Kv.by(objectCode, UtilKit.getKv(configs.getStr(objectCode)));
-        this.fieldsMap = UtilKit.getKv(configs, "fieldsMap");
+        this.fieldsMap = UtilKit.getOKv(configs, "fieldsMap");
         this.objectCode = objectCode;
         this.instanceCode = instanceCode;
         this.instanceName = instanceName;
         this.set(self).set("fieldsMap", fieldsMap).set("instanceCode", instanceCode).set("instanceName", instanceName);
     }
 
-    private ComponentInstanceConfig(Kv objectConfig, Kv fieldsMap, String objectCode, String instanceCode, String instanceName) {
+    private ComponentInstanceConfig(Kv objectConfig, Okv fieldsMap, String objectCode, String instanceCode, String instanceName) {
         this.self = objectConfig;
         this.fieldsMap = fieldsMap;
         this.objectCode = objectCode;
@@ -57,7 +58,7 @@ public class ComponentInstanceConfig extends Kv {
         return new ComponentInstanceConfig(config, objectCode, instanceCode, instanceName);
     }
 
-    public static ComponentInstanceConfig Load(Kv objectConfig, Kv fieldsMap, String objectCode, String instanceCode, String instanceName) {
+    public static ComponentInstanceConfig Load(Kv objectConfig, Okv fieldsMap, String objectCode, String instanceCode, String instanceName) {
         return new ComponentInstanceConfig(objectConfig, fieldsMap, objectCode, instanceCode, instanceName);
     }
 
@@ -71,7 +72,7 @@ public class ComponentInstanceConfig extends Kv {
         return self.getAs(objectCode);
     }
 
-    public Kv getFieldsMap() {
+    public Okv getFieldsMap() {
         return fieldsMap;
     }
 }

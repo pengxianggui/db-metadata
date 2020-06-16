@@ -17,6 +17,7 @@ import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.aop.Before;
 import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -186,14 +187,14 @@ public class ComponentService {
         String sql = "select * from " + META_COMPONENT_INSTANCE + " where code=?";
         List<Record> records = Db.use(App.DB_MAIN).find(sql, instanceCode);
         Kv objectConfig = Kv.create();
-        Kv fieldsMap = Kv.create();
+        Okv fieldsMap = Okv.create();
         AtomicReference<String> objectCode = new AtomicReference<>();
         AtomicReference<String> instanceName = new AtomicReference<>();
         records.forEach(record -> {
             if (record.getStr("dest_object").contains(".")) {
                 String[] ss = record.getStr("dest_object").split("\\.");
                 objectCode.set(ss[0]);
-                fieldsMap.set(ss[1], record.getStr("config"));
+                fieldsMap.put(ss[1], record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
                 instanceName.set(record.getStr("name"));
@@ -223,7 +224,7 @@ public class ComponentService {
         String strConfig = objectConfig.getStr("config");
         Kv objConf = Kv.by(destCode, StrKit.isBlank(strConfig) ? Maps.newHashMapWithExpectedSize(0) : strConfig);
 
-        Kv fieldsMap = Kv.create();
+        Okv fieldsMap = Okv.create();
         List<Record> fields = Db.use(App.DB_MAIN).find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
                                                        componentCode,
                                                        destCode,
@@ -252,7 +253,7 @@ public class ComponentService {
         Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
 
         List<Record> fieldRecords = Lists.newArrayList();
-        Kv fieldsMap = componentInstanceConfig.getFieldsMap();
+        Okv fieldsMap = componentInstanceConfig.getFieldsMap();
         object.fields().forEach(f -> {
             Kv fkv = UtilKit.getKv(fieldsMap, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component,

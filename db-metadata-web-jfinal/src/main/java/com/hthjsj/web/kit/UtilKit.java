@@ -13,6 +13,7 @@ import com.hthjsj.web.WebException;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.PathKitExt;
@@ -60,6 +61,16 @@ public class UtilKit {
     public static Kv getKv(Kv kv, String key) {
         Kv result = JSON.parseObject(kv.getStr(key), Kv.class);
         return result != null ? result : Kv.create();
+    }
+
+    public static Kv getKv(Okv kv, String key) {
+        Kv result = JSON.parseObject(kv.getStr(key), Kv.class);
+        return result != null ? result : Kv.create();
+    }
+
+    public static Okv getOKv(Kv kv, String key) {
+        Okv result = JSON.parseObject(kv.getStr(key), Okv.class);
+        return result != null ? result : Okv.create();
     }
 
     public static List<Kv> getKvs(Kv kvSource, String key) {
