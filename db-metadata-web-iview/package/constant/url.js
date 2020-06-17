@@ -13,6 +13,7 @@ export const restUrl = {
     META_FIELD_TO_EDIT: '/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}',  // 元字段编辑(TO)
     OBJECT_CODE_LIST: '/table/list?objectCode=meta_object&fs=code&s=1000',  // 获取所有元对象code
     FIELD_CODE_LIST_BY_OBJECT: '/table/list?objectCode=meta_field&object_code={objectCode}&fs=field_code,en,cn&en->key&field_code->value&cn->label&s=1000', // 查询某个元对象的元字段的field_code和cn，并以key,value返回
+    FIELD_CODE_CONF: '/table/list?objectCode=meta_field&object_code={objectCode}&field_code={fieldCode}&fs=config', // 获取某个元字段的逻辑配置
     COMPONENT_CODE_LIST: '/component/list', // 获取所有组件列表, 返回数据格式KV
     INSTANCE_CODE_LIST: '/table/list/meta_component_instance?fs=code&code->value&s=1000', // instanceCode
     COMP_CONF_UPDATE: '/component/doUpdate', // 组件(默认|实例)配置更新

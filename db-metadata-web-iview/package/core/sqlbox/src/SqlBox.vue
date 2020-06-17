@@ -1,16 +1,16 @@
 <template>
     <div>
-        <textarea ref="sqlEditor" type="textarea" :value="cacheValue"></textarea>
+        <textarea ref="sqlEditor" type="textarea"></textarea>
         <span v-if="tip.state !== null">
             <span :class="tip.state === 'fail' ? 'error-tip': 'success-tip'">tip: {{tip.msg}}</span>&nbsp;
         </span>
         <br>
         <template v-if="innerMeta['check']">
-            <el-button circle icon="el-icon-search" @click="checkSql(cacheValue)"></el-button>
+            <el-button circle icon="el-icon-search" @click="checkSql(nativeValue)"></el-button>
             &nbsp;&nbsp;
-            <el-tooltip content="必须执行校验操作并通过, 否则不予保存" placement="right">
-                <i class="el-icon-question"></i>
-            </el-tooltip>
+<!--            <el-tooltip content="必须执行校验操作并通过, 否则不予保存" placement="right">-->
+<!--                <i class="el-icon-question"></i>-->
+<!--            </el-tooltip>-->
         </template>
     </div>
 </template>
@@ -43,13 +43,14 @@
                     state: null, // fail or ok, otherwise null
                     msg: null
                 },
-                cacheValue: this.value
+                editor: {}
+                // cacheValue: this.value
             }
         },
         methods: {
-            cleanValue() {
-                this.nativeValue = null;
-            },
+            // cleanValue() {
+            //     this.nativeValue = null;
+            // },
             setTip(state, msg) {
                 this.tip['state'] = state;
                 this.tip['msg'] = msg;
@@ -58,7 +59,7 @@
                 this.$axios.get(this.$compile(restUrl.CHECK_SQL, {sql: value})).then(resp => {
                     if (resp.state === 'ok') {
                         this.setTip(resp.state, resp.msg);
-                        this.nativeValue = value;
+                        // this.nativeValue = value;
                     } else {
                         this.setTip(resp.state, resp.msg)
                         // this.nativeValue = null;
@@ -69,11 +70,13 @@
                 })
             }
         },
+        created() {
+        },
         mounted() {
             let self = this;
             let mime = self.innerMeta['mode'];
             let theme = self.innerMeta['theme'];
-            let editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, {
+            self.editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, {
                 mode: mime,
                 indentWithTabs: true,
                 smartIndent: true,
@@ -83,20 +86,23 @@
                 extraKeys: {'Ctrl': 'autocomplete'}, //自定义快捷键
             });
 
-            editor.on('change', function (instance) {
+            self.editor.on('change', function (instance) {
                 let newVal = instance.getValue();
-                self.cacheValue = newVal;
-                if (newVal === null || newVal.trim() === '') {
-                    self.cleanValue();
-                }
+                // self.cacheValue = newVal;
+                self.nativeValue = newVal;
+                self.setTip(null, null)
+                // if (newVal === null || newVal.trim() === '') {
+                //     self.cleanValue();
+                // }
 
-                if (!self.innerMeta['check']) { // needn't be checked
-                    self.nativeValue = newVal;
-                } else {
-                    if (self.tip['state'] === 'ok') self.setTip(null, null);
-                }
+                // if (!self.innerMeta['check']) { // needn't be checked
+                //     self.nativeValue = newVal;
+                // } else {
+                //     if (self.tip['state'] === 'ok') self.setTip(null, null);
+                // }
             });
-            editor.setSize('auto', '80px');
+            self.editor.setSize('auto', '80px');
+            self.editor.setValue(self.nativeValue)
         }
     }
 </script>

@@ -1,3 +1,4 @@
+import path from "path";
 <template>
     <div :class="{'expand-menu': !isCollapse}" style="display: flex; flex-direction: column;">
         <div style="text-align: center">
@@ -13,7 +14,8 @@
                         <span v-text="item.label"></span>
                     </template>
                     <template v-for="subItem in item.children">
-                        <el-menu-item v-if="!subItem.hidden" :index="subItem.path" :key="subItem.path">
+                        <el-menu-item v-if="!subItem.hidden" :index="resolvePath(item.path, subItem.path)"
+                                      :key="resolvePath(item.path, subItem.path)">
                             <i :class="subItem.icon"></i>
                             <span slot="title" v-text="subItem.label"></span>
                         </el-menu-item>
@@ -27,6 +29,7 @@
 <script>
     import {restUrl} from '@/../package/constant/url'
     import {routes} from '@/router'
+    import path from 'path'
 
     export default {
         name: "aside-nav",
@@ -37,6 +40,9 @@
             }
         },
         methods: {
+            resolvePath(basePath, routePath) {
+                return path.resolve(basePath, routePath)
+            },
             handleOpen(key, keyPath) {
                 // console.log(key, keyPath);
             },

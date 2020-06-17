@@ -86,6 +86,10 @@
                                                         <el-button slot="reference" size="mini" icon="el-icon-question"
                                                                    circle></el-button>
                                                     </el-popover>
+                                                    <span>
+                                                        <el-button size="mini" icon="el-icon-question" circle
+                                                                   @click="openLogicConf(confModel.objectCode, key)"></el-button>
+                                                    </span>
                                                 </template>
                                             </mini-form-box>
                                         </el-form-item>
@@ -100,6 +104,10 @@
                 </el-tabs>
             </div>
         </el-form>
+        <dialog-box :visible.sync="logicConf.dialogShow" title="编辑逻辑配置">
+            <field-conf :object-code="logicConf.objectCode" :field-code="logicConf.fieldCode"></field-conf>
+            <template #footer><span></span></template>  <!-- 表单自带button条 -->
+        </dialog-box>
     </el-container>
 </template>
 
@@ -108,6 +116,7 @@
     import {restUrl} from "../../constant/url";
     import FormBuilder from "../form-builder/FormBuilder";
     import UiConfTip from './ext/UiConfTip'
+    import FieldConf from "./ext/FieldConf";
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
     import DefaultDropDownBoxMeta from '../../core/dropdownbox/ui-conf'
@@ -137,7 +146,7 @@
 
     export default {
         name: "InstanceConfEdit",
-        components: {FormBuilder, UiConfTip},
+        components: {FormBuilder, UiConfTip, FieldConf},
         data() {
             const {instanceCode, componentCode, objectCode} = this.$route.query;
 
@@ -148,6 +157,11 @@
                 objectMeta: objectMeta,
                 objConfMeta: {}, // 构建元对象配置迷你表单的元数据
                 fieldsConfMeta: {}, // 构建元字段配置迷你表单的元数据
+                logicConf: {
+                    objectCode: null,
+                    fieldCode: null,
+                    dialogShow: false,
+                },
                 confModel: {
                     instanceCode: utils.assertUndefined(instanceCode),
                     instanceName: null,
@@ -167,6 +181,11 @@
             initConf() {
                 this.confModel['conf'] = {};
                 this.confModel['fConf'] = {};
+            },
+            openLogicConf(objectCode, fieldCode) {
+                this.logicConf.objectCode = objectCode;
+                this.logicConf.fieldCode = fieldCode;
+                this.logicConf.dialogShow = true;
             },
             handleOcChange(objectCode) {
                 this.confModel['objectCode'] = objectCode;
@@ -198,7 +217,9 @@
                             // build object conf meta
                             this.buildObjectConfMeta(this.confModel['conf']);
                             // build fields conf meta
-                            Object.keys(this.confModel['fConf']).forEach(key => this.buildFieldConfMeta(this.confModel['fConf'][key], key));
+                            Object.keys(this.confModel['fConf']).forEach(key => {
+                                this.buildFieldConfMeta(this.confModel['fConf'][key], key);
+                            });
                         }).catch(err => {
                             console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                             this.$message.error(err.msg);
