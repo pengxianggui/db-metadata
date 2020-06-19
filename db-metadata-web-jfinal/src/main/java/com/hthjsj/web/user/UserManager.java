@@ -26,7 +26,7 @@ public class UserManager {
     }
 
     public void setUserFactory(UserFactory userFactory) {
-        userFactory = userFactory;
+        this.userFactory = userFactory;
     }
 
     public UserService userService() {
