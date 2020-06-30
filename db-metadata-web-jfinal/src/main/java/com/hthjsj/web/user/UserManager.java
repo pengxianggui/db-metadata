@@ -2,6 +2,8 @@ package com.hthjsj.web.user;
 
 import com.hthjsj.web.user.local.LocalUserFactory;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p> @Date : 2019/12/13 </p>
  * <p> @Project : db-meta-serve</p>
@@ -35,5 +37,9 @@ public class UserManager {
 
     public LoginService loginService() {
         return getUserFactory().loginService();
+    }
+
+    public User getUser(HttpServletRequest request) {
+        return loginService().getUser(request);
     }
 }
