@@ -54,7 +54,6 @@
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
-            <version>4.9</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

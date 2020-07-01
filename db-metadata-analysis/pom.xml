@@ -18,7 +18,6 @@
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
-            <version>4.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
