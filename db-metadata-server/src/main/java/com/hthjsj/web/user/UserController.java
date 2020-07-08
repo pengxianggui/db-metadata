@@ -31,6 +31,11 @@ public class UserController extends Controller {
 
     }
 
+    public void info() {
+        User user = UserManager.me().getUser(getRequest());
+        renderJson(Ret.ok("data", user));
+    }
+
     public void update() {
         String updateAttr = getPara("attrs");
         Kv attrs = UtilKit.getKv(updateAttr);
