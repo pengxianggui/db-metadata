@@ -85,7 +85,7 @@ public class AnalysisConfig {
     }
 
     public Prop getProp() {
-        return PropKit.use(App.CONFIG_NAME);
+        return PropKit.useFirstFound("config-dev.properties", App.CONFIG_NAME);
     }
 
     public void start() {
