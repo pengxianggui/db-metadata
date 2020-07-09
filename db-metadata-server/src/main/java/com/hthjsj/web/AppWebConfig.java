@@ -59,7 +59,7 @@ public class AppWebConfig extends JFinalConfig {
      * jar->config.properties
      */
     private void initProp() {
-        prop = PropKit.use(App.CONFIG_NAME);
+        prop = PropKit.useFirstFound("config-dev.properties", App.CONFIG_NAME);
         File configPropFile = UtilKit.stairsLoad(App.CONFIG_NAME, "config");
         if (configPropFile != null) {
             prop.appendIfExists(configPropFile);
