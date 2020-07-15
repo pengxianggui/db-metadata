@@ -35,7 +35,8 @@
 
 <script>
     import utils from '../utils'
-    import {restUrl, routeUrl} from "../constant/url";
+    import {restUrl, routeUrl} from '../constant/url';
+    import {innerFeatureCode} from "../constant/variable";
     import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
     import FeatureAdd from './feature/FeatureAdd'
@@ -49,7 +50,7 @@
         },
         data() {
             return {
-                featureCode: "meta_manager",
+                featureCode: innerFeatureCode.metadata,
                 featureParams: {},
 
                 choseMData: [],

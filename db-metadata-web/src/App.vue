@@ -20,26 +20,6 @@
         padding: 0;
     }
 
-    .el-card {
-        padding: 10px;
-    }
-
-    form .inline {
-        display: inline-block;
-    }
-
-    .el-popover {
-        min-width: 50px;
-    }
-
-    .quote {
-        margin: 10px;
-        padding: 10px;
-        border-left: 5px solid #409EFF;
-        color: #666666;
-        background-color: #eeeeee;
-    }
-
     .h2 {
         font-size: 1.5em;
         margin-block-start: 0.83em;
@@ -47,8 +27,5 @@
         margin-inline-start: 0px;
         margin-inline-end: 0px;
         font-weight: bold;
-    }
-    .no-padding {
-        padding: 0;
     }
 </style>

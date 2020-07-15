@@ -19,6 +19,7 @@
 <script>
     import {getSpMeta, getTlMeta} from "../../core/mixins/methods"
     import {routeUrl} from '../../constant/url'
+    import {innerObjectCode} from "../../constant/variable";
 
     export default {
         name: "GlobalConfList",
@@ -35,7 +36,7 @@
         },
         data() {
             return {
-                objectCode: "meta_component",
+                objectCode: innerObjectCode.globalConfList,
                 tlMeta: {},
                 filterParams: {},
                 spMeta: {}

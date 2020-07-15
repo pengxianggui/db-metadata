@@ -53,7 +53,18 @@ import InstanceConfEdit from "./meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "./meta/component-instance/InstanceConfNew";
 import GlobalFnRegister from './register/fn-register'
 import GlobalFilterRegister from './register/filter-register'
+import MetaFeatureList from './meta/feature';
+import MetaConfList from "./meta/meta-conf";
+import DictList from "./meta/dict"
+import ExceptionList from './meta/exception'
 import {restUrl, routeUrl} from './constant/url'
+import {innerObjectCode, innerFeatureCode, access} from "./constant/variable";
+// 内置路由
+import MetaRoute from './route'
+import MetaMenu from './meta/meta-menu'
+
+// style
+import './style/index.scss'
 
 // autoLoadingGlobalComponent()
 
@@ -111,19 +122,40 @@ const components = [
     GlobalConf,
     InstanceConfList,
     InstanceConfEdit,
-    InstanceConfNew
+    InstanceConfNew,
+    MetaFeatureList,
+    MetaConfList,
+    DictList,
+    ExceptionList,
+
+    // 内置meta菜单组件
+    MetaMenu
 ];
 
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
     Vue.use(ElementUI, opts);
-    // 自定义url覆盖
+    // 自定义路由url覆盖
     if (opts.routeUrl) {
         utils.reverseMerge(routeUrl, opts.routeUrl, false);
     }
+    // 自定义rest接口url覆盖
     if (opts.restUrl) {
         utils.reverseMerge(restUrl, opts.restUrl, false);
+    }
+
+    // 自定义元对象编码覆盖: 用于meta 路由菜单
+    if (opts.objectCode) {
+        utils.reverseMerge(innerObjectCode, opts.objectCode, false);
+    }
+    // 自定义功能编码覆盖: 用于meta 路由菜单
+    if (opts.featureCode) {
+        utils.reverseMerge(innerFeatureCode, opts.featureCode, false);
+    }
+    // 自定义权限配置: 例如设置meta管理 仅对某个角色开放(adminRoleCode)
+    if (opts.access) {
+        utils.reverseMerge(access, opts.access, false);
     }
 
     Vue.use(GlobalFnRegister, opts);    // 全局方法
@@ -195,7 +227,14 @@ export default {
     GlobalConf,
     InstanceConfList,
     InstanceConfEdit,
-    InstanceConfNew
+    InstanceConfNew,
+    MetaFeatureList,
+    MetaConfList,
+    DictList,
+    ExceptionList,
+
+    // 内置meta菜单
+    MetaMenu
 }
 
 export {
@@ -256,5 +295,13 @@ export {
     GlobalConf,
     InstanceConfList,
     InstanceConfEdit,
-    InstanceConfNew
+    InstanceConfNew,
+    MetaFeatureList,
+    MetaConfList,
+    DictList,
+    ExceptionList,
+
+    // 内置路由
+    MetaRoute,
+    MetaMenu
 }
