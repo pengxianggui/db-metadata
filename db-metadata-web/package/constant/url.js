@@ -1,5 +1,5 @@
 export const routeUrl = {
-    ROOT_URL: '/meta',
+    baseURL: '/meta',
     R_GOBAL_CONF_ADD: '/global-conf',
     R_GOBAL_CONF_EDIT: '/global-conf',
     R_INSTANCE_CONF_NEW: '/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]

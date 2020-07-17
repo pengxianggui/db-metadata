@@ -15,7 +15,7 @@ Vue.use(MetaElement, {
         baseURL: config.apiBaseUrl + 'meta'   // default
     },
     routeUrl: {
-        ROOT_URL: '/main'
+        baseURL: '/main'
     },
     restUrl: {}
 });
