@@ -28,11 +28,11 @@
         props: {
             newRouteUrl: {
                 type: String,
-                default: () => routeUrl.R_INSTANCE_CONF_NEW
+                default: () => routeUrl.ROOT_URL + routeUrl.R_INSTANCE_CONF_NEW
             },
             editRouteUrl: {
                 type: String,
-                default: () => routeUrl.R_INSTANCE_CONF_EDIT
+                default: () => routeUrl.ROOT_URL + routeUrl.R_INSTANCE_CONF_EDIT
             }
         },
         data() {

@@ -1,8 +1,9 @@
 export const routeUrl = {
-    R_GOBAL_CONF_ADD: '/main/global-conf',
-    R_GOBAL_CONF_EDIT: '/main/global-conf',
-    R_INSTANCE_CONF_NEW: '/main/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
-    R_INSTANCE_CONF_EDIT: '/main/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}',    // 组件实例配置界面[编辑]
+    ROOT_URL: '/meta',
+    R_GOBAL_CONF_ADD: '/global-conf',
+    R_GOBAL_CONF_EDIT: '/global-conf',
+    R_INSTANCE_CONF_NEW: '/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
+    R_INSTANCE_CONF_EDIT: '/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}',    // 组件实例配置界面[编辑]
     RR_INSTANCE_CONF_ADD: '/instance-conf-edit',
 };
 

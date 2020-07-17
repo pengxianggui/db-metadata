@@ -14,11 +14,11 @@ import {access} from '../constant/variable'
 
 const jumpOut = [
     {
-        path: '/instance-conf-edit',
+        path: 'instance-conf-edit',
         component: InstanceConfEdit,
-        name: 'Meta配置',
+        name: 'InstanceConfEdit',
         meta: {
-            title: 'Meta配置',
+            title: '组件实例配置-编辑',
             icon: 'edit',
             noCache: false,
             roles: [access.adminRoleCode]
@@ -49,7 +49,7 @@ export default [
         },
         component: MetaFeatureList
     }, {
-        path: 'meta-component',
+        path: 'global-conf-list',
         name: 'MetaComponent',
         meta: {
             title: "组件全局配置",
@@ -59,7 +59,7 @@ export default [
         },
         component: GlobalConfList
     }, {
-        path: 'meta-component-edit',
+        path: 'global-conf',
         name: 'MetaComponentEdit',
         meta: {
             title: "组件全局配置-编辑",
@@ -70,7 +70,7 @@ export default [
         hidden: true,
         component: GlobalConf
     }, {
-        path: 'meta-component-instance',
+        path: 'instance-conf-list',
         name: 'MetaComponentInstance',
         meta: {
             title: "组件实例配置",
@@ -80,7 +80,7 @@ export default [
         },
         component: InstanceConfList
     }, {
-        path: 'meta-component-instance/new',
+        path: 'instance-conf-new',
         name: 'InstanceConfNew',
         meta: {
             title: "组件实例配置-新增",
@@ -90,17 +90,6 @@ export default [
         },
         hidden: true,
         component: InstanceConfNew
-    }, {
-        path: 'meta-component-instance/edit',
-        name: 'InstanceConfEdit',
-        meta: {
-            title: "组件实例配置-编辑",
-            icon: "el-icon-star-off",
-            noCache: false,
-            roles: [access.adminRoleCode]
-        },
-        hidden: true,
-        component: InstanceConfEdit
     }, {
         path: 'form-builder',
         name: 'FormBuilder',

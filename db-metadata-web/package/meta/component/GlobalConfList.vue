@@ -27,11 +27,11 @@
         props: {
             newRouteUrl: {
                 type: String,
-                default: () => routeUrl.R_GOBAL_CONF_ADD
+                default: () => routeUrl.ROOT_URL + routeUrl.R_GOBAL_CONF_ADD
             },
             editRouteUrl: {
                 type: String,
-                default: () => routeUrl.R_GOBAL_CONF_EDIT
+                default: () => routeUrl.ROOT_URL + routeUrl.R_GOBAL_CONF_EDIT
             }
         },
         data() {
