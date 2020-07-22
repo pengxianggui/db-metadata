@@ -1,7 +1,7 @@
 package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.App;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.user.User;
@@ -30,7 +30,7 @@ public class FeatureService {
 
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
         Record record = getRecord(type, name, code, config);
-        return Db.use(App.DB_MAIN).save("meta_feature", "id", record);
+        return AnalysisConfig.me().dbMain().save("meta_feature", "id", record);
     }
 
     public <T> T loadFeatureConfig(String featureCode) {
@@ -43,7 +43,7 @@ public class FeatureService {
     }
 
     public List<Record> findAll() {
-        return Db.use(App.DB_MAIN).findAll("meta_feature");
+        return AnalysisConfig.me().dbMain().findAll("meta_feature");
     }
 
     public boolean deleteFeature(String[] featureCodes) {

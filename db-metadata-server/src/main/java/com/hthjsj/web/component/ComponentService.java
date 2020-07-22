@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hthjsj.App;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.SnowFlake;
@@ -19,7 +19,6 @@ import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
@@ -59,7 +58,7 @@ public class ComponentService {
         if (StrKit.isBlank(componentCode)) {
             throw new ComponentException("必须指定组件 Code:%s", componentCode);
         }
-        Record record = Db.use(App.DB_MAIN).findFirst("select * from " + META_COMPONENT + " where code=? and version=?", componentCode, version);
+        Record record = AnalysisConfig.me().dbMain().findFirst("select * from " + META_COMPONENT + " where code=? and version=?", componentCode, version);
         if (record == null) {
             throw new ComponentException("未找到Code[%s]的组件", componentCode);
         }
@@ -70,15 +69,14 @@ public class ComponentService {
         Record defaultRecord = loadLatestComponentRecord(componentCode);
         if (defaultRecord == null) {
             Record record = getNewComponentRecord(ComponentType.V(componentCode), config);
-            return Db.use(App.DB_MAIN).save(META_COMPONENT, record);
+            return AnalysisConfig.me().dbMain().save(META_COMPONENT, record);
         }
         return false;
     }
 
     private Record loadLatestComponentRecord(String componentCode) {
-        return Db.use(App.DB_MAIN).findFirst("select * from " + META_COMPONENT + " where code=? and version=(select max(version) from meta_component where code=?)",
-                                             componentCode,
-                                             componentCode);
+        return AnalysisConfig.me().dbMain().findFirst(
+                "select * from " + META_COMPONENT + " where code=? and version=(select max(version) from meta_component where code=?)", componentCode, componentCode);
     }
 
     public void updateDefault(String componentCode, Kv config) {
@@ -87,16 +85,16 @@ public class ComponentService {
             defaultRecord.set("version", defaultRecord.getInt("version") + 1);
             defaultRecord.set("config", JSON.toJSONString(config));
             UtilKit.setUpdateUser(defaultRecord.getColumns());
-            Db.use(App.DB_MAIN).update(META_COMPONENT, defaultRecord);
+            AnalysisConfig.me().dbMain().update(META_COMPONENT, defaultRecord);
         }
     }
 
     public boolean deleteDefault(String componentCode) {
-        return Db.use(App.DB_MAIN).update("update " + META_COMPONENT + " set config=? where code=?", Kv.create().toJson(), componentCode) > 0;
+        return AnalysisConfig.me().dbMain().update("update " + META_COMPONENT + " set config=? where code=?", Kv.create().toJson(), componentCode) > 0;
     }
 
     public List<Record> loadComponents() {
-        return Db.use(App.DB_MAIN).findAll(META_COMPONENT);
+        return AnalysisConfig.me().dbMain().findAll(META_COMPONENT);
     }
 
     /**
@@ -143,9 +141,9 @@ public class ComponentService {
     }
 
     public List<ComponentType> loadTypesByObjectCode(String objectCode) {
-        List<String> codes = Db.use(App.DB_MAIN).query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
-                                                       INSTANCE.META_OBJECT.toString(),
-                                                       objectCode);
+        List<String> codes = AnalysisConfig.me().dbMain().query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
+                                                                INSTANCE.META_OBJECT.toString(),
+                                                                objectCode);
         List<ComponentType> types = new ArrayList<>();
         codes.forEach(s -> {
             types.add(ComponentType.V(s));
@@ -164,14 +162,14 @@ public class ComponentService {
      */
     public List<String> loadInstanceCodeByObjectCode(String objectCode, ComponentType type) {
         if (type == ComponentType.UNKNOWN) {
-            return Db.use(App.DB_MAIN).query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and type=?",
-                                             objectCode,
-                                             INSTANCE.META_OBJECT.toString());
+            return AnalysisConfig.me().dbMain().query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and type=?",
+                                                      objectCode,
+                                                      INSTANCE.META_OBJECT.toString());
         } else {
-            return Db.use(App.DB_MAIN).query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and comp_code=? and type=?",
-                                             objectCode,
-                                             type.getCode(),
-                                             INSTANCE.META_OBJECT.toString());
+            return AnalysisConfig.me().dbMain().query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and comp_code=? and type=?",
+                                                      objectCode,
+                                                      type.getCode(),
+                                                      INSTANCE.META_OBJECT.toString());
         }
     }
 
@@ -185,7 +183,7 @@ public class ComponentService {
      */
     public ComponentInstanceConfig loadObjectConfig(String instanceCode) {
         String sql = "select * from " + META_COMPONENT_INSTANCE + " where code=?";
-        List<Record> records = Db.use(App.DB_MAIN).find(sql, instanceCode);
+        List<Record> records = AnalysisConfig.me().dbMain().find(sql, instanceCode);
         Kv objectConfig = Kv.create();
         Okv fieldsMap = Okv.create();
         AtomicReference<String> objectCode = new AtomicReference<>();
@@ -216,19 +214,20 @@ public class ComponentService {
      */
     public ComponentInstanceConfig loadObjectConfig(String componentCode, String destCode) {
         //load single object config
-        Record objectConfig = Db.use(App.DB_MAIN).findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?",
-                                                            componentCode,
-                                                            destCode,
-                                                            INSTANCE.META_OBJECT.toString());
+        Record objectConfig = AnalysisConfig.me().dbMain().findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object=? and type=?",
+                                                                     componentCode,
+                                                                     destCode,
+                                                                     INSTANCE.META_OBJECT.toString());
         //ensure return avalible value, like "" , "{}"
         String strConfig = objectConfig.getStr("config");
         Kv objConf = Kv.by(destCode, StrKit.isBlank(strConfig) ? Maps.newHashMapWithExpectedSize(0) : strConfig);
 
         Okv fieldsMap = Okv.create();
-        List<Record> fields = Db.use(App.DB_MAIN).find("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
-                                                       componentCode,
-                                                       destCode,
-                                                       INSTANCE.META_FIELD.toString());
+        List<Record> fields = AnalysisConfig.me().dbMain().find(
+                "select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
+                componentCode,
+                destCode,
+                INSTANCE.META_FIELD.toString());
         for (Record record : fields) {
             String s = record.getStr("dest_object").split("\\.")[1];
             fieldsMap.set(s, record.getStr("config"));
@@ -250,7 +249,7 @@ public class ComponentService {
                                   componentInstanceConfig.getInstanceName(),
                                   INSTANCE.META_OBJECT,
                                   componentInstanceConfig.getObjectConfig());
-        Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
+        AnalysisConfig.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         List<Record> fieldRecords = Lists.newArrayList();
         Okv fieldsMap = componentInstanceConfig.getFieldsMap();
@@ -264,7 +263,7 @@ public class ComponentService {
                                                   fkv));
         });
 
-        Db.use(App.DB_MAIN).batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
+        AnalysisConfig.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
     }
@@ -288,7 +287,7 @@ public class ComponentService {
                                   componentInstanceConfig.getInstanceName(),
                                   INSTANCE.META_OBJECT,
                                   componentInstanceConfig.getObjectConfig());
-        Db.use(App.DB_MAIN).save(META_COMPONENT_INSTANCE, record);
+        AnalysisConfig.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         Collection<IMetaField> fields = object.fields();
 
@@ -303,7 +302,7 @@ public class ComponentService {
                                                   fkv));
         });
 
-        Db.use(App.DB_MAIN).batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
+        AnalysisConfig.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
 
         return true;
     }
@@ -318,15 +317,15 @@ public class ComponentService {
      * @return
      */
     public boolean updateFieldConfig(ComponentType containerType, IMetaField metaField, Kv config) {
-        Record fieldInstance = Db.use(App.DB_MAIN).findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                                             containerType.getCode(),
-                                                             INSTANCE.META_FIELD.toString(),
-                                                             metaField.objectCode() + "." + metaField.fieldCode());
+        Record fieldInstance = AnalysisConfig.me().dbMain().findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                                                                      containerType.getCode(),
+                                                                      INSTANCE.META_FIELD.toString(),
+                                                                      metaField.objectCode() + "." + metaField.fieldCode());
         fieldInstance.set("config", config.toJson());
         Date timestamp = new Date();
         fieldInstance.set("updated_time", timestamp);
         fieldInstance.set("remark", "from file" + DateKit.toStr(timestamp));
-        return Db.use(App.DB_MAIN).update(META_COMPONENT_INSTANCE, fieldInstance);
+        return AnalysisConfig.me().dbMain().update(META_COMPONENT_INSTANCE, fieldInstance);
     }
 
     private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, String instanceCodoe, String instanceName, Kv config) {
@@ -342,34 +341,34 @@ public class ComponentService {
      * @return
      */
     public boolean deleteObjectAll(String objectCode) {
-        Db.use(App.DB_MAIN).delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?", INSTANCE.META_OBJECT.toString(), objectCode);
-        Db.use(App.DB_MAIN).delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object like concat(?,'%')",
-                                   INSTANCE.META_FIELD.toString(),
-                                   objectCode);
+        AnalysisConfig.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?", INSTANCE.META_OBJECT.toString(), objectCode);
+        AnalysisConfig.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object like concat(?,'%')",
+                                            INSTANCE.META_FIELD.toString(),
+                                            objectCode);
         return true;
     }
 
     public boolean deleteObjectConfig(String componentCode, String objectCode, boolean isSingle) {
 
-        Db.use(App.DB_MAIN).delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                   componentCode,
-                                   INSTANCE.META_OBJECT.toString(),
-                                   objectCode);
+        AnalysisConfig.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                                            componentCode,
+                                            INSTANCE.META_OBJECT.toString(),
+                                            objectCode);
 
         if (!isSingle) {
-            Db.use(App.DB_MAIN).delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object like concat(?,'%')",
-                                       componentCode,
-                                       INSTANCE.META_FIELD.toString(),
-                                       objectCode);
+            AnalysisConfig.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object like concat(?,'%')",
+                                                componentCode,
+                                                INSTANCE.META_FIELD.toString(),
+                                                objectCode);
         }
         return true;
     }
 
     public boolean deleteFieldConfig(String componentCode, String objectCode, String fieldCode) {
-        Db.use(App.DB_MAIN).delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                   componentCode,
-                                   INSTANCE.META_FIELD.toString(),
-                                   objectCode + "." + fieldCode);
+        AnalysisConfig.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                                            componentCode,
+                                            INSTANCE.META_FIELD.toString(),
+                                            objectCode + "." + fieldCode);
         return true;
     }
 
@@ -378,7 +377,7 @@ public class ComponentService {
     }
 
     public boolean hasObjectConfig(String instanceCode) {
-        return Db.use(App.DB_MAIN).queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 1;
+        return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 1;
     }
 
     private Record getRecord(Component component, String specificCode, String instanceCode, String instanceName, INSTANCE specific, Kv config) {

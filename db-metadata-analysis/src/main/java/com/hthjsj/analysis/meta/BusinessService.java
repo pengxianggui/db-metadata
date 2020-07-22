@@ -1,6 +1,6 @@
 package com.hthjsj.analysis.meta;
 
-import com.hthjsj.App;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.jfinal.aop.Before;
@@ -107,6 +107,6 @@ public class BusinessService {
         record.set("pvalue", newData.get(object.primaryKey()));
         record.set("olddata", Json.getJson().toJson(oldData));
         record.set("newData", Json.getJson().toJson(newData));
-        Db.use(App.DB_MAIN).save("change_log", record);
+        AnalysisConfig.me().dbMain().save("change_log", record);
     }
 }

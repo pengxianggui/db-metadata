@@ -1,16 +1,14 @@
 package com.hthjsj.analysis.meta;
 
-import com.hthjsj.App;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.*;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.jfinal.plugin.activerecord.tx.TxConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -24,11 +22,10 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-@TxConfig(App.DB_MAIN)
 @Before(Tx.class)
 public class DbMetaService {
 
-    private BusinessService businessService = Aop.get(BusinessService.class);
+    private final BusinessService businessService = Aop.get(BusinessService.class);
 
     public IMetaObject importFromTable(String schema, String table) {
         DbService dbService = Aop.get(MysqlService.class);
@@ -38,17 +35,17 @@ public class DbMetaService {
     }
 
     public boolean isExists(String objectCode) {
-        return Db.use(App.DB_MAIN).queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
+        return AnalysisConfig.me().dbMain().queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
     }
 
     public boolean isExists(IMetaObject metaObject, IMetaField metaField, Object value) {
-        return Db.use(App.DB_MAIN).queryInt("select count(1) from " + metaObject.tableName() + " where " + metaField.fieldCode() + "=?", value) > 0;
+        return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + metaObject.tableName() + " where " + metaField.fieldCode() + "=?", value) > 0;
     }
 
     public List<IMetaObject> findAll() {
         List<IMetaObject> result = new ArrayList<>();
 
-        List<String> objs = Db.use(App.DB_MAIN).query("select code from meta_object");
+        List<String> objs = AnalysisConfig.me().dbMain().query("select code from meta_object");
         for (String metaObjectCode : objs) {
             result.add(findByCode(metaObjectCode));
         }
@@ -59,11 +56,11 @@ public class DbMetaService {
         if (StrKit.isBlank(objectCode)) {
             throw new MetaOperateException("必须指定元对象编码,当前元对象编码:%s", objectCode);
         }
-        Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        Record moRecord = AnalysisConfig.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
         if (moRecord == null) {
             throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
         }
-        List<Record> metafields = Db.use(App.DB_MAIN).find("select * from meta_field where object_code=? order by order_num ", objectCode);
+        List<Record> metafields = AnalysisConfig.me().dbMain().find("select * from meta_field where object_code=? order by order_num ", objectCode);
         IMetaObject metaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {
             MetaField defaultMetaField = new MetaField(metaObject);
@@ -76,7 +73,9 @@ public class DbMetaService {
     public IMetaField findFieldByCode(String objectCode, String fieldCode) {
         IMetaField metaField = null;
         if (StrKit.notBlank(objectCode, fieldCode)) {
-            Record field = Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=? order by order_num", objectCode, fieldCode);
+            Record field = AnalysisConfig.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=? order by order_num",
+                                                                  objectCode,
+                                                                  fieldCode);
             if (field == null) {
                 throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
             }
@@ -92,7 +91,7 @@ public class DbMetaService {
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
         metaObject.dataMap().put("id", SnowFlake.me().nextId());
-        boolean moSaved = Db.use(App.DB_MAIN).save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
+        boolean moSaved = AnalysisConfig.me().dbMain().save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
             metaObject.fields().forEach((re) -> {
@@ -101,24 +100,24 @@ public class DbMetaService {
                 re.objectCode(metaObject.code());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
-            int[] result = Db.use(App.DB_MAIN).batchSave("meta_field", updateRecords, 50);
+            int[] result = AnalysisConfig.me().dbMain().batchSave("meta_field", updateRecords, 50);
             log.info("batchSave result:{}", Arrays.toString(result));
         }
         return moSaved;
     }
 
     public boolean updateMetaObject(IMetaObject metaObject) {
-        boolean moUpdated = Db.use(App.DB_MAIN).update("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
+        boolean moUpdated = AnalysisConfig.me().dbMain().update("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         List<Record> updateRecords = new ArrayList<>();
         metaObject.fields().forEach((re) -> {
             updateRecords.add(new Record().setColumns(re.dataMap()));
         });
-        Db.use(App.DB_MAIN).batchUpdate("meta_field", updateRecords, 50);
+        AnalysisConfig.me().dbMain().batchUpdate("meta_field", updateRecords, 50);
         return moUpdated;
     }
 
     public boolean deleteMetaObject(String objectCode) {
-        return Db.use(App.DB_MAIN).delete("delete from meta_object where code=?", objectCode) > 0 && Db.use(App.DB_MAIN).delete(
+        return AnalysisConfig.me().dbMain().delete("delete from meta_object where code=?", objectCode) > 0 && AnalysisConfig.me().dbMain().delete(
                 "delete from meta_field where object_code=?",
                 objectCode) > 0;
     }
@@ -132,7 +131,7 @@ public class DbMetaService {
      * @return
      */
     public Record findObjectRecordByCode(String objectCode) {
-        Record moRecord = Db.use(App.DB_MAIN).findFirst("select * from meta_object where code=?", objectCode);
+        Record moRecord = AnalysisConfig.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
         if (moRecord == null) {
             throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
         }
@@ -149,7 +148,7 @@ public class DbMetaService {
      * @return
      */
     public Record findFieldRecordByCode(String code, String fieldCode) {
-        return Db.use(App.DB_MAIN).findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
+        return AnalysisConfig.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
     }
 
     //*****************业务操作(metadata数据库以外的操作迁移至businessService)**************************

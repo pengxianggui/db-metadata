@@ -3,7 +3,6 @@ package com.hthjsj.web;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.AnalysisManager;
-import com.hthjsj.App;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.auth.JsonUserPermit;
 import com.hthjsj.web.auth.MRAuthIntercept;
@@ -59,8 +58,8 @@ public class AppWebConfig extends JFinalConfig {
      * jar->config.properties
      */
     private void initProp() {
-        prop = PropKit.useFirstFound("config-dev.properties", App.CONFIG_NAME);
-        File configPropFile = UtilKit.stairsLoad(App.CONFIG_NAME, "config");
+        prop = PropKit.useFirstFound("config-dev.properties", AnalysisConfig.CONFIG_NAME);
+        File configPropFile = UtilKit.stairsLoad(AnalysisConfig.CONFIG_NAME, "config");
         if (configPropFile != null) {
             prop.appendIfExists(configPropFile);
         }

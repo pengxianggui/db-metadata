@@ -1,7 +1,6 @@
 package com.hthjsj.analysis.db;
 
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.App;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -41,7 +40,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             records = Db.use(schema).find(showTablesSql, schema);
         } else {
-            records = Db.use(App.DB_MAIN).find(showTablesSql, schema);
+            records = AnalysisConfig.me().dbMain().find(showTablesSql, schema);
         }
 
         if (records == null || records.isEmpty()) {
@@ -64,7 +63,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             record = Db.use(schema).findFirst(getTableSql, schema, tableName);
         } else {
-            record = Db.use(App.DB_MAIN).findFirst(getTableSql, schema, tableName);
+            record = AnalysisConfig.me().dbMain().findFirst(getTableSql, schema, tableName);
         }
         Table table = new Table(record);
         return table.setColumns(getColumns(schema, tableName));
@@ -81,7 +80,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             records = Db.use(schema).find(showColumns, schema, tableName);
         } else {
-            records = Db.use(App.DB_MAIN).find(showColumns, schema, tableName);
+            records = AnalysisConfig.me().dbMain().find(showColumns, schema, tableName);
         }
         List<Column> result = new ArrayList<>();
         for (Record record : records) {

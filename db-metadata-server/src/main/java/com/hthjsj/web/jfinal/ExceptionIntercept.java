@@ -1,7 +1,7 @@
 package com.hthjsj.web.jfinal;
 
 import com.google.common.base.Throwables;
-import com.hthjsj.App;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.aop.Interceptor;
@@ -11,7 +11,6 @@ import com.jfinal.core.JFinal;
 import com.jfinal.json.Json;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,7 +66,7 @@ public class ExceptionIntercept implements Interceptor {
                 se.set("res_data", Json.getJson().toJson(controller.getRequest().getParameterMap()));
                 se.set("created_by", "db-metadata-server");
                 se.set("created_time", new Date());
-                Db.use(App.DB_MAIN).save("meta_exception", se);
+                AnalysisConfig.me().dbMain().save("meta_exception", se);
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
