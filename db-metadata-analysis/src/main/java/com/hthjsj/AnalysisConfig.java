@@ -10,8 +10,12 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.DbKit;
+import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class AnalysisConfig {
 
     public static final String PREFIX_BIZ_DB = "biz.db";
@@ -35,6 +40,14 @@ public class AnalysisConfig {
     public static final String SUFFIX_BIZ_PASSWORD = ".jdbc.password";
 
     public static final String SUFFIX_BIZ_PERMISSION = ".jdbc.permission";
+
+    public static final String CONFIG_NAME = "config.properties";
+
+    public static final String DB_MAIN_URL = "main.jdbc.url";
+
+    public static final String DB_MAIN_USERNAME = "main.jdbc.username";
+
+    public static final String DB_MAIN_PASSWORD = "main.jdbc.password";
 
     private static final AnalysisConfig me = new AnalysisConfig();
 
@@ -48,10 +61,10 @@ public class AnalysisConfig {
 
     public void initDefaultDbSource() {
         //init main database resource
-        DBSource mainSource = new DBSource(App.DB_MAIN,
-                                           getProp().get(App.DB_MAIN_URL),
-                                           getProp().get(App.DB_MAIN_USERNAME),
-                                           getProp().get(App.DB_MAIN_PASSWORD),
+        DBSource mainSource = new DBSource(DbKit.MAIN_CONFIG_NAME,
+                                           getProp().get(DB_MAIN_URL),
+                                           getProp().get(DB_MAIN_USERNAME),
+                                           getProp().get(DB_MAIN_PASSWORD),
                                            DbSourceConfig.Permission.RW,
                                            plugins);
         dbSources.add(mainSource);
@@ -76,6 +89,10 @@ public class AnalysisConfig {
         }
     }
 
+    public DbPro dbMain() {
+        return Db.use(DbKit.MAIN_CONFIG_NAME);
+    }
+
     public List<IPlugin> getPlugins() {
         return plugins.getPluginList();
     }
@@ -85,7 +102,7 @@ public class AnalysisConfig {
     }
 
     public Prop getProp() {
-        return PropKit.useFirstFound("config-dev.properties", App.CONFIG_NAME);
+        return PropKit.useFirstFound("config-dev.properties", CONFIG_NAME);
     }
 
     public void start() {
@@ -100,6 +117,11 @@ public class AnalysisConfig {
 
         void init(Plugins me);
 
+        /**
+         * TODO  not finished
+         *
+         * @return
+         */
         Permission getPermission();
 
         enum Permission {
