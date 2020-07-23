@@ -6,12 +6,12 @@
     <parent>
         <artifactId>db-metadata-parent</artifactId>
         <groupId>com.hthjsj</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
     <packaging>pom</packaging>
     <artifactId>db-metadata-web</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <name>db-metadata-web</name>
 
     <properties>
