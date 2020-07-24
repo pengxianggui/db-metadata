@@ -14,8 +14,6 @@ RegisterGlobalFn.install = function (Vue, opts = {}) {
     Vue.prototype.$dialog = utils.dialog;
 
     Vue.prototype.$hasAllRole = function (roles) { // 根据角色鉴权
-        console.log(access.roles)
-        console.log(roles)
         let userRoles = utils.assertEmpty(access.roles, []); // 用户拥有的角色
         if (!utils.isArray(userRoles)) {
             console.error(`[MetaElement] 当前用户角色必须是数组或角色字符串`)
