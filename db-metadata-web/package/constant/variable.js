@@ -12,5 +12,6 @@ export const innerObjectCode = {
 }
 
 export const access = {
-    adminRoleCode: 'admin'
+    adminRoleCode: 'admin',
+    roles: [] // 当前用户角色
 }

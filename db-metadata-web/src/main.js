@@ -17,7 +17,11 @@ Vue.use(MetaElement, {
     routeUrl: {
         baseURL: '/main'
     },
-    restUrl: {}
+    restUrl: {},
+    access: {
+        adminRoleCode: 'admin', // 可以使用MetaEasyEdit功能的角色
+        roles: ['admin'] // 当前用户角色
+    }
 });
 
 

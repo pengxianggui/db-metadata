@@ -156,6 +156,7 @@ const install = function (Vue, opts = {}) {
     // 自定义权限配置: 例如设置meta管理 仅对某个角色开放(adminRoleCode)
     if (opts.access) {
         utils.reverseMerge(access, opts.access, false);
+        Vue.prototype.$adminRoleCode = access.adminRoleCode; // 全局注入组件
     }
 
     Vue.use(GlobalFnRegister, opts);    // 全局方法

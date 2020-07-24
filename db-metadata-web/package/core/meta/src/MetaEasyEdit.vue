@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="$hasAuth('ADMIN') && objectCode">
+        <template v-if="$hasAllRole($adminRoleCode) && objectCode">
             <template v-if="all">
                 <pop-menu trigger="right-click">
                     <template #label>{{label}}</template>
@@ -63,6 +63,7 @@
 <script>
     import utils from '../../../utils'
     import {restUrl, routeUrl} from "../../../constant/url";
+    import {access} from "../../../constant/variable";
 
     export default {
         name: "MetaEasyEdit",
