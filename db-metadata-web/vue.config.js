@@ -1,4 +1,3 @@
-let config = require('./config');
 let alias = require('./alias.config');
 
 const name = "db-metadata-web";
@@ -10,7 +9,7 @@ const serverProxy = {
 };
 
 module.exports = {
-    publicPath: config.publicPath,
+    publicPath: "/",
     outputDir: 'dist',
     assetsDir: 'static',    // 静态资源存放目录,相对于outputDir
     indexPath: 'index.html', // 生成的index.html的输出路径(相对于outputDir), 也可以是绝对路径

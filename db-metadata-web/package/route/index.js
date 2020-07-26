@@ -21,7 +21,7 @@ const jumpOut = [
             title: '组件实例配置-编辑',
             icon: 'edit',
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         hidden: true
     }
@@ -35,7 +35,7 @@ export default [
             title: "元数据管理",
             icon: "el-icon-warning",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: MetaDataManager
     }, {
@@ -45,7 +45,7 @@ export default [
             title: '功能维护',
             icon: 'el-icon-warning-outline',
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: MetaFeatureList
     }, {
@@ -55,7 +55,7 @@ export default [
             title: "组件全局配置",
             icon: "el-icon-star-off",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: GlobalConfList
     }, {
@@ -65,7 +65,7 @@ export default [
             title: "组件全局配置-编辑",
             icon: "el-icon-star-off",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         hidden: true,
         component: GlobalConf
@@ -76,7 +76,7 @@ export default [
             title: "组件实例配置",
             icon: "el-icon-star-on",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: InstanceConfList
     }, {
@@ -86,7 +86,7 @@ export default [
             title: "组件实例配置-新增",
             icon: "el-icon-star-off",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         hidden: true,
         component: InstanceConfNew
@@ -97,7 +97,7 @@ export default [
             title: "表单构建",
             icon: "el-icon-s-order",
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: FormBuilder
     }, {
@@ -107,7 +107,7 @@ export default [
             title: 'MetaConf',
             icon: 'el-icon-s-tools',
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: MetaConfList
     }, {
@@ -117,7 +117,7 @@ export default [
             title: '字典',
             icon: 'el-icon-collection',
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: DictList
     }, {
@@ -127,7 +127,7 @@ export default [
             title: '异常',
             icon: 'el-icon-warning',
             noCache: false,
-            roles: [access.adminRoleCode]
+            roles: [access.root]
         },
         component: ExceptionList
     },

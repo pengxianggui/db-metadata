@@ -3,6 +3,7 @@ import * as kvFormats from './kvFormat'
 import * as common from './common'
 import * as dialog from './dialog'
 import * as url from './url'
+import * as auth from './user'
 
 export default {
     ...common,
@@ -10,4 +11,5 @@ export default {
     ...url,
     ...kvFormats,
     ...dialog,
+    ...auth
 }

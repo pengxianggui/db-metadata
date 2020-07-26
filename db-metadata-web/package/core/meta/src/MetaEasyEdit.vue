@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="$hasAllRole($adminRoleCode) && objectCode">
+        <template v-if="$isRoot() && objectCode">
             <template v-if="all">
                 <pop-menu trigger="right-click">
                     <template #label>{{label}}</template>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="$isRoot()">
         <template v-for="m in menus">
             <menu-item v-if="!m.hidden" :item="m" :base-path="basePath" :key="m.path">
             </menu-item>

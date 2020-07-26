@@ -1,6 +1,9 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import utils from './utils'
+import * as user from './utils/user'
+import axios from './axios'
+import filters from './register/filter'
 // 核心组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -51,8 +54,6 @@ import GlobalConf from "./meta/component/GlobalConf";
 import InstanceConfList from "./meta/component-instance/InstanceConfList";
 import InstanceConfEdit from "./meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "./meta/component-instance/InstanceConfNew";
-import GlobalFnRegister from './register/fn-register'
-import GlobalFilterRegister from './register/filter-register'
 import MetaFeatureList from './meta/feature';
 import MetaConfList from "./meta/meta-conf";
 import DictList from "./meta/dict"
@@ -129,7 +130,7 @@ const components = [
     ExceptionList,
 
     // 内置meta菜单组件
-    MetaMenu
+    MetaMenu,
 ];
 
 const install = function (Vue, opts = {}) {
@@ -153,14 +154,24 @@ const install = function (Vue, opts = {}) {
     if (opts.featureCode) {
         utils.reverseMerge(innerFeatureCode, opts.featureCode, false);
     }
-    // 自定义权限配置: 例如设置meta管理 仅对某个角色开放(adminRoleCode)
+    // 角色配置
     if (opts.access) {
+        if (opts.access.hasOwnProperty('root')) {
+            Vue.prototype.$root = access.root; // 全局注入组件
+        }
         utils.reverseMerge(access, opts.access, false);
-        Vue.prototype.$adminRoleCode = access.adminRoleCode; // 全局注入组件
     }
 
-    Vue.use(GlobalFnRegister, opts);    // 全局方法
-    Vue.use(GlobalFilterRegister, opts);    // 全局过滤器
+    // 注册全局函数
+    Vue.prototype.$axios = axios(opts['axios']);    // {axios: {}} // 对axios进行配置, 如baseURL等
+    Vue.prototype.$merge = utils.merge;
+    Vue.prototype.$reverseMerge = utils.reverseMerge;
+    Vue.prototype.$compile = utils.compile;
+    Vue.prototype.$dialog = utils.dialog;
+    Vue.prototype.$isRoot = utils.isRoot;
+
+    // 注册全局过滤器
+    Object.keys(filters).map(key => Vue.filter(key, filters[key]))
 
     components.map(component => Vue.component(component.name, component))
 };
@@ -172,6 +183,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
     install,
     utils,
+    user,
     routeUrl,
     restUrl,
 
@@ -242,6 +254,7 @@ export {
     utils,
     routeUrl,
     restUrl,
+    user,
 
     // atom or container
     BoolBox,

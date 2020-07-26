@@ -1,10 +1,11 @@
 import axios from 'axios'
-import {e_format, s_format} from "./responseExchange";
-import config from "./config";
-import utils from '../../package/utils'
+import {e_format, s_format} from "./responseExchange"
+import utils from '../utils'
 
 export default function (opts = {}) {
-    utils.merge(opts, config);
+    utils.merge(opts, {
+        baseURL: '/'
+    });
     let instance = axios.create(opts);
 
     // 添加一个请求拦截器

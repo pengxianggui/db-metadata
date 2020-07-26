@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import MetaElement from '../package/index' // 如果将index省略, 则会发生下面Vue.use无法正常调用的异常情况
 import router from './router'
-import config from '../config'
 import {mockXHR} from '../mock'
 
 if (process.env.NODE_ENV === 'development') {
@@ -10,23 +9,23 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 Vue.use(MetaElement, {
-    authorities: ['ADMIN'],
-    axios: {
-        baseURL: config.apiBaseUrl + 'meta'   // default
+    axios: { // 内置axios配置
+        baseURL: '/meta'   // default
     },
-    routeUrl: {
-        baseURL: '/main'
+    routeUrl: { // 内置路由配置，用于覆盖内部组件的路由跳转, 通常只需要配置前缀
+        baseURL: '/main' // 为内部所有跳转的路由添加前缀
     },
-    restUrl: {},
-    access: {
-        adminRoleCode: 'admin', // 可以使用MetaEasyEdit功能的角色
-        roles: ['admin'] // 当前用户角色
+    restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置
+    objectCode: {}, // 对于内置模块的元对象编码, 若objectCode不一致， 可以进行配置
+    featureCode: {}, // 同上, 针对需要纠正内置模块的featureCode
+    access: { // 访问权限配置
+        root: 'ROOT' // 默认为ROOT, 如果自定义覆盖, 对于MetaEasyEdit快捷编辑是有效的, 但是平台维护路由未生效
     }
 });
 
 
 Vue.config.productionTip = false;
-Vue.prototype.NODE_ENV = process.env.NODE_ENV;
+Vue.prototype.$NODE_ENV = process.env.NODE_ENV;
 
 new Vue({
     router,

@@ -4,7 +4,7 @@
             <span class="h2" style="font-family: unset">元数据管理系统</span>
             <span style="font-family: cursive;">—— Data Fuck Everything</span>
         </div>
-        <router-link v-if="NODE_ENV === 'development'" to="/workspace"
+        <router-link v-if="$NODE_ENV === 'development'" to="/workspace"
                      style="display: inline-block; color: deepskyblue; padding: 10px; cursor: pointer;">
             workspace
         </router-link>
