@@ -36,33 +36,69 @@
                                 </h2>
                                 <el-form-item>
                                     <mini-form-box v-model="confModel.conf" class="shadow"
-                                                   :meta="buildMiniFormMeta(confModel.objectCode, confModel.conf)"></mini-form-box>
+                                                   :show-change-type="true" :meta="objConfMeta"
+                                                   @json-change="() => buildObjectConfMeta(confModel.conf)">
+                                        <template #button-expand="{value}">
+                                            <el-popover placement="right" trigger="click"
+                                                        popper-class="ui-conf-tip-popper">
+                                                <ui-conf-tip
+                                                        :component-name="confModel.conf['component_name']"></ui-conf-tip>
+                                                <el-button slot="reference" size="mini" icon="el-icon-question"
+                                                           circle></el-button>
+                                            </el-popover>
+                                        </template>
+                                    </mini-form-box>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row v-else>
                             <div class="blank-tip">请先选择一个组件</div>
                         </el-row>
-                        <el-row v-for="(key, index) in Object.keys(confModel.fConf).length" :key="key">
-                            <template v-if="index%2==0">
-                                <el-col :span="12">
-                                    <el-form-item>
-                                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>
-                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"
-                                                       class="shadow" :meta="buildMiniFormMeta(key,
-                                                       confModel.fConf[Object.keys(confModel.fConf)[index]])"></mini-form-box>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">
-                                    <el-form-item>
-                                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>
-                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"
-                                                       class="shadow" :meta="buildMiniFormMeta(key,
-                                                       confModel.fConf[Object.keys(confModel.fConf)[index+1]])"></mini-form-box>
-                                    </el-form-item>
-                                </el-col>
-                            </template>
-                        </el-row>
+                        <div class="field-conf-parent">
+                            <div class="field-conf" v-for="(key, index) in Object.keys(confModel.fConf)"
+                                 :key="key">
+                                <el-form-item>
+                                    <h1 :name="key">{{index+1}}.{{key}}</h1>
+                                    <mini-form-box v-model="confModel.fConf[key]" class="shadow"
+                                                   :meta="fieldsConfMeta[key]" :show-change-type="true"
+                                                   @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
+                                        <template #button-expand="{value}">
+                                            <el-popover placement="right" trigger="click"
+                                                        popper-class="ui-conf-tip-popper">
+                                                <ui-conf-tip
+                                                        :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
+                                                <el-button slot="reference" size="mini" icon="el-icon-question"
+                                                           circle></el-button>
+                                            </el-popover>
+                                            <span>
+                                                        <el-button size="mini" icon="el-icon-question" circle
+                                                                   @click="openLogicConf(confModel.objectCode, key)"></el-button>
+                                                    </span>
+                                        </template>
+                                    </mini-form-box>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <!--                        <el-row v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
+                        <!--                            <template v-if="index%2==0">-->
+                        <!--                                <el-col :span="12">-->
+                        <!--                                    <el-form-item>-->
+                        <!--                                        <span>{{index+1}}.{{Object.keys(confModel.fConf)[index]}}</span>-->
+                        <!--                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index]]"-->
+                        <!--                                                       class="shadow" :meta="buildMiniFormMeta(key,-->
+                        <!--                                                       confModel.fConf[Object.keys(confModel.fConf)[index]])"></mini-form-box>-->
+                        <!--                                    </el-form-item>-->
+                        <!--                                </el-col>-->
+                        <!--                                <el-col :span="12" v-if="(index+1)!==Object.keys(confModel.fConf).length">-->
+                        <!--                                    <el-form-item>-->
+                        <!--                                        <span>{{index+2}}.{{Object.keys(confModel.fConf)[index+1]}}</span>-->
+                        <!--                                        <mini-form-box v-model="confModel.fConf[Object.keys(confModel.fConf)[index+1]]"-->
+                        <!--                                                       class="shadow" :meta="buildMiniFormMeta(key,-->
+                        <!--                                                       confModel.fConf[Object.keys(confModel.fConf)[index+1]])"></mini-form-box>-->
+                        <!--                                    </el-form-item>-->
+                        <!--                                </el-col>-->
+                        <!--                            </template>-->
+                        <!--                        </el-row>-->
                     </el-tab-pane>
                     <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
                         <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
@@ -70,6 +106,11 @@
                 </el-tabs>
             </div>
         </el-form>
+
+        <dialog-box :visible.sync="logicConf.dialogShow" title="编辑逻辑配置">
+            <field-conf :object-code="logicConf.objectCode" :field-code="logicConf.fieldCode"></field-conf>
+            <template #footer><span></span></template>  <!-- 表单自带button条 -->
+        </dialog-box>
     </el-container>
 </template>
 
@@ -80,6 +121,8 @@
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
     import DefaultDropDownBoxMeta from '../../core/dropdownbox/ui-conf'
+    import UiConfTip from "./ext/UiConfTip";
+    import FieldConf from "./ext/FieldConf";
 
     let objectMeta = {
         name: "object",
@@ -106,14 +149,21 @@
 
     export default {
         name: "InstanceConfNew",
-        components: {FormBuilder},
+        components: {FormBuilder, UiConfTip, FieldConf},
         data() {
             const {componentCode, objectCode} = this.$route.query;
             this.$merge(objectMeta, DefaultDropDownBoxMeta);
 
             return {
                 isAutoComputed: false,
+                objConfMeta: {}, // 构建元对象配置迷你表单的元数据
+                fieldsConfMeta: {}, // 构建元字段配置迷你表单的元数据
                 objectMeta: objectMeta,
+                logicConf: {
+                    objectCode: null,
+                    fieldCode: null,
+                    dialogShow: false,
+                },
                 confModel: {
                     instanceName: null,
                     componentCode: componentCode,
@@ -131,6 +181,11 @@
             initConf() {
                 this.confModel['conf'] = {};
                 this.confModel['fConf'] = {};
+            },
+            openLogicConf(objectCode, fieldCode) {
+                this.logicConf.objectCode = objectCode;
+                this.logicConf.fieldCode = fieldCode;
+                this.logicConf.dialogShow = true;
             },
             handleOcChange(objectCode) {
                 this.confModel['objectCode'] = objectCode;
@@ -159,6 +214,13 @@
                             for (let fieldName in fieldsMap) {
                                 this.$set(this.confModel['fConf'], fieldName, extractConfig.call(this, fieldsMap, fieldName));
                             }
+
+                            // build object conf meta
+                            this.buildObjectConfMeta(this.confModel['conf']);
+                            // build fields conf meta
+                            Object.keys(this.confModel['fConf']).forEach(key => {
+                                this.buildFieldConfMeta(this.confModel['fConf'][key], key);
+                            });
                         }).catch(err => {
                             console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
                             this.$message.error(err.msg);
@@ -238,6 +300,12 @@
             },
             buildMiniFormMeta(key, value) {
                 return buildMeta(value);
+            },
+            buildObjectConfMeta(value) {
+                this.objConfMeta = buildMeta(value);
+            },
+            buildFieldConfMeta(value, key) {
+                this.fieldsConfMeta[key] = buildMeta(value, key);
             }
         },
         mounted() {
