@@ -1,6 +1,7 @@
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import utils from './utils'
+import * as Rest from './utils/rest'
 import * as user from './utils/user'
 import axios from './axios'
 import filters from './register/filter'
@@ -185,6 +186,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
     install,
     utils,
+    Rest,
     user,
     routeUrl,
     restUrl,
@@ -255,6 +257,7 @@ export default {
 
 export {
     utils,
+    Rest,
     routeUrl,
     restUrl,
     user,

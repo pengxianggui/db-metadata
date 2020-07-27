@@ -531,3 +531,10 @@ MetaEasyEdit权限功能配置
 添加富文本组件(基于[Tinymce](https://www.tiny.cloud/docs/integrations/vue/#forminputbindingsv-model)),
 
 暂未提供更多可配置化内容, 后期完善。
+
+### 0.2.46
+导出直接获取某个元对象的form meta(Add、Update)
+
+### 0.2.47
+调整FormView item插槽的上抛的绑定数据, 将整个model引用数据抛出, 以便于外部修改其中
+的值, 可以实现回传(双向绑定), 若抛出的是基本类型value， 则无法在外部被绑定（v-model） 
