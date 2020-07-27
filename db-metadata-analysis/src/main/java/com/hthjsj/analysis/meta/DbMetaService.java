@@ -22,6 +22,7 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
+//@TxConfig(DbKit.MAIN_CONFIG_NAME)
 @Before(Tx.class)
 public class DbMetaService {
 

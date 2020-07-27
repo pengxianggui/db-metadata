@@ -11,7 +11,6 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -19,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p> Class title: </p>
@@ -61,7 +62,7 @@ public class AnalysisConfig {
 
     public void initDefaultDbSource() {
         //init main database resource
-        DBSource mainSource = new DBSource(DbKit.MAIN_CONFIG_NAME,
+        DBSource mainSource = new DBSource(dbMainStr(),
                                            getProp().get(DB_MAIN_URL),
                                            getProp().get(DB_MAIN_USERNAME),
                                            getProp().get(DB_MAIN_PASSWORD),
@@ -89,8 +90,22 @@ public class AnalysisConfig {
         }
     }
 
+    public String dbMainStr() {
+        return filterMainDBStr(getProp().get(DB_MAIN_URL));
+    }
+
+    private String filterMainDBStr(String jdbcUrl) {
+        Pattern pattern = Pattern.compile("jdbc:mysql://.*/(.*)\\?.*");
+        Matcher matcher = pattern.matcher(jdbcUrl);
+        String dbName = "";
+        if (matcher.find()) {
+            dbName = matcher.group(1);
+        }
+        return StrKit.defaultIfBlank(dbName, "");
+    }
+
     public DbPro dbMain() {
-        return Db.use(DbKit.MAIN_CONFIG_NAME);
+        return Db.use(dbMainStr());
     }
 
     public List<IPlugin> getPlugins() {
