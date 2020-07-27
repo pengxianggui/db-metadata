@@ -524,5 +524,10 @@ FindBox修复双击回选无效的bug;
 ### 0.2.36 、0.2.37
 简化客户端路由覆盖配置
 
-### 0.2.37 ~ 0.2.43
+### 0.2.37 ~ 0.2.44
 MetaEasyEdit权限功能配置
+
+### 0.2.45
+添加富文本组件(基于[Tinymce](https://www.tiny.cloud/docs/integrations/vue/#forminputbindingsv-model)),
+
+暂未提供更多可配置化内容, 后期完善。

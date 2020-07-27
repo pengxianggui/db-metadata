@@ -27,6 +27,7 @@ import NumBox from './core/numbox'
 import PassBox from './core/passbox'
 import PopMenu from './core/popmenu'
 import RadioBox from './core/radiobox'
+import RichTextBox from "./core/richtextbox";
 import SearchPanel from './core/searchpanel'
 import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
@@ -96,6 +97,7 @@ const components = [
     PassBox,
     PopMenu,
     RadioBox,
+    RichTextBox,
     SearchPanel,
     SqlBox,
     Tags,
@@ -213,6 +215,7 @@ export default {
     PassBox,
     PopMenu,
     RadioBox,
+    RichTextBox,
     SearchPanel,
     SqlBox,
     Tags,
@@ -282,6 +285,7 @@ export {
     PassBox,
     PopMenu,
     RadioBox,
+    RichTextBox,
     SearchPanel,
     SqlBox,
     Tags,
