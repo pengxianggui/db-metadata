@@ -24,21 +24,30 @@
         },
         data() {
             return {
-                fieldConf: {}
+                fieldConf: {},
+                id: null
             }
         },
         methods: {
             submit() {
-                // TODO 只更新某个元字段配置, 暂无法实现——没有只更新某个字段的接口, 若拉出整个meta_field编辑表单, 需要
-                // 此条记录的ID, 而光靠objectCode和fieldCode无法实现
-                this.$message.warning("暂未实现: 无法只更新某个字段, 若拉出整个meta_field编辑表单, 需要此记录的ID, 只有objectCode和fieldCode 无法实现")
+                const {objectCode, fieldCode, fieldConf, id} = this;
+                const url = this.$compile(restUrl.RECORD_DO_UPDATE, {objectCode: "meta_field"})
+                this.$axios.post(url, {
+                    id: id,
+                    object_code: objectCode,
+                    field_code: fieldCode,
+                    config: fieldConf
+                }).then(resp => {
+                    this.$emit('callback')
+                })
             }
         },
         created() {
             const {objectCode, fieldCode} = this;
             const url = this.$compile(restUrl.FIELD_CODE_CONF, {objectCode: objectCode, fieldCode: fieldCode});
             this.$axios.safeGet(url).then(resp => {
-                let {config} = Array.isArray(resp.data) ? resp.data[0] : resp.data;
+                let {id, config} = Array.isArray(resp.data) ? resp.data[0] : resp.data;
+                this.id = id;
                 this.fieldConf = config;
             })
         }

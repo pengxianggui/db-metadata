@@ -105,7 +105,8 @@
             </div>
         </el-form>
         <dialog-box :visible.sync="logicConf.dialogShow" title="编辑逻辑配置">
-            <field-conf :object-code="logicConf.objectCode" :field-code="logicConf.fieldCode"></field-conf>
+            <field-conf @callback="logicConf.dialogShow = false" :object-code="logicConf.objectCode"
+                        :field-code="logicConf.fieldCode"></field-conf>
             <template #footer><span></span></template>  <!-- 表单自带button条 -->
         </dialog-box>
     </el-container>

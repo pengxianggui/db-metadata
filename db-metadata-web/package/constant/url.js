@@ -14,7 +14,7 @@ export const restUrl = {
     META_FIELD_TO_EDIT: '/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}',  // 元字段编辑(TO)
     OBJECT_CODE_LIST: '/table/list?objectCode=meta_object&fs=code&s=1000',  // 获取所有元对象code
     FIELD_CODE_LIST_BY_OBJECT: '/table/list?objectCode=meta_field&object_code={objectCode}&fs=field_code,en,cn&en->key&field_code->value&cn->label&s=1000', // 查询某个元对象的元字段的field_code和cn，并以key,value返回
-    FIELD_CODE_CONF: '/table/list?objectCode=meta_field&object_code={objectCode}&field_code={fieldCode}&fs=config', // 获取某个元字段的逻辑配置
+    FIELD_CODE_CONF: '/table/list?objectCode=meta_field&object_code={objectCode}&field_code={fieldCode}&fs=config,id', // 获取某个元字段的逻辑配置
     COMPONENT_CODE_LIST: '/component/list', // 获取所有组件列表, 返回数据格式KV
     INSTANCE_CODE_LIST: '/table/list/meta_component_instance?fs=code&code->value&s=1000', // instanceCode
     COMP_CONF_UPDATE: '/component/doUpdate', // 组件(默认|实例)配置更新
@@ -27,6 +27,7 @@ export const restUrl = {
     COMPONENT_INSTANCE_META: '/component/meta?componentCode={componentCode}&objectCode={objectCode}', // 组件实例元数据
     RECORD_TO_ADD: "/form/toAdd/{objectCode}",  // 新增记录(TO)
     RECORD_TO_UPDATE: '/form/toUpdate/{objectCode}?id={primaryKv}',    // 更新记录(TO)
+    RECORD_DO_UPDATE: '/form/doUpdate?objectCode={objectCode}', // 更新记录(DO)
     LOAD_COMP_BY_OBJECT: '/meta/contact/{objectCode}?kv={kv}', // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
     LOAD_INSTANCE_CODE_BY_OBJECT_COMP: '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}', // 根据查询在objectCode+componentCode下的所有实例配置
     LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 根据查询在objectCode下的所有实例配置
