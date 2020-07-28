@@ -63,7 +63,8 @@
                                          show-overflow-tooltip>
                             <template slot="header">
                                 <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
-                                                :label="item.label || item.name" :all="true">
+                                                :label="item.label || item.name" :all="true"
+                                                component-code="TableTreeList">
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
                             </template>
@@ -437,16 +438,8 @@
         computed: {
             primaryKey() {
                 const {objectPrimaryKey} = this.meta;
-                const defaultPrimaryKey = defaultPrimaryKey;
-                let primaryKey;
-
-                if (utils.isEmpty(objectPrimaryKey)) {
-                    console.warn('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
-                    primaryKey = defaultPrimaryKey.split(',');
-                } else {
-                    primaryKey = objectPrimaryKey.split(',');
-                }
-                return primaryKey;
+                let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
+                return primaryKey.split(',');
             },
             tlRefName() {
                 return this.innerMeta['name'];
