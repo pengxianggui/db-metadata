@@ -36,7 +36,7 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-    user.setRoles(["ROOT1"]) // 异步获取角色并设置
+    user.setRoles(["ROOT"]) // 异步获取角色并设置
     next();
 })
 
