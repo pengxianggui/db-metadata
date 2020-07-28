@@ -6,12 +6,12 @@
     <parent>
         <artifactId>db-metadata-parent</artifactId>
         <groupId>com.hthjsj</groupId>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>db-metadata-analysis</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <name>db-metadata-analysis</name>
 
     <dependencies>

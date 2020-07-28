@@ -7,12 +7,12 @@
     <parent>
         <artifactId>db-metadata-parent</artifactId>
         <groupId>com.hthjsj</groupId>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>db-metadata-server</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 
     <!-- 使用阿里 maven 库 -->
     <repositories>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.hthjsj</groupId>
             <artifactId>db-metadata-analysis</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.jfinal</groupId>
