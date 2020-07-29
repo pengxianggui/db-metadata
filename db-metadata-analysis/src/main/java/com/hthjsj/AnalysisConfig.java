@@ -93,11 +93,11 @@ public class AnalysisConfig {
     }
 
     public String dbMainStr() {
-        return getProp().get(PREFIX_MAN_DB);
+        return getProp().get(PREFIX_MAN_DB, filterMainDBStr());
     }
 
-    @Deprecated
-    private String filterMainDBStr(String jdbcUrl) {
+    private String filterMainDBStr() {
+        String jdbcUrl = getProp().get(DB_MAIN_URL);
         Pattern pattern = Pattern.compile("jdbc:mysql://.*/(.*)\\?.*");
         Matcher matcher = pattern.matcher(jdbcUrl);
         String dbName = "";

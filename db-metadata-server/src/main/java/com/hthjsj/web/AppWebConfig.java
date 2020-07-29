@@ -32,7 +32,6 @@ import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserRouter;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
-import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
@@ -58,7 +57,7 @@ public class AppWebConfig extends JFinalConfig {
      * jar->config.properties
      */
     private void initProp() {
-        prop = PropKit.useFirstFound("config-dev.properties", AnalysisConfig.CONFIG_NAME);
+        prop = AnalysisConfig.me().getProp();
         File configPropFile = UtilKit.stairsLoad(AnalysisConfig.CONFIG_NAME, "config");
         if (configPropFile != null) {
             prop.appendIfExists(configPropFile);
