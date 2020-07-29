@@ -66,7 +66,6 @@ public class UploadController extends FrontRestController {
             }
         }
 
-
         File destFile = uploadService.upload(file.getFile(), objectCode, fieldCode);
 
         log.info("destFile.getPath : {}", destFile.getPath());
@@ -96,5 +95,17 @@ public class UploadController extends FrontRestController {
 
         Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
         renderImageOrFile(ServiceManager.fileService().getFile(filePath));
+    }
+
+    /**
+     * TODO 问题: 这种方式开辟了,只要有相对路径就能够通过该接口访问上传目录下的文件
+     * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
+     * 后面非图片类型的文件是否可以通过这个接口来完成预览?
+     */
+    @ActionKey("file/preview/tmp")
+    public void tmpPre() {
+        String path = getPara("path", "");
+        UploadService uploadService = ServiceManager.fileService();
+        renderImageOrFile(uploadService.getFile(path));
     }
 }
