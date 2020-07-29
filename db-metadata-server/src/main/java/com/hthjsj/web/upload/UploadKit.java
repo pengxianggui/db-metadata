@@ -21,4 +21,8 @@ public class UploadKit {
         String params = queryHelper.builder("objectCode", objectCode).builder("fieldCode", fieldCode).builder("id", id).buildQueryString(true);
         return "/file/down" + params;
     }
+
+    public static String previewUrl(String url) {
+        return "/file/preview?path=" + url;
+    }
 }

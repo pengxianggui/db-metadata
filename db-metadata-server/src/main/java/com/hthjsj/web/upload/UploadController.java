@@ -70,7 +70,10 @@ public class UploadController extends FrontRestController {
 
         log.info("destFile.getPath : {}", destFile.getPath());
 
-        Kv result = Kv.by("name", file.getFileName()).set("url", destFile.getPath().replaceFirst(uploadService.getBasePath(), ""));
+        String url = destFile.getPath().replaceFirst(uploadService.getBasePath(), "");
+        Kv result = Kv.by("name", file.getFileName());
+        result.set("url", url);
+        result.set("download_url", UploadKit.previewUrl(url));
         renderJson(Ret.ok("data", result));
     }
 
@@ -102,7 +105,7 @@ public class UploadController extends FrontRestController {
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
-    @ActionKey("file/preview/tmp")
+    @ActionKey("file/preview")
     public void tmpPre() {
         String path = getPara("path", "");
         UploadService uploadService = ServiceManager.fileService();
