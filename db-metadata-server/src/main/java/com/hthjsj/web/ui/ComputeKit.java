@@ -24,6 +24,14 @@ public class ComputeKit {
     @Getter
     private static List<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> instanceExtensions;
 
+    /**
+     * 扩展配置计算的调用入口
+     *
+     * @param metaField
+     * @param componentType
+     *
+     * @return
+     */
     public static Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
         /**
          * 分析元字段
@@ -47,6 +55,11 @@ public class ComputeKit {
         return builder.render();
     }
 
+    /**
+     * 扩展配置的追加入口
+     *
+     * @param extension
+     */
     public static void addInstanceExtension(ConfigExtension extension) {
         if (instanceExtensions == null) {
             instanceExtensions = new ArrayList<>();

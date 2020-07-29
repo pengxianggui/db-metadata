@@ -1,11 +1,14 @@
 package com.hthjsj.analysis.meta;
 
 /**
- * 配置扩展接口
- * 使用方:
- * 1. MetaConfigFactory
- * 2. ComputedKit
- *
+ * <p>配置扩展接口 使用方分别代表两类扩展需求</p>
+ * 1. MetaConfigFactory  生成 元对象 or 元子段 配置信息
+ * <pre>
+ *     M : MetaObject | MetaField
+ *     C : Kv (config)
+ *     T : ComponentType
+ * </pre>
+ * 2. ComputedKit 自动计算UI配置时用
  * <pre>
  *     M : MetaObject | MetaField
  *     C : xxxConfigBuilder
