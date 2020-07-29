@@ -71,14 +71,13 @@ public class MetaDataTypeConvert {
         }
     };
 
-    private static DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static Class getType(String dataType) {
         return map.get(dataType);
     }
 
     public static String getTypeName(String dataType) {
-        System.out.println("dataType:" + dataType);
         return map.get(dataType).getTypeName();
     }
 

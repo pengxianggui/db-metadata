@@ -2,8 +2,11 @@ package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.DbMetaService;
+import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.TableView;
@@ -23,6 +26,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -144,6 +148,52 @@ public class MetaController extends FrontRestController {
 
             log.info("删除元对象{}实例配置", metaObject.code());
             componentService().deleteObjectAll(objectCode);
+        }
+        renderJson(Ret.ok());
+    }
+
+    /**
+     * <pre>
+     * 增量import新字段
+     * 范围:
+     *      指定元对象
+     *      指定元对象 + 元对象所对应物理表的其他元对象 ( dependency)
+     * 参数 :
+     *      objectCode: ${objectCode}
+     *      scope: vertical | single (default)
+     * </pre>
+     */
+    public void incrementImport() {
+        String objectCode = new QueryHelper(this).getObjectCode();
+        String scope = getPara("scope", "single");
+        IMetaObject seedMetaObject = metaService().findByCode(objectCode);
+
+        List<IMetaObject> toBeUpdateObjects = Lists.newArrayList(seedMetaObject);
+        //某元对象背后表关联的所有元对象更新
+        if ("vertical".equalsIgnoreCase(scope)) {
+            toBeUpdateObjects = metaService().seriesOfTable(seedMetaObject.schemaName(), seedMetaObject.tableName());
+        }
+        //获取新的元对象结构
+        IMetaObject newMetaObject = metaService().importFromTable(seedMetaObject.schemaName(), seedMetaObject.tableName());
+        Set<String> newFieldNames = newMetaObject.fields().parallelStream().map(m -> m.en()).collect(Collectors.toSet());
+
+        for (IMetaObject oldMetaObject : toBeUpdateObjects) {
+            Set<String> oldFieldNames = oldMetaObject.fields().parallelStream().map(m -> m.en()).collect(Collectors.toSet());
+            //取差集newFieldNames中存在,oldFieldNames中不存在的字段
+            Set<String> incrementFields = Sets.difference(newFieldNames, oldFieldNames);
+            if (incrementFields.isEmpty()) {
+                log.info("未检测到新字段");
+            } else {
+                for (String fieldName : incrementFields) {
+                    IMetaField metaField = newMetaObject.getField(fieldName);
+                    oldMetaObject.addField(metaField);
+                    log.info("元对象[{}] 新增[{}]字段", metaField.objectCode(), metaField.fieldCode());
+                }
+                //清理原metaObject
+                metaService().deleteMetaObject(oldMetaObject.code());
+                boolean addStatus = metaService().saveMetaObject(oldMetaObject, true);
+                log.info("元对象[{}]增量导入[{}]", objectCode, addStatus);
+            }
         }
         renderJson(Ret.ok());
     }

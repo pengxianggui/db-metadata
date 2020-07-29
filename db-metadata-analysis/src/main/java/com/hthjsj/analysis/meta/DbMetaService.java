@@ -35,6 +35,23 @@ public class DbMetaService {
         return dbMetaObjectAssembly.assembly(t);
     }
 
+    /**
+     * 查找某表所有的元对象
+     *
+     * @param schemaName
+     * @param tableName
+     *
+     * @return
+     */
+    public List<IMetaObject> seriesOfTable(String schemaName, String tableName) {
+        List<String> objs = AnalysisConfig.me().dbMain().query("select code from meta_object where schema_name=? and table_name=? ", schemaName, tableName);
+        List<IMetaObject> result = new ArrayList<>();
+        for (String metaObjectCode : objs) {
+            result.add(findByCode(metaObjectCode));
+        }
+        return result;
+    }
+
     public boolean isExists(String objectCode) {
         return AnalysisConfig.me().dbMain().queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
     }
