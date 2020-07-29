@@ -3,15 +3,20 @@ package com.hthjsj.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.google.common.io.Files;
+import com.google.common.net.MediaType;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
+import com.hthjsj.web.jfinal.render.PictureRender;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -103,9 +108,7 @@ public class FrontRestController extends Controller implements FrontRest {
                                          simplePropertyPreFilter,
                                          SerializerFeature.DisableCircularReferenceDetect,
                                          SerializerFeature.WriteDateUseDateFormat,
-                                         SerializerFeature.WriteNullListAsEmpty,
-                                         SerializerFeature.WriteMapNullValue,
-                                         SerializerFeature.WriteNullStringAsEmpty));
+                                         SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
         } else {
             renderJson(data);
         }
@@ -113,5 +116,19 @@ public class FrontRestController extends Controller implements FrontRest {
 
     Kv toPage(int total, int index, int size) {
         return Kv.by("total", total).set("index", index).set("size", size);
+    }
+
+    public void renderImageOrFile(File downloadFile) {
+        MediaType mediaType = MediaType.create("image", Files.getFileExtension(downloadFile.getName()));
+        try {
+            if (mediaType.is(MediaType.ANY_IMAGE_TYPE)) {
+                byte[] fileCtx = Files.toByteArray(downloadFile);
+                render(new PictureRender(fileCtx, Files.getFileExtension(downloadFile.getName())));
+            } else {
+                renderFile(downloadFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

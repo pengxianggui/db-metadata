@@ -4,9 +4,9 @@ import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.ActionKey;
-import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -28,7 +28,7 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class UploadController extends Controller {
+public class UploadController extends FrontRestController {
 
     /**
      * param objectCode
@@ -95,7 +95,6 @@ public class UploadController extends Controller {
         String filePath = dbMetaService.findDataFieldById(metaField.getParent(), metaField, id);
 
         Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
-
-        renderFile(ServiceManager.fileService().getFile(filePath));
+        renderImageOrFile(ServiceManager.fileService().getFile(filePath));
     }
 }
