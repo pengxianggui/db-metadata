@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +123,11 @@ public class MetaFieldConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isFile"));
     }
 
+    public FileConfig fileConfig() {
+        FileConfig fileConfig = JSON.parseObject(getStr("fileConfig"), FileConfig.class);
+        return fileConfig;
+    }
+
     /**
      * addStatus/updateStatus 控制展示行为
      * 正常(能看,能生成sql)
@@ -152,5 +161,62 @@ public class MetaFieldConfigParse extends MetaData {
 
     public boolean isView() {
         return viewStatus() > DISABLE;
+    }
+
+    /**
+     * 每个插槽的作用
+     * 一个插槽可以上传一个或多个文件 由single来
+     */
+    @Data
+    @AllArgsConstructor
+    public static class SlotItem {
+
+        private String name;
+
+        private boolean single;
+
+        public static SlotItem of(String name, boolean single) {
+            return new SlotItem(name, single);
+        }
+    }
+
+    /**
+     * 文件配置
+     * <pre>
+     *     默认有一个default插槽
+     * </pre>
+     */
+    public static class FileConfig {
+
+        //SingleGroup,MultiGroup
+
+        /**
+         * Group1            Group2
+         * +------------+    +------------+
+         * |   File|1   |    |   File|1   |
+         * |   File|2   |    |   File|2   |
+         * |   File|1   |    |   File|1   |
+         * |   File-4   |    |   File-4   |
+         * +------------+    +------------+
+         */
+        @Getter
+        @Setter
+        private List<SlotItem> slots = new ArrayList<>();
+
+        public FileConfig() {
+            slots.add(SlotItem.of("default", true));
+        }
+
+        private SlotItem getByName(String name) {
+            return slots.parallelStream().filter(s -> name.equalsIgnoreCase(s.name)).findFirst().get();
+        }
+
+        public SlotItem getDefault() {
+            return getByName("default");
+        }
+
+        public boolean isDefault() {
+            return getByName("default") != null || slots.isEmpty();
+        }
     }
 }

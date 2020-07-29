@@ -1,17 +1,20 @@
 package com.hthjsj.web.query;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.upload.UploadKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -60,9 +63,18 @@ public class FormDataFactory {
                     formData.set(metaField.fieldCode(), castedValue);
                 }
                 if (metaField.configParser().isFile()) {
-                    List<Kv> files = UtilKit.getKvs(String.valueOf(castedValue));
+
+                    MetaFieldConfigParse.FileConfig fileConfig = metaField.configParser().fileConfig();
+                    List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
+
+                    for (UploadFile uploadFile : files) {
+                        if (fileConfig.isDefault()) {
+                            uploadFile.setSlotName("default");
+                        }
+                    }
+
                     if (files != null && files.size() > 0) {
-                        formData.set(metaField.fieldCode(), files.get(0).getStr("url"));
+                        formData.set(metaField.fieldCode(), Kv.by("files", files).toJson());
                     } else {
                         formData.set(metaField.fieldCode(), "");
                     }
@@ -105,5 +117,15 @@ public class FormDataFactory {
                 record.set(metaField.fieldCode(), Lists.newArrayList(file));
             }
         }
+    }
+
+    @Data
+    class UploadFile {
+
+        String name;
+
+        String url;
+
+        String slotName;
     }
 }
