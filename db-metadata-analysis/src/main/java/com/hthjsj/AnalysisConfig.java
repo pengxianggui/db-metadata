@@ -34,6 +34,8 @@ public class AnalysisConfig {
 
     public static final String PREFIX_BIZ_DB = "biz.db";
 
+    public static final String PREFIX_MAN_DB = "main.db";
+
     public static final String SUFFIX_BIZ_URL = ".jdbc.url";
 
     public static final String SUFFIX_BIZ_USERNAME = ".jdbc.username";
@@ -91,9 +93,10 @@ public class AnalysisConfig {
     }
 
     public String dbMainStr() {
-        return filterMainDBStr(getProp().get(DB_MAIN_URL));
+        return getProp().get(PREFIX_MAN_DB);
     }
 
+    @Deprecated
     private String filterMainDBStr(String jdbcUrl) {
         Pattern pattern = Pattern.compile("jdbc:mysql://.*/(.*)\\?.*");
         Matcher matcher = pattern.matcher(jdbcUrl);
