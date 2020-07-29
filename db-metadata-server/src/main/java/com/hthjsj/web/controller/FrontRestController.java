@@ -3,8 +3,8 @@ package com.hthjsj.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
-import com.google.common.net.MediaType;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
@@ -18,6 +18,7 @@ import com.jfinal.kit.Ret;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p> @Date : 2019/10/9 </p>
@@ -108,7 +109,9 @@ public class FrontRestController extends Controller implements FrontRest {
                                          simplePropertyPreFilter,
                                          SerializerFeature.DisableCircularReferenceDetect,
                                          SerializerFeature.WriteDateUseDateFormat,
-                                         SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
+                                         SerializerFeature.WriteNullListAsEmpty,
+                                         SerializerFeature.WriteMapNullValue,
+                                         SerializerFeature.WriteNullStringAsEmpty));
         } else {
             renderJson(data);
         }
@@ -119,9 +122,10 @@ public class FrontRestController extends Controller implements FrontRest {
     }
 
     public void renderImageOrFile(File downloadFile) {
-        MediaType mediaType = MediaType.create("image", Files.getFileExtension(downloadFile.getName()));
+        List<String> anyImageTypes = Lists.newArrayList("jpg", "png", "gif", "jpeg");
+        String ext = Files.getFileExtension(downloadFile.getName());
         try {
-            if (mediaType.is(MediaType.ANY_IMAGE_TYPE)) {
+            if (anyImageTypes.contains(ext)) {
                 byte[] fileCtx = Files.toByteArray(downloadFile);
                 render(new PictureRender(fileCtx, Files.getFileExtension(downloadFile.getName())));
             } else {
