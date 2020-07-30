@@ -33,14 +33,14 @@
                 <el-tabs type="border-card">
                     <el-tab-pane label="高级配置">
                         <div id="conf-panel">
-                            <!--                            hash 模式下无法使用锚点-->
-                            <!--                                                        <div id="conf-menu">-->
-                            <!--                                                            <ul>-->
-                            <!--                                                                <li v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
-                            <!--                                                                    <a :href="'#' + key">{{index+1}}.{{key}}</a>-->
-                            <!--                                                                </li>-->
-                            <!--                                                            </ul>-->
-                            <!--                                                        </div>-->
+                            <!--                                                        hash 模式下无法使用锚点-->
+                            <!--                                                                                    <div id="conf-menu">-->
+                            <!--                                                                                        <ul>-->
+                            <!--                                                                                            <li v-for="(key, index) in Object.keys(confModel.fConf)" :key="key">-->
+                            <!--                                                                                                <a :href="'#' + key">{{index+1}}.{{key}}</a>-->
+                            <!--                                                                                            </li>-->
+                            <!--                                                                                        </ul>-->
+                            <!--                                                                                    </div>-->
                             <div id="conf-content">
                                 <el-row v-if="confModel.componentCode && confModel.objectCode">
                                     <el-col>
@@ -69,9 +69,12 @@
                                 <el-row v-else>
                                     <div class="blank-tip">请先选择一个组件</div>
                                 </el-row>
-
+                                <el-checkbox-group v-model="filterFields" size="mini">
+                                    <el-checkbox-button label="上海" v-for="key in Object.keys(confModel.fConf)"
+                                                        :label="key"></el-checkbox-button>
+                                </el-checkbox-group>
                                 <div class="field-conf-parent">
-                                    <div class="field-conf" v-for="(key, index) in Object.keys(confModel.fConf)"
+                                    <div class="field-conf" v-for="(key, index) in filteredFields"
                                          :key="key">
                                         <el-form-item>
                                             <h1 :name="key">{{index+1}}.{{key}}</h1>
@@ -154,6 +157,7 @@
             this.$merge(objectMeta, DefaultDropDownBoxMeta);
 
             return {
+                filterFields: [],
                 isAutoComputed: false,
                 objectMeta: objectMeta,
                 objConfMeta: {}, // 构建元对象配置迷你表单的元数据
@@ -338,6 +342,15 @@
             this.initConf();
             if (!utils.isEmpty(instanceCode)) {
                 this.loadConf();
+            }
+        },
+        computed: {
+            filteredFields: function () {
+                const {confModel: {fConf}, filterFields} = this;
+                if (fConf && filterFields.length > 0) {
+                    return (Object.keys(fConf)).filter(f => filterFields.indexOf(f) > -1)
+                }
+                return Object.keys(fConf)
             }
         }
     }
