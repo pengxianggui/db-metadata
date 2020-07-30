@@ -9,7 +9,7 @@
                 :before-remove="beforeRemove"
                 :on-exceed="handleExceed"
                 :before-upload="handleBeforeUpload"
-                accept="image/*" :file-list="fileList">
+                :file-list="fileList">
             <i class="el-icon-plus"></i>
         </el-upload>
         <span>{{seat}}</span>
@@ -43,7 +43,7 @@
             },
             seat: {
                 type: String,
-                default: () => 'DEFAULT'
+                default: () => ''
             }
         },
         data() {
@@ -55,11 +55,7 @@
         },
         methods: {
             handleBeforeUpload(file) {
-                let isImage = utils.isImageFile(file);
-                if (!isImage) {
-                    this.$message.warning('只支持图片文件！');
-                }
-                return isImage;
+                return file;
             },
             handleRemove(file, fileList) {
             },
@@ -74,6 +70,7 @@
                 let self = this;
                 return this.$confirm(`确定移除 ${file.name}？`).then(data => {
                     self.nativeValue = self.nativeValue.filter(i => i.uid !== file.uid);
+                    this.$emit('change', self.nativeValue)
                 });
             },
             handleOnSuccess(response, file, fileList) {
@@ -84,6 +81,7 @@
 
                     this.fileList = fileList
                     this.nativeValue = [{url: url, name: name, value: value, uid: file.uid, seat: seat}]
+                    this.$emit('change', this.nativeValue)
                 } else {
                     this.$message.error('文件上传失败');
                 }

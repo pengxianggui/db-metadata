@@ -10,18 +10,10 @@ export default function (value) {
         return []
     }
 
-    if (utils.isString(value)) {
-        return [{
-            url: value,
-            name: '',
-            seat: ''
-        }]
+    if (utils.isArray(value)) {
+        return value.filter(i => !utils.isEmpty(i));
     }
 
-    if (utils.isArray(value) && value.every(i => i.hasOwnProperty('url'))) {
-        return value;
-    }
-
-    console.error(`[MetaElement] 参数 ${value} 输入错误， 请查看FileBox的入参规则`)
+    console.error(`[MetaElement] 参数 输入错误， 请查看FileBox的入参规则:`)
     return [];
 }

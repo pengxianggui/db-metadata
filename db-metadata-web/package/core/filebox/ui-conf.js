@@ -15,9 +15,10 @@ export default {
     "name": "FileBox",
     "label": "文件上传框",
     "inline": false,
-    "seats": [''], //
+    "seats": [''],
     "conf": {
         "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
+        "drag": false,
         "tip": "上传文件限制不超过2M",
         "auto-upload": true,
         "show-file-list": true,

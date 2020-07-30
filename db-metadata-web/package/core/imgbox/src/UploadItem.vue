@@ -11,8 +11,6 @@
                 :before-upload="handleBeforeUpload"
                 accept="image/*"
                 :file-list="fileList">
-            <!--            <img v-if="value && value.hasOwnProperty('url')" :src="value.url" class="avatar">-->
-            <!--            <i v-else class="el-icon-plus"></i>-->
             <i class="el-icon-plus"></i>
         </el-upload>
         <p class="name">{{seat}}</p>
@@ -46,7 +44,7 @@
             },
             seat: {
                 type: String,
-                default: () => 'DEFAULT'
+                default: () => ''
             }
         },
         data() {
@@ -77,6 +75,7 @@
                 let self = this;
                 return this.$confirm(`确定移除 ${file.name}？`).then(data => {
                     self.nativeValue = self.nativeValue.filter(i => i.uid !== file.uid);
+                    this.$emit('change', self.nativeValue)
                 });
             },
             handleOnSuccess(response, file, fileList) {
@@ -87,6 +86,7 @@
 
                     this.fileList = fileList
                     this.nativeValue = [{url: url, name: name, value: value, uid: file.uid, seat: seat}]
+                    this.$emit('change', this.nativeValue)
                 } else {
                     this.$message.error('文件上传失败');
                 }
@@ -101,13 +101,9 @@
 </script>
 
 <style lang="scss" scoped>
-    .avatar {
-        width: 100%;
-        height: 100%;
-    }
-
     .upload-item {
         p.name {
+            /* TODO 居中效果不佳 */
             text-align: center;
         }
     }
