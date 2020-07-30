@@ -15,7 +15,7 @@
 <script>
     export default {
         name: "img-box-demo",
-        data () {
+        data() {
             return {
                 fileList: [],
                 meta: {
