@@ -72,8 +72,8 @@ public class UploadController extends FrontRestController {
 
         String url = destFile.getPath().replaceFirst(uploadService.getBasePath(), "");
         Kv result = Kv.by("name", file.getFileName());
-        result.set("url", url);
-        result.set("download_url", UploadKit.previewUrl(url));
+        result.set("value", url);
+        result.set("url", UploadKit.previewUrl(url));
         renderJson(Ret.ok("data", result));
     }
 
