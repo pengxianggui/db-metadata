@@ -24,6 +24,10 @@ public class PictureRender extends Render {
 
     protected String sFileExt;
 
+    public PictureRender() {
+
+    }
+
     /**
      * 构造函数。
      *
