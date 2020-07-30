@@ -3,10 +3,10 @@
         <template v-if="innerMeta.hasOwnProperty('seats')">
             <upload-item class="upload-item" v-for="(seat, index) in innerMeta['seats']" :key="seat" :seat="seat"
                          :meta="innerMeta" v-model="value[index]" :multiple="false"
-                         :show-file-list="false"></upload-item>
+                         :show-file-list="true"></upload-item>
         </template>
         <template v-else>
-<!--            <upload-item></upload-item>-->
+            <!--            <upload-item></upload-item>-->
         </template>
     </div>
 </template>
