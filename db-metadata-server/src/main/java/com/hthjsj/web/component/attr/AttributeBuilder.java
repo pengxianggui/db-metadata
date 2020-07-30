@@ -78,6 +78,8 @@ public class AttributeBuilder {
         FileUploadAttr autoUpload(boolean v);
 
         FileUploadAttr actionUrl(String url);
+
+        FileUploadAttr seats(String[] seats);
     }
 
     interface AttrRender {
@@ -220,6 +222,12 @@ public class AttributeBuilder {
         @Override
         public FileUploadAttr actionUrl(String url) {
             return setConf("action", url);
+        }
+
+        @Override
+        public FileUploadAttr seats(String[] seats) {
+            set("seats", seats);
+            return this;
         }
     }
 }

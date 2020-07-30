@@ -1,7 +1,6 @@
 package com.hthjsj.web.query;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Lists;
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -9,7 +8,6 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
-import com.hthjsj.web.upload.UploadKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
@@ -73,7 +71,7 @@ public class FormDataFactory {
                     }
 
                     if (files != null && files.size() > 0) {
-                        formData.set(metaField.fieldCode(), Kv.by("files", files).toJson());
+                        formData.set(metaField.fieldCode(), JSON.toJSONString(files));
                     } else {
                         formData.set(metaField.fieldCode(), "");
                     }
@@ -107,19 +105,13 @@ public class FormDataFactory {
                 if (StrKit.isBlank(filepath)) {
                     continue;
                 }
-                String url = UploadKit.downloadUrl(metaField.objectCode(), metaField.fieldCode(), id);
-                log.info("downloadUrl:{}", url);
-                Kv file = Kv.create();
-                file.setIfNotBlank("name", filepath); // set origin file name
-                file.setIfNotBlank("url", filepath);
-                file.setIfNotBlank("download_url", url);
-                record.set(metaField.fieldCode(), Lists.newArrayList(file));
+                record.set(metaField.fieldCode(), JSON.parseArray(filepath));
             }
         }
     }
 
     @Data
-    class UploadFile {
+    public static class UploadFile {
 
         String name;
 
