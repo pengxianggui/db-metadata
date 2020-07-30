@@ -7,7 +7,6 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.upload.UploadKit;
@@ -64,12 +63,12 @@ public class FormDataFactory {
                 }
                 if (metaField.configParser().isFile()) {
 
-                    MetaFieldConfigParse.FileConfig fileConfig = metaField.configParser().fileConfig();
+                    List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
 
                     for (UploadFile uploadFile : files) {
-                        if (fileConfig.isDefault()) {
-                            uploadFile.setSlotName("default");
+                        if (fileConfig == null || fileConfig.isEmpty()) {
+                            uploadFile.setSeat("default");
                         }
                     }
 
@@ -126,6 +125,6 @@ public class FormDataFactory {
 
         String url;
 
-        String slotName;
+        String seat;
     }
 }

@@ -16,6 +16,9 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * 基于Apache Common FileUpload的MultipartRequest
+ * JFinal com.jfinal.upload.MultipartRequest 在与spring 一起使用时会出现java.io.IOException: Corrupt form data: premature ending
+ *
  * <p> @Date : 2020/7/28 </p>
  * <p> @Project : db-meta-serve</p>
  *
