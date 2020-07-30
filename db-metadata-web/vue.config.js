@@ -32,7 +32,7 @@ module.exports = {
             '^/file/': {
                 target: 'http://localhost:8888',
                 // target: 'http://192.168.110.67:8888',
-                pathRewrite: {'^/file': ''},
+                pathRewrite: {'^/file': '/file'},
                 changeOrigin: true
             },
             // '^\/db\/': serverProxy,
