@@ -1,13 +1,6 @@
 let alias = require('./alias.config');
 
 const name = "db-metadata-web";
-const serverProxy = {
-    target: 'http://localhost:8888',
-    // target: 'http://192.168.110.67:8888',
-    pathRewrite: {'^/meta': ''},
-    changeOrigin: true
-};
-
 module.exports = {
     publicPath: "/",
     outputDir: 'dist',
@@ -30,7 +23,18 @@ module.exports = {
         sockHost: 'localhost',
         // proxy: 'http://192.168.110.67:8888'
         proxy: {
-            '^/meta/': serverProxy,   // 超过11个node会提示MaxListenersExceededWarning
+            '^/meta/': {
+                target: 'http://localhost:8888',
+                // target: 'http://192.168.110.67:8888',
+                pathRewrite: {'^/meta': ''},
+                changeOrigin: true
+            },   // 超过11个node会提示MaxListenersExceededWarning
+            '^/file/': {
+                target: 'http://localhost:8888',
+                // target: 'http://192.168.110.67:8888',
+                pathRewrite: {'^/file': ''},
+                changeOrigin: true
+            },
             // '^\/db\/': serverProxy,
             // '^\/meta\/': serverProxy,
             // '^\/component\/': serverProxy,
