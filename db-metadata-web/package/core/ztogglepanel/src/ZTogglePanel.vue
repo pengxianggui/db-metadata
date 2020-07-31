@@ -32,6 +32,11 @@
                 default: () => false
             }
         },
+        watch: {
+            defaultOpen: function (newV) {
+                this.open = newV
+            }
+        },
         data() {
             return {
                 open: this.defaultOpen
