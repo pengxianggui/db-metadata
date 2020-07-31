@@ -47,6 +47,7 @@ import SingleGridTmpl from './template/SingleGridTmpl'
 import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
+import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
 // meta 组件
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import MetaDataManager from "./meta/MetaDataManager";
@@ -61,11 +62,10 @@ import MetaConfList from "./meta/meta-conf";
 import DictList from "./meta/dict"
 import ExceptionList from './meta/exception'
 import {restUrl, routeUrl} from './constant/url'
-import {innerObjectCode, innerFeatureCode, access} from "./constant/variable";
+import {access, innerFeatureCode, innerObjectCode} from "./constant/variable";
 // 内置路由
 import MetaRoute from './route'
 import MetaMenu from './meta/meta-menu'
-
 // style
 import './style/index.scss'
 
@@ -237,6 +237,7 @@ export default {
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
+    TreeSingleGridTmpl,
 
     // meta
     MetaDataManager,
@@ -308,6 +309,7 @@ export {
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
+    TreeSingleGridTmpl,
 
     // meta
     MetaDataManager,
