@@ -97,13 +97,9 @@ public class FormDataFactory {
         for (IMetaField metaField : metaObject.fields()) {
 
             if (metaField.configParser().isFile()) {
-                if (metaObject.isMultiplePrimaryKey()) {
-                    throw new WebException("%s 元对象为复合主键", metaObject.code());
-                }
-                String id = record.getStr(metaObject.primaryKey());
                 String filepath = record.getStr(metaField.fieldCode());
                 if (StrKit.isBlank(filepath)) {
-                    continue;
+                    filepath = "[]";
                 }
                 record.set(metaField.fieldCode(), JSON.parseArray(filepath));
             }
