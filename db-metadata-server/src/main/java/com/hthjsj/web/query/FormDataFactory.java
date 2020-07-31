@@ -26,6 +26,16 @@ import java.util.Map;
 @Slf4j
 public class FormDataFactory {
 
+    /**
+     * 根据request 参数,metaObject 构建MetaData
+     * 其中包含对元字段特殊配置的处理
+     *
+     * @param httpParams
+     * @param metaObject
+     * @param isInsert
+     *
+     * @return
+     */
     public static MetaData buildFormData(Map<String, String[]> httpParams, IMetaObject metaObject, boolean isInsert) {
         Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
@@ -37,7 +47,7 @@ public class FormDataFactory {
             Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
-                //主键处理
+                //新增 & 主键处理
                 if (metaField.isPrimary() && isInsert) {
                     //非联合主键时,根据策略开关(uuid或数值序列)对主键进行赋值
                     if (!metaObject.isMultiplePrimaryKey()) {
@@ -56,24 +66,25 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+                // set 该metafile 转换后的value
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
                 }
+                // 该字段如果是文件类型
                 if (metaField.configParser().isFile()) {
 
                     List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
 
-                    for (UploadFile uploadFile : files) {
-                        if (fileConfig == null || fileConfig.isEmpty()) {
-                            uploadFile.setSeat("default");
-                        }
-                    }
-
                     if (files != null && files.size() > 0) {
+                        for (UploadFile uploadFile : files) {
+                            if (fileConfig == null || fileConfig.isEmpty()) {
+                                uploadFile.setSeat("default");
+                            }
+                        }
                         formData.set(metaField.fieldCode(), JSON.toJSONString(files));
                     } else {
-                        formData.set(metaField.fieldCode(), "");
+                        formData.set(metaField.fieldCode(), JSON.parseArray("[]"));
                     }
                 }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {

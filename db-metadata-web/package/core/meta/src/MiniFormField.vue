@@ -13,6 +13,9 @@
                 <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
                 <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
                 <el-checkbox v-model="nativeValue.isFile" label="是否文件" border></el-checkbox>
+                <el-tooltip content="上传文件/图片需要勾选" placement="right">
+                    <i class="el-icon-question"></i>
+                </el-tooltip>
             </div>
         </el-form-item>
         <el-form-item v-if="nativeValue.isFile" label="上传插槽">
