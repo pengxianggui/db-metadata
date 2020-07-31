@@ -541,3 +541,6 @@ MetaEasyEdit权限功能配置
 
 ### 0.2.48
 FileBox, ImgBox支持差异化多文件
+
+### 0.2.52
+修复SearchPanel配置expand为true无法生效的bug;
