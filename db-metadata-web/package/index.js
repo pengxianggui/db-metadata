@@ -118,6 +118,7 @@ const components = [
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
+    TreeSingleGridTmpl,
 
     // meta
     MetaDataManager,
