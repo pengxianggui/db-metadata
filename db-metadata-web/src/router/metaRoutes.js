@@ -1,16 +1,6 @@
 import Main from '@/components/Main'
-import utils from '@/../package/utils'
 import MetaRoutes from '@/../package/route'
-
-const jumpOut = [
-    {
-        path: 'instance-conf-edit',
-        label: "组件实例编辑",
-        hidden: true,
-        name: 'InstanceConfEdit',
-        component: () => import('@/../package/meta/component-instance/InstanceConfEdit')
-    }
-];
+import {outerRoute} from "@/../package/route";
 
 const routes = [
     {
@@ -49,15 +39,8 @@ const routes = [
                 component: () => import('@/components/demo/DemoMain')
             }
         ]
-    }
+    },
+    ...outerRoute
 ];
-
-export let globalRoute = jumpOut.map(route => {
-    let item = utils.deepClone(route);
-    item.path = '/' + route.path;
-    item.name = 'G_' + route.name; // 避免重名
-    return item;
-});
-routes.unshift(...globalRoute);
 
 export default routes;

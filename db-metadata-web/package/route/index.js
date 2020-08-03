@@ -11,6 +11,7 @@ import DictList from "../meta/dict"
 import ExceptionList from '../meta/exception'
 
 import {access} from '../constant/variable'
+import utils from "../utils";
 
 const jumpOut = [
     {
@@ -133,3 +134,14 @@ export default [
     },
     ...jumpOut
 ]
+
+/**
+ * 外层路由，用于全页面打开ui-conf编辑
+ * @type {*[]}
+ */
+export const outerRoute = jumpOut.map(route => {
+    let item = utils.deepClone(route);
+    item.path = '/' + route.path;
+    item.name = 'G_' + route.name; // 避免重名
+    return item;
+});

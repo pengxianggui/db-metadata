@@ -3,8 +3,7 @@ export const routeUrl = {
     R_GOBAL_CONF_ADD: '/global-conf',
     R_GOBAL_CONF_EDIT: '/global-conf',
     R_INSTANCE_CONF_NEW: '/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
-    R_INSTANCE_CONF_EDIT: '/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}',    // 组件实例配置界面[编辑]
-    RR_INSTANCE_CONF_ADD: '/instance-conf-edit',
+    R_INSTANCE_CONF_EDIT: '/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}'    // 组件实例配置界面[编辑]
 };
 
 export const restUrl = {
@@ -36,5 +35,5 @@ export const restUrl = {
     FEATURE_LOAD: '/feature/load?fc={featureCode}', // 加载功能配置
     MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
     LIST_FEATURE_TYPE: '/feature/list', // 列出所有的功能类型code
-    MENU_DATA: '/feature/menu'
+    MENU_DATA: '/menu/tree',
 };

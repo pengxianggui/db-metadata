@@ -5,6 +5,9 @@ import * as Rest from './utils/rest'
 import * as user from './utils/user'
 import axios from './axios'
 import filters from './register/filter'
+// 布局组件
+
+import NavMenu from "./core/navmenu/src/NavMenu";
 // 核心组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -39,6 +42,7 @@ import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
 import Tree from './core/tree'
 import ZTogglePanel from './core/ztogglepanel'
+import SvgIcon from "./core/svgicon";
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
@@ -109,7 +113,9 @@ const components = [
     TextBox,
     TimeBox,
     ZTogglePanel,
+    SvgIcon,
 
+    NavMenu,
     // template
     DataListTableTmpl,
     FormTmpl,
@@ -229,7 +235,9 @@ export default {
     TextBox,
     TimeBox,
     ZTogglePanel,
+    SvgIcon,
 
+    NavMenu,
     // template
     DataListTableTmpl,
     FormTmpl,
@@ -301,7 +309,9 @@ export {
     TextBox,
     TimeBox,
     ZTogglePanel,
+    SvgIcon,
 
+    NavMenu,
     // template
     DataListTableTmpl,
     FormTmpl,

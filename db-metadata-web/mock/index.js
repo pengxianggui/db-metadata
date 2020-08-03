@@ -2,10 +2,14 @@ import utils from '@/../package/utils'
 import Mock from 'mockjs'
 import component from './modules/component'
 import feature from './modules/feature'
+import menu from './modules/menu'
+import route from './modules/route'
 
 const mocks = [
     ...component,
-    ...feature
+    ...feature,
+    ...menu,
+    ...route
 ];
 
 export function mockXHR() {

@@ -51,7 +51,8 @@ import path from "path";
             }
         },
         mounted() {
-            this.$axios.safeGet(restUrl.MENU_DATA).then(resp => {
+            // 动态路由、菜单、功能应用 这块内容将进行整改, 为了不占用MENU_DATA这个贴切的属性名, 这里硬编码
+            this.$axios.safeGet('/feature/menu').then(resp => {
                 const dynamicRoutes = resp.data;
                 this.menus.push(...dynamicRoutes);
                 this.menus.push(...routes);

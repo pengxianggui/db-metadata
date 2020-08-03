@@ -23,6 +23,12 @@ Vue.use(MetaElement, {
     }
 });
 
+// 异步动态路由装载尝试
+import exchange from '@/../package/route/exchange'
+
+Vue.prototype.$axios.get("/route/tree").then(resp => {
+    router.addRoutes(exchange(resp.data))
+})
 
 Vue.config.productionTip = false;
 Vue.prototype.$NODE_ENV = process.env.NODE_ENV;

@@ -114,7 +114,6 @@
                     })
             },
             getInstanceCode() {
-                console.log('sss');
                 const {objectCode, instanceCodes, componentCode} = this;
                 if (!utils.isEmpty(instanceCodes)) return; // 避免重复请求
                 if (!this.checkObjectCode()) return;
@@ -166,14 +165,13 @@
                 const {objectCode, componentCode: compCode} = this;
                 if (!this.checkObjectCode()) return;
 
-                const url = routeUrl.RR_INSTANCE_CONF_ADD;
+                const url = this.$compile(routeUrl.R_INSTANCE_CONF_EDIT, {
+                    componentCode: compCode,
+                    objectCode: objectCode,
+                    instanceCode: ic
+                })
                 const finalRouteUrl = this.$router.resolve({
-                    path: url,
-                    query: {
-                        componentCode: compCode,
-                        objectCode: objectCode,
-                        instanceCode: ic
-                    }
+                    path: url
                 });
                 window.open(finalRouteUrl.href, '_blank');
             },

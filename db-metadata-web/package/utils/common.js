@@ -501,3 +501,13 @@ export function param2Obj(url) {
         '"}'
     )
 }
+
+
+/**
+ * 是否外网链接
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternal(path) {
+    return /^(https?:|mailto:|tel:)/.test(path)
+}

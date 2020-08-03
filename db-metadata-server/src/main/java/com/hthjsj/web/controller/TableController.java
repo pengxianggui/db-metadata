@@ -59,7 +59,7 @@ public class TableController extends FrontRestController {
 
         String includeFieldStr = getPara("fs", getPara("fields", ""));
         String excludeFieldStr = getPara("efs", getPara("exfields", ""));
-        boolean raw = getParaToBoolean("raw", false);
+        boolean raw = getParaToBoolean("raw", true);
         String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
         String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
 
