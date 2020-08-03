@@ -11,6 +11,7 @@ import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.user.User;
+import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
@@ -90,6 +91,9 @@ public class UtilKit {
         if (user != null) {
             data.put("created_by", user.userId());
             data.put("created_time", new Date());
+        } else {
+            data.put("created_by", UserIntercept.staticUser.userId());
+            data.put("created_time", new Date());
         }
     }
 
@@ -98,6 +102,9 @@ public class UtilKit {
         if (user != null) {
             data.put("updated_by", user.userId());
             data.put("updated_time", new Date());
+        } else {
+            data.put("created_by", UserIntercept.staticUser.userId());
+            data.put("created_time", new Date());
         }
     }
 

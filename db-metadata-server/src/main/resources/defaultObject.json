@@ -68,6 +68,9 @@
     }
   },
   "meta_object": {
+    "config": {
+      "orderBy": "created_time desc,updated_time desc"
+    },
     "is_sys": true,
     "_fields": {
       "id": {
@@ -131,9 +134,6 @@
     }
   },
   "meta_dict": {
-    "is_sys": true
-  },
-  "meta_component": {
     "is_sys": true
   },
   "meta_component": {

@@ -72,10 +72,9 @@ public class FormDataFactory {
                 }
                 // 该字段如果是文件类型
                 if (metaField.configParser().isFile()) {
-
                     List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
-
+                    // 确保入库的文件字段 必须是有效的[]
                     if (files != null && files.size() > 0) {
                         for (UploadFile uploadFile : files) {
                             if (fileConfig == null || fileConfig.isEmpty()) {
@@ -106,7 +105,7 @@ public class FormDataFactory {
 
     public static void buildUpdateFormData(IMetaObject metaObject, Record record) {
         for (IMetaField metaField : metaObject.fields()) {
-
+            // 确保回传给前端的文件字段 必须是有效的[]
             if (metaField.configParser().isFile()) {
                 String filepath = record.getStr(metaField.fieldCode());
                 if (StrKit.isBlank(filepath)) {

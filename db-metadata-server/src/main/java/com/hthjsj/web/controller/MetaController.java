@@ -14,6 +14,7 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.DropDownBox;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
+import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
@@ -129,8 +130,8 @@ public class MetaController extends FrontRestController {
         IMetaObject metaObject = dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
+        UtilKit.setCreateUser(metaObject.dataMap());  //set createBy,createTime
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
-
         renderJson(status ? Ret.ok() : Ret.fail());
     }
 

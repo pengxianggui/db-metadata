@@ -22,7 +22,7 @@ public class UserIntercept implements Interceptor {
 
     public static Cache<String, User> caches = CacheBuilder.newBuilder().maximumSize(100).build();
 
-    static User staticUser = new User() {
+    public static User staticUser = new User() {
 
         @Override
         public String userId() {
