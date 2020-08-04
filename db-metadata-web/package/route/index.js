@@ -28,7 +28,7 @@ const jumpOut = [
     }
 ];
 
-export default [
+export const innerRoute = [
     {
         path: 'meta-data',
         name: 'Metadata',
@@ -145,3 +145,8 @@ export const outerRoute = jumpOut.map(route => {
     item.name = 'G_' + route.name; // 避免重名
     return item;
 });
+
+export default {
+    inner: innerRoute,
+    outer: outerRoute
+}

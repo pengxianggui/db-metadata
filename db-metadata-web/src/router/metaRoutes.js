@@ -1,6 +1,5 @@
 import Main from '@/components/Main'
 import MetaRoutes from '@/../package/route'
-import {outerRoute} from "@/../package/route";
 
 const routes = [
     {
@@ -11,7 +10,7 @@ const routes = [
         component: Main,
         redirect: '/main/meta-data',
         children: [
-            ...(MetaRoutes.map(r => {
+            ...(MetaRoutes.inner.map(r => {
                 r.icon = r.meta.icon;
                 r.label = r.meta.title;
                 return r;
@@ -40,7 +39,7 @@ const routes = [
             }
         ]
     },
-    ...outerRoute
+    ...MetaRoutes.outer
 ];
 
 export default routes;

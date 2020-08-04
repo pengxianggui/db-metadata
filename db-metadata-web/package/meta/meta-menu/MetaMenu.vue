@@ -24,7 +24,7 @@
         },
         data() {
             return {
-                menus: MetaRoute
+                menus: MetaRoute.inner
             }
         }
     }
