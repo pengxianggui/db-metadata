@@ -26,9 +26,11 @@ public interface MetaViewAdapterFactory {
     MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode);
 
     /**
+     * <pre>
      * 属性重算逻辑,分2种情况
      * 1. 已经有过额外自定义配置的属性,重新计算
      * 2. 还未生成的配置,重新计算
+     * </pre>
      *
      * @param metaField
      * @param fieldComponent

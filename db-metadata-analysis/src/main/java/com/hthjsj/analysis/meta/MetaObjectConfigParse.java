@@ -6,6 +6,9 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 元对象配置解析器
  * <p> @Date : 2019/11/14 </p>
@@ -70,14 +73,27 @@ public class MetaObjectConfigParse extends MetaData {
         return "";
     }
 
-    public <T extends IPointCut> T interceptor() {
-        if (!StrKit.notBlank(getStr("bizInterceptor"))) {
+    public String[] interceptors() {
+        String ss = getStr("bizInterceptor");
+        if (StrKit.isBlank(ss)) {
+            return new String[0];
+        } else {
+            if (ss.contains(",")) {
+                return ss.split(",");
+            } else {
+                return new String[] { ss };
+            }
+        }
+    }
+
+    private <T extends IPointCut> T interceptor(String interceptorStr) {
+        if (!StrKit.notBlank(interceptorStr)) {
             return (T) EMPTY_POINT_CUT;
         }
 
         T clazz = null;
         try {
-            clazz = (T) Class.forName(getStr("bizInterceptor")).newInstance();
+            clazz = (T) Class.forName(interceptorStr).newInstance();
             return clazz;
         } catch (ClassNotFoundException e) {
             log.error(e.getMessage(), e);
@@ -96,35 +112,51 @@ public class MetaObjectConfigParse extends MetaData {
     /**
      * 客户端可以按需选择实现add,update,delete,view切入点
      */
-    public DeletePointCut deletePointCut() {
-        Object o = interceptor();
-        if (o instanceof DeletePointCut) {
-            return (DeletePointCut) o;
+    public DeletePointCut[] deletePointCut() {
+        List<IPointCut> iPointCuts = new ArrayList<>();
+        String[] interceptors = interceptors();
+        for (String i : interceptors) {
+            Object o = interceptor(i);
+            if (o instanceof DeletePointCut) {
+                iPointCuts.add((DeletePointCut) o);
+            }
         }
-        return EMPTY_POINT_CUT;
+        return iPointCuts.toArray(new DeletePointCut[iPointCuts.size()]);
     }
 
-    public AddPointCut addPointCut() {
-        Object o = interceptor();
-        if (o instanceof AddPointCut) {
-            return (AddPointCut) o;
+    public AddPointCut[] addPointCut() {
+        List<IPointCut> iPointCuts = new ArrayList<>();
+        String[] interceptors = interceptors();
+        for (String i : interceptors) {
+            Object o = interceptor(i);
+            if (o instanceof AddPointCut) {
+                iPointCuts.add((AddPointCut) o);
+            }
         }
-        return EMPTY_POINT_CUT;
+        return iPointCuts.toArray(new AddPointCut[iPointCuts.size()]);
     }
 
-    public UpdatePointCut updatePointCut() {
-        Object o = interceptor();
-        if (o instanceof UpdatePointCut) {
-            return (UpdatePointCut) o;
+    public UpdatePointCut[] updatePointCut() {
+        List<IPointCut> iPointCuts = new ArrayList<>();
+        String[] interceptors = interceptors();
+        for (String i : interceptors) {
+            Object o = interceptor(i);
+            if (o instanceof UpdatePointCut) {
+                iPointCuts.add((UpdatePointCut) o);
+            }
         }
-        return EMPTY_POINT_CUT;
+        return iPointCuts.toArray(new UpdatePointCut[iPointCuts.size()]);
     }
 
-    public ViewPointCut viewPointCut() {
-        Object o = interceptor();
-        if (o instanceof ViewPointCut) {
-            return (ViewPointCut) o;
+    public ViewPointCut[] viewPointCut() {
+        List<IPointCut> iPointCuts = new ArrayList<>();
+        String[] interceptors = interceptors();
+        for (String i : interceptors) {
+            Object o = interceptor(i);
+            if (o instanceof ViewPointCut) {
+                iPointCuts.add((ViewPointCut) o);
+            }
         }
-        return EMPTY_POINT_CUT;
+        return iPointCuts.toArray(new ViewPointCut[iPointCuts.size()]);
     }
 }
