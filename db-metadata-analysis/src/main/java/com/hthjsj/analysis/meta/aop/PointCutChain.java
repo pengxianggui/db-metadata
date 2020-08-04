@@ -28,25 +28,16 @@ public class PointCutChain {
 
     private static final List<IPointCut> viewPointCuts = new ArrayList<>(0);
 
-    public static void registerAddPointCut(IPointCut pointCut) {
+    public static void registerGlobalPointCut(IPointCut pointCut) {
         if (pointCut != null && pointCut instanceof AddPointCut) {
             addPointCuts.add(pointCut);
         }
-    }
-
-    public static void registerUpdatePointCut(IPointCut pointCut) {
         if (pointCut != null && pointCut instanceof UpdatePointCut) {
             updatePointCuts.add(pointCut);
         }
-    }
-
-    public static void registerDeletePointCut(IPointCut pointCut) {
         if (pointCut != null && pointCut instanceof DeletePointCut) {
             deletePointCuts.add(pointCut);
         }
-    }
-
-    public static void registerViewPointCut(IPointCut pointCut) {
         if (pointCut != null && pointCut instanceof ViewPointCut) {
             viewPointCuts.add(pointCut);
         }

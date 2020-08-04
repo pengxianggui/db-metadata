@@ -9,6 +9,7 @@ import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
+import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
@@ -128,7 +129,7 @@ public class TableController extends FrontRestController {
         Preconditions.checkArgument(ids.length != 0, "无效的数据id:[%s]", MoreObjects.toStringHelper(ids));
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        DeletePointCut pointCut = metaObjectConfigParse.deletePointCut();
+        DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
         AopInvocation invocation = new AopInvocation(metaObject, getKv());
 
         boolean status = Db.tx(new IAtom() {
@@ -137,10 +138,10 @@ public class TableController extends FrontRestController {
             public boolean run() throws SQLException {
                 boolean s = false;
                 try {
-                    pointCut.deleteBefore(invocation);
+                    PointCutChain.deleteBefore(pointCut, invocation);
                     s = metaService().deleteDatas(metaObject, ids);
                     invocation.setPreOperateStatus(s);
-                    pointCut.deleteAfter(invocation);
+                    PointCutChain.deleteAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);

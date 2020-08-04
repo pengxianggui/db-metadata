@@ -5,6 +5,7 @@ import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.AddPointCut;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
+import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
@@ -61,7 +62,7 @@ public class FormController extends FrontRestController {
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        AddPointCut pointCut = metaObjectConfigParse.addPointCut();
+        AddPointCut[] pointCut = metaObjectConfigParse.addPointCut();
         AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
 
         boolean status = Db.tx(new IAtom() {
@@ -70,10 +71,10 @@ public class FormController extends FrontRestController {
             public boolean run() throws SQLException {
                 boolean s = false;
                 try {
-                    pointCut.addBefore(invocation);
+                    PointCutChain.addBefore(pointCut, invocation);
                     s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
                     invocation.setPreOperateStatus(s);
-                    pointCut.addAfter(invocation);
+                    PointCutChain.addAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
@@ -116,7 +117,7 @@ public class FormController extends FrontRestController {
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
-        UpdatePointCut pointCut = metaObjectConfigParse.updatePointCut();
+        UpdatePointCut[] pointCut = metaObjectConfigParse.updatePointCut();
         AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
 
         boolean status = Db.tx(new IAtom() {
@@ -125,10 +126,10 @@ public class FormController extends FrontRestController {
             public boolean run() throws SQLException {
                 boolean s = false;
                 try {
-                    pointCut.updateBefore(invocation);
+                    PointCutChain.updateBefore(pointCut, invocation);
                     s = metaService().updateData(invocation.getMetaObject(), invocation.getFormData());
                     invocation.setPreOperateStatus(s);
-                    pointCut.updateAfter(invocation);
+                    PointCutChain.updateAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
