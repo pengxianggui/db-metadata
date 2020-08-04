@@ -10,6 +10,7 @@ import java.util.List;
  * 期望的能力:
  * 1. 一次注册,全局生效
  * 2. 拦截器之间的数据传递
+ * 3. 调用过程中 中间的拦截器出现异常,需要有反馈机制通知同组其他切面
  * </pre>
  * <p> @Date : 2020/6/18 </p>
  * <p> @Project : db-meta-serve</p>
@@ -76,6 +77,62 @@ public class PointCutChain {
         for (IPointCut addPointCut : pointCuts) {
             if (addPointCut instanceof AddPointCut) {
                 ((AddPointCut) addPointCut).addAfter(invocation);
+            }
+        }
+    }
+
+    public static void updateBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut updatePointCut : updatePointCuts) {
+            if (updatePointCut instanceof UpdatePointCut) {
+                ((UpdatePointCut) updatePointCut).updateBefore(invocation);
+            }
+        }
+
+        for (IPointCut updatePointCut : pointCuts) {
+            if (updatePointCut instanceof UpdatePointCut) {
+                ((UpdatePointCut) updatePointCut).updateBefore(invocation);
+            }
+        }
+    }
+
+    public static void updateAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut updatePointCut : updatePointCuts) {
+            if (updatePointCut instanceof UpdatePointCut) {
+                ((UpdatePointCut) updatePointCut).updateAfter(invocation);
+            }
+        }
+
+        for (IPointCut updatePointCut : pointCuts) {
+            if (updatePointCut instanceof UpdatePointCut) {
+                ((UpdatePointCut) updatePointCut).updateAfter(invocation);
+            }
+        }
+    }
+
+    public static void deleteBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut deletePointCut : deletePointCuts) {
+            if (deletePointCut instanceof DeletePointCut) {
+                ((DeletePointCut) deletePointCut).deleteBefore(invocation);
+            }
+        }
+
+        for (IPointCut deletePointCut : pointCuts) {
+            if (deletePointCut instanceof UpdatePointCut) {
+                ((DeletePointCut) deletePointCut).deleteBefore(invocation);
+            }
+        }
+    }
+
+    public static void deleteAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut deletePointCut : deletePointCuts) {
+            if (deletePointCut instanceof DeletePointCut) {
+                ((DeletePointCut) deletePointCut).deleteAfter(invocation);
+            }
+        }
+
+        for (IPointCut deletePointCut : pointCuts) {
+            if (deletePointCut instanceof UpdatePointCut) {
+                ((DeletePointCut) deletePointCut).deleteAfter(invocation);
             }
         }
     }
