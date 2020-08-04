@@ -8,7 +8,11 @@ package com.hthjsj.analysis.meta.aop;
  */
 public interface UpdatePointCut extends IPointCut {
 
-    boolean updateBefore(AopInvocation invocation);
+    default boolean updateBefore(AopInvocation invocation) {
+        return true;
+    }
 
-    boolean updateAfter(AopInvocation invocation);
+    default boolean updateAfter(AopInvocation invocation) {
+        return true;
+    }
 }

@@ -15,20 +15,23 @@ public interface AddPointCut extends IPointCut {
      *
      * @return
      */
-//    abstract boolean match();
+    //    abstract boolean match();
+    default boolean addBefore(AopInvocation invocation) {
+        return true;
+    }
 
-    boolean addBefore(AopInvocation invocation);
+    //    @Override
+    //    public void intercept(Invocation inv) {
+    //        if (match()) {
+    //            addBefore();
+    //            inv.invoke();
+    //            addAfter();
+    //        } else {
+    //            inv.invoke();
+    //        }
+    //    }
 
-//    @Override
-//    public void intercept(Invocation inv) {
-//        if (match()) {
-//            addBefore();
-//            inv.invoke();
-//            addAfter();
-//        } else {
-//            inv.invoke();
-//        }
-//    }
-
-    boolean addAfter(AopInvocation invocation);
+    default boolean addAfter(AopInvocation invocation) {
+        return true;
+    }
 }

@@ -13,7 +13,7 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
 
     @Override
     public boolean addBefore(AopInvocation invocation) {
-        log.error("this is addBefore");
+        log.error("[PointCut] default operation : this is addBefore");
         return false;
     }
 
@@ -25,33 +25,33 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
 
     @Override
     public void deleteBefore(AopInvocation invocation) {
-        log.error("this is deleteBefore!");
+        log.error("[PointCut] default operation : this is deleteBefore!");
     }
 
     @Override
     public void deleteAfter(AopInvocation invocation) {
-        log.error("this is deleteAfter!");
+        log.error("[PointCut] default operation : this is deleteAfter!");
     }
 
     @Override
     public boolean updateBefore(AopInvocation invocation) {
-        log.error("this is updateBefore!");
+        log.error("[PointCut] default operation : this is updateBefore!");
         return false;
     }
 
     @Override
     public boolean updateAfter(AopInvocation invocation) {
-        log.error("this is updateAfter!");
+        log.error("[PointCut] default operation : this is updateAfter!");
         return false;
     }
 
     @Override
     public void viewBefore(AopInvocation invocation) {
-        log.error("this is viewBefore!");
+        log.error("[PointCut] default operation : this is viewBefore!");
     }
 
     @Override
     public void viewAfter(AopInvocation invocation) {
-        log.error("this is viewAfter!");
+        log.error("[PointCut] default operation : this is viewAfter!");
     }
 }
