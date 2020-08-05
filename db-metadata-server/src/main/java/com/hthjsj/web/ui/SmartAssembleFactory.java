@@ -43,8 +43,8 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
                 builder.deleteUrl("/table/delete/" + metaObject.code());
                 break;
             case TREETABLEVIEW:
-                builder.dataUrl("/tree/list/" + metaObject.code());
-                builder.deleteUrl("/tree/delete/" + metaObject.code());
+                builder.dataUrl("/table/tree/" + metaObject.code());
+                builder.deleteUrl("/table/tree/delete/" + metaObject.code());
                 break;
         }
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());

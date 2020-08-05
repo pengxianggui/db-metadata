@@ -80,6 +80,10 @@ let mapping = {
         "ele": null,
         "includes": []
     },
+    "TableTreeList": {
+        "ele": Table,
+        "includes": []
+    }
     // "ZTogglePanel": null,
 };
 

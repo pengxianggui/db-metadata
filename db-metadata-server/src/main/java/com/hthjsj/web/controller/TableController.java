@@ -168,6 +168,6 @@ public class TableController extends FrontRestController {
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAll(metaObject, treeConfig);
-        renderJson(tree);
+        renderJson(Ret.ok("data", tree));
     }
 }
