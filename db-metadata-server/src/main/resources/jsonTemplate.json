@@ -51,6 +51,67 @@
       }
     }
   },
+  "TableTreeList": {
+    "component_name": "TableTreeList",
+    "name": "TableTreeList",
+    "label": "树型表",
+    "data_url": "/feature/tree/{objectCode}",
+    "delete_url": "/feature/tree/delete?objectCode={objectCode}&ids={ids}",
+    "multi_select": false,
+    "editable": false,
+    "conf": {
+      "row-key": "id",
+      "tree-props": {
+        "hasChildren": "hasChildren",
+        "children": "children"
+      },
+      "default-expand-all": false,
+      "expand-row-keys": [],
+      "indent": 16,
+      "lazy": false,
+      "default-sort": {
+        "prop": "id",
+        "order": "descending"
+      },
+      "highlight-current-row": true,
+      "size": "medium"
+    },
+    "columns": [],
+    "pagination": {
+      "page-size": 10,
+      "page-sizes": [
+        10,
+        20,
+        50,
+        100,
+        200
+      ],
+      "current-page": 1,
+      "layout": "total, sizes, prev, pager, next, jumper"
+    },
+    "operation-bar": {
+      "size": "mini",
+      "type": "primary"
+    },
+    "buttons": {
+      "edit": {
+        "label": "编辑",
+        "conf": {
+          "icon": "el-icon-edit",
+          "size": "mini",
+          "type": "primary"
+        }
+      },
+      "delete": {
+        "label": "删除",
+        "conf": {
+          "size": "mini",
+          "icon": "el-icon-delete",
+          "type": "danger"
+        }
+      }
+    }
+  },
   "BoolBox": {
     "component_name": "BoolBox",
     "name": "BoolBox",
