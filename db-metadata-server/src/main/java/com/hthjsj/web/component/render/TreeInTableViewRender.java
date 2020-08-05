@@ -1,8 +1,13 @@
 package com.hthjsj.web.component.render;
 
 import com.hthjsj.analysis.component.ComponentRender;
+import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.TreeTableView;
+import com.hthjsj.web.component.form.FormField;
+import com.hthjsj.web.component.form.FormFieldFactory;
+import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.jfinal.kit.Kv;
 
 /**
@@ -15,23 +20,35 @@ public class TreeInTableViewRender implements ComponentRender<TreeTableView> {
 
     private final IMetaObject metaObject;
 
-    private final TreeTableView treeTableView;
+    private final TreeTableView component;
 
-    private final Kv instanceFlatConfig;
+    private final ComponentInstanceConfig componentInstanceConfig;
 
-    public TreeInTableViewRender(IMetaObject metaObject, TreeTableView treeTableView, Kv instanceFlatConfig) {
+    public TreeInTableViewRender(IMetaObject metaObject, TreeTableView treeTableView, ComponentInstanceConfig instanceFlatConfig) {
         this.metaObject = metaObject;
-        this.treeTableView = treeTableView;
-        this.instanceFlatConfig = instanceFlatConfig;
+        this.component = treeTableView;
+        this.componentInstanceConfig = instanceFlatConfig;
     }
 
     @Override
     public TreeTableView component() {
-        return treeTableView;
+        return component;
     }
 
     @Override
     public Kv render() {
-        return treeTableView.getMeta();
+        Kv kv = UtilKit.getKv(componentInstanceConfig, metaObject.code());
+        UtilKit.deepMerge(component.getMeta(), kv, false);
+
+        for (IMetaField metaField : metaObject.fields()) {
+            Kv config = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), metaField.fieldCode());
+            FormField formField = FormFieldFactory.createFormFieldInContainer(metaField, config, component);
+
+            if (metaField.configParser().isListShow()) {
+                component.getFields().add(formField);
+                continue;
+            }
+        }
+        return component.getMeta();
     }
 }
