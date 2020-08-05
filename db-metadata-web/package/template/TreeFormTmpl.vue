@@ -18,7 +18,7 @@
     import {restUrl} from '../constant/url'
     import {defaultPrimaryKey} from "../config";
     import {getFormMeta, getTreeMeta, loadFeature} from "../core/mixins/methods"
-    import DefaultFormViewMeta from '../core/form/ui-conf'
+    import DefaultFormViewMeta from '../core/formview/ui-conf'
 
     export default {
         name: "TreeFormTmpl",

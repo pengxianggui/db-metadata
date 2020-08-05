@@ -17,8 +17,8 @@
             return {
                 params: null,
                 meta: {
-                    "component_name": "SearchPanel",
-                    "name": "SearchPanel",
+                    "component_name": "SearchView",
+                    "name": "SearchView",
                     "label": "搜索面板",
                     "conf": {
                     },

@@ -11,7 +11,7 @@ export const ConfDesc = `
 `;
 
 export default {
-    "component_name": "DataList",
+    "component_name": "ListView",
     "name": "DataList",
     "label": "列表",
     "data_url": "/data/list/{objectCode}",

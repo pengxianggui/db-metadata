@@ -17,7 +17,7 @@ export const loadFeature = {
 }
 
 /**
- * 获取TableList的meta, 参数objectCode.
+ * 获取TableView的meta, 参数objectCode.
  * @type {{methods: {getTlMeta(*=): void}}}
  */
 export const getTlMeta = {
@@ -25,7 +25,7 @@ export const getTlMeta = {
         getTlMeta(objectCode) {
             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
-                componentCode: 'TableList'
+                componentCode: 'TableView'
             });
             return this.$axios.safeGet(url);
         }
@@ -41,7 +41,7 @@ export const getTableTlMeta = {
         getTableTlMeta(objectCode) {
             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
                 objectCode: objectCode,
-                componentCode: 'TableTreeList'
+                componentCode: 'TableTreeView'
             });
             return this.$axios.safeGet(url)
         }
@@ -74,7 +74,7 @@ export const getFormMeta = {
 
 /**
  * 获取DataList的meta, 参数objectCode.
- * **组件实例中TableList的meta的命名必须为 dlMeta**
+ * **组件实例中TableView的meta的命名必须为 dlMeta**
  * @type {{methods: {getDlMeta(*=): void}}}
  */
 export const getDlMeta = {
@@ -98,7 +98,7 @@ export const getSpMeta = {
     methods: {
         getSpMeta(objectCode) {
             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                componentCode: 'SearchPanel',
+                componentCode: 'SearchView',
                 objectCode: objectCode
             });
             return this.$axios.safeGet(url);

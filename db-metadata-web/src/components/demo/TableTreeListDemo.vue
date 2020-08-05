@@ -11,13 +11,13 @@
 
 <script>
     export default {
-        name: "table-tree-list-demo",
+        name: "table-tree-view-demo",
         data() {
             return {
                 meta: {
-                    component_name: 'TableTreeList',
-                    name: 'TableTreeListDemo',
-                    label: 'TableTreeList',
+                    component_name: 'TableTreeView',
+                    name: 'TableTreeViewDemo',
+                    label: 'TableTreeView',
                     columns: [{
                         name: "id"
                     }, {
@@ -39,9 +39,9 @@
 
                 /*
                 meta: {
-                    component_name: 'TableTreeList',
+                    component_name: 'TableTreeView',
                     name: 'TableTreeListDemo',
-                    label: 'TableTreeList',
+                    label: 'TableTreeView',
                     columns: [{
                         name: 'id',
                     }, {

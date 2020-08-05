@@ -30,7 +30,7 @@
     import ComponentList from './ComponentList'
     import WorkArea from './WorkArea'
     import ConfArea from './ConfArea'
-    import DefaultFormViewMeta from '../../core/form/ui-conf'
+    import DefaultFormViewMeta from '../../core/formview/ui-conf'
 
     export default {
         name: "FormBuilder",

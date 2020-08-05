@@ -5,7 +5,7 @@
             ></tree>
         </template>
         <template #right>
-            <table-list :ref="tlRefName" :meta="tlMeta">
+            <table-view :ref="tlRefName" :meta="tlMeta">
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>
                 </template>
@@ -24,7 +24,7 @@
                 <template #buttons="{scope, conf}">
                     <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-            </table-list>
+            </table-view>
         </template>
     </row-grid>
 </template>

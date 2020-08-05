@@ -61,7 +61,7 @@
 <script>
     import utils from '../../utils'
     import draggable from 'vuedraggable'
-    import FormView from "../../core/form/src/FormView";
+    import FormView from "../../core/formview/src/FormView";
     import {restUrl} from "../../constant/url";
     import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
     import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";

@@ -1,7 +1,7 @@
 <template>
     <row-grid :span="[14, 10]">
         <template #left>
-            <table-list :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange">
+            <table-view :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange">
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>
                 </template>
@@ -20,7 +20,7 @@
                 <template #buttons="{scope, conf}">
                     <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-            </table-list>
+            </table-view>
         </template>
         <template #right>
             <div class="el-card" style="margin-left: 5px">
@@ -39,7 +39,7 @@
     import {restUrl} from "../constant/url";
     import {defaultPrimaryKey} from '../config'
     import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
-    import DefaultFormViewMeta from '../core/form/ui-conf'
+    import DefaultFormViewMeta from '../core/formview/ui-conf'
 
     export default {
         name: "TableFormTmpl",

@@ -80,7 +80,7 @@
 
     export default {
         mixins: [Meta(DefaultMeta)],
-        name: "Tree",
+        name: "TreeView",
         props: {
             data: Array
         },

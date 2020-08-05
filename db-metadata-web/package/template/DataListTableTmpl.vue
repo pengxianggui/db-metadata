@@ -8,8 +8,8 @@
         </template>
         <template #right>
             <div class="el-card" style="margin-left: 5px;">
-                <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-                <table-list :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams" :page="{ size: 5 }">
+                <search-view :meta="spMeta" @search="handleSearch"></search-view>
+                <table-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams" :page="{ size: 5 }">
                     <template #prefix-btn="{conf}">
                         <slot name="prefix-btn" v-bind:conf="conf"></slot>
                     </template>
@@ -28,7 +28,7 @@
                     <template #buttons="{scope, conf}">
                         <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
                     </template>
-                </table-list>
+                </table-view>
             </div>
         </template>
     </row-grid>

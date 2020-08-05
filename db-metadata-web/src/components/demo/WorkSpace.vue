@@ -2,7 +2,6 @@
     <div style="padding: 20px; overflow: auto; height: 100%;">
         <h1>组件开发调试页面</h1>
         <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
-        <!--        <table-tree-list :meta="meta"></table-tree-list>-->
     </div>
 </template>
 

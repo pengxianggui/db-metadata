@@ -66,11 +66,11 @@ let mapping = {
         "ele": Form,
         "includes": []
     },
-    "SearchPanel": {
+    "SearchView": {
         "ele": Form,
         "includes": []
     },
-    "TableList": {
+    "TableView": {
         "ele": Table,
         "includes": []
     },
@@ -80,7 +80,7 @@ let mapping = {
         "ele": null,
         "includes": []
     },
-    "TableTreeList": {
+    "TableTreeView": {
         "ele": Table,
         "includes": []
     }

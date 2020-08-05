@@ -12,7 +12,7 @@
 
 <script>
     import utils from '../utils'
-    import FormView from "../core/form/src/FormView";
+    import FormView from "../core/formview/src/FormView";
 
     export default {
         name: "FormTmpl",

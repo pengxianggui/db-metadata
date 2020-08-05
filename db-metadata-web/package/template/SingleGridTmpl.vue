@@ -1,7 +1,7 @@
 <template>
     <div class="el-card">
-        <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-list :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
+        <search-view :meta="spMeta" @search="handleSearch"></search-view>
+        <table-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
             <template #prefix-btn="{conf}">
                 <slot name="prefix-btn" v-bind:conf="conf"></slot>
             </template>
@@ -34,7 +34,7 @@
             <template #inner-after-extend-btn="{scope, conf}">
                 <slot name="inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
             </template>
-        </table-list>
+        </table-view>
     </div>
 </template>
 

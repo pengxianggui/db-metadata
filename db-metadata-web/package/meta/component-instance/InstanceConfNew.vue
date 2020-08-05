@@ -9,7 +9,7 @@
                 <el-form-item label="组件" prop="componentCode" class="inline">
                     <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
                     <radio-box v-model="confModel.componentCode"
-                               :options="['FormView', 'TableList', 'SearchPanel','TreeTableView']"></radio-box>
+                               :options="['FormView', 'TableView', 'SearchView','TableTreeView']"></radio-box>
                 </el-form-item>
                 <el-form-item label="实例描述">
                     <text-area-box v-model="confModel.instanceName"></text-area-box>

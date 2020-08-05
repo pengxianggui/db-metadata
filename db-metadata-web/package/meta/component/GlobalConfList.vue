@@ -1,7 +1,7 @@
 <template>
     <div>
-        <search-panel :meta="spMeta" @search="handleSearch"></search-panel>
-        <table-list :ref="refName" :meta="tlMeta" :filter-params="filterParams">
+        <search-view :meta="spMeta" @search="handleSearch"></search-view>
+        <table-view :ref="refName" :meta="tlMeta" :filter-params="filterParams">
             <template #add-btn="{conf}">
                 <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
@@ -12,7 +12,7 @@
                                @click="handlerConf($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
             </template>
-        </table-list>
+        </table-view>
     </div>
 </template>
 

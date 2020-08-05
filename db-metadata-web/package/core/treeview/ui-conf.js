@@ -11,7 +11,7 @@ export const ConfDesc = `
 `;
 
 export default {
-    "component_name": "Tree",
+    "component_name": "TreeView",
     "name": "Tree",
     "label": "树型列表",
     "data_url": "/tree/list/{objectCode}",

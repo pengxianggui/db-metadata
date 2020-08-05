@@ -72,7 +72,7 @@
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
                 //
                 let url = this.$compile(routeUrl.baseURL + routeUrl.R_INSTANCE_CONF_NEW, {
-                    componentCode: 'TableList',
+                    componentCode: 'TableView',
                     objectCode: objectCode
                 });
                 this.$confirm(title, '提示', {

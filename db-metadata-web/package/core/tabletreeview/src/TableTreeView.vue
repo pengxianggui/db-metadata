@@ -14,9 +14,19 @@
                             </el-button>
                         </slot>
                         <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
-                              v-bind:batchDelete="handleBatchDelete">
+                              v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
                             <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                       v-bind="operationBarConf" v-if="multiSelect">删除
+                                       v-bind="operationBarConf">删除
+                            </el-button>
+                        </slot>
+                        <slot name="expand-all-btn">
+                            <el-button @click="handleExpandAll" icon="el-icon-caret-bottom" type="info"
+                                       v-bind="operationBarConf">展开全部
+                            </el-button>
+                        </slot>
+                        <slot name="shrink-all-btn">
+                            <el-button @click="handleShrinkAll" icon="el-icon-caret-right" type="info"
+                                       v-bind="operationBarConf">收起全部
                             </el-button>
                         </slot>
                         <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
@@ -24,21 +34,23 @@
                 </slot>
             </el-col>
         </el-row>
-
         <el-row>
             <el-col :span="24">
                 <el-table
                         :id="innerMeta.name"
                         :ref="innerMeta.name"
                         :data="innerData"
+                        :load="handleLoad"
                         v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                         @row-click="handleRowClick"
-                        @row-dblclick="handleRowDbClick"
                         @sort-change="sortChange"
-                        @selection-change="handleSelectionChange">
+                        @selection-change="handleSelectionChange"
+                        @row-dblclick="$emit('row-dblclick', $event)"
+                        :default-expand-all="expandAll"
+                        v-if="show">
 
                     <!-- multi select conf -->
-                    <template v-if="multiSelect">
+                    <template v-if="innerMeta.multi_select">
                         <el-table-column type="selection" width="55"></el-table-column>
                     </template>
 
@@ -49,20 +61,17 @@
                                          :prop="item.name"
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
-                            <template #header>
+                            <template slot="header">
                                 <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
-                                                :label="item.label || item.name" :all="true" component-code="TableList">
+                                                :label="item.label || item.name" :all="true"
+                                                component-code="TableTreeView">
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
                             </template>
-                            <template #default="scope">
-                                <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
-                            </template>
                         </el-table-column>
                     </template>
-
-                    <slot name="operation-column" v-if="operationColMode">
-                        <el-table-column width="180" v-bind="operationColumnConf">
+                    <slot name="operation-column">
+                        <el-table-column width="180">
                             <template #header>
                                 <span>
                                     <span>操作</span>
@@ -92,8 +101,7 @@
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
-                                        <slot name="delete-btn"
-                                              v-bind:conf="buttonsConf['delete']['conf']"
+                                        <slot name="delete-btn" v-bind:conf="buttonsConf['delete']['label']"
                                               v-bind:delete="handleDelete"
                                               v-bind:scope="scope">
                                             <el-button v-bind="buttonsConf['delete']['conf']"
@@ -111,7 +119,6 @@
                 </el-table>
             </el-col>
         </el-row>
-
         <el-row v-if="pageModel" style="margin-top: 5px;">
             <el-col>
                 <!-- pagination bar -->
@@ -141,22 +148,27 @@
 </template>
 
 <script>
-    import utils from '../../../utils'
     import {restUrl} from "../../../constant/url";
     import {defaultPrimaryKey} from "../../../config";
+    import utils from '../../../utils'
     import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
-    import TableCell from './tableCell'
     import DefaultMeta from '../ui-conf'
 
     export default {
-        name: "TableList",
+        name: "TableTreeView",
         mixins: [Meta(DefaultMeta, assembleMeta)],
-        components: {MetaEasyEdit, TableCell},
+        components: {MetaEasyEdit},
         data() {
+            // 利用解构赋值防止空指针
+            const {conf: {'default-expand-all': instanceExpandAll} = {}} = this.meta;
+            const {conf: {'default-expand-all': defaultExpandAll} = {}} = DefaultMeta;
+            const expandAll = utils.assertUndefined(instanceExpandAll, defaultExpandAll);
+
             return {
-                multiEdit: false, // 多行编辑模式
+                show: true, // use to reRender for table
+                expandAll: expandAll,
                 innerData: [],
                 choseData: [],
                 activeData: {},
@@ -174,15 +186,63 @@
         props: {
             data: Array,
             page: Object,
-            filterParams: Object    // 搜索面板过滤参数
+            filterParams: Object,   // 搜索面板过滤参数
+            treeProps: {
+                type: Object,
+                default: function () {
+                    return {hasChildren: 'hasChildren', children: 'children'}
+                },
+                validator: function (value) {
+                    return value.hasOwnProperty('hasChildren') && value.hasOwnProperty('children');
+                }
+            },
+            loadChildrens: Function
         },
         methods: {
+            tableReRender() {
+                this.show = false;
+                this.$nextTick(() => {
+                    this.show = true;
+                });
+            },
+            handleExpandAll() {
+                this.expandAll = true;
+                this.tableReRender();
+            },
+            handleShrinkAll() {
+                this.expandAll = false;
+                this.tableReRender();
+            },
+            handleLoad(tree, treeNode, resolve) {
+                const isLazy = this.innerMeta['conf']['lazy'];
+                if (!isLazy) return;
+
+                const fn = this.loadChildrens;
+                const children_data_url = this.innerMeta['children_data_url'];
+                const parentPrimary = tree[this.primaryKey];
+
+                if (!utils.isEmpty(fn)) {
+                    fn({tree, treeNode, resolve});
+                    return;
+                }
+                this.$axios.safeGet(children_data_url, {
+                    parentPrimary: parentPrimary
+                }).then(resp => {
+                    resolve(resp.data);
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                    console.error(err.msg());
+                })
+            },
             handleSelectionChange(selection) {
-                if (this.multiSelect) {
+                if (this.multiMode) {
                     this.choseData = selection;
                     this.$emit('chose-change', selection);
                 }
-                this.$emit('selection-change', selection)
+            },
+            extractPrimaryValue(row) {
+                const {primaryKey} = this;
+                return utils.extractValue(row, primaryKey);
             },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
@@ -193,9 +253,11 @@
             },
             doEdit(primaryValue) {
                 let url, title;
+                const {activeData, primaryKey} = this;
+
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKey = this.primaryKey, primaryKv;
+                    let primaryKv;
 
                     if (primaryKey.length <= 1) {
                         primaryKv = primaryValue[0];
@@ -209,7 +271,14 @@
                     });
                 } else {
                     title = '新增';
-                    url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
+                    let fillParams = function (path) {
+                        if (!utils.isEmpty(activeData)) {
+                            path += ('?' + primaryKey + '=' + activeData[primaryKey])
+                        }
+                        return path
+                    }
+
+                    url = this.$compile(fillParams(restUrl.RECORD_TO_ADD), {objectCode: this.innerMeta['objectCode']});
                 }
                 this.dialog(url, {title: title});
             },
@@ -239,83 +308,49 @@
             },
             // 批量删除
             handleBatchDelete(ev) {
-                if (this.choseData.length <= 0) {
-                    this.$message.warning('请至少选择一项!');
-                    return;
-                }
-
+                let primaryKv = [];
                 let {primaryKey} = this;
-                let primaryValue;
-                let primaryKvExp;
+                this.choseData.forEach(row => {
+                    let kv = utils.spliceKvs(primaryKey, this.extractPrimaryValue(row));
+                    primaryKv.push(kv);
+                });
 
-                if (primaryKey.length > 1) {    // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4"
-                    let primaryKvExpArr = [];
-                    this.choseData.forEach(row => {
-                        primaryValue = utils.extractValue(row, primaryKey);
-                        primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
-                    });
-                    primaryKvExp = primaryKvExpArr.join('&');
-                    this.doDelete(primaryKvExp, ev);
-                } else {    // 单主键 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
-                    primaryValue = this.choseData.map(row => row[primaryKey[0]]);
-                    let primaryKvExpArr = primaryValue.map(value => utils.spliceKv(primaryKey[0], value, "="));
-                    primaryKvExp = primaryKvExpArr.join('&');
-
-                    this.doDelete(primaryKvExp, ev);
+                if (this.choseData.length > 0) {
+                    this.doDelete(primaryKv, ev);
+                    return
                 }
+                this.$message.warning('请至少选择一项!');
             },
+
             /**
              * default remove the assembly logic is based on primaryKey get on
              * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
              */
             doDelete(primaryKvExp) {
-                let title = '确定删除此条记录?';
-                const RECORD_SIZE = this.choseData.length;
-
-                if (RECORD_SIZE > 1) {
-                    title = '确定删除选中的' + RECORD_SIZE + '条记录?';
-                }
-
-                this.$confirm(title, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    const {delete_url} = this.innerMeta;
-                    const url = delete_url + '?' + primaryKvExp;
-                    this.$axios.delete(url).then(resp => {
-                        this.$message.success(resp.msg);
-                        this.getData();
-                    }).catch(err => {
-                        this.$message.error(err.msg);
-                    });
-                });
+                // PXG_TODO
+                this.$message.warning("NOT FINISHED!")
             },
             // 新增一行
             handleAdd() {
                 this.doEdit();
             },
             handleRowClick(row, col, event) {
-                this.$emit('row-click', {row, col, event});
                 event.ctrlKey ? this.choseRow(row) : this.activeRow(row);
-            },
-            handleRowDbClick(row, col, event) {
-                this.$emit('row-dblclick', {row, col, event});
             },
             choseRow(row) {
                 let selected = true;
-                const {primaryKey, multiSelect} = this;
+                const {primaryKey, multiMode} = this;
 
-                if (multiSelect) {
-                    let tableRefName = this.innerMeta['name'];
-                    for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
-                        let choseItem = this.$refs[tableRefName]['selection'][i];
+                if (multiMode) {
+                    let {tlRefName} = this;
+                    for (let i = 0; i < this.$refs[tlRefName]['selection'].length; i++) { // cancel chose judge
+                        let choseItem = this.$refs[tlRefName]['selection'][i];
                         if (utils.allEqualOnKeys(row, choseItem, primaryKey)) {
                             selected = false;
                             break
                         }
                     }
-                    this.$refs[tableRefName].toggleRowSelection(row, selected);
+                    this.$refs[tlRefName].toggleRowSelection(row, selected);
                 }
             },
             activeRow(row) {
@@ -323,8 +358,8 @@
 
                 if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
                     this.activeData = {};
-                    const refName = this.innerMeta['name'];
-                    this.$refs[refName].setCurrentRow();
+                    const {tlRefName} = this;
+                    this.$refs[tlRefName].setCurrentRow();
                 } else {
                     this.activeData = row;
                 }
@@ -352,33 +387,36 @@
                 if (!utils.isEmpty(index)) this.pageModel['index'] = parseInt(index);
                 if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
+
             // get business data
             getData() {
-                const {innerMeta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey} = this;
+                const {innerMeta, pageModel, filterParams, sortParams} = this;
 
-                if (utils.isEmpty(data_url)) {
+                if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
                     return;
                 }
 
                 let params = {};
+                const {data_url: url} = innerMeta;
                 const {index, size} = pageModel;
-                const columnNames = columns.filter(column => utils.hasProp(column, 'showable') && column['showable'])
+                const columnNames = (innerMeta['columns'] || [])
+                    .filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
 
-                utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
+                utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
                 utils.mergeObject(params, filterParams, sortParams, {
                     'fs': columnNames.join(','),
                     'p': index,
                     's': size
                 });
 
-                this.$axios.safeGet(data_url, {
+                this.$axios.safeGet(url, {
                     params: params
                 }).then(resp => {
                     this.innerData = resp.data;
-                    this.$emit("data-change", resp.data);
-                    if (utils.hasProp(resp, 'page')) {
+                    this.$emit("update:data", resp.data);
+                    if (resp.hasOwnProperty('page')) {
                         this.setPageModel(resp['page']);
                     }
                 }).catch(err => {
@@ -387,10 +425,10 @@
             },
             initData() { // init business data
                 let {page, data} = this;
-                if (!utils.isUndefined(page)) {
+                if (page !== undefined) {
                     this.setPageModel(page)
                 }
-                if (!utils.isUndefined(data)) {
+                if (data !== undefined) {
                     this.innerData = data;
                     return;
                 }
@@ -399,7 +437,7 @@
                     return;
                 }
                 console.error("data or data_url in meta provide one at least!")
-            }
+            },
         },
         watch: {
             'data': function (newVal, oldVal) {
@@ -421,23 +459,14 @@
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
             },
-            multiSelect() {
-                const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
-                if (multiSelect !== undefined) return multiSelect;
-                if (multi_select != undefined) return multi_select;
-                return true;
+            tlRefName() {
+                return this.innerMeta['name'];
             },
-            operationColMode() {
-                const {$attrs: {'operation-col-mode': operationColMode}, innerMeta: {operation_col_mode}} = this;
-                if (operationColMode !== undefined) return operationColMode;
-                if (operation_col_mode !== undefined) return operation_col_mode;
-                return true;
+            multiMode() {
+                return this.innerMeta['multi_select'];
             },
             operationBarConf() {
                 return this.innerMeta['operation-bar'];
-            },
-            operationColumnConf() {
-                return utils.mergeObject({}, this.innerMeta['operation-column'], this.$attrs['operation-column-conf']);
             },
             buttonsConf() {
                 return this.innerMeta['buttons'];

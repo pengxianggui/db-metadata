@@ -2,18 +2,18 @@
     <el-container direction="vertical">
         <el-row>
             <el-col>
-                <search-panel :ref="spMeta['name']" :meta="spMeta" @search="handlerSearch"></search-panel>
+                <search-view :ref="spMeta['name']" :meta="spMeta" @search="handlerSearch"></search-view>
             </el-col>
         </el-row>
         <el-row>
             <el-col>
-                <table-list :ref="refName" :meta="tlMeta" :filter-params="filterParams" :active-data="activeData"
+                <table-view :ref="refName" :meta="tlMeta" :filter-params="filterParams" :active-data="activeData"
                             @active-change="handlerActiveChange"
                             @row-dblclick="handleRowDbClick">
                     <template #operation-bar><span></span></template>
                     <template #buttons><span></span></template>
                     <template #operation-column><span></span></template>
-                </table-list>
+                </table-view>
             </el-col>
         </el-row>
         <slot name="action">
@@ -32,8 +32,8 @@
 </template>
 
 <script>
-    import DefaultTableListMeta from '../../tablelist/ui-conf';
-    import DefaultSearchPanelMeta from '../../searchpanel/ui-conf';
+    import DefaultTableListMeta from '../../tableview/ui-conf';
+    import DefaultSearchPanelMeta from '../../searchview/ui-conf';
 
     export default {
         name: "FindPanel",
@@ -81,12 +81,12 @@
         computed: {
             spMeta() {
                 let meta = this.$merge(this.meta.search, DefaultSearchPanelMeta);
-                meta.component_name = 'SearchPanel';
+                meta.component_name = 'SearchView';
                 return meta;
             },
             tlMeta() {
                 let meta = this.$merge(this.meta.table, DefaultTableListMeta);
-                meta.component_name = 'TableList';
+                meta.component_name = 'TableView';
                 meta.multi_select = false; // pxg_todo 暂不支持多选
                 return meta;
             },

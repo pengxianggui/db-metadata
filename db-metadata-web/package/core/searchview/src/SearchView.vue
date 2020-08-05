@@ -62,7 +62,7 @@
                 </el-form-item>
             </el-form>
             <div style="float: right; margin: -20px 5px 0px 0px">
-                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="SearchPanel">
+                <meta-easy-edit :object-code="innerMeta.objectCode" component-code="SearchView">
                     <template #label><i class="el-icon-setting"></i></template>
                 </meta-easy-edit>
             </div>
@@ -86,7 +86,7 @@
     import {defaultMeta} from '../../index'
 
     export default {
-        name: "SearchPanel",
+        name: "SearchView",
         mixins: [Meta(DefaultMeta)],
         components: {MetaEasyEdit},
         data() {

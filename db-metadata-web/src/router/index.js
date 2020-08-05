@@ -5,7 +5,6 @@ import metaRoutes from './metaRoutes'
 import templateRoutes from './templateRoutes'
 import staticRoutes from './staticRoutes'
 import {user} from '@/../package/index'
-// import dynamicRoutes from '../../package/register/dynamic-router'
 
 Vue.use(Router);
 

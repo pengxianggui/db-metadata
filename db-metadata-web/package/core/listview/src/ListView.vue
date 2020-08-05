@@ -28,12 +28,13 @@
     import DefaultMeta from '../ui-conf'
 
     export default {
-        name: "DataList",
+        name: "ListView",
         props: {
             labelProps: Object,
             meta: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                }
             },
             data: Array,
             page: Object

@@ -12,8 +12,8 @@ export const ConfDesc = `
 `;
 
 export default {
-    "component_name": "SearchPanel",
-    "name": "SearchPanel",
+    "component_name": "SearchView",
+    "name": "SearchView",
     "label": "搜索面板",
     "expand": false,
     "label-position": "top-center",

@@ -12,35 +12,33 @@ import NavMenu from "./core/navmenu/src/NavMenu";
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
-import DataList from './core/datalist'
+import ListView from './core/listview'
 import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
 import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
-import FormView from './core/form'
-import RowGrid from './core/grid'
+import FormView from './core/formview'
+import RowGrid from './core/rowgrid'
 import IconBox from './core/iconbox'
 import ImgBox from './core/imgbox'
 import JsonBox from './core/jsonbox'
-import List from './core/list'
-import ListItem from './core/listitem'
 import MiniFormBox from './core/miniformbox'
 import NumBox from './core/numbox'
 import PassBox from './core/passbox'
 import PopMenu from './core/popmenu'
 import RadioBox from './core/radiobox'
 import RichTextBox from "./core/richtextbox";
-import SearchPanel from './core/searchpanel'
+import SearchView from './core/searchview'
 import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
-import TableList from './core/tablelist'
-import TableTreeList from './core/tabletreelist'
+import TableView from './core/tableview'
+import TableTreeView from './core/tabletreeview'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
-import Tree from './core/tree'
+import TreeView from './core/treeview'
 import ZTogglePanel from './core/ztogglepanel'
 import SvgIcon from "./core/svgicon";
 // 模板组件
@@ -80,7 +78,7 @@ const components = [
     BoolBox,
     CheckBox,
     CodeBox,
-    DataList,
+    ListView,
     DateBox,
     DateTimeBox,
     DialogBox,
@@ -92,8 +90,6 @@ const components = [
     IconBox,
     ImgBox,
     JsonBox,
-    List,
-    ListItem,
     MiniFormBox,
     MiniFormObject,
     MiniFormField,
@@ -103,12 +99,12 @@ const components = [
     PopMenu,
     RadioBox,
     RichTextBox,
-    SearchPanel,
+    SearchView,
     SqlBox,
     Tags,
-    TableList,
-    Tree,
-    TableTreeList,
+    TableView,
+    TreeView,
+    TableTreeView,
     TextAreaBox,
     TextBox,
     TimeBox,
@@ -202,7 +198,7 @@ export default {
     BoolBox,
     CheckBox,
     CodeBox,
-    DataList,
+    DataList: ListView,
     DateBox,
     DateTimeBox,
     DialogBox,
@@ -214,8 +210,6 @@ export default {
     IconBox,
     ImgBox,
     JsonBox,
-    List,
-    ListItem,
     MiniFormBox,
     MiniFormObject,
     MiniFormField,
@@ -225,12 +219,12 @@ export default {
     PopMenu,
     RadioBox,
     RichTextBox,
-    SearchPanel,
+    SearchView,
     SqlBox,
     Tags,
-    TableList,
-    Tree,
-    TableTreeList,
+    TableView,
+    TreeView,
+    TableTreeView,
     TextAreaBox,
     TextBox,
     TimeBox,
@@ -276,7 +270,7 @@ export {
     BoolBox,
     CheckBox,
     CodeBox,
-    DataList,
+    ListView,
     DateBox,
     DateTimeBox,
     DialogBox,
@@ -288,8 +282,6 @@ export {
     IconBox,
     ImgBox,
     JsonBox,
-    List,
-    ListItem,
     MiniFormBox,
     MiniFormObject,
     MiniFormField,
@@ -299,12 +291,12 @@ export {
     PopMenu,
     RadioBox,
     RichTextBox,
-    SearchPanel,
+    SearchView,
     SqlBox,
     Tags,
-    TableList,
-    Tree,
-    TableTreeList,
+    TableView,
+    TreeView,
+    TableTreeView,
     TextAreaBox,
     TextBox,
     TimeBox,

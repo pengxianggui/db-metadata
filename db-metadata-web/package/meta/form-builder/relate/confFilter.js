@@ -1,4 +1,4 @@
-import DefaultFormViewMeta from '../../../core/form/ui-conf'
+import DefaultFormViewMeta from '../../../core/formview/ui-conf'
 
 const FORM_EXCLUDES = ['columns', 'buttons', 'name', 'group', 'objectCode', 'objectPrimaryKey', 'component_name'];
 const FIELD_EXCLUDES = ['name', 'group', 'objectCode', 'objectPrimaryKey'];

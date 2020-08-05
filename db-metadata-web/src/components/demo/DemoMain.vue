@@ -56,7 +56,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <table-tree-list-demo></table-tree-list-demo>
+                <table-tree-view-demo></table-tree-view-demo>
             </el-col>
         </el-row>
         <el-row>
@@ -96,7 +96,7 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <search-panel-demo></search-panel-demo>
+                <search-view-demo></search-view-demo>
             </el-col>
         </el-row>
         <el-row>

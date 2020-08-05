@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="el-card">
-            <search-panel :meta="master.spMeta" @search="mHandleSearch"></search-panel>
-            <table-list :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
+            <search-view :meta="master.spMeta" @search="mHandleSearch"></search-view>
+            <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
                         @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }">
 
@@ -35,27 +35,27 @@
                 <template #inner-after-extend-btn="{scope, conf}">
                     <slot name="inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-            </table-list>
+            </table-view>
         </div>
         <el-divider></el-divider>
         <!-- multi slave -->
         <div class="el-card" v-if="slaves.length > 1">
             <el-tabs type="border-card">
                 <el-tab-pane :label="slave.objectCode" v-for="slave in slaves" :key="slave.objectCode">
-                    <search-panel :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-panel>
-                    <table-list :ref="slave['objectCode']" :meta="slave.tlMeta" :filter-params="slave.filterParams"
+                    <search-view :meta="slave.spMeta" @search="sHandleSearch(slave, arguments)"></search-view>
+                    <table-view :ref="slave['objectCode']" :meta="slave.tlMeta" :filter-params="slave.filterParams"
                                 :page="{ size: 5 }">
                         <template #add-btn="{conf}">
                             <el-button v-bind="conf" @click="handleAdd(slave)">新增</el-button>
                         </template>
-                    </table-list>
+                    </table-view>
                 </el-tab-pane>
             </el-tabs>
         </div>
         <!-- single slave -->
         <div class="el-card" v-if="slaves.length === 1">
-            <search-panel :meta="slaves[0].spMeta" @search="sHandleSearch(slaves[0], arguments)"></search-panel>
-            <table-list :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
+            <search-view :meta="slaves[0].spMeta" @search="sHandleSearch(slaves[0], arguments)"></search-view>
+            <table-view :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
                         :page="{ size: 5 }">
 
                 <!-- 子表操作栏扩展插槽 -->
@@ -89,7 +89,7 @@
                 <template #inner-after-extend-btn="{scope, conf}">
                     <slot name="s-inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-            </table-list>
+            </table-view>
         </div>
     </div>
 </template>
