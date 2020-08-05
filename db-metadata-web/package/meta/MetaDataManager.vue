@@ -1,28 +1,44 @@
 <template>
     <div>
-        <master-slave-table-tmpl :ref="featureCode" :fc="featureCode"
-                                 @m-active-change="handleMActiveChange"
-                                 @m-chose-change="handleMChoseChange">
-            <template #prefix-btn="{conf}">
-                <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
-            </template>
-            <template #add-btn="{conf}">
-                <el-button v-bind="conf" @click="visible=true">创建元对象</el-button>
-            </template>
+        <div class="el-card">
+            <search-view :meta="object.svMeta" @search="mHandleSearch"></search-view>
+            <table-view ref="metaObject" :meta="object.tvMeta" :filter-params="object.filterParams"
+                        @active-change="handleMActiveChange"
+                        @chose-change="handleMChoseChange" :page="{ size: 5 }">
 
-            <template #batch-delete-btn="{conf}">
-                <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
-                           v-bind="conf">删除
-                </el-button>
-            </template>
+                <template #prefix-btn="{conf}">
+                    <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
+                </template>
+                <template #add-btn="{conf, add}">
+                    <el-button v-bind="conf" @click="toAddMetaObject">创建元对象</el-button>
+                </template>
+                <template #batch-delete-btn="{conf, batchDelete}">
+                    <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
+                               v-bind="conf">删除
+                    </el-button>
+                </template>
 
-            <template #delete-btn="{scope, conf}">
-                <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
-            </template>
-        </master-slave-table-tmpl>
+                <!-- 单条纪录操作扩展插槽 -->
+                <template #delete-btn="{scope, conf}">
+                    <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
+                </template>
+            </table-view>
+        </div>
 
-        <dialog-box :visible.sync="visible" title="创建元对象">
-            <meta-import :meta="formMeta" @cancel="visible=false" @submit="formSubmit"></meta-import>
+        <el-divider></el-divider>
+
+        <div class="el-card">
+            <search-view :meta="field.svMeta" @search="sHandleSearch"></search-view>
+            <table-view ref="metaField" :meta="field.tvMeta" :filter-params="field.filterParams"
+                        :page="{ size: 5 }">
+                <template #add-btn="{conf}">
+                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
+                </template>
+            </table-view>
+        </div>
+
+        <dialog-box :visible.sync="metaObjectAddVisible" title="创建元对象">
+            <meta-import :meta="formMeta" @cancel="metaObjectAddVisible=false" @submit="formSubmit"></meta-import>
             <template #footer><span></span></template>
         </dialog-box>
         <dialog-box :visible.sync="featureAddVisible" title="创建功能">
@@ -36,25 +52,38 @@
 <script>
     import utils from '../utils'
     import {restUrl, routeUrl} from '../constant/url';
-    import {innerFeatureCode} from "../constant/variable";
-    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getSpMeta, getTlMeta} from "../core/mixins/methods"
     import MetaImport from './MetaImport'
     import FeatureAdd from './feature/FeatureAdd'
 
     export default {
         name: "MetaDataManager",
-        mixins: [loadFeature, getTlMeta, getSpMeta],
+        mixins: [getTlMeta, getSpMeta],
         components: {
             MetaImport,
             FeatureAdd
         },
         data() {
             return {
-                featureCode: innerFeatureCode.metadata,
+                object: {
+                    objectCode: 'meta_object',
+                    svMeta: {},
+                    tvMeta: {},
+                    filterParams: {},
+                    activeData: {},
+                    choseData: []
+                },
+                field: {
+                    objectCode: 'meta_field',
+                    svMeta: {},
+                    tvMeta: {},
+                    filterParams: {},
+                    activeData: {},
+                    choseData: [],
+                    urlTemplate: null,
+                },
                 featureParams: {},
-
-                choseMData: [],
-                visible: false,
+                metaObjectAddVisible: false,
                 formMeta: {},
                 featureAddVisible: false
             }
@@ -63,10 +92,46 @@
             handleMChoseChange({rows}) {
                 this.choseMData = rows;
             },
-            handleMActiveChange({row, masterPrimaryKey}) {
+            handleMActiveChange(row) {
+                // 带入 feature add dialog
                 this.featureParams = {
-                    objectCode: row[masterPrimaryKey]
+                    objectCode: row['code']
                 }
+
+                this.object.activeData = row
+                const objectCode = this.object.activeData['code'];
+                let url = this.$compile(this.field.urlTemplate, {objectCode: objectCode});
+                this.field.tvMeta['data_url'] = url
+            },
+            mHandleSearch(params) {
+                this.object.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs['metaObject'].getData();
+                });
+            },
+            sHandleSearch(params) {
+                this.field.filterParams = params;
+                this.$nextTick(() => {
+                    this.$refs['metaField'].getData();
+                });
+            },
+            handleAdd(slave) {
+                const {object: {activeData}} = this
+                if (utils.isEmpty(activeData)) {
+                    this.$message.warning('请先选择一条主表记录', '提示');
+                    return;
+                }
+
+                const foreignKeyName = slave['foreignFieldCode'];
+                const foreignKeyValue = activeData['code'];
+
+                const url = this.$compile(restUrl.MASTER_SLAVE_TO_ADD_S, {
+                    objectCode: 'meta_field',
+                    // featureCode: featureCode,
+                    foreignKeyName: foreignKeyName,
+                    foreignKeyValue: foreignKeyValue
+                });
+                this.$refs['metaField'].dialog(url);
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
@@ -102,7 +167,7 @@
                 $axios.post(formMeta.action, formModel).then(resp => {
                     this.$message.success(resp.msg);
                     let objectCode = formModel['objectCode'];
-                    this.visible = false;
+                    this.metaObjectAddVisible = false;
                     // refresh master
                     $refs[featureCode].refreshMasterData();
                     this.jumpToConf(objectCode);
@@ -141,13 +206,34 @@
                         this.$message.error(err.msg);
                     });
                 });
+            },
+            toAddMetaObject() {
+                this.$axios.get(restUrl.META_OBJECT_TO_ADD).then(resp => {
+                    this.formMeta = resp.data
+                    this.metaObjectAddVisible = true
+                }).catch(err => {
+                    this.$message.error(err.msg);
+                });
             }
         },
         created() {
-            this.$axios.get(restUrl.META_OBJECT_TO_ADD).then(resp => {
-                this.formMeta = resp.data
-            }).catch(err => {
-                this.$message.error(err.msg);
+            // 获取meta数据
+            const {objectCode: metaObjectCode} = this.object;
+            const {objectCode: metaFieldCode} = this.field;
+            this.getSpMeta(metaObjectCode).then(resp => {
+                this.object.svMeta = resp.data;
+            })
+            this.getTlMeta(metaObjectCode).then(resp => {
+                this.object.tvMeta = resp.data;
+            })
+            this.getSpMeta(metaFieldCode).then(resp => {
+                this.field.svMeta = resp.data
+            })
+            this.getTlMeta(metaFieldCode).then(resp => {
+                const meta = resp.data;
+                this.field.urlTemplate = meta['data_url'] + '?object_code={objectCode}';
+                meta.data_url = this.field.urlTemplate
+                this.field.tvMeta = meta
             })
         }
     }

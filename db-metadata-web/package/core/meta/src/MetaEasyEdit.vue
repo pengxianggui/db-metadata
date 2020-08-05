@@ -63,7 +63,6 @@
 <script>
     import utils from '../../../utils'
     import {restUrl, routeUrl} from "../../../constant/url";
-    import {access} from "../../../constant/variable";
 
     export default {
         name: "MetaEasyEdit",

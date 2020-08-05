@@ -12,6 +12,8 @@ import NavMenu from "./core/navmenu/src/NavMenu";
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
+import List from "./core/list";
+import ListItem from "./core/listitem";
 import ListView from './core/listview'
 import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
@@ -78,6 +80,8 @@ const components = [
     BoolBox,
     CheckBox,
     CodeBox,
+    List,
+    ListItem,
     ListView,
     DateBox,
     DateTimeBox,
@@ -198,7 +202,9 @@ export default {
     BoolBox,
     CheckBox,
     CodeBox,
-    DataList: ListView,
+    List,
+    ListItem,
+    ListView,
     DateBox,
     DateTimeBox,
     DialogBox,
@@ -270,6 +276,8 @@ export {
     BoolBox,
     CheckBox,
     CodeBox,
+    List,
+    ListItem,
     ListView,
     DateBox,
     DateTimeBox,
