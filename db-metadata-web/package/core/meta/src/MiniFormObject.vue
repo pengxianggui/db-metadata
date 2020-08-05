@@ -13,6 +13,24 @@
                 <el-checkbox v-model="nativeValue.isAutoIncrement" label="自动生成" border></el-checkbox>
             </div>
         </el-form-item>
+        <el-form-item label="数据结构">
+            <el-radio-group v-model="nativeValue.structure">
+                <el-radio-button label="list">列表</el-radio-button>
+                <el-radio-button label="tree">树型表</el-radio-button>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="树型表配置" v-if="nativeValue.structure=='tree'">
+            <el-col :span="4">
+                <el-input v-model="nativeValue.structureConfig.idKey" placeholder="id 列名"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="nativeValue.structureConfig.pidKey" placeholder="pid 列名"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="nativeValue.structureConfig.label" placeholder="label"></el-input>
+            </el-col>
+        </el-form-item>
+
         <el-form-item label="排序规则(SQL)">
             <el-input placeholder="默认排序规则: columnA desc,columnB asc" v-model="nativeValue.orderBy"></el-input>
         </el-form-item>
@@ -20,7 +38,7 @@
             <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
         </el-form-item>
         <el-form-item label="业务拦截器">
-            <el-input placeholder="配置业务拦截器 完整的包名, 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+            <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
                       v-model="nativeValue.bizInterceptor"></el-input>
         </el-form-item>
     </el-form>
@@ -37,13 +55,16 @@
         props: {
             value: {
                 type: [Object, String],
-                default: () => {}
+                default: () => {
+                }
             }
         },
         data() {
             return {
                 config: {
                     objectCode: null,
+                    structure: "list",
+                    structureConfig: {},
                     isUUIDPrimary: false,
                     isNumberSequence: false,
                     isAutoIncrement: false,
