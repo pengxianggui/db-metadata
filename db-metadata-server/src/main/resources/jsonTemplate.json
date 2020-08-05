@@ -1,7 +1,7 @@
 {
-  "TableList": {
-    "component_name": "TableList",
-    "name": "TableList",
+  "TableView": {
+    "component_name": "TableView",
+    "name": "TableView",
     "label": "表格模板",
     "data_url": "/table/list/{objectCode}",
     "delete_url": "/table/delete?objectCode={objectCode}&{primaryKvExp}",
@@ -51,9 +51,9 @@
       }
     }
   },
-  "TableTreeList": {
-    "component_name": "TableTreeList",
-    "name": "TableTreeList",
+  "TableTreeView": {
+    "component_name": "TableTreeView",
+    "name": "TableTreeView",
     "label": "树型表",
     "data_url": "/table/tree/{objectCode}",
     "delete_url": "/table/tree/delete?objectCode={objectCode}&ids={ids}",
@@ -287,9 +287,9 @@
       "destroy-on-close": true
     }
   },
-  "SearchPanel": {
-    "component_name": "SearchPanel",
-    "name": "SearchPanel",
+  "SearchView": {
+    "component_name": "SearchView",
+    "name": "SearchView",
     "label": "搜索面板",
     "expand": false,
     "label-position": "top-center",
@@ -352,9 +352,9 @@
     "mode": "text/x-mysql",
     "conf": {}
   },
-  "Tree": {
-    "component_name": "Tree",
-    "name": "Tree",
+  "TreeView": {
+    "component_name": "TreeView",
+    "name": "TreeView",
     "label": "树型列表",
     "conf": {
       "node-key": "id",
