@@ -55,8 +55,8 @@
     "component_name": "TableTreeList",
     "name": "TableTreeList",
     "label": "树型表",
-    "data_url": "/feature/tree/{objectCode}",
-    "delete_url": "/feature/tree/delete?objectCode={objectCode}&ids={ids}",
+    "data_url": "/table/tree/{objectCode}",
+    "delete_url": "/table/tree/delete?objectCode={objectCode}&ids={ids}",
     "multi_select": false,
     "editable": false,
     "conf": {

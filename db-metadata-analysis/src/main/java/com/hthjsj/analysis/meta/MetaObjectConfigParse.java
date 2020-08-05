@@ -159,4 +159,25 @@ public class MetaObjectConfigParse extends MetaData {
         }
         return iPointCuts.toArray(new ViewPointCut[iPointCuts.size()]);
     }
+
+    public boolean isTreeStructure() {
+        if (StrKit.notBlank(getStr("structure"))) {
+            return getBoolean("structure");
+        }
+        return false;
+    }
+
+    /**
+     * TODO 前端直传,但是使用com.hthjsj.web.kit.tree.TreeConfig数据结构
+     *
+     * @return
+     *
+     * @see com.hthjsj.web.kit.tree.TreeConfig
+     */
+    public String treeConfig() {
+        if (StrKit.notBlank(getStr("structureConfig"))) {
+            return getStr("structureConfig");
+        }
+        return "";
+    }
 }

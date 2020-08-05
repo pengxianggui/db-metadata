@@ -73,6 +73,28 @@ public class AttributeBuilder {
         TableAttr showOverflowTooltip(boolean flag);
     }
 
+    interface TreeTableAttr {
+
+        TreeTableAttr dataUrl(String dataUrl);
+
+        TreeTableAttr multiSelect(boolean multi);
+
+        TreeTableAttr editable(boolean editable);
+
+        TreeTableAttr rowKey(String rowKey);
+
+        TreeTableAttr hasChildren(String functionName);
+
+        TreeTableAttr children(String childPropertyName);
+
+        //        初始展开的行, 数组中的内容为row-key指定属性对应的值
+        TreeTableAttr expandRowKeys(String[] rowkeys);
+
+        TreeTableAttr lazy(boolean lazy);
+
+        TreeTableAttr highlightCurrentRow(boolean isHighlight);
+    }
+
     interface FileUploadAttr {
 
         FileUploadAttr autoUpload(boolean v);
@@ -87,7 +109,7 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr {
+    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr {
 
         private Kv config = Kv.create();
 
@@ -183,6 +205,50 @@ public class AttributeBuilder {
         public FatAttributeBuilder dataUrl(String url) {
             config.setIfNotBlank("data_url", url);
             return this;
+        }
+
+        @Override
+        public TreeTableAttr multiSelect(boolean multi) {
+            return set("multi_select", multi);
+        }
+
+        @Override
+        public TreeTableAttr editable(boolean editable) {
+            return set("editable", editable);
+        }
+
+        @Override
+        public TreeTableAttr rowKey(String rowKey) {
+            return setConf("row-key", rowKey);
+        }
+
+        @Override
+        public TreeTableAttr hasChildren(String functionName) {
+            setConf("tree-props", Kv.create());
+            ((Kv) ((Kv) config.getAs("conf")).getAs("tree-props")).setIfNotBlank("hasChildren", functionName);
+            return this;
+        }
+
+        @Override
+        public TreeTableAttr children(String childPropertyName) {
+            setConf("tree-props", Kv.create());
+            ((Kv) ((Kv) config.getAs("conf")).getAs("tree-props")).setIfNotBlank("children", childPropertyName);
+            return this;
+        }
+
+        @Override
+        public TreeTableAttr expandRowKeys(String[] rowkeys) {
+            return setConf("expand-row-keys", rowkeys);
+        }
+
+        @Override
+        public TreeTableAttr lazy(boolean lazy) {
+            return setConf("lazy", lazy);
+        }
+
+        @Override
+        public TreeTableAttr highlightCurrentRow(boolean isHighlight) {
+            return setConf("highlight-current-row", isHighlight);
         }
 
         @Override

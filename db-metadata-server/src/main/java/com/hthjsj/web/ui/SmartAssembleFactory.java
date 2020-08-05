@@ -34,7 +34,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return me;
     }
 
-    private Kv recommendObjectConfig(IMetaObject metaObject, ComponentType componentType) {
+    private Kv recommendObjectConfig(IMetaObject metaObject, ComponentType componentType, Kv globalComponentConfig) {
         AttributeBuilder.FatAttributeBuilder builder = new AttributeBuilder.FatAttributeBuilder();
         builder.componentName(componentType);
         switch (componentType) {
@@ -42,8 +42,12 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
                 builder.dataUrl("/table/list/" + metaObject.code());
                 builder.deleteUrl("/table/delete/" + metaObject.code());
                 break;
+            case TREETABLEVIEW:
+                builder.dataUrl("/tree/list/" + metaObject.code());
+                builder.deleteUrl("/tree/delete/" + metaObject.code());
+                break;
         }
-        return builder.render();
+        return UtilKit.mergeUseNew(globalComponentConfig, builder.render());
     }
 
     private Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
@@ -106,7 +110,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
 
 
         String instanceCode = Joiner.on(".").join(metaObject.code(), componentType.getCode());
-        Kv objectConfig = Kv.by(metaObject.code(), recommendObjectConfig(metaObject, componentType));
+        Kv objectConfig = Kv.by(metaObject.code(), recommendObjectConfig(metaObject, componentType, globalComponentConfig));
 
         ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(objectConfig, fieldsMap, metaObject.code(), instanceCode, "自动计算配置");
 

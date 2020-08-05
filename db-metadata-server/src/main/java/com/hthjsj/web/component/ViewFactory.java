@@ -7,6 +7,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.render.MetaViewRender;
+import com.hthjsj.web.component.render.TreeInTableViewRender;
 import com.hthjsj.web.ui.ComponentInstanceConfig;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +57,17 @@ public class ViewFactory {
         return searchView;
     }
 
+    public static TreeTableView treeTableView(IMetaObject metaObject) {
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TREETABLEVIEW.getCode(), metaObject.code());
+        return treeTableView(metaObject, instanceFlatConfig);
+    }
+
+    public static TreeTableView treeTableView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
+        TreeTableView treeTableView = new TreeTableView(metaObject.code() + ComponentType.TREETABLEVIEW.getCode(), metaObject.name());
+        treeTableView.setRender(new TreeInTableViewRender(metaObject, treeTableView, instanceFlatConfig));
+        return treeTableView;
+    }
+
     public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType) {
         Component component = null;
         switch (componentType) {
@@ -67,6 +79,9 @@ public class ViewFactory {
                 break;
             case SEARCHVIEW:
                 component = searchView(metaObject);
+                break;
+            case TREETABLEVIEW:
+                component = treeTableView(metaObject);
                 break;
             default:
         }
@@ -84,6 +99,9 @@ public class ViewFactory {
                 break;
             case SEARCHVIEW:
                 component = searchView(metaObject, instanceFlatConfig);
+                break;
+            case TREETABLEVIEW:
+                component = treeTableView(metaObject, instanceFlatConfig);
                 break;
             default:
         }
@@ -110,6 +128,9 @@ public class ViewFactory {
                 break;
             case SEARCHVIEW:
                 component = new SearchView(type.getCn(), type.getCode());
+                break;
+            case TREETABLEVIEW:
+                component = new TreeTableView(type.getCn(), type.getCode());
                 break;
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);

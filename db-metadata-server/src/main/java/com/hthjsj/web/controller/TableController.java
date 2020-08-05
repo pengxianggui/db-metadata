@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -10,8 +11,11 @@ import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.kit.tree.TreeConfig;
+import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.OptionsKit;
@@ -25,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -152,5 +157,17 @@ public class TableController extends FrontRestController {
         });
 
         renderJson(status ? Ret.ok() : Ret.fail());
+    }
+
+    /**
+     * 树型数据
+     */
+    public void tree() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+        TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAll(metaObject, treeConfig);
+        renderJson(tree);
     }
 }
