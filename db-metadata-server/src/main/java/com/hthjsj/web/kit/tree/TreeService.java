@@ -1,14 +1,17 @@
 package com.hthjsj.web.kit.tree;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * <p> @Date : 2020/1/21 </p>
@@ -28,5 +31,118 @@ public class TreeService {
             nodes.add(node);
         });
         return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+    }
+
+    public List<TreeNode<String, Record>> findAllByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
+        List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+        Map<String, Record> allRecordsMap = recordToMap(allRecords, treeConfig);
+        List<Record> hitRecords = findHitRecordByKeyWords(allRecords, keywords);
+        TreeSet<Record> resultRecords = Sets.newTreeSet(new ResultRecordComparator(treeConfig));
+
+        recursiveParent(hitRecords, allRecordsMap, resultRecords, treeConfig);
+
+        List<TreeNode<String, Record>> nodes = Lists.newArrayList();
+        resultRecords.forEach(record -> {
+            TreeNode<String, Record> node = new DefaultTreeNode(treeConfig, record);
+            nodes.add(node);
+        });
+        return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+    }
+
+    private Map<String, Record> recordToMap(List<Record> records, TreeConfig treeConfig) {
+        Map<String, Record> map = Maps.newTreeMap();
+        records.parallelStream().forEach(record -> {
+            map.put(record.getStr(treeConfig.getIdKey()), record);
+        });
+        return map;
+    }
+
+    private void recursiveParent(List<Record> hitRecords, Map<String, Record> allRecordsMap, Set<Record> resultRecords, TreeConfig treeConfig) {
+
+        TreeSet<Record> nextSets = Sets.newTreeSet(new ResultRecordComparator(treeConfig));
+
+        for (Record hitRecord : hitRecords) {
+            //将自身节点加入结果Set,贯穿全局传递
+            resultRecords.add(hitRecord);
+
+            //如果父节点存在加入到结果节点
+            String pid = hitRecord.getStr(treeConfig.getPidKey());
+            if (!StrKit.isBlank(pid)) {
+                //对根标识的判断
+                if (allRecordsMap.get(pid) != null) {
+                    nextSets.add(allRecordsMap.get(pid));
+                }
+            }
+        }
+        //下次节点列表空时 就退出
+        if (nextSets.isEmpty()) {
+            return;
+        }
+        recursiveParent(Lists.newArrayList(nextSets), allRecordsMap, resultRecords, treeConfig);
+    }
+
+    /**
+     * 根据关键字在List<Record>中找到匹配的记录
+     * <pre>
+     *     1. load完成数据
+     *     2. 多重遍历,keywords与每条Record的column匹配
+     *     3. 将命中的Record返回
+     * </pre>
+     *
+     * @param records
+     * @param keywords
+     *
+     * @return
+     */
+    private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {
+        List<Record> hitRecords = Lists.newArrayList();
+        for (Record record : records) {
+            record.getColumns().forEach((key, value) -> {
+                for (String keyword : keywords) {
+                    if (String.valueOf(value).contains(keyword)) {
+                        hitRecords.add(record);
+                    }
+                }
+            });
+        }
+        return hitRecords;
+    }
+
+    /**
+     * Record 结果集用的比较器
+     */
+    class ResultRecordComparator implements Comparator<Record> {
+
+        TreeConfig treeConfig;
+
+        public ResultRecordComparator(TreeConfig treeConfig) {
+            this.treeConfig = treeConfig;
+        }
+
+        @Override
+        public int compare(Record o1, Record o2) {
+            if (o1 == null && o2 == null) {
+                return 0;
+            }
+            if (o1 == null || o2 == null) {
+                return -1;
+            }
+
+            boolean s1 = false;
+            if (StrKit.notBlank(o1.getStr(treeConfig.getIdKey()), o2.getStr(treeConfig.getIdKey()))) {
+                s1 = o1.getStr(treeConfig.getIdKey()).equalsIgnoreCase(o2.getStr(treeConfig.getIdKey()));
+            }
+
+            boolean s2 = false;
+            if (o1.getStr(treeConfig.getPidKey()) == null && o2.getStr(treeConfig.getPidKey()) == null) {
+                s2 = true;
+            } else if (o1.getStr(treeConfig.getPidKey()) != null && o2.getStr(treeConfig.getPidKey()) != null) {
+                s2 = o1.getStr(treeConfig.getPidKey()).equalsIgnoreCase(o2.getStr(treeConfig.getPidKey()));
+            } else if (o1.getStr(treeConfig.getPidKey()) == null || o2.getStr(treeConfig.getPidKey()) == null) {
+                s2 = false;
+            }
+
+            return s1 && s2 ? 0 : -1;
+        }
     }
 }

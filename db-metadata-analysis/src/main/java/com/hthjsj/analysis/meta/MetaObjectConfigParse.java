@@ -162,7 +162,7 @@ public class MetaObjectConfigParse extends MetaData {
 
     public boolean isTreeStructure() {
         if (StrKit.notBlank(getStr("structure"))) {
-            return getBoolean("structure");
+            return Boolean.valueOf(getStr("structure"));
         }
         return false;
     }

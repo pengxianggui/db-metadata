@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class TreeConfig {
 
-    String objectCode;
+    private String objectCode;
 
-    String idKey;
+    private String idKey;
 
-    String pidKey;
+    private String pidKey;
 
-    String rootIdentify;
+    private String rootIdentify;
 
-    String label;
+    private String label;
 
-    boolean isSync = false;
+    private boolean isSync = false;
 }

@@ -42,6 +42,11 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
                 builder.dataUrl("/table/list/" + metaObject.code());
                 builder.deleteUrl("/table/delete/" + metaObject.code());
                 break;
+            case SEARCHVIEW:
+                if (metaObject.configParser().isTreeStructure()) {
+                    builder.dataUrl("/table/tree/" + metaObject.code());
+                }
+                break;
             case TREETABLEVIEW:
                 builder.dataUrl("/table/tree/" + metaObject.code());
                 builder.deleteUrl("/table/tree/delete/" + metaObject.code());
