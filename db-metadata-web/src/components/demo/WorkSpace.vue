@@ -1,26 +1,28 @@
 <template>
-    <div style="padding: 20px;">
+    <div style="padding: 20px; overflow: auto; height: 100%;">
         <h1>组件开发调试页面</h1>
-        <nav-menu :meta="menuMeta"></nav-menu>
+        <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
+        <!--        <table-tree-list :meta="meta"></table-tree-list>-->
     </div>
 </template>
 
 <script>
+    import {getTableTlMeta} from "../../../package/core/mixins/methods";
+
     export default {
         name: "WorkSpace",
-        components: {},
+        // mixins: [getTableTlMeta],
         data() {
             return {
-                menuMeta: {
-                    component_name: 'NavMenu',
-                    conf: {
-                        "unique-opened": true
-                    }
-                }
+                // meta: {}
+                fc: 'dict_tree'
             }
         },
         methods: {},
-        mounted() {
+        created() {
+            // this.getTableTlMeta("dict_test").then(resp => {
+            //     this.meta = resp.data
+            // })
         }
     }
 </script>

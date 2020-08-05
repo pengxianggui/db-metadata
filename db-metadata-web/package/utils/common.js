@@ -511,3 +511,12 @@ export function param2Obj(url) {
 export function isExternal(path) {
     return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+/**
+ * 断言， 条件成立通过, 成立抛出错误
+ * @param condition
+ * @param msg
+ */
+export function assert(condition, msg) {
+    if (!condition) throw new Error(`${msg}`)
+}

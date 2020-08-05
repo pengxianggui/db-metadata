@@ -31,20 +31,7 @@ export default {
         "size": "medium", // medium, small, mini
         // "max-height": 500,
     },
-    "columns": [
-        // {
-        //     name: 'name',
-        //     label: 'label',
-        //     component_name: '',
-        //     editable: false,     // 表格内可编辑
-        //     searchable: true,    // 搜索面板支持该字段搜索
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // }
-    ], // 字段元数据
+    "columns": [], // 字段元数据
     "pagination": { // element ui配置
         "page-size": pageNumArea[0],
         "page-sizes": pageNumArea,

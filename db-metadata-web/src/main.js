@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import MetaElement from '../package/index' // 如果将index省略, 则会发生下面Vue.use无法正常调用的异常情况
+import {restUrl} from "../package/index";
 import router from './router'
 import {mockXHR} from '../mock'
 
@@ -24,11 +25,12 @@ Vue.use(MetaElement, {
 });
 
 // 异步动态路由装载尝试
-import exchange from '@/../package/route/exchange'
-
-Vue.prototype.$axios.get("/route/tree").then(resp => {
-    router.addRoutes(exchange(resp.data))
-})
+// import exchange from '@/../package/route/exchange'
+//
+// // TODO 这部分装配考虑放到MetaElement中完成, 对业务系统透明
+// Vue.prototype.$axios.get(restUrl.ROUTE_DATA).then(resp => {
+//     router.addRoutes(exchange(resp.data))
+// })
 
 Vue.config.productionTip = false;
 Vue.prototype.$NODE_ENV = process.env.NODE_ENV;

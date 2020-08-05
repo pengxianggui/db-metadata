@@ -18,7 +18,6 @@ export const loadFeature = {
 
 /**
  * 获取TableList的meta, 参数objectCode.
- * **组件实例中TableList的meta的命名必须为 tlMeta**
  * @type {{methods: {getTlMeta(*=): void}}}
  */
 export const getTlMeta = {
@@ -32,6 +31,22 @@ export const getTlMeta = {
         }
     }
 };
+
+/**
+ * 获取TableTreeList的meta, 参数objectCode.
+ * @type {{methods: {getTableTlMeta(*=): *}}}
+ */
+export const getTableTlMeta = {
+    methods: {
+        getTableTlMeta(objectCode) {
+            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+                objectCode: objectCode,
+                componentCode: 'TableTreeList'
+            });
+            return this.$axios.safeGet(url)
+        }
+    }
+}
 
 export const getTreeMeta = {
     methods: {

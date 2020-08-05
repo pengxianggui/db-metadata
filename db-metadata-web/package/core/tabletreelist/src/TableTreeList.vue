@@ -253,9 +253,11 @@
             },
             doEdit(primaryValue) {
                 let url, title;
+                const {activeData, primaryKey} = this;
+
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKey = this.primaryKey, primaryKv;
+                    let primaryKv;
 
                     if (primaryKey.length <= 1) {
                         primaryKv = primaryValue[0];
@@ -269,7 +271,14 @@
                     });
                 } else {
                     title = '新增';
-                    url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
+                    let fillParams = function (path) {
+                        if (!utils.isEmpty(activeData)) {
+                            path += ('?' + primaryKey + '=' + activeData[primaryKey])
+                        }
+                        return path
+                    }
+
+                    url = this.$compile(fillParams(restUrl.RECORD_TO_ADD), {objectCode: this.innerMeta['objectCode']});
                 }
                 this.dialog(url, {title: title});
             },
@@ -288,10 +297,14 @@
                 if (ev) ev.stopPropagation();
 
                 const {primaryKey} = this;
-                const primaryValue = this.extractPrimaryValue(row);
-                const primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-
-                this.doDelete(primaryKv, ev, row, index);
+                const primaryValue = utils.extractValue(row, primaryKey);
+                let primaryKvExp;
+                if (primaryKey.length > 1 && primaryValue.length > 1) { // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2"
+                    primaryKvExp = 'id=' + utils.spliceKvs(primaryKey, primaryValue);
+                } else {    // 单主键, 目标: primaryKvExp="pk=v"
+                    primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue[0], '=');
+                }
+                this.doDelete(primaryKvExp, ev, row, index);
             },
             // 批量删除
             handleBatchDelete(ev) {
@@ -308,9 +321,14 @@
                 }
                 this.$message.warning('请至少选择一项!');
             },
-            // default remove the assembly logic is based on primaryKey get on
-            doDelete(primaryKv) {
+
+            /**
+             * default remove the assembly logic is based on primaryKey get on
+             * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
+             */
+            doDelete(primaryKvExp) {
                 // PXG_TODO
+                this.$message.warning("NOT FINISHED!")
             },
             // 新增一行
             handleAdd() {

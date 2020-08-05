@@ -21,7 +21,6 @@
                 <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
             </template>
 
-            <!-- 主表单条纪录操作扩展插槽 -->
             <template #inner-before-extend-btn="{scope, conf}">
                 <slot name="inner-before-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
             </template>
@@ -40,22 +39,20 @@
 
 <script>
     import utils from '../utils'
-    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getSpMeta, getTableTlMeta, loadFeature} from "../core/mixins/methods"
+    import {assert, isEmpty} from "../utils/common";
 
     export default {
         name: "TreeSingleGridTmpl",
-        mixins: [loadFeature, getTlMeta, getSpMeta],
+        mixins: [loadFeature, getTableTlMeta, getSpMeta],
         props: {
-            fc: String,
-            oc: String
+            fc: String
         },
         data() {
-            const {featureCode: R_fc, objectCode: R_oc} = this.$route.query;
+            const {featureCode: R_fc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
-            const objectCode = utils.assertUndefined(this.oc, R_oc);
             return {
                 featureCode: featureCode,
-                objectCode: objectCode,
                 tlMeta: {},
                 spMeta: {},
                 filterParams: {}
@@ -74,7 +71,7 @@
                 })
             },
             initMeta(objectCode) {
-                this.getTlMeta(objectCode).then(resp => {
+                this.getTableTlMeta(objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
@@ -90,16 +87,13 @@
             }
         },
         created() {
-            const {featureCode, objectCode} = this;
+            const {featureCode, initMeta, loadFeature} = this;
+            assert(!isEmpty(featureCode), `featureCode无效: ${featureCode}`)
 
-            if (!utils.isEmpty(featureCode)) {
-                this.loadFeature(featureCode).then(resp => {
-                    const config = resp.data['table'];
-                    this.initMeta(config.objectCode);
-                })
-            } else {
-                this.initMeta(objectCode);
-            }
+            loadFeature(featureCode).then(resp => {
+                const config = resp.data['table'];
+                initMeta(config.objectCode);
+            })
         },
         computed: {
             tlRefName() {

@@ -19,9 +19,9 @@ export default {
     "component_name": "TableTreeList",
     "name": "TableTreeList",
     "label": "树型表",
-    "data_url": "/table/list/{objectCode}",
-    "delete_url": "/table/delete?objectCode={objectCode}&ids={ids}",
-    "children_data_url": "/table/list/{objectCode}?parentPrimary={parentPrimary}",
+    "data_url": "/table/tree/{objectCode}",
+    "delete_url": "/table/tree/delete/{objectCode}?ids={ids}",
+    // "children_data_url": "/table/list/{objectCode}?parentPrimary={parentPrimary}",
     "multi_select": false,
     "editable": false,
     "conf": {

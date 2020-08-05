@@ -1,8 +1,8 @@
 <template>
     <el-form>
-        <el-divider content-position="left">Tree配置</el-divider>
+        <el-divider content-position="left">配置</el-divider>
         <el-form-item label="元对象编码" class="inline">
-            <drop-down-box v-model="config.tree.objectCode" :data-url="metaObjectCodeUrl">
+            <drop-down-box v-model="config.table.objectCode" :data-url="metaObjectCodeUrl" filterable>
                 <template #options="{options}">
                     <el-option v-for="item in options" :key="item.code" :label="item.code"
                                :value="item.code">
@@ -11,17 +11,9 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="primaryKey" class="inline">
-            <drop-down-box v-model="config.tree.primaryKey"
-                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})">
-                <template #label="{option}">
-                    <span>{{option.value}}({{option.label}})</span>
-                </template>
-            </drop-down-box>
-        </el-form-item>
         <el-form-item label="idKey" class="inline">
-            <drop-down-box v-model="config.tree.idKey"
-                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
+            <drop-down-box v-model="config.table.idKey"
+                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
                 <template #label="{option}">
                     <span>{{option.value}}({{option.label}})</span>
@@ -29,8 +21,8 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="pidKey" class="inline">
-            <drop-down-box v-model="config.tree.pidKey"
-                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
+            <drop-down-box v-model="config.table.pidKey"
+                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
                 <template #label="{option}">
                     <span>{{option.value}}({{option.label}})</span>
@@ -38,11 +30,11 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="rootIdentify" class="inline">
-            <text-box v-model="config.tree.rootIdentify" required></text-box>
+            <text-box v-model="config.table.rootIdentify" required></text-box>
         </el-form-item>
         <el-form-item label="label" class="inline">
-            <drop-down-box v-model="config.tree.label"
-                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
+            <drop-down-box v-model="config.table.label"
+                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
                 <template #label="{option}">
                     <span>{{option.value}}({{option.label}})</span>
@@ -50,29 +42,7 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="isSync">
-            <bool-box v-model="config.tree.isSync" required></bool-box>
-        </el-form-item>
-        <h3>Table配置</h3>
-        <el-form-item label="objectCode" class="inline">
-            <drop-down-box v-model="config.table.objectCode"
-                           :data-url="metaObjectCodeUrl" @change="config.table.foreignFieldCode = null"
-                           filterable required>
-                <template #options="{options}">
-                    <el-option v-for="item in options" :key="item.code" :label="item.code"
-                               :value="item.code">
-                        {{item.code}}
-                    </el-option>
-                </template>
-            </drop-down-box>
-        </el-form-item>
-        <el-form-item label="foreignFieldCode" class="inline">
-            <drop-down-box v-model="config.table.foreignFieldCode"
-                           :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
-                           filterable required>
-                <template #label="{option}">
-                    <span>{{option.value}}({{option.label}})</span>
-                </template>
-            </drop-down-box>
+            <bool-box v-model="config.table.isSync" required></bool-box>
         </el-form-item>
     </el-form>
 </template>
@@ -89,17 +59,13 @@
             const {oc: objectCode} = this;
             return {
                 config: {
-                    tree: {
-                        objectCode: null,
+                    table: {
+                        objectCode: objectCode,
                         idKey: null,
                         pidKey: null,
                         rootIdentify: null,
                         label: null,
                         isSync: false
-                    },
-                    table: {
-                        objectCode: objectCode,
-                        foreignFieldCode: null
                     }
                 },
                 metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,

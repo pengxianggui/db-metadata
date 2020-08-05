@@ -5,7 +5,6 @@
             <template #add-btn="{conf}">
                 <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
-            <template #batch-delete-btn><span></span></template>
             <template #inner-before-extend-btn="{conf, scope}">
                 <el-tooltip content="配置" placement="left">
                     <el-button icon="el-icon-s-tools" v-bind="conf" type="info"
