@@ -11,7 +11,10 @@ export const routes = [
         "path": "/main",
         "name": "main",
         "redirect": "/main/meta-data",
-        "component": "Main",
+        "components": {
+            default: "Management",
+            menu: "NavMenu"
+        },
         "children": [
             {
                 "path": "meta-data",
@@ -135,7 +138,7 @@ export const routes = [
     {
         "path": "/main",
         "name": "business",
-        "component": "Main",
+        "component": "Management",
         "children": [
             {
                 "path": "ms-table",

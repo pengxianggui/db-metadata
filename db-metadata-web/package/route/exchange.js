@@ -30,6 +30,8 @@ const exchangeAll = function (routes) {
         if (r.hasOwnProperty("children")) {
             r.children = exchangeAll(r.children)
         }
+
+        // TODO
         const {component: componentName} = r;
         r.component = exchangeOne(componentName)
         return r

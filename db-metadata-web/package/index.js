@@ -6,7 +6,7 @@ import * as user from './utils/user'
 import axios from './axios'
 import filters from './register/filter'
 // 布局组件
-
+import Management from "./layout/management/src/Management";
 import NavMenu from "./core/navmenu/src/NavMenu";
 // 核心组件
 import BoolBox from './core/boolbox'
@@ -69,7 +69,6 @@ import {restUrl, routeUrl} from './constant/url'
 import {access, innerFeatureCode, innerObjectCode} from "./constant/variable";
 // 内置路由
 import MetaRoute from './route'
-import MetaMenu from './meta/meta-menu'
 // style
 import './style/index.scss'
 
@@ -115,6 +114,8 @@ const components = [
     ZTogglePanel,
     SvgIcon,
 
+    // 布局组件layout
+    Management,
     NavMenu,
     // template
     DataListTableTmpl,
@@ -137,10 +138,7 @@ const components = [
     MetaFeatureList,
     MetaConfList,
     DictList,
-    ExceptionList,
-
-    // 内置meta菜单组件
-    MetaMenu,
+    ExceptionList
 ];
 
 const install = function (Vue, opts = {}) {
@@ -237,6 +235,8 @@ export default {
     ZTogglePanel,
     SvgIcon,
 
+    // 布局组件layout
+    Management,
     NavMenu,
     // template
     DataListTableTmpl,
@@ -259,10 +259,7 @@ export default {
     MetaFeatureList,
     MetaConfList,
     DictList,
-    ExceptionList,
-
-    // 内置meta菜单
-    MetaMenu
+    ExceptionList
 }
 
 export {
@@ -311,6 +308,8 @@ export {
     ZTogglePanel,
     SvgIcon,
 
+    // 布局组件layout
+    Management,
     NavMenu,
     // template
     DataListTableTmpl,
@@ -336,6 +335,5 @@ export {
     ExceptionList,
 
     // 内置路由
-    MetaRoute,
-    MetaMenu
+    MetaRoute
 }
