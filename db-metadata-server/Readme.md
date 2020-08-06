@@ -56,3 +56,13 @@ MetaField 数据源配置
 
 ##### 其他
 - [JMS规范](https://docs.oracle.com/cd/E19688-01/817-5020-10/overview.html#46007)
+
+#### 版本变更
+
+```
+update meta_component_instance set comp_code=REPLACE(comp_code,"Panel","View");
+update meta_component_instance set code=REPLACE(code,"Panel","View");
+update meta_component_instance set comp_code=REPLACE(comp_code,"TableList","TableView");
+update meta_component_instance set code=REPLACE(code,"TableList","TableView");
+update meta_component_instance set comp_code=REPLACE(comp_code,"TableTreeList","TableTreeView");
+```
