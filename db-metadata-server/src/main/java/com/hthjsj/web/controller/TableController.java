@@ -163,25 +163,37 @@ public class TableController extends FrontRestController {
 
     /**
      * 树型数据
+     * https://blog.csdn.net/u011627980/article/details/51454323?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
      */
     public void tree() {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
-        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAll(metaObject, treeConfig);
 
-        /**
-         * TreeNode渲染时,通过filter 将currNode内容,渲染到json 根下
-         *
-         */
+        Integer pageIndex = queryHelper.getPageIndex();
+        Integer pageSize = queryHelper.getPageSize();
+
+        String includeFieldStr = getPara("fs", getPara("fields", ""));
+        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
+        boolean raw = getParaToBoolean("raw", true);
+        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
+        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
+
+        Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
+
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
+        SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
+        Page<Record> result = metaService().paginate(pageIndex, 1000, metaObject, sqlPara.getSelect(), MetaSqlKit.where(sqlPara.getSql(), metaObject), sqlPara.getPara());
+
+
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAllByKeywords(metaObject, result.getList(), treeConfig);
+
+
+        /* TreeNode渲染时,通过filter 将currNode内容,渲染到json 根下 */
         AfterFilter afterFilter = new AfterFilter() {
 
-            /**
-             * object 运行时传TreeNode
-             *
-             * @param object
-             */
+            /* object为运行时传TreeNode */
             @Override
             public void writeAfter(Object object) {
                 if (object instanceof TreeNode) {
@@ -198,5 +210,14 @@ public class TableController extends FrontRestController {
             }
         };
         renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, afterFilter))));
+    }
+
+    public void test() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+        TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAllByKeywords(metaObject, treeConfig, "解决方案", "高中");
+        renderJson(tree);
     }
 }

@@ -49,6 +49,21 @@ public class TreeService {
         return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
     }
 
+    public List<TreeNode<String, Record>> findAllByKeywords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
+        List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+        Map<String, Record> allRecordsMap = recordToMap(allRecords, treeConfig);
+        TreeSet<Record> resultRecords = Sets.newTreeSet(new ResultRecordComparator(treeConfig));
+
+        recursiveParent(hitRecords, allRecordsMap, resultRecords, treeConfig);
+
+        List<TreeNode<String, Record>> nodes = Lists.newArrayList();
+        resultRecords.forEach(record -> {
+            TreeNode<String, Record> node = new DefaultTreeNode(treeConfig, record);
+            nodes.add(node);
+        });
+        return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+    }
+
     private Map<String, Record> recordToMap(List<Record> records, TreeConfig treeConfig) {
         Map<String, Record> map = Maps.newTreeMap();
         records.parallelStream().forEach(record -> {
