@@ -26,6 +26,7 @@ import com.hthjsj.web.jms.TestFormExtensibleListener;
 import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.menu.MenuModuleRouter;
 import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserIntercept;
@@ -80,6 +81,7 @@ public class AppWebConfig extends JFinalConfig {
         if (getPropertyToBoolean(AppConst.NEED_LOGIN)) {
             me.add(new UserRouter());
         }
+        me.add(new MenuModuleRouter());
         me.add("/file/upload", UploadController.class);
         me.add("/file", FileController.class);
     }

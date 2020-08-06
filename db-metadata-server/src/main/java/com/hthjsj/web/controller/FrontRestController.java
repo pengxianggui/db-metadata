@@ -10,6 +10,7 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.jfinal.render.PictureRender;
+import com.hthjsj.web.kit.tree.TreeService;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
@@ -38,6 +39,10 @@ public class FrontRestController extends Controller implements FrontRest {
 
     protected FeatureService featureService() {
         return ServiceManager.featureService();
+    }
+
+    protected TreeService treeService() {
+        return ServiceManager.treeService();
     }
 
     public void api() {
@@ -99,7 +104,7 @@ public class FrontRestController extends Controller implements FrontRest {
      * @param data
      * @param excludes
      */
-    void renderJsonExcludes(Object data, String... excludes) {
+    protected void renderJsonExcludes(Object data, String... excludes) {
         if (excludes != null && excludes.length > 0) {
 
             SimplePropertyPreFilter simplePropertyPreFilter = new SimplePropertyPreFilter();

@@ -1,7 +1,6 @@
 package com.hthjsj.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.AfterFilter;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -13,10 +12,10 @@ import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.WebException;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeConfig;
+import com.hthjsj.web.kit.tree.TreeKit;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
@@ -189,27 +188,7 @@ public class TableController extends FrontRestController {
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAllByKeywords(metaObject, result.getList(), treeConfig);
 
-
-        /* TreeNode渲染时,通过filter 将currNode内容,渲染到json 根下 */
-        AfterFilter afterFilter = new AfterFilter() {
-
-            /* object为运行时传TreeNode */
-            @Override
-            public void writeAfter(Object object) {
-                if (object instanceof TreeNode) {
-                    TreeNode treeNode = (TreeNode) object;
-                    Object currNode = treeNode.currNode();
-                    if (currNode instanceof Record) {
-                        ((Record) currNode).getColumns().forEach((key, value) -> {
-                            writeKeyValue(key, value);
-                        });
-                    } else {
-                        throw new WebException("还未支持的TreeNode Json 转换");
-                    }
-                }
-            }
-        };
-        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, afterFilter))));
+        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
     }
 
     public void test() {

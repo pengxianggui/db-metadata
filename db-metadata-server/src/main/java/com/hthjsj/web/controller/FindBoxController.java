@@ -67,7 +67,7 @@ public class FindBoxController extends FrontRestController {
 
         renderJson(Ret.ok("data", result));
     }
-
+    @Override
     public void list() {
         /**
          * 1. query data by metaObject
