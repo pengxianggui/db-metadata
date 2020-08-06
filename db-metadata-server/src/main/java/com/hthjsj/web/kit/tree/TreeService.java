@@ -124,42 +124,4 @@ public class TreeService {
         }
         return hitRecords;
     }
-    //
-    //    /**
-    //     * Record 结果集用的比较器
-    //     */
-    //    class ResultRecordComparator implements Comparator<Record> {
-    //
-    //        TreeConfig treeConfig;
-    //
-    //        public ResultRecordComparator(TreeConfig treeConfig) {
-    //            this.treeConfig = treeConfig;
-    //        }
-    //
-    //        @Override
-    //        public int compare(Record o1, Record o2) {
-    //            if (o1 == null && o2 == null) {
-    //                return 0;
-    //            }
-    //            if (o1 == null || o2 == null) {
-    //                return -1;
-    //            }
-    //
-    //            boolean s1 = false;
-    //            if (StrKit.notBlank(o1.getStr(treeConfig.getIdKey()), o2.getStr(treeConfig.getIdKey()))) {
-    //                s1 = o1.getStr(treeConfig.getIdKey()).equalsIgnoreCase(o2.getStr(treeConfig.getIdKey()));
-    //            }
-    //
-    //            boolean s2 = false;
-    //            if (o1.getStr(treeConfig.getPidKey()) == null && o2.getStr(treeConfig.getPidKey()) == null) {
-    //                s2 = true;
-    //            } else if (o1.getStr(treeConfig.getPidKey()) != null && o2.getStr(treeConfig.getPidKey()) != null) {
-    //                s2 = o1.getStr(treeConfig.getPidKey()).equalsIgnoreCase(o2.getStr(treeConfig.getPidKey()));
-    //            } else if (o1.getStr(treeConfig.getPidKey()) == null || o2.getStr(treeConfig.getPidKey()) == null) {
-    //                s2 = false;
-    //            }
-    //
-    //            return s1 && s2 ? 0 : -1;
-    //        }
-    //    }
 }
