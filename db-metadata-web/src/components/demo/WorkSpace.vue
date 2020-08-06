@@ -6,7 +6,6 @@
 </template>
 
 <script>
-    import {getTableTlMeta} from "../../../package/core/mixins/methods";
 
     export default {
         name: "WorkSpace",
@@ -14,7 +13,7 @@
         data() {
             return {
                 // meta: {}
-                fc: 'dict_tree'
+                fc: 'meta_dict_tree'
             }
         },
         methods: {},

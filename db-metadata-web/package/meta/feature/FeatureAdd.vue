@@ -64,6 +64,7 @@
     import SingleGrid from './conf-mini/SingleGrid'
     import TreeSingleGrid from './conf-mini/TreeSingleGrid'
     import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
+    import utils from '../../utils'
 
     const FEATURE_TYPE = {
         MasterSlaveGrid: 'MasterSlaveGrid',
@@ -91,7 +92,9 @@
                 objectCode: this.params['objectCode'],
                 primaryKey: this.params['primaryKey'],
                 featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
-                instanceCodeUrl: restUrl.INSTANCE_CODE_LIST,
+                instanceCodeUrl: utils.resolvePath(restUrl.INSTANCE_CODE_LIST, {
+                    type: 'META_OBJECT'
+                }),
                 feature: {
                     type: FEATURE_TYPE['SingleGrid'],
                     name: null,
@@ -104,28 +107,7 @@
                     },
                     instanceCode: null,
 
-                },
-                // listTableConf: {
-                //     list: {
-                //         objectCode: null,
-                //         primaryKey: null
-                //     },
-                //     table: {
-                //         objectCode: null,
-                //         foreignFieldCode: null
-                //     }
-                // },
-                // tableFormConf: {
-                //     table: {
-                //         objectCode: null,
-                //         primaryKey: null
-                //     },
-                //     form: {
-                //         objectCode: null,
-                //         foreignFieldCode: null
-                //     }
-                // },
-                // activeTab: 'first',
+                }
             }
         },
         methods: {

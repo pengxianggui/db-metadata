@@ -2,7 +2,7 @@
     <div>
         <div class="el-card">
             <search-view :meta="object.svMeta" @search="mHandleSearch"></search-view>
-            <table-view ref="metaObject" :meta="object.tvMeta" :filter-params="object.filterParams"
+            <table-view :ref="object.objectCode" :meta="object.tvMeta" :filter-params="object.filterParams"
                         @active-change="handleMActiveChange"
                         @chose-change="handleMChoseChange" :page="{ size: 5 }">
 
@@ -29,7 +29,7 @@
 
         <div class="el-card">
             <search-view :meta="field.svMeta" @search="sHandleSearch"></search-view>
-            <table-view ref="metaField" :meta="field.tvMeta" :filter-params="field.filterParams"
+            <table-view :ref="field.objectCode" :meta="field.tvMeta" :filter-params="field.filterParams"
                         :page="{ size: 5 }">
                 <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="handleAdd">新增</el-button>
@@ -37,8 +37,9 @@
             </table-view>
         </div>
 
-        <dialog-box :visible.sync="metaObjectAddVisible" title="创建元对象">
-            <meta-import :meta="formMeta" @cancel="metaObjectAddVisible=false" @submit="formSubmit"></meta-import>
+        <dialog-box :visible.sync="metaImportFormVisible" title="创建元对象">
+            <meta-import :meta="metaImportFormMeta" @cancel="metaImportFormVisible=false"
+                         @submit="handlerMetaImport"></meta-import>
             <template #footer><span></span></template>
         </dialog-box>
         <dialog-box :visible.sync="featureAddVisible" title="创建功能">
@@ -81,10 +82,11 @@
                     activeData: {},
                     choseData: [],
                     urlTemplate: null,
+                    pidKey: 'code'
                 },
                 featureParams: {},
-                metaObjectAddVisible: false,
-                formMeta: {},
+                metaImportFormVisible: false,
+                metaImportFormMeta: {},
                 featureAddVisible: false
             }
         },
@@ -94,44 +96,44 @@
             },
             handleMActiveChange(row) {
                 // 带入 feature add dialog
+                const {field: {pidKey, urlTemplate}} = this
                 this.featureParams = {
-                    objectCode: row['code']
+                    objectCode: row[pidKey]
                 }
 
                 this.object.activeData = row
-                const objectCode = this.object.activeData['code'];
-                let url = this.$compile(this.field.urlTemplate, {objectCode: objectCode});
+                const objectCode = this.object.activeData[pidKey];
+                let url = this.$compile(urlTemplate, {objectCode: objectCode});
                 this.field.tvMeta['data_url'] = url
             },
             mHandleSearch(params) {
+                const {object: {objectCode}} = this
                 this.object.filterParams = params;
                 this.$nextTick(() => {
-                    this.$refs['metaObject'].getData();
+                    this.$refs[objectCode].getData();
                 });
             },
             sHandleSearch(params) {
+                const {field: {objectCode}} = this
                 this.field.filterParams = params;
                 this.$nextTick(() => {
-                    this.$refs['metaField'].getData();
+                    this.$refs[objectCode].getData();
                 });
             },
-            handleAdd(slave) {
-                const {object: {activeData}} = this
+            handleAdd() {
+                const {object: {activeData, objectCode: objectCode}} = this
+                const {field: {objectCode: fieldCode}} = this
                 if (utils.isEmpty(activeData)) {
                     this.$message.warning('请先选择一条主表记录', '提示');
                     return;
                 }
 
-                const foreignKeyName = slave['foreignFieldCode'];
-                const foreignKeyValue = activeData['code'];
-
-                const url = this.$compile(restUrl.MASTER_SLAVE_TO_ADD_S, {
-                    objectCode: 'meta_field',
-                    // featureCode: featureCode,
-                    foreignKeyName: foreignKeyName,
-                    foreignKeyValue: foreignKeyValue
+                const url = this.$compile(restUrl.RECORD_TO_ADD, {
+                    objectCode: fieldCode,
                 });
-                this.$refs['metaField'].dialog(url);
+                this.$refs[fieldCode].dialog(utils.resolvePath(url,
+                    {code: objectCode}
+                ));
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
@@ -162,20 +164,20 @@
                     });
                 });
             },
-            formSubmit(formModel) {
-                const {$refs, $axios, featureCode, formMeta} = this;
-                $axios.post(formMeta.action, formModel).then(resp => {
+            handlerMetaImport(formModel) {
+                const {$refs, $axios, metaImportFormMeta, object: {objectCode}} = this;
+                $axios.post(metaImportFormMeta.action, formModel).then(resp => {
                     this.$message.success(resp.msg);
-                    let objectCode = formModel['objectCode'];
-                    this.metaObjectAddVisible = false;
+                    this.metaImportFormVisible = false;
                     // refresh master
-                    $refs[featureCode].refreshMasterData();
+                    $refs[objectCode].refreshMasterData();
                     this.jumpToConf(objectCode);
                 }).catch(err => {
                     this.$message.error(err.msg);
                 })
             },
             handleDelete(row) {
+                const {object: {objectCode}, field: {objectCode: fieldCode}} = this
                 let title, objectCodes, url;
                 if (utils.isUndefined(row)) {   // 批量删除
                     const objectCodeArr = this.choseMData.map(row => row.code);
@@ -196,12 +198,12 @@
                     type: 'warning',
                     dangerouslyUseHTMLString: true
                 }).then(() => {
-                    const {$axios, $refs, featureCode} = this;
+                    const {$axios, $refs} = this;
                     $axios.delete(url).then(resp => {
                         this.$message.success(resp.msg);
                         // refresh master,slave data
-                        $refs[featureCode].refreshMasterData();
-                        $refs[featureCode].refreshSlavesData();
+                        $refs[objectCode].getData();
+                        $refs[fieldCode].getData();
                     }).catch(err => {
                         this.$message.error(err.msg);
                     });
@@ -209,8 +211,8 @@
             },
             toAddMetaObject() {
                 this.$axios.get(restUrl.META_OBJECT_TO_ADD).then(resp => {
-                    this.formMeta = resp.data
-                    this.metaObjectAddVisible = true
+                    this.metaImportFormMeta = resp.data
+                    this.metaImportFormVisible = true
                 }).catch(err => {
                     this.$message.error(err.msg);
                 });
