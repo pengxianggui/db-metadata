@@ -1,4 +1,4 @@
-package com.hthjsj.web.ext.meta;
+package com.hthjsj.web.ui.meta;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;

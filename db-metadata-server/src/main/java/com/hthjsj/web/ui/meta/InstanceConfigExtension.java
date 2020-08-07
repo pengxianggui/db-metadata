@@ -1,4 +1,4 @@
-package com.hthjsj.web.ext.meta;
+package com.hthjsj.web.ui.meta;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.ConfigExtension;
@@ -20,9 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class InstanceConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> {
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
         if (metaField.dbType().isText()) {
-            if (metaField.dbTypeLength() == 1L) {
+            if (metaField.dbTypeLength() == 1L || metaField.dbType().isTinyInt()) {
                 builder.componentName(ComponentType.BOOLBOX);
             } else {
                 builder.maxlength(metaField.dbTypeLength().intValue());
@@ -35,7 +35,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> dateRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> dateRecommend = (metaField, builder, containerType) -> {
         //日期
         if (metaField.dbType().isDate()) {
             if (metaField.dbType().isDateTime()) {
@@ -50,14 +50,14 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> numberRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> numberRecommend = (metaField, builder, containerType) -> {
         //数值
         if (metaField.dbType().isNumber()) {
             builder.componentName(ComponentType.NUMBERBOX);
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> jsonRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> jsonRecommend = (metaField, builder, containerType) -> {
         //Json
         if (metaField.dbType().isJson()) {
             builder.componentName(ComponentType.JSONBOX);
@@ -65,7 +65,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> optionsRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> optionsRecommend = (metaField, builder, containerType) -> {
         log.debug("analysis metafield config");
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.hasTranslation()) {
@@ -83,7 +83,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> commonRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> commonRecommend = (metaField, builder, containerType) -> {
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.isMultiple()) {
             builder.multiple(true);
@@ -91,7 +91,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         builder.defaultVal(metaFieldConfigParse.defaultVal());
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {
 
         //上传框
         if (metaField.fieldCode().contains("file")) {
@@ -101,7 +101,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         }
     };
 
-    private ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> validateRecommend = (metaField, builder, containerType) -> {
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> validateRecommend = (metaField, builder, containerType) -> {
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.isRequired()) {
             builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));

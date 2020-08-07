@@ -28,11 +28,15 @@ public class DbTypeJudge {
     }
 
     public boolean isNumber() {
-        return isInt() || isBigInt() || isDecimal();
+        return isInt() || isBigInt() || isDecimal() || isTinyInt();
     }
 
     public boolean isInt() {
         return value.equalsIgnoreCase("int");
+    }
+
+    public boolean isTinyInt() {
+        return value.equalsIgnoreCase("tinyint");
     }
 
     public boolean isBigInt() {

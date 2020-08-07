@@ -1,4 +1,4 @@
-package com.hthjsj.web.ext.meta;
+package com.hthjsj.web.ui.meta;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.ConfigExtension;
