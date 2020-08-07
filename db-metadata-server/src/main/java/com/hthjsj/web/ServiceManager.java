@@ -1,5 +1,6 @@
 package com.hthjsj.web;
 
+import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
@@ -38,6 +39,10 @@ public class ServiceManager {
 
     public static TreeService treeService() {
         return Aop.get(TreeService.class);
+    }
+
+    public static BusinessService businessService() {
+        return Aop.get(BusinessService.class);
     }
 
     public static SqlAnalysis sqlAnalysis() {

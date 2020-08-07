@@ -33,11 +33,14 @@ public class TreeController extends Controller {
      * config -> getConfig()
      */
     public void index() {
-
         QueryHelper queryHelper = new QueryHelper(this);
+        String featureCode = queryHelper.getFeatureCode();
         String objectCode = queryHelper.getObjectCode();
+
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAll(metaObject, getConfig());
+        TreeInTableConfig treeInTableConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
+
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, treeInTableConfig.getTreeConfig());
         renderJson(tree);
     }
 

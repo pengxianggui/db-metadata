@@ -12,6 +12,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +43,10 @@ public class BusinessService {
 
     public Page<Record> paginate(Integer pageIndex, Integer pageSize, IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
         return Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, select, sqlExceptSelect, paras);
+    }
+
+    public List<Record> findData(IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
+        return Db.use(metaObject.schemaName()).find(select + sqlExceptSelect, paras);
     }
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {

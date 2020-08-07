@@ -170,9 +170,6 @@ public class TableController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
 
-        Integer pageIndex = queryHelper.getPageIndex();
-        Integer pageSize = queryHelper.getPageSize();
-
         String includeFieldStr = getPara("fs", getPara("fields", ""));
         String excludeFieldStr = getPara("efs", getPara("exfields", ""));
         boolean raw = getParaToBoolean("raw", true);
@@ -183,20 +180,11 @@ public class TableController extends FrontRestController {
 
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
-        Page<Record> result = metaService().paginate(pageIndex, 1000, metaObject, sqlPara.getSelect(), MetaSqlKit.where(sqlPara.getSql(), metaObject), sqlPara.getPara());
+        List<Record> result = businessService().findData(metaObject, sqlPara.getSelect(), MetaSqlKit.where(sqlPara.getSql(), metaObject), sqlPara.getPara());
 
 
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAllByKeywords(metaObject, result.getList(), treeConfig);
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 
         renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
-    }
-
-    public void test() {
-        QueryHelper queryHelper = new QueryHelper(this);
-        String objectCode = queryHelper.getObjectCode();
-        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-        TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().findAllByKeywords(metaObject, treeConfig, "解决方案", "高中");
-        renderJson(tree);
     }
 }

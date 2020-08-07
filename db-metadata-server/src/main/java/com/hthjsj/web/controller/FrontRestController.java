@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
@@ -43,6 +44,10 @@ public class FrontRestController extends Controller implements FrontRest {
 
     protected TreeService treeService() {
         return ServiceManager.treeService();
+    }
+
+    protected BusinessService businessService() {
+        return ServiceManager.businessService();
     }
 
     public void api() {

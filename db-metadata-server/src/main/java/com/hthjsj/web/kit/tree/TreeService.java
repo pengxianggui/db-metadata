@@ -25,7 +25,7 @@ import java.util.Set;
 @Before(Tx.class)
 public class TreeService {
 
-    public List<TreeNode<String, Record>> findAll(IMetaObject metaObject, TreeConfig treeConfig) {
+    public List<TreeNode<String, Record>> tree(IMetaObject metaObject, TreeConfig treeConfig) {
         List<TreeNode<String, Record>> nodes = Lists.newArrayList();
         List<Record> records = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
         records.forEach(r -> {
@@ -35,24 +35,18 @@ public class TreeService {
         return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
     }
 
-    public List<TreeNode<String, Record>> findAllByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
+    public List<TreeNode<String, Record>> treeByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
-        Map<String, Record> allRecordsMap = recordToMap(allRecords, treeConfig);
         List<Record> hitRecords = findHitRecordByKeyWords(allRecords, keywords);
-        Set<UniqueRecord> resultRecords = Sets.newHashSet();
-
-        recursiveParent(hitRecords, allRecordsMap, resultRecords, treeConfig);
-
-        List<TreeNode<String, Record>> nodes = Lists.newArrayList();
-        resultRecords.forEach(record -> {
-            TreeNode<String, Record> node = new DefaultTreeNode(treeConfig, record);
-            nodes.add(node);
-        });
-        return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+        return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig);
     }
 
-    public List<TreeNode<String, Record>> findAllByKeywords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
+    public List<TreeNode<String, Record>> treeByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+        return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig);
+    }
+
+    private List<TreeNode<String, Record>> buildTreeRelyOnHitRecords(List<Record> allRecords, List<Record> hitRecords, TreeConfig treeConfig) {
         Map<String, Record> allRecordsMap = recordToMap(allRecords, treeConfig);
         Set<UniqueRecord> resultRecords = Sets.newHashSet();
 
@@ -68,7 +62,7 @@ public class TreeService {
 
     private Map<String, Record> recordToMap(List<Record> records, TreeConfig treeConfig) {
         Map<String, Record> map = Maps.newHashMap();
-        records.parallelStream().forEach(record -> {
+        records.forEach(record -> {
             map.put(record.getStr(treeConfig.getIdKey()), record);
         });
         return map;

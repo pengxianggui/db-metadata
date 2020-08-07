@@ -23,7 +23,7 @@ public class RouterController extends FrontRestController {
     public void index() {
         String objectCode = "meta_router";
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        List<TreeNode<String, Record>> tree = treeService().findAll(metaObject, treeConfig());
+        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig());
         renderJsonExcludes(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))), "created_time", "updated_time");
     }
 
