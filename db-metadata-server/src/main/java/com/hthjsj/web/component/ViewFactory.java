@@ -57,15 +57,15 @@ public class ViewFactory {
         return searchView;
     }
 
-    public static TreeTableView treeTableView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TREETABLEVIEW.getCode(), metaObject.code());
-        return treeTableView(metaObject, instanceFlatConfig);
+    public static TableTreeView tableTreeView(IMetaObject metaObject) {
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TABLETREEVIEW.getCode(), metaObject.code());
+        return tableTreeView(metaObject, instanceFlatConfig);
     }
 
-    public static TreeTableView treeTableView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
-        TreeTableView treeTableView = new TreeTableView(metaObject.code() + ComponentType.TREETABLEVIEW.getCode(), metaObject.name());
-        treeTableView.setRender(new TreeInTableViewRender(metaObject, treeTableView, instanceFlatConfig));
-        return treeTableView;
+    public static TableTreeView tableTreeView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
+        TableTreeView tableTreeView = new TableTreeView(metaObject.code() + ComponentType.TABLETREEVIEW.getCode(), metaObject.name());
+        tableTreeView.setRender(new TreeInTableViewRender(metaObject, tableTreeView, instanceFlatConfig));
+        return tableTreeView;
     }
 
     public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType) {
@@ -80,8 +80,8 @@ public class ViewFactory {
             case SEARCHVIEW:
                 component = searchView(metaObject);
                 break;
-            case TREETABLEVIEW:
-                component = treeTableView(metaObject);
+            case TABLETREEVIEW:
+                component = tableTreeView(metaObject);
                 break;
             default:
         }
@@ -100,8 +100,8 @@ public class ViewFactory {
             case SEARCHVIEW:
                 component = searchView(metaObject, instanceFlatConfig);
                 break;
-            case TREETABLEVIEW:
-                component = treeTableView(metaObject, instanceFlatConfig);
+            case TABLETREEVIEW:
+                component = tableTreeView(metaObject, instanceFlatConfig);
                 break;
             default:
         }
@@ -129,8 +129,8 @@ public class ViewFactory {
             case SEARCHVIEW:
                 component = new SearchView(type.getCn(), type.getCode());
                 break;
-            case TREETABLEVIEW:
-                component = new TreeTableView(type.getCn(), type.getCode());
+            case TABLETREEVIEW:
+                component = new TableTreeView(type.getCn(), type.getCode());
                 break;
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);

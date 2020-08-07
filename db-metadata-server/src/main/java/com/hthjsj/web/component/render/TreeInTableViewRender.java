@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.component.ComponentRender;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.component.TreeTableView;
+import com.hthjsj.web.component.TableTreeView;
 import com.hthjsj.web.component.form.FormField;
 import com.hthjsj.web.component.form.FormFieldFactory;
 import com.hthjsj.web.kit.UtilKit;
@@ -18,17 +18,17 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public class TreeInTableViewRender implements ComponentRender<TreeTableView> {
+public class TreeInTableViewRender implements ComponentRender<TableTreeView> {
 
     private final IMetaObject metaObject;
 
-    private final TreeTableView component;
+    private final TableTreeView component;
 
     private final ComponentInstanceConfig componentInstanceConfig;
 
-    public TreeInTableViewRender(IMetaObject metaObject, TreeTableView treeTableView, ComponentInstanceConfig instanceFlatConfig) {
+    public TreeInTableViewRender(IMetaObject metaObject, TableTreeView tableTreeView, ComponentInstanceConfig instanceFlatConfig) {
         this.metaObject = metaObject;
-        this.component = treeTableView;
+        this.component = tableTreeView;
         this.componentInstanceConfig = instanceFlatConfig;
         component.getMeta().putIfAbsent("objectCode", metaObject.code());
         Preconditions.checkNotNull(metaObject.configParser().treeConfig(), "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
@@ -36,7 +36,7 @@ public class TreeInTableViewRender implements ComponentRender<TreeTableView> {
     }
 
     @Override
-    public TreeTableView component() {
+    public TableTreeView component() {
         return component;
     }
 

@@ -31,4 +31,8 @@ public class MetaData extends Kv {
         }
         return values.toArray();
     }
+
+    public boolean hasMetadata() {
+        return !entrySet().isEmpty();
+    }
 }

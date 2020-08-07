@@ -31,7 +31,7 @@ public enum ComponentType {
     MINIFORMBOX("miniformbox", "迷你表单框", "MiniFormBox"),
     FINDBOX("findbox", "查找框", "FindBox"),
     SEARCHVIEW("searchview", "搜索面板", "SearchView"),
-    TREETABLEVIEW("treetableview", "树形表格组件", "TableTreeView"),
+    TABLETREEVIEW("tabletreeview", "树形表格组件", "TableTreeView"),
     FILEBOX("filebox", "上传控件", "FileBox"),
     IMAGEBOX("imagebox", "图片控件", "ImgBox"),
     UNKNOWN("unknow", "未知控件", "unknow");

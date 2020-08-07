@@ -11,16 +11,16 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public class TreeTableView extends ViewContainer {
+public class TableTreeView extends ViewContainer {
 
-    public TreeTableView(String name, String label) {
+    public TableTreeView(String name, String label) {
         super(name, label);
-        setRender(new ManualRender<TreeTableView>(this));
+        setRender(new ManualRender<TableTreeView>(this));
     }
 
     @Override
     public ComponentType componentType() {
-        return ComponentType.TREETABLEVIEW;
+        return ComponentType.TABLETREEVIEW;
     }
 
     @Override

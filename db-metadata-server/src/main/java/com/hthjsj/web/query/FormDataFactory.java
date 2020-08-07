@@ -66,10 +66,6 @@ public class FormDataFactory {
                     }
                     continue;
                 }
-                // set 该metafile 转换后的value
-                if (castedValue != null) {
-                    formData.set(metaField.fieldCode(), castedValue);
-                }
                 // 该字段如果是文件类型
                 if (metaField.configParser().isFile()) {
                     List<String> fileConfig = metaField.configParser().fileConfig();
@@ -85,6 +81,13 @@ public class FormDataFactory {
                     } else {
                         formData.set(metaField.fieldCode(), JSON.parseArray("[]"));
                     }
+                    continue;
+                }
+                // set 该metafile 转换后的value
+                if (castedValue != null) {
+                    formData.set(metaField.fieldCode(), castedValue);
+                } else {
+                    formData.set(metaField.fieldCode(), "");
                 }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {
                 log.error(e.getMessage(), e);

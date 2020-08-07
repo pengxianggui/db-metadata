@@ -1,13 +1,12 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.analysis.component.ComponentInjectFactory;
+import com.hthjsj.analysis.component.ViewInject;
 import com.hthjsj.analysis.meta.aop.*;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 元对象配置解析器
@@ -19,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class MetaObjectConfigParse extends MetaData {
 
-    private static final PointCut EMPTY_POINT_CUT = new PointCut();
+    private final PointCutFactory pointCutFactory = new PointCutFactory(this);
 
     MetaObjectConfigParse(Kv config) {
         set(config);
@@ -73,91 +72,27 @@ public class MetaObjectConfigParse extends MetaData {
         return "";
     }
 
-    public String[] interceptors() {
-        String ss = getStr("bizInterceptor");
-        if (StrKit.isBlank(ss)) {
-            return new String[0];
-        } else {
-            if (ss.contains(",")) {
-                return ss.split(",");
-            } else {
-                return new String[] { ss };
-            }
-        }
-    }
-
-    private <T extends IPointCut> T interceptor(String interceptorStr) {
-        if (!StrKit.notBlank(interceptorStr)) {
-            return (T) EMPTY_POINT_CUT;
-        }
-
-        T clazz = null;
-        try {
-            clazz = (T) Class.forName(interceptorStr).newInstance();
-            return clazz;
-        } catch (ClassNotFoundException e) {
-            log.error(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            log.error(e.getMessage(), e);
-        } catch (InstantiationException e) {
-            log.error(e.getMessage(), e);
-        } catch (NullPointerException e) {
-            log.error("元对象 {},未配置拦截器.", getStr("objectCode"));
-            log.error(e.getMessage(), e);
-        }
-        log.warn("元对象{},使用默认拦截器{}", getStr("objectCode"), PointCut.class);
-        return (T) EMPTY_POINT_CUT;
+    public ViewInject[] viewInjects() {
+        return ComponentInjectFactory.viewInjects(getStr("viewInject"));
     }
 
     /**
      * 客户端可以按需选择实现add,update,delete,view切入点
      */
     public DeletePointCut[] deletePointCut() {
-        List<IPointCut> iPointCuts = new ArrayList<>();
-        String[] interceptors = interceptors();
-        for (String i : interceptors) {
-            Object o = interceptor(i);
-            if (o instanceof DeletePointCut) {
-                iPointCuts.add((DeletePointCut) o);
-            }
-        }
-        return iPointCuts.toArray(new DeletePointCut[iPointCuts.size()]);
+        return pointCutFactory.deletePointCut();
     }
 
     public AddPointCut[] addPointCut() {
-        List<IPointCut> iPointCuts = new ArrayList<>();
-        String[] interceptors = interceptors();
-        for (String i : interceptors) {
-            Object o = interceptor(i);
-            if (o instanceof AddPointCut) {
-                iPointCuts.add((AddPointCut) o);
-            }
-        }
-        return iPointCuts.toArray(new AddPointCut[iPointCuts.size()]);
+        return pointCutFactory.addPointCut();
     }
 
     public UpdatePointCut[] updatePointCut() {
-        List<IPointCut> iPointCuts = new ArrayList<>();
-        String[] interceptors = interceptors();
-        for (String i : interceptors) {
-            Object o = interceptor(i);
-            if (o instanceof UpdatePointCut) {
-                iPointCuts.add((UpdatePointCut) o);
-            }
-        }
-        return iPointCuts.toArray(new UpdatePointCut[iPointCuts.size()]);
+        return pointCutFactory.updatePointCut();
     }
 
     public ViewPointCut[] viewPointCut() {
-        List<IPointCut> iPointCuts = new ArrayList<>();
-        String[] interceptors = interceptors();
-        for (String i : interceptors) {
-            Object o = interceptor(i);
-            if (o instanceof ViewPointCut) {
-                iPointCuts.add((ViewPointCut) o);
-            }
-        }
-        return iPointCuts.toArray(new ViewPointCut[iPointCuts.size()]);
+        return pointCutFactory.viewPointCut();
     }
 
     public boolean isTreeStructure() {
