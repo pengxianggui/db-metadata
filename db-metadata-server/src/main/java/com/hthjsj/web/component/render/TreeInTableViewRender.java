@@ -28,6 +28,7 @@ public class TreeInTableViewRender implements ComponentRender<TreeTableView> {
         this.metaObject = metaObject;
         this.component = treeTableView;
         this.componentInstanceConfig = instanceFlatConfig;
+        component.getMeta().putIfAbsent("objectCode", metaObject.code());
     }
 
     @Override
