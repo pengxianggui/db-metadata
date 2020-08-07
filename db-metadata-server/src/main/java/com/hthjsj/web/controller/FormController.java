@@ -13,6 +13,7 @@ import com.hthjsj.web.jms.EventKit;
 import com.hthjsj.web.jms.FormMessage;
 import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryHelper;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
@@ -48,6 +49,14 @@ public class FormController extends FrontRestController {
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
+        //TODO 手工build,方便后面编程式操作表单内元子控件
+        Kv metaFields = queryHelper.hasMetaParams(metaObject);
+        if (!metaFields.isEmpty()) {
+            formView.buildChildren();
+            metaFields.forEach((key, value) -> {
+                formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
+            });
+        }
         renderJson(Ret.ok("data", formView.toKv()));
     }
 
