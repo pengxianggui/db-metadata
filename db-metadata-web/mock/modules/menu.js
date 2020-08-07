@@ -104,7 +104,7 @@ const menus = [
 
 export default [
     {
-        url: '/menu/tree',
+        url: '/menu',
         type: 'get',
         disable: true,
         response: config => {

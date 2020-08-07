@@ -5,7 +5,7 @@
                      :collapse="collapse"
                      v-bind="$reverseMerge(innerMeta.conf, $attrs)">
                 <template v-for="menu in menus">
-                    <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.index"></menu-item>
+                    <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
                 </template>
             </el-menu>
         </el-scrollbar>
@@ -37,7 +37,7 @@
         },
         data() {
             return {
-                menus: MetaMenuData
+                menus: []
             }
         },
         watch: {
@@ -47,6 +47,7 @@
         },
         methods: {
             getData(url) {
+                this.menus.push(...MetaMenuData)
                 this.$axios.get(url).then(resp => {
                     const {data: dynamicMenu} = resp
                     this.menus.push(...dynamicMenu)

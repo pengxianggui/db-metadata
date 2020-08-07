@@ -253,7 +253,7 @@
             },
             doEdit(primaryValue) {
                 let url, title;
-                const {activeData, primaryKey, objectCode} = this;
+                const {activeData, primaryKey, objectCode, treeConf: {idKey, pidKey}} = this;
 
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
@@ -273,7 +273,7 @@
                     title = '新增';
                     let fillParams = function (path) {
                         if (!utils.isEmpty(activeData)) {
-                            path += ('?' + primaryKey + '=' + activeData[primaryKey])
+                            path += ('?' + pidKey + '=' + activeData[idKey])
                         }
                         return path
                     }
@@ -463,6 +463,10 @@
                 const {innerMeta: {objectCode}} = this
                 utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
                 return objectCode
+            },
+            treeConf() {
+                const {innerMeta: {treeInTableConfig: treeConf}} = this;
+                return treeConf
             },
             tlRefName() {
                 return this.innerMeta['name'];

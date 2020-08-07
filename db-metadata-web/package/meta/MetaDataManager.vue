@@ -128,6 +128,13 @@
                     return;
                 }
 
+                // this.$msgbox({
+                //     title: '同步数据结构？',
+                //
+                //     confirmButtonText: '是的',
+                //     cancelButtonText: '取消',
+                // })
+
                 const url = this.$compile(restUrl.RECORD_TO_ADD, {
                     objectCode: fieldCode,
                 });

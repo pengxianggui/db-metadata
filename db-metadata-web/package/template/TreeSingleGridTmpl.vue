@@ -49,7 +49,7 @@
             fc: String
         },
         data() {
-            const {featureCode: R_fc} = this.$route.query;
+            const {fc: R_fc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
             return {
                 featureCode: featureCode,
@@ -87,7 +87,7 @@
             }
         },
         created() {
-            const {featureCode, initMeta, loadFeature} = this;
+            const {featureCode, initMeta, loadFeature} = this
             assert(!isEmpty(featureCode), `featureCode无效: ${featureCode}`)
 
             loadFeature(featureCode).then(resp => {

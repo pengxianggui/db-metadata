@@ -48,7 +48,7 @@ export const routes = [
 
 export default [
     {
-        url: '/route/tree',
+        url: '/route',
         type: 'get',
         disable: true,
         response: config => {
