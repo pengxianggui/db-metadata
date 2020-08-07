@@ -66,7 +66,7 @@ public class FormDataFactory {
                     }
                     continue;
                 }
-                // 该字段如果是文件类型
+                // 文件类型处理
                 if (metaField.configParser().isFile()) {
                     List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
@@ -83,11 +83,14 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+                //文本类型处理
+                if (metaField.dbType().isText()) {
+                    String s = String.valueOf(castedValue);
+                    formData.set(metaField.fieldCode(), StrKit.defaultIfBlank(s, ""));
+                }
                 // set 该metafile 转换后的value
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
-                } else {
-                    formData.set(metaField.fieldCode(), "");
                 }
             } catch (MetaDataTypeConvert.MetaDataTypeConvertException e) {
                 log.error(e.getMessage(), e);

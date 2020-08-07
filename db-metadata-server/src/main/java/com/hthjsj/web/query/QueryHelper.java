@@ -4,10 +4,12 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
+import com.jfinal.kit.StrKit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,9 @@ import java.util.List;
  */
 public class QueryHelper {
 
-    private Controller tp;
+    private final Controller tp;
 
-    private Kv params = Kv.create();
+    private final Kv params = Kv.create();
 
     public QueryHelper(Controller controller) {
         tp = controller;
@@ -85,6 +87,17 @@ public class QueryHelper {
 
     public String[] getObjectCodes() {
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
+    }
+
+    public Kv hasMetaParams(IMetaObject metaObject) {
+        Kv kv = Kv.create();
+        for (IMetaField metaField : metaObject.fields()) {
+            String metaFieldValue = tp.getPara(metaField.fieldCode());
+            if (StrKit.notBlank(metaFieldValue)) {
+                kv.putIfAbsent(metaField.fieldCode(), metaFieldValue);
+            }
+        }
+        return kv;
     }
 
     public QueryHelper builder(String key, String value) {
