@@ -229,6 +229,9 @@ public class UtilKit {
      * 说明:
      * 从source -> merge 到 mergeMap
      * 如遇key重复, newValue指用source的内容,oldValue指用target的内容
+     *
+     * 注意:
+     *  WARN ME merge时,如遇value为空值的化,使用有值的那一个
      * </pre>
      *
      * @param mergeMap
@@ -250,7 +253,7 @@ public class UtilKit {
                     deepMerge((Map) mergeMap.get(key), valueJson, overwrite);
                 } else {
                     if (overwrite) {
-                        mergeMap.merge(key, value, (oldValue, newValue) -> newValue);
+                        mergeMap.merge(key, value, (oldValue, newValue) -> StrKit.defaultIfBlank(String.valueOf(newValue), String.valueOf(oldValue)));
                     } else {
                         mergeMap.merge(key, value, (oldValue, newValue) -> oldValue);
                     }

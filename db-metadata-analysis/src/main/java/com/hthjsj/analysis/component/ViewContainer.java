@@ -19,9 +19,9 @@ public abstract class ViewContainer extends Component {
     @Setter
     ViewInject viewInject = new ViewInject.DefaultViewInject();
 
-    boolean isBuild = false;
+    boolean isPreBuild = false;
 
-    private List<Component> fields = new ArrayList<>(0);
+    private final List<Component> fields = new ArrayList<>(0);
 
     public ViewContainer(String name, String label) {
         this.name = name;
@@ -65,16 +65,17 @@ public abstract class ViewContainer extends Component {
     public Kv toKv() {
         renderCustomMeta(meta);
 
-//        if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
-//            getViewInject().inject(this, meta, getFieldInject());
-//        } else {
-//            //如使用了Inject,就覆盖默认逻辑
-//            renderFieldsMeta(fields, meta);
-//        }
-        //TODO
-        if (!isBuild) {
+        //        if (!(getViewInject() instanceof ViewInject.DefaultViewInject)) {
+        //            getViewInject().inject(this, meta, getFieldInject());
+        //        } else {
+        //            //如使用了Inject,就覆盖默认逻辑
+        //            renderFieldsMeta(fields, meta);
+        //        }
+        /* 防止重复构建meta */
+        if (!isPreBuild) {
             render.render();
         }
+
         if (!getFields().isEmpty()) {
             meta.set("columns", getFields().stream().map((k) -> k.toKv()).collect(Collectors.toList()));
         }
@@ -92,7 +93,7 @@ public abstract class ViewContainer extends Component {
 
         render.render();
 
-        isBuild = true;
+        isPreBuild = true;
         return this;
     }
 }
