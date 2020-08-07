@@ -89,7 +89,7 @@ public class MetaDataTypeConvert {
         Integer size = field.dbTypeLength().intValue();
         Class clazz = getType(typeName);
         // DB类型特殊转换规则
-        if ((typeName.equalsIgnoreCase("tinyint") && size == 1) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
+        if ((typeName.equalsIgnoreCase("tinyint")) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
             clazz = Boolean.class;
         }
         o = cast(o.toString(), clazz);
