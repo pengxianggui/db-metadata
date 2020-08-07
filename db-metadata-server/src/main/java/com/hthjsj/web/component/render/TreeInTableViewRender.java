@@ -1,5 +1,6 @@
 package com.hthjsj.web.component.render;
 
+import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.component.ComponentRender;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -29,6 +30,8 @@ public class TreeInTableViewRender implements ComponentRender<TreeTableView> {
         this.component = treeTableView;
         this.componentInstanceConfig = instanceFlatConfig;
         component.getMeta().putIfAbsent("objectCode", metaObject.code());
+        Preconditions.checkNotNull(metaObject.configParser().treeConfig(), "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
+        component.getMeta().putIfAbsent("treeInTableConfig", metaObject.configParser().treeConfig());
     }
 
     @Override
