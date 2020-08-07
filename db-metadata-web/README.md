@@ -549,3 +549,7 @@ FileBox, ImgBox支持差异化多文件
 - 新增SvgIcon组件(待完善)
 - 新增菜单组件(暂时只支持内置dataUrl加载菜单数据,待完善);
 - 将MetaEasyEdit中快捷UI编辑的路由拎到导出的MetaRoute中，可以避免客户端从MetaEasyEdit入口编辑UI conf时，打开的UI conf组件不是全视图的，而是位于子route-view中;
+
+### 0.2.60
+组件命名规范统一
+修复一些缺陷

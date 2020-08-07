@@ -42,7 +42,7 @@
                         <el-table-column type="selection" width="55"></el-table-column>
                     </template>
 
-                    <template v-for="(item, index) in innerMeta.columns">
+                    <template v-for="(item, index) in columns">
                         <el-table-column v-if="item.showable"
                                          v-bind="item.conf"
                                          :key="item.name"
@@ -50,7 +50,7 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template #header>
-                                <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
+                                <meta-easy-edit :object-code="objectCode" :field-code="item.name"
                                                 :label="item.label || item.name" :all="true" component-code="TableView">
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
@@ -68,7 +68,7 @@
                                     <span>操作</span>
                                     <el-popover placement="bottom-end" trigger="hover">
                                         <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
-                                        <el-checkbox v-for="(item, index) in innerMeta.columns"
+                                        <el-checkbox v-for="(item, index) in columns"
                                                      :key="item.name + '' + index"
                                                      :label="item.name"
                                                      v-model="item.showable"
@@ -192,10 +192,12 @@
                 this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
             },
             doEdit(primaryValue) {
+                const {objectCode, primaryKey} = this
                 let url, title;
+
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKey = this.primaryKey, primaryKv;
+                    let primaryKv;
 
                     if (primaryKey.length <= 1) {
                         primaryKv = primaryValue[0];
@@ -204,12 +206,12 @@
                     }
 
                     url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-                        objectCode: this.innerMeta['objectCode'],
+                        objectCode: objectCode,
                         primaryKv: primaryKv
                     });
                 } else {
                     title = '新增';
-                    url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: objectCode});
                 }
                 this.dialog(url, {title: title});
             },
@@ -420,6 +422,15 @@
                 const {objectPrimaryKey} = this.meta;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
+            },
+            objectCode() {
+                let {innerMeta: {objectCode}} = this
+                utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
+                return objectCode
+            },
+            columns() {
+                const {innerMeta: {columns}} = this
+                return columns
             },
             multiSelect() {
                 const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;

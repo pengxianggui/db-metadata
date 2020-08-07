@@ -518,5 +518,8 @@ export function isExternal(path) {
  * @param msg
  */
 export function assert(condition, msg) {
-    if (!condition) throw new Error(`${msg}`)
+    if (!condition) {
+        // throw new Error(`${msg}`)
+        console.error(msg)
+    }
 }

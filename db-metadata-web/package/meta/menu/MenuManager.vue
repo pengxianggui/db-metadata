@@ -1,9 +1,8 @@
 <template>
-    <tree-single-grid-tmpl :oc="oc"></tree-single-grid-tmpl>
+    <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
 </template>
 
 <script>
-    import {innerObjectCode} from "../../constant/variable";
     import TreeSingleGridTmpl from "../../template/TreeSingleGridTmpl";
 
     export default {
@@ -13,7 +12,7 @@
         },
         data() {
             return {
-                oc: innerObjectCode.MenuList
+                fc: 'meta_menu'
             }
         }
     }

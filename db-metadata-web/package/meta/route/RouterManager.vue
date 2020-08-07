@@ -1,11 +1,12 @@
 <template>
     <div class="route-manager-box">
-        <div class="preview">
-            <div class="item" v-for="(r, index) in routes" :key="r.path" @click.native="activeIndex = index"></div>
-        </div>
-        <div class="content">
-            <json-box v-model="routes[activeIndex]"></json-box>
-        </div>
+        <!--        <div class="preview">-->
+        <!--            <div class="item" v-for="(r, index) in routes" :key="r.path" @click.native="activeIndex = index"></div>-->
+        <!--        </div>-->
+        <!--        <div class="content">-->
+        <!--            <json-box v-model="routes[activeIndex]"></json-box>-->
+        <!--        </div>-->
+        <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
     </div>
 </template>
 
@@ -14,14 +15,15 @@
     import {restUrl} from "../../constant/url";
 
     export default {
-        name: "RouteManager",
+        name: "RouterManager",
         components: {
             JsonBox
         },
         data() {
             return {
                 activeIndex: 0,
-                routes: []
+                routes: [],
+                fc: 'meta_router'
             }
         },
         methods: {

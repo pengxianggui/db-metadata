@@ -35,6 +35,6 @@ export const restUrl = {
     FEATURE_LOAD: '/feature/load?fc={featureCode}', // 加载功能配置
     MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
     LIST_FEATURE_TYPE: '/feature/list', // 列出所有的功能类型code
-    MENU_DATA: '/menu/tree',
-    ROUTE_DATA: '/route/tree'
+    MENU_DATA: '/menu',
+    ROUTE_DATA: '/router'
 };

@@ -236,5 +236,153 @@
         }
       }
     }
+  },
+  "meta_router": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_router",
+      "isUUIDPrimary": true,
+      "structure": "tree",
+      "structureConfig": {
+        "idKey": "id",
+        "pidKey": "pid",
+        "label": "name"
+      }
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "pid": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "config": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "redirect": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      }
+    }
+  },
+  "meta_menu": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_router",
+      "isUUIDPrimary": true,
+      "structure": "tree",
+      "structureConfig": {
+        "idKey": "id",
+        "pidKey": "pid",
+        "label": "name"
+      }
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "pid": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "hidden": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "disable": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "icon": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "path": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "config": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      }
+    }
   }
 }

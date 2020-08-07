@@ -62,7 +62,7 @@
                                          :label="item.label || item.name"
                                          show-overflow-tooltip>
                             <template slot="header">
-                                <meta-easy-edit :object-code="innerMeta.objectCode" :field-code="item.name"
+                                <meta-easy-edit :object-code="objectCode" :field-code="item.name"
                                                 :label="item.label || item.name" :all="true"
                                                 component-code="TableTreeView">
                                     <template #label>{{item.label || item.name}}</template>
@@ -253,7 +253,7 @@
             },
             doEdit(primaryValue) {
                 let url, title;
-                const {activeData, primaryKey} = this;
+                const {activeData, primaryKey, objectCode} = this;
 
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
@@ -266,7 +266,7 @@
                     }
 
                     url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-                        objectCode: this.innerMeta['objectCode'],
+                        objectCode: objectCode,
                         primaryKv: primaryKv
                     });
                 } else {
@@ -278,7 +278,7 @@
                         return path
                     }
 
-                    url = this.$compile(fillParams(restUrl.RECORD_TO_ADD), {objectCode: this.innerMeta['objectCode']});
+                    url = this.$compile(fillParams(restUrl.RECORD_TO_ADD), {objectCode: objectCode});
                 }
                 this.dialog(url, {title: title});
             },
@@ -458,6 +458,11 @@
                 const {objectPrimaryKey} = this.meta;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
+            },
+            objectCode() {
+                const {innerMeta: {objectCode}} = this
+                utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
+                return objectCode
             },
             tlRefName() {
                 return this.innerMeta['name'];

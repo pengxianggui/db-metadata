@@ -5,8 +5,9 @@ import * as Rest from './utils/rest'
 import * as user from './utils/user'
 import axios from './axios'
 import filters from './register/filter'
+import {assembleRoute} from "./route";
 // 布局组件
-import Management from "./layout/management/src/Management";
+import AdminLayout from "./layout/admin-layout";
 import NavMenu from "./core/navmenu/src/NavMenu";
 // 核心组件
 import BoolBox from './core/boolbox'
@@ -61,6 +62,8 @@ import GlobalConf from "./meta/component/GlobalConf";
 import InstanceConfList from "./meta/component-instance/InstanceConfList";
 import InstanceConfEdit from "./meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "./meta/component-instance/InstanceConfNew";
+import MenuManager from "./meta/menu/MenuManager";
+import RouterManager from "./meta/route/RouterManager";
 import MetaFeatureList from './meta/feature';
 import MetaConfList from "./meta/meta-conf";
 import DictList from "./meta/dict"
@@ -68,11 +71,10 @@ import ExceptionList from './meta/exception'
 import {restUrl, routeUrl} from './constant/url'
 import {access, innerFeatureCode, innerObjectCode} from "./constant/variable";
 // 内置路由
+
 import MetaRoute from './route'
 // style
 import './style/index.scss'
-
-// autoLoadingGlobalComponent()
 
 const components = [
     // atom or container
@@ -115,8 +117,10 @@ const components = [
     SvgIcon,
 
     // 布局组件layout
-    Management,
+    AdminLayout,
     NavMenu,
+
+
     // template
     DataListTableTmpl,
     FormTmpl,
@@ -135,6 +139,8 @@ const components = [
     InstanceConfList,
     InstanceConfEdit,
     InstanceConfNew,
+    MenuManager,
+    RouterManager,
     MetaFeatureList,
     MetaConfList,
     DictList,
@@ -145,6 +151,15 @@ const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
     Vue.use(ElementUI, opts);
+
+    // 注册全局函数
+    Vue.prototype.$axios = axios(opts['axios']);    // {axios: {}} // 对axios进行配置, 如baseURL等
+    Vue.prototype.$merge = utils.merge;
+    Vue.prototype.$reverseMerge = utils.reverseMerge;
+    Vue.prototype.$compile = utils.compile;
+    Vue.prototype.$dialog = utils.dialog;
+    Vue.prototype.$isRoot = utils.isRoot;
+
     // 自定义路由url覆盖
     if (opts.routeUrl) {
         utils.reverseMerge(routeUrl, opts.routeUrl, false);
@@ -170,13 +185,8 @@ const install = function (Vue, opts = {}) {
         utils.reverseMerge(access, opts.access, false);
     }
 
-    // 注册全局函数
-    Vue.prototype.$axios = axios(opts['axios']);    // {axios: {}} // 对axios进行配置, 如baseURL等
-    Vue.prototype.$merge = utils.merge;
-    Vue.prototype.$reverseMerge = utils.reverseMerge;
-    Vue.prototype.$compile = utils.compile;
-    Vue.prototype.$dialog = utils.dialog;
-    Vue.prototype.$isRoot = utils.isRoot;
+    // 路由装配
+    assembleRoute(Vue, opts)
 
     // 注册全局过滤器
     Object.keys(filters).map(key => Vue.filter(key, filters[key]))
@@ -236,7 +246,7 @@ export default {
     SvgIcon,
 
     // 布局组件layout
-    Management,
+    AdminLayout,
     NavMenu,
     // template
     DataListTableTmpl,
@@ -309,7 +319,7 @@ export {
     SvgIcon,
 
     // 布局组件layout
-    Management,
+    AdminLayout,
     NavMenu,
     // template
     DataListTableTmpl,

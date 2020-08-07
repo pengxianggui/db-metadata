@@ -1,5 +1,6 @@
 export const innerFeatureCode = {
-    metadata: 'meta_manager' // TODO 元数据管理模块不应当依赖任何其他配置移除对meta_manger 功能编码的依赖
+    // metadata: 'meta_manager' // TODO 元数据管理模块不应当依赖任何其他配置移除对meta_manger 功能编码的依赖
+
 }
 
 export const innerObjectCode = {

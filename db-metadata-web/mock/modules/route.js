@@ -8,137 +8,9 @@
  */
 export const routes = [
     {
-        "path": "/main",
-        "name": "main",
-        "redirect": "/main/meta-data",
-        "components": {
-            default: "Management",
-            menu: "NavMenu"
-        },
-        "children": [
-            {
-                "path": "meta-data",
-                "name": "Metadata",
-                "component": "MetaDataManager",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "feature",
-                "name": "Feature",
-                "component": "FeatureList",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "global-conf-list",
-                "name": "MetaComponent",
-                "component": "GlobalConfList",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "global-conf",
-                "name": "MetaComponentEdit",
-                "component": "GlobalConf",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "instance-conf-list",
-                "name": "MetaComponentInstance",
-                "component": "InstanceConfList",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "instance-conf-new",
-                "name": "InstanceConfNew",
-                "component": "InstanceConfNew",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "form-builder",
-                "name": "FormBuilder",
-                "component": "FormBuilder",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "meta-conf",
-                "name": "MetaConf",
-                "component": "MetaConf",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "meta-dict",
-                "name": "MetaDict",
-                "component": "DataList",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "meta-exception",
-                "name": "MetaException",
-                "component": "ExceptionList",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "instance-conf-edit",
-                "name": "InstanceConfEdit",
-                "component": "InstanceConfEdit",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "objects",
-                "name": "objects",
-                "component": "ObjectsTmpl",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            },
-            {
-                "path": "demo",
-                "name": "Demo",
-                "component": "Demo",
-                "meta": {
-                    "roles": [],
-                    "cache": false
-                }
-            }
-        ]
-    },
-    {
-        "path": "/main",
+        "path": "/business",
         "name": "business",
-        "component": "Management",
+        "component": "Layout",
         "children": [
             {
                 "path": "ms-table",
@@ -178,7 +50,7 @@ export default [
     {
         url: '/route/tree',
         type: 'get',
-        disable: false,
+        disable: true,
         response: config => {
             console.log('mock: /route/tree');
             return {

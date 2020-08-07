@@ -5,6 +5,8 @@ import GlobalConf from "../meta/component/GlobalConf";
 import InstanceConfList from "../meta/component-instance/InstanceConfList";
 import InstanceConfEdit from "../meta/component-instance/InstanceConfEdit";
 import InstanceConfNew from "../meta/component-instance/InstanceConfNew";
+import RouterManager from "../meta/route/RouterManager";
+import MenuManager from "../meta/menu/MenuManager";
 import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
@@ -12,6 +14,14 @@ import ExceptionList from '../meta/exception'
 
 import {access} from '../constant/variable'
 import utils from "../utils";
+import {restUrl} from "../constant/url";
+import exchange from "./exchange";
+import {assert, isEmpty} from "../utils/common";
+
+/**
+ * Meta 平台维护路由数据
+ * @type {any}
+ */
 
 const jumpOut = [
     {
@@ -25,6 +35,17 @@ const jumpOut = [
             roles: [access.root]
         },
         hidden: true
+    }, {
+        path: 'instance-conf-new',
+        name: 'InstanceConfNew',
+        meta: {
+            title: "组件实例配置-新增",
+            icon: "el-icon-star-off",
+            noCache: false,
+            roles: [access.root]
+        },
+        hidden: true,
+        component: InstanceConfNew
     }
 ];
 
@@ -81,16 +102,27 @@ export const innerRoute = [
         },
         component: InstanceConfList
     }, {
-        path: 'instance-conf-new',
-        name: 'InstanceConfNew',
+        path: 'meta-router',
+        name: 'MetaRouter',
         meta: {
-            title: "组件实例配置-新增",
+            title: "路由维护",
             icon: "el-icon-star-off",
             noCache: false,
             roles: [access.root]
         },
-        hidden: true,
-        component: InstanceConfNew
+        hidden: false,
+        component: RouterManager
+    }, {
+        path: 'meta-menu',
+        name: 'MetaMenu',
+        meta: {
+            title: "菜单维护",
+            icon: "el-icon-star-off",
+            noCache: false,
+            roles: [access.root]
+        },
+        hidden: false,
+        component: MenuManager
     }, {
         path: 'form-builder',
         name: 'FormBuilder',
@@ -146,7 +178,34 @@ export const outerRoute = jumpOut.map(route => {
     return item;
 });
 
-export default {
-    inner: innerRoute,
-    outer: outerRoute
+export default [
+    ...innerRoute,
+    ...outerRoute
+]
+
+function metaRoute(layout) {
+    return [{
+        path: '/meta',
+        component: layout,
+        redirect: '/meta/meta-data',
+        children: [
+            ...innerRoute
+        ]
+    },
+        ...outerRoute
+    ]
+}
+
+export function assembleRoute(Vue, opts = {}) {
+    const {layout, router} = opts
+    assert(!isEmpty(layout), '[MetaElement] layout必须指定')
+    assert(!isEmpty(router), '[MetaElement] router必须指定')
+
+    router.addRoutes(metaRoute(layout))
+    // 装配动态路由
+    Vue.prototype.$axios.get(restUrl.ROUTE_DATA).then(resp => {
+        const {data: routes} = resp
+        console.info('[MetaElement] 装配动态路由, %o', routes)
+        router.addRoutes(exchange(routes))
+    })
 }

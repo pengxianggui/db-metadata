@@ -15,7 +15,7 @@ const getComponent404 = function (componentName) {
  * 根据组件名提取全局注册的组件
  * @param componentName
  */
-const exchangeOne = function (componentName) {
+export const exchangeComponent = function (componentName) {
     let components = Vue.options.components
     for (let componentsKey in components) {
         if (componentsKey === componentName) {
@@ -33,7 +33,7 @@ const exchangeAll = function (routes) {
 
         // TODO
         const {component: componentName} = r;
-        r.component = exchangeOne(componentName)
+        r.component = exchangeComponent(componentName)
         return r
     })
 }

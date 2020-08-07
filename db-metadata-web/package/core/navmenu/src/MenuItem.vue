@@ -1,22 +1,22 @@
 <template>
     <div class="menu-wrapper" v-if="!item.hidden">
         <template v-if="noChild(item)">
-            <app-link :to="item.index"
+            <app-link :to="item.path"
                       :query="resolveParams(item['params'])">
-                <el-menu-item :index="item.index">
+                <el-menu-item :index="item.path">
                     <svg-icon :icon-class="item.icon" v-if="item.icon"></svg-icon>
                     <span slot="title">{{item.title}}</span>
                 </el-menu-item>
             </app-link>
         </template>
 
-        <el-submenu v-else ref="subMenu" :index="item.index" popper-append-to-body>
+        <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
             <template #title>
                 <svg-icon :icon-class="item.icon" v-if="item.icon"></svg-icon>
                 <span slot="title">{{item.title}}</span>
             </template>
             <menu-item v-for="subMenu in item.children"
-                       :key="subMenu.index"
+                       :key="subMenu.path"
                        :item="subMenu"/>
         </el-submenu>
     </div>

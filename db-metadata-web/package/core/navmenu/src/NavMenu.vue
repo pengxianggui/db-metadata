@@ -4,7 +4,7 @@
             <el-menu :default-active="activeMenu"
                      :collapse="collapse"
                      v-bind="$reverseMerge(innerMeta.conf, $attrs)">
-                <template v-for="menu in data">
+                <template v-for="menu in menus">
                     <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.index"></menu-item>
                 </template>
             </el-menu>
@@ -17,6 +17,7 @@
     import DefaultMeta from "../../navmenu/ui-conf";
     import {restUrl} from "../../../constant/url";
     import MenuItem from './MenuItem'
+    import MetaMenuData from '../../../menu'
 
     export default {
         name: "NavMenu",
@@ -36,7 +37,7 @@
         },
         data() {
             return {
-                data: []
+                menus: MetaMenuData
             }
         },
         watch: {
@@ -46,7 +47,10 @@
         },
         methods: {
             getData(url) {
-                this.$axios.get(url).then(resp => this.data = resp.data)
+                this.$axios.get(url).then(resp => {
+                    const {data: dynamicMenu} = resp
+                    this.menus.push(...dynamicMenu)
+                })
             }
         },
         created() {
@@ -56,7 +60,6 @@
             activeMenu() {
                 const route = this.$route;
                 const {path} = route;
-                console.log(route)
                 return path
             }
         }
