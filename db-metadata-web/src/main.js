@@ -15,9 +15,6 @@ Vue.use(MetaElement, {
     },
     router: router,
     layout: Layout,
-    routeUrl: { // 内置路由配置，用于覆盖内部组件的路由跳转, 通常只需要配置前缀
-        // baseURL: '/main' // 为内部所有跳转的路由添加前缀
-    },
     restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置
     objectCode: {}, // 对于内置模块的元对象编码, 若objectCode不一致， 可以进行配置
     featureCode: {}, // 同上, 针对需要纠正内置模块的featureCode

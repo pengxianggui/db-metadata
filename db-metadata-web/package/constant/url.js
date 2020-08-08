@@ -10,6 +10,7 @@ export const restUrl = {
     META_OBJECT_TO_ADD: '/meta/toAdd',   // 元对象新增(TO)
     META_OBJECT_TO_EDIT: '/meta/editObject/{objectCode}', // 元对象编辑(TO)
     META_OBJECT_DELETE: '/meta/delete?objectCode={objectCode}',  // 元对象删除(DO)
+    META_FIELD_SYNC: '/meta/incrementImport?objectCode={objectCode}',   // 元
     META_FIELD_TO_EDIT: '/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}',  // 元字段编辑(TO)
     OBJECT_CODE_LIST: '/table/list?objectCode=meta_object&fs=code&s=1000',  // 获取所有元对象code
     FIELD_CODE_LIST_BY_OBJECT: '/table/list?objectCode=meta_field&object_code={objectCode}&fs=field_code,en,cn&en->key&field_code->value&cn->label&s=1000', // 查询某个元对象的元字段的field_code和cn，并以key,value返回

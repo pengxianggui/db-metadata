@@ -3,7 +3,7 @@
         <el-scrollbar wrap-class="scrollbar-wrapper">
             <el-menu :default-active="activeMenu"
                      :collapse="collapse"
-                     v-bind="$reverseMerge(innerMeta.conf, $attrs)">
+                     v-bind="conf">
                 <template v-for="menu in menus">
                     <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
                 </template>
@@ -18,6 +18,7 @@
     import {restUrl} from "../../../constant/url";
     import MenuItem from './MenuItem'
     import MetaMenuData from '../../../menu'
+    import {resolvePath} from '@/../package/utils/url'
 
     export default {
         name: "NavMenu",
@@ -60,8 +61,12 @@
         computed: {
             activeMenu() {
                 const route = this.$route;
-                const {path} = route;
-                return path
+                const {path, query} = route;
+                return resolvePath(path, query)
+            },
+            conf() {
+                const {$reverseMerge, innerMeta: {conf}, $attrs} = this
+                return $reverseMerge(conf, $attrs)
             }
         }
     }

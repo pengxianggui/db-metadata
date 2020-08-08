@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-input v-model="nativeValue"
-                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                  v-bind="conf"
                   :name="innerMeta.name"
                   @blur="$emit('blur', $event)"
                   @focus="$emit('focus', $event)"
@@ -52,6 +52,12 @@
             selectIcon(value) {
                 this.nativeValue = value;
                 this.dialogVisible = false;
+            }
+        },
+        computed: {
+            conf() {
+                const {innerMeta: {conf}, $attrs, $reverseMerge} = this
+                return $reverseMerge(conf, $attrs)
             }
         }
     }

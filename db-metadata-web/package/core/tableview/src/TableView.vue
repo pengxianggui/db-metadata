@@ -31,7 +31,7 @@
                         :id="innerMeta.name"
                         :ref="innerMeta.name"
                         :data="innerData"
-                        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                        v-bind="tableConf"
                         @row-click="handleRowClick"
                         @row-dblclick="handleRowDbClick"
                         @sort-change="sortChange"
@@ -120,7 +120,7 @@
                                    :page-size.sync="pageModel.size"
                                    :current-page.sync="pageModel.index"
                                    :total="pageModel.total"
-                                   v-bind="innerMeta.pagination"
+                                   v-bind="paginationConf"
                                    @size-change="sizeChange"
                                    @current-change="getData"
                     ></el-pagination>
@@ -149,6 +149,7 @@
     import assembleMeta from './assembleMeta'
     import TableCell from './tableCell'
     import DefaultMeta from '../ui-conf'
+    import columnsValid from "./columnsValid";
 
     export default {
         name: "TableView",
@@ -223,6 +224,9 @@
                         conf: utils.assertUndefined(conf, {title: '新增'})
                     };
                     this.dialogVisible = true
+                }).catch(err => {
+                    const {msg = '发生错误'} = err
+                    this.$message.error(msg)
                 });
             },
             // 删除单行
@@ -430,28 +434,43 @@
             },
             columns() {
                 const {innerMeta: {columns}} = this
+                columnsValid(columns)
                 return columns
             },
             multiSelect() {
                 const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
-                if (multiSelect !== undefined) return multiSelect;
-                if (multi_select != undefined) return multi_select;
-                return true;
+                return utils.assertEmpty(multiSelect, multi_select) || true
             },
             operationColMode() {
-                const {$attrs: {'operation-col-mode': operationColMode}, innerMeta: {operation_col_mode}} = this;
-                if (operationColMode !== undefined) return operationColMode;
-                if (operation_col_mode !== undefined) return operation_col_mode;
-                return true;
+                const {
+                    $attrs: {'operation-col-mode': operationColModeAttr},
+                    innerMeta: {operation_col_mode: operationColModeMeta}
+                } = this;
+                return utils.assertEmpty(operationColModeAttr, operationColModeMeta) || true
             },
             operationBarConf() {
-                return this.innerMeta['operation-bar'];
+                const {innerMeta: {"operation-bar": operationBarConf = {}}} = this
+                return operationBarConf;
+            },
+            tableConf() {
+                const {innerMeta: {conf}, $attrs, $reverseMerge} = this
+                return $reverseMerge(conf, $attrs)
             },
             operationColumnConf() {
-                return utils.mergeObject({}, this.innerMeta['operation-column'], this.$attrs['operation-column-conf']);
+                const {
+                    innerMeta: {'operation-column': operationColumn},
+                    $attrs: {'operation-column-conf': operationColumnConf}
+                } = this
+
+                return utils.mergeObject({}, operationColumn, operationColumnConf);
+            },
+            paginationConf() {
+                const {innerMeta: {pagination: paginationConf = {}}} = this
+                return paginationConf
             },
             buttonsConf() {
-                return this.innerMeta['buttons'];
+                const {innerMeta: {buttons: buttonsConf = {}}} = this
+                return buttonsConf
             },
             // 支持无渲染的行为插槽
             actions() {

@@ -49,7 +49,7 @@ const jumpOut = [
     }
 ];
 
-export const innerRoute = [
+const innerRoute = [
     {
         path: 'meta-data',
         name: 'Metadata',
@@ -196,16 +196,24 @@ function metaRoute(layout) {
     ]
 }
 
+/**
+ * 将MetaElement动态路由数据装配到VueRouter实例中
+ * @param Vue
+ * @param opts
+ */
 export function assembleRoute(Vue, opts = {}) {
     const {layout, router} = opts
-    assert(!isEmpty(layout), '[MetaElement] layout必须指定')
-    assert(!isEmpty(router), '[MetaElement] router必须指定')
+    assert(!isEmpty(layout), '[MetaElement] layout必须指定, 它是你自定义的布局组件')
+    assert(!isEmpty(router), '[MetaElement] router必须指定, 且必须是VueRouter实例')
 
+    // 装配内置固定的Meta路由
     router.addRoutes(metaRoute(layout))
-    // 装配动态路由
+    // 装配动态路由数据
     Vue.prototype.$axios.get(restUrl.ROUTE_DATA).then(resp => {
         const {data: routes} = resp
         console.info('[MetaElement] 装配动态路由, %o', routes)
-        router.addRoutes(exchange(routes))
+        const dynamicRoutes = exchange(routes)
+        console.debug('[MetaElement] 动态路由数据为: %o', dynamicRoutes)
+        router.addRoutes(dynamicRoutes)
     })
 }

@@ -9,13 +9,16 @@
             <router-link to="/workspace" style="cursor: pointer;">
                 workspace
             </router-link>
-
+            &nbsp;&nbsp;
             <el-tooltip class="item" effect="dark" content="初始化数据库" placement="bottom">
                 <el-button @click="initDb" type="primary" icon="el-icon-magic-stick" size="mini"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="清空数据库" placement="bottom">
                 <el-button @click="cleanDb" type="danger" icon="el-icon-delete-solid" size="mini"></el-button>
             </el-tooltip>
+        </template>
+        <template #menu>
+            <nav-menu :unique-opened="true"></nav-menu>
         </template>
     </admin-layout>
 </template>

@@ -13,34 +13,12 @@
 <template>
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
         <div class="el-card" style="padding: 5px;">
-            <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" inline
+            <el-form :ref="innerMeta['name']" v-bind="formConf" :model="model" inline
                      @keyup.enter.native="onSubmit" v-if="innerMeta.columns && innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
-                        <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"
-                                       v-if="['DropDownBox'].indexOf(item.component_name) >= 0">
-                        </drop-down-box>
-
-                        <bool-box v-model="model[item.name]['value']" :meta="item"
-                                  v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>
-
-                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                        is-range type="daterange"
-                                        v-else-if="['DateBox'].indexOf(item.component_name) >= 0">
-                        </el-date-picker>
-
-                        <el-time-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                        is-range type="timerange"
-                                        v-else-if="['TimeBox'].indexOf(item.component_name) >= 0">
-                        </el-time-picker>
-
-                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"
-                                        is-range type="datetimerange"
-                                        v-else-if="['DateTimeBox'].indexOf(item.component_name) >= 0">
-                        </el-date-picker>
-
-                        <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>
+                        <component v-model="model[item.name]['value']" v-bind="linkProps(model, item)">
                             <template #prepend v-if="model[item.name]['symbol']['optional']">
                                 <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">
                                     <el-option v-for="(value, key) in model[item.name]['symbol']['options']"
@@ -49,7 +27,41 @@
                                     </el-option>
                                 </el-select>
                             </template>
-                        </el-input>
+                        </component>
+
+<!--                        <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"-->
+<!--                                       v-if="['DropDownBox'].indexOf(item.component_name) >= 0">-->
+<!--                        </drop-down-box>-->
+
+<!--                        <bool-box v-model="model[item.name]['value']" :meta="item"-->
+<!--                                  v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>-->
+
+<!--                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
+<!--                                        is-range type="daterange"-->
+<!--                                        v-else-if="['DateBox'].indexOf(item.component_name) >= 0">-->
+<!--                        </el-date-picker>-->
+
+<!--                        <el-time-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
+<!--                                        is-range type="timerange"-->
+<!--                                        v-else-if="['TimeBox'].indexOf(item.component_name) >= 0">-->
+<!--                        </el-time-picker>-->
+
+<!--                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
+<!--                                        is-range type="datetimerange"-->
+<!--                                        v-else-if="['DateTimeBox'].indexOf(item.component_name) >= 0">-->
+<!--                        </el-date-picker>-->
+
+<!--                        <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>-->
+<!--                            <template #prepend v-if="model[item.name]['symbol']['optional']">-->
+<!--                                <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">-->
+<!--                                    <el-option v-for="(value, key) in model[item.name]['symbol']['options']"-->
+<!--                                               :key="key" :value="key">-->
+<!--                                        {{key}}-->
+<!--                                    </el-option>-->
+<!--                                </el-select>-->
+<!--                            </template>-->
+<!--                        </el-input>-->
+
                     </el-form-item>
                 </template>
                 <el-form-item>
@@ -95,6 +107,29 @@
             }
         },
         methods: {
+            linkProps(model, meta) {
+                const {$merge} = this
+                const {component_name, conf} = meta;
+                const props = {
+                    is: component_name,
+                    meta: meta,
+                    clearable: true
+                }
+                $merge(props, conf);
+
+                switch (component_name) {
+                    case 'DateBox':
+                        $merge(props, {"is-range": true, "type": 'daterange'})
+                        break;
+                    case 'TimeBox':
+                        $merge(props, {"is-range": true, "type": "timerange"})
+                        break;
+                    case 'DateTimeBox':
+                        $merge(props, {"is-range": true, "type": 'datetimerange'})
+                        break;
+                }
+                return props
+            },
             onSubmit() {
                 let params = {};
                 let model = this.model;
@@ -158,6 +193,10 @@
                 let meta = this.$merge(this.meta, DefaultMeta);
                 this.assemblyModel(meta);
                 return meta;
+            },
+            formConf() {
+                const {innerMeta: {conf}, $attrs} = this
+                return this.$reverseMerge(conf, $attrs)
             }
         }
     }

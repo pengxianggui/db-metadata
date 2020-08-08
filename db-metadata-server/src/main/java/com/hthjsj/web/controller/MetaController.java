@@ -184,6 +184,8 @@ public class MetaController extends FrontRestController {
             Set<String> incrementFields = Sets.difference(newFieldNames, oldFieldNames);
             if (incrementFields.isEmpty()) {
                 log.info("未检测到新字段");
+                renderJson(Ret.ok().set("msg", "未检测到新字段，不会执行同步操作"));
+                return;
             } else {
                 for (String fieldName : incrementFields) {
                     IMetaField metaField = newMetaObject.getField(fieldName);

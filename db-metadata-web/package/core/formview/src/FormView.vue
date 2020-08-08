@@ -150,6 +150,6 @@
 
 <style scoped>
     .width-align {
-        width: 400px; /* pxg_todo 临时解决控件对齐问题 */
+        min-width: 400px; /* pxg_todo 临时解决控件对齐问题 */
     }
 </style>

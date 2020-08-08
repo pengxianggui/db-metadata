@@ -36,25 +36,24 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <el-table
-                        :id="innerMeta.name"
-                        :ref="innerMeta.name"
-                        :data="innerData"
-                        :load="handleLoad"
-                        v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                        @row-click="handleRowClick"
-                        @sort-change="sortChange"
-                        @selection-change="handleSelectionChange"
-                        @row-dblclick="$emit('row-dblclick', $event)"
-                        :default-expand-all="expandAll"
-                        v-if="show">
+                <el-table :id="innerMeta.name"
+                          :ref="innerMeta.name"
+                          :data="innerData"
+                          :load="handleLoad"
+                          v-bind="tableConf"
+                          @row-click="handleRowClick"
+                          @sort-change="sortChange"
+                          @selection-change="handleSelectionChange"
+                          @row-dblclick="$emit('row-dblclick', $event)"
+                          :default-expand-all="expandAll"
+                          v-if="show">
 
                     <!-- multi select conf -->
-                    <template v-if="innerMeta.multi_select">
+                    <template v-if="multiSelect">
                         <el-table-column type="selection" width="55"></el-table-column>
                     </template>
 
-                    <template v-for="(item, index) in innerMeta.columns">
+                    <template v-for="(item, index) in columns">
                         <el-table-column v-if="item.showable"
                                          v-bind="item.conf"
                                          :key="item.name"
@@ -68,16 +67,19 @@
                                     <template #label>{{item.label || item.name}}</template>
                                 </meta-easy-edit>
                             </template>
+                            <template #default="scope">
+                                <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
+                            </template>
                         </el-table-column>
                     </template>
-                    <slot name="operation-column">
-                        <el-table-column width="180">
+                    <slot name="operation-column" v-if="operationColMode">
+                        <el-table-column width="180" v-bind="operationColumnConf">
                             <template #header>
                                 <span>
                                     <span>操作</span>
                                     <el-popover placement="bottom-end" trigger="hover">
                                         <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
-                                        <el-checkbox v-for="(item, index) in innerMeta.columns"
+                                        <el-checkbox v-for="(item, index) in columns"
                                                      :key="item.name + '' + index"
                                                      :label="item.name"
                                                      v-model="item.showable"
@@ -119,21 +121,6 @@
                 </el-table>
             </el-col>
         </el-row>
-        <el-row v-if="pageModel" style="margin-top: 5px;">
-            <el-col>
-                <!-- pagination bar -->
-                <slot name="pagination" v-bind:pageModel="pageModel">
-                    <el-pagination background
-                                   :page-size.sync="pageModel.size"
-                                   :current-page.sync="pageModel.index"
-                                   :total="pageModel.total"
-                                   v-bind="innerMeta.pagination"
-                                   @size-change="sizeChange"
-                                   @current-change="getData"
-                    ></el-pagination>
-                </slot>
-            </el-col>
-        </el-row>
 
         <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
                     @ok="getData()" @cancel="dialogVisible=false">
@@ -155,11 +142,13 @@
     import Meta from '../../mixins/meta'
     import assembleMeta from './assembleMeta'
     import DefaultMeta from '../ui-conf'
+    import TableCell from '../../tableview/src/tableCell'
+    import columnsValid from "../../tableview/src/columnsValid";
 
     export default {
         name: "TableTreeView",
         mixins: [Meta(DefaultMeta, assembleMeta)],
-        components: {MetaEasyEdit},
+        components: {MetaEasyEdit, TableCell},
         data() {
             // 利用解构赋值防止空指针
             const {conf: {'default-expand-all': instanceExpandAll} = {}} = this.meta;
@@ -167,17 +156,13 @@
             const expandAll = utils.assertUndefined(instanceExpandAll, defaultExpandAll);
 
             return {
+                multiEdit: false, // 多行编辑模式
                 show: true, // use to reRender for table
                 expandAll: expandAll,
                 innerData: [],
                 choseData: [],
                 activeData: {},
                 sortParams: {},
-                pageModel: {
-                    size: 10,
-                    index: 1,
-                    total: 0
-                },
                 dialogComponentMea: {}, // 弹窗内包含的组件元对象
                 dialogMeta: {}, // 弹窗组件元对象
                 dialogVisible: false,   // 弹窗显隐
@@ -185,7 +170,6 @@
         },
         props: {
             data: Array,
-            page: Object,
             filterParams: Object,   // 搜索面板过滤参数
             treeProps: {
                 type: Object,
@@ -374,23 +358,10 @@
                     this.getData();
                 }
             },
-            setPage(index) {
-                this.pageModel['index'] = index;
-            },
-            sizeChange() {
-                this.setPage(1); // jump to page one
-                this.getData();
-            },
-            setPageModel(page) {
-                const {total, index, size} = page;
-                if (!utils.isEmpty(total)) this.pageModel['total'] = parseInt(total);
-                if (!utils.isEmpty(index)) this.pageModel['index'] = parseInt(index);
-                if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
-            },
 
             // get business data
             getData() {
-                const {innerMeta, pageModel, filterParams, sortParams} = this;
+                const {innerMeta, filterParams, sortParams} = this;
 
                 if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
@@ -399,16 +370,13 @@
 
                 let params = {};
                 const {data_url: url} = innerMeta;
-                const {index, size} = pageModel;
                 const columnNames = (innerMeta['columns'] || [])
                     .filter(column => utils.hasProp(column, 'showable') && column['showable'])
                     .map(column => column['name']);
 
                 utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
                 utils.mergeObject(params, filterParams, sortParams, {
-                    'fs': columnNames.join(','),
-                    'p': index,
-                    's': size
+                    'fs': columnNames.join(',')
                 });
 
                 this.$axios.safeGet(url, {
@@ -416,18 +384,12 @@
                 }).then(resp => {
                     this.innerData = resp.data;
                     this.$emit("update:data", resp.data);
-                    if (resp.hasOwnProperty('page')) {
-                        this.setPageModel(resp['page']);
-                    }
                 }).catch(err => {
                     this.$message.error(err.msg);
                 });
             },
             initData() { // init business data
-                let {page, data} = this;
-                if (page !== undefined) {
-                    this.setPageModel(page)
-                }
+                let {data} = this;
                 if (data !== undefined) {
                     this.innerData = data;
                     return;
@@ -464,6 +426,38 @@
                 utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
                 return objectCode
             },
+            columns() {
+                const {innerMeta: {columns}} = this
+                columnsValid(columns)
+                return columns
+            },
+            multiSelect() {
+                const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
+                return utils.assertEmpty(multiSelect, multi_select) || false
+            },
+            operationColMode() {
+                const {
+                    $attrs: {'operation-col-mode': operationColModeAttr},
+                    innerMeta: {operation_col_mode: operationColModeMeta}
+                } = this;
+                return utils.assertEmpty(operationColModeAttr, operationColModeMeta) || true
+            },
+            operationBarConf() {
+                const {innerMeta: {"operation-bar": operationBarConf = {}}} = this
+                return operationBarConf;
+            },
+            tableConf() {
+                const {innerMeta: {conf}, $attrs, $reverseMerge} = this
+                return $reverseMerge(conf, $attrs)
+            },
+            operationColumnConf() {
+                const {
+                    innerMeta: {'operation-column': operationColumn},
+                    $attrs: {'operation-column-conf': operationColumnConf}
+                } = this
+
+                return utils.mergeObject({}, operationColumn, operationColumnConf);
+            },
             treeConf() {
                 const {innerMeta: {treeInTableConfig: treeConf}} = this;
                 return treeConf
@@ -474,11 +468,9 @@
             multiMode() {
                 return this.innerMeta['multi_select'];
             },
-            operationBarConf() {
-                return this.innerMeta['operation-bar'];
-            },
             buttonsConf() {
-                return this.innerMeta['buttons'];
+                const {innerMeta: {buttons: buttonsConf = {}}} = this
+                return buttonsConf
             },
             // 支持无渲染的行为插槽
             actions() {

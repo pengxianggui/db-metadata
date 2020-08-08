@@ -32,7 +32,7 @@
             <table-view :ref="field.objectCode" :meta="field.tvMeta" :filter-params="field.filterParams"
                         :page="{ size: 5 }">
                 <template #add-btn="{conf}">
-                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
+                    <el-button v-bind="conf" @click="syncIncrementHandler">同步增量字段</el-button>
                 </template>
             </table-view>
         </div>
@@ -120,27 +120,30 @@
                     this.$refs[objectCode].getData();
                 });
             },
-            handleAdd() {
-                const {object: {activeData, objectCode: objectCode}} = this
-                const {field: {objectCode: fieldCode}} = this
+            syncIncrementHandler() {
+                const {object: {activeData}, $compile} = this
+
                 if (utils.isEmpty(activeData)) {
                     this.$message.warning('请先选择一条主表记录', '提示');
                     return;
                 }
 
-                // this.$msgbox({
-                //     title: '同步数据结构？',
-                //
-                //     confirmButtonText: '是的',
-                //     cancelButtonText: '取消',
-                // })
+                const {code} = activeData
 
-                const url = this.$compile(restUrl.RECORD_TO_ADD, {
-                    objectCode: fieldCode,
-                });
-                this.$refs[fieldCode].dialog(utils.resolvePath(url,
-                    {code: objectCode}
-                ));
+                this.$confirm('只会同步新增的表字段', `确定同步元对象：${code}?`, {
+                    confirmButtonText: '是的',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.get($compile(restUrl.META_FIELD_SYNC, {objectCode: code}))
+                        .then(resp => {
+                            const {msg = '同步成功'} = resp
+                            this.$message.success(msg)
+                        }).catch(err => {
+                        const {msg = '发生错误'} = err
+                        this.$message.error(msg)
+                    })
+                })
             },
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';

@@ -3,13 +3,13 @@
 </template>
 
 <script>
-    import {innerObjectCode} from "../../constant/variable";
+    import {metaObjectCode} from "../../constant/variable";
 
     export default {
         name: "MetaConf",
         data() {
             return {
-                oc: innerObjectCode.metaConfList
+                oc: metaObjectCode.metaConfList
             }
         }
     }

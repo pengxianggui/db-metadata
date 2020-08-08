@@ -78,26 +78,26 @@ export default [{
             "hidden": false,
             "disable": false
         },
-        {
-            "path": "/meta/meta-version",
-            "title": "DbVersion",
-            "icon": "el-icon-paperclip",
-            "hidden": false,
-            "disable": false
-        },
-        {
-            "path": "/meta/objects",
-            "title": "动态元对象",
-            "icon": "el-icon-menu",
-            "hidden": false,
-            "disable": false
-        },
-        {
-            "path": "/meta/demo",
-            "title": "组件概览",
-            "icon": "el-icon-menu",
-            "hidden": false,
-            "disable": false
-        }
+        // {
+        //     "path": "/meta/meta-version",
+        //     "title": "DbVersion",
+        //     "icon": "el-icon-paperclip",
+        //     "hidden": false,
+        //     "disable": false
+        // },
+        // {
+        //     "path": "/meta/objects",
+        //     "title": "动态元对象",
+        //     "icon": "el-icon-menu",
+        //     "hidden": false,
+        //     "disable": false
+        // },
+        // {
+        //     "path": "/meta/demo",
+        //     "title": "组件概览",
+        //     "icon": "el-icon-menu",
+        //     "hidden": false,
+        //     "disable": false
+        // }
     ]
 }]

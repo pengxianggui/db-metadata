@@ -8,47 +8,74 @@
  */
 export const routes = [
     {
-        "path": "/business",
-        "name": "business",
+        "redirect": "/ops/dashboard",
+        "components": null,
+        "pid": null,
+        "remark": "运维管理下的跟路由",
+        "cn": "运维控制台",
+        "created_by": "db-meta-web-devUser",
+        "path": "/ops",
         "component": "Layout",
         "children": [
             {
-                "path": "ms-table",
-                "name": "msTable",
-                "component": "MasterSlaveTableTmpl"
+                "redirect": null,
+                "components": null,
+                "pid": "3d82391ef09f4f23a6f629d00b4d849e",
+                "remark": "系统字典维护",
+                "cn": "系统字典维护",
+                "created_by": "db-meta-web-devUser",
+                "parentId": "3d82391ef09f4f23a6f629d00b4d849e",
+                "path": "/ops/sys-dict",
+                "component": "TreeSingleGridTmpl",
+                "children": [],
+                "meta": "null",
+                "name": "SysDict",
+                "updated_by": "null",
+                "id": "17b9bbfa93be437d993f3a1aab5da990"
             },
             {
-                "path": "ding-user",
-                "name": "dingUser",
-                "component": "SingleGridTmpl"
+                "redirect": null,
+                "components": null,
+                "pid": "3d82391ef09f4f23a6f629d00b4d849e",
+                "remark": "业务字典树",
+                "cn": "业务字典维护",
+                "created_by": "db-meta-web-devUser",
+                "parentId": "3d82391ef09f4f23a6f629d00b4d849e",
+                "path": "/ops/biz-dict",
+                "component": "TreeSingleGridTmpl",
+                "children": [],
+                "meta": null,
+                "name": "BizDict",
+                "updated_by": "null",
+                "id": "94a2f2533fba4c47a40e2ee3f7e90319"
             },
             {
-                "path": "magpie-user",
-                "name": "magpieUser",
-                "component": "SingleGridTmpl"
-            },
-            {
-                "path": "gitlab-user",
-                "name": "gitlabUser",
-                "component": "SingleGridTmpl"
-            },
-            {
-                "path": "jira-user",
-                "name": "jiraUser",
-                "component": "SingleGridTmpl"
-            },
-            {
-                "path": "jira-project",
-                "name": "jiraProject",
-                "component": "SingleGridTmpl"
+                "redirect": null,
+                "components": null,
+                "pid": "3d82391ef09f4f23a6f629d00b4d849e",
+                "remark": "服务方案审核",
+                "cn": "服务方案审核",
+                "created_by": "db-meta-web-devUser",
+                "parentId": "3d82391ef09f4f23a6f629d00b4d849e",
+                "path": "/ops/service-plan",
+                "component": "TextBox",
+                "children": [],
+                "meta": null,
+                "name": "ServicePlanCertify",
+                "updated_by": null,
+                "id": "d32853025279481db546fef689cc8e62"
             }
-        ]
+        ],
+        "meta": null,
+        "name": "OpsManage",
+        "updated_by": null,
+        "id": "3d82391ef09f4f23a6f629d00b4d849e"
     }
 ]
 
 export default [
     {
-        url: '/route',
+        url: '/router',
         type: 'get',
         disable: true,
         response: config => {

@@ -553,3 +553,9 @@ FileBox, ImgBox支持差异化多文件
 ### 0.2.60
 组件命名规范统一
 修复一些缺陷
+
+### 0.3.0
+支持动态路由
+支持动态菜单
+提供默认的AdminLayout
+简化自定义配置(Vue.use(MetaElement))

@@ -185,24 +185,24 @@ export function convertToArray(value) {
 }
 
 /**
- * 将值转为对象, 若是对象则直接返回该值;
- * 若为字符串则尝试转换为Object,转换成功则返回转换后对象, 转换失败则返回空对象;
- * 若是其他类型, 则直接返回空对象
+ * 将字符串值转为对象, 若转换失败, 则返回原值
+ * 若不为字符串则直接返回原值
+ *
  * @param value
  * @returns {{}|*}
  */
-export function convertToObject(value) {
-    if (isObject(value)) return value;
-
-    if (!isString(value)) return {};
-    let result;
-    try {
-        result = JSON.parse(value);
-        return isObject(result) ? result : {};
-    } catch (e) {
-        console.error("value can't be conver to Object, attention please. value: o%", value);
-        return {};
+export function strToObject(value) {
+    if (isString(value)) {
+        let result;
+        try {
+            result = JSON.parse(value);
+            return isObject(result) ? result : {};
+        } catch (e) {
+            console.error("value can't be conver to Object, attention please. value: o%", value);
+            return value;
+        }
     }
+    return value
 }
 
 /**

@@ -1,7 +1,7 @@
 <template>
     <el-time-picker
             v-model="nativeValue"
-            v-bind="$reverseMerge(innerMeta.conf, $attrs)">
+            v-bind="conf">
     </el-time-picker>
 </template>
 
@@ -17,6 +17,12 @@
         props: {
             value: [Date, String],
         },
+        computed: {
+            conf() {
+                const {innerMeta: {conf}, $attrs} = this
+                return this.$reverseMerge(conf, $attrs)
+            }
+        }
     }
 </script>
 

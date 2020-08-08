@@ -4,14 +4,14 @@
 
 <script>
     import SingleGridTmpl from "../../template/SingleGridTmpl";
-    import {innerObjectCode} from "../../constant/variable";
+    import {metaObjectCode} from "../../constant/variable";
 
     export default {
         name: "FeatureList",
         components: {SingleGridTmpl},
         data() {
             return {
-                oc: innerObjectCode.featureList
+                oc: metaObjectCode.featureList
             }
         }
     }
