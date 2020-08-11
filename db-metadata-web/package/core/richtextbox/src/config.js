@@ -1,6 +1,10 @@
 /**
  * tinymce富文本编辑器的配置
  * 更多配置, 参见: https://www.tiny.cloud/docs/configure/editor-appearance
+ * TODO 1.图片上传:  https://www.tiny.cloud/docs/general-configuration-guide/upload-images/
+ * TODO 2.主题更新，默认太丑
+ * TODO 3.编辑器最大化
+ *
  * @type {{toolbar: string, menubar: boolean, plugins: [string, string, string], height: number}}
  */
 export const EditorConf = {
