@@ -6,7 +6,7 @@
 
     <groupId>com.hthjsj</groupId>
     <artifactId>db-metadata-parent</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>pom</packaging>
     <name>db-metadata-parent</name>
 

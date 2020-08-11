@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.hthjsj</groupId>
             <artifactId>db-metadata-server</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.8</version>
             <exclusions>
                 <exclusion>
                     <artifactId>mysql-connector-java</artifactId>
@@ -101,7 +101,7 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.artislong</groupId>
+            <groupId>com.hthjsj</groupId>
             <artifactId>jfinal-spring-boot-starter</artifactId>
             <version>1.4</version>
             <exclusions>

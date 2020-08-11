@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {isEmpty} from "../utils/common";
+import {isEmpty, strToObject} from "../utils/common";
 
 const getComponent404 = function (componentName) {
     return Vue.component("Component404", {
@@ -28,6 +28,18 @@ export const exchangeComponent = function (componentName) {
 
 const includes = ['path', 'name', 'component', 'children', 'meta', 'redirect'] // 滤出的字段
 
+const exchangeRouteKey = function (route, r, k) {
+    let value;
+    switch (k) {
+        case 'meta':
+            value = strToObject(r[k])
+            break;
+        default:
+            value = r[k]
+    }
+    route[k] = value
+}
+
 const exchangeAll = function (routes) {
     return routes.map(r => {
         if (r.hasOwnProperty("children")) {
@@ -36,10 +48,9 @@ const exchangeAll = function (routes) {
         const route = {}
         Object.keys(r).filter(k => includes.indexOf(k) > -1).filter(k => {
             return !isEmpty(r[k]) && r[k] !== 'null' // TODO 路由数据中redirect值可能非返回"null"字符串
-        }).map(k => {
-            route[k] = r[k]
+        }).forEach(k => {
+            exchangeRouteKey(route, r, k)
         })
-
 
         // TODO
         const {component: componentName} = route;

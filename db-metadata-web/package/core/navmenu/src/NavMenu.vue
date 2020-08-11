@@ -1,14 +1,15 @@
 <template>
-    <div>
-        <el-scrollbar wrap-class="scrollbar-wrapper">
-            <el-menu :default-active="activeMenu"
-                     :collapse="collapse"
-                     v-bind="conf">
-                <template v-for="menu in menus">
-                    <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
-                </template>
-            </el-menu>
-        </el-scrollbar>
+    <div style="height: 100%;">
+        <!--        <el-scrollbar wrap-class="scrollbar-wrapper" style="height: 100%">-->
+        <el-menu :default-active="activeMenu"
+                 :collapse="collapse"
+                 v-bind="conf" class="menu-class">
+            <template v-for="menu in menus">
+                <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
+            </template>
+            <slot></slot>
+        </el-menu>
+        <!--        </el-scrollbar>-->
     </div>
 </template>
 
@@ -72,6 +73,8 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    .menu-class {
+        height: 100%;
+    }
 </style>

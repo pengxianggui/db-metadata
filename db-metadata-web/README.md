@@ -559,3 +559,16 @@ FileBox, ImgBox支持差异化多文件
 支持动态菜单
 提供默认的AdminLayout
 简化自定义配置(Vue.use(MetaElement))
+
+### 0.3.1
+优化AdminLayout插槽
+
+### 0.3.2~0.3.10
+修复一些问题
+
+### 0.3.11
+- 为Tinymce配置apiKey, 解决富文本框提示未注册问题, 并配置富文本的表格/图片功能(上传暂未支持, 目前是链接外部图片);
+- 调整meta-element默认的AdminLayout布局中插槽位置, 提升自定义程度;
+- 修复路由管理页面无法滚动;
+- 兼容路由数据中meta为对象字符串;
+- 修复meta-element菜单高度无法100%;

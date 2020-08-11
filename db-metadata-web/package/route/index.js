@@ -49,7 +49,7 @@ const jumpOut = [
     }
 ];
 
-const innerRoute = [
+export const innerRoute = [
     {
         path: 'meta-data',
         name: 'Metadata',

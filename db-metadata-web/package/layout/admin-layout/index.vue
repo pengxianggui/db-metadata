@@ -1,19 +1,19 @@
 <template>
     <div class="layout">
-        <div class="header">
-            <slot name="header">
+        <slot name="header">
+            <div class="header">
                 <div>
                     <span class="h2" style="font-family: unset">元数据管理系统</span>
                     <span style="font-family: cursive;">—— Data Fuck Everything</span>
                 </div>
-            </slot>
-        </div>
-        <div class="body">
-            <div class="menu">
-                <slot name="menu">
-                    <nav-menu></nav-menu>
-                </slot>
             </div>
+        </slot>
+        <div class="body">
+            <slot name="menu">
+                <div class="menu">
+                    <nav-menu></nav-menu>
+                </div>
+            </slot>
             <div class="main">
                 <router-view :key="$route.path"></router-view>
             </div>
@@ -64,7 +64,6 @@
             .menu {
                 min-width: 200px;
                 max-width: 300px;
-                overflow-y: hidden;
                 height: 100%;
                 overflow: auto;
             }
@@ -73,7 +72,6 @@
                 flex: 1;
                 overflow: auto;
                 padding: 20px;
-                overflow: auto;
             }
         }
     }

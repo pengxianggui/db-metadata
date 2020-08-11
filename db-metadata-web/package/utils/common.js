@@ -196,7 +196,7 @@ export function strToObject(value) {
         let result;
         try {
             result = JSON.parse(value);
-            return isObject(result) ? result : {};
+            return isObject(result) ? result : value;
         } catch (e) {
             console.error("value can't be conver to Object, attention please. value: o%", value);
             return value;

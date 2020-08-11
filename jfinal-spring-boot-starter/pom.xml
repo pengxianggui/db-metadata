@@ -6,7 +6,7 @@
     <parent>
         <artifactId>db-metadata-parent</artifactId>
         <groupId>com.hthjsj</groupId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
     <artifactId>jfinal-spring-boot-starter</artifactId>
