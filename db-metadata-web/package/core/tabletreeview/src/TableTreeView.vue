@@ -311,8 +311,27 @@
              * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
              */
             doDelete(primaryKvExp) {
-                // PXG_TODO
-                this.$message.warning("NOT FINISHED!")
+                let title = '确定删除此条记录?';
+                const RECORD_SIZE = this.choseData.length;
+
+                if (RECORD_SIZE > 1) {
+                    title = '确定删除选中的' + RECORD_SIZE + '条记录?';
+                }
+
+                this.$confirm(title, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const {delete_url} = this.innerMeta;
+                    const url = delete_url + '?' + primaryKvExp;
+                    this.$axios.delete(url).then(resp => {
+                        this.$message.success(resp.msg);
+                        this.getData();
+                    }).catch(err => {
+                        this.$message.error(err.msg);
+                    });
+                });
             },
             // 新增一行
             handleAdd() {
