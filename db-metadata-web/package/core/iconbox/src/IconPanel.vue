@@ -1,13 +1,28 @@
 <template>
     <div class="ui-fas">
-        <el-input class="inputIcon" v-model="name"
-                  suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
-        </el-input>
-        <ul class="fas-icon-list">
-            <li v-for="(item, index) in filteredIconList" :key="index" @dblclick="handleRowDbClick(item)">
-                <i class="fas" :class="[item]"/>
-            </li>
-        </ul>
+        <el-tabs v-model="chose">
+            <el-tab-pane label="Font Icon" name="font">
+                <el-input class="inputIcon" v-model="name"
+                          suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
+                </el-input>
+                <ul class="fas-icon-list">
+                    <li v-for="(item, index) in filteredIconList" :key="index" @dblclick="handleRowDbClick(item)">
+                        <i class="fas" :class="[item]"/>
+                    </li>
+                </ul>
+            </el-tab-pane>
+            <el-tab-pane label="SVG" name="svg">
+                <el-input class="inputIcon" v-model="name"
+                          suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
+                </el-input>
+                <ul class="fas-icon-list">
+                    <li v-for="svg in filteredSvgList" :key="svg" @dblclick="handleRowDbClick(svg)">
+                        <svg-icon :value="svg"></svg-icon>
+                    </li>
+                </ul>
+            </el-tab-pane>
+        </el-tabs>
+
     </div>
 </template>
 <script>
@@ -19,22 +34,20 @@
         data() {
             return {
                 name: '',
-                iconList: IconList
-            }
-        },
-        filters: {
-            filterIcons(iconList) {
-                if (!utils.isEmpty(this.name)) {
-                    return iconList.filter(item => item.includes(this.name));
-                } else {
-                    return iconList;
-                }
+                iconList: IconList,
+                chose: 'font',
+                svgs: []
             }
         },
         methods: {
             handleRowDbClick(icon) {
                 this.$emit('selected', icon);
             }
+        },
+        mounted() {
+            const symbols = document.querySelectorAll('svg>symbol')
+            const svgs = Array.prototype.slice.call(symbols).map(s => s.id.match(/icon-(\S*)/)[1])
+            this.svgs = svgs
         },
         computed: {
             filteredIconList() {
@@ -44,6 +57,10 @@
                 } else {
                     return iconList;
                 }
+            },
+            filteredSvgList() {
+                const {svgs, name} = this;
+                return utils.isEmpty(name) ? svgs : svgs.filter(i => i.includes(name))
             }
         }
     }

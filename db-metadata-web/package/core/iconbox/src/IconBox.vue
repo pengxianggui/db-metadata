@@ -8,9 +8,11 @@
                   @change="$emit('change', $event)"
                   @clear="handlerClear($event)"
                   v-on:click.native="handlerClick($event)"
-                  :prefix-icon="nativeValue"
                   suffix-icon="el-icon-search"
                   placeholder="点击选择图标" clearable>
+            <template #prefix>
+                <svg-icon v-if="nativeValue" :value="nativeValue"></svg-icon>
+            </template>
         </el-input>
         <dialog-box :visible.sync="dialogVisible">
             <icon-panel @selected="selectIcon"></icon-panel>
@@ -62,7 +64,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .tip {
         font-size: 12px;
         color: #999999;
