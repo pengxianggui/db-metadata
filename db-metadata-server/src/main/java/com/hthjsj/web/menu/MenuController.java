@@ -19,11 +19,27 @@ import java.util.List;
  */
 public class MenuController extends FrontRestController {
 
+    private String objectCode() {
+        return "meta_menu";
+    }
+
     @Override
     public void index() {
-        String objectCode = "meta_menu";
-        IMetaObject metaObject = metaService().findByCode(objectCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode());
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig());
+        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
+    }
+
+    /**
+     * 获取某节点所有子节点,并以树状结构返回;
+     * 取树逻辑不变,变更TreeConfig配置即可
+     */
+    public void child() {
+        IMetaObject metaObject = metaService().findByCode(objectCode());
+        TreeConfig treeConfig = treeConfig();
+        String pid = getPara(treeConfig.getPidKey(), "").trim();
+        treeConfig.setRootIdentify(pid);
+        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
         renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
     }
 
