@@ -253,7 +253,16 @@ public class UtilKit {
                     deepMerge((Map) mergeMap.get(key), valueJson, overwrite);
                 } else {
                     if (overwrite) {
-                        mergeMap.merge(key, value, (oldValue, newValue) -> StrKit.defaultIfBlank(String.valueOf(newValue), String.valueOf(oldValue)));
+                        mergeMap.merge(key, value, (oldValue, newValue) -> {
+                            //                            StrKit.defaultIfBlank(String.valueOf(newValue), String.valueOf(oldValue))
+                            if (newValue != null && StrKit.notBlank(String.valueOf(newValue))) {
+                                return newValue;
+                            }
+                            if (oldValue != null && StrKit.notBlank(String.valueOf(oldValue))) {
+                                return oldValue;
+                            }
+                            return newValue;
+                        });
                     } else {
                         mergeMap.merge(key, value, (oldValue, newValue) -> oldValue);
                     }
