@@ -312,21 +312,21 @@
              */
             doDelete(primaryKvExp) {
                 let title = '确定删除此条记录?';
-                const RECORD_SIZE = this.choseData.length;
 
+                const {choseData: {length: RECORD_SIZE}, innerMeta: {delete_url: deleteUrl}} = this;
                 if (RECORD_SIZE > 1) {
                     title = '确定删除选中的' + RECORD_SIZE + '条记录?';
                 }
 
-                this.$confirm(title, '提示', {
+                this.$confirm(`${title} 会连同子节点一起删除。`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const {delete_url} = this.innerMeta;
-                    const url = delete_url + '?' + primaryKvExp;
+                    const url = deleteUrl + '?' + primaryKvExp;
                     this.$axios.delete(url).then(resp => {
-                        this.$message.success(resp.msg);
+                        const {msg = '删除成功'} = resp
+                        this.$message.success(msg);
                         this.getData();
                     }).catch(err => {
                         this.$message.error(err.msg);
