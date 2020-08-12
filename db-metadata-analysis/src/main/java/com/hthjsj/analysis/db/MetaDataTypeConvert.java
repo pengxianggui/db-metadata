@@ -74,7 +74,7 @@ public class MetaDataTypeConvert {
     private static final DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static Class getType(String dataType) {
-        return map.get(dataType);
+        return map.get(dataType.toUpperCase());
     }
 
     public static String getTypeName(String dataType) {
