@@ -4,6 +4,8 @@ import com.alibaba.fastjson.serializer.AfterFilter;
 import com.hthjsj.web.WebException;
 import com.jfinal.plugin.activerecord.Record;
 
+import java.util.List;
+
 /**
  * <p> @Date : 2020/8/6 </p>
  * <p> @Project : db-meta-serve</p>
@@ -31,4 +33,14 @@ public class TreeKit {
             }
         }
     };
+
+    public static <S, N> void getChildIds(List<TreeNode<S, N>> tree, List<Object> result) {
+        for (TreeNode treeNode : tree) {
+            if (treeNode.getChildren() != null && !treeNode.getChildren().isEmpty()) {
+                getChildIds(treeNode.getChildren(), result);
+            } else {
+                result.add(treeNode.getId());
+            }
+        }
+    }
 }

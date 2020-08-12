@@ -31,6 +31,13 @@ public class UniqueRecord extends Record implements Comparable<UniqueRecord> {
         return selfId.hashCode();
     }
 
+    /**
+     * 树型结构下,一般Pid可能会设置null或者空串,s2变量的判断是针对种情况
+     *
+     * @param o
+     *
+     * @return
+     */
     @Override
     public int compareTo(UniqueRecord o) {
         String selfId = getStr(treeConfig.getIdKey());

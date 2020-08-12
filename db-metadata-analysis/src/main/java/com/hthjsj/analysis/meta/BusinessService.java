@@ -90,6 +90,11 @@ public class BusinessService {
                 if (status) {
                     i++;
                 }
+            } else {
+                boolean status = Db.use(object.schemaName()).deleteById(object.tableName(), pks);
+                if (status) {
+                    i++;
+                }
             }
         }
         return ids.length == i;

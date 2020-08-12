@@ -9,6 +9,8 @@ import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 对象配置信息与MiniFormObject.vue 文件一一对应
+ * <p>
  * 元对象配置解析器
  * <p> @Date : 2019/11/14 </p>
  * <p> @Project : db-meta-serve</p>
@@ -97,7 +99,7 @@ public class MetaObjectConfigParse extends MetaData {
 
     public boolean isTreeStructure() {
         if (StrKit.notBlank(getStr("structure"))) {
-            return Boolean.valueOf(getStr("structure"));
+            return getStr("structure").equalsIgnoreCase("tree");
         }
         return false;
     }

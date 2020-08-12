@@ -29,6 +29,7 @@ import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -122,6 +123,11 @@ public class TableController extends FrontRestController {
      * url样例:
      *      单主键:   http://localhost:8888/table/delete?id=1&id=2&id=3
      *      复合主键: http://localhost:8888/table/delete?id=pk1_v1,pk2_v2&id=pk1_v1,pk2_v2
+     *
+     * 树形删除逻辑:
+     *     1. 先构建子树
+     *     2. 遍历子树取id
+     *     3. 构建Object[] ids 与普通原对象共用删除逻辑
      * </pre>
      */
     @Override
@@ -130,7 +136,27 @@ public class TableController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        Object[] ids = queryHelper.getPks(metaObject);
+        Object[] ids;
+
+        if (metaObject.configParser().isTreeStructure()) {
+            String id = getPara("id", "").trim();
+            boolean containsRoot = getParaToBoolean("self", true);
+            List<Object> idss = new ArrayList<>();
+
+            TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
+            Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
+            treeConfig.setRootIdentify(id);
+
+            List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
+            if (containsRoot) {
+                idss.add(id);
+            }
+
+            TreeKit.getChildIds(tree, idss);
+            ids = idss.toArray();
+        } else {
+            ids = queryHelper.getPks(metaObject);
+        }
 
         Preconditions.checkArgument(ids.length != 0, "无效的数据id:[%s]", MoreObjects.toStringHelper(ids));
 
@@ -153,7 +179,7 @@ public class TableController extends FrontRestController {
                     log.error(e.getMessage(), e);
                     s = false;
                 }
-                return s;
+                return true;
             }
         });
 
