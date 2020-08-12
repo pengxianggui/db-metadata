@@ -13,7 +13,7 @@ import com.hthjsj.web.user.UserService;
 public class JeesiteUserFactory extends AbstractUserFactory<JeesiteUser> {
 
     @Override
-    public UserService<JeesiteUser> createService() {
+    public UserService<JeesiteUser> userService() {
         return new JeesiteUserService();
     }
 

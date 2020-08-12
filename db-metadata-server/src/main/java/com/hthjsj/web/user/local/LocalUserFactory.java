@@ -13,7 +13,7 @@ import com.hthjsj.web.user.UserService;
 public class LocalUserFactory extends AbstractUserFactory<LocalUser> {
 
     @Override
-    public UserService<LocalUser> createService() {
+    public UserService<LocalUser> userService() {
         return new LocalUserService("user.json");
     }
 

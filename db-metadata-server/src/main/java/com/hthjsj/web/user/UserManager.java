@@ -32,7 +32,7 @@ public class UserManager {
     }
 
     public UserService userService() {
-        return getUserFactory().createService();
+        return getUserFactory().userService();
     }
 
     public LoginService loginService() {
