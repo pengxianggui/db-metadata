@@ -32,7 +32,8 @@
                     to: {
                         path: url,
                         query: query
-                    }
+                    },
+                    style: 'text-decoration: none'
                 }
             }
         }

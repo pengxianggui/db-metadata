@@ -1,9 +1,9 @@
 <template>
-    <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners"/>
+    <div v-if="isExternal" :style="styleExternalIcon"
+         class="svg-external-icon svg-icon" v-on="$listeners" v-bind="$attrs"></div>
     <span v-else>
-<!--        区分element图标和svg图标-->
-        <i v-if="iconClass.startsWith('el-')" :class="iconClass"></i>
-        <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
+        <i v-if="value.startsWith('el-icon')" :class="value"></i>
+        <svg v-else aria-hidden="true" class="svg-icon" v-on="$listeners" v-bind="$attrs">
             <use :xlink:href="iconName"/>
         </svg>
     </span>
@@ -15,33 +15,22 @@
     export default {
         name: 'SvgIcon',
         props: {
-            iconClass: {
+            value: {
                 type: String,
                 required: true
-            },
-            className: {
-                type: String,
-                default: ''
             }
         },
         computed: {
             isExternal() {
-                return isExternal(this.iconClass)
+                return isExternal(this.value)
             },
             iconName() {
-                return `#icon-${this.iconClass}`
-            },
-            svgClass() {
-                if (this.className) {
-                    return 'svg-icon ' + this.className
-                } else {
-                    return 'svg-icon'
-                }
+                return `#icon-${this.value}`
             },
             styleExternalIcon() {
                 return {
-                    mask: `url(${this.iconClass}) no-repeat 50% 50%`,
-                    '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`
+                    'background-image': `url(${this.value})`,
+                    'background-size': '100% 100%'
                 }
             }
         }

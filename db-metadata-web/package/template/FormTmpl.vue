@@ -13,31 +13,41 @@
 <script>
     import utils from '../utils'
     import FormView from "../core/formview/src/FormView";
+    import {getAddFormMeta, getUpdateFormMeta} from '../utils/rest'
 
     export default {
         name: "FormTmpl",
+        props: {
+            oc: String,
+            type: {
+                type: String,
+                default: () => 'ADD',
+                validator: (value) => ['ADD', 'UPDATE'].indexOf(value.toUpperCase()) > -1
+            }
+        },
         components: {
             FormView
         },
-        props: {
-            metaUrl: {
-                type: String,
-                require: true
-            }
-        },
         data() {
-            const {R_url} = this.$route.query;
-            const url = utils.assertUndefined(this.metaUrl, R_url);
+            const {oc: R_oc} = this.$route.query
+            const objectCode = utils.assertUndefined(this.oc, R_oc);
             return {
-                url: url,
+                objectCode: objectCode,
                 meta: {}
             }
         },
         created() {
-            const {url} = this;
-            this.$axios.get(url).then(resp => {
-                this.meta = resp.data;
-            });
+            const {objectCode, type} = this;
+            let metaFn;
+            if (type.toUpperCase() === 'ADD') {
+                metaFn = getAddFormMeta
+            } else if (type.toUpperCase() === 'UPDATE') {
+                metaFn = getUpdateFormMeta
+            }
+            metaFn(objectCode).then(resp => {
+                const {data: meta} = resp
+                this.meta = meta;
+            })
         }
     }
 </script>

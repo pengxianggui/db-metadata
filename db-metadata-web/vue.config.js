@@ -1,4 +1,5 @@
 let alias = require('./alias.config');
+let path = require('path')
 
 const name = "db-metadata-web";
 module.exports = {
@@ -34,18 +35,7 @@ module.exports = {
                 // target: 'http://192.168.110.67:8888',
                 pathRewrite: {'^/file': '/file'},
                 changeOrigin: true
-            },
-            // '^\/db\/': serverProxy,
-            // '^\/meta\/': serverProxy,
-            // '^\/component\/': serverProxy,
-            // '^\/table\/': serverProxy,
-            // '^\/form\/': serverProxy,
-            // '^\/dict\/': serverProxy,
-            // '^\/file\/': serverProxy,
-            // '^\/check\/': serverProxy,
-            // '^\/find\/': serverProxy,
-            // '^\/feature\/': serverProxy,
-            // '^\/route\/': serverProxy,
+            }
         }
     },
     // 扩展 webpack 配置，使 packages 加入编译
@@ -55,5 +45,22 @@ module.exports = {
             .use('babel').loader('babel-loader').tap(options => {
             return options;
         })
+
+        // set svg-sprite-loade
+        config.module
+            .rule('svg')
+            .exclude.add(path.join(__dirname, 'src/svg'))
+            .end()
+        config.module
+            .rule('icons')
+            .test(/\.svg$/)
+            .include.add(path.join(__dirname, 'src/svg'))
+            .end()
+            .use('svg-sprite-loader')
+            .loader('svg-sprite-loader')
+            .options({
+                symbolId: 'icon-[name]'
+            })
+            .end()
     }
 };

@@ -60,6 +60,30 @@ export const getTreeMeta = {
     }
 };
 
+// export const getAddFormMeta = {
+//     methods: {
+//         getAddFormMeta(objectCode) {
+//             let url = this.$compile(restUrl.RECORD_TO_ADD, {
+//                 objectCode: objectCode,
+//                 componentCode: 'FormView'
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// }
+//
+// export const getUpdateFormMeta = {
+//     methods: {
+//         getUpdateFormMeta(objectCode) {
+//             let url = this.$compile(restUrl.RECORD_TO_UPDATE, {
+//                 objectCode: objectCode,
+//                 componentCode: 'FormView'
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// }
+
 export const getFormMeta = {
     methods: {
         getFormMeta(objectCode) {

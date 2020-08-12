@@ -4,7 +4,7 @@
             <app-link :to="item.path"
                       :query="resolveParams(item['params'])">
                 <el-menu-item :index="item.path">
-                    <svg-icon :icon-class="item.icon" v-if="item.icon"></svg-icon>
+                    <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
                     <span slot="title">{{item.title}}</span>
                 </el-menu-item>
             </app-link>
@@ -12,7 +12,7 @@
 
         <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
             <template #title>
-                <svg-icon :icon-class="item.icon" v-if="item.icon"></svg-icon>
+                <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
                 <span slot="title">{{item.title}}</span>
             </template>
             <menu-item v-for="subMenu in item.children"
