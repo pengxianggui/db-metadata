@@ -32,7 +32,7 @@ public class RouterController extends FrontRestController {
         if (StrKit.notBlank(pid)) {
             treeConfig.setRootIdentify(pid);
         }
-        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig());
+        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
         renderJsonExcludes(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))), "created_time", "updated_time");
     }
 

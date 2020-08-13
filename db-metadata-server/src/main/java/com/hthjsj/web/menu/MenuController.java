@@ -32,7 +32,7 @@ public class MenuController extends FrontRestController {
         if (StrKit.notBlank(pid)) {
             treeConfig.setRootIdentify(pid);
         }
-        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig());
+        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
         renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
     }
 
