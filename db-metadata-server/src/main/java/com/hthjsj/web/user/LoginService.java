@@ -22,9 +22,27 @@ public interface LoginService<U extends User> {
 
     U login(String username, String password);
 
-    boolean logout(U user);
+    /**
+     * 如外部已完成用户的login动作,可以将User用户手动登入
+     * 方法主要逻辑在于显示得将某个用户注册到验证容器中
+     *
+     * @param user
+     *
+     * @return
+     */
+    default U login(U user) {
+        return user;
+    }
 
-    boolean logged(U user);
+    default boolean logout(U user) {
+        return false;
+    }
 
-    boolean isExpired(U user);
+    default boolean logged(U user) {
+        return false;
+    }
+
+    default boolean isExpired(U user) {
+        return false;
+    }
 }

@@ -1,8 +1,8 @@
 package com.hthjsj.web.user;
 
 import com.google.common.base.Preconditions;
-import com.hthjsj.web.auth.MRAuthIntercept;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.user.auth.MRAuthIntercept;
 import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
