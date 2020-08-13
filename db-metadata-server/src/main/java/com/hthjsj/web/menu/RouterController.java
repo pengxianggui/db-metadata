@@ -7,6 +7,7 @@ import com.hthjsj.web.kit.tree.TreeConfig;
 import com.hthjsj.web.kit.tree.TreeKit;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
@@ -26,22 +27,15 @@ public class RouterController extends FrontRestController {
     @Override
     public void index() {
         IMetaObject metaObject = metaService().findByCode(objectCode());
+        TreeConfig treeConfig = treeConfig();
+        String pid = getPara(treeConfig.getPidKey(), "").trim();
+        if (StrKit.notBlank(pid)) {
+            treeConfig.setRootIdentify(pid);
+        }
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig());
         renderJsonExcludes(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))), "created_time", "updated_time");
     }
 
-    /**
-     * 获取某节点所有子节点,并以树状结构返回;
-     * 取树逻辑不变,变更TreeConfig配置即可
-     */
-    public void child() {
-        IMetaObject metaObject = metaService().findByCode(objectCode());
-        TreeConfig treeConfig = treeConfig();
-        String pid = getPara(treeConfig.getPidKey(), "").trim();
-        treeConfig.setRootIdentify(pid);
-        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
-        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
-    }
 
     private TreeConfig treeConfig() {
         TreeConfig treeConfig = new TreeConfig();
