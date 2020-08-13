@@ -1,25 +1,26 @@
 <template>
     <div class="ui-fas">
-        <el-tabs v-model="chose">
-            <el-tab-pane label="Font Icon" name="font">
-                <el-input class="inputIcon" v-model="name"
-                          suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
-                </el-input>
+        <el-input class="inputIcon" v-model="name"
+                  suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
+        </el-input>
+        <el-tabs v-model="chose" style="height: 100%">
+            <el-tab-pane label="Font Icon" name="font" style="overflow: auto; height: 200px">
                 <ul class="fas-icon-list">
                     <li v-for="(item, index) in filteredIconList" :key="index" @dblclick="handleRowDbClick(item)">
                         <i class="fas" :class="[item]"/>
                     </li>
                 </ul>
             </el-tab-pane>
-            <el-tab-pane label="SVG" name="svg">
-                <el-input class="inputIcon" v-model="name"
-                          suffix-icon="el-icon-search" placeholder="请输入图标名称" clearable>
-                </el-input>
+            <el-tab-pane label="SVG" name="svg" style="overflow: auto; height: 200px">
                 <ul class="fas-icon-list">
                     <li v-for="svg in filteredSvgList" :key="svg" @dblclick="handleRowDbClick(svg)">
                         <svg-icon :value="svg"></svg-icon>
                     </li>
                 </ul>
+            </el-tab-pane>
+            <el-tab-pane label="Link" name="link" style="overflow: auto; height: 200px">
+                <el-input v-model="value" placeholder="请输入有效的网络图标链接, 回车应用.."
+                          @keyup.enter.native="handleRowDbClick(value)"></el-input>
             </el-tab-pane>
         </el-tabs>
 
@@ -36,11 +37,13 @@
                 name: '',
                 iconList: IconList,
                 chose: 'font',
-                svgs: []
+                svgs: [],
+                value: ''
             }
         },
         methods: {
             handleRowDbClick(icon) {
+                this.value = icon
                 this.$emit('selected', icon);
             }
         },
@@ -78,8 +81,7 @@
     }
 
     .fas-icon-list {
-        height: 100%;
-        overflow: scroll;
+        overflow: auto;
         list-style: none;
     }
 

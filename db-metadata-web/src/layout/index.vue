@@ -21,7 +21,7 @@
         </template>
         <template #menu>
             <div class="menu">
-                <nav-menu style="height: 100%"></nav-menu>
+                <nav-menu style="height: 100%" :unique-opened="true"></nav-menu>
             </div>
         </template>
     </admin-layout>
