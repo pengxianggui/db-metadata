@@ -92,7 +92,10 @@ public class MetaDataTypeConvert {
         if ((typeName.equalsIgnoreCase("tinyint")) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
             clazz = Boolean.class;
         }
-        o = cast(o.toString(), clazz);
+        o = cast(String.valueOf(o), clazz);
+        if (String.valueOf(o).equalsIgnoreCase("null")) {
+            return null;
+        }
         return o;
     }
 

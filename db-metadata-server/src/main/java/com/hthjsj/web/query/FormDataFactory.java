@@ -27,8 +27,12 @@ import java.util.Map;
 public class FormDataFactory {
 
     /**
-     * 根据request 参数,metaObject 构建MetaData
-     * 其中包含对元字段特殊配置的处理
+     * <pre>
+     *      根据request 参数,metaObject 构建MetaData,其中包含对元字段特殊配置的处理
+     *      关于数据库保存"null"字符串的情况的几种说明:
+     *          1. httpParams 中未传,但metaField中获得
+     *          2. httpParams 中某字段 value为"null"
+     * </pre>
      *
      * @param httpParams
      * @param metaObject
@@ -43,7 +47,7 @@ public class FormDataFactory {
 
         for (IMetaField metaField : metaObject.fields()) {
 
-            //转值
+            //转值  : ""| null | 真实值
             Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
@@ -83,10 +87,32 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+                //日期类型处理
+                if (metaField.dbType().isDate()) {
+                    if (StrKit.notNull(castedValue)) {
+                        formData.set(metaField.fieldCode(), castedValue);
+                    } else {
+                        formData.set(metaField.fieldCode(), null);
+                    }
+                    continue;
+                }
+                //数值类型 value->defaultVal->0
+                if (metaField.dbType().isNumber()) {
+                    if (StrKit.notNull(castedValue)) {
+                        formData.set(metaField.fieldCode(), castedValue);
+                    } else {
+                        if (StrKit.notBlank(metaField.configParser().defaultVal())) {
+                            formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
+                        } else {
+                            formData.set(metaField.fieldCode(), 0);
+                        }
+                    }
+                    continue;
+                }
                 //文本类型处理
                 if (metaField.dbType().isText()) {
-                    String s = String.valueOf(castedValue);
-                    formData.set(metaField.fieldCode(), StrKit.defaultIfBlank(s, ""));
+                    formData.set(metaField.fieldCode(), StrKit.defaultIfBlank(String.valueOf(castedValue), ""));
+                    continue;
                 }
                 // set 该metafile 转换后的value
                 if (castedValue != null) {
