@@ -1,7 +1,7 @@
 package com.hthjsj.web.user.role;
 
-import com.hthjsj.web.auth.MRRole;
 import com.hthjsj.web.user.User;
+import com.hthjsj.web.user.auth.MRRole;
 
 /**
  * <p> @Date : 2020/8/12 </p>
