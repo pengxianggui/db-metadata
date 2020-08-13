@@ -109,9 +109,19 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+
+                if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
+                    formData.set(metaField.fieldCode(), Boolean.parseBoolean(String.valueOf(castedValue)));
+                    continue;
+                }
+
                 //文本类型处理
                 if (metaField.dbType().isText()) {
-                    formData.set(metaField.fieldCode(), StrKit.defaultIfBlank(String.valueOf(castedValue), ""));
+                    if (StrKit.notNull(castedValue)) {
+                        formData.set(metaField.fieldCode(), castedValue);
+                    } else {
+                        formData.set(metaField.fieldCode(), "");
+                    }
                     continue;
                 }
                 // set 该metafile 转换后的value
