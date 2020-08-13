@@ -19,18 +19,18 @@ public class MRManager implements MRLoader, MRPermit<User, MResource> {
 
     private static final MRManager me = new MRManager();
 
-    private MRManager() {
-    }
-
     /**
      * 注册多个资源访问器
      */
     private final List<MRLoader> mrLoaders = new ArrayList<>();
 
+    private final Map<String, MResource> allMResource = new HashMap<>();
+
     @Setter
     private MRPermit permit;
 
-    private final Map<String, MResource> allMResource = new HashMap<>();
+    private MRManager() {
+    }
 
     public static MRManager me() {
         return me;

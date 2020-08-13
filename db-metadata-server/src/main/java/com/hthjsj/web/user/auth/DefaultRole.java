@@ -11,13 +11,13 @@ import java.util.List;
  */
 class DefaultRole implements MRRole {
 
-    private Permission[] permissions;
-
     private final List<Permission> innerPermissionList;
 
     private final String code;
 
     private final String name;
+
+    private Permission[] permissions;
 
     public DefaultRole(String code, String name) {
         this.code = code;
@@ -43,10 +43,6 @@ class DefaultRole implements MRRole {
         return permissions;
     }
 
-    public void addPermission(Permission permission) {
-        innerPermissionList.add(permission);
-    }
-
     @Override
     public boolean hasPermission(Permission permission) {
         for (Permission p : permissions) {
@@ -55,5 +51,9 @@ class DefaultRole implements MRRole {
             }
         }
         return false;
+    }
+
+    public void addPermission(Permission permission) {
+        innerPermissionList.add(permission);
     }
 }
