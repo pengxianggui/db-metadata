@@ -1,7 +1,7 @@
-package com.hthjsj.web.auth.jfinal;
+package com.hthjsj.web.user.auth.jfinal;
 
-import com.hthjsj.web.auth.MRLoader;
-import com.hthjsj.web.auth.MResource;
+import com.hthjsj.web.user.auth.MRLoader;
+import com.hthjsj.web.user.auth.MResource;
 import com.jfinal.core.JFinal;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class JFinalResourceLoader implements MRLoader {
 
-    private List<MResource> resources = new ArrayList<>(0);
+    private final List<MResource> resources = new ArrayList<>(0);
 
     @Override
     public void load() {

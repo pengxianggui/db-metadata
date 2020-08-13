@@ -1,6 +1,6 @@
-package com.hthjsj.web.auth.jfinal;
+package com.hthjsj.web.user.auth.jfinal;
 
-import com.hthjsj.web.auth.MResource;
+import com.hthjsj.web.user.auth.MResource;
 
 /**
  * <p> @Date : 2019/12/16 </p>
@@ -10,11 +10,11 @@ import com.hthjsj.web.auth.MResource;
  */
 public class ActionResource implements MResource {
 
-    private String rid;
+    private final String rid;
 
-    private String rName;
+    private final String rName;
 
-    private boolean needPermit;
+    private final boolean needPermit;
 
     public ActionResource(String rid, String rName, boolean needPermit) {
         this.rid = rid;

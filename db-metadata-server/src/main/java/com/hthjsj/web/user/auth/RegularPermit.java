@@ -1,4 +1,4 @@
-package com.hthjsj.web.auth;
+package com.hthjsj.web.user.auth;
 
 import com.hthjsj.web.user.User;
 import com.jfinal.kit.StrKit;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class RegularPermit implements MRPermit<User, MResource> {
 
-    private Pattern pattern;
+    private final Pattern pattern;
 
     public RegularPermit(String regex) {
         this(regex, true);

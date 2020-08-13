@@ -1,4 +1,4 @@
-package com.hthjsj.web.auth;
+package com.hthjsj.web.user.auth;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.web.user.User;
@@ -25,12 +25,12 @@ public class MRManager implements MRLoader, MRPermit<User, MResource> {
     /**
      * 注册多个资源访问器
      */
-    private List<MRLoader> mrLoaders = new ArrayList<>();
+    private final List<MRLoader> mrLoaders = new ArrayList<>();
 
     @Setter
     private MRPermit permit;
 
-    private Map<String, MResource> allMResource = new HashMap<>();
+    private final Map<String, MResource> allMResource = new HashMap<>();
 
     public static MRManager me() {
         return me;

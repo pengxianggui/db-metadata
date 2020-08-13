@@ -1,4 +1,4 @@
-package com.hthjsj.web.auth;
+package com.hthjsj.web.user.auth;
 
 /**
  * <p> @Date : 2020/8/12 </p>
