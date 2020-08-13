@@ -1,4 +1,4 @@
-package com.hthjsj.web.user.local;
+package com.hthjsj.web.user.support.local;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -7,7 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
-import com.hthjsj.web.user.UserIntercept;
+import com.hthjsj.web.user.UserManager;
 import com.jfinal.kit.Kv;
 import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +27,9 @@ import java.util.List;
 @Slf4j
 public class LocalUserService extends AbstractUserService<LocalUser> {
 
-    private static List<LocalUser> users = new ArrayList<>();
+    private static final List<LocalUser> users = new ArrayList<>();
 
-    private String fileName;
+    private final String fileName;
 
     public LocalUserService(String fileName) {
         this.fileName = fileName;
@@ -59,7 +59,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
     public LocalUser login(String username, String password) {
         LocalUser user = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username)).findFirst().get();
         if (user != null) {
-            UserIntercept.caches.put(user.userId(), user);
+            UserManager.me().getLoginUsers().put(user.userId(), user);
         }
         return user;
     }

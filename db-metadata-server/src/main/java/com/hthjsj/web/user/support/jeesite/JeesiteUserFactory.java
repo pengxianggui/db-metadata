@@ -1,4 +1,4 @@
-package com.hthjsj.web.user.jeesite;
+package com.hthjsj.web.user.support.jeesite;
 
 import com.hthjsj.web.user.AbstractUserFactory;
 import com.hthjsj.web.user.LoginService;

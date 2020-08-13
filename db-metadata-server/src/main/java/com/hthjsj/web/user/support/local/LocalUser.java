@@ -1,4 +1,4 @@
-package com.hthjsj.web.user.jeesite;
+package com.hthjsj.web.user.support.local;
 
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.User;
@@ -12,22 +12,22 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class JeesiteUser implements User {
+public class LocalUser implements User {
 
     Kv attrs;
 
-    public JeesiteUser(Map attrs) {
-        this.attrs = Kv.create().set(attrs);
+    public LocalUser(Map attr) {
+        this.attrs = Kv.create().set(attr);
     }
 
     @Override
     public String userId() {
-        return attrs.getStr("user_code");
+        return attrs.getStr("userId");
     }
 
     @Override
     public String userName() {
-        return attrs.getStr("user_name");
+        return attrs.getStr("userName");
     }
 
     @Override

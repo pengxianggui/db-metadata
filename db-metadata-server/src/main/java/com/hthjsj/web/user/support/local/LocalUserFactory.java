@@ -1,4 +1,4 @@
-package com.hthjsj.web.user.local;
+package com.hthjsj.web.user.support.local;
 
 import com.hthjsj.web.user.AbstractUserFactory;
 import com.hthjsj.web.user.LoginService;

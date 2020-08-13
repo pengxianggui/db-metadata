@@ -1,8 +1,8 @@
-package com.hthjsj.web.user.jeesite;
+package com.hthjsj.web.user.support.jeesite;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.web.user.AbstractUserService;
-import com.hthjsj.web.user.UserIntercept;
+import com.hthjsj.web.user.UserManager;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -43,7 +43,7 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
         Record user = Db.use(JEESITE).findFirst("select * from js_sys_user where user_code=? and password=?", username, password);
         if (user != null) {
             JeesiteUser jeesiteUser = new JeesiteUser(user.getColumns());
-            UserIntercept.caches.put(jeesiteUser.userId(), jeesiteUser);
+            UserManager.me().getLoginUsers().put(jeesiteUser.userId(), jeesiteUser);
             return jeesiteUser;
         }
         return null;
@@ -51,18 +51,18 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
 
     @Override
     public boolean logout(JeesiteUser user) {
-        UserIntercept.caches.invalidate(user.userId());
+        UserManager.me().getLoginUsers().invalidate(user.userId());
         return true;
     }
 
     @Override
     public boolean logged(JeesiteUser user) {
-        return UserIntercept.caches.getIfPresent(user.userId()) != null;
+        return UserManager.me().getLoginUsers().getIfPresent(user.userId()) != null;
     }
 
     @Override
     public boolean isExpired(JeesiteUser user) {
-        return UserIntercept.caches.getIfPresent(user.userId()) != null;
+        return UserManager.me().getLoginUsers().getIfPresent(user.userId()) != null;
     }
 
     @Override
