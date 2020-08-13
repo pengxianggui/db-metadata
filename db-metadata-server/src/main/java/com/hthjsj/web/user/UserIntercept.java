@@ -1,7 +1,5 @@
 package com.hthjsj.web.user;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.JFinal;
@@ -19,8 +17,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class UserIntercept implements Interceptor {
-
-    public static Cache<String, User> caches = CacheBuilder.newBuilder().maximumSize(100).build();
 
     public static User staticUser = new User() {
 

@@ -28,7 +28,7 @@ public abstract class AbstractUserService<U extends User> implements UserService
         //request load
         uid = StrKit.defaultIfBlank(uid, request.getParameter(tokenKey()));
         if (StrKit.notBlank(uid)) {
-            U user = (U) UserIntercept.caches.getIfPresent(uid);
+            U user = (U) UserManager.me().getLoginUsers().getIfPresent(uid);
             return user;
         }
         return null;

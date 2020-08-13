@@ -1,6 +1,10 @@
 package com.hthjsj.web.user;
 
-import com.hthjsj.web.user.local.LocalUserFactory;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.hthjsj.web.user.role.UserWithRolesWrapper;
+import com.hthjsj.web.user.support.local.LocalUserFactory;
+import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 public class UserManager {
 
     private static final UserManager me = new UserManager();
+
+    /**
+     * 需要注意得是loginUsers得put动作 只能由loginService来做
+     */
+    @Getter
+    private final Cache<String, User> loginUsers = CacheBuilder.newBuilder().maximumSize(1000).build();
 
     private UserFactory userFactory;
 
@@ -41,5 +51,22 @@ public class UserManager {
 
     public User getUser(HttpServletRequest request) {
         return loginService().getUser(request);
+    }
+
+    /**
+     * 指定某用户为登录状态
+     *
+     * @param user
+     */
+    public void assignUserToLogged(User user) {
+        loginService().login(user);
+    }
+
+    public UserWithRolesWrapper getUserRole(HttpServletRequest request) {
+        User user = getUser(request);
+        if (user instanceof UserWithRolesWrapper) {
+            return (UserWithRolesWrapper) user;
+        }
+        throw new UserException("当前User实例中并不包含Role信息");
     }
 }
