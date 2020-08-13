@@ -41,7 +41,7 @@ public class TreeBuilder<Node extends TreeNode> {
      * @return
      */
     private boolean isEqualsParentId(Object p1, Object p2) {
-        if (p1 != null && p1 != null) {
+        if (p1 != null && p2 != null) {
             return p1.equals(p2);
         } else if (p1 == null && p2 == null) {
             return true;
