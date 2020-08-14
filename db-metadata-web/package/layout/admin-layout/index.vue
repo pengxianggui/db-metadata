@@ -70,7 +70,7 @@
 
             .main {
                 flex: 1;
-                overflow: auto;
+                overflow: hidden auto;
                 padding: 20px;
             }
         }
