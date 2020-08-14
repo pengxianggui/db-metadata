@@ -23,6 +23,10 @@
                 type: String,
                 default: () => 'ADD',
                 validator: (value) => ['ADD', 'UPDATE'].indexOf(value.toUpperCase()) > -1
+            },
+            pkvs: {
+                // 当type为UPDATE时, 必须传入pkvs (当metaObject为单主键, 其值为主键值, 当为联合主键, 此值为pk1_pv1,pk2_pv2,..)
+                type: String
             }
         },
         components: {
@@ -37,14 +41,15 @@
             }
         },
         created() {
-            const {objectCode, type} = this;
-            let metaFn;
+            const {objectCode, type, pkvs} = this;
+            let promise;
             if (type.toUpperCase() === 'ADD') {
-                metaFn = getAddFormMeta
+                promise = getAddFormMeta(objectCode)
             } else if (type.toUpperCase() === 'UPDATE') {
-                metaFn = getUpdateFormMeta
+                promise = getUpdateFormMeta(objectCode, pkvs)
             }
-            metaFn(objectCode).then(resp => {
+
+            promise.then(resp => {
                 const {data: meta} = resp
                 this.meta = meta;
             })
