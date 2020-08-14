@@ -206,6 +206,27 @@ export function strToObject(value) {
 }
 
 /**
+ * 将字符串值转为数组, 若转换失败, 则返回原值
+ * 若不为字符串则直接返回原值
+ *
+ * @param value
+ * @returns {{}|*}
+ */
+export function strToArray(value) {
+    if (isString(value)) {
+        let result;
+        try {
+            result = JSON.parse(value);
+            return isArray(result) ? result : value;
+        } catch (e) {
+            console.error("value can't be conver to Array, attention please. value: o%", value);
+            return value;
+        }
+    }
+    return value
+}
+
+/**
  * 如果 value 不是字符串，将其转换为字符串。 null 和 undefined 将返回空字符串。
  * toString(null);
  * // => ''
