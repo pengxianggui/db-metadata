@@ -58,14 +58,14 @@ public class BusinessService {
     }
 
     public boolean saveData(IMetaObject object, Kv data) {
-        boolean status = Db.use(object.schemaName()).save(object.tableName(), object.primaryKey(), new Record().setColumns(data));
+        boolean status = Db.use(object.schemaName()).save(object.tableName(), object.primaryKey(), new Record().setColumns(data).removeNullValueColumns());
         buriedPoint(object, Kv.create(), data);
         return status;
     }
 
     public boolean updateData(IMetaObject object, MetaData data) {
         Record old = Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), data.getPks(object.primaryKey()));
-        boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data));
+        boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data).removeNullValueColumns());
         buriedPoint(object, old.getColumns(), data);
         return status;
     }

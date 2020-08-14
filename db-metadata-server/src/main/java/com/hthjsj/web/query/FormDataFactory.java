@@ -83,7 +83,7 @@ public class FormDataFactory {
                         }
                         formData.set(metaField.fieldCode(), JSON.toJSONString(files));
                     } else {
-                        formData.set(metaField.fieldCode(), JSON.parseArray("[]"));
+                        formData.set(metaField.fieldCode(), "[]");
                     }
                     continue;
                 }
