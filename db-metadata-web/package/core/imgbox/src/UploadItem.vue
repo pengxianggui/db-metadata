@@ -2,7 +2,7 @@
     <div class="upload-item">
         <el-upload
                 :limit="1"
-                v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                v-bind="conf"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :on-success="handleOnSuccess"
@@ -28,10 +28,10 @@
     export default {
         name: "UploadItem",
         mixins: [Meta(), Val(function (value) {
-            return (!utils.isObject(value) ? [] : [value]);
+            return (!utils.isObject(value) ? [] : [value]); // 入参转数组
         }, function (value) {
             if (utils.isArray(value)) {
-                return value.length > 0 ? value[0] : {}
+                return value.length > 0 ? value[0] : {} // 出参转对象
             }
             if (utils.isObject(value)) {
                 return value
@@ -75,7 +75,6 @@
                 let self = this;
                 return this.$confirm(`确定移除 ${file.name}？`).then(data => {
                     self.nativeValue = self.nativeValue.filter(i => i.uid !== file.uid);
-                    this.$emit('change', self.nativeValue)
                 });
             },
             handleOnSuccess(response, file, fileList) {
@@ -86,7 +85,6 @@
 
                     this.fileList = fileList
                     this.nativeValue = [{url: url, name: name, value: value, uid: file.uid, seat: seat}]
-                    this.$emit('change', this.nativeValue)
                 } else {
                     this.$message.error('文件上传失败');
                 }
@@ -96,6 +94,12 @@
             this.$nextTick(() => {
                 this.fileList = utils.deepClone(this.nativeValue);
             })
+        },
+        computed: {
+            conf() {
+                const {innerMeta: {conf = {}}, $attrs, $reverseMerge} = this
+                return $reverseMerge(conf, $attrs)
+            }
         }
     }
 </script>

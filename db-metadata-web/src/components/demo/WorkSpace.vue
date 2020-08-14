@@ -2,32 +2,55 @@
     <div style="padding: 20px; overflow: auto; height: 100%;">
         <h1>组件开发调试页面</h1>
 
-<!--        <svg-icon-->
-<!--                value="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"></svg-icon>-->
-<!--        <svg-icon value="bug" style="color: red" class="ddd"></svg-icon>-->
-<!--        <svg-icon value="more"></svg-icon>-->
-<!--        <svg-icon value="pass"></svg-icon>-->
-<!--        <svg-icon value="el-icon-setting" style="color: blue" class="ddd"></svg-icon>-->
+        <!--        <img-box :meta="meta" v-model="value"></img-box>-->
 
-        <svg-icon v-for="i in svgs" :value="i"></svg-icon>
-
+        <form-view :meta="meta" :model="data">
+            <template #form-item-content="{column, model}">
+                <el-form-item :name="column.name" :label="column.label">
+                    <rich-text-box v-model="model[column.name]"></rich-text-box>
+                </el-form-item>
+            </template>
+        </form-view>
     </div>
 </template>
 
 <script>
+    import {Rest} from "../../../package/index";
 
     export default {
         name: "WorkSpace",
         data() {
             return {
-                svgs: []
+                oc: 'news',
+                meta1: {
+                    "conf": {
+                        "action": "/file/upload?objectCode=news&fieldCode=thumbnail",
+                        "maxlength": 0,
+                        "show-overflow-tooltip": true
+                    },
+                    "seats": ['1', '2'],
+                    "name": "thumbnail",
+                    "label": "文章缩略图",
+                    "inline": false,
+                    "default_value": {},
+                    "component_name": "ImgBox"
+                },
+                meta: {},
+                value: [],
+                data: {}
             }
         },
-        methods: {},
+        methods: {
+            getMeta() {
+                Rest.getAddFormMeta(this.oc).then(resp => {
+                    this.meta = resp.data
+                    // TODO mock
+                    this.meta.columns.filter(c => c.name === 'account_id').map(c => c.default_value = this.userInfo.accountId)
+                })
+            }
+        },
         created() {
-            const symbols = document.querySelectorAll('svg>symbol')
-            const svgs = Array.prototype.slice.call(symbols).map(s => s.id.match(/icon-(\S*)/)[1])
-            this.svgs = svgs
+            this.getMeta()
         }
     }
 </script>
