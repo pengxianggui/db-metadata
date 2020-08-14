@@ -580,8 +580,9 @@ FileBox, ImgBox支持差异化多文件
 更新FormTmpl, 支持type区分新增表单还是编辑表单;
 SvgIcon支持三种模式: 外部链接、elementUI字体图标、svg图标(需要客户端处理svg图)
 
-### 0.3.15~0.3.17
+### 0.3.15~0.3.18
 TableTreeView删除记录
 IconBox支持点选扩展的svg图标
 修复ImgBox, FileBox删除后vModel值为[{}], 应当为[]
+JsonBox 将传入的值转为合法值
 
