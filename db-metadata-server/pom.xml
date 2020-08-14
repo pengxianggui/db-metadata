@@ -164,6 +164,7 @@
                                     下面的配置支持排除指定文件打包到 jar 之中，可以用于排除需要修改的配置文件以便于在外部的 config 目录下的
                                     同名配置文件生效，建议使用 Prop.appendIfExists(xxx_pro.txt) 在外部放一个非同名配置来覆盖开发环境的配置
                                     则可以不用使用下面的配置，文档参考:
+                                        https://www.jianshu.com/p/7a0e20b30401
                                         http://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html#DontIncludeResourceTransformer
                                 -->
                                 <transformer
@@ -175,7 +176,15 @@
                                     </resources>
                                 </transformer>
                             </transformers>
-
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.jboss.logging:*</exclude>
+                                    <exclude>io.undertow:*</exclude>
+                                    <exclude>com.jfinal:*</exclude>
+                                    <exclude>org.checkerframework:*</exclude>
+                                    <exclude>com.alibaba:druid:jar:</exclude>
+                                </excludes>
+                            </artifactSet>
                             <!--
                                 解决 fatjar 的 "java.lang.SecurityException: Invalid signature file digest
                                 for Manifest main attributes" 问题
