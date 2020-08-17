@@ -6,6 +6,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.jfinal.kit.Kv;
 
 /**
+ * 元子段配置扩展
  * <p> @Date : 2019/12/18 </p>
  * <p> @Project : db-meta-serve</p>
  *

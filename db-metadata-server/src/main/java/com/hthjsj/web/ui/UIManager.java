@@ -2,7 +2,7 @@ package com.hthjsj.web.ui;
 
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.WebException;
+import com.hthjsj.web.ServiceManager;
 import com.jfinal.kit.Kv;
 
 /**
@@ -65,8 +65,12 @@ public class UIManager {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, ComponentType.TABLEVIEW);
     }
 
-    public static boolean update(MetaObjectViewAdapter metaObjectViewAdapter) {
-        throw new WebException("not finished");
+    public static boolean createField(MetaFieldViewAdapter metaFieldViewAdapter, String instanceCode, String instanceName) {
+        return ServiceManager.componentService().newFieldConfig(metaFieldViewAdapter.getComponent(),
+                                                                metaFieldViewAdapter.getMetaField(),
+                                                                instanceCode,
+                                                                instanceName,
+                                                                metaFieldViewAdapter.getFieldInstanceConfig());
     }
 
     public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter, ComponentType componentType) {

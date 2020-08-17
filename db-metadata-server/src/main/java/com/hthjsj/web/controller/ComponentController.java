@@ -155,7 +155,11 @@ public class ComponentController extends FrontRestController {
                 return;
             }
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config, metaObject.code(), instanceCode, instanceName);
+            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
+                                                                                          metaObject.code(),
+                                                                                          instanceCode,
+                                                                                          instanceName,
+                                                                                          component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -178,7 +182,11 @@ public class ComponentController extends FrontRestController {
         Component component = ViewFactory.createEmptyViewComponent(compCode);
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config, metaObject.code(), instanceCode, instanceName);
+            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
+                                                                                          metaObject.code(),
+                                                                                          instanceCode,
+                                                                                          instanceName,
+                                                                                          component.componentType());
             componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));

@@ -152,11 +152,27 @@ public class ComponentService {
     }
 
     /**
+     * 根据元对象 返回所有相关的 ComponentInstanceConfig
+     *
+     * @param objectCode
+     *
+     * @return
+     */
+    public List<ComponentInstanceConfig> loadInstanceByObjectCode(String objectCode) {
+        List<ComponentInstanceConfig> instanceConfigList = new ArrayList<>();
+        List<String> instanceCodes = loadInstanceCodeByObjectCode(objectCode, ComponentType.UNKNOWN);
+        instanceCodes.forEach(instanceCode -> {
+            instanceConfigList.add(loadObjectConfig(instanceCode));
+        });
+        return instanceConfigList;
+    }
+
+    /**
      * 根据元对象+组件类型 获得所有instanceCode
      * 注: type=Unknow时不参加条件拼接
      *
      * @param objectCode
-     * @param type
+     * @param type       UNKNOWN时查询所有
      *
      * @return
      */
@@ -186,6 +202,7 @@ public class ComponentService {
         List<Record> records = AnalysisConfig.me().dbMain().find(sql, instanceCode);
         Kv objectConfig = Kv.create();
         Okv fieldsMap = Okv.create();
+        AtomicReference<ComponentType> containerType = new AtomicReference<>();
         AtomicReference<String> objectCode = new AtomicReference<>();
         AtomicReference<String> instanceName = new AtomicReference<>();
         records.forEach(record -> {
@@ -195,11 +212,12 @@ public class ComponentService {
                 fieldsMap.put(ss[1], record.getStr("config"));
             } else {
                 //dest_object -> meta_object_code
+                containerType.set(ComponentType.V(record.getStr("comp_code")));
                 instanceName.set(record.getStr("name"));
                 objectConfig.set(objectCode, record.getStr("config"));
             }
         });
-        return ComponentInstanceConfig.Load(objectConfig, fieldsMap, objectCode.get(), instanceCode, instanceName.get());
+        return ComponentInstanceConfig.Load(objectConfig, fieldsMap, objectCode.get(), instanceCode, instanceName.get(), containerType.get());
     }
 
     /**
@@ -235,7 +253,7 @@ public class ComponentService {
 
         String instanceCode = objectConfig.getStr("code");
         String instanceName = objectConfig.getStr("name");
-        return ComponentInstanceConfig.Load(objConf, fieldsMap, destCode, instanceCode, instanceName);
+        return ComponentInstanceConfig.Load(objConf, fieldsMap, destCode, instanceCode, instanceName, ComponentType.V(componentCode));
     }
 
     public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
@@ -328,9 +346,23 @@ public class ComponentService {
         return AnalysisConfig.me().dbMain().update(META_COMPONENT_INSTANCE, fieldInstance);
     }
 
-    private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, String instanceCodoe, String instanceName, Kv config) {
+    /**
+     * 单独新增实例字段,配合增量更新元字段使用
+     *
+     * @param component
+     * @param metaField
+     * @param config
+     *
+     * @return
+     */
+    public boolean newFieldConfig(Component component, IMetaField metaField, String instanceCode, String instanceName, Kv config) {
+        Record fieldInstance = getFieldConfigRecord(component, metaField.objectCode(), metaField.fieldCode(), instanceCode, instanceName, config);
+        return AnalysisConfig.me().dbMain().save(META_COMPONENT_INSTANCE, fieldInstance);
+    }
+
+    private Record getFieldConfigRecord(Component component, String objectCode, String fieldCode, String instanceCode, String instanceName, Kv config) {
         String dest_code = objectCode + "." + fieldCode;
-        return getRecord(component, dest_code, instanceCodoe, instanceName, INSTANCE.META_FIELD, config);
+        return getRecord(component, dest_code, instanceCode, instanceName, INSTANCE.META_FIELD, config);
     }
 
     /**
@@ -380,14 +412,14 @@ public class ComponentService {
         return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 1;
     }
 
-    private Record getRecord(Component component, String specificCode, String instanceCode, String instanceName, INSTANCE specific, Kv config) {
+    private Record getRecord(Component component, String destObject, String instanceCode, String instanceName, INSTANCE specific, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
         record.set("code", instanceCode);
         record.set("name", instanceName);
         record.set("comp_code", component.type());
         record.set("type", specific.toString());
-        record.set("dest_object", specificCode);
+        record.set("dest_object", destObject);
         record.set("config", config == null ? Kv.create().toJson() : config.toJson());
         User u = UserThreadLocal.getUser();
         if (u != null) {

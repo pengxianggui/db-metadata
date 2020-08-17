@@ -8,6 +8,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
@@ -16,9 +17,7 @@ import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
-import com.hthjsj.web.ui.MetaObjectViewAdapter;
-import com.hthjsj.web.ui.OptionsKit;
-import com.hthjsj.web.ui.UIManager;
+import com.hthjsj.web.ui.*;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -196,6 +195,24 @@ public class MetaController extends FrontRestController {
                 metaService().deleteMetaObject(oldMetaObject.code());
                 boolean addStatus = metaService().saveMetaObject(oldMetaObject, true);
                 log.info("元对象[{}]增量导入[{}]", objectCode, addStatus);
+
+                if (addStatus) {
+                    log.info("元对象[{}]增量导入,UI配置{}", objectCode, addStatus);
+                    List<ComponentInstanceConfig> existInstance = ServiceManager.componentService().loadInstanceByObjectCode(oldMetaObject.code());
+                    for (ComponentInstanceConfig instanceConfig : existInstance) {
+                        log.info("载入实例:{} - 类型:{}", instanceConfig.getInstanceCode(), instanceConfig.getContainerType());
+                        /* 1. 利用自动计算功能,计算容器 */
+                        /* 2. 从容器中获取单个字段配置 */
+                        /* 3. 将改配置更新 */
+                        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(oldMetaObject, instanceConfig.getContainerType());
+                        for (String fieldName : incrementFields) {
+                            log.info("增加字段 {} 在 {} 中的配置", fieldName, instanceConfig.getContainerType());
+                            MetaFieldViewAdapter metaFieldViewAdapter = metaObjectViewAdapter.getFieldAdapter(fieldName);
+                            boolean fs = UIManager.createField(metaFieldViewAdapter, instanceConfig.getInstanceCode(), instanceConfig.getInstanceName());
+                            log.info("保存[{}]", fs);
+                        }
+                    }
+                }
             }
         }
         renderJson(Ret.ok());

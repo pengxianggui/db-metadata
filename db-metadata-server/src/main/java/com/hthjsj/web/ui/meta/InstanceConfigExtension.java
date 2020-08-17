@@ -11,7 +11,7 @@ import com.hthjsj.web.upload.UploadKit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 组件实例配置的扩展
+ * 组件实例配置的扩展,ComponentType 传的是容器type
  * <p> @Date : 2019/12/18 </p>
  * <p> @Project : db-meta-serve</p>
  *
