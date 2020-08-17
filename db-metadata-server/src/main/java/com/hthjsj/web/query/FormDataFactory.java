@@ -120,7 +120,11 @@ public class FormDataFactory {
                     if (StrKit.notNull(castedValue)) {
                         formData.set(metaField.fieldCode(), castedValue);
                     } else {
-                        formData.set(metaField.fieldCode(), "");
+                        if (StrKit.notBlank(metaField.configParser().defaultVal())) {
+                            formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
+                        } else {
+                            formData.set(metaField.fieldCode(), "");
+                        }
                     }
                     continue;
                 }
