@@ -66,7 +66,7 @@ public class UIManager {
     }
 
     public static boolean createField(MetaFieldViewAdapter metaFieldViewAdapter, String instanceCode, String instanceName) {
-        return ServiceManager.componentService().newFieldConfig(metaFieldViewAdapter.getComponent(),
+        return ServiceManager.componentService().newFieldConfig(metaFieldViewAdapter.getContainer().getComponent(),
                                                                 metaFieldViewAdapter.getMetaField(),
                                                                 instanceCode,
                                                                 instanceName,

@@ -349,7 +349,7 @@ public class ComponentService {
     /**
      * 单独新增实例字段,配合增量更新元字段使用
      *
-     * @param component
+     * @param component 传容器的Component
      * @param metaField
      * @param config
      *
