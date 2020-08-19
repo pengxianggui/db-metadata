@@ -12,7 +12,7 @@
                 </slot>
             </template>
         </slot>
-        <el-form-item v-if="innerMeta.columns.length > 0">
+        <el-form-item v-if="innerMeta.columns.length > 0 && formType !== 'view'">
             <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf">
                 <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
                            @click="onSubmit"
@@ -81,7 +81,11 @@
                 })
             },
             onSubmit(ev) {
-                const {name: refName} = this.innerMeta;
+                const {innerMeta: {name: refName}, formType} = this
+                if (formType === 'view') {
+                    return
+                }
+
                 const fn = 'submit';
                 if (this.$listeners.hasOwnProperty(fn)) {
                     this.$emit(fn, this.model);
@@ -123,6 +127,10 @@
             }
         },
         computed: {
+            formType() {
+                const {innerMeta: {formType}} = this
+                return formType
+            },
             innerMeta() {
                 let newMeta = utils.deepClone(this.meta);
                 this.$merge(newMeta, DefaultMeta);

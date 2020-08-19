@@ -3,12 +3,10 @@
         <el-row justify="end">
             <el-col :span="24">
                 <!-- operation bar -->
-                <slot name="operation-bar"
-                      v-bind:conf="operationBarConf"
-                      v-bind:operations="{handleAdd, handleBatchDelete}">
+                <slot name="operation-bar" v-bind:conf="operationBarConf">
                     <el-button-group>
                         <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
-                        <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd">
+                        <slot name="add-btn" v-bind:conf="operationBarConf">
                             <el-button @click="handleAdd" icon="el-icon-document-add"
                                        v-bind="operationBarConf">新增
                             </el-button>
@@ -19,7 +17,7 @@
                                        v-bind="operationBarConf">删除
                             </el-button>
                         </slot>
-                        <slot name="expand-all-btn">
+                        <slot name="expand-all-btn" v-bind:conf="operationBarConf">
                             <el-button @click="handleExpandAll" icon="el-icon-caret-bottom" type="info"
                                        v-bind="operationBarConf">展开全部
                             </el-button>
@@ -72,8 +70,9 @@
                             </template>
                         </el-table-column>
                     </template>
-                    <slot name="operation-column" v-if="operationColMode">
-                        <el-table-column width="180" v-bind="operationColumnConf">
+                    <slot name="operation-column" v-if="operationColumnConf['show']">
+                        <el-table-column v-bind:width="operationColumnConf['width']"
+                                         v-bind:fixed="operationColumnConf['fixed']">
                             <template #header>
                                 <span>
                                     <span>操作</span>
@@ -90,12 +89,15 @@
                             </template>
                             <template slot-scope="scope">
                                 <slot name="buttons"
-                                      v-bind:conf="buttonsConf"
                                       v-bind:scope="scope">
                                     <el-button-group>
                                         <slot name="inner-before-extend-btn"
-                                              v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:scope="scope"></slot>
+                                        <slot name="view-btn" v-bind:conf="buttonsConf['view']['conf']"
+                                              v-bind:scope="scope">
+                                            <el-button v-bind="buttonsConf['view']['conf']"
+                                                       @click="handleView($event, scope.row, scope.$index)"></el-button>
+                                        </slot>
                                         <slot name="edit-btn" v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:edit="handleEdit"
                                               v-bind:scope="scope">
@@ -111,7 +113,6 @@
                                             </el-button>
                                         </slot>
                                         <slot name="inner-after-extend-btn"
-                                              v-bind:conf="buttonsConf['edit']['conf']"
                                               v-bind:scope="scope"></slot>
                                     </el-button-group>
                                 </slot>
@@ -228,6 +229,18 @@
                 const {primaryKey} = this;
                 return utils.extractValue(row, primaryKey);
             },
+            handleView(ev, row, index) {
+                if (ev) ev.stopPropagation()
+
+                const {primaryKey, $compile, objectCode} = this
+                const primaryValue = utils.extractValue(row, primaryKey)
+                let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
+                const url = $compile(restUrl.RECORD_TO_VIEW, {
+                    objectCode: objectCode,
+                    primaryKv: primaryKv
+                })
+                this.dialog(url, {title: '详情'});
+            },
             handleEdit(ev, row, index) { // edit/add
                 if (ev) ev.stopPropagation();
                 const {primaryKey} = this;
@@ -241,14 +254,7 @@
 
                 if (!utils.isEmpty(primaryValue)) {
                     title = '编辑';
-                    let primaryKv;
-
-                    if (primaryKey.length <= 1) {
-                        primaryKv = primaryValue[0];
-                    } else {
-                        primaryKv = utils.spliceKvs(primaryKey, primaryValue);
-                    }
-
+                    let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
                     url = this.$compile(restUrl.RECORD_TO_UPDATE, {
                         objectCode: objectCode,
                         primaryKv: primaryKv
@@ -454,13 +460,6 @@
                 const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
                 return utils.assertEmpty(multiSelect, multi_select) || false
             },
-            operationColMode() {
-                const {
-                    $attrs: {'operation-col-mode': operationColModeAttr},
-                    innerMeta: {operation_col_mode: operationColModeMeta}
-                } = this;
-                return utils.assertEmpty(operationColModeAttr, operationColModeMeta) || true
-            },
             operationBarConf() {
                 const {innerMeta: {"operation-bar": operationBarConf = {}}} = this
                 return operationBarConf;
@@ -472,7 +471,7 @@
             operationColumnConf() {
                 const {
                     innerMeta: {'operation-column': operationColumn},
-                    $attrs: {'operation-column-conf': operationColumnConf}
+                    $attrs: {'operation-column': operationColumnConf}
                 } = this
 
                 return utils.mergeObject({}, operationColumn, operationColumnConf);

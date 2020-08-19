@@ -28,6 +28,7 @@ export const restUrl = {
     RECORD_TO_ADD: "/form/toAdd/{objectCode}",  // 新增记录(TO)
     RECORD_TO_UPDATE: '/form/toUpdate/{objectCode}?id={primaryKv}',    // 更新记录(TO)
     RECORD_DO_UPDATE: '/form/doUpdate?objectCode={objectCode}', // 更新记录(DO)
+    RECORD_TO_VIEW: '/form/detail/{objectCode}?id={primaryKv}', // 详情
     LOAD_COMP_BY_OBJECT: '/meta/contact/{objectCode}?kv={kv}', // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
     LOAD_INSTANCE_CODE_BY_OBJECT_COMP: '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}', // 根据查询在objectCode+componentCode下的所有实例配置
     LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 根据查询在objectCode下的所有实例配置

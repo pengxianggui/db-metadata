@@ -5,9 +5,9 @@
             <template #add-btn="{conf}">
                 <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
-            <template #inner-before-extend-btn="{conf, scope}">
+            <template #inner-before-extend-btn="{scope}">
                 <el-tooltip content="配置" placement="left">
-                    <el-button icon="el-icon-s-tools" v-bind="conf" type="info"
+                    <el-button icon="el-icon-s-tools" size="mini" type="info"
                                @click="handlerConf($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
             </template>

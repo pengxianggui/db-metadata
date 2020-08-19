@@ -49,7 +49,20 @@ export default {
         "size": "mini",
         "type": "primary"
     },
+    "operation-column": { // 针对操作列
+        "show": true,
+        "fixed": "right",
+        "width": "180"
+    },
     "buttons": {
+        "view": {
+            "label": "详情",
+            "conf": {
+                "icon": "el-icon-view",
+                "size": "mini",
+                "type": "success"
+            }
+        },
         "edit": {
             "label": "编辑",
             "conf": {

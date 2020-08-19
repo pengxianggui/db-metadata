@@ -586,3 +586,7 @@ IconBox支持点选扩展的svg图标
 修复ImgBox, FileBox删除后vModel值为[{}], 应当为[]
 JsonBox 将传入的值转为合法值
 
+### 0.3.19
+新增TableView和TableTreeView的查看支持(formType:view);
+移除TableView和TableTreeView无用的插槽绑定元素;
+修复一处显示缺陷;

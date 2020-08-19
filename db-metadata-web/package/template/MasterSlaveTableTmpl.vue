@@ -10,21 +10,19 @@
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>
                 </template>
-                <template #add-btn="{conf, add}">
-                    <slot name="add-btn" v-bind:conf="conf" v-bind:add="add"></slot>
+                <template #add-btn="{conf}">
+                    <slot name="add-btn" v-bind:conf="conf"></slot>
                 </template>
-                <template #batch-delete-btn="{conf, batchDelete}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf"
-                          v-bind:batchDelete="batchDelete">
-                    </slot>
+                <template #batch-delete-btn="{conf}">
+                    <slot name="batch-delete-btn" v-bind:conf="conf"></slot>
                 </template>
                 <template #suffix-btn="{conf}">
                     <slot name="suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
                 <!-- 主表单条纪录操作扩展插槽 -->
-                <template #inner-before-extend-btn="{scope, conf}">
-                    <slot name="inner-before-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <template #inner-before-extend-btn="{scope}">
+                    <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
                 </template>
                 <template #edit-btn="{scope, conf, edit}">
                     <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
@@ -32,8 +30,8 @@
                 <template #delete-btn="{scope, conf}">
                     <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-                <template #inner-after-extend-btn="{scope, conf}">
-                    <slot name="inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <template #inner-after-extend-btn="{scope}">
+                    <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
                 </template>
             </table-view>
         </div>
@@ -67,27 +65,25 @@
                         <el-button v-bind="conf" @click="handleAdd(slaves[0])">新增</el-button>
                     </slot>
                 </template>
-                <template #batch-delete-btn="{conf, batchDelete}">
-                    <slot name="s-batch-delete-btn" v-bind:conf="conf"
-                          v-bind:batchDelete="batchDelete">
-                    </slot>
+                <template #batch-delete-btn="{conf}">
+                    <slot name="s-batch-delete-btn" v-bind:conf="conf"></slot>
                 </template>
                 <template #suffix-btn="{conf}">
                     <slot name="s-suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
                 <!-- 子表单条纪录操作扩展插槽 -->
-                <template #inner-before-extend-btn="{scope, conf}">
-                    <slot name="s-inner-before-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <template #inner-before-extend-btn="{scope}">
+                    <slot name="s-inner-before-extend-btn" v-bind:scope="scope"></slot>
                 </template>
-                <template #edit-btn="{scope, conf, edit}">
+                <template #edit-btn="{scope, conf}">
                     <slot name="s-edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
                 <template #delete-btn="{scope, conf}">
                     <slot name="s-delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
-                <template #inner-after-extend-btn="{scope, conf}">
-                    <slot name="s-inner-after-extend-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                <template #inner-after-extend-btn="{scope}">
+                    <slot name="s-inner-after-extend-btn" v-bind:scope="scope"></slot>
                 </template>
             </table-view>
         </div>

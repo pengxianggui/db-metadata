@@ -52,6 +52,7 @@ public class MetaConfigFactory {
             config.set("updateStatus", MetaFieldConfigParse.NORMAL);
         }
 
+        config.set("viewStatus", MetaFieldConfigParse.READONLY);
         config.set("isListShow", true);
         config.set("isSearch", true);
 
