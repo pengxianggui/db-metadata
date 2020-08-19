@@ -590,3 +590,6 @@ JsonBox 将传入的值转为合法值
 新增TableView和TableTreeView的查看支持(formType:view);
 移除TableView和TableTreeView无用的插槽绑定元素;
 修复一处显示缺陷;
+
+### 0.3.20
+修复一些小问题
