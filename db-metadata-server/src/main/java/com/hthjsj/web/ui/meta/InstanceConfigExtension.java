@@ -94,7 +94,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
     private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {
 
         //上传框
-        if (metaField.fieldCode().contains("file")) {
+        if (metaField.fieldCode().contains("file") || metaField.configParser().isFile()) {
             builder.componentName(ComponentType.FILEBOX);
             builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
             builder.autoUpload(true);
