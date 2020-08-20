@@ -4,6 +4,10 @@
         <el-menu :default-active="activeMenu"
                  :collapse="collapse"
                  v-bind="conf" class="menu-class">
+            <template v-for="menu in metaMenus" v-if="$isRoot()">
+                <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
+            </template>
+
             <template v-for="menu in menus">
                 <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
             </template>
@@ -39,6 +43,7 @@
         },
         data() {
             return {
+                metaMenus: MetaMenuData,
                 menus: []
             }
         },
@@ -49,7 +54,6 @@
         },
         methods: {
             getData(url) {
-                this.menus.push(...MetaMenuData)
                 this.$axios.get(url).then(resp => {
                     const {data: dynamicMenu} = resp
                     this.menus.push(...dynamicMenu)

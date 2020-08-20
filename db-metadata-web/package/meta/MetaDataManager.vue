@@ -9,10 +9,10 @@
                 <template #prefix-btn="{conf}">
                     <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
                 </template>
-                <template #add-btn="{conf, add}">
+                <template #add-btn="{conf}">
                     <el-button v-bind="conf" @click="toAddMetaObject">创建元对象</el-button>
                 </template>
-                <template #batch-delete-btn="{conf, batchDelete}">
+                <template #batch-delete-btn="{conf}">
                     <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
                                v-bind="conf">删除
                     </el-button>
@@ -91,8 +91,8 @@
             }
         },
         methods: {
-            handleMChoseChange({rows}) {
-                this.choseMData = rows;
+            handleMChoseChange(rows) {
+                this.object.choseData = rows;
             },
             handleMActiveChange(row) {
                 // 带入 feature add dialog
@@ -180,17 +180,19 @@
                     this.$message.success(resp.msg);
                     this.metaImportFormVisible = false;
                     // refresh master
-                    $refs[objectCode].refreshMasterData();
-                    this.jumpToConf(objectCode);
+                    $refs[objectCode].getData();
+                    const {objectCode: oc} = formModel
+                    this.jumpToConf(oc);
                 }).catch(err => {
-                    this.$message.error(err.msg);
+                    const {msg} = err
+                    this.$message.error(msg);
                 })
             },
             handleDelete(row) {
-                const {object: {objectCode}, field: {objectCode: fieldCode}} = this
+                const {object: {objectCode, choseData}, field: {objectCode: fieldCode}} = this
                 let title, objectCodes, url;
                 if (utils.isUndefined(row)) {   // 批量删除
-                    const objectCodeArr = this.choseMData.map(row => row.code);
+                    const objectCodeArr = choseData.map(row => row.code);
                     if (utils.isEmpty(objectCodeArr)) {
                         this.$message.warning('请至少选择一项!');
                         return;
