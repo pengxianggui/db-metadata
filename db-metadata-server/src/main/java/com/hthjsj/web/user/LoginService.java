@@ -10,10 +10,26 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface LoginService<U extends User> {
 
+    /**
+     * 从Request中获取用户标识时需要用到得tokenKey;
+     *
+     * @return
+     */
     String tokenKey();
 
+    /**
+     * 登录时 获取用户名的key
+     * 如:username
+     *
+     * @return
+     */
     String loginKey();
 
+    /**
+     * 登录时 获取密码的key
+     *
+     * @return
+     */
     String pwdKey();
 
     String cookieKey();
@@ -21,6 +37,14 @@ public interface LoginService<U extends User> {
     U getUser(HttpServletRequest request);
 
     U login(String username, String password);
+
+    /**
+     * 新建用户动作(注册)
+     *
+     * @param user
+     */
+    default void register(U user) {
+    }
 
     /**
      * 如外部已完成用户的login动作,可以将User用户手动登入
