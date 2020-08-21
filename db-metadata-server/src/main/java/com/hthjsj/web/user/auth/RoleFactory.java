@@ -1,6 +1,10 @@
 package com.hthjsj.web.user.auth;
 
 /**
+ * <pre>
+ * 角色构建工厂:
+ * 使用默认DefaultRole作为实现,初始化后不能显示得增加权限;
+ * </pre>
  * <p> @Date : 2020/8/12 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -8,14 +12,11 @@ package com.hthjsj.web.user.auth;
  */
 public class RoleFactory {
 
-    public static MRRole createAdmin() {
-        DefaultRole mrRole = new DefaultRole("admin", "管理员");
-        mrRole.addPermission(StaticPermission.of("site-admin-login", "门户登录权限"));
-        return mrRole;
-    }
-
-    public static MRRole createNormalRole() {
-        DefaultRole role = new DefaultRole("normal", "普通用户");
+    public static MRRole createRole(String code, String name, Permission... permissions) {
+        DefaultRole role = new DefaultRole(code, name);
+        for (Permission permission : permissions) {
+            role.addPermission(permission);
+        }
         return role;
     }
 }
