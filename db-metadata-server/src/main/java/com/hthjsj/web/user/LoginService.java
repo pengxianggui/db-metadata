@@ -1,6 +1,7 @@
 package com.hthjsj.web.user;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -41,9 +42,12 @@ public interface LoginService<U extends User> {
     /**
      * 新建用户动作(注册)
      *
-     * @param user
+     * @param username
+     * @param password
+     * @param attr
      */
-    default void register(U user) {
+    default boolean register(String username, String password, Map attr) {
+        return false;
     }
 
     /**
