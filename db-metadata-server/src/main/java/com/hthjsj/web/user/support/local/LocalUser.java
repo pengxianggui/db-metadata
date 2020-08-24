@@ -2,6 +2,8 @@ package com.hthjsj.web.user.support.local;
 
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.User;
+import com.hthjsj.web.user.auth.MRRole;
+import com.hthjsj.web.user.role.UserWithRolesWrapper;
 import com.jfinal.kit.Kv;
 
 import java.util.Map;
@@ -12,12 +14,19 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class LocalUser implements User {
+public class LocalUser implements User, UserWithRolesWrapper {
 
     Kv attrs;
 
+    MRRole[] roles;
+
     public LocalUser(Map attr) {
         this.attrs = Kv.create().set(attr);
+    }
+
+    public LocalUser(Map attr, MRRole role) {
+        this.attrs = Kv.create().set(attr);
+        this.roles = new MRRole[] { role };
     }
 
     @Override
@@ -39,5 +48,20 @@ public class LocalUser implements User {
     public Kv attrs(Map attrs) {
         UtilKit.deepMerge(this.attrs, attrs, true);
         return this.attrs;
+    }
+
+    @Override
+    public MRRole[] roles() {
+        return roles;
+    }
+
+    @Override
+    public boolean hasRole(String nameOrCode) {
+        for (MRRole role : roles) {
+            if (role.name().equalsIgnoreCase(nameOrCode.toLowerCase()) || role.code().equalsIgnoreCase(nameOrCode.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

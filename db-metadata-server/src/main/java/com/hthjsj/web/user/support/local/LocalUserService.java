@@ -8,6 +8,8 @@ import com.google.common.io.Files;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.AbstractUserService;
 import com.hthjsj.web.user.UserManager;
+import com.hthjsj.web.user.auth.RoleFactory;
+import com.hthjsj.web.user.auth.StaticPermission;
 import com.jfinal.kit.Kv;
 import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +88,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
             JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
             for (int i = 0; i < userObjs.size(); i++) {
                 JSONObject j = (JSONObject) userObjs.get(i);
-                users.add(new LocalUser(j.getInnerMap()));
+                users.add(new LocalUser(j.getInnerMap(), RoleFactory.createRole("normal", "普通角色", StaticPermission.of("", "登录权限"))));
             }
         }
         return users;
