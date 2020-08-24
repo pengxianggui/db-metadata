@@ -48,7 +48,7 @@ public class FormView extends ViewContainer {
     public FormField getField(String name) {
         FormField field = (FormField) getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().get();
         if (field == null) {
-            throw new ComponentException("FormView 实例中不包含 {} 组件", name);
+            throw new ComponentException("FormView 实例中不包含 %s 组件", name);
         }
         return field;
     }
