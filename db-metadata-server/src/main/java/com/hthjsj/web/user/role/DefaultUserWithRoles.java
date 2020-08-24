@@ -27,7 +27,7 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
 
     @Override
     public MRRole[] roles() {
-        return new MRRole[0];
+        return roles;
     }
 
     @Override

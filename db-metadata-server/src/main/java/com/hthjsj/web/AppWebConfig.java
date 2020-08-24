@@ -101,9 +101,12 @@ public class AppWebConfig extends JFinalConfig {
     public void onStart() {
         SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
 
-        //component register
-        Components.me().init();
-        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+        if (prop.getBoolean(AppConst.COMPONENT_ALLOW_REPLACE)) {
+            //component register
+            Components.me().init();
+            Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+        }
+
         //dictionary register
         Dicts.me().init();
 
