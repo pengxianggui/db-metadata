@@ -19,6 +19,7 @@ import com.hthjsj.web.kit.tree.TreeKit;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -76,11 +77,15 @@ public class TableController extends FrontRestController {
 
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
+
+        /** 编译where后条件 */
+        String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
+
         Page<Record> result = metaService().paginate(pageIndex,
                                                      pageSize,
                                                      metaObject,
                                                      sqlPara.getSelect(),
-                                                     MetaSqlKit.where(sqlPara.getSql(), metaObject),
+                                                     MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
                                                      sqlPara.getPara());
 
         /**

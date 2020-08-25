@@ -2,7 +2,6 @@ package com.hthjsj.web.query.dynamic;
 
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserManager;
-import com.jfinal.kit.Kv;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +27,6 @@ public class UserVariable implements VariableDefinition {
     @Override
     public Object init() {
         User user = UserManager.me().getUser(request);
-        return Kv.create().set(user.attrs());
+        return user;
     }
 }

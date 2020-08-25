@@ -1,7 +1,5 @@
 package com.hthjsj.web.query;
 
-import com.alibaba.druid.sql.parser.Keywords;
-import com.alibaba.druid.sql.parser.Token;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -56,9 +54,9 @@ public class QueryConditionForMetaObject implements IQueryCondition {
      * Call:
      * Db.find(select * from tableA where id=? and name >=?,new String[]{v_id,v_name})
      */
-    private IMetaObject metaObject;
+    private final IMetaObject metaObject;
 
-    private Collection<IMetaField> metaFields;
+    private final Collection<IMetaField> metaFields;
 
     public QueryConditionForMetaObject(IMetaObject metaObject, Collection<IMetaField> filtered) {
         this.metaObject = metaObject;

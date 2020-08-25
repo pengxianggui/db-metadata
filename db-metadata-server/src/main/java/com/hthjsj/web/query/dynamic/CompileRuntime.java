@@ -1,5 +1,6 @@
 package com.hthjsj.web.query.dynamic;
 
+import com.jfinal.kit.StrKit;
 import com.jfinal.template.Engine;
 import com.jfinal.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,20 @@ public class CompileRuntime {
     }
 
     public String compile(String sqlTemplate, HttpServletRequest request) {
-        Template template = engine.getTemplateByString(sqlTemplate);
-        Context context = new DefaultContext();
-        UserVariable userVariable = new UserVariable(request);
-        context.set(userVariable.name(), userVariable.init());
-        String result = template.renderToString(context.data());
-        log.info("Compile sqlTemplate:{}", result);
+        if (StrKit.isBlank(sqlTemplate)) {
+            return "";
+        }
+        String result;
+        try {
+            Template template = engine.getTemplateByString(sqlTemplate);
+            Context context = new DefaultContext();
+            UserVariable userVariable = new UserVariable(request);
+            context.set(userVariable.name(), userVariable.init());
+            result = template.renderToString(context.data());
+            log.info("Compile sqlTemplate:{}", result);
+        } catch (Exception e) {
+            throw new QueryCompileException("动态SQL: %s 编译出错,错误信息:%s ", sqlTemplate, e.getMessage());
+        }
         return result;
     }
 

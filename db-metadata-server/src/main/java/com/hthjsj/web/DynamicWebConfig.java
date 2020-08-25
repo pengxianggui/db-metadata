@@ -25,6 +25,10 @@ import com.hthjsj.web.ui.meta.MetaFieldConfigExtension;
 import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserRouter;
+import com.hthjsj.web.user.auth.JsonUserPermit;
+import com.hthjsj.web.user.auth.MRAuthIntercept;
+import com.hthjsj.web.user.auth.MRManager;
+import com.hthjsj.web.user.auth.jfinal.JFinalResourceLoader;
 import com.jfinal.config.*;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
@@ -96,6 +100,19 @@ public class DynamicWebConfig extends JFinalConfig {
             if (AppConst.getProp().getBoolean(AppConst.NEED_LOGIN)) {
                 me.add(new UserIntercept());
             }
+            if (AppConst.getProp().getBoolean(AppConst.NEED_AUTH)) {
+                me.add(new MRAuthIntercept());
+            }
+        }
+
+        @Override
+        public void onStart() {
+            if (AppConst.getProp().getBoolean(AppConst.NEED_AUTH)) {
+                MRManager mrManager = MRManager.me();
+                mrManager.addLoader(new JFinalResourceLoader());
+                mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
+                mrManager.load();
+            }
         }
     };
 
@@ -110,10 +127,10 @@ public class DynamicWebConfig extends JFinalConfig {
                           .addAutoInitComponents(ComponentType.SEARCHVIEW)
                           .addAutoInitComponents(ComponentType.TABLEVIEW)
                           .addAutoInitComponents(ComponentType.FORMVIEW);
-                //Auto import anyConfig from json file;
-                if (AppConst.getProp().getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
-                    InitKit.me().importMetaObjectConfig().importInstanceConfig();
-                }
+            }
+            //Auto import anyConfig from json file;
+            if (AppConst.getProp().getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
+                InitKit.me().importMetaObjectConfig().importInstanceConfig();
             }
             AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
