@@ -6,6 +6,7 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
+import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
@@ -32,6 +33,11 @@ public class FormDataFactory {
      *      关于数据库保存"null"字符串的情况的几种说明:
      *          1. httpParams 中未传,但metaField中获得
      *          2. httpParams 中某字段 value为"null"
+     *
+     *      函数调用时机:
+     *          1. form.doAdd
+     *          2. form.doUpdate
+     *          为了配合ConfigParser字段设置的新增,编辑时的各种状态,需要在处理metafield之前做一遍处理;
      * </pre>
      *
      * @param httpParams
@@ -44,32 +50,50 @@ public class FormDataFactory {
         Kv params = Kv.create().set(UtilKit.toObjectFlat(httpParams));
         MetaData formData = new MetaData();
 
-
         for (IMetaField metaField : metaObject.fields()) {
 
             //转值  : ""| null | 真实值
             Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
-                //新增 & 主键处理
-                if (metaField.isPrimary() && isInsert) {
-                    //非联合主键时,根据策略开关(uuid或数值序列)对主键进行赋值
-                    if (!metaObject.isMultiplePrimaryKey()) {
-                        if (metaObject.configParser().isNumberSequence()) {
-                            formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
+                //主键处理
+                if (metaField.isPrimary()) {
+                    //新增时主键设置
+                    if (isInsert) {
+                        //非联合主键时,根据策略开关(uuid或数值序列)对主键进行赋值
+                        if (!metaObject.isMultiplePrimaryKey()) {
+                            if (metaObject.configParser().isNumberSequence()) {
+                                formData.set(metaField.fieldCode(), SnowFlake.me().nextId());
+                            }
+                            if (metaObject.configParser().isUUIDPrimary()) {
+                                formData.set(metaField.fieldCode(), StrKit.getRandomUUID());
+                            }
+                        } else {
+                            formData.set(metaField.fieldCode(), castedValue);
                         }
-                        if (metaObject.configParser().isUUIDPrimary()) {
-                            formData.set(metaField.fieldCode(), StrKit.getRandomUUID());
+                        //自增主键时删除主键字段,交给数据库自增,
+                        if (metaObject.configParser().isAutoIncrement()) {
+                            formData.remove(metaObject.primaryKey());
                         }
-                    } else {
+                    } else {//更新时主键赋值
                         formData.set(metaField.fieldCode(), castedValue);
-                    }
-                    //自增主键时删除主键字段,交给数据库自增,
-                    if (metaObject.configParser().isAutoIncrement()) {
-                        formData.remove(metaObject.primaryKey());
                     }
                     continue;
                 }
+
+                /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断 新增[只读,隐藏,禁用],更新[只读,隐藏,禁用],*/
+                if (isInsert) {
+                    if (metaField.configParser().addStatus() == MetaFieldConfigParse.READONLY || metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
+                        continue;
+                    }
+                } else {
+                    if (metaField.configParser().updateStatus() == MetaFieldConfigParse.READONLY
+                            || metaField.configParser().updateStatus() == MetaFieldConfigParse.DISABLE) {
+                        continue;
+                    }
+                }
+
+
                 // 文件类型处理
                 if (metaField.configParser().isFile()) {
                     List<String> fileConfig = metaField.configParser().fileConfig();
