@@ -51,9 +51,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut addPointCut : pointCuts) {
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut addPointCut = pointCuts[i];
             if (addPointCut instanceof AddPointCut) {
-                ((AddPointCut) addPointCut).addBefore(invocation);
+                boolean s = ((AddPointCut) addPointCut).addBefore(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", addPointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }
@@ -65,9 +72,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut addPointCut : pointCuts) {
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut addPointCut = pointCuts[i];
             if (addPointCut instanceof AddPointCut) {
-                ((AddPointCut) addPointCut).addAfter(invocation);
+                boolean s = ((AddPointCut) addPointCut).addAfter(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", addPointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }
@@ -79,9 +93,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut updatePointCut : pointCuts) {
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut updatePointCut = pointCuts[i];
             if (updatePointCut instanceof UpdatePointCut) {
-                ((UpdatePointCut) updatePointCut).updateBefore(invocation);
+                boolean s = ((UpdatePointCut) updatePointCut).updateBefore(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", updatePointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }
@@ -93,9 +114,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut updatePointCut : pointCuts) {
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut updatePointCut = pointCuts[i];
             if (updatePointCut instanceof UpdatePointCut) {
-                ((UpdatePointCut) updatePointCut).updateAfter(invocation);
+                boolean s = ((UpdatePointCut) updatePointCut).updateAfter(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", updatePointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }

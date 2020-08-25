@@ -157,7 +157,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.hthjsj.web.DynamicWebConfig</mainClass>
+                                    <mainClass>com.hthjsj.web.DynamicWebConfigFacade</mainClass>
                                 </transformer>
 
                                 <!--

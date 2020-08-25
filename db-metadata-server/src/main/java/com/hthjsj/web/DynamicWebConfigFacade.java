@@ -49,7 +49,7 @@ import java.util.Collection;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class DynamicWebConfig extends JFinalConfig {
+public class DynamicWebConfigFacade extends JFinalConfig {
 
     private final Collection<JFinalConfig> extConfig = new ArrayList<>(0);
 
@@ -158,7 +158,7 @@ public class DynamicWebConfig extends JFinalConfig {
     };
 
     public static void main(String[] args) {
-        UndertowServer.start(DynamicWebConfig.class, 8888, true);
+        UndertowServer.start(DynamicWebConfigFacade.class, 8888, true);
     }
 
     public void addExtConfig(JFinalConfig jFinalConfig) {
