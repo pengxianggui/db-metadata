@@ -8,6 +8,7 @@ export const ConfDesc = `
     |label|该实例标签名,表现为表单域的label|string|-|-|
     |expand|是否默认展开搜索面板|boolean|true/false|false|
     |label-position|收缩开展开关按钮位置|string|top-left/top-center/top-right/bottom-left/bottom-center/bottom-right|top-center|
+    |directly_trigger|直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action|Array|字段名组成的字符串数组|
     |conf|ElementUI(` + elementVersion + `)中el-form的原生配置项|object|-|-|
 `;
 
@@ -21,5 +22,6 @@ export default {
         "label-width": '80px',
         "size": 'mini', // medium|small|mini
     },
-    "columns": []
+    "columns": [],
+    "directly_trigger": [] // 直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action
 }

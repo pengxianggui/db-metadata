@@ -18,7 +18,8 @@
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
-                        <component v-model="model[item.name]['value']" v-bind="linkProps(model, item)">
+                        <component v-model="model[item.name]['value']" v-bind="linkProps(model, item)"
+                                   @change="changeHandler(item.name)">
                             <template #prepend v-if="model[item.name]['symbol']['optional']">
                                 <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">
                                     <el-option v-for="(value, key) in model[item.name]['symbol']['options']"
@@ -96,6 +97,7 @@
     import symbols from '../ext/config'
     import DefaultMeta from '../ui-conf'
     import {defaultMeta} from '../../index'
+    import {isEmpty} from "../../../utils/common";
 
     export default {
         name: "SearchView",
@@ -130,51 +132,72 @@
                 }
                 return props
             },
-            onSubmit() {
+            toParams(model = {}) {
                 let params = {};
-                let model = this.model;
                 for (let key in model) {
-                    let item = model[key];
-                    let name = key + "_";
-                    let value = item.value;
-                    let symbol = item.symbol;
+                  let item = model[key];
+                  let name = key + "_";
+                  let value = item.value;
+                  let symbol = item.symbol;
 
-                    if (value == null || value.length == 0) continue;
+                  if (value == null || value.length == 0) continue;
 
-                    switch (symbol.value) {
-                        case "in":
-                            value = Array.isArray(value) ? value.join(',') : value;
-                            params[name + 'in'] = value;
-                            break;
-                        case "range":
-                            params[name + "gt"] = value[0];
-                            params[name + "lt"] = value[1];
-                            break;
-                        default:
-                            params[name + symbol.options[symbol.value]] = value;
-                    }
+                  switch (symbol.value) {
+                    case "in":
+                      value = Array.isArray(value) ? value.join(',') : value;
+                      params[name + 'in'] = value;
+                      break;
+                    case "range":
+                      params[name + "gt"] = value[0];
+                      params[name + "lt"] = value[1];
+                      break;
+                    default:
+                      params[name + symbol.options[symbol.value]] = value;
+                  }
                 }
-
-                this.$emit('search', params);
+                return params
+            },
+            changeHandler(name = '') {
+                const {directlyTrigger = []} = this
+                if (directlyTrigger.indexOf(name) > -1) {
+                    this.onSubmit()
+                }
+            },
+            onSubmit() {
+                const {model, toParams} = this
+                this.$emit('search', toParams(model));
             },
             onReset() {
                 this.model = {};
                 this.$emit('search', {});
             },
             assemblyModel(meta) {
-                this.model = {};
-                let columns = meta.columns;
+                const {toParams, $merge} = this
+                const {columns} = meta
+                let shoot = false
+                this.model = {}
 
                 if (Array.isArray(columns)) {
                     columns.forEach(item => {
-                        let componentName = item.component_name;
-                        this.$merge(item, defaultMeta[componentName]); // merge column
+                        const {component_name: componentName, default_value:defaultValue} = item
+                        $merge(item, defaultMeta[componentName]); // merge column
                         let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
+                        let value = null;
+                        if (!isEmpty(defaultValue)) {
+                            value = defaultValue
+                            shoot = true
+                        }
                         this.$set(this.model, item.name, {
-                            value: null,
+                            value: value,
                             symbol: symbol
                         });
                     });
+                }
+
+                if (shoot === true) {
+                    this.$nextTick(() => {
+                        this.$emit('search', toParams(this.model))
+                    })
                 }
             }
         },
@@ -197,6 +220,10 @@
             formConf() {
                 const {innerMeta: {conf}, $attrs} = this
                 return this.$reverseMerge(conf, $attrs)
+            },
+            directlyTrigger() {
+                const {innerMeta: {directly_trigger: directlyTrigger}} = this
+                return directlyTrigger
             }
         }
     }
