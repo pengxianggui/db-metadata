@@ -14,7 +14,7 @@
     <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
         <div class="el-card" style="padding: 5px;">
             <el-form :ref="innerMeta['name']" v-bind="formConf" :model="model" inline
-                     @keyup.enter.native="onSubmit" v-if="innerMeta.columns && innerMeta.columns.length > 0">
+                     @keyup.enter.native="emitSearch" v-if="innerMeta.columns && innerMeta.columns.length > 0">
                 <template v-for="(item) in innerMeta.columns">
                     <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
                                   v-if="model.hasOwnProperty(item.name)">
@@ -67,7 +67,7 @@
                 </template>
                 <el-form-item>
                     <slot name="action" v-bind:model="model">
-                        <el-button type="primary" @click="onSubmit">
+                        <el-button type="primary" @click="emitSearch">
                             <slot name="search-label">搜索</slot>
                         </el-button>
                         <el-button @click="onReset">重置</el-button>
@@ -105,7 +105,8 @@
         components: {MetaEasyEdit},
         data() {
             return {
-                model: {}
+                model: {},
+                hasInitValue: false // model是否有默认值
             }
         },
         methods: {
@@ -160,46 +161,18 @@
             changeHandler(name = '') {
                 const {directlyTrigger = []} = this
                 if (directlyTrigger.indexOf(name) > -1) {
-                    this.onSubmit()
+                    this.emitSearch()
                 }
             },
-            onSubmit() {
+            emitSearch() {
                 const {model, toParams} = this
                 this.$emit('search', toParams(model));
             },
             onReset() {
-                this.model = {};
-                this.$emit('search', {});
+                const {initModel, model} = this
+                this.$reverseMerge(model, initModel)
+                this.emitSearch()
             },
-            assemblyModel(meta) {
-                const {toParams, $merge} = this
-                const {columns} = meta
-                let shoot = false
-                this.model = {}
-
-                if (Array.isArray(columns)) {
-                    columns.forEach(item => {
-                        const {component_name: componentName, default_value:defaultValue} = item
-                        $merge(item, defaultMeta[componentName]); // merge column
-                        let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
-                        let value = null;
-                        if (!isEmpty(defaultValue)) {
-                            value = defaultValue
-                            shoot = true
-                        }
-                        this.$set(this.model, item.name, {
-                            value: value,
-                            symbol: symbol
-                        });
-                    });
-                }
-
-                if (shoot === true) {
-                    this.$nextTick(() => {
-                        this.$emit('search', toParams(this.model))
-                    })
-                }
-            }
         },
         filters: {
             decorate(meta, componentName) {
@@ -211,11 +184,40 @@
                 return meta;
             }
         },
+        watch: {
+            initModel: function (newV) {
+                this.$merge(this.model, newV, true)
+                if (this.hasInitValue === true) {
+                    this.emitSearch()
+                }
+            }
+        },
         computed: {
             innerMeta() {
                 let meta = this.$merge(this.meta, DefaultMeta);
-                this.assemblyModel(meta);
                 return meta;
+            },
+            initModel() {
+                const {$merge, innerMeta: {columns}} = this
+                const model = {}
+
+                if (Array.isArray(columns)) {
+                    columns.forEach(item => {
+                        const {component_name: componentName, default_value:defaultValue} = item
+                        $merge(item, defaultMeta[componentName]); // merge column
+                        let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
+                        let value = null;
+                        if (!isEmpty(defaultValue)) {
+                            value = defaultValue
+                            this.hasInitValue = true
+                        }
+                        this.$set(model, item.name, {
+                            value: value,
+                            symbol: symbol
+                        });
+                    });
+                }
+                return model
             },
             formConf() {
                 const {innerMeta: {conf}, $attrs} = this

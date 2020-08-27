@@ -1,62 +1,59 @@
 <template>
-    <div style="padding: 20px; overflow: auto; height: 100%;">
-        <h1>组件开发调试页面</h1>
+  <div style="padding: 20px; overflow: auto; height: 100%;">
+    <h1>组件开发调试页面</h1>
 
-        <!--        <img-box :meta="meta" v-model="value"></img-box>-->
+    <el-form ref="form" :model="model" :rules="rules">
+      <el-form-item prop="image" label="图片">
+        <img-box v-model="model.image" action="/file/upload?objectCode=ctrl_demand&fieldCode=pic"
+                 list-type="picture-card"></img-box>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="submit('form')">提交</el-button>
+      </el-form-item>
+    </el-form>
 
-        <form-view :meta="meta" :model="data">
-            <template #form-item-content="{column, model}">
-                <el-form-item :name="column.name" :label="column.label">
-                    <rich-text-box v-model="model[column.name]"></rich-text-box>
-                </el-form-item>
-            </template>
-        </form-view>
-    </div>
+    <form-view :meta="formMeta"></form-view>
+  </div>
 </template>
 
 <script>
-    import {Rest} from "../../../package/index";
+import {Rest} from '@/../package/index'
+export default {
+  name: "WorkSpace",
+  data() {
+    return {
+      model: {
+        image: []
+      },
+      rules: {
+        image: [{required: true, message: '图片必填', trigger: 'blur'}]
+      },
 
-    export default {
-        name: "WorkSpace",
-        data() {
-            return {
-                oc: 'news',
-                meta1: {
-                    "conf": {
-                        "action": "/file/upload?objectCode=news&fieldCode=thumbnail",
-                        "maxlength": 0,
-                        "show-overflow-tooltip": true
-                    },
-                    "seats": ['1', '2'],
-                    "name": "thumbnail",
-                    "label": "文章缩略图",
-                    "inline": false,
-                    "default_value": {},
-                    "component_name": "ImgBox"
-                },
-                meta: {},
-                value: [],
-                data: {}
-            }
-        },
-        methods: {
-            getMeta() {
-                Rest.getAddFormMeta(this.oc).then(resp => {
-                    this.meta = resp.data
-                    // TODO mock
-                    this.meta.columns.filter(c => c.name === 'account_id').map(c => c.default_value = this.userInfo.accountId)
-                })
-            }
-        },
-        created() {
-            this.getMeta()
-        }
+      formMeta: {}
     }
+  },
+  methods: {
+    submit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log('success')
+        } else {
+          console.log('error')
+        }
+
+      })
+    }
+  },
+  created() {
+    Rest.getAddFormMeta('ctrl_demand').then(resp => {
+      this.formMeta = resp.data
+    })
+  }
+}
 </script>
 
 <style scoped>
-    .ddd {
-        font-size: 40px;
-    }
+.ddd {
+  font-size: 40px;
+}
 </style>
