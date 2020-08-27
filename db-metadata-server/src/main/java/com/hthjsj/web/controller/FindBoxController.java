@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaFactory;
+import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.SearchView;
 import com.hthjsj.web.component.TableView;
@@ -12,6 +13,7 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.OptionsKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
@@ -67,6 +69,7 @@ public class FindBoxController extends FrontRestController {
 
         renderJson(Ret.ok("data", result));
     }
+
     @Override
     public void list() {
         /**
@@ -99,19 +102,20 @@ public class FindBoxController extends FrontRestController {
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
 
+        String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
         Page<Record> result = metaService().paginate(queryHelper.getPageIndex(),
-                                                     queryHelper.getPageSize(),
-                                                     metaObject,
-                                                     sqlPara.getSelect(),
-                                                     sqlPara.getFromWhere(),
-                                                     sqlPara.getPara());
+                queryHelper.getPageSize(),
+                metaObject,
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
 
         /**
          * escape field value;
          * 1. 是否需要转义的规则;
          */
         if (!raw) {
-            result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
+            result.setList(OptionsKit.trans(metaObject.fields(), result.getList(), getRequest()));
         }
 
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);

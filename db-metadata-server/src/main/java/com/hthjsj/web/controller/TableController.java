@@ -82,18 +82,18 @@ public class TableController extends FrontRestController {
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
         Page<Record> result = metaService().paginate(pageIndex,
-                                                     pageSize,
-                                                     metaObject,
-                                                     sqlPara.getSelect(),
-                                                     MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                     sqlPara.getPara());
+                pageSize,
+                metaObject,
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
 
         /**
          * escape field value;
          * 1. 是否需要转义的规则;
          */
         if (!raw) {
-            result.setList(OptionsKit.trans(filteredFields, result.getList()));
+            result.setList(OptionsKit.trans(filteredFields, result.getList(), getRequest()));
         }
 
         /**
@@ -211,7 +211,11 @@ public class TableController extends FrontRestController {
 
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
-        List<Record> result = businessService().findData(metaObject, sqlPara.getSelect(), MetaSqlKit.where(sqlPara.getSql(), metaObject), sqlPara.getPara());
+
+        String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
+        List<Record> result = businessService().findData(metaObject, sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
 
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);

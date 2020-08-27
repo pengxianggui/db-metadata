@@ -6,12 +6,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
+import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
@@ -133,7 +135,7 @@ public class OptionsKit {
      *
      * @return
      */
-    public static List<Record> trans(Collection<IMetaField> fields, List<Record> dataRecords) {
+    public static List<Record> trans(Collection<IMetaField> fields, List<Record> dataRecords, HttpServletRequest request) {
         List<Record> result = Lists.newArrayList(dataRecords);
         MetaFieldConfigParse configWrapper = null;
         Kv mappeds = Kv.create();
@@ -144,7 +146,8 @@ public class OptionsKit {
                 if (configWrapper.isSql()) {
                     log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
                     String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
-                    Kv mapped = transIdCnFlatMapBySql(configWrapper.scopeSql(), dbConfig);
+                    String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(), request);
+                    Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
                     mappeds.set(field.fieldCode(), mapped);
                 }
                 if (configWrapper.isOptions()) {
