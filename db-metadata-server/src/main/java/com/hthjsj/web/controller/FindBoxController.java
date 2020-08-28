@@ -10,11 +10,13 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.SearchView;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.OptionsKit;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Page;
@@ -71,6 +73,7 @@ public class FindBoxController extends FrontRestController {
     }
 
     @Override
+    @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
     public void list() {
         /**
          * 1. query data by metaObject
@@ -115,7 +118,7 @@ public class FindBoxController extends FrontRestController {
          * 1. 是否需要转义的规则;
          */
         if (!raw) {
-            result.setList(OptionsKit.trans(metaObject.fields(), result.getList(), getRequest()));
+            result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
         }
 
         renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);

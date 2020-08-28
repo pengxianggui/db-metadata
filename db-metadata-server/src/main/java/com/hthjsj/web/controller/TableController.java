@@ -12,6 +12,7 @@ import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeConfig;
@@ -21,6 +22,7 @@ import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.OptionsKit;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -49,6 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TableController extends FrontRestController {
 
     @Override
+    @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
     public void list() {
         /**
          * 1. query data by metaObject
@@ -93,7 +96,7 @@ public class TableController extends FrontRestController {
          * 1. 是否需要转义的规则;
          */
         if (!raw) {
-            result.setList(OptionsKit.trans(filteredFields, result.getList(), getRequest()));
+            result.setList(OptionsKit.trans(filteredFields, result.getList()));
         }
 
         /**
