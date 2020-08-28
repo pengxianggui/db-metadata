@@ -5,6 +5,9 @@
             <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
                         @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }">
+                <tempalte #operation-bar="{conf}">
+                  <slot name="operation-bar" v-bind:conf="conf"></slot>
+                </tempalte>
 
                 <!-- 主表操作栏扩展插槽 -->
                 <template #prefix-btn="{conf}">
@@ -20,9 +23,15 @@
                     <slot name="suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
-                <!-- 主表单条纪录操作扩展插槽 -->
+                <template #buttons="{scope}">
+                  <slot name="buttons" v-bind:scope="scope"></slot>
+                </template>
+
                 <template #inner-before-extend-btn="{scope}">
                     <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
+                </template>
+                <template #view-btn="{scope, conf}">
+                  <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
                 <template #edit-btn="{scope, conf, edit}">
                     <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
@@ -56,6 +65,9 @@
             <table-view :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
                         :page="{ size: 5 }">
 
+                <tempalte #operation-bar="{conf}">
+                    <slot name="s-operation-bar" v-bind:conf="conf"></slot>
+                </tempalte>
                 <!-- 子表操作栏扩展插槽 -->
                 <template #prefix-btn="{conf}">
                     <slot name="s-prefix-btn" v-bind:conf="conf"></slot>
@@ -72,9 +84,16 @@
                     <slot name="s-suffix-btn" v-bind:conf="conf"></slot>
                 </template>
 
+                <template #buttons="{scope}">
+                    <slot name="s-buttons" v-bind:scope="scope"></slot>
+                </template>
+
                 <!-- 子表单条纪录操作扩展插槽 -->
                 <template #inner-before-extend-btn="{scope}">
                     <slot name="s-inner-before-extend-btn" v-bind:scope="scope"></slot>
+                </template>
+                <template #view-btn="{scope, conf}">
+                    <slot name="s-view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
                 </template>
                 <template #edit-btn="{scope, conf}">
                     <slot name="s-edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
@@ -102,7 +121,7 @@
             fc: String,
         },
         data() {
-            const {featureCode: R_fc} = this.$route.query;
+            const {fc: R_fc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
             return {
                 filterParams: {},

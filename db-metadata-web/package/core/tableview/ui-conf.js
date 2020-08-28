@@ -11,6 +11,7 @@ export const ConfDesc = `
     |multi_select|是否多选模式|boolean|true/false|true|
     |editable|是否编辑模式(暂未支持)|boolean|true/false|false|
     |render|对单元格进行特殊渲染处理|function|参考vue的render方法, 配置此回调函数, 利用h()渲染最终呈现效果|null|
+    |operation-bar||object|-|{"show": true,"size": "mini","type": "primary"}|
     |column|表格列的元数据信息, 配置见原子控件配置|array|-|[]|
     |pagination|分页配置对象|object|-|{'page-size': ` + pageNumArea[0] + `, 'page-sizes': ` + pageNumArea + `, 'current-size': 1, 'layout': 'total, prev, pager, next'}|
     |conf|ElementUI(` + elementVersion + `)中el-table的原生配置项|object|-|-|
@@ -33,12 +34,14 @@ export default {
     },
     "columns": [], // 字段元数据
     "pagination": { // element ui配置
+        "show": true,
         "page-size": pageNumArea[0],
         "page-sizes": pageNumArea,
         "current-page": 1,
         "layout": "total, sizes, prev, pager, next, jumper"
     },
     "operation-bar": { // 针对操作栏中所有按钮的默认设置
+        "show": true,
         "size": "mini",
         "type": "primary"
     },
@@ -48,7 +51,9 @@ export default {
         "width": "180"
     },
     "buttons": {
+        "show": true,
         "view": {
+            "show": true,
             "label": "详情",
             "conf": {
                 "icon": "el-icon-view",
@@ -57,6 +62,7 @@ export default {
             }
         },
         "edit": {
+            "show": true,
             "label": "编辑",
             "conf": {
                 "icon": "el-icon-edit",
@@ -65,6 +71,7 @@ export default {
             }
         },
         "delete": {
+            "show": true,
             "label": "删除",
             "conf": {
                 "size": "mini",

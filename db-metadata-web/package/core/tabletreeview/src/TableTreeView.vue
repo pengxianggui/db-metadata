@@ -3,7 +3,7 @@
         <el-row justify="end">
             <el-col :span="24">
                 <!-- operation bar -->
-                <slot name="operation-bar" v-bind:conf="operationBarConf">
+                <slot name="operation-bar" v-bind:conf="operationBarConf" v-if="operationBarConf['show']">
                     <el-button-group>
                         <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
                         <slot name="add-btn" v-bind:conf="operationBarConf">
@@ -88,32 +88,27 @@
                                 </span>
                             </template>
                             <template slot-scope="scope">
-                                <slot name="buttons"
-                                      v-bind:scope="scope">
+                                <slot name="buttons" v-bind:scope="scope" v-if="buttonsConf['show']">
                                     <el-button-group>
-                                        <slot name="inner-before-extend-btn"
-                                              v-bind:scope="scope"></slot>
+                                        <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
                                         <slot name="view-btn" v-bind:conf="buttonsConf['view']['conf']"
-                                              v-bind:scope="scope">
+                                              v-bind:scope="scope" v-if="buttonsConf['view']['show']">
                                             <el-button v-bind="buttonsConf['view']['conf']"
                                                        @click="handleView($event, scope.row, scope.$index)"></el-button>
                                         </slot>
                                         <slot name="edit-btn" v-bind:conf="buttonsConf['edit']['conf']"
-                                              v-bind:edit="handleEdit"
-                                              v-bind:scope="scope">
+                                              v-bind:scope="scope" v-if="buttonsConf['edit']['show']">
                                             <el-button v-bind="buttonsConf['edit']['conf']"
                                                        @click="handleEdit($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
                                         <slot name="delete-btn" v-bind:conf="buttonsConf['delete']['label']"
-                                              v-bind:delete="handleDelete"
-                                              v-bind:scope="scope">
+                                              v-bind:scope="scope" v-if="buttonsConf['delete']['show']">
                                             <el-button v-bind="buttonsConf['delete']['conf']"
                                                        @click="handleDelete($event, scope.row, scope.$index)">
                                             </el-button>
                                         </slot>
-                                        <slot name="inner-after-extend-btn"
-                                              v-bind:scope="scope"></slot>
+                                        <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
                                     </el-button-group>
                                 </slot>
                             </template>
