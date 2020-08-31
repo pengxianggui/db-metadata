@@ -1,5 +1,5 @@
 <template>
-    <ul id="menu">
+    <ul id="menu" v-bind="$attrs">
         <slot></slot>
     </ul>
 </template>

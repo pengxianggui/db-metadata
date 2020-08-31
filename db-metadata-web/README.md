@@ -599,3 +599,6 @@ Meta菜单支持根据ROOT角色控制显隐;
 ### 0.3.21~0.3.25
 SearchView组件支持UIConf配置初始搜索值，并支持定义directlyTrigger的筛选项;
 修复一些问题
+
+### 0.3.30~0.3.31
+支持tagView

@@ -1,5 +1,6 @@
 <template>
     <li @click="$emit('click')"
+        v-bind="$attrs"
         @mouseenter="$emit('hover')">
         <slot name="title"></slot>
         <slot></slot>

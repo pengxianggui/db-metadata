@@ -8,6 +8,7 @@ import {assembleRoute} from "./route";
 // 布局组件
 import AdminLayout from "./layout/admin-layout";
 import NavMenu from "./core/navmenu/src/NavMenu";
+import TagView from "./core/tagview";
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -108,6 +109,7 @@ const components = [
     // 布局组件layout
     AdminLayout,
     NavMenu,
+    TagView,
 
     // template
     DataListTableTmpl,
@@ -149,7 +151,15 @@ const install = function (Vue, opts = {}) {
     // 注册全局过滤器
     Object.keys(filters).map(key => Vue.filter(key, filters[key]))
 
-    components.map(component => Vue.component(component.name, component))
+    // components.map(component => Vue.component(component.name, component))
+    components.map(component => {
+        if (component.install) {
+            console.log(component.name)
+            Vue.use(component, opts)
+        } else {
+            Vue.component(component.name, component)
+        }
+    })
 
     // 路由数据装配
     assembleRoute(Vue, opts)

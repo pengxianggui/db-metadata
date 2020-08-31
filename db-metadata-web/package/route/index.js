@@ -184,14 +184,26 @@ export default [
 ]
 
 function metaRoute(layout) {
-    return [{
-        path: '/meta',
-        component: layout,
-        redirect: '/meta/meta-data',
-        children: [
-            ...innerRoute
-        ]
-    },
+    return [
+        {
+            path: '/meta',
+            component: layout,
+            redirect: '/meta/meta-data',
+            children: [
+                ...innerRoute
+            ]
+        },
+        {
+            path: '/meta-element-redirect',
+            component: layout,
+            hidden: true,
+            children: [
+                {
+                    path: '/meta-element-redirect/:path(.*)',
+                    component: () => import('./redirect')
+                }
+            ]
+        },
         ...outerRoute
     ]
 }

@@ -17,10 +17,11 @@ Vue.use(MetaElement, {
     router: router,
     layout: Layout,
     restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置
-    objectCode: {}, // 对于内置模块的元对象编码, 若objectCode不一致， 可以进行配置
-    featureCode: {}, // 同上, 针对需要纠正内置模块的featureCode
     access: { // 访问权限配置
         root: 'ROOT' // 默认为ROOT, 如果自定义覆盖, 对于MetaEasyEdit快捷编辑是有效的, 但是平台维护路由未生效
+    },
+    tagView: {
+        show: true
     }
 });
 
