@@ -17,13 +17,12 @@
 </template>
 
 <script>
-    import {getSpMeta, getTlMeta} from "../../core/mixins/methods"
+    import {getSearchViewMeta, getTableViewMeta} from "../../utils/rest";
     import {routeUrl} from '../../constant/url'
     import {metaObjectCode} from "../../constant/variable";
 
     export default {
         name: "GlobalConfList",
-        mixins: [getTlMeta, getSpMeta],
         props: {
             newRouteUrl: {
                 type: String,
@@ -66,14 +65,14 @@
             }
         },
         created() {
-            this.getTlMeta(this.objectCode).then(resp => {
+            getTableViewMeta(this.objectCode).then(resp => {
                 this.tlMeta = resp.data;
             }).catch(err => {
                 console.error('[ERROR] msg: %s', err.msg);
                 this.$message.error(err.msg);
             });
 
-            this.getSpMeta(this.objectCode).then(resp => {
+            getSearchViewMeta(this.objectCode).then(resp => {
                 this.spMeta = resp.data;
             }).catch(err => {
                 console.error('[ERROR] msg: %s', err.msg);

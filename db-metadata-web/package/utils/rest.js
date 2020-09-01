@@ -22,3 +22,53 @@ export function getUpdateFormMeta(objectCode, primaryKv) {
     const url = compile(restUrl.RECORD_TO_UPDATE, {objectCode: objectCode, primaryKv: primaryKv})
     return Vue.prototype.$axios.get(url)
 }
+
+export function loadFeature(featureCode) {
+    let url = compile(restUrl.FEATURE_LOAD, {
+        featureCode: featureCode
+    });
+    return Vue.prototype.$axios.safeGet(url);
+}
+
+export function getTableViewMeta(objectCode) {
+    let url = compile(restUrl.COMPONENT_INSTANCE_META, {
+        objectCode: objectCode,
+        componentCode: 'TableView'
+    });
+    return Vue.prototype.$axios.safeGet(url);
+}
+
+export function getTableTreeViewMeta(objectCode) {
+    let url = compile(restUrl.COMPONENT_INSTANCE_META, {
+        objectCode: objectCode,
+        componentCode: 'TableTreeView'
+    });
+    return Vue.prototype.$axios.safeGet(url)
+}
+
+
+export function getTreeMeta(objectCode) {
+    let url = compile(restUrl.COMPONENT_INSTANCE_META, {
+        objectCode: objectCode,
+        componentCode: 'Tree'
+    });
+    return Vue.prototype.$axios.safeGet(url);
+}
+
+
+export function getDataListMeta(objectCode) {
+    let url = compile(restUrl.COMPONENT_INSTANCE_META, {
+        objectCode: objectCode,
+        componentCode: 'DataList'
+    });
+    return Vue.prototype.$axios.safeGet(url);
+}
+
+
+export function getSearchViewMeta(objectCode) {
+    let url = compile(restUrl.COMPONENT_INSTANCE_META, {
+        componentCode: 'SearchView',
+        objectCode: objectCode
+    });
+    return Vue.prototype.$axios.safeGet(url);
+}

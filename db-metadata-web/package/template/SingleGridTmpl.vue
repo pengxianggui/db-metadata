@@ -44,11 +44,10 @@
 
 <script>
     import utils from '../utils'
-    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getSearchViewMeta, getTableViewMeta, loadFeature} from "../utils/rest";
 
     export default {
         name: "SingleGridTmpl",
-        mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
             fc: String,
             oc: String
@@ -78,14 +77,14 @@
                 })
             },
             initMeta(objectCode) {
-                this.getTlMeta(objectCode).then(resp => {
+                getTableViewMeta(objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getSpMeta(objectCode).then(resp => {
+                getSearchViewMeta(objectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
@@ -97,7 +96,7 @@
             const {featureCode, objectCode} = this;
 
             if (!utils.isEmpty(featureCode)) {
-                this.loadFeature(featureCode).then(resp => {
+                loadFeature(featureCode).then(resp => {
                     const config = resp.data['singleGrid'];
                     this.initMeta(config.objectCode);
                 })

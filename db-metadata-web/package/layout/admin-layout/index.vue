@@ -15,9 +15,11 @@
         </div>
       </slot>
       <div class="main">
-        <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
+        <div class="fixed-header">
+          <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
+        </div>
         <keep-alive :include="cachedViews">
-          <router-view :key="$route.path"></router-view>
+          <router-view :key="$route.path" style="margin-top: 40px;"></router-view>
         </keep-alive>
       </div>
     </div>
@@ -73,9 +75,9 @@ export default {
     flex-direction: row;
     overflow: auto;
 
+    $menuWidth: 220px;
     .menu {
-      min-width: 200px;
-      max-width: 300px;
+      width: $menuWidth;
       height: 100%;
       overflow: auto;
     }
@@ -83,6 +85,14 @@ export default {
     .main {
       flex: 1;
       overflow: hidden auto;
+
+      .fixed-header {
+        position: absolute;
+        right: 0;
+        z-index: 9;
+        width: calc(100% - #{$menuWidth});
+        transition: width 0.28s;
+      }
     }
   }
 }

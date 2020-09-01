@@ -41,12 +41,11 @@
 
 <script>
     import utils from '../utils'
-    import {getSpMeta, getTableTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getSearchViewMeta, getTableTreeViewMeta, loadFeature} from "../utils/rest";
     import {assert, isEmpty} from "../utils/common";
 
     export default {
         name: "TreeSingleGridTmpl",
-        mixins: [loadFeature, getTableTlMeta, getSpMeta],
         props: {
             fc: String
         },
@@ -73,14 +72,14 @@
                 })
             },
             initMeta(objectCode) {
-                this.getTableTlMeta(objectCode).then(resp => {
+                getTableTreeViewMeta(objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getSpMeta(objectCode).then(resp => {
+                getSearchViewMeta(objectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
@@ -89,7 +88,7 @@
             }
         },
         created() {
-            const {featureCode, initMeta, loadFeature} = this
+            const {featureCode, initMeta} = this
             assert(!isEmpty(featureCode), `featureCode无效: ${featureCode}`)
 
             loadFeature(featureCode).then(resp => {

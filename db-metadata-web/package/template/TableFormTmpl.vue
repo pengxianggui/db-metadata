@@ -34,14 +34,12 @@
 
 <script>
     import utils from '../utils'
-    import {restUrl} from "../constant/url";
     import {defaultPrimaryKey} from '../config'
-    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getTableViewMeta, getUpdateFormMeta, loadFeature} from "../utils/rest";
     import DefaultFormViewMeta from '../core/formview/ui-conf'
 
     export default {
         name: "TableFormTmpl",
-        mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
             fc: String,
             oc: String
@@ -79,16 +77,12 @@
 
                 const objectCode = this.tlMeta['objectCode'];
 
-                let url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-                    objectCode: objectCode,
-                    primaryKv: primaryValue
-                });
-                this.$axios.get(url).then(resp => {
-                    this.fmMeta = resp.data;
-                });
+                getUpdateFormMeta(objectCode, primaryValue).then(resp => {
+                  this.fmMeta = resp.data
+                })
             },
             initMeta(objectCode) {
-                this.getTlMeta(objectCode).then(resp => {
+                getTableViewMeta(objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
@@ -101,7 +95,7 @@
             let objectCode;
 
             if (!utils.isEmpty(featureCode)) {
-                this.loadFeature(featureCode).then(resp => {
+                loadFeature(featureCode).then(resp => {
                     objectCode = resp.data['objectCode'];
                     this.initMeta(objectCode);
                 })

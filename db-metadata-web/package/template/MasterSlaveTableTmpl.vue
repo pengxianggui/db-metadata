@@ -111,12 +111,12 @@
 
 <script>
     import utils from '../utils'
-    import {getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {getSearchViewMeta, getTableViewMeta, loadFeature} from "../utils/rest";
     import {restUrl} from "../constant/url";
+
 
     export default {
         name: "MasterSlaveTableTmpl",
-        mixins: [loadFeature, getTlMeta, getSpMeta],
         props: {
             fc: String,
         },
@@ -210,7 +210,7 @@
             }
         },
         created() {
-            this.loadFeature(this.featureCode).then(resp => {
+            loadFeature(this.featureCode).then(resp => {
                 const feature = resp.data;
                 this.master = feature['master'];
                 this.slaves = feature['slaves'];
@@ -218,7 +218,7 @@
                 const mObjectCode = this.master['objectCode'];
 
                 // 获取主表TableList 组件meta
-                this.getTlMeta(mObjectCode).then(resp => {
+                getTableViewMeta(mObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     this.$set(this.master, 'tlMeta', tlMeta);
                 }).catch(err => {
@@ -226,7 +226,7 @@
                     this.$message.error(err.msg);
                 });
                 // 获取主表SearchPanel 组件meta
-                this.getSpMeta(mObjectCode).then(resp => {
+                getSearchViewMeta(mObjectCode).then(resp => {
                     let spMeta = resp.data;
                     this.$set(this.master, 'spMeta', spMeta);
                 }).catch(err => {
@@ -239,8 +239,8 @@
                     let slave = this.slaves[i];
                     const sObjectCode = slave['objectCode'];
 
-                    // 获取从表TableList 组件meta
-                    this.getTlMeta(sObjectCode).then(resp => {
+                    // 获取从表TableView 组件meta
+                    getTableViewMeta(sObjectCode).then(resp => {
                         let foreignFieldKey = slave['foreignFieldCode'];
                         let tlMeta = resp.data;
                         const data_url = tlMeta['data_url'] + '?' + foreignFieldKey + '={objectCode}';
@@ -254,7 +254,7 @@
                     });
 
                     // 获取从表SearchPanel 组件meta
-                    this.getSpMeta(sObjectCode).then(resp => {
+                    getSearchViewMeta(sObjectCode).then(resp => {
                         let spMeta = resp.data;
                         this.$set(slave, 'spMeta', spMeta);
                     }).catch(err => {

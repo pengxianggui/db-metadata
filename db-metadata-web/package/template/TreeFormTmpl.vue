@@ -17,12 +17,11 @@
     import utils from '../utils'
     import {restUrl} from '../constant/url'
     import {defaultPrimaryKey} from "../config";
-    import {getFormMeta, getTreeMeta, loadFeature} from "../core/mixins/methods"
+    import {getTreeMeta, loadFeature} from '../utils/rest'
     import DefaultFormViewMeta from '../core/formview/ui-conf'
 
     export default {
         name: "TreeFormTmpl",
-        mixins: [getFormMeta, getTreeMeta, loadFeature],
         props: {
             fc: String,
             oc: String
@@ -63,7 +62,7 @@
                 });
             },
             initMeta(objectCode) {
-                this.getTreeMeta(objectCode).then(resp => {
+                getTreeMeta(objectCode).then(resp => {
                     this.treeMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
@@ -74,7 +73,7 @@
         created() {
             const {featureCode, objectCode} = this;
             if (!utils.isEmpty(featureCode)) {
-                this.loadFeature(this.featureCode).then(resp => {
+                loadFeature(this.featureCode).then(resp => {
                     const feature = resp.data;
                     this.treeConf = feature['tree'];
                     this.formConf = feature['form'];

@@ -29,11 +29,10 @@
 
 <script>
     import utils from '../utils'
-    import {getSpMeta, getTlMeta, getTreeMeta, loadFeature} from "../core/mixins/methods"
+    import {getSearchViewMeta, getTableViewMeta, getTreeMeta, loadFeature} from "../utils/rest";
 
     export default {
         name: "TreeTableTmpl",
-        mixins: [getTlMeta, getSpMeta, getTreeMeta, loadFeature],
         props: {
             fc: String
         },
@@ -66,21 +65,21 @@
                 });
             },
             initMeta(treeObjectCode, tableObjectCode) {
-                this.getTreeMeta(treeObjectCode).then(resp => {
+                getTreeMeta(treeObjectCode).then(resp => {
                     this.treeMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getSpMeta(tableObjectCode).then(resp => {
+                getSearchViewMeta(tableObjectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getTlMeta(tableObjectCode).then(resp => {
+                getTableViewMeta(tableObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     const {foreignFieldCode} = this.tableConf;
                     const data_url = tlMeta['data_url'] + '?' + foreignFieldCode + '={objectCode}'; // pxg_todo 关联方式
@@ -96,7 +95,7 @@
         created() {
             const {featureCode} = this;
 
-            this.loadFeature(featureCode).then(resp => {
+            loadFeature(featureCode).then(resp => {
                 const feature = resp.data;
                 this.treeConf = feature['tree'];
                 this.tableConf = feature['table'];

@@ -36,11 +36,10 @@
 
 <script>
     import utils from '../utils'
-    import {getDlMeta, getSpMeta, getTlMeta, loadFeature} from "../core/mixins/methods"
+    import {loadFeature, getDataListMeta, getSearchViewMeta, getTableViewMeta} from '../utils/rest'
 
     export default {
         name: "DataListTableTmpl",
-        mixins: [loadFeature, getTlMeta, getSpMeta, getDlMeta],
         props: {
             fc: String
         },
@@ -81,21 +80,21 @@
                 });
             },
             initMeta(dlObjectCode, tlObjectCode) {
-                this.getDlMeta(dlObjectCode).then(resp => {
+                getDataListMeta(dlObjectCode).then(resp => {
                     this.dlMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getSpMeta(dlObjectCode).then(resp => {
+                getSearchViewMeta(dlObjectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
 
-                this.getTlMeta(tlObjectCode).then(resp => {
+                getTableViewMeta(tlObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     const {foreignFieldCode} = this.tlConf;
                     const data_url = tlMeta['data_url'] + '?' + foreignFieldCode + '={objectCode}'; // pxg_todo 关联方式
@@ -109,7 +108,7 @@
             }
         },
         created() {
-            this.loadFeature(this.featureCode).then(resp => {
+          loadFeature(this.featureCode).then(resp => {
                 const feature = resp.data;
                 this.dlConf = feature['list'];
                 this.tlConf = feature['table'];

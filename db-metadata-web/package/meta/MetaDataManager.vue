@@ -53,13 +53,12 @@
 <script>
     import utils from '../utils'
     import {restUrl, routeUrl} from '../constant/url';
-    import {getSpMeta, getTlMeta} from "../core/mixins/methods"
+    import {getSearchViewMeta, getTableViewMeta} from "../utils/rest";
     import MetaImport from './MetaImport'
     import FeatureAdd from './feature/FeatureAdd'
 
     export default {
         name: "MetaDataManager",
-        mixins: [getTlMeta, getSpMeta],
         components: {
             MetaImport,
             FeatureAdd
@@ -234,16 +233,16 @@
             // 获取meta数据
             const {objectCode: metaObjectCode} = this.object;
             const {objectCode: metaFieldCode} = this.field;
-            this.getSpMeta(metaObjectCode).then(resp => {
+            getSearchViewMeta(metaObjectCode).then(resp => {
                 this.object.svMeta = resp.data;
             })
-            this.getTlMeta(metaObjectCode).then(resp => {
+            getTableViewMeta(metaObjectCode).then(resp => {
                 this.object.tvMeta = resp.data;
             })
-            this.getSpMeta(metaFieldCode).then(resp => {
+            getSearchViewMeta(metaFieldCode).then(resp => {
                 this.field.svMeta = resp.data
             })
-            this.getTlMeta(metaFieldCode).then(resp => {
+            getTableViewMeta(metaFieldCode).then(resp => {
                 const meta = resp.data;
                 this.field.urlTemplate = meta['data_url'] + '?object_code={objectCode}';
                 meta.data_url = this.field.urlTemplate

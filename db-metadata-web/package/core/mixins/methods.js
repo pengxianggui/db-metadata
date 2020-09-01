@@ -1,64 +1,48 @@
 import utils from '../../utils'
-import {restUrl} from "../../constant/url";
 
-/**
- * 加载功能配置
- * @type {{methods: {loadFeature(*=): *}}}
- */
-export const loadFeature = {
-    methods: {
-        loadFeature(featureCode) {
-            let url = this.$compile(restUrl.FEATURE_LOAD, {
-                featureCode: featureCode
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-}
-
-/**
- * 获取TableView的meta, 参数objectCode.
- * @type {{methods: {getTlMeta(*=): void}}}
- */
-export const getTlMeta = {
-    methods: {
-        getTlMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                objectCode: objectCode,
-                componentCode: 'TableView'
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-};
+// /**
+//  * 获取TableView的meta, 参数objectCode.
+//  * @type {{methods: {getTlMeta(*=): void}}}
+//  */
+// export const getTlMeta = {
+//     methods: {
+//         getTlMeta(objectCode) {
+//             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+//                 objectCode: objectCode,
+//                 componentCode: 'TableView'
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// };
 
 /**
  * 获取TableTreeList的meta, 参数objectCode.
  * @type {{methods: {getTableTlMeta(*=): *}}}
  */
-export const getTableTlMeta = {
-    methods: {
-        getTableTlMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                objectCode: objectCode,
-                componentCode: 'TableTreeView'
-            });
-            return this.$axios.safeGet(url)
-        }
-    }
-}
+// export const getTableTlMeta = {
+//     methods: {
+//         getTableTlMeta(objectCode) {
+//             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+//                 objectCode: objectCode,
+//                 componentCode: 'TableTreeView'
+//             });
+//             return this.$axios.safeGet(url)
+//         }
+//     }
+// }
 
-export const getTreeMeta = {
-    methods: {
-        getTreeMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                objectCode: objectCode,
-                componentCode: 'Tree'
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-};
+// export const getTreeMeta = {
+//     methods: {
+//         getTreeMeta(objectCode) {
+//             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+//                 objectCode: objectCode,
+//                 componentCode: 'Tree'
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// };
 
 // export const getAddFormMeta = {
 //     methods: {
@@ -84,51 +68,39 @@ export const getTreeMeta = {
 //     }
 // }
 
-export const getFormMeta = {
-    methods: {
-        getFormMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                objectCode: objectCode,
-                componentCode: 'FormView'
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-};
-
 /**
  * 获取DataList的meta, 参数objectCode.
  * **组件实例中TableView的meta的命名必须为 dlMeta**
  * @type {{methods: {getDlMeta(*=): void}}}
  */
-export const getDlMeta = {
-    methods: {
-        getDlMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                objectCode: objectCode,
-                componentCode: 'DataList'
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-};
+// export const getDlMeta = {
+//     methods: {
+//         getDlMeta(objectCode) {
+//             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+//                 objectCode: objectCode,
+//                 componentCode: 'DataList'
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// };
 
 /**
  * 获取SearchPanel的meta, 参数objectCode.
  * **组件实例中SearchPanel的meta的命名必须为 spMeta**
  * @type {{methods: {getSpMeta(): void}}}
  */
-export const getSpMeta = {
-    methods: {
-        getSpMeta(objectCode) {
-            let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-                componentCode: 'SearchView',
-                objectCode: objectCode
-            });
-            return this.$axios.safeGet(url);
-        }
-    }
-};
+// export const getSpMeta = {
+//     methods: {
+//         getSpMeta(objectCode) {
+//             let url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
+//                 componentCode: 'SearchView',
+//                 objectCode: objectCode
+//             });
+//             return this.$axios.safeGet(url);
+//         }
+//     }
+// };
 
 /**
  * 针对RadioBox, CheckBox, DropDownBox这一类选项数据处理进行集中抽取
