@@ -314,7 +314,8 @@
         "idKey": "id",
         "pidKey": "pid",
         "label": "name"
-      }
+      },
+      "orderBy": "order_num asc"
     },
     "_fields": {
       "id": {

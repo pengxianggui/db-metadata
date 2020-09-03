@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,9 +23,6 @@ public class TreeBuilder<Node extends TreeNode> {
      *
      * @param rootNode
      * @param childrens
-     * @param <T>
-     * @param <N>
-     *
      * @return
      */
     public Node level1Tree(Node rootNode, Node... childrens) {
@@ -37,7 +35,6 @@ public class TreeBuilder<Node extends TreeNode> {
      *
      * @param p1
      * @param p2
-     *
      * @return
      */
     private boolean isEqualsParentId(Object p1, Object p2) {
@@ -59,7 +56,6 @@ public class TreeBuilder<Node extends TreeNode> {
      *
      * @param list     分类表
      * @param parentId 传入的父节点ID
-     *
      * @return String
      */
     public List<Node> getChildTreeObjects(List<Node> list, Object parentId) {
@@ -74,6 +70,7 @@ public class TreeBuilder<Node extends TreeNode> {
                 }
             }
         }
+        Collections.sort(returnList);
         return returnList;
     }
 
@@ -85,6 +82,7 @@ public class TreeBuilder<Node extends TreeNode> {
      */
     private void recursionFn(List<Node> list, Node t) {
         List<Node> childList = getChildList(list, t);// 得到子节点列表
+        Collections.sort(childList);
         t.setChildren(childList);
         for (Node tChild : childList) {
             if (hasChild(list, tChild)) {// 判断是否有子节点
@@ -118,7 +116,6 @@ public class TreeBuilder<Node extends TreeNode> {
      *
      * @param list
      * @param t
-     *
      * @return
      */
     private boolean hasChild(List<Node> list, Node t) {

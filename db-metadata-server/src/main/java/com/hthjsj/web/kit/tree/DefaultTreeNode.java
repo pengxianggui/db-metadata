@@ -3,6 +3,7 @@ package com.hthjsj.web.kit.tree;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,5 +71,22 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
     @Override
     public Record currNode() {
         return node;
+    }
+
+    @Override
+    public Comparable getOrder() {
+        Object value = this.node.getObject(treeConfig.getOrderBy(), Integer.MAX_VALUE);
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        if (value instanceof Date) {
+            return (int) ((Date) value).getTime();
+        }
+
+        if (value instanceof String) {
+            return ((String) value).length();
+        }
+
+        return Integer.MAX_VALUE;
     }
 }

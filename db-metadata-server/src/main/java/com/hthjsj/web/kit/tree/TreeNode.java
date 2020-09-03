@@ -7,7 +7,7 @@ import java.util.List;
  * <p>Created by konbluesky </p>
  * <p>Date : 2016/12/3 下午7:10</p>
  */
-public interface TreeNode<IdType, Node> {
+public interface TreeNode<IdType, Node> extends Comparable<TreeNode> {
 
     IdType getId();
 
@@ -26,4 +26,13 @@ public interface TreeNode<IdType, Node> {
     void setChildren(List<TreeNode<IdType, Node>> children);
 
     Node currNode();
+
+    default Comparable getOrder() {
+        return 0;
+    }
+
+    @Override
+    default int compareTo(TreeNode node) {
+        return getOrder().compareTo(node.getOrder());
+    }
 }

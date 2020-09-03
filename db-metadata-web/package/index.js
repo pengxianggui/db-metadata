@@ -154,7 +154,6 @@ const install = function (Vue, opts = {}) {
     // components.map(component => Vue.component(component.name, component))
     components.map(component => {
         if (component.install) {
-            console.log(component.name)
             Vue.use(component, opts)
         } else {
             Vue.component(component.name, component)

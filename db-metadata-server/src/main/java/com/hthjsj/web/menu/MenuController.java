@@ -41,6 +41,7 @@ public class MenuController extends FrontRestController {
         treeConfig.setIdKey("id");
         treeConfig.setPidKey("pid");
         treeConfig.setLabel("title");
+        treeConfig.setOrderBy("order_num");
         return treeConfig;
     }
 }

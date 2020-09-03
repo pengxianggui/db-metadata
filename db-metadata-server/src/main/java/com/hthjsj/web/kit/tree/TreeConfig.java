@@ -23,4 +23,6 @@ public class TreeConfig {
     private String label;
 
     private boolean isSync = false;
+
+    private String orderBy;
 }
