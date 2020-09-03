@@ -74,6 +74,11 @@ public class TreeBuilder<Node extends TreeNode> {
         return returnList;
     }
 
+
+    public Node getRootObject(List<Node> list, Object parentId) {
+        return list.stream().filter(node -> node.getId().equals(parentId)).findFirst().get();
+    }
+
     /**
      * 递归列表
      *

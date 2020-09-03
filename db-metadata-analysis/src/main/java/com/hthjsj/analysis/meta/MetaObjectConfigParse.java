@@ -59,7 +59,7 @@ public class MetaObjectConfigParse extends MetaData {
      */
     public String orderBy() {
         if (StrKit.notBlank(getStr("orderBy"))) {
-            return getStr("orderBy").replaceFirst("order by", "");
+            return getStr("orderBy").trim().replaceFirst("order by", "");
         }
         return "";
     }

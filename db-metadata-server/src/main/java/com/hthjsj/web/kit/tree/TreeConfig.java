@@ -20,6 +20,8 @@ public class TreeConfig {
 
     private String rootIdentify;
 
+    private boolean keepRoot = false; // rootIdentify有值时标示构建树时是否保留root节点
+
     private String label;
 
     private boolean isSync = false;

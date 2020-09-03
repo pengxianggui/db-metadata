@@ -29,6 +29,8 @@ public class RouterController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode());
         TreeConfig treeConfig = treeConfig();
         String pid = getPara(treeConfig.getPidKey(), "").trim();
+        
+        treeConfig.setKeepRoot(getParaToBoolean("keep", false));
         if (StrKit.notBlank(pid)) {
             treeConfig.setRootIdentify(pid);
         }

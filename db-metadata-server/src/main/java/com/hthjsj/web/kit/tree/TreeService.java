@@ -32,7 +32,14 @@ public class TreeService {
             TreeNode<String, Record> node = new DefaultTreeNode(treeConfig, r);
             nodes.add(node);
         });
-        return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+        TreeBuilder treeBuilder = new TreeBuilder<TreeNode<String, Record>>();
+        List<TreeNode<String, Record>> treeNodes = treeBuilder.getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+        if (!treeConfig.isKeepRoot()) {
+            return treeNodes;
+        }
+        TreeNode root = treeBuilder.getRootObject(nodes, treeConfig.getRootIdentify());
+        return root == null ? treeNodes
+                : Lists.newArrayList(treeBuilder.level1Tree(root, treeNodes.toArray(new DefaultTreeNode[treeNodes.size()])));
     }
 
     public List<TreeNode<String, Record>> treeByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
@@ -102,7 +109,6 @@ public class TreeService {
      *
      * @param records
      * @param keywords
-     *
      * @return
      */
     private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {
