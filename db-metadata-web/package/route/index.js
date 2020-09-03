@@ -11,12 +11,12 @@ import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
 import ExceptionList from '../meta/exception'
+import AdminLayout from '../layout/admin-layout'
 
 import {access} from '../constant/variable'
 import utils from "../utils";
 import {restUrl} from "../constant/url";
 import exchange from "./exchange";
-import {assert, isEmpty} from "../utils/common";
 
 /**
  * Meta 平台维护路由数据
@@ -178,11 +178,6 @@ export const outerRoute = jumpOut.map(route => {
     return item;
 });
 
-export default [
-    ...innerRoute,
-    ...outerRoute
-]
-
 function metaRoute(layout) {
     return [
         {
@@ -208,24 +203,28 @@ function metaRoute(layout) {
     ]
 }
 
-/**
- * 将MetaElement动态路由数据装配到VueRouter实例中
- * @param Vue
- * @param opts
- */
-export function assembleRoute(Vue, opts = {}) {
-    const {layout, router} = opts
-    assert(!isEmpty(layout), '[MetaElement] layout必须指定, 它是你自定义的布局组件')
-    assert(!isEmpty(router), '[MetaElement] router必须指定, 且必须是VueRouter实例')
+function addMetaRoutes(router, Layout = AdminLayout) {
+    router.addRoutes(metaRoute(Layout))
+}
 
-    // 装配内置固定的Meta路由
-    router.addRoutes(metaRoute(layout))
-    // 装配动态路由数据
-    Vue.prototype.$axios.get(restUrl.ROUTE_DATA).then(resp => {
+function addDynamicRoutes(router, Layout = AdminLayout, axios, url = restUrl.ROUTE_DATA, formatCallback = exchange) {
+    axios.get(url).then(resp => {
         const {data: routes} = resp
         console.info('[MetaElement] 装配动态路由, %o', routes)
-        const dynamicRoutes = exchange(routes)
+        const dynamicRoutes = formatCallback(routes, Layout)
         console.debug('[MetaElement] 动态路由数据为: %o', dynamicRoutes)
         router.addRoutes(dynamicRoutes)
     })
+}
+
+// export default function (router, Layout, axios, url, formatCallback) {
+//     addMetaRoutes(router, Layout)
+//     addDynamicRoutes(router, Layout, axios, url, formatCallback)
+// }
+
+export default class RouteLoader {
+    addRoutes(router, Layout, axios, url, formatCallback) {
+        addMetaRoutes(router, Layout)
+        addDynamicRoutes(router, Layout, axios, url, formatCallback)
+    }
 }

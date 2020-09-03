@@ -3,7 +3,7 @@ import {isEmpty, strToObject} from "../utils/common";
 
 const getComponent404 = function (componentName) {
     return Vue.component("Component404", {
-        template: `<h1>组件{{componentName}}未找到, 请确保您全局注册了该组件</h1>`,
+        template: `<h1>组件{{ componentName }}未找到, 请确保您全局注册了该组件</h1>`,
         data() {
             return {
                 componentName: componentName
@@ -16,7 +16,11 @@ const getComponent404 = function (componentName) {
  * 根据组件名提取全局注册的组件
  * @param componentName
  */
-export const exchangeComponent = function (componentName) {
+export const exchangeComponent = function (componentName, Layout) {
+    if (componentName === Layout.name) { // 布局组件支持直接传入, 避免约束应用必须全局注册(但是仍然需要路由数据中布局组件名和Layout.name保持一致)
+        return Layout
+    }
+
     let components = Vue.options.components
     for (let componentsKey in components) {
         if (componentsKey === componentName) {
@@ -40,10 +44,10 @@ const exchangeRouteKey = function (route, r, k) {
     route[k] = value
 }
 
-const exchangeAll = function (routes) {
+const exchangeAll = function (routes, Layout) {
     return routes.map(r => {
         if (r.hasOwnProperty("children")) {
-            r.children = exchangeAll(r.children)
+            r.children = exchangeAll(r.children, Layout)
         }
         const route = {}
         Object.keys(r).filter(k => includes.indexOf(k) > -1).filter(k => {
@@ -54,7 +58,7 @@ const exchangeAll = function (routes) {
 
         // TODO
         const {component: componentName} = route;
-        route.component = exchangeComponent(componentName)
+        route.component = exchangeComponent(componentName, Layout)
         return route
     })
 }
@@ -64,6 +68,6 @@ const exchangeAll = function (routes) {
  * @param routes
  * @returns {*}
  */
-export default function (routes) {
-    return exchangeAll(routes)
+export default function (routes, Layout) {
+    return exchangeAll(routes, Layout)
 }

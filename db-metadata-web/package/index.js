@@ -4,7 +4,6 @@ import utils from './utils'
 import * as Rest from './utils/rest'
 import axios from './axios'
 import filters from './register/filter'
-import {assembleRoute} from "./route";
 // 布局组件
 import AdminLayout from "./layout/admin-layout";
 import NavMenu from "./core/navmenu/src/NavMenu";
@@ -58,13 +57,14 @@ import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import {restUrl} from './constant/url'
 import {access} from "./access";
 import user from './access'
-// 内置路由: Meta维护路由
-import MetaRoute from './route'
+// 路由装配对象
+import RouteLoader from "./route";
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
 
 // style
 import './style/index.scss'
+import {isFunction} from "./utils/common";
 
 const components = [
     // atom or container
@@ -151,7 +151,6 @@ const install = function (Vue, opts = {}) {
     // 注册全局过滤器
     Object.keys(filters).map(key => Vue.filter(key, filters[key]))
 
-    // components.map(component => Vue.component(component.name, component))
     components.map(component => {
         if (component.install) {
             Vue.use(component, opts)
@@ -161,7 +160,10 @@ const install = function (Vue, opts = {}) {
     })
 
     // 路由数据装配
-    assembleRoute(Vue, opts)
+    if (opts.addRoutes && isFunction(opts.addRoutes)) {
+        // opts.addRoutes(Route, Vue.prototype.$axios)
+        opts.addRoutes.call(this, new RouteLoader(), Vue.prototype.$axios)
+    }
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -177,6 +179,5 @@ export {
     Rest,
     restUrl,
     user,
-    MetaRoute,
     MetaMenu
 }

@@ -14,8 +14,9 @@ Vue.use(MetaElement, {
     axios: { // 内置axios配置
         baseURL: '/meta'   // default
     },
-    router: router,
-    layout: Layout,
+    addRoutes: (RouteLoader, axios) => {
+        RouteLoader.addRoutes(router, Layout, axios)
+    },
     restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置
     access: { // 访问权限配置
         root: 'ROOT' // 默认为ROOT, 如果自定义覆盖, 对于MetaEasyEdit快捷编辑是有效的, 但是平台维护路由未生效
@@ -24,7 +25,6 @@ Vue.use(MetaElement, {
         show: true
     }
 });
-
 
 Vue.config.productionTip = false;
 Vue.prototype.$NODE_ENV = process.env.NODE_ENV;
