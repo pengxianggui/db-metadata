@@ -42,7 +42,7 @@
                          @submit="handlerMetaImport"></meta-import>
             <template #footer><span></span></template>
         </dialog-box>
-        <dialog-box :visible.sync="featureAddVisible" title="创建功能">
+        <dialog-box :visible.sync="featureAddVisible" title="创建功能" :fullscreen="true">
             <feature-add :params="featureParams" @ok="featureAddVisible=false"
                          @cancel="featureAddVisible=false"></feature-add>
             <template #footer><span></span></template>

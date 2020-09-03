@@ -14,7 +14,7 @@
         </slot>
         <el-form-item>
             <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
-                  v-if="innerMeta.columns.length > 0 && formType !== 'view'">
+                  v-if="formType !== 'view' && buttonsConf.show">
                 <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
                            @click="onSubmit"
                            v-text="buttonsConf['submit']['label']"></el-button>

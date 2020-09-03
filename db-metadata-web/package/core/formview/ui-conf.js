@@ -29,6 +29,7 @@ export default {
     },
     "columns": [],
     "buttons": {
+        "show": true,
         "submit": {
             "label": "提交",
             "conf": {
