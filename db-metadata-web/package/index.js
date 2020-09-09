@@ -1,5 +1,5 @@
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import {isFunction} from "./utils/common";
 import utils from './utils'
 import * as Rest from './utils/rest'
 import axios from './axios'
@@ -32,6 +32,7 @@ import PassBox from './core/passbox'
 import PopMenu from './core/popmenu'
 import RadioBox from './core/radiobox'
 import RichTextBox from "./core/richtextbox";
+import RegionBox from "./core/regionbox";
 import SearchView from './core/searchview'
 import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
@@ -63,8 +64,8 @@ import RouteLoader from "./route";
 import MetaMenu from "./menu/MetaMenu";
 
 // style
+import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
-import {isFunction} from "./utils/common";
 
 const components = [
     // atom or container
@@ -94,6 +95,7 @@ const components = [
     PopMenu,
     RadioBox,
     RichTextBox,
+    RegionBox,
     SearchView,
     SqlBox,
     Tags,
