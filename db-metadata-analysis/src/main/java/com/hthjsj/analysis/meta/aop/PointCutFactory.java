@@ -63,7 +63,7 @@ public class PointCutFactory implements Serializable, Cloneable {
                 return (QueryPointCut) o;
             }
         }
-        return (QueryPointCut) o;
+        return EMPTY_POINT_CUT;
     }
 
     /**

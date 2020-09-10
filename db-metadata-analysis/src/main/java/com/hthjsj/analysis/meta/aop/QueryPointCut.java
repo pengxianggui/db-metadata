@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
  *
  * <p> @author konbluesky </p>
  */
-public interface QueryPointCut {
+public interface QueryPointCut extends IPointCut {
 
     /**
      * 如prevent返回true,则使用GetResult作为查询请求的返回结果;

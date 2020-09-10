@@ -1,5 +1,7 @@
 package com.hthjsj.analysis.meta.aop;
 
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -9,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, ViewPointCut {
+public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, ViewPointCut, QueryPointCut {
 
     @Override
     public boolean addBefore(AopInvocation invocation) {
@@ -53,5 +55,15 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     @Override
     public void viewAfter(AopInvocation invocation) {
         log.error("[PointCut] default operation : this is viewAfter!");
+    }
+
+    @Override
+    public boolean prevent() {
+        return false;
+    }
+
+    @Override
+    public Page<Record> getResult(QueryInvocation queryInvocation) {
+        return null;
     }
 }
