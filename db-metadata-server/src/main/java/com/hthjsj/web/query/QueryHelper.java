@@ -10,6 +10,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class QueryHelper {
 
     private final Kv params = Kv.create();
 
+    private ListHelper listHelper;
+
     public QueryHelper(Controller controller) {
         tp = controller;
     }
@@ -39,6 +42,13 @@ public class QueryHelper {
      */
     public static QueryHelper queryBuilder() {
         return new QueryHelper(null);
+    }
+
+    public ListHelper list() {
+        if (listHelper == null) {
+            listHelper = new ListHelper(tp);
+        }
+        return listHelper;
     }
 
     public String getObjectCode() {
@@ -178,5 +188,37 @@ public class QueryHelper {
             }
         }
         return params;
+    }
+
+    @Data
+    public class ListHelper {
+
+        String[] fields;
+
+        String[] excludeFields;
+
+        boolean raw;
+
+        Controller controller;
+
+        public ListHelper(Controller controller) {
+            this.controller = controller;
+        }
+
+        public String fs() {
+            return controller.getPara("fs", controller.getPara("fields", ""));
+        }
+
+        public String efs() {
+            return controller.getPara("efs", controller.getPara("exfields", ""));
+        }
+
+        public String[] fields() {
+            return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(fs()).toArray(new String[0]);
+        }
+
+        public String[] excludeFields() {
+            return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(efs()).toArray(new String[0]);
+        }
     }
 }

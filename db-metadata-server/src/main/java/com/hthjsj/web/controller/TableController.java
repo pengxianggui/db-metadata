@@ -3,7 +3,6 @@ package com.hthjsj.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
@@ -69,11 +68,9 @@ public class TableController extends FrontRestController {
         Integer pageIndex = queryHelper.getPageIndex();
         Integer pageSize = queryHelper.getPageSize();
 
-        String includeFieldStr = getPara("fs", getPara("fields", ""));
-        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
         boolean raw = getParaToBoolean("raw", false);
-        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
-        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
+        String[] fields = queryHelper.list().fields();
+        String[] excludeFields = queryHelper.list().excludeFields();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
         Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
@@ -85,11 +82,11 @@ public class TableController extends FrontRestController {
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
         Page<Record> result = metaService().paginate(pageIndex,
-                pageSize,
-                metaObject,
-                sqlPara.getSelect(),
-                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                sqlPara.getPara());
+                                                     pageSize,
+                                                     metaObject,
+                                                     sqlPara.getSelect(),
+                                                     MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                                                     sqlPara.getPara());
 
         /**
          * escape field value;
@@ -204,13 +201,10 @@ public class TableController extends FrontRestController {
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
         treeConfig.setOrderBy(metaObject.configParser().orderBy().split(" ")[0]);
-        
+
         Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
-        String includeFieldStr = getPara("fs", getPara("fields", ""));
-        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
-        boolean raw = getParaToBoolean("raw", false);
-        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
-        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
+        String[] fields = queryHelper.list().fields();
+        String[] excludeFields = queryHelper.list().excludeFields();
 
         Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
 
@@ -218,9 +212,10 @@ public class TableController extends FrontRestController {
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
 
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
-        List<Record> result = businessService().findData(metaObject, sqlPara.getSelect(),
-                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                sqlPara.getPara());
+        List<Record> result = businessService().findData(metaObject,
+                                                         sqlPara.getSelect(),
+                                                         MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                                                         sqlPara.getPara());
 
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);

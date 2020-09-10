@@ -12,7 +12,7 @@ import com.hthjsj.analysis.meta.MetaData;
  *
  * <p> @author konbluesky </p>
  */
-public abstract class FeatureConfig extends MetaData implements Feature {
+public abstract class FeatureConfig extends MetaData {
 
     protected String icon() {
         return getStr("icon");

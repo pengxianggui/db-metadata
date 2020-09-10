@@ -53,8 +53,8 @@ public class FeatureController extends FrontRestController {
     public void load() {
         QueryHelper queryHelper = new QueryHelper(this);
         String featureCode = queryHelper.getFeatureCode();
-        Feature feature = featureService().loadFeatureConfig(featureCode);
-        renderJson(Ret.ok("data", feature.execute()));
+        FeatureConfig feature = featureService().loadFeatureConfig(featureCode);
+        renderJson(Ret.ok("data", feature));
     }
 
     /**
