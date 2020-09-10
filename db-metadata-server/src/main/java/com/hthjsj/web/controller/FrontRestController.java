@@ -14,6 +14,7 @@ import com.hthjsj.web.jfinal.render.PictureRender;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
+import com.jfinal.core.NotAction;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
@@ -109,6 +110,7 @@ public class FrontRestController extends Controller implements FrontRest {
      * @param data
      * @param excludes
      */
+    @NotAction
     protected void renderJsonExcludes(Object data, String... excludes) {
         if (excludes != null && excludes.length > 0) {
 
@@ -127,10 +129,12 @@ public class FrontRestController extends Controller implements FrontRest {
         }
     }
 
-    Kv toPage(int total, int index, int size) {
+    @NotAction
+    protected Kv toPage(int total, int index, int size) {
         return Kv.by("total", total).set("index", index).set("size", size);
     }
 
+    @NotAction
     public void renderImageOrFile(File downloadFile) {
         List<String> anyImageTypes = Lists.newArrayList("jpg", "png", "gif", "jpeg");
         String ext = Files.getFileExtension(downloadFile.getName());
