@@ -54,6 +54,18 @@ public class PointCutFactory implements Serializable, Cloneable {
         return (T) EMPTY_POINT_CUT;
     }
 
+    public QueryPointCut queryPointCut() {
+        String[] interceptors = interceptors();
+        Object o = null;
+        for (String i : interceptors) {
+            o = interceptor(i);
+            if (o instanceof QueryPointCut) {
+                return (QueryPointCut) o;
+            }
+        }
+        return (QueryPointCut) o;
+    }
+
     /**
      * 客户端可以按需选择实现add,update,delete,view切入点
      */

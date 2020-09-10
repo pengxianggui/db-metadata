@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaField implements IMetaField {
+class MetaField implements IMetaField {
 
     Record record = new Record();
 

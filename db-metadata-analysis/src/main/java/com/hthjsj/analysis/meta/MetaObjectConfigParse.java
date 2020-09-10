@@ -97,6 +97,15 @@ public class MetaObjectConfigParse extends MetaData {
         return pointCutFactory.viewPointCut();
     }
 
+    /**
+     * 考虑到干预查询动作,是建立在前端动态条件的基础上来做的,只支持单个PointCut
+     *
+     * @return
+     */
+    public QueryPointCut queryPointCut() {
+        return pointCutFactory.queryPointCut();
+    }
+
     public boolean isTreeStructure() {
         if (StrKit.notBlank(getStr("structure"))) {
             return getStr("structure").equalsIgnoreCase("tree");

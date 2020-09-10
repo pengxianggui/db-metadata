@@ -10,6 +10,7 @@ import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.DeletePointCut;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
+import com.hthjsj.analysis.meta.aop.QueryPointCut;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
@@ -67,32 +68,44 @@ public class TableController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         Integer pageIndex = queryHelper.getPageIndex();
         Integer pageSize = queryHelper.getPageSize();
-
-        boolean raw = getParaToBoolean("raw", false);
         String[] fields = queryHelper.list().fields();
         String[] excludeFields = queryHelper.list().excludeFields();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
 
+
+
+        Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
-
         /** 编译where后条件 */
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
-        Page<Record> result = metaService().paginate(pageIndex,
-                                                     pageSize,
-                                                     metaObject,
-                                                     sqlPara.getSelect(),
-                                                     MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                     sqlPara.getPara());
+        /** pointCut构建 */
+        QueryPointCut queryPointCut = metaObject.configParser().queryPointCut();
+        TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject, this, queryHelper);
+        tableQueryInvocation.setSqlParaExt(sqlPara);
+        tableQueryInvocation.setCompileWhere(compileWhere);
+        tableQueryInvocation.setFilteredFields(filteredFields);
+
+        Page<Record> result = null;
+        if (queryPointCut.prevent()) {
+            result = queryPointCut.getResult(tableQueryInvocation);
+        } else {
+            result = metaService().paginate(pageIndex,
+                                            pageSize,
+                                            metaObject,
+                                            sqlPara.getSelect(),
+                                            MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                                            sqlPara.getPara());
+        }
+
 
         /**
          * escape field value;
          * 1. 是否需要转义的规则;
          */
-        if (!raw) {
+        if (!queryHelper.list().raw()) {
             result.setList(OptionsKit.trans(filteredFields, result.getList()));
         }
 

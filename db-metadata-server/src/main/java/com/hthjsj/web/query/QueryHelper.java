@@ -10,7 +10,6 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,14 +189,7 @@ public class QueryHelper {
         return params;
     }
 
-    @Data
     public class ListHelper {
-
-        String[] fields;
-
-        String[] excludeFields;
-
-        boolean raw;
 
         Controller controller;
 
@@ -219,6 +211,10 @@ public class QueryHelper {
 
         public String[] excludeFields() {
             return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(efs()).toArray(new String[0]);
+        }
+
+        public boolean raw() {
+            return controller.getParaToBoolean("raw", false);
         }
     }
 }
