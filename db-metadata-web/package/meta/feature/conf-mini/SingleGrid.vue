@@ -1,8 +1,8 @@
 <template>
-    <el-form>
+    <el-form ref="singleGridForm" :model="config">
         <el-divider content-position="left">单表配置</el-divider>
-        <el-form-item label="元对象编码" prop="objectCode" required>
-            <drop-down-box v-model="config.singleGrid.objectCode" :data-url="metaObjectCodeUrl">
+        <el-form-item label="元对象编码" prop="singleGrid.objectCode" required>
+            <drop-down-box v-model="config.singleGrid.objectCode" :data-url="metaObjectCodeUrl" filterable>
                 <template #options="{options}">
                     <el-option v-for="item in options" :key="item.code" :label="item.code"
                                :value="item.code">
@@ -20,21 +20,27 @@
     export default {
         name: "SingleGrid",
         props: {
-            oc: String
+            config: {
+              type: Object,
+              required: true
+            }
         },
         data() {
-            const {oc: objectCode} = this;
             return {
-                config: {
-                    singleGrid: {
-                        objectCode: objectCode
-                    }
-                },
                 metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST
             }
         },
-        updated() {
-            this.$emit('change', this.config);
+        created() {
+          this.$merge(this.config, {
+            singleGrid: {
+              objectCode: null
+            }
+          })
+        },
+        methods: {
+            validate(callback) {
+              return this.$refs['singleGridForm'].validate(valid => callback(valid))
+            }
         }
     }
 </script>

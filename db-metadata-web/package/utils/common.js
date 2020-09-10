@@ -198,7 +198,7 @@ export function strToObject(value) {
             result = JSON.parse(value);
             return isObject(result) ? result : value;
         } catch (e) {
-            console.error("value can't be conver to Object, attention please. value: o%", value);
+            console.warn(`value can't be conver to Object, attention please. value:${value}`);
             return value;
         }
     }
@@ -219,7 +219,7 @@ export function strToArray(value) {
             result = JSON.parse(value);
             return isArray(result) ? result : value;
         } catch (e) {
-            console.error("value can't be conver to Array, attention please. value: o%", value);
+            console.warn(`value can't be conver to Array, attention please. value:${value}`);
             return value;
         }
     }

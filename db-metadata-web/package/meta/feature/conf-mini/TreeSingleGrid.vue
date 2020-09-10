@@ -1,7 +1,7 @@
 <template>
-    <el-form>
+    <el-form ref="treeSingleGrid" :model="config">
         <el-divider content-position="left">配置</el-divider>
-        <el-form-item label="元对象编码" class="inline">
+        <el-form-item label="元对象编码" class="inline" prop="table.objectCode" required>
             <drop-down-box v-model="config.table.objectCode" :data-url="metaObjectCodeUrl" filterable>
                 <template #options="{options}">
                     <el-option v-for="item in options" :key="item.code" :label="item.code"
@@ -11,7 +11,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="idKey" class="inline">
+        <el-form-item label="idKey" class="inline" prop="table.idKey" required>
             <drop-down-box v-model="config.table.idKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -20,7 +20,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="pidKey" class="inline">
+        <el-form-item label="pidKey" class="inline" prop="table.pidKey" required>
             <drop-down-box v-model="config.table.pidKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -29,10 +29,10 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="rootIdentify" class="inline">
+        <el-form-item label="rootIdentify" class="inline" prop="table.rootIdentify">
             <text-box v-model="config.table.rootIdentify" required></text-box>
         </el-form-item>
-        <el-form-item label="label" class="inline">
+        <el-form-item label="label" class="inline" prop="table.label" required>
             <drop-down-box v-model="config.table.label"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -41,7 +41,7 @@
                 </template>
             </drop-down-box>
         </el-form-item>
-        <el-form-item label="isSync">
+        <el-form-item label="isSync" prop="table.isSync">
             <bool-box v-model="config.table.isSync" required></bool-box>
         </el-form-item>
     </el-form>
@@ -53,27 +53,33 @@
     export default {
         name: "TreeSingleGrid",
         props: {
-            oc: String
+          config: {
+            type: Object,
+            required: true
+          }
+        },
+        created() {
+          this.$merge(this.config, {
+            table: {
+              objectCode: null,
+              idKey: null,
+              pidKey: null,
+              rootIdentify: null,
+              label: null,
+              isSync: false
+            }
+          })
         },
         data() {
-            const {oc: objectCode} = this;
             return {
-                config: {
-                    table: {
-                        objectCode: objectCode,
-                        idKey: null,
-                        pidKey: null,
-                        rootIdentify: null,
-                        label: null,
-                        isSync: false
-                    }
-                },
                 metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
                 metaFieldCodeUrl: restUrl.FIELD_CODE_LIST_BY_OBJECT
             }
         },
-        updated() {
-            this.$emit('change', this.config);
+        methods: {
+          validate(callback) {
+            return this.$refs['treeSingleGrid'].validate(valid => callback(valid))
+          }
         }
     }
 </script>

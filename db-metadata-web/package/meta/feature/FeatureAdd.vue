@@ -3,7 +3,7 @@
     <el-card class="feature-form">
       <el-form ref="featureForm" :model="feature" label-width="120px">
         <el-form-item label="功能类别" prop="type" required>
-          <radio-box :data-url="featureTypeUrl" v-model="feature.type"></radio-box>
+          <radio-box :data-url="featureTypeUrl" v-model="feature.type" @change="initFeatureConfMeta"></radio-box>
         </el-form-item>
         <el-form-item label="功能名" class="inline" prop="name" required>
           <text-box v-model="feature.name"></text-box>
@@ -11,45 +11,16 @@
         <el-form-item label="功能代码" class="inline" prop="code" required>
           <text-box v-model="feature.code"></text-box>
         </el-form-item>
-        <!--            <el-form-item label="图标" class="inline" prop="icon">-->
-        <!--                <icon-box v-model="feature.icon"></icon-box>-->
-        <!--            </el-form-item>-->
         <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>
           <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
         </el-form-item>
+        <el-form-item label="业务拦截器">
+          <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+                    v-model="feature.bizInterceptor"></el-input>
+        </el-form-item>
 
-        <!--            <el-form-item label="独立路由" class="inline" prop="config.hasRouter" required>-->
-        <!--                <el-tooltip effect="dark" placement="top">-->
-        <!--                    <div slot="content">-->
-        <!--                        独立路由是指,选择了指定功能后,需要在前端文件单独路由的选项-->
-        <!--                    </div>-->
-        <!--                    <i class="el-icon-question"></i>-->
-        <!--                </el-tooltip>-->
-        <!--                <el-radio v-model="feature.config.hasRouter" :label=false>否</el-radio>-->
-        <!--                <el-radio v-model="feature.config.hasRouter" :label=true>是</el-radio>-->
-        <!--            </el-form-item>-->
-
-        <!--            <el-form-item v-if="feature.config.hasRouter" prop="config.componentName" required>-->
-        <!--                <text-box v-model="feature.config.componentName"-->
-        <!--                          placeholder="输入指定的Component名称与Router注册时相同"></text-box>-->
-        <!--            </el-form-item>-->
-
-        <div v-show="feature.type === FEATURE_TYPE.MasterSlaveGrid">
-          <MasterSlaveGrid ref="masterSlaveGrid" :oc="objectCode" :pk="primaryKey"></MasterSlaveGrid>
-          <!-- TODO 从表后期应当支持多个子表设置 -->
-        </div>
-
-        <div v-show="feature.type === FEATURE_TYPE.SingleGrid">
-          <SingleGrid ref="singleGrid" :oc="objectCode"></SingleGrid>
-        </div>
-
-        <div v-show="feature.type === FEATURE_TYPE.TreeSingleGrid">
-          <TreeSingleGrid ref="treeSingleGrid" :oc="objectCode"></TreeSingleGrid>
-        </div>
-
-        <div v-show="feature.type === FEATURE_TYPE.TreeAndSingleGrid">
-          <TreeAndSingleGrid ref="treeAndSingleGrid" :oc="objectCode"></TreeAndSingleGrid>
-        </div>
+        <!--扩展配置-->
+        <component ref="extendConf" :is="feature.type" :config.sync="feature.config"></component>
 
         <el-form-item>
           <el-button @click="onSubmit('featureForm')" type="primary">保存</el-button>
@@ -86,7 +57,12 @@ const FEATURE_TYPE = {
 
 export default {
   name: "FeatureAdd",
-  components: {MasterSlaveGrid, SingleGrid, TreeSingleGrid, TreeAndSingleGrid},
+  components: {
+    'MasterSlaveGrid': MasterSlaveGrid,
+    'SingleGrid': SingleGrid,
+    'TreeInTable': TreeSingleGrid,
+    'TreeAndTable': TreeAndSingleGrid
+  },
   props: {
     params: {
       type: Object
@@ -110,14 +86,9 @@ export default {
         type: FEATURE_TYPE['SingleGrid'],
         name: null,
         code: null,
-        config: {
-          //是否指定特殊的ComponentName
-          hasRouter: false,
-          componentName: '',
-          icon: ''// 功能图标,
-        },
         instanceCode: null,
-
+        bizInterceptor: '',
+        config: {},
       },
       route: {
         objectCode: 'meta_router',
@@ -132,66 +103,62 @@ export default {
     }
   },
   methods: {
-    assembleParams() {
-      const {$refs, feature} = this;
-      const {type: featureType} = feature;
+    initFeatureConfMeta() {
+      const {feature: {type: featureType}, objectCode, primaryKey} = this
       switch (featureType) {
         case FEATURE_TYPE['MasterSlaveGrid']:
-          this.feature.config = this.$merge(this.feature.config, $refs['masterSlaveGrid'].config);
+          this.feature.config = {
+            master: {
+              objectCode: objectCode,
+              primaryKey: primaryKey
+            },
+            slaves: [{
+              objectCode: null,
+              foreignFieldCode: null,
+              order: 0
+            }]
+          }
+
           break;
         case FEATURE_TYPE['SingleGrid']:
-          this.feature.config = this.$merge(this.feature.config, $refs['singleGrid'].config);
+          this.feature.config = {
+            singleGrid: {
+              objectCode: objectCode
+            }
+          }
+
           break;
         case FEATURE_TYPE['TreeSingleGrid']:
-          this.feature.config = this.$merge(this.feature.config, $refs['treeSingleGrid'].config);
+          this.feature.config = {
+            table: {
+              objectCode: objectCode,
+              idKey: null,
+              pidKey: null,
+              rootIdentify: null,
+              label: null,
+              isSync: false
+            }
+          }
+
           break;
         case FEATURE_TYPE['TreeAndSingleGrid']:
-          this.feature.config = this.$merge(this.feature.config, $refs['treeAndSingleGrid'].config);
+          this.feature.config = {
+            tree: {
+              objectCode: null,
+              idKey: null,
+              pidKey: null,
+              rootIdentify: null,
+              label: null,
+              isSync: false
+            },
+            table: {
+              objectCode: objectCode,
+              primaryKey: null,
+              foreignFieldCode: null
+            }
+          }
           break;
       }
-      return this.feature;
-    },
-    doSubmit() {
-      const params = this.assembleParams();
-      const {type: featureType} = params;
-      let url = this.$compile(restUrl.FEATURE_ADD, {
-        featureType: featureType
-      });
-      this.$axios.post(url, params).then(resp => {
-        this.$message.success('操作成功');
-        this.$emit('ok', params);
-      }).catch(err => {
-        this.$message.error(err.msg);
-      })
-    },
-    onSubmit(formName) {
-      const {route: {saved: routeSaved}, menu: {saved: menuSaved}} = this
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (!(routeSaved && menuSaved)) {
-            let msg = ''
-            msg += (!routeSaved ? '路由表单没有保存,' : '')
-            msg += (!menuSaved ? '菜单表单没有保存,' : '')
-            this.$confirm(`${msg}建议你填写并手动保存下, 我可不会自动帮你保存, 因为我不知道你要不要保存.`, '提示', {
-              type: 'warning',
-              showCancelButton: true,
-              cancelButtonText: '不了, 就保存功能吧',
-              showConfirmButton: true,
-              confirmButtonText: '采纳你的建议'
-            }).then(() => {
-            }).catch(() => {
-              this.doSubmit()
-            })
-          } else {
-            this.doSubmit() // submit
-          }
-        } else {
-          return false;
-        }
-      });
-    },
-    onCancel: function (event) {
-      this.$emit('cancel', event);
     },
     initAssociateMeta() {
       const {route: {objectCode: routeObjectCode}, menu: {objectCode: menuObjectCode}} = this
@@ -203,14 +170,60 @@ export default {
         const {data: meta} = resp
         this.menu.meta = meta
       })
+    },
+    doSubmit() {
+      const {feature: {type: featureType}, feature} = this
+
+      let url = this.$compile(restUrl.FEATURE_ADD, {
+        featureType: featureType
+      });
+      this.$axios.post(url, feature).then(resp => {
+        this.$message.success('操作成功');
+        this.$emit('ok', params);
+      }).catch(err => {
+        this.$message.error(err.msg);
+      })
+    },
+
+    onSubmit(formName) {
+      const {route: {saved: routeSaved}, menu: {saved: menuSaved}} = this
+      this.$refs[formName].validate((valid) => {
+          this.$refs['extendConf'].validate(subValid => {
+            if (valid && subValid) {
+              if (!(routeSaved && menuSaved)) {
+                let msg = ''
+                msg += (!routeSaved ? '路由表单没有保存,' : '')
+                msg += (!menuSaved ? '菜单表单没有保存,' : '')
+                this.$confirm(`${msg}建议你填写并手动保存下, 我可不会自动帮你保存, 因为我不知道你要不要保存.`, '提示', {
+                  type: 'warning',
+                  showCancelButton: true,
+                  cancelButtonText: '不了, 就保存功能吧',
+                  showConfirmButton: true,
+                  confirmButtonText: '采纳你的建议'
+                }).then(() => {
+                }).catch(() => {
+                  this.doSubmit()
+                })
+              } else {
+                this.doSubmit() // submit
+              }
+            } else {
+              return false
+            }
+          })
+      });
+    },
+    onCancel: function (event) {
+      this.$emit('cancel', event);
     }
   },
   created() {
     this.initAssociateMeta()
+    this.initFeatureConfMeta()
   },
   mounted() {
   },
-  computed: {}
+  computed: {},
 }
 </script>
 

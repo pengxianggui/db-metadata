@@ -11,7 +11,11 @@
     import DefaultMeta from '../ui-conf'
 
     let conver = function (value) {
-        return utils.isEmpty(value) ? 0 : value;
+        if (utils.isEmpty(value)) {
+            return 0
+        } else {
+            return parseFloat(value)
+        }
     };
 
     export default {
@@ -19,7 +23,7 @@
         name: "NumBox",
         label: "数字框",
         props: {
-            value: Number,
+            value: [Number, String],
         }
     }
 </script>
