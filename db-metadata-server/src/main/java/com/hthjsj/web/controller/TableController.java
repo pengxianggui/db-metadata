@@ -73,8 +73,6 @@ public class TableController extends FrontRestController {
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
-
-
         Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);

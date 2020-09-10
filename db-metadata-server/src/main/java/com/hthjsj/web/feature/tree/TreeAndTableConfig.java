@@ -1,6 +1,8 @@
 package com.hthjsj.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
+import com.hthjsj.analysis.meta.aop.PointCutFactory;
+import com.hthjsj.analysis.meta.aop.QueryPointCut;
 import com.hthjsj.web.feature.FeatureConfig;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import lombok.Data;
@@ -17,6 +19,8 @@ public class TreeAndTableConfig extends FeatureConfig {
 
     private TableConfig tableConfig;
 
+    private TreeAndTableIntercept intercept;
+
     public TreeConfig getTreeConfig() {
         if (treeConfig == null) {
             treeConfig = JSON.parseObject(getStr("tree"), TreeConfig.class);
@@ -31,13 +35,18 @@ public class TreeAndTableConfig extends FeatureConfig {
         return tableConfig;
     }
 
+    public TreeAndTableIntercept intercept() {
+        QueryPointCut queryPointCut = new PointCutFactory(this).queryPointCut();
+        return new TreeAndTableIntercept(null, queryPointCut);
+    }
+
     @Data
     public static class TableConfig {
 
-        String objectCode;
+        private String objectCode;
 
-        String primaryKey;
+        private String primaryKey;
 
-        String foreignFieldCode;
+        private String foreignFieldCode;
     }
 }

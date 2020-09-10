@@ -44,19 +44,6 @@ public class TreeController extends Controller {
         renderJson(tree);
     }
 
-    /**
-     * 组装树型数据逻辑
-     * 1. 根据sql或条件取List<Record>,可能是缺陷树,
-     * 2. 根据标志取根节点
-     * 3. 构建树
-     */
-    public void child() {
-
-    }
-
-    public void parent() {
-
-    }
 
     private TreeConfig getConfig() {
         TreeConfig treeConfig = new TreeConfig();

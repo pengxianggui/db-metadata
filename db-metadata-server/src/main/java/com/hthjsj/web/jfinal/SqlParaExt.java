@@ -1,5 +1,6 @@
 package com.hthjsj.web.jfinal;
 
+import com.hthjsj.web.query.sqls.InNotInMatch;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.SqlPara;
@@ -56,5 +57,23 @@ public class SqlParaExt extends SqlPara {
      */
     public boolean verify() {
         return SqlAnalysis.check(getSql());
+    }
+
+    /**
+     * <pre>
+     *  appendSql : a=?
+     *  params: 与?需一一对应
+     * </pre>
+     *
+     * @param columnName
+     * @param params
+     */
+    public void appendLike(String columnName, Object... params) {
+        InNotInMatch inNotInMatch = new InNotInMatch();
+        String oneCondition = inNotInMatch.toSqlKey(columnName, params, true);
+        whereExcept += " and " + oneCondition;
+        for (int i = 0; i < params.length; i++) {
+            addPara(params[i]);
+        }
     }
 }

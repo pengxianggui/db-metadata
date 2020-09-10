@@ -19,15 +19,15 @@ import java.util.Collection;
 @Data
 public class TableQueryInvocation extends QueryInvocation {
 
-    QueryHelper queryHelper;
+    private QueryHelper queryHelper;
 
-    SqlParaExt sqlParaExt;
+    private SqlParaExt sqlParaExt;
 
-    String compileWhere;
+    private String compileWhere;
 
-    Collection<IMetaField> filteredFields;
+    private Collection<IMetaField> filteredFields;
 
-    boolean prevent;
+    private boolean prevent;
 
     public TableQueryInvocation(IMetaObject metaObject, Controller controller, QueryHelper queryHelper) {
         super(metaObject, controller);
