@@ -1,13 +1,9 @@
 package com.hthjsj.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Lists;
 import com.hthjsj.web.feature.FeatureConfig;
 import com.hthjsj.web.kit.tree.TreeConfig;
-import com.jfinal.kit.Kv;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author pengxg
@@ -21,16 +17,6 @@ public class TreeInTableConfig extends FeatureConfig {
     private String instanceCode;
 
     private TreeConfig treeConfig;
-
-    @Override
-    public List<String> metaObjects() {
-        return Lists.newArrayList(this.objectCode);
-    }
-
-    @Override
-    public Kv execute() {
-        return this;
-    }
 
     public TreeConfig getTreeConfig() {
         if (treeConfig == null) {

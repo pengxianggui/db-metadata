@@ -27,7 +27,6 @@ import java.util.List;
 @Before(Tx.class)
 public class FeatureService {
 
-
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
         Record record = getRecord(type, name, code, config);
         return AnalysisConfig.me().dbMain().save("meta_feature", "id", record);

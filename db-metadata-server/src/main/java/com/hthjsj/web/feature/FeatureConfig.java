@@ -3,6 +3,10 @@ package com.hthjsj.web.feature;
 import com.hthjsj.analysis.meta.MetaData;
 
 /**
+ * <pre>
+ *     在反序列化时,因为是Map的子类,所以会先以Map接收JSON,在获取如TreeConfig时
+ *     通过JSON.parseObject(toJson(), TreeConfig.class);再将实体拿出来
+ * </pre>
  * <p> @Date : 2019/12/20 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -21,7 +25,7 @@ public abstract class FeatureConfig extends MetaData implements Feature {
      * @return
      */
     public boolean hasRouter() {
-        return getBoolean("hasRouter") == null ? false : getBoolean("hasRouter");
+        return getBoolean("hasRouter") != null && getBoolean("hasRouter");
     }
 
     public String componentName() {
