@@ -24,10 +24,6 @@ import java.util.List;
 @Slf4j
 public class MetaFieldEditPointCut implements UpdatePointCut {
 
-    @Override
-    public boolean updateBefore(AopInvocation invocation) {
-        return true;
-    }
 
     /**
      * 此处更新的是meta_field的记录,但是需要级联计算的是,该条记录中指向的[元对象,元子段]
@@ -46,6 +42,7 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
             IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
 
             log.info("Update {} - field {},Biz data Primary key:{}", metaObject.code(), fieldCode, formData.getPks(metaObject.primaryKey()));
+            //TODO 无法作用到自定义instanceCode上的实例配置;
             List<ComponentType> existTypes = ServiceManager.componentService().loadTypesByObjectCode(metaObject.code());
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);
