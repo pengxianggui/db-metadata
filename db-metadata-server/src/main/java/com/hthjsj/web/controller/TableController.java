@@ -200,7 +200,7 @@ public class TableController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
-        treeConfig.setOrderBy(metaObject.configParser().orderBy().split(" ")[0]);
+        treeConfig.setOrderBy(metaObject.configParser().orderBy());
 
         Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
         String[] fields = queryHelper.list().fields();

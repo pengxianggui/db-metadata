@@ -1,5 +1,6 @@
 package com.hthjsj.web.kit.tree;
 
+import com.jfinal.kit.StrKit;
 import lombok.Data;
 
 /**
@@ -27,4 +28,14 @@ public class TreeConfig {
     private boolean isSync = false;
 
     private String orderBy;
+
+    public void setOrderBy(String orderBy) {
+        if (StrKit.notBlank(orderBy)) {
+            if (orderBy.contains(",")) {
+                orderBy = orderBy.split(",")[0].split(" ")[0];
+            } else {
+                orderBy = orderBy.split(" ")[0];
+            }
+        }
+    }
 }
