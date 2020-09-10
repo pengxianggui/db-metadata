@@ -50,7 +50,7 @@ export function getTableTreeViewMeta(objectCode) {
 export function getTreeMeta(objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         objectCode: objectCode,
-        componentCode: 'Tree'
+        componentCode: 'TreeView'
     });
     return Vue.prototype.$axios.safeGet(url);
 }
@@ -75,7 +75,7 @@ export function getSearchViewMeta(objectCode) {
 
 // 从功能中直接获取meta
 export function getMetaFromFeature_TreeTableTmpl(featureCode) {
-    let url = compile("", { // TODO 补充url
+    let url = compile(restUrl.FEATURE_TREE_AND_TABLE_META, { // TODO 补充url
         featureCode: featureCode
     })
     return Vue.prototype.$axios.safeGet(url)

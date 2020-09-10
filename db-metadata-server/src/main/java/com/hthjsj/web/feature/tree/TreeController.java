@@ -6,6 +6,7 @@ import com.hthjsj.web.kit.tree.TreeConfig;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,10 +39,10 @@ public class TreeController extends Controller {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-        TreeInTableConfig treeInTableConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
+        DefaultTreeFeatureConfig defaultTreeFeatureConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
 
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, treeInTableConfig.getTreeConfig());
-        renderJson(tree);
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, defaultTreeFeatureConfig.getTreeConfig());
+        renderJson(Ret.ok("data", tree));
     }
 
 

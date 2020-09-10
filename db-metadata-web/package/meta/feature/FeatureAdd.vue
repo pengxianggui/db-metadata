@@ -145,11 +145,12 @@ export default {
           this.feature.config = {
             tree: {
               objectCode: null,
-              idKey: null,
+              idKey: primaryKey,
               pidKey: null,
               rootIdentify: null,
               label: null,
-              isSync: false
+              isSync: false,
+              primaryKey: primaryKey
             },
             table: {
               objectCode: objectCode,

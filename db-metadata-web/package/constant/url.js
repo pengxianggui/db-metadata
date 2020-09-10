@@ -25,6 +25,7 @@ export const restUrl = {
     COMP_INSTANCE_CONF_LOAD_NEW: '/component/load?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置加载[自动计算-新增时]
     COMP_INSTANCE_CONF_DELETE: '/component/delete/{objectCode}?componentCode={componentCode}', // 组件实例配置删除
     COMPONENT_INSTANCE_META: '/component/meta?componentCode={componentCode}&objectCode={objectCode}', // 组件实例元数据
+    FEATURE_TREE_AND_TABLE_META: '/feature/treeAndTable/meta?featureCode={featureCode}',
     RECORD_TO_ADD: "/form/toAdd/{objectCode}",  // 新增记录(TO)
     RECORD_TO_UPDATE: '/form/toUpdate/{objectCode}?id={primaryKv}',    // 更新记录(TO)
     RECORD_DO_UPDATE: '/form/doUpdate?objectCode={objectCode}', // 更新记录(DO)

@@ -13,9 +13,9 @@ import lombok.Data;
  *
  * <p> @author konbluesky </p>
  */
-public class TreeAndTableConfig extends FeatureConfig {
+public class TreeAndTableConfig extends DefaultTreeFeatureConfig {
 
-    private TreeConfig treeConfig;
+//    private TreeConfig treeConfig;
 
     private TableConfig tableConfig;
 

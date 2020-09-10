@@ -49,7 +49,9 @@ public class TreeAndTableController extends FrontRestController {
         TableView tableView = (TableView) metaObjectViewAdapter.getComponent();
         tableView.dataUrl("/f/tat/tableList?featureCode=" + featureCode);
         Kv tableMeta = tableView.toKv();
-        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode={objectCode}");
+        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode="
+                + treeAndTableConfig.getTreeConfig().getObjectCode()
+                + "&featureCode=" + featureCode);
 
         renderJson(Ret.ok("data", Kv.create().set("table", tableMeta).set("tree", treeMeta)));
     }

@@ -254,7 +254,7 @@
                 return this.innerMeta['conf']['show-checkbox'];
             },
             props() {
-                return this.meta['conf']['props'];
+                return this.innerMeta['conf']['props'];
             },
             operationBarConf() {
                 return this.innerMeta['operation-bar'];

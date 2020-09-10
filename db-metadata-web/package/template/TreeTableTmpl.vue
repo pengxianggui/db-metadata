@@ -36,6 +36,8 @@
     import utils from '../utils'
     import {getMetaFromFeature_TreeTableTmpl, getTableViewMeta, getTreeMeta, loadFeature} from "../utils/rest";
     import {restUrl} from "..";
+    import {isEmpty} from "../utils/common";
+    import {resolvePath} from "../utils/url";
 
     export default {
         name: "TreeTableTmpl",
@@ -53,7 +55,7 @@
                 tableConf: {},
                 tvMeta: {},
                 treeMeta: {},
-                initTableDataUrl: ''
+                tableDataUrl: ''
             }
         },
         methods: {
@@ -69,40 +71,57 @@
                 $refs[treeRefName].getData()
             },
             refreshTableData() {
-                const {tableConf: {foreignFieldCode}, activeTreeData} = this
+                const {treeConf: {primaryKey}, activeTreeData, tableDataUrl} = this
 
-                const foreignFieldValue = activeTreeData[foreignFieldCode];
-                this.slaves.forEach(slave => {
-                  let url = this.$compile(slave['tableUrl'], {foreignFieldValue: foreignFieldValue});
-                  slave.tlMeta['data_url'] = url;
-                });
+                const foreignFieldValue = activeTreeData[primaryKey];
+                let url = this.$compile(tableDataUrl, {foreignFieldValue: foreignFieldValue});
+                this.tvMeta['data_url'] = url;
             },
             handleActiveChange(row) {
                 this.activeTreeData = row
                 this.refreshTableData()
             },
             handleAdd() {
-              if (utils.isEmpty(this.activeMData)) {
-                this.$message.warning('请先选择一条主表记录', '提示');
+              if (utils.isEmpty(this.activeTreeData)) {
+                this.$message.warning('请先选择树节点', '提示');
                 return;
               }
 
-              const {$refs, featureCode, activeMData, master} = this;
-              const sObjectCode = slave.objectCode;
-              const refName = slave.objectCode;
-              const foreignKeyName = slave['foreignFieldCode'];
-              const foreignKeyValue = activeMData[master['primaryKey']];
+              const {$refs, tlRefName, featureCode, activeTreeData, treeConf,
+                tableConf: {objectCode: tableObjectCode, foreignFieldCode: foreignKeyName}} = this;
 
-              // 主子一对一时, this.$refs[refName]为对象, 主子一对多时, 该结果为数组?
-              let ref = utils.isArray($refs[refName]) ? $refs[refName][0] : $refs[refName];
+              const foreignKeyValue = activeTreeData[foreignKeyName];
+              // TODO
 
-              const url = this.$compile(restUrl.MASTER_SLAVE_TO_ADD_S, {
-                objectCode: sObjectCode,
-                featureCode: featureCode,
-                foreignKeyName: foreignKeyName,
-                foreignKeyValue: foreignKeyValue
-              });
-              ref.dialog(url);
+              // const url = this.$compile(restUrl.MASTER_SLAVE_TO_ADD_S, {
+              //   objectCode: tableObjectCode,
+              //   featureCode: featureCode,
+              //   foreignKeyName: foreignKeyName,
+              //   foreignKeyValue: foreignKeyValue
+              // });
+
+              $refs[tlRefName].dialog(url);
+            },
+            adjustTvMeta() {
+                const {tableConf: {foreignFieldCode}, tvMeta} = this
+                let data_url = tvMeta['data_url'];
+                if (!isEmpty(foreignFieldCode)) {
+                  let params = {};
+                  params[foreignFieldCode] = "{foreignFieldValue}"
+                  data_url = resolvePath(data_url, params)
+                }
+                this.tableDataUrl = data_url;
+                this.tvMeta['data_url'] = data_url
+            },
+            adjustTreeMeta() {
+                const {treeConf: {label}} = this
+                this.$merge(this.treeMeta, {
+                  conf: {
+                    props: {
+                      label: label
+                    }
+                  }
+                })
             },
             initMeta(treeObjectCode, tableObjectCode) {
                 getTreeMeta(treeObjectCode).then(resp => {
@@ -114,22 +133,20 @@
 
                 getTableViewMeta(tableObjectCode).then(resp => {
                     let tvMeta = resp.data;
-                    const {foreignFieldCode} = this.tableConf;
-                    const data_url = tvMeta['data_url'] + '?' + foreignFieldCode + '={foreignFieldValue}'; // pxg_todo 关联方式
-                    tvMeta['data_url'] = data_url;
-                    this.initTableDataUrl = data_url;
                     this.tvMeta = tvMeta;
+                    this.adjustTvMeta()
                 }).catch(err => {
                     console.error('[ERROR] msg: %s', err.msg);
                     this.$message.error(err.msg);
                 });
             },
             initMetaByFeatureCode(featureCode) {
-                // 从功能Controller中拿meta
                 getMetaFromFeature_TreeTableTmpl(featureCode).then(resp => {
                     const {tree: treeMeta, table: tvMeta} = resp.data
                     this.treeMeta = treeMeta
+                    this.adjustTreeMeta()
                     this.tvMeta = tvMeta
+                    this.adjustTvMeta()
                 })
             }
         },
@@ -143,8 +160,13 @@
 
                 const treeObjectCode = this.treeConf['objectCode'];
                 const tableObjectCode = this.tableConf['objectCode'];
-                this.initMeta(treeObjectCode, tableObjectCode);
-                // this.initMetaByFeatureCode(featureCode) // TODO 切换
+                const {foreignFieldCode} = this.tableConf
+                if (isEmpty(foreignFieldCode)) { // 表示无法直接寻找外键关联
+                    // 通过功能获取meta（在功能层面配置业务拦截器, 兼容关独立联表建立的关联关系）
+                    this.initMetaByFeatureCode(featureCode)
+                } else { // 存在外键关联
+                    this.initMeta(treeObjectCode, tableObjectCode);
+                }
             });
         },
         computed: {

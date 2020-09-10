@@ -12,6 +12,10 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="idKey" class="inline" prop="table.idKey" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">Tree自身关联的主键</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.table.idKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -21,6 +25,10 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="pidKey" class="inline" prop="table.pidKey" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">Tree自身关联的外键</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.table.pidKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -30,9 +38,17 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="rootIdentify" class="inline" prop="table.rootIdentify">
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">根节点标识, pidKey为何值时表示根节点</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <text-box v-model="config.table.rootIdentify" required></text-box>
         </el-form-item>
         <el-form-item label="label" class="inline" prop="table.label" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">显示为树节点名的字段</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.table.label"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                            filterable required>
@@ -42,6 +58,10 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="isSync" prop="table.isSync">
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">树节点展开是否异步加载</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <bool-box v-model="config.table.isSync" required></bool-box>
         </el-form-item>
     </el-form>

@@ -12,6 +12,10 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="idKey" class="inline" prop="tree.idKey" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">Tree自身关联的主键</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.tree.idKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
                            filterable required>
@@ -21,6 +25,10 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="pidKey" class="inline" prop="tree.pidKey" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">Tree自身关联的外键</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.tree.pidKey"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
                            filterable required>
@@ -30,9 +38,17 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="rootIdentify" class="inline" prop="tree.rootIdentity">
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">根节点标识, pidKey为何值时表示根节点</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <text-box name="rootIdentity" v-model="config.tree.rootIdentify"></text-box>
         </el-form-item>
         <el-form-item label="label" class="inline" prop="tree.label" required>
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">显示为树节点名的字段</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <drop-down-box v-model="config.tree.label"
                            :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
                            filterable required>
@@ -42,7 +58,24 @@
             </drop-down-box>
         </el-form-item>
         <el-form-item label="isSync" prop="tree.isSync">
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content">树节点展开是否异步加载</div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
             <bool-box v-model="config.tree.isSync" required></bool-box>
+        </el-form-item>
+        <el-form-item label="主键" class="inline" prop="tree.primaryKey" required>
+          <el-tooltip effect="dark" placement="top">
+            <div slot="content">Table关联的主键</div>
+            <i class="el-icon-question"></i>
+          </el-tooltip>
+          <drop-down-box v-model="config.tree.primaryKey"
+                         :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
+                         filterable required>
+            <template #label="{option}">
+              <span>{{option.value}}({{option.label}})</span>
+            </template>
+          </drop-down-box>
         </el-form-item>
 
         <el-divider content-position="left">Table配置</el-divider>
@@ -58,16 +91,11 @@
             </template>
           </drop-down-box>
         </el-form-item>
-        <el-form-item label="primaryKey" class="inline" prop="table.primaryKey" required>
-          <drop-down-box v-model="config.table.primaryKey"
-                         :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
-                         filterable required>
-            <template #label="{option}">
-              <span>{{option.value}}({{option.label}})</span>
-            </template>
-          </drop-down-box>
-        </el-form-item>
-        <el-form-item label="foreignFieldCode" class="inline" prop="table.foreignFieldCode">
+        <el-form-item label="外键" class="inline" prop="table.foreignFieldCode">
+          <el-tooltip effect="dark" placement="top">
+            <div slot="content">关联Tree中主键的字段</div>
+            <i class="el-icon-question"></i>
+          </el-tooltip>
           <drop-down-box v-model="config.table.foreignFieldCode"
                          :data-url="$compile(metaFieldCodeUrl, {objectCode: config.table.objectCode})"
                          filterable>

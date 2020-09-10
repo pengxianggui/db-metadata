@@ -1,7 +1,6 @@
 package com.hthjsj.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.web.feature.FeatureConfig;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import lombok.Data;
 
@@ -10,17 +9,17 @@ import lombok.Data;
  * @date
  */
 @Data
-public class TreeInTableConfig extends FeatureConfig {
+public class TreeInTableConfig extends DefaultTreeFeatureConfig {
 
     private String objectCode;
 
     private String instanceCode;
 
-    private TreeConfig treeConfig;
-
+//    private TreeConfig treeConfig;
+//
     public TreeConfig getTreeConfig() {
         if (treeConfig == null) {
-            treeConfig = JSON.parseObject(toJson(), TreeConfig.class);
+            treeConfig = JSON.parseObject(getStr("table"), TreeConfig.class);
         }
         return treeConfig;
     }
