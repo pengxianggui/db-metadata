@@ -72,3 +72,11 @@ export function getSearchViewMeta(objectCode) {
     });
     return Vue.prototype.$axios.safeGet(url);
 }
+
+// 从功能中直接获取meta
+export function getMetaFromFeature_TreeTableTmpl(featureCode) {
+    let url = compile("", { // TODO 补充url
+        featureCode: featureCode
+    })
+    return Vue.prototype.$axios.safeGet(url)
+}

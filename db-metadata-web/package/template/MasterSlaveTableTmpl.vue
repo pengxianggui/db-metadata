@@ -202,9 +202,9 @@
             refreshSlavesData() {   // 刷新所有slave的业务数据
                 const {master, activeMData} = this;
                 const primaryKey = master['primaryKey'];
-                const objectCode = activeMData[primaryKey];
+                const foreignFieldValue = activeMData[primaryKey];
                 this.slaves.forEach(slave => {
-                    let url = this.$compile(slave['tableUrl'], {objectCode: objectCode});
+                    let url = this.$compile(slave['tableUrl'], {foreignFieldValue: foreignFieldValue});
                     slave.tlMeta['data_url'] = url;
                 });
             }
@@ -243,7 +243,7 @@
                     getTableViewMeta(sObjectCode).then(resp => {
                         let foreignFieldKey = slave['foreignFieldCode'];
                         let tlMeta = resp.data;
-                        const data_url = tlMeta['data_url'] + '?' + foreignFieldKey + '={objectCode}';
+                        const data_url = tlMeta['data_url'] + '?' + foreignFieldKey + '={foreignFieldValue}';
                         tlMeta['data_url'] = data_url;
 
                         this.$set(slave, 'tlMeta', tlMeta);

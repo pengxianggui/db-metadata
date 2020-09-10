@@ -1,6 +1,6 @@
 <template>
     <div class="el-card">
-        <div class="header">
+        <div class="header" v-if="operationBarConf.show">
             <slot name="operation-bar"
                   v-bind:conf="operationBarConf"
                   v-bind:operations="{handleAdd, handleBatchDelete}">
@@ -268,7 +268,7 @@
                 } else {
                     return objectPrimaryKey;
                 }
-            },
+            }
         }
     }
 </script>

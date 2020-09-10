@@ -34,6 +34,7 @@ export default {
         }
     },
     "operation-bar": {
+        "show": true,
         "size": "mini",
         "type": "primary"
     },
