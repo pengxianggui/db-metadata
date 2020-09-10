@@ -2,6 +2,7 @@ package com.hthjsj.analysis.meta.aop;
 
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.SqlPara;
 
 /**
  * <p> @Date : 2020/9/10 </p>
@@ -21,11 +22,22 @@ public interface QueryPointCut extends IPointCut {
     }
 
     /**
-     * 干预查询返回结果
+     * 配合prevent() 干预查询返回结果
      *
      * @param queryInvocation
      *
      * @return
      */
     Page<Record> getResult(QueryInvocation queryInvocation);
+
+    /**
+     * 配合prevent() 干预查询过程
+     *
+     * @param queryInvocation
+     *
+     * @return
+     */
+    default SqlPara queryWrapper(QueryInvocation queryInvocation) {
+        return null;
+    }
 }
