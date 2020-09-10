@@ -179,7 +179,7 @@ export default {
       });
       this.$axios.post(url, feature).then(resp => {
         this.$message.success('操作成功');
-        this.$emit('ok', params);
+        this.$emit('ok', this.params);
       }).catch(err => {
         this.$message.error(err.msg);
       })
@@ -230,7 +230,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  height: 600px;
+  //height: 600px;
 
   .feature-form {
     flex: 1;
