@@ -62,10 +62,10 @@ public class InNotInMatch extends MetaSQLExtract {
         }
     }
 
-    public String toSqlKey(String fieldCode, String[] ss, boolean isIn) {
+    public String toSqlKey(String fieldCode, Object[] values, boolean isIn) {
         StringBuilder sb = new StringBuilder();
-        for (String v : ss) {
-            if (StrKit.notBlank(v)) {
+        for (Object v : values) {
+            if (StrKit.notBlank(String.valueOf(v))) {
                 sb.append(",?");
             }
         }
