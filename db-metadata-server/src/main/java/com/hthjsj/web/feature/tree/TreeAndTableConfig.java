@@ -13,14 +13,15 @@ import lombok.Data;
  *
  * <p> @author konbluesky </p>
  */
-public class TreeAndTableConfig extends DefaultTreeFeatureConfig {
+public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGetter {
 
-//    private TreeConfig treeConfig;
+    private TreeConfig treeConfig;
 
     private TableConfig tableConfig;
 
     private TreeAndTableIntercept intercept;
 
+    @Override
     public TreeConfig getTreeConfig() {
         if (treeConfig == null) {
             treeConfig = JSON.parseObject(getStr("tree"), TreeConfig.class);
@@ -36,8 +37,11 @@ public class TreeAndTableConfig extends DefaultTreeFeatureConfig {
     }
 
     public TreeAndTableIntercept intercept() {
-        QueryPointCut queryPointCut = new PointCutFactory(this).queryPointCut();
-        return new TreeAndTableIntercept(null, queryPointCut);
+        if (intercept == null) {
+            QueryPointCut queryPointCut = new PointCutFactory(this).queryPointCut();
+            intercept = new TreeAndTableIntercept(null, queryPointCut);
+        }
+        return intercept;
     }
 
     @Data

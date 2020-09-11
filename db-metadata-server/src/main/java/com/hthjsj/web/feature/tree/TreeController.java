@@ -39,12 +39,11 @@ public class TreeController extends Controller {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-        DefaultTreeFeatureConfig defaultTreeFeatureConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
+        TreeConfigGetter treeConfigGetter = ServiceManager.featureService().loadFeatureConfig(featureCode);
 
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, defaultTreeFeatureConfig.getTreeConfig());
+        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
         renderJson(Ret.ok("data", tree));
     }
-
 
     private TreeConfig getConfig() {
         TreeConfig treeConfig = new TreeConfig();
