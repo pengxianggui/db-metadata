@@ -28,7 +28,9 @@ public interface QueryPointCut extends IPointCut {
      *
      * @return
      */
-    Page<Record> getResult(QueryInvocation queryInvocation);
+    default Page<Record> getResult(QueryInvocation queryInvocation) {
+        return new Page<>();
+    }
 
     /**
      * 配合prevent() 干预查询过程
