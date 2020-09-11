@@ -1,8 +1,6 @@
 package com.hthjsj.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.analysis.meta.aop.PointCutFactory;
-import com.hthjsj.analysis.meta.aop.QueryPointCut;
 import com.hthjsj.web.feature.FeatureConfig;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import lombok.Data;
@@ -31,19 +29,28 @@ public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGette
         return treeConfig;
     }
 
+    @Override
+    public TreeAndTableIntercept getTreeFeatureIntercept() {
+        if (intercept == null) {
+
+            try {
+                intercept = (TreeAndTableIntercept) Class.forName(getStr("bizInterceptor")).newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return intercept;
+    }
+
     public TableConfig getTableConfig() {
         if (tableConfig == null) {
             tableConfig = JSON.parseObject(getStr("table"), TableConfig.class);
         }
         return tableConfig;
-    }
-
-    public TreeAndTableIntercept intercept() {
-        if (intercept == null) {
-            QueryPointCut queryPointCut = new PointCutFactory(this).queryPointCut();
-            intercept = new TreeAndTableIntercept(null, queryPointCut);
-        }
-        return intercept;
     }
 
     @Data

@@ -2,6 +2,8 @@ package com.hthjsj.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.web.feature.FeatureConfig;
+import com.hthjsj.web.feature.FeatureException;
+import com.hthjsj.web.feature.FeatureIntercept;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import lombok.Data;
 
@@ -24,6 +26,11 @@ public class TreeInTableConfig extends FeatureConfig implements TreeConfigGetter
             treeConfig = JSON.parseObject(getStr("table"), TreeConfig.class);
         }
         return treeConfig;
+    }
+
+    @Override
+    public FeatureIntercept getTreeFeatureIntercept() {
+        throw new FeatureException("not finished!");
     }
 
     public String getIdKey() {

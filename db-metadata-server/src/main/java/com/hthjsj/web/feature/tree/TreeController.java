@@ -1,11 +1,9 @@
 package com.hthjsj.web.feature.tree;
 
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.ServiceManager;
-import com.hthjsj.web.kit.tree.TreeConfig;
+import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,7 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class TreeController extends Controller {
+public class TreeController extends FrontRestController {
 
     /**
      * test:
@@ -38,20 +36,10 @@ public class TreeController extends Controller {
         String featureCode = queryHelper.getFeatureCode();
         String objectCode = queryHelper.getObjectCode();
 
-        IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
-        TreeConfigGetter treeConfigGetter = ServiceManager.featureService().loadFeatureConfig(featureCode);
+        IMetaObject metaObject = metaService().findByCode(objectCode);
+        TreeConfigGetter treeConfigGetter = featureService().loadFeatureConfig(featureCode);
 
-        List<TreeNode<String, Record>> tree = ServiceManager.treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
+        List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
         renderJson(Ret.ok("data", tree));
-    }
-
-    private TreeConfig getConfig() {
-        TreeConfig treeConfig = new TreeConfig();
-        treeConfig.setIdKey("area_code");
-        treeConfig.setPidKey("parent_code");
-        treeConfig.setRootIdentify("0");
-        treeConfig.setSync(false);
-        treeConfig.setLabel("area_name");
-        return treeConfig;
     }
 }

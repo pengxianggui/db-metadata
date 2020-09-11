@@ -1,8 +1,8 @@
 package com.hthjsj.web.feature.tree;
 
-import com.hthjsj.analysis.meta.aop.QueryPointCut;
+import com.hthjsj.analysis.meta.aop.IPointCut;
+import com.hthjsj.analysis.meta.aop.PointCut;
 import com.hthjsj.web.feature.FeatureIntercept;
-import lombok.Getter;
 
 /**
  * <p> @Date : 2020/9/10 </p>
@@ -10,15 +10,13 @@ import lombok.Getter;
  *
  * <p> @author konbluesky </p>
  */
-@Getter
-public class TreeAndTableIntercept implements FeatureIntercept {
+public interface TreeAndTableIntercept extends FeatureIntercept {
 
-    FeatureIntercept tree;
+    default IPointCut treeIntercept() {
+        return new PointCut();
+    }
 
-    QueryPointCut table;
-
-    public TreeAndTableIntercept(FeatureIntercept tree, QueryPointCut table) {
-        this.tree = tree;
-        this.table = table;
+    default IPointCut tableIntercept() {
+        return new PointCut();
     }
 }

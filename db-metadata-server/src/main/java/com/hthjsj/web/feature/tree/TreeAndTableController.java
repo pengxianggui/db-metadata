@@ -61,10 +61,13 @@ public class TreeAndTableController extends FrontRestController {
     public void toAdd() {
         QueryHelper queryHelper = new QueryHelper(this);
         String featureCode = queryHelper.getFeatureCode();
-        String relateIdValue = getPara(TreeAndTableConfig.RELATE_ID_KEY, "");
+        TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
+
+        /** 优先通过ForeignFieldCode取值 如无,再通过RELATE_ID_KEY  */
+        String relateIdValue = getPara(treeAndTableConfig.getTableConfig().getForeignFieldCode(), getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
         Preconditions.checkArgument(StrKit.notBlank(relateIdValue), "树->表 关联ID[%s]丢失,请检查.", TreeAndTableConfig.RELATE_ID_KEY);
 
-        TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
+        /** 构建元对象与FormView */
         IMetaObject metaObject = metaService().findByCode(treeAndTableConfig.getTableConfig().getObjectCode());
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
@@ -78,6 +81,7 @@ public class TreeAndTableController extends FrontRestController {
                 formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
             });
         }
+
         renderJson(Ret.ok("data", formView.toKv()));
     }
 
@@ -112,19 +116,19 @@ public class TreeAndTableController extends FrontRestController {
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
         /** pointCut构建 */
-        QueryPointCut queryPointCut = treeAndTableConfig.intercept().getTable();
-        TableAndTableInvocation tableAndTableInvocation = new TableAndTableInvocation(metaObject, this, queryHelper);
-        tableAndTableInvocation.setSqlParaExt(sqlPara);
-        tableAndTableInvocation.setCompileWhere(compileWhere);
-        tableAndTableInvocation.setFilteredFields(filteredFields);
-        tableAndTableInvocation.setTreeAndTableConfig(treeAndTableConfig);
+        QueryPointCut queryPointCut = (QueryPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
+        TreeAndTableInvocation treeAndTableInvocation = new TreeAndTableInvocation(metaObject, this, queryHelper);
+        treeAndTableInvocation.setSqlParaExt(sqlPara);
+        treeAndTableInvocation.setCompileWhere(compileWhere);
+        treeAndTableInvocation.setFilteredFields(filteredFields);
+        treeAndTableInvocation.setTreeAndTableConfig(treeAndTableConfig);
 
         Page<Record> result = null;
         if (queryPointCut.prevent()) {
-            result = queryPointCut.getResult(tableAndTableInvocation);
+            result = queryPointCut.getResult(treeAndTableInvocation);
         } else {
-            SqlParaExt pointCutSqlPara = (SqlParaExt) queryPointCut.queryWrapper(tableAndTableInvocation);
-            /** 默认逻辑 */
+            SqlParaExt pointCutSqlPara = (SqlParaExt) queryPointCut.queryWrapper(treeAndTableInvocation);
+            /** 当拦截点未设置时,使用默认查询逻辑 */
             if (pointCutSqlPara == null) {
                 result = metaService().paginate(pageIndex,
                                                 pageSize,
