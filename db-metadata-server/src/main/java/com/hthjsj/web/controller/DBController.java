@@ -95,7 +95,7 @@ public class DBController extends FrontRestController {
                 componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
             }
         }
-        InitKit.me().importInstanceConfig().importMetaObjectConfig();
+        InitKit.me().importMetaObjectConfig().importInstanceConfig();
         renderJson(Ret.ok());
     }
 }

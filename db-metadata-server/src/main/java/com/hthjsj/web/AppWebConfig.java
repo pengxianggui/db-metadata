@@ -104,8 +104,8 @@ public class AppWebConfig extends JFinalConfig {
         if (prop.getBoolean(AppConst.COMPONENT_ALLOW_REPLACE)) {
             //component register
             Components.me().init();
-            Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
         }
+        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
 
         //dictionary register
         Dicts.me().init();
