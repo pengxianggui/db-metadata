@@ -5,6 +5,8 @@
             ></tree-view>
         </template>
         <template #right>
+<!--            SearchView的meta来源-->
+<!--            <search-view></search-view>-->
             <table-view :ref="tlRefName" :meta="tvMeta">
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf"></slot>

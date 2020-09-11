@@ -8,4 +8,4 @@ export const defaultPrimaryKey = 'id';
  * 功能模板中, 当两个元对象通过另一个中间表进行关联时, 传递主键的key值
  * @type {string}
  */
-export const relatedId = '_related_id'
+export const relatedId = '_relate_id'
