@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="idKey" class="inline" prop="tree.idKey" required>
             <el-tooltip effect="dark" placement="top">
-              <div slot="content">Tree自身关联的主键</div>
+              <div slot="content">Tree自身关联的主键以及Table关联的主键, 目前这两者要求为同一个字段</div>
               <i class="el-icon-question"></i>
             </el-tooltip>
             <drop-down-box v-model="config.tree.idKey"
@@ -64,19 +64,19 @@
             </el-tooltip>
             <bool-box v-model="config.tree.isSync" required></bool-box>
         </el-form-item>
-        <el-form-item label="主键" class="inline" prop="tree.primaryKey" required>
-          <el-tooltip effect="dark" placement="top">
-            <div slot="content">Table关联的主键</div>
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-          <drop-down-box v-model="config.tree.primaryKey"
-                         :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"
-                         filterable required>
-            <template #label="{option}">
-              <span>{{option.value}}({{option.label}})</span>
-            </template>
-          </drop-down-box>
-        </el-form-item>
+<!--        <el-form-item label="主键" class="inline" prop="tree.primaryKey" required>-->
+<!--          <el-tooltip effect="dark" placement="top">-->
+<!--            <div slot="content">Table关联的主键</div>-->
+<!--            <i class="el-icon-question"></i>-->
+<!--          </el-tooltip>-->
+<!--          <drop-down-box v-model="config.tree.primaryKey"-->
+<!--                         :data-url="$compile(metaFieldCodeUrl, {objectCode: config.tree.objectCode})"-->
+<!--                         filterable required>-->
+<!--            <template #label="{option}">-->
+<!--              <span>{{option.value}}({{option.label}})</span>-->
+<!--            </template>-->
+<!--          </drop-down-box>-->
+<!--        </el-form-item>-->
 
         <el-divider content-position="left">Table配置</el-divider>
         <el-form-item label="objectCode" class="inline" prop="table.objectCode" required>

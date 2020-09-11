@@ -6,13 +6,13 @@
                   v-bind:operations="{handleAdd, handleBatchDelete}">
                 <el-button-group>
                     <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
-                    <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd">
+                    <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd" v-if="editable">
                         <el-button @click="handleAdd" icon="el-icon-document-add"
                                    v-bind="operationBarConf">新增
                         </el-button>
                     </slot>
                     <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
-                          v-bind:batchDelete="handleBatchDelete" v-if="multiMode">
+                          v-bind:batchDelete="handleBatchDelete" v-if="multiMode && editable">
                         <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
                                    v-bind="operationBarConf">删除
                         </el-button>
@@ -84,6 +84,7 @@
     import Meta from '../../mixins/meta'
     import DefaultMeta from '../ui-conf'
     import MetaEasyEdit from "../../meta/src/MetaEasyEdit";
+    import {assertEmpty} from "../../../utils/common";
 
     export default {
         mixins: [Meta(DefaultMeta)],
@@ -251,15 +252,20 @@
             this.initData();
         },
         computed: {
-            ref() {
-                const {name} = this.innerMeta;
-                return this.$refs[name];
-            },
             innerMeta() {
-                return this.$merge(this.meta, DefaultMeta);
+              return this.$merge(this.meta, DefaultMeta);
+            },
+            ref() {
+                const {innerMeta: {name} = {}, $refs} = this
+                return $refs[name]
             },
             multiMode() {
-                return this.innerMeta['conf']['show-checkbox'];
+                const {innerMeta: {conf: {'show-checkbox': multiMode} = {}} = {}} = this
+                return multiMode;
+            },
+            editable() {
+                const {innerMeta: {editable} = {}} = this
+                return editable
             },
             props() {
                 return this.innerMeta['conf']['props'];
@@ -268,14 +274,8 @@
                 return this.innerMeta['operation-bar'];
             },
             primaryKey() {
-                const {objectPrimaryKey} = this.meta;
-
-                if (utils.isEmpty(objectPrimaryKey)) {
-                    console.error('Missing primary key info! will use default primaryKey:%s', defaultPrimaryKey);
-                    return defaultPrimaryKey;
-                } else {
-                    return objectPrimaryKey;
-                }
+                const {objectPrimaryKey} = this.meta
+                return assertEmpty(objectPrimaryKey, defaultPrimaryKey)
             }
         }
     }

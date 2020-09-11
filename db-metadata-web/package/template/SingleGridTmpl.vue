@@ -53,7 +53,7 @@
             oc: String
         },
         data() {
-            const {fc: R_fc, objectCode: R_oc} = this.$route.query;
+            const {fc: R_fc, oc: R_oc} = this.$route.query;
             const featureCode = utils.assertUndefined(this.fc, R_fc);
             const objectCode = utils.assertUndefined(this.oc, R_oc);
             return {

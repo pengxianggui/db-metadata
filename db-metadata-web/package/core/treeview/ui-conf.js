@@ -33,6 +33,7 @@ export default {
             "children": "children"
         }
     },
+    "editable": false,
     "operation-bar": {
         "show": true,
         "size": "mini",

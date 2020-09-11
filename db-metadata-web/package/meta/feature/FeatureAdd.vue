@@ -150,7 +150,7 @@ export default {
               rootIdentify: null,
               label: null,
               isSync: false,
-              primaryKey: primaryKey
+              // primaryKey: primaryKey
             },
             table: {
               objectCode: objectCode,
