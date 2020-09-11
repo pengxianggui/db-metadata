@@ -21,7 +21,7 @@ export default {
         "default-expand-all": false,
         "check-on-click-node": false,
         "expand-on-click-node": false,
-        "show-checkbox": true,
+        "show-checkbox": false,
         "default-expanded-keys": [],
         "default-checked-keys": [],
         "accordion": false,

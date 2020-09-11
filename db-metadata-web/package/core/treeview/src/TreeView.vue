@@ -69,6 +69,12 @@
         <dialog-box :visible="visible" title="节点编辑">
             <form-tmpl :meta="formMeta"></form-tmpl>
         </dialog-box>
+
+        <div style="float: right">
+          <meta-easy-edit :object-code="innerMeta.objectCode" component-code="TreeView">
+            <template #label><i class="el-icon-setting"></i></template>
+          </meta-easy-edit>
+        </div>
     </div>
 </template>
 
@@ -77,10 +83,12 @@
     import {defaultPrimaryKey} from '../../../config'
     import Meta from '../../mixins/meta'
     import DefaultMeta from '../ui-conf'
+    import MetaEasyEdit from "../../meta/src/MetaEasyEdit";
 
     export default {
         mixins: [Meta(DefaultMeta)],
         name: "TreeView",
+        components: {MetaEasyEdit},
         props: {
             data: Array
         },

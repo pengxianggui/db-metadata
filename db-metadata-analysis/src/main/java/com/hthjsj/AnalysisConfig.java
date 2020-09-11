@@ -201,7 +201,7 @@ public class AnalysisConfig {
             //            arp_info.addSqlTemplate("schema_init.sql.txt");
             //            arp_info.addSqlTemplate("meta_operator.sql.txt");
             arp_info.setDialect(new MysqlDialect());
-            arp_info.setShowSql(false);
+            arp_info.setShowSql(true);
 
 
             me.add(dp_info).add(arp_info);
