@@ -1,10 +1,12 @@
 package com.hthjsj.web.feature.tree;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.meta.IMetaField;
-import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.analysis.meta.MetaSqlKit;
+import com.hthjsj.analysis.meta.*;
+import com.hthjsj.analysis.meta.aop.AddPointCut;
+import com.hthjsj.analysis.meta.aop.AopInvocation;
+import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.analysis.meta.aop.QueryPointCut;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
@@ -12,7 +14,10 @@ import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
+import com.hthjsj.web.jms.EventKit;
+import com.hthjsj.web.jms.FormMessage;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
@@ -23,9 +28,13 @@ import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.extern.slf4j.Slf4j;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class TreeAndTableController extends FrontRestController {
 
     /**
@@ -58,23 +68,41 @@ public class TreeAndTableController extends FrontRestController {
         renderJson(Ret.ok("data", Kv.create().set("table", tableMeta).set("tree", treeMeta)));
     }
 
+    @Override
     public void toAdd() {
         QueryHelper queryHelper = new QueryHelper(this);
         String featureCode = queryHelper.getFeatureCode();
         TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
 
-        /** 优先通过ForeignFieldCode取值 如无,再通过RELATE_ID_KEY  */
-        String relateIdValue = getPara(treeAndTableConfig.getTableConfig().getForeignFieldCode(), getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
+        String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignFieldCode();
+        /** 优先通过ForeignFieldCodeKey取值 如无,再通过RELATE_ID_KEY  */
+        String relateIdValue = getPara(foreignFieldCodeKey, getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
         Preconditions.checkArgument(StrKit.notBlank(relateIdValue), "树->表 关联ID[%s]丢失,请检查.", TreeAndTableConfig.RELATE_ID_KEY);
 
-        /** 构建元对象与FormView */
+        /** 构建Table元对象 */
         IMetaObject metaObject = metaService().findByCode(treeAndTableConfig.getTableConfig().getObjectCode());
-        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
+        /**
+         * 没有设置foreignFieldCodeKey,意味着靠拦截器的方式干预查询和保存动作
+         * RELATE_ID_KEY需要传递到表单中,通过构建一个虚拟字段来存放
+         * */
+        if (StrKit.isBlank(foreignFieldCodeKey)) {
+            IMetaField virtualField = MetaFactory.createReadonlyMetaField(metaObject, TreeAndTableConfig.RELATE_ID_KEY, "外键字段", relateIdValue);
+            metaObject.addField(virtualField);
+        }
+
+        queryHelper.builder("featureCode", featureCode);
+        FormView formView = ViewFactory.formView(metaObject).action("/f/tat/doAdd" + queryHelper.buildQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
+
         /** 将关联RELATE_ID_KEY的value 获取到后,放入要disable的字段map中 */
-        disableMetaFields.put(treeAndTableConfig.getTableConfig().getForeignFieldCode(), relateIdValue);
+        if (StrKit.isBlank(foreignFieldCodeKey)) {
+            disableMetaFields.put(TreeAndTableConfig.RELATE_ID_KEY, relateIdValue);
+        } else {
+            disableMetaFields.put(foreignFieldCodeKey, relateIdValue);
+        }
+
         if (!disableMetaFields.isEmpty()) {
             formView.buildChildren();
             disableMetaFields.forEach((key, value) -> {
@@ -83,6 +111,46 @@ public class TreeAndTableController extends FrontRestController {
         }
 
         renderJson(Ret.ok("data", formView.toKv()));
+    }
+
+    @Override
+    public void doAdd() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String featureCode = queryHelper.getFeatureCode();
+        TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
+
+        IMetaObject metaObject = metaService().findByCode(treeAndTableConfig.getTableConfig().getObjectCode());
+
+        MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
+
+        MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
+        AddPointCut addPointCut = (AddPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
+        /** 将TreeAndTable中拦截器取出合并到AddPointCut拦截器中 */
+        AddPointCut[] pointCut = Lists.asList(addPointCut, metaObjectConfigParse.addPointCut()).toArray(new AddPointCut[0]);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
+
+        boolean status = Db.tx(new IAtom() {
+
+            @Override
+            public boolean run() throws SQLException {
+                boolean s = false;
+                try {
+                    PointCutChain.addBefore(pointCut, invocation);
+                    s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
+                    invocation.setPreOperateStatus(s);
+                    PointCutChain.addAfter(pointCut, invocation);
+                } catch (Exception e) {
+                    log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
+                    log.error(e.getMessage(), e);
+                    s = false;
+                }
+                return s;
+            }
+        });
+
+        EventKit.post(FormMessage.AddMessage(invocation));
+
+        renderJson(status ? Ret.ok() : Ret.fail());
     }
 
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;

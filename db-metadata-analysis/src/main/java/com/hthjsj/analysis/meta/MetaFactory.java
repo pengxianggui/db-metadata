@@ -87,6 +87,18 @@ public class MetaFactory {
         return new MetaField(parent);
     }
 
+    public static IMetaField createReadonlyMetaField(IMetaObject parent, String fieldCode, String cn, String value) {
+        IMetaField metaField = new MetaField(parent);
+        metaField.fieldCode(fieldCode);
+        metaField.en(fieldCode);
+        metaField.cn(cn);
+        metaField.objectCode(parent.code());
+        metaField.dbType("varchar");
+        metaField.config("{}");
+        metaField.config(MetaConfigFactory.createV1FieldConfig(metaField, value, null).toJson());
+        return metaField;
+    }
+
     public static IMetaObject createMetaObject() {
         return new MetaObject();
     }
