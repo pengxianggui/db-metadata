@@ -32,9 +32,9 @@ public class TreeConfig {
     public void setOrderBy(String orderBy) {
         if (StrKit.notBlank(orderBy)) {
             if (orderBy.contains(",")) {
-                orderBy = orderBy.split(",")[0].split(" ")[0];
+                this.orderBy = orderBy.split(",")[0].split(" ")[0];
             } else {
-                orderBy = orderBy.split(" ")[0];
+                this.orderBy = orderBy.split(" ")[0];
             }
         }
     }
