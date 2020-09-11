@@ -68,10 +68,21 @@ public class SqlParaExt extends SqlPara {
      * @param columnName
      * @param params
      */
-    public void appendLike(String columnName, Object... params) {
+    public void appendIn(String columnName, Object... params) {
         InNotInMatch inNotInMatch = new InNotInMatch();
         String oneCondition = inNotInMatch.toSqlKey(columnName, params, true);
-        whereExcept += " and " + oneCondition;
+        appendAndCondition(oneCondition, params);
+    }
+
+    /**
+     * @param conditionAndValue column=abc
+     */
+    public void appendAndCondition(String conditionAndValue) {
+        whereExcept += " and " + conditionAndValue;
+    }
+
+    public void appendAndCondition(String conditionFull, Object... params) {
+        whereExcept += " and " + conditionFull;
         for (int i = 0; i < params.length; i++) {
             addPara(params[i]);
         }
