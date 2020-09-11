@@ -9,7 +9,7 @@ import com.hthjsj.web.user.UserThreadLocal;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +27,25 @@ import java.util.List;
 @Before(Tx.class)
 public class FeatureService {
 
+    private DbPro db() {
+        return AnalysisConfig.me().dbMain();
+    }
+
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
+        Record old = loadExistsFeature(code);
+        if (old != null) {
+            throw new FeatureException("已经有一个名[%s]的[%s]模板使用了该[%s]Code", old.getStr("name"), old.getStr("type"), old.getStr("code"));
+        }
         Record record = getRecord(type, name, code, config);
-        return AnalysisConfig.me().dbMain().save("meta_feature", "id", record);
+        return db().save("meta_feature", "id", record);
+    }
+
+    private Record loadExistsFeature(String featureCode) {
+        return db().findFirst("select * from meta_feature where code=?", featureCode);
     }
 
     public <T> T loadFeatureConfig(String featureCode) {
-        Record record = Db.findFirst("select * from meta_feature where code=?", featureCode);
+        Record record = loadExistsFeature(featureCode);
         if (record == null) {
             throw new FeatureException("%s是无效的功能code", featureCode);
         }
@@ -42,12 +54,12 @@ public class FeatureService {
     }
 
     public List<Record> findAll() {
-        return AnalysisConfig.me().dbMain().findAll("meta_feature");
+        return db().findAll("meta_feature");
     }
 
     public boolean deleteFeature(String[] featureCodes) {
         String idsString = StrKit.join(featureCodes, "','");
-        return Db.update("delete from meta_feature where code in ('" + idsString + "')") > 0;
+        return db().update("delete from meta_feature where code in ('" + idsString + "')") > 0;
     }
 
     private Record getRecord(FeatureType type, String name, String code, Kv config) {
