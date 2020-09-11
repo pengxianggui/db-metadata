@@ -98,6 +98,14 @@ public class QueryHelper {
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(getObjectCode()).toArray(new String[0]);
     }
 
+    /**
+     * 根据元对象从Request中解析 fieldCode=fieldValue, 如果请求中包含该元对象的字段和值
+     * 包装成KV返回
+     *
+     * @param metaObject
+     *
+     * @return
+     */
     public Kv hasMetaParams(IMetaObject metaObject) {
         Kv kv = Kv.create();
         for (IMetaField metaField : metaObject.fields()) {

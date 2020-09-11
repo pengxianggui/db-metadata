@@ -15,6 +15,8 @@ import lombok.Data;
  */
 public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGetter {
 
+    public static final String RELATE_ID_KEY = "_relate_id";
+
     private TreeConfig treeConfig;
 
     private TableConfig tableConfig;

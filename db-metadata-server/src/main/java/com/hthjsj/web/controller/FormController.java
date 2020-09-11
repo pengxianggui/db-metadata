@@ -50,10 +50,10 @@ public class FormController extends FrontRestController {
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
 
         //TODO 手工build,方便后面编程式操作表单内元子控件
-        Kv metaFields = queryHelper.hasMetaParams(metaObject);
-        if (!metaFields.isEmpty()) {
+        Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
+        if (!disableMetaFields.isEmpty()) {
             formView.buildChildren();
-            metaFields.forEach((key, value) -> {
+            disableMetaFields.forEach((key, value) -> {
                 formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
             });
         }

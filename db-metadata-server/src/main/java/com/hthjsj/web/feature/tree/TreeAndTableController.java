@@ -1,11 +1,14 @@
 package com.hthjsj.web.feature.tree;
 
+import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaSqlKit;
 import com.hthjsj.analysis.meta.aop.QueryPointCut;
 import com.hthjsj.web.component.TableView;
+import com.hthjsj.web.component.ViewFactory;
+import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.controller.FrontRestController;
 import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
@@ -19,6 +22,7 @@ import com.hthjsj.web.ui.UIManager;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -49,11 +53,32 @@ public class TreeAndTableController extends FrontRestController {
         TableView tableView = (TableView) metaObjectViewAdapter.getComponent();
         tableView.dataUrl("/f/tat/tableList?featureCode=" + featureCode);
         Kv tableMeta = tableView.toKv();
-        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode="
-                + treeAndTableConfig.getTreeConfig().getObjectCode()
-                + "&featureCode=" + featureCode);
+        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode=" + treeAndTableConfig.getTreeConfig().getObjectCode() + "&featureCode=" + featureCode);
 
         renderJson(Ret.ok("data", Kv.create().set("table", tableMeta).set("tree", treeMeta)));
+    }
+
+    public void toAdd() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String featureCode = queryHelper.getFeatureCode();
+        String relateIdValue = getPara(TreeAndTableConfig.RELATE_ID_KEY, "");
+        Preconditions.checkArgument(StrKit.notBlank(relateIdValue), "树->表 关联ID[%s]丢失,请检查.", TreeAndTableConfig.RELATE_ID_KEY);
+
+        TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
+        IMetaObject metaObject = metaService().findByCode(treeAndTableConfig.getTableConfig().getObjectCode());
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
+
+        /** 公共逻辑: 获取请求中已挂的参数 */
+        Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
+        /** 将关联RELATE_ID_KEY的value 获取到后,放入要disable的字段map中 */
+        disableMetaFields.put(treeAndTableConfig.getTableConfig().getForeignFieldCode(), relateIdValue);
+        if (!disableMetaFields.isEmpty()) {
+            formView.buildChildren();
+            disableMetaFields.forEach((key, value) -> {
+                formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
+            });
+        }
+        renderJson(Ret.ok("data", formView.toKv()));
     }
 
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
