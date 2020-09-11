@@ -2,6 +2,7 @@ package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
@@ -79,20 +80,19 @@ public class DBController extends FrontRestController {
         String token = getPara(0, "");
         Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
         Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
-        List<Table> tables = Aop.get(MysqlService.class).showTables("metadata");
+        String mainDB = AnalysisConfig.me().dbMainStr();
+        List<Table> tables = Aop.get(MysqlService.class).showTables(AnalysisConfig.me().dbMainStr());
 
         Components.me().init();
         for (Table t : tables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
-            if (!t.getTableName().equalsIgnoreCase("PDMAN_DB_VERSION".toLowerCase())) {
-                IMetaObject metaObject = metaService().importFromTable("metadata", t.getTableName());
-                metaService().saveMetaObject(metaObject, true);
-                metaObject = metaService().findByCode(t.getTableName());
-                //自动初始化一些控件
-                for (ComponentType type : Components.me().getAutoInitComponents()) {
-                    MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
-                    componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
-                }
+            IMetaObject metaObject = metaService().importFromTable(mainDB, t.getTableName());
+            metaService().saveMetaObject(metaObject, true);
+            metaObject = metaService().findByCode(t.getTableName());
+            //自动初始化一些控件
+            for (ComponentType type : Components.me().getAutoInitComponents()) {
+                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
             }
         }
         InitKit.me().importInstanceConfig().importMetaObjectConfig();
