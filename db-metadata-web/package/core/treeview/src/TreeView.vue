@@ -1,5 +1,5 @@
 <template>
-    <div class="el-card">
+    <div class="container el-card">
         <div class="header" v-if="operationBarConf.show">
             <slot name="operation-bar"
                   v-bind:conf="operationBarConf"
@@ -62,7 +62,7 @@
                  @node-collapse="$emit('node-collapse')">
             <template slot-scope="{ node, data }">
                 <slot v-bind:node="node" v-bind:data="data">
-                    <span>{{data[innerMeta.conf['props']['label']]}}</span>
+                    <span class="el-tree-node__label">{{data[innerMeta.conf['props']['label']]}}</span>
                 </slot>
             </template>
         </el-tree>
@@ -282,5 +282,8 @@
 </script>
 
 <style scoped>
-
+  .container {
+      height: 100%;
+      box-sizing: border-box;
+  }
 </style>

@@ -217,7 +217,7 @@ export default {
       }
       this.dialog(url, {title: title});
     },
-    dialog(url, conf) {
+    dialog(url, conf = {title: ''}) {
       this.$axios.get(url).then(resp => {
         this.dialogComponentMea = resp.data;
         this.dialogMeta = {
