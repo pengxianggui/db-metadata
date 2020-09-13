@@ -616,3 +616,6 @@ tagView固定
 提供地区选择器
 ### 0.3.39
 修复BoolBox缺陷: 当传入值为空串, 会选中
+
+### 0.3.46
+TableView和TableTreeView meta配置增强, 行内操作配置的show支持函数回调配置控制行的显影

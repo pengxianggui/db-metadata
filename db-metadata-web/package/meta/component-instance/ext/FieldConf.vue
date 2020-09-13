@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mini-form-field v-model="fieldConf"></mini-form-field>
+        <mini-form-field v-if="show" v-model="fieldConf"></mini-form-field>
         <div style="margin-top: 10px; text-align: right">
             <el-button @click="submit" type="primary">保存</el-button>
         </div>
@@ -25,7 +25,8 @@
         data() {
             return {
                 fieldConf: {},
-                id: null
+                id: null,
+                show: false
             }
         },
         methods: {
@@ -49,6 +50,7 @@
                 let {id, config} = Array.isArray(resp.data) ? resp.data[0] : resp.data;
                 this.id = id;
                 this.fieldConf = config;
+                this.show = true
             })
         }
     }

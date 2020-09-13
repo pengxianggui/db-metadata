@@ -2,6 +2,8 @@
   <div style="padding: 20px; overflow: auto; height: 100%;">
     <h1>组件开发调试页面</h1>
     <tree-table-tmpl fc="news-tree-table"></tree-table-tmpl>
+
+    <sql-box v-model="value"></sql-box>
   </div>
 </template>
 
@@ -11,7 +13,7 @@ export default {
   name: "WorkSpace",
   data() {
     return {
-      value: "",
+      value: "select * from value",
       treeMeta: {}
     }
   },
