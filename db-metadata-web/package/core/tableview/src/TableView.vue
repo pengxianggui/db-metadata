@@ -77,23 +77,23 @@
                 </span>
               </template>
               <template slot-scope="scope">
-                <slot name="buttons" v-bind:scope="scope" v-if="buttonsConf['show']">
+                <slot name="buttons" v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['show'])">
                   <el-button-group>
                     <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
                     <slot name="view-btn" v-bind:conf="buttonsConf['view']['conf']"
-                          v-bind:scope="scope" v-if="buttonsConf['view']['show']">
+                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['view']['show'])">
                       <el-button v-bind="buttonsConf['view']['conf']"
                                  @click="handleView($event, scope.row, scope.$index)">
                       </el-button>
                     </slot>
                     <slot name="edit-btn" v-bind:conf="buttonsConf['edit']['conf']"
-                          v-bind:scope="scope" v-if="buttonsConf['edit']['show']">
+                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['edit']['show'])">
                       <el-button v-bind="buttonsConf['edit']['conf']"
                                  @click="handleEdit($event, scope.row, scope.$index)">
                       </el-button>
                     </slot>
                     <slot name="delete-btn" v-bind:conf="buttonsConf['delete']['conf']"
-                          v-bind:scope="scope" v-if="buttonsConf['delete']['show']">
+                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['delete']['show'])">
                       <el-button v-bind="buttonsConf['delete']['conf']"
                                  @click="handleDelete($event, scope.row, scope.$index)">
                       </el-button>
@@ -146,10 +146,11 @@ import assembleMeta from './assembleMeta'
 import TableCell from './tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "./columnsValid";
+import showable from "../../mixins/showable";
 
 export default {
   name: "TableView",
-  mixins: [Meta(DefaultMeta, assembleMeta)],
+  mixins: [Meta(DefaultMeta, assembleMeta), showable],
   components: {MetaEasyEdit, TableCell},
   data() {
     return {
