@@ -18,6 +18,7 @@
 
 <script>
     import {restUrl} from "../../../constant/url";
+    import {isEmpty} from '@/../package/utils/common'
     import DefaultMeta from '../ui-conf'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
@@ -102,6 +103,9 @@
                   } else {
                       // if (self.tip['state'] === 'ok') self.setTip(null, null);
                       self.cacheValue = newVal
+                      if (isEmpty(newVal)) {
+                          self.nativeValue = newVal
+                      }
                   }
                 });
                 self.editor.setSize('auto', '80px');

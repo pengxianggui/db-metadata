@@ -111,7 +111,7 @@
         },
         methods: {
             linkProps(model, meta) {
-                const {$merge} = this
+                const {$merge, $reverseMerge} = this
                 const {component_name, conf} = meta;
                 const props = {
                     is: component_name,
@@ -122,13 +122,13 @@
 
                 switch (component_name) {
                     case 'DateBox':
-                        $merge(props, {"is-range": true, "type": 'daterange'})
+                        $reverseMerge(props, {"is-range": true, "type": 'daterange'})
                         break;
                     case 'TimeBox':
-                        $merge(props, {"is-range": true, "type": "timerange"})
+                        $reverseMerge(props, {"is-range": true, "type": "timerange"})
                         break;
                     case 'DateTimeBox':
-                        $merge(props, {"is-range": true, "type": 'datetimerange'})
+                        $reverseMerge(props, {"is-range": true, "type": 'datetimerange'})
                         break;
                 }
                 return props
