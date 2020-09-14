@@ -147,6 +147,7 @@ import TableCell from './tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "./columnsValid";
 import showable from "../../mixins/showable";
+import {isEmpty} from "../../../utils/common";
 
 export default {
   name: "TableView",
@@ -349,10 +350,10 @@ export default {
     },
     setPage(index) {
       this.pageModel['index'] = index;
+      this.getData();
     },
     sizeChange() {
       this.setPage(1); // jump to page one
-      this.getData();
     },
     setPageModel(page) {
       const {total, index, size} = page;
@@ -384,10 +385,14 @@ export default {
       this.$axios.safeGet(data_url, {
         params: params
       }).then(resp => {
-        this.innerData = resp.data;
-        this.$emit("data-change", resp.data);
+        const {data} = resp
+        this.innerData = data;
+        this.$emit("data-change", data);
         if (utils.hasProp(resp, 'page')) {
           this.setPageModel(resp['page']);
+        }
+        if (index > 1 && (isEmpty(data) || data.length <= 0)) {
+          this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
       }).catch(err => {
         this.$message.error(err.msg);
