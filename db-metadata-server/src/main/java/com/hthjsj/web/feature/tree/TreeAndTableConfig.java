@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hthjsj.web.feature.FeatureConfig;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p> @Date : 2020/1/22 </p>
@@ -11,6 +12,7 @@ import lombok.Data;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGetter {
 
     public static final String RELATE_ID_KEY = "_relate_id";
@@ -35,12 +37,13 @@ public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGette
 
             try {
                 intercept = (TreeAndTableIntercept) Class.forName(getStr("bizInterceptor")).newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                log.error(e.getMessage(), e);
+            } catch (NullPointerException e) {
+                log.error(e.getMessage(), e);
+                intercept = new TreeAndTableIntercept() {
+
+                };
             }
         }
         return intercept;

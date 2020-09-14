@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class FrontRestController extends Controller implements FrontRest {
+public class FrontRestController extends Controller {
 
     protected DbMetaService metaService() {
         return ServiceManager.metaService();
@@ -55,42 +55,34 @@ public class FrontRestController extends Controller implements FrontRest {
         renderJson(JFinal.me().getAllActionKeys());
     }
 
-    @Override
     public void index() {
         list();
     }
 
-    @Override
     public void toAdd() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void doAdd() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void toUpdate() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void doUpdate() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void detail() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void delete() {
         renderJson(faildMsgInfo());
     }
 
-    @Override
     public void list() {
         renderJson(faildMsgInfo());
     }

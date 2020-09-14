@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public class PointCutFactory implements Serializable, Cloneable {
 
-    private static final PointCut EMPTY_POINT_CUT = new PointCut();
+    public static final PointCut EMPTY_POINT_CUT = new PointCut();
 
     private final MetaData metaData;
 
