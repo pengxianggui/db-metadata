@@ -189,12 +189,12 @@ function metaRoute(layout) {
             ]
         },
         {
-            path: '/meta-element-redirect',
+            path: '/__redirect',
             component: layout,
             hidden: true,
             children: [
                 {
-                    path: '/meta-element-redirect/:path(.*)',
+                    path: '/__redirect/:path(.*)',
                     component: () => import('./redirect')
                 }
             ]

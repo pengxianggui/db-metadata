@@ -2,7 +2,7 @@
   <div id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
       <router-link
-          v-for="tag in visitedViews"
+          v-for="(tag, index) in visitedViews"
           ref="tag"
           :key="tag.path"
           :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}"
@@ -11,20 +11,25 @@
           class="tags-view-item"
           @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
       >
-        <pop-menu trigger="right-click" @show="openMenu(tag)">
+        <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)">
           <template #label>
             <span>{{ tag.meta.title }}</span>
             <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
           </template>
           <list style="width: 80px;">
-            <list-item style="height: 22px; line-height: 22px;" @click="refreshSelectedTag(selectedTag)"
+            <list-item style="height: 22px; line-height: 22px;"
+                       @click="refreshSelectedTag(selectedTag); closePopMenu('popMenu' + index)"
                        v-if="isActive(tag)">刷新
             </list-item>
             <list-item style="height: 22px; line-height: 22px;" v-if="!isAffix(selectedTag)"
-                       @click="closeSelectedTag(selectedTag)">关闭
+                       @click="closeSelectedTag(selectedTag); closePopMenu('popMenu' + index)">关闭
             </list-item>
-            <list-item style="height: 22px; line-height: 22px;" @click="closeOthersTags">关闭其他</list-item>
-            <list-item style="height: 22px; line-height: 22px;" @click="closeAllTags(selectedTag)">关闭所有</list-item>
+            <list-item style="height: 22px; line-height: 22px;"
+                       @click="closeOthersTags(selectedTag); closePopMenu('popMenu' + index)">关闭其他
+            </list-item>
+            <list-item style="height: 22px; line-height: 22px;"
+                       @click="closeAllTags(selectedTag); closePopMenu('popMenu' + index)">关闭所有
+            </list-item>
           </list>
         </pop-menu>
       </router-link>
@@ -37,6 +42,7 @@ import ScrollPane from './ScrollPane'
 import path from 'path'
 import VisitedViewMaintain from "../visitedViewMaintain"
 import Conf from '../conf'
+import {isArray, isEmpty} from "../../../utils/common";
 
 /**
  * TODO TagView的切换缓存基于vue 动态组件的 keep-alive, 因此keep-alive中的include只能根据组件名来, 而TagView的数据基于路由,
@@ -63,7 +69,8 @@ export default {
       selectedTag: {},
       affixTags: [],
       visitedViews: [],
-      cachedViews: []
+      cachedViews: [],
+      showPopMenu: false
     }
   },
   computed: {
@@ -94,6 +101,15 @@ export default {
     this.addTags()
   },
   methods: {
+    closePopMenu(refName) {
+      const ref = this.$refs[refName]
+      if (isEmpty(ref)) return;
+      if (isArray(ref)) {
+        ref[0].close()
+      } else {
+        ref.close()
+      }
+    },
     isActive(route) {
       return route.path === this.$route.path
     },
@@ -156,7 +172,7 @@ export default {
         const {fullPath} = view
         this.$nextTick(() => {
           this.$router.replace({
-            path: '/meta-element-redirect' + fullPath
+            path: '/__redirect' + fullPath
           })
         })
       })
@@ -168,8 +184,10 @@ export default {
         }
       })
     },
-    closeOthersTags() {
-      this.$router.push(this.selectedTag)
+    closeOthersTags(view) {
+      if (view.path !== this.$route.path) {
+        this.$router.push(view)
+      }
       this.deleteOtherView(this.selectedTag).then(() => {
         this.moveToCurrentTag()
       })
