@@ -4,7 +4,6 @@ import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.*;
 import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -183,7 +182,7 @@ public class DbMetaService {
         return businessService.findDataFieldById(metaObject, metaField, id);
     }
 
-    public boolean saveData(IMetaObject object, Kv data) {
+    public boolean saveData(IMetaObject object, MetaData data) {
         return businessService.saveData(object, data);
     }
 

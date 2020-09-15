@@ -54,10 +54,10 @@ public class BusinessService {
         if (object.isMultiplePrimaryKey()) {
             throw new MetaAnalysisException("%s 元对象为复合主键", object.code());
         }
-        return (T) Db.use(object.schemaName()).queryFirst("select " + metaField.fieldCode() + " from " + object.tableName() + " where " + object.primaryKey() + "=?", id);
+        return Db.use(object.schemaName()).queryFirst("select " + metaField.fieldCode() + " from " + object.tableName() + " where " + object.primaryKey() + "=?", id);
     }
 
-    public boolean saveData(IMetaObject object, Kv data) {
+    public boolean saveData(IMetaObject object, MetaData data) {
         boolean status = Db.use(object.schemaName()).save(object.tableName(), object.primaryKey(), new Record().setColumns(data).removeNullValueColumns());
         buriedPoint(object, Kv.create(), data);
         return status;
