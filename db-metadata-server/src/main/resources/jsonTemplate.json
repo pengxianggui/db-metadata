@@ -367,5 +367,26 @@
       "filterNodeMethod": "function (value, data, node) {if (!value) return true;return data.label.indexOf(value) !== -1;}",
       "renderContent": "function (h, {node, data, store}) {}"
     }
+  },
+  "RegionBox": {
+    "component_name": "RegionBox",
+    "name": "RegionBox",
+    "label": "地区/省市框",
+    "inline": true,
+    "conf": {
+      "type": "default",
+      "level": "2"
+    }
+  },
+  "RichTextBox": {
+    "component_name": "RichTextBox",
+    "name": "RichTextBox",
+    "label": "富文本",
+    "conf": {}
+  },
+  "IconBox": {
+    "component_name": "IconBox",
+    "name": "IconBox",
+    "label": "图标框"
   }
 }
