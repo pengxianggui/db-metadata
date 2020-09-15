@@ -11,9 +11,10 @@
         <el-form-item label="功能代码" class="inline" prop="code" required>
           <text-box v-model="feature.code"></text-box>
         </el-form-item>
-        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>
-          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>
-        </el-form-item>
+<!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
+<!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
+<!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
+<!--        </el-form-item>-->
         <el-form-item label="业务拦截器">
           <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
                     v-model="feature.config.bizInterceptor"></el-input>

@@ -88,7 +88,7 @@
         },
         mounted() {
             const objectCode = this.objectCode;
-            this.loadConf(objectCode);
+            // this.loadConf(objectCode); // 当该源对象无FormView配置时后端提示不友好直接报错， 这里先屏蔽
         },
     }
 </script>

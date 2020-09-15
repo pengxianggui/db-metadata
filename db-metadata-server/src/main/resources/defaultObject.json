@@ -47,6 +47,18 @@
           "isSearch": false
         }
       },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
       "updated_time": {
         "config": {
           "isListShow": false,
@@ -94,6 +106,13 @@
           "isListShow": false
         }
       },
+      "name": {
+        "config": {
+          "addStatus": 30,
+          "updateStatus": 30,
+          "isSearch": true
+        }
+      },
       "code": {
         "config": {
           "addStatus": 30,
@@ -111,6 +130,18 @@
         "config": {
           "addStatus": 30,
           "updateStatus": 30
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
         }
       },
       "updated_by": {
@@ -134,7 +165,61 @@
     }
   },
   "meta_dict": {
-    "is_sys": true
+    "is_sys": true,
+    "config": {},
+    "_fields": {
+      "id": {
+        "isSearch": false
+      },
+      "pid": {
+        "isSearch": false
+      },
+      "dict_type": {
+        "isSearch": false
+      },
+      "is_sys": {
+        "isSearch": false
+      },
+      "value": {
+        "isSearch": false
+      },
+      "live_flag": {
+        "isSearch": false
+      },
+      "order_num": {
+        "isSearch": false
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      }
+    }
   },
   "meta_component": {
     "is_sys": true,
@@ -157,17 +242,32 @@
       },
       "remark": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "updated_by": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "updated_time": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       }
     }
@@ -194,7 +294,20 @@
       },
       "remark": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "updated_by": {
@@ -220,7 +333,47 @@
     }
   },
   "meta_feature": {
-    "is_sys": true
+    "is_sys": true,
+    "_fields": {
+      "config": {
+        "isSearch": false,
+        "isListShow": false
+      },
+      "op_config": {
+        "isSearch": false,
+        "isListShow": false
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "remarks": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      }
+    }
   },
   "test_table": {
     "config": {
@@ -257,7 +410,19 @@
       },
       "pid": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isFile": false,
+          "isSearch": false,
+          "scopeSql": "select id, name as cn from meta_router;db-metadata-demo",
+          "addStatus": 100,
+          "defaultVal": "",
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "scopeRange": [],
+          "viewStatus": 30,
+          "scopeOptions": [],
+          "updateStatus": 100
         }
       },
       "config": {
@@ -272,28 +437,49 @@
           "isListShow": false
         }
       },
+      "component": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "components": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "meta": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10
         }
       },
       "remark": {
@@ -325,7 +511,18 @@
       },
       "pid": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isFile": false,
+          "scopeSql": "select id, title as cn from meta_menu;db-metadata-demo",
+          "addStatus": 100,
+          "defaultVal": "",
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "scopeRange": [],
+          "viewStatus": 30,
+          "scopeOptions": [],
+          "updateStatus": 100
         }
       },
       "hidden": {
@@ -344,6 +541,11 @@
         }
       },
       "path": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "order_num": {
         "config": {
           "isSearch": false
         }

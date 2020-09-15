@@ -105,7 +105,10 @@ public class AppWebConfig extends JFinalConfig {
             //component register
             Components.me().init();
         }
-        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW)
+                .addAutoInitComponents(ComponentType.TABLEVIEW)
+                .addAutoInitComponents(ComponentType.TABLETREEVIEW)
+                .addAutoInitComponents(ComponentType.FORMVIEW);
 
         //dictionary register
         Dicts.me().init();

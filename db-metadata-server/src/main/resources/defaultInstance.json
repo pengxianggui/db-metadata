@@ -50,7 +50,11 @@
       }
     }
   },
+  "meta_component": {
+  },
   "meta_component_instance": {
+    "TableView": {
+    },
     "FormView": {
       "type": {
         "component_name": "DropDownBox",
@@ -76,6 +80,34 @@
           "multiple": false,
           "filterable": true
         }
+      }
+    }
+  },
+  "meta_router": {
+    "TableTreeView": {
+    },
+    "FormView": {
+      "pid": {
+        "component_name": "DropDownBox",
+        "data_url": "/component/options/meta_router?f=pid"
+      }
+    }
+  },
+  "meta_menu": {
+    "TableTreeView": {},
+    "FormView": {
+      "pid": {
+        "component_name": "DropDownBox",
+        "data_url": "/component/options/meta_menu?f=pid"
+      },
+      "icon": {
+        "component_name": "IconBox"
+      },
+      "hidden": {
+        "component_name": "BoolBox"
+      },
+      "disable": {
+        "component_name": "BoolBox"
       }
     }
   }

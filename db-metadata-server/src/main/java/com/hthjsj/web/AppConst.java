@@ -32,6 +32,9 @@ public class AppConst {
         SYS_TABLE.put("meta_field", "config", true);
         SYS_TABLE.put("meta_component", "config", true);
         SYS_TABLE.put("meta_component_instance", "config", true);
+        SYS_TABLE.put("meta_router", "config", true);
+        SYS_TABLE.put("meta_menu", "config", true);
+        SYS_TABLE.put("meta_feature", "config", true);
     }
 
     public static Prop getProp() {
