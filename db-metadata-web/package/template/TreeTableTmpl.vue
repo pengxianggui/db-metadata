@@ -9,22 +9,38 @@
 <!--            <search-view></search-view>-->
             <table-view :ref="tlRefName" :meta="tvMeta">
                 <template #prefix-btn="{conf}">
-                    <slot name="prefix-btn" v-bind:conf="conf"></slot>
+                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
                 </template>
                 <template #add-btn="{conf}">
-                  <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig">
+                  <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId">
                     <el-button v-bind="conf" @click="handleAdd">新增</el-button>
                   </slot>
                 </template>
                 <template #batch-delete-btn="{conf}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf"></slot>
+                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
                 </template>
                 <template #suffix-btn="{conf}">
-                    <slot name="suffix-btn" v-bind:conf="conf"></slot>
+                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
                 </template>
 
                 <template #buttons="{scope, conf}">
-                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                </template>
+
+                <template #inner-before-extend-btn="{scope}">
+                    <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                </template>
+                <template #view-btn="{scope, conf}">
+                    <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                </template>
+                <template #edit-btn="{scope, conf}">
+                    <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                </template>
+                <template #delete-btn="{scope, conf}">
+                    <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                </template>
+                <template #inner-after-extend-btn="{scope}">
+                    <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
                 </template>
             </table-view>
         </template>
@@ -176,6 +192,10 @@
             },
             tableConf() {
                 return this.featureConfig['table']
+            },
+            relateId() {
+                const {activeTreeData, treePrimaryKey} = this
+                return activeTreeData[treePrimaryKey]
             }
         }
     }
