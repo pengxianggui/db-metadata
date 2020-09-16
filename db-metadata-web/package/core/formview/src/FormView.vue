@@ -66,6 +66,9 @@
                 let rules = item.hasOwnProperty('conf') ? item.conf['rules'] : [];
                 return utils.isEmpty(rules) ? [] : rules;
             },
+            setItem(name, value) {
+                this.$set(this.model, name, value)
+            },
             doSubmit(ev) {
                 let {innerMeta, model: params} = this;
                 const {action, objectCode} = innerMeta;

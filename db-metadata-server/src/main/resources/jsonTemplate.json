@@ -19,6 +19,7 @@
     "pagination": {
       "page-size": 10,
       "page-sizes": [
+        5,
         10,
         20,
         50,

@@ -113,10 +113,11 @@
         <!-- pagination bar -->
         <slot name="pagination" v-bind:pageModel="pageModel">
           <el-pagination background
+                         :page-sizes="pageSizes"
                          :page-size.sync="pageModel.size"
                          :current-page.sync="pageModel.index"
                          :total="pageModel.total"
-                         v-bind="paginationConf"
+                         :layout="pageLayout"
                          @size-change="sizeChange"
                          @current-change="getData"
           ></el-pagination>
@@ -467,6 +468,14 @@ export default {
     paginationConf() {
       const {innerMeta: {pagination: paginationConf = {}}} = this
       return paginationConf
+    },
+    pageSizes() {
+      const {paginationConf: {"page-sizes": pageSizes} = {}} = this
+      return pageSizes
+    },
+    pageLayout() {
+      const {paginationConf: {"layout": pageLayout} = {}} = this
+      return pageLayout
     },
     buttonsConf() {
       const {innerMeta: {buttons: buttonsConf = {}}} = this

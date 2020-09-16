@@ -12,6 +12,7 @@ import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
 import ExceptionList from '../meta/exception'
 import AdminLayout from '../layout/admin-layout'
+import Redirect from './redirect'
 
 import {access} from '../constant/variable'
 import utils from "../utils";
@@ -195,7 +196,7 @@ function metaRoute(layout) {
             children: [
                 {
                     path: '/__redirect/:path(.*)',
-                    component: () => import('./redirect')
+                    component: Redirect
                 }
             ]
         },

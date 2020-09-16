@@ -50,25 +50,37 @@
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {
@@ -135,25 +147,37 @@
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {
@@ -192,25 +216,37 @@
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {
@@ -249,25 +285,37 @@
       "created_by": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       }
     }
@@ -301,23 +349,35 @@
       "created_by": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "name": {
@@ -346,25 +406,37 @@
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remarks": {
@@ -458,28 +530,36 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "addStatus": 10
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "addStatus": 10
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "addStatus": 10
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "addStatus": 10
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {
@@ -559,25 +639,37 @@
       "created_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "created_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_by": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {

@@ -11,10 +11,10 @@
         <el-form-item label="功能代码" class="inline" prop="code" required>
           <text-box v-model="feature.code"></text-box>
         </el-form-item>
-<!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
-<!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
-<!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
-<!--        </el-form-item>-->
+        <!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
+        <!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
+        <!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
+        <!--        </el-form-item>-->
         <el-form-item label="业务拦截器">
           <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
                     v-model="feature.config.bizInterceptor"></el-input>
@@ -32,7 +32,33 @@
     <el-card class="associate-box">
       <h3>关联路由</h3>
       <form-view :ref="route.objectCode" :meta="route.meta" @ok="route.saved = true"
-                 :disabled="route.saved"></form-view>
+                 :disabled="route.saved">
+        <template #form-item-pid="{column, model}">
+          <el-form-item :name="column.name" :label="column.label">
+            <drop-down-box :data-url="column.data_url" v-model="model[column.name]"></drop-down-box>
+          </el-form-item>
+        </template>
+        <template #form-item-cn="{column, model}">
+          <el-form-item :name="column.name" :label="column.label">
+            <text-box v-model="model[column.name]"
+                      @change="$refs[route.objectCode].setItem('meta', {'title': model[column.name]});
+                      $refs[menu.objectCode].setItem('title', model[column.name]);"></text-box>
+          </el-form-item>
+        </template>
+        <template #form-item-component="{column, model}">
+          <el-form-item :name="column.name" :label="column.label">
+            <drop-down-box v-if="!customComponent" :options="tmplOptions" v-model="model[column.name]"></drop-down-box>
+            <text-box v-else v-model="model[column.name]"></text-box>&nbsp;
+            <bool-box v-model="customComponent">是否自定义组件</bool-box>
+          </el-form-item>
+        </template>
+        <template #form-item-path="{column, model}">
+          <el-form-item :name="column.name" :label="column.label">
+            <text-box v-model="model[column.name]"
+                      @change="$refs[menu.objectCode].setItem('path', model[column.name] + '?fc=' + feature.code)"></text-box>
+          </el-form-item>
+        </template>
+      </form-view>
       <h3>关联菜单</h3>
       <form-view :ref="menu.objectCode" :meta="menu.meta" @ok="menu.saved = true"
                  :disabled="menu.saved"></form-view>
@@ -49,6 +75,7 @@ import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
 import utils from '../../utils'
 import {getAddFormMeta} from '../../utils/rest'
 
+// 后端功能类别代码 和 前端功能类别代码的映射： TODO 统一
 const FEATURE_TYPE = {
   MasterSlaveGrid: 'MasterSlaveGrid',
   SingleGrid: 'SingleGrid',
@@ -75,18 +102,19 @@ export default {
     }
   },
   data() {
+    const {params: {objectCode = null, primaryKey = null} = {}} = this
     return {
       FEATURE_TYPE: FEATURE_TYPE,
-      objectCode: this.params['objectCode'],
-      primaryKey: this.params['primaryKey'],
+      objectCode: objectCode,
+      primaryKey: primaryKey,
       featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
       instanceCodeUrl: utils.resolvePath(restUrl.INSTANCE_CODE_LIST, {
         type: 'META_OBJECT'
       }),
       feature: {
         type: FEATURE_TYPE['SingleGrid'],
-        name: null,
-        code: null,
+        name: objectCode,
+        code: objectCode,
         instanceCode: null,
         bizInterceptor: '',
         config: {},
@@ -100,7 +128,14 @@ export default {
         objectCode: 'meta_menu',
         meta: {},
         saved: false
-      }
+      },
+      customComponent: false,
+      tmplOptions: [ // TODO 后端的功能编码应当与模板名保持一致，此处先静态配置options
+        {key: '主子表', value: 'MasterSlaveTableTmpl'},
+        {key: '单表', value: 'SingleGridTmpl'},
+        {key: '树形表', value: 'TreeSingleGridTmpl'},
+        {key: '树和表', value: 'TreeTableTmpl'},
+      ]
     }
   },
   methods: {
@@ -190,29 +225,29 @@ export default {
     onSubmit(formName) {
       const {route: {saved: routeSaved}, menu: {saved: menuSaved}} = this
       this.$refs[formName].validate((valid) => {
-          this.$refs['extendConf'].validate(subValid => {
-            if (valid && subValid) {
-              if (!(routeSaved && menuSaved)) {
-                let msg = ''
-                msg += (!routeSaved ? '路由表单没有保存,' : '')
-                msg += (!menuSaved ? '菜单表单没有保存,' : '')
-                this.$confirm(`${msg}建议你填写并手动保存下, 我可不会自动帮你保存, 因为我不知道你要不要保存.`, '提示', {
-                  type: 'warning',
-                  showCancelButton: true,
-                  cancelButtonText: '不了, 就保存功能吧',
-                  showConfirmButton: true,
-                  confirmButtonText: '采纳你的建议'
-                }).then(() => {
-                }).catch(() => {
-                  this.doSubmit()
-                })
-              } else {
-                this.doSubmit() // submit
-              }
+        this.$refs['extendConf'].validate(subValid => {
+          if (valid && subValid) {
+            if (!(routeSaved && menuSaved)) {
+              let msg = ''
+              msg += (!routeSaved ? '路由表单没有保存,' : '')
+              msg += (!menuSaved ? '菜单表单没有保存,' : '')
+              this.$confirm(`${msg}建议你填写并手动保存下, 我可不会自动帮你保存, 因为我不知道你要不要保存.`, '提示', {
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonText: '不了, 就保存功能吧',
+                showConfirmButton: true,
+                confirmButtonText: '采纳你的建议'
+              }).then(() => {
+              }).catch(() => {
+                this.doSubmit()
+              })
             } else {
-              return false
+              this.doSubmit() // submit
             }
-          })
+          } else {
+            return false
+          }
+        })
       });
     },
     onCancel: function (event) {
@@ -222,10 +257,7 @@ export default {
   created() {
     this.initAssociateMeta()
     this.initFeatureConfMeta()
-  },
-  mounted() {
-  },
-  computed: {},
+  }
 }
 </script>
 
