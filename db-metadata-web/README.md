@@ -620,3 +620,7 @@ tagView固定
 ### 0.3.46~0.3.48
 TableView和TableTreeView meta配置增强, 行内操作配置的show支持函数回调配置控制行的显影
 修复一些缺陷
+
+### 0.5.53
+TableCell中将行记录传入render函数，以便更丰富的扩展;
+修复SearchView一处缺陷: NumBox比较逻辑下拉没有出来

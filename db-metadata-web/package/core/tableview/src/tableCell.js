@@ -41,8 +41,9 @@ export default {
 
             if (!utils.isEmpty(meta.render)) {
                 try {
+                    const {data: {row}} = this
                     const render = utils.strToFn(meta.render);
-                    return render(h, value);
+                    return render(h, value, row);
                 } catch (e) {
                     console.error('the render(in field meta) is not function, meta: %o, value: %s, will show original value', meta, value);
                     return h('span', null, value);

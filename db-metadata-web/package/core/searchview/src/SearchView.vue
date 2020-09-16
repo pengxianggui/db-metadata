@@ -130,6 +130,9 @@
                     case 'DateTimeBox':
                         $reverseMerge(props, {"is-range": true, "type": 'datetimerange'})
                         break;
+                    case 'NumBox': // NumBox无法设置"比较操作符"插槽, 改为TextBox
+                        props.is = 'TextBox'
+                        break;
                 }
                 return props
             },
