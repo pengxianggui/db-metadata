@@ -5,15 +5,14 @@ import MetaElement from '../package/index' // 如果将index省略, 则会发生
 import router from './router'
 import {mockXHR} from '../mock'
 import Layout from './layout'
+import axios from './axios'
 
 if (process.env.NODE_ENV === 'development') {
     mockXHR()
 }
 
 Vue.use(MetaElement, {
-    axios: { // 内置axios配置
-        baseURL: '/meta'   // default
-    },
+    axios: axios,
     addRoutes: (RouteLoader, axios) => {
         RouteLoader.addRoutes(router, Layout, axios)
     },

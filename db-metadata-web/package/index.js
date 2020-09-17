@@ -2,7 +2,6 @@ import ElementUI from 'element-ui'
 import {isFunction} from "./utils/common";
 import utils from './utils'
 import * as Rest from './utils/rest'
-import axios from './axios'
 import filters from './register/filter'
 // 布局组件
 import AdminLayout from "./layout/admin-layout";
@@ -66,6 +65,8 @@ import MetaMenu from "./menu/MetaMenu";
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
+import instance from "@/axios";
+import configAxios from "./axios/configAxios";
 
 const components = [
     // atom or container
@@ -130,23 +131,20 @@ const install = function (Vue, opts = {}) {
     Vue.use(ElementUI, opts);
 
     // 注册全局函数
-    Vue.prototype.$axios = axios(opts['axios']);    // {axios: {}} // 对axios进行配置, 如baseURL等
-    Vue.prototype.$merge = utils.merge;
-    Vue.prototype.$reverseMerge = utils.reverseMerge;
-    Vue.prototype.$compile = utils.compile;
-    Vue.prototype.$dialog = utils.dialog;
-    Vue.prototype.$isRoot = user.isRoot;
+    Vue.prototype.$axios = configAxios(opts.axios)
+    Vue.prototype.$merge = utils.merge
+    Vue.prototype.$reverseMerge = utils.reverseMerge
+    Vue.prototype.$compile = utils.compile
+    Vue.prototype.$dialog = utils.dialog
+    Vue.prototype.$isRoot = user.isRoot
 
     // 自定义rest接口url覆盖
     if (opts.restUrl) {
         utils.reverseMerge(restUrl, opts.restUrl, false);
     }
 
-    // 角色配置
+    // 静态角色配置
     if (opts.access) {
-        // if (opts.access.hasOwnProperty('root')) {
-        //     Vue.prototype.$root = access.root; // 全局注入组件
-        // }
         utils.reverseMerge(access, opts.access, false);
     }
 

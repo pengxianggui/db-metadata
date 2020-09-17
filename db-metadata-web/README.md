@@ -624,3 +624,6 @@ TableView和TableTreeView meta配置增强, 行内操作配置的show支持函�
 ### 0.5.53
 TableCell中将行记录传入render函数，以便更丰富的扩展;
 修复SearchView一处缺陷: NumBox比较逻辑下拉没有出来
+
+### 0.5.54
+axios对象不再由MetaElement负责创建, 由外部创建并作为必配置项传入
