@@ -3,6 +3,7 @@ package com.hthjsj.web.jfinal;
 import com.google.common.base.Throwables;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.SnowFlake;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -69,6 +70,10 @@ public class ExceptionIntercept implements Interceptor {
                 AnalysisConfig.me().dbMain().save("meta_exception", se);
             } catch (Exception ex) {
                 log.error(ex.getMessage());
+            }
+            if (e instanceof WebException) {
+                controller.renderJson(ret.set("code", ((WebException) e).getCode()).set("msg", ((WebException) e).getMsg()));
+                return;
             }
             controller.renderJson(ret.set("code", 500).set("msg", e.getMessage()));
         }
