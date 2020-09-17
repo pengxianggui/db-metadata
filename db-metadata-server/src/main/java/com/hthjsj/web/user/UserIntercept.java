@@ -77,7 +77,7 @@ public class UserIntercept implements Interceptor {
                 inv.invoke();
                 inv.getController().setCookie(loginService.cookieKey(), user.userId(), (int) TimeUnit.HOURS.toSeconds(6));
             } else {
-                throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey());
+                throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey()).loginError();
             }
         } finally {
             UserThreadLocal.removeUser(user);
