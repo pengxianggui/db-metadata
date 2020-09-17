@@ -10,6 +10,7 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.WebException;
+import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserThreadLocal;
@@ -299,6 +300,17 @@ public class UtilKit {
             });
         });
         return list;
+    }
+
+    public static List<TreeNode<String, Record>> aliasTreeList(List<TreeNode<String, Record>> dataList, Kv aliasMap) {
+        List<TreeNode<String, Record>> result = dataList;
+        dataList.forEach(tree -> aliasTreeNode(tree, aliasMap));
+        return result;
+    }
+
+    public static TreeNode<String, Record> aliasTreeNode(TreeNode<String, Record> tree, Kv aliasMap) {
+        // TODO
+        return tree;
     }
 
     /**
