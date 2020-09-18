@@ -221,17 +221,15 @@
                 getTableViewMeta(mObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     this.$set(this.master, 'tlMeta', tlMeta);
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取TableView meta 错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
                 // 获取主表SearchPanel 组件meta
                 getSearchViewMeta(mObjectCode).then(resp => {
                     let spMeta = resp.data;
                     this.$set(this.master, 'spMeta', spMeta);
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取SearchView meta错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
 
                 // 子表数据装载
@@ -248,18 +246,17 @@
 
                         this.$set(slave, 'tlMeta', tlMeta);
                         this.$set(slave, 'tableUrl', data_url); // 暂存
-                    }).catch(err => {
-                        console.error('[ERROR] msg: %s', err.msg);
-                        this.$message.error(err.msg);
+                    }).catch(({msg = '获取TableView meta数据错误'}) => {
+                        console.error('[ERROR] msg: %s', msg);
+                        this.$message.error(msg);
                     });
 
                     // 获取从表SearchPanel 组件meta
                     getSearchViewMeta(sObjectCode).then(resp => {
                         let spMeta = resp.data;
                         this.$set(slave, 'spMeta', spMeta);
-                    }).catch(err => {
-                        console.error('[ERROR] msg: %s', err.msg);
-                        this.$message.error(err.msg);
+                    }).catch(({msg = '获取SearchView meta 数据错误'}) => {
+                        console.error('[ERROR] msg: %s', msg);
                     });
                 }
             });

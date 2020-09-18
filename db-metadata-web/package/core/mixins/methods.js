@@ -164,8 +164,8 @@ export const options = {
                     let format = utils.assertUndefined(this.format, this.getBehavior('format'));
                     this.innerOptions = format ? format(resp.data) : this.assemblyOptions(resp.data);
                     this.$emit('update:options', this.innerOptions);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                }).catch(({msg = 'Error'}) => {
+                    this.$message.error(msg);
                 })
             }
         }

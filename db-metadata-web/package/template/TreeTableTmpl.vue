@@ -104,7 +104,7 @@
               const {$refs, tlRefName, featureCode, activeTreeData, treePrimaryKey} = this
 
               if (utils.isEmpty(activeTreeData)) {
-                this.$message.warning('请先选择树节点', '提示');
+                this.$message.warning('请先选择树节点');
                 return;
               }
 
@@ -135,23 +135,6 @@
                   }
                 })
             },
-            // initMeta(treeObjectCode, tableObjectCode) {
-            //     getTreeMeta(treeObjectCode).then(resp => {
-            //         this.treeMeta = resp.data;
-            //     }).catch(err => {
-            //         console.error('[ERROR] msg: %s', err.msg);
-            //         this.$message.error(err.msg);
-            //     });
-            //
-            //     getTableViewMeta(tableObjectCode).then(resp => {
-            //         let tvMeta = resp.data;
-            //         this.tvMeta = tvMeta;
-            //         this.adjustTvMeta()
-            //     }).catch(err => {
-            //         console.error('[ERROR] msg: %s', err.msg);
-            //         this.$message.error(err.msg);
-            //     });
-            // },
             initMetaByFeatureCode(featureCode) {
                 getMetaFromFeature_TreeTableTmpl(featureCode).then(resp => {
                     const {tree: treeMeta, table: tvMeta} = resp.data

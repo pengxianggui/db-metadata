@@ -221,9 +221,9 @@
                             Object.keys(this.confModel['fConf']).forEach(key => {
                                 this.buildFieldConfMeta(this.confModel['fConf'][key], key);
                             });
-                        }).catch(err => {
-                            console.error('[ERROR] url: %s, msg: %s', url, err.msg || err);
-                            this.$message.error(err.msg);
+                        }).catch(({msg = '配置加载失败'}) => {
+                            console.error('[ERROR] url: %s, msg: %s', url, msg);
+                            this.$message.error(msg);
                         })
                     } else {
                         this.$message.warning('请填写必填项')
@@ -237,10 +237,10 @@
                     type: 'warning'
                 }).then(() => {
                     let url = this.$compile(restUrl.COMP_INSTANCE_CONF_DELETE, this.confModel);
-                    this.$axios.delete(url).then(resp => {
-                        this.$message.success(resp.msg);
-                    }).catch(err => {
-                        this.$message.error(err.msg);
+                    this.$axios.delete(url).then(({msg = '配置删除成功'}) => {
+                        this.$message.success(msg);
+                    }).catch(({msg = '配置删除失败'}) => {
+                        this.$message.error(msg);
                     })
                 })
             },
@@ -270,10 +270,10 @@
                                 method: 'POST',
                                 url: restUrl.COMP_CONF_ADD,
                                 data: params
-                            }).then(resp => {
-                                this.$message.success(resp.msg);
-                            }).catch(err => {
-                                this.$message.error(err.msg);
+                            }).then(({msg = '配置提交成功'}) => {
+                                this.$message.success(msg);
+                            }).catch(({msg = '配置提交失败'}) => {
+                                this.$message.error(msg);
                             })
                         }).catch(() => {
                         });

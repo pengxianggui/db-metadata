@@ -72,16 +72,14 @@
         created() {
             getTableViewMeta(this.objectCode).then(resp => {
                 this.tlMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
+            }).catch(({msg = '加载TableView meta发生错误'}) => {
+                console.error('[ERROR] msg: %s', msg);
             });
 
             getSearchViewMeta(this.objectCode).then(resp => {
                 this.spMeta = resp.data;
-            }).catch(err => {
-                console.error('[ERROR] msg: %s', err.msg);
-                this.$message.error(err.msg);
+            }).catch(({msg = '加载SearchView meta数据发生异常'}) => {
+                console.error('[ERROR] msg: %s', msg);
             });
         },
         computed: {

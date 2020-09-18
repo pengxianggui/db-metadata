@@ -214,11 +214,11 @@ export default {
       let url = this.$compile(restUrl.FEATURE_ADD, {
         featureType: featureType
       });
-      this.$axios.post(url, feature).then(resp => {
-        this.$message.success('操作成功');
+      this.$axios.post(url, feature).then(({msg = '操作成功'}) => {
+        this.$message.success(msg);
         this.$emit('ok', this.params);
-      }).catch(err => {
-        this.$message.error(err.msg);
+      }).catch(({msg = '操作失败'}) => {
+        this.$message.error(msg);
       })
     },
 

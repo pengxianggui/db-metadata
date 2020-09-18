@@ -33,20 +33,20 @@
         methods: {
             initDb: function () {
                 this.$prompt('提示:请输入口令', '确定要初始化系统', {}).then(data => {
-                    this.$axios.get('/db/init/' + data.value).then(resp => {
-                        this.$message.success(resp.msg);
+                    this.$axios.get('/db/init/' + data.value).then(({msg = '初始化成功'}) => {
+                        this.$message.success(msg);
                         this.$router.go(0);
-                    }).catch(err => {
-                        this.$message.error(err.msg);
+                    }).catch(({msg = '发生错误'}) => {
+                        this.$message.error(msg);
                     })
                 })
             },
             cleanDb: function () {
                 this.$prompt('提示:请输入口令', '确定要清空数据库', {}).then(data => {
-                    this.$axios.get('/db/truncate/' + data.value).then(resp => {
-                        this.$message.success(resp.msg);
-                    }).catch(err => {
-                        this.$message.error(err.msg);
+                    this.$axios.get('/db/truncate/' + data.value).then(({msg = '操作成功'}) => {
+                        this.$message.success(msg);
+                    }).catch(({msg = '操作失败'}) => {
+                        this.$message.error(msg);
                     })
                 }).catch(() => {
                 });

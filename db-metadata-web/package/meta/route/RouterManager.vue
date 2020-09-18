@@ -68,16 +68,14 @@ export default {
     const {objectCode} = this
     getTableTreeViewMeta(objectCode).then(resp => {
       this.tlMeta = resp.data;
-    }).catch(err => {
-      console.error('[ERROR] msg: %s', err.msg);
-      this.$message.error(err.msg);
+    }).catch(({msg = '加载TableTreeView meta发生错误'}) => {
+      console.error('[ERROR] msg: %s', msg);
     });
 
     getSearchViewMeta(objectCode).then(resp => {
       this.spMeta = resp.data;
-    }).catch(err => {
-      console.error('[ERROR] msg: %s', err.msg);
-      this.$message.error(err.msg);
+    }).catch(({msg = '加载SearchView meta数据发生错误'}) => {
+      console.error('[ERROR] msg: %s', msg);
     });
   },
   computed: {

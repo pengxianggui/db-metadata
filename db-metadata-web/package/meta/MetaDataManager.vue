@@ -123,7 +123,7 @@
                 const {object: {activeData}, $compile} = this
 
                 if (utils.isEmpty(activeData)) {
-                    this.$message.warning('请先选择一条主表记录', '提示');
+                    this.$message.warning('请先选择一条主表记录');
                     return;
                 }
 
@@ -135,13 +135,11 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios.get($compile(restUrl.META_FIELD_SYNC, {objectCode: code}))
-                        .then(resp => {
-                            const {msg = '同步成功'} = resp
+                        .then(({msg = '同步成功'}) => {
                             this.$message.success(msg)
-                        }).catch(err => {
-                        const {msg = '发生错误'} = err
-                        this.$message.error(msg)
-                    })
+                        }).catch(({msg = '同步发生错误'}) => {
+                            this.$message.error(msg)
+                        })
                 })
             },
             jumpToConf(objectCode) {
@@ -175,15 +173,14 @@
             },
             handlerMetaImport(formModel) {
                 const {$refs, $axios, metaImportFormMeta, object: {objectCode}} = this;
-                $axios.post(metaImportFormMeta.action, formModel).then(resp => {
-                    this.$message.success(resp.msg);
+                $axios.post(metaImportFormMeta.action, formModel).then(({msg = '元对象导入成功'}) => {
+                    this.$message.success(msg);
                     this.metaImportFormVisible = false;
                     // refresh master
                     $refs[objectCode].getData();
                     const {objectCode: oc} = formModel
                     this.jumpToConf(oc);
-                }).catch(err => {
-                    const {msg} = err
+                }).catch(({msg = '元对象导入失败'}) => {
                     this.$message.error(msg);
                 })
             },
@@ -210,13 +207,13 @@
                     dangerouslyUseHTMLString: true
                 }).then(() => {
                     const {$axios, $refs} = this;
-                    $axios.delete(url).then(resp => {
-                        this.$message.success(resp.msg);
+                    $axios.delete(url).then(({msg = '删除成功'}) => {
+                        this.$message.success(msg);
                         // refresh master,slave data
                         $refs[objectCode].getData();
                         $refs[fieldCode].getData();
-                    }).catch(err => {
-                        this.$message.error(err.msg);
+                    }).catch(({msg = '删除失败'}) => {
+                        this.$message.error(msg);
                     });
                 });
             },
@@ -224,8 +221,8 @@
                 this.$axios.get(restUrl.META_OBJECT_TO_ADD).then(resp => {
                     this.metaImportFormMeta = resp.data
                     this.metaImportFormVisible = true
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                }).catch(({msg = '发生错误'}) => {
+                    this.$message.error(msg);
                 });
             }
         },
@@ -236,14 +233,14 @@
             getSearchViewMeta(metaObjectCode).then(resp => {
                 this.object.svMeta = resp.data;
             })
-            getTableViewMeta(metaObjectCode).then(resp => {
-                this.object.tvMeta = resp.data;
+            getTableViewMeta(metaObjectCode).then(({data = {}}) => {
+                this.object.tvMeta = data;
             })
-            getSearchViewMeta(metaFieldCode).then(resp => {
-                this.field.svMeta = resp.data
+            getSearchViewMeta(metaFieldCode).then(({data = {}}) => {
+                this.field.svMeta = data
             })
-            getTableViewMeta(metaFieldCode).then(resp => {
-                const meta = resp.data;
+            getTableViewMeta(metaFieldCode).then(({data = {}}) => {
+                const meta = data;
                 this.field.urlTemplate = meta['data_url'] + '?object_code={objectCode}';
                 meta.data_url = this.field.urlTemplate
                 this.field.tvMeta = meta

@@ -16,7 +16,7 @@
                            :total="pageModel.total"
                            v-bind="innerMeta.pagination"
                            @size-change="sizeChange"
-                           @current-change="getData"
+                           @current-change="getData(pageModel)"
             ></el-pagination>
         </slot>
     </div>
@@ -37,17 +37,31 @@
                 }
             },
             data: Array,
-            page: Object
+            dataFunction: Function,
+            page: {
+                type: Object,
+                default: () => {
+                    return {
+                        size: 10,
+                        index: 1,
+                        total: 0
+                    }
+                },
+                validator: (value) => value.hasOwnProperty('size')
+                    && value.hasOwnProperty('index')
+                    && value.hasOwnProperty('total')
+            }
         },
         data() {
+            const {size, index, total} = this.page
             return {
                 innerData: [],
                 activeIndex: null,
                 activeData: {},
                 pageModel: {
-                    size: 10,
-                    index: 1,
-                    total: 0
+                    size: size,
+                    index: index,
+                    total: total
                 },
             }
         },
@@ -57,7 +71,7 @@
             },
             sizeChange() {
                 this.setPage(1); // jump to page one
-                this.getData();
+                this.getData(this.pageModel);
             },
             handleClick(row, index, event) {
                 this.activeData = row;
@@ -70,9 +84,13 @@
                 if (!utils.isEmpty(index)) this.pageModel['index'] = parseInt(index);
                 if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
             },
-            getData(params) {
-                let {innerMeta, pageModel} = this;
-                if (!utils.isObject(params)) params = {};
+            getData(pageModel) {
+                let {innerMeta, dataFunction} = this;
+
+                if (dataFunction && utils.isFunction(dataFunction)) {
+                    dataFunction.call(this, pageModel)
+                    return
+                }
 
                 if (!utils.hasProp(innerMeta, 'data_url')) {
                     console.error('lack data_url attribute');
@@ -95,23 +113,20 @@
                     if (utils.hasProp(resp, 'page')) {
                         this.setPageModel(resp['page']);
                     }
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                }).catch(({msg = 'Error'}) => {
+                    this.$message.error(msg);
                 });
             },
             initData() { // init business data
-                let {page, data, innerMeta} = this;
-
-                if (!utils.isUndefined(page)) {
-                    this.setPageModel(page)
-                }
+                let {pageModel, data, innerMeta} = this;
 
                 if (!utils.isUndefined(data)) {
                     this.innerData = data;
                     return;
                 }
+
                 if (utils.hasProp(innerMeta, 'data_url')) {
-                    this.getData();
+                    this.getData(pageModel);
                     return;
                 }
                 console.error("data or data_url in meta provide one at least!")

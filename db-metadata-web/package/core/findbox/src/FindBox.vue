@@ -53,10 +53,9 @@
                     this.findPanelMeta = resp.data;
                     this.findPanelMeta.component_name = 'FindPanel';
                     this.dialogVisible = true;
-                }).catch(err => {
-                    console.error(err);
-                    this.$message.error(err.msg);
-                });
+                }).catch(({msg ='Error'}) => {
+                    this.$message.error(msg);
+                })
             },
             handlerOk(row) {
                 const {table: tableMeta} = this.findPanelMeta;

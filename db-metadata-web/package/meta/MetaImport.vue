@@ -68,10 +68,10 @@
                     this.$emit('submit', params)
                 } else {
                     const url = this.innerMeta.action;
-                    this.$axios.post(url, params).then(resp => {
-                        this.$message.success(resp.msg);
-                    }).catch(err => {
-                        this.$message.error(err.msg);
+                    this.$axios.post(url, params).then(({msg = '提交成功'}) => {
+                        this.$message.success(msg);
+                    }).catch(({msg = '提交失败'}) => {
+                        this.$message.error(msg);
                     })
                 }
             },

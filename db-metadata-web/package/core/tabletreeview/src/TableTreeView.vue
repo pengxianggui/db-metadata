@@ -208,11 +208,10 @@ export default {
       }
       this.$axios.safeGet(children_data_url, {
         parentPrimary: parentPrimary
-      }).then(resp => {
-        resolve(resp.data);
-      }).catch(err => {
-        this.$message.error(err.msg);
-        console.error(err.msg());
+      }).then(({data}) => {
+        resolve(data);
+      }).catch(({msg = 'Error'}) => {
+        this.$message.error(msg);
       })
     },
     handleSelectionChange(selection) {
@@ -330,8 +329,8 @@ export default {
           const {msg = '删除成功'} = resp
           this.$message.success(msg);
           this.getData();
-        }).catch(err => {
-          this.$message.error(err.msg);
+        }).catch(({msg = 'Error'}) => {
+          this.$message.error(msg);
         });
       });
     },
@@ -405,8 +404,8 @@ export default {
       }).then(resp => {
         this.innerData = resp.data;
         this.$emit("update:data", resp.data);
-      }).catch(err => {
-        this.$message.error(err.msg);
+      }).catch(({msg = 'Error'}) => {
+        this.$message.error(msg);
       });
     },
     initData() { // init business data

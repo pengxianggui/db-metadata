@@ -77,11 +77,11 @@
                 params['objectCode'] = objectCode;
 
                 utils.joinArrInObj(params);
-                this.$axios.post(url, params).then(resp => {
+                this.$axios.post(url, params).then(({msg = '提交成功'}) => {
                     this.$emit('ok', params); //  default callback
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                    this.$message.success(msg);
+                }).catch(({msg = 'Error'}) => {
+                    this.$message.error(msg);
                 })
             },
             onSubmit(ev) {

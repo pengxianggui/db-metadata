@@ -82,16 +82,14 @@
             initMeta(dlObjectCode, tlObjectCode) {
                 getDataListMeta(dlObjectCode).then(resp => {
                     this.dlMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取DataList meta发生错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
 
                 getSearchViewMeta(dlObjectCode).then(resp => {
                     this.spMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '加载SearchView meta数据发生错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
 
                 getTableViewMeta(tlObjectCode).then(resp => {
@@ -101,9 +99,8 @@
                     tlMeta['data_url'] = data_url;
                     this.tableUrl = data_url;
                     this.tlMeta = tlMeta;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取TableView meta发生错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
             }
         },

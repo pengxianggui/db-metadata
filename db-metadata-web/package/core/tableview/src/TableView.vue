@@ -228,8 +228,7 @@ export default {
           conf: conf
         };
         this.dialogVisible = true
-      }).catch(err => {
-        const {msg = '发生错误'} = err
+      }).catch(({msg = '发生错误'}) => {
         this.$message.error(msg)
       });
     },
@@ -293,11 +292,11 @@ export default {
       }).then(() => {
         const {delete_url} = this.innerMeta;
         const url = delete_url + '?' + primaryKvExp;
-        this.$axios.delete(url).then(resp => {
-          this.$message.success(resp.msg);
+        this.$axios.delete(url).then(({msg = '删除成功'}) => {
           this.getData();
-        }).catch(err => {
-          this.$message.error(err.msg);
+          this.$message.success(msg);
+        }).catch(({msg = '删除失败'}) => {
+          this.$message.error(msg);
         });
       });
     },
@@ -395,8 +394,8 @@ export default {
         if (index > 1 && (isEmpty(data) || data.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
-      }).catch(err => {
-        this.$message.error(err.msg);
+      }).catch(({msg = '加载TableView数据发生错误'}) => {
+        this.$message.error(msg);
       });
     },
     initData() { // init business data

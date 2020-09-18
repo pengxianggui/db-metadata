@@ -127,8 +127,6 @@
                 })
             },
             submitForm() {
-                // this.$message.error("submitForm action not finished!");
-
                 const componentCode = 'FormView';
                 const objectCode = this.formMeta.objectCode;
                 let params = {
@@ -149,10 +147,10 @@
                     method: 'POST',
                     url: restUrl.COMP_CONF_UPDATE,
                     data: params
-                }).then(resp => {
-                    this.$message.success(resp.msg);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                }).then(({msg = '提交成功'}) => {
+                    this.$message.success(msg);
+                }).catch(({msg = '提交失败'}) => {
+                    this.$message.error(msg);
                 })
             },
             resetForm() {

@@ -79,16 +79,14 @@
             initMeta(objectCode) {
                 getTableViewMeta(objectCode).then(resp => {
                     this.tlMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取TableView meta数据错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
 
                 getSearchViewMeta(objectCode).then(resp => {
                     this.spMeta = resp.data;
-                }).catch(err => {
-                    console.error('[ERROR] msg: %s', err.msg);
-                    this.$message.error(err.msg);
+                }).catch(({msg = '获取SearchView meta数据错误'}) => {
+                    console.error('[ERROR] msg: %s', msg);
                 });
             }
         },

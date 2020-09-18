@@ -74,9 +74,9 @@
                 this.$axios.safeGet(url).then(resp => {
                     let formMeta = resp.data;
                     this.$reverseMerge(this.formMeta, formMeta, true);
-                }).catch(err => {
-                    this.$message.error(err.msg);
+                }).catch(({msg = '加载失败'}) => {
                     this.setInitState();
+                    this.$message.error(msg);
                 })
             }
         },

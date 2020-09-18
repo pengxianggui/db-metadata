@@ -16,28 +16,14 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截器
 instance.interceptors.response.use(res => {
-    if (!s_format(res)) {
+    const {state} = res.data
+    if (state !== 'ok') {
         return Promise.reject(res.data);
     }
     return Promise.resolve(res.data);
 }, err => {
-    e_format(err);
     console.error("[ERROR] ", err);
     return Promise.reject(err)
 });
-
-
-// 扩展cancel ----------------------------------------------------------------------------------------------------------
-Promise.cancel = function (msg) {
-    console.warn(msg);
-    return new Promise(resolve => {
-    }, reject => {
-    })
-};
-Promise.prototype.cancel = function (onCancel) {
-    onCancel();
-    return this;
-};
-// ---------------------------------------------------------------------------------------------------------------------
 
 export default instance
