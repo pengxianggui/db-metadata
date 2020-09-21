@@ -8,15 +8,20 @@ import Meta from '../../mixins/meta'
 import DefaultMeta from '../ui-conf'
 import VueAddress from "@pxg/vue-address";
 import "@pxg/vue-address/lib/vue-address.css"
+import conver from "./conver";
+import reverse from "./reverse";
 
 export default {
   name: "RegionBox",
-  mixins: [Meta(DefaultMeta), Val()],
+  mixins: [Meta(DefaultMeta), Val(conver, reverse)],
   components: {
     'vue-address': VueAddress
   },
   props: {
-    value: String
+    value: {
+      type: [String, Array],
+      default: () => []
+    }
   },
   computed: {
     conf() {
