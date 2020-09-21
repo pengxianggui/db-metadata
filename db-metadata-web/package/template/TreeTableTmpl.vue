@@ -89,12 +89,16 @@
                 $refs[treeRefName].getData()
             },
             refreshTableData() {
-                const {treePrimaryKey, activeTreeData, tableDataUrl, initTableDataUrl} = this
+                const {treePrimaryKey, activeTreeData, tableDataUrl, initTableDataUrl, tvMeta, tlRefName} = this
 
                 let data_url = isEmpty(activeTreeData) ? initTableDataUrl : tableDataUrl
                 const foreignFieldValue = activeTreeData[treePrimaryKey];
                 let url = this.$compile(data_url, {foreignFieldValue: foreignFieldValue});
-                this.tvMeta['data_url'] = url;
+                if (tvMeta['data_url'] === url) {
+                  this.$refs[tlRefName].getData()
+                } else {
+                  this.tvMeta['data_url'] = url;
+                }
             },
             handleActiveChange(row) {
                 this.activeTreeData = row
