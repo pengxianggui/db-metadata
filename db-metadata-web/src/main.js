@@ -6,6 +6,8 @@ import router from './router'
 import {mockXHR} from '../mock'
 import Layout from './layout'
 import axios from './axios'
+import ArticleForm from "@/view/ArticleForm";
+Vue.component(ArticleForm.name, ArticleForm)
 
 if (process.env.NODE_ENV === 'development') {
     mockXHR()

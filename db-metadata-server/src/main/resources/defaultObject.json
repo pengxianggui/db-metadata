@@ -484,8 +484,7 @@
         "config": {
           "isSearch": false,
           "isFile": false,
-          "isSearch": false,
-          "scopeSql": "select id, name as cn from meta_router;db-metadata-demo",
+          "scopeSql": "select id, path as cn from meta_router;db-metadata-demo",
           "addStatus": 100,
           "defaultVal": "",
           "isListShow": true,

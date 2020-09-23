@@ -4,7 +4,7 @@
       <div class="header">
         <div>
           <span class="h2" style="font-family: unset">元数据管理系统</span>
-          <span style="font-family: cursive;">—— Data Fuck Everything</span>
+          <span style="font-family: cursive;">—— Data Drive Everything</span>
         </div>
       </div>
     </slot>
@@ -18,9 +18,11 @@
         <div class="fixed-header">
           <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
         </div>
-        <keep-alive :include="cachedViews">
-          <router-view :key="$route.path" style="margin-top: 40px;"></router-view>
-        </keep-alive>
+        <transition name="fade-transform" mode="out-in">
+          <keep-alive :include="cachedViews">
+            <router-view :key="$route.path" style="margin-top: 40px;"></router-view>
+          </keep-alive>
+        </transition>
       </div>
     </div>
   </div>

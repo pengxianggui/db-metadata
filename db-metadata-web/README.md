@@ -631,3 +631,14 @@ axios对象不再由MetaElement负责创建, 由外部创建并作为必配置�
 ### 0.5.56
 axios对象由外部实例化后, 响应拦截时的数据装配也有外部负责, 为防止this.$message.info(err)时, err不是字符串会发生报错，并影响中断
 逻辑, 用解构对进行处理。
+
+### 0.5.57~0.5.60
+修复一些缺陷;
+
+### 0.5.61
+RichTextBox改为使用vue-tinymce-text
+
+### 0.5.62
+修复切换tagview时, RichTextBox会被隐藏的问题：此缺陷原因未知，当router-view加上transition时，此缺陷修复。若未加，此RichTextBox中的
+编辑框会在切换回来后，奇怪的被加上display:none的样式.
+

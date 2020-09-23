@@ -4,7 +4,7 @@
             <div class="header">
                 <div>
                     <span class="h2" style="font-family: unset">元数据管理系统</span>
-                    <span style="font-family: cursive;">—— Data Fuck Everything</span>
+                    <span style="font-family: cursive;">—— Data Drive Everything</span>
                 </div>
                 <span style="flex: 1"></span>
                 <router-link to="/workspace" style="cursor: pointer;">

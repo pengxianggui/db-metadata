@@ -1,32 +1,55 @@
 <template>
-    <editor v-model="nativeValue" :api-key="apiKey" :init="editorConf"/>
+  <vue-tinymce-text v-model="nativeValue"
+                    :toolbar="toolbar" :menubar="menubar"
+                    :width="width" :height="height"></vue-tinymce-text>
 </template>
 
 <script>
-    // TODO 将一些配置提取支持meta传入
-    import Editor from '@tinymce/tinymce-vue'
-    import {EditorConf, apiKey} from './config';
-    import Val from "../../mixins/value";
+import VueTinymceText from 'vue-tinymce-text'
+import Val from "../../mixins/value";
 
-    export default {
-        name: "RichTextBox",
-        mixins: [Val()],
-        components: {
-            'editor': Editor
-        },
-        props: {
-            value: {
-                type: String,
-                default: ''
-            }
-        },
-        data() {
-            return {
-                editorConf: EditorConf,
-                apiKey: apiKey
-            }
-        }
+export default {
+  name: "RichTextBox",
+  mixins: [Val()],
+  components: {
+    'vue-tinymce-text': VueTinymceText
+  },
+  props: {
+    // id: {
+    //   type: String,
+    //   default: () => 'vue-tinymce-text' + (Math.random() * 10000)
+    // },
+    value: {
+      type: String,
+      default: () => ''
+    },
+    toolbar: {
+      type: Array,
+      required: false,
+      default() {
+        return []
+      }
+    },
+    menubar: {
+      type: String,
+      default: 'file edit insert view format table'
+    },
+    height: {
+      type: [Number, String],
+      required: false,
+      default: 360
+    },
+    width: {
+      type: [Number, String],
+      required: false,
+      default: 'auto'
     }
+  }
+  ,
+  data() {
+    return {}
+  }
+}
 </script>
 
 <style scoped>
