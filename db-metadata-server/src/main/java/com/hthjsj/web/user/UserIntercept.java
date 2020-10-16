@@ -59,7 +59,8 @@ public class UserIntercept implements Interceptor {
         User user = null;
         try {
             //只对登录放行
-            if (inv.getActionKey().startsWith(UserRouter.URL_LOGIN)) {
+            if (inv.getActionKey().startsWith(UserRouter.URL_LOGIN)
+                    || inv.getActionKey().startsWith("/file/preview")) { // TODO 登录拦截放行支持可编码配置
                 inv.invoke();
                 return;
             }

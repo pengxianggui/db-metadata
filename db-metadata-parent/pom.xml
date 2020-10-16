@@ -6,7 +6,7 @@
 
     <groupId>com.hthjsj</groupId>
     <artifactId>db-metadata-parent</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <packaging>pom</packaging>
     <name>db-metadata-parent</name>
 
@@ -21,7 +21,7 @@
     <modules>
         <module>../db-metadata-analysis</module>
         <module>../db-metadata-server</module>
-        <module>../db-metadata-web</module>
+<!--        <module>../db-metadata-web</module>-->
         <module>../jfinal-spring-boot-starter</module>
     </modules>
 
