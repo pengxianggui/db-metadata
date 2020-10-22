@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -58,18 +59,25 @@ public class AnalysisConfig {
 
     private final Plugins plugins = new Plugins();
 
+    @Setter
+    private Prop prop;
+
     public static AnalysisConfig me() {
         return me;
+    }
+
+    public static void initProp(Prop prop) {
+        me.setProp(prop);
     }
 
     public void initDefaultDbSource() {
         //init main database resource
         DBSource mainSource = new DBSource(dbMainStr(),
-                                           getProp().get(DB_MAIN_URL),
-                                           getProp().get(DB_MAIN_USERNAME),
-                                           getProp().get(DB_MAIN_PASSWORD),
-                                           DbSourceConfig.Permission.RW,
-                                           plugins);
+                getProp().get(DB_MAIN_URL),
+                getProp().get(DB_MAIN_USERNAME),
+                getProp().get(DB_MAIN_PASSWORD),
+                DbSourceConfig.Permission.RW,
+                plugins);
         dbSources.add(mainSource);
 
         //init business database resource
@@ -120,7 +128,10 @@ public class AnalysisConfig {
     }
 
     public Prop getProp() {
-        return PropKit.useFirstFound("config-dev.properties", CONFIG_NAME);
+        if (this.prop == null) {
+            return PropKit.useFirstFound("config-dev.properties", CONFIG_NAME);
+        }
+        return this.prop;
     }
 
     public void start() {

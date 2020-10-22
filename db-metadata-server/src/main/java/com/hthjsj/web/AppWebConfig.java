@@ -33,6 +33,7 @@ import com.hthjsj.web.user.auth.MRManager;
 import com.hthjsj.web.user.auth.jfinal.JFinalResourceLoader;
 import com.jfinal.config.*;
 import com.jfinal.json.FastJsonRecordSerializer;
+import com.jfinal.kit.Prop;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
@@ -57,17 +58,20 @@ public class AppWebConfig extends JFinalConfig {
      * /config/config.properties
      * jar->config.properties
      */
-    private void initProp() {
-        prop = AnalysisConfig.me().getProp();
-        File configPropFile = UtilKit.stairsLoad(AnalysisConfig.CONFIG_NAME, "config");
-        if (configPropFile != null) {
-            prop.appendIfExists(configPropFile);
+    public void initProp(Prop prop) {
+        if (this.prop == null) {
+            this.prop = prop;
+            File configPropFile = UtilKit.stairsLoad(AnalysisConfig.CONFIG_NAME, "config");
+            if (configPropFile != null) {
+                this.prop.appendIfExists(configPropFile);
+            }
+            AnalysisConfig.initProp(this.prop);
         }
     }
 
     @Override
     public void configConstant(Constants me) {
-        initProp();
+        initProp(AnalysisConfig.me().getProp());
         me.setDevMode(prop.getBoolean("devMode", false));
         me.setJsonFactory(new CrackFastJsonFactory());
         me.setRenderFactory(new ErrorJsonRenderFactory());
