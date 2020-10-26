@@ -135,8 +135,8 @@ public class OptionsKit {
      *
      * @return
      */
-    public static List<Record> trans(Collection<IMetaField> fields, List<Record> dataRecords) {
-        List<Record> result = Lists.newArrayList(dataRecords);
+    public static <T extends Record> List<T> trans(Collection<IMetaField> fields, List<T> dataRecords) {
+        List<T> result = Lists.newArrayList(dataRecords);
         MetaFieldConfigParse configWrapper = null;
         Kv mappeds = Kv.create();
         //计算需要转义的字段的映射关系
