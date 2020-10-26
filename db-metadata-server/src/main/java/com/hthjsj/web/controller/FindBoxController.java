@@ -1,7 +1,6 @@
 package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaFactory;
@@ -90,11 +89,10 @@ public class FindBoxController extends FrontRestController {
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
-        String includeFieldStr = getPara("fs", getPara("fields", ""));
-        String excludeFieldStr = getPara("efs", getPara("exfields", ""));
+
         boolean raw = getParaToBoolean("raw", false);
-        String[] fields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(includeFieldStr).toArray(new String[0]);
-        String[] excludeFields = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(excludeFieldStr).toArray(new String[0]);
+        String[] fields = QueryHelper.queryBuilder().list().fields();
+        String[] excludeFields = QueryHelper.queryBuilder().list().excludeFields();
         IMetaObject metaObject = null;
 
         if (metaField.configParser().isSql()) {
@@ -107,11 +105,11 @@ public class FindBoxController extends FrontRestController {
 
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
         Page<Record> result = metaService().paginate(queryHelper.getPageIndex(),
-                queryHelper.getPageSize(),
-                metaObject,
-                sqlPara.getSelect(),
-                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                sqlPara.getPara());
+                                                     queryHelper.getPageSize(),
+                                                     metaObject,
+                                                     sqlPara.getSelect(),
+                                                     MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                                                     sqlPara.getPara());
 
         /**
          * escape field value;
