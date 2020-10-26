@@ -9,6 +9,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -38,33 +39,50 @@ public class TreeService {
             return treeNodes;
         }
         TreeNode root = treeBuilder.getRootObject(nodes, treeConfig.getRootIdentify());
-        return root == null ? treeNodes
-                : Lists.newArrayList(treeBuilder.level1Tree(root, treeNodes.toArray(new DefaultTreeNode[treeNodes.size()])));
+        return root == null ? treeNodes : Lists.newArrayList(treeBuilder.level1Tree(root, treeNodes.toArray(new DefaultTreeNode[treeNodes.size()])));
     }
 
     public List<TreeNode<String, Record>> treeByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
         List<Record> hitRecords = findHitRecordByKeyWords(allRecords, keywords);
-        return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig);
+        return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig).getTreeList();
     }
 
     public List<TreeNode<String, Record>> treeByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+        return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig).getTreeList();
+    }
+
+    /**
+     * 返回构建树阶段数据
+     *
+     * @param metaObject
+     * @param hitRecords
+     * @param treeConfig
+     *
+     * @return
+     */
+    public TreePhases treePhasesByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
+        List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
         return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig);
     }
 
-    private List<TreeNode<String, Record>> buildTreeRelyOnHitRecords(List<Record> allRecords, List<Record> hitRecords, TreeConfig treeConfig) {
+    private TreePhases buildTreeRelyOnHitRecords(List<Record> allRecords, List<Record> hitRecords, TreeConfig treeConfig) {
         Map<String, Record> allRecordsMap = recordToMap(allRecords, treeConfig);
         Set<UniqueRecord> resultRecords = Sets.newHashSet();
+        /** 返回阶段数据 */
+        TreePhases treePhases = new TreePhases();
 
         recursiveParent(hitRecords, allRecordsMap, resultRecords, treeConfig);
 
+        treePhases.setResultRecords(resultRecords);
         List<TreeNode<String, Record>> nodes = Lists.newArrayList();
         resultRecords.forEach(record -> {
             TreeNode<String, Record> node = new DefaultTreeNode(treeConfig, record);
             nodes.add(node);
         });
-        return new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify());
+        treePhases.setTreeList(new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodes, treeConfig.getRootIdentify()));
+        return treePhases;
     }
 
     private Map<String, Record> recordToMap(List<Record> records, TreeConfig treeConfig) {
@@ -109,6 +127,7 @@ public class TreeService {
      *
      * @param records
      * @param keywords
+     *
      * @return
      */
     private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {
@@ -123,5 +142,13 @@ public class TreeService {
             });
         }
         return hitRecords;
+    }
+
+    @Data
+    public static class TreePhases {
+
+        private Set<UniqueRecord> resultRecords;
+
+        private List<TreeNode<String, Record>> treeList;
     }
 }
