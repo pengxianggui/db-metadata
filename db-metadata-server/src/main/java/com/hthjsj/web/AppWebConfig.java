@@ -25,7 +25,7 @@ import com.hthjsj.web.ui.meta.CCUUConfigExtension;
 import com.hthjsj.web.ui.meta.InstanceConfigExtension;
 import com.hthjsj.web.ui.meta.MetaFieldConfigExtension;
 import com.hthjsj.web.upload.UploadController;
-import com.hthjsj.web.user.UserIntercept;
+import com.hthjsj.web.user.UserManager;
 import com.hthjsj.web.user.UserRouter;
 import com.hthjsj.web.user.auth.JsonUserPermit;
 import com.hthjsj.web.user.auth.MRAuthIntercept;
@@ -142,7 +142,7 @@ public class AppWebConfig extends JFinalConfig {
         me.add(new ExceptionIntercept());
         me.add(new JsonParamIntercept());
         if (prop.getBoolean(AppConst.NEED_LOGIN)) {
-            me.add(new UserIntercept());
+            me.add(UserManager.me().getUserIntercept());
         }
         if (prop.getBoolean(AppConst.NEED_AUTH)) {
             me.add(new MRAuthIntercept());

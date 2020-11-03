@@ -1,11 +1,15 @@
 package com.hthjsj.web.user;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.hthjsj.web.kit.PatternPathMatcher;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +21,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class UserIntercept implements Interceptor {
+
+    private List<String> skipPathPatterns = Lists.newArrayList(UserRouter.URL_LOGIN);
 
     public static User staticUser = new User() {
 
@@ -41,6 +47,9 @@ public class UserIntercept implements Interceptor {
         }
     };
 
+    public UserIntercept() {
+    }
+
     @Override
     public void intercept(Invocation inv) {
         /**
@@ -58,9 +67,9 @@ public class UserIntercept implements Interceptor {
          */
         User user = null;
         try {
-            //只对登录放行
-            if (inv.getActionKey().startsWith(UserRouter.URL_LOGIN)
-                    || inv.getActionKey().startsWith("/file/preview")) { // TODO 登录拦截放行支持可编码配置
+            // 放行
+            if (PatternPathMatcher.matchAny(inv.getActionKey(),
+                    skipPathPatterns.toArray(new String[skipPathPatterns.size()]))) {
                 inv.invoke();
                 return;
             }
@@ -83,5 +92,10 @@ public class UserIntercept implements Interceptor {
         } finally {
             UserThreadLocal.removeUser(user);
         }
+    }
+
+    public void addSkipPathPatterns(String... skipPathPatterns) {
+        Preconditions.checkNotNull(skipPathPatterns);
+        this.skipPathPatterns.addAll(Lists.newArrayList(skipPathPatterns));
     }
 }

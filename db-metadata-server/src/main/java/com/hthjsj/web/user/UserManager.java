@@ -26,9 +26,15 @@ public class UserManager {
 
     private UserFactory userFactory;
 
+    private UserIntercept userIntercept;
+
     public static UserManager me() {
         if (me.userFactory == null) {
             me.userFactory = new LocalUserFactory();
+        }
+
+        if (me.userIntercept == null) {
+            me.userIntercept = new UserIntercept();
         }
         return me;
     }
@@ -47,6 +53,10 @@ public class UserManager {
 
     public LoginService loginService() {
         return getUserFactory().loginService();
+    }
+
+    public UserIntercept getUserIntercept() {
+        return userIntercept;
     }
 
     public User getUser(HttpServletRequest request) {

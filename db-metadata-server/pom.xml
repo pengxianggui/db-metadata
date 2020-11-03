@@ -7,12 +7,12 @@
     <parent>
         <artifactId>db-metadata-parent</artifactId>
         <groupId>com.hthjsj</groupId>
-        <version>1.1.5</version>
+        <version>1.1.6-SNAPSHOT</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>db-metadata-server</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6-SNAPSHOT</version>
 
     <!-- 使用阿里 maven 库 -->
     <repositories>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.hthjsj</groupId>
             <artifactId>db-metadata-analysis</artifactId>
-            <version>1.1.5</version>
+            <version>1.1.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jfinal</groupId>
@@ -94,51 +94,6 @@
     <name>db-metadata-server</name>
     <build>
         <plugins>
-            <!--
-				当项目的 web 资源在 src/main/webapp 下时，需要使用 maven-resources-plugin
-				将 web 资源复制到 jar 包中去，注意打包的时候需要配置 engine：
-					me.setBaseTemplatePath("webapp");
-					me.setToClassPathSourceFactory();
-
-				如果 web 资源本身就放在 src/main/resources/webapp 之下，则不需要此插件
-			-->
-            <!--            <plugin>-->
-            <!--                <artifactId>maven-resources-plugin</artifactId>-->
-            <!--                <version>3.1.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>copy-webapp</id>-->
-            <!--                        <phase>process-sources</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>copy-resources</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <encoding>UTF-8</encoding>-->
-            <!--                            <outputDirectory>${basedir}/target/config</outputDirectory>-->
-            <!--                            <resources>-->
-            <!--                                <resource>-->
-            <!--                                    <directory>${basedir}/src/main/resources</directory>-->
-            <!--                                    <includes>-->
-            <!--                                        &lt;!&ndash; <include>**/*.xml</include> &ndash;&gt;-->
-            <!--                                        <include>**/**</include>-->
-            <!--                                    </includes>-->
-            <!--                                </resource>-->
-            <!--                            </resources>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-jar-plugin</artifactId>-->
-            <!--                <version>3.1.2</version>-->
-            <!--                <configuration>-->
-            <!--                    <excludes>-->
-            <!--                        <exclude>*.json</exclude>-->
-            <!--                        <exclude>*.properties</exclude>-->
-            <!--                    </excludes>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

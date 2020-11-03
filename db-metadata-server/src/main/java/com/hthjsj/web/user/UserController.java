@@ -16,7 +16,7 @@ import com.jfinal.kit.Ret;
  */
 public class UserController extends Controller {
 
-    @Clear(MRAuthIntercept.class)
+    @Clear({MRAuthIntercept.class, UserIntercept.class})
     public void login() {
         LoginService loginService = UserManager.me().loginService();
         String uid = getPara(loginService.loginKey());

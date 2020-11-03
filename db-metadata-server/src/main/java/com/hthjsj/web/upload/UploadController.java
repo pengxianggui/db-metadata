@@ -109,6 +109,12 @@ public class UploadController extends FrontRestController {
     public void tmpPre() {
         String path = getPara("path", "");
         UploadService uploadService = ServiceManager.fileService();
+        File file = uploadService.getFile(path);
+
+        if (!file.exists()) {
+            renderJson(Ret.fail("msg", "文件找不到了"));
+            return;
+        }
         renderImageOrFile(uploadService.getFile(path));
     }
 }
