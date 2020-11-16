@@ -1,5 +1,4 @@
 import ElementUI from 'element-ui'
-import {isFunction} from "./utils/common";
 import utils from './utils'
 import * as Rest from './utils/rest'
 import filters from './register/filter'
@@ -58,14 +57,13 @@ import {restUrl} from './constant/url'
 import {access} from "./access";
 import user from './access'
 // 路由装配对象
-import RouteLoader from "./route";
+import addRoutes from "./route";
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
 
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
-import instance from "@/axios";
 import configAxios from "./axios/configAxios";
 
 const components = [
@@ -137,6 +135,7 @@ const install = function (Vue, opts = {}) {
     Vue.prototype.$compile = utils.compile
     Vue.prototype.$dialog = utils.dialog
     Vue.prototype.$isRoot = user.isRoot
+    Vue.prototype.$hasRoles = user.hasRoles
 
     // 自定义rest接口url覆盖
     if (opts.restUrl) {
@@ -158,12 +157,6 @@ const install = function (Vue, opts = {}) {
             Vue.component(component.name, component)
         }
     })
-
-    // 路由数据装配
-    if (opts.addRoutes && isFunction(opts.addRoutes)) {
-        // opts.addRoutes(Route, Vue.prototype.$axios)
-        opts.addRoutes.call(this, new RouteLoader(), Vue.prototype.$axios)
-    }
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -179,5 +172,6 @@ export {
     Rest,
     restUrl,
     user,
-    MetaMenu
+    MetaMenu,
+    addRoutes
 }

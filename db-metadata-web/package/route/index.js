@@ -204,12 +204,18 @@ function metaRoute(layout) {
     ]
 }
 
+async function getDynamicRoutesFromRemote(axios, url) {
+    return await axios.get(url)
+}
+
+// 装载 meta 路由
 function addMetaRoutes(router, Layout = AdminLayout) {
     router.addRoutes(metaRoute(Layout))
 }
 
+// 异步装载动态路由
 function addDynamicRoutes(router, Layout = AdminLayout, axios, url = restUrl.ROUTE_DATA, formatCallback = exchange) {
-    axios.get(url).then(resp => {
+    getDynamicRoutesFromRemote(axios, url).then(resp => {
         const {data: routes} = resp
         console.info('[MetaElement] 装配动态路由, %o', routes)
         const dynamicRoutes = formatCallback(routes, Layout)
@@ -218,14 +224,7 @@ function addDynamicRoutes(router, Layout = AdminLayout, axios, url = restUrl.ROU
     })
 }
 
-// export default function (router, Layout, axios, url, formatCallback) {
-//     addMetaRoutes(router, Layout)
-//     addDynamicRoutes(router, Layout, axios, url, formatCallback)
-// }
-
-export default class RouteLoader {
-    addRoutes(router, Layout, axios, url, formatCallback) {
-        addMetaRoutes(router, Layout)
-        addDynamicRoutes(router, Layout, axios, url, formatCallback)
-    }
+export default function (router, Layout, axios, url, formatCallback) {
+    addMetaRoutes(router, Layout)
+    addDynamicRoutes(router, Layout, axios, url, formatCallback)
 }

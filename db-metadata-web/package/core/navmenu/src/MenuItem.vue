@@ -1,5 +1,5 @@
 <template>
-    <div class="menu-wrapper" v-if="!item.hidden">
+    <div class="menu-wrapper" v-if="$hasRoles(item.roles) && !item.hidden">
         <template v-if="noChild(item)">
             <app-link :to="item.path"
                       :query="resolveParams(item['params'])">

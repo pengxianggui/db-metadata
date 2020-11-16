@@ -1,5 +1,5 @@
 import utils from "./utils";
-import {isArray, isString} from "./utils/common";
+import {isArray, isString, isEmpty} from "./utils/common";
 
 
 /**
@@ -32,6 +32,25 @@ export function isRoot() { // 根据角色鉴权
     return false;
 }
 
+
+/**
+ * Use meta.role to determine if the current user has permission
+ * @param userRoles
+ * @param route
+ */
+export function hasRoles(needRoles) {
+    const {roles: userRoles} = access
+    if (isEmpty(needRoles)) {
+        return true
+    }
+    if (!Array.isArray(userRoles)) {
+        return false
+    }
+
+    const upperCaseNeedRoles = needRoles.map(r => r.toUpperCase()) // 大小写不敏感
+    return userRoles.some(r => upperCaseNeedRoles.includes(r.toUpperCase())) // route中定义的roles只要有一个符合即可
+}
+
 /**
  * 设置用户角色
  * @param roles
@@ -56,5 +75,6 @@ export function setRoles(roles = []) {
 
 export default {
     isRoot,
-    setRoles
+    setRoles,
+    hasRoles
 }
