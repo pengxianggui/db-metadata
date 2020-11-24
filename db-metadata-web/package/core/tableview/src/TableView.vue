@@ -3,21 +3,21 @@
     <el-row justify="end">
       <el-col :span="24">
         <!-- operation bar -->
-        <slot name="operation-bar" v-bind:conf="operationBarConf" v-if="operationBarConf['show']">
+        <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData" v-if="operationBarConf['show']">
           <el-button-group>
-            <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
+            <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
             <slot name="add-btn" v-bind:conf="operationBarConf">
               <el-button @click="handleAdd" icon="el-icon-document-add"
                          v-bind="operationBarConf">新增
               </el-button>
             </slot>
-            <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
+            <slot name="batch-delete-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
                   v-bind:batchDelete="handleBatchDelete">
               <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
                          v-bind="operationBarConf" v-if="multiSelect">删除
               </el-button>
             </slot>
-            <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
+            <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
           </el-button-group>
         </slot>
       </el-col>

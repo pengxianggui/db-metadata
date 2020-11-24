@@ -5,22 +5,22 @@
             <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
                         @active-change="handleActiveChange"
                         @chose-change="handleChoseChange" :page="{ size: 5 }">
-                <tempalte #operation-bar="{conf}">
-                  <slot name="operation-bar" v-bind:conf="conf"></slot>
+                <tempalte #operation-bar="{conf, choseData}">
+                  <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </tempalte>
 
                 <!-- 主表操作栏扩展插槽 -->
-                <template #prefix-btn="{conf}">
-                    <slot name="prefix-btn" v-bind:conf="conf"></slot>
+                <template #prefix-btn="{conf, choseData}">
+                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
                 <template #add-btn="{conf}">
                     <slot name="add-btn" v-bind:conf="conf"></slot>
                 </template>
-                <template #batch-delete-btn="{conf}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf"></slot>
+                <template #batch-delete-btn="{conf, choseData}">
+                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
-                <template #suffix-btn="{conf}">
-                    <slot name="suffix-btn" v-bind:conf="conf"></slot>
+                <template #suffix-btn="{conf, choseData}">
+                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
 
                 <template #buttons="{scope}">
@@ -65,23 +65,23 @@
             <table-view :ref="slaves[0]['objectCode']" :meta="slaves[0].tlMeta" :filter-params="slaves[0].filterParams"
                         :page="{ size: 5 }">
 
-                <tempalte #operation-bar="{conf}">
-                    <slot name="s-operation-bar" v-bind:conf="conf"></slot>
+                <tempalte #operation-bar="{conf, choseData}">
+                    <slot name="s-operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </tempalte>
                 <!-- 子表操作栏扩展插槽 -->
-                <template #prefix-btn="{conf}">
-                    <slot name="s-prefix-btn" v-bind:conf="conf"></slot>
+                <template #prefix-btn="{conf, choseData}">
+                    <slot name="s-prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
                 <template #add-btn="{conf}">
                     <slot name="s-add-btn" v-bind:conf="conf">
                         <el-button v-bind="conf" @click="handleAdd(slaves[0])">新增</el-button>
                     </slot>
                 </template>
-                <template #batch-delete-btn="{conf}">
-                    <slot name="s-batch-delete-btn" v-bind:conf="conf"></slot>
+                <template #batch-delete-btn="{conf, choseData}">
+                    <slot name="s-batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
-                <template #suffix-btn="{conf}">
-                    <slot name="s-suffix-btn" v-bind:conf="conf"></slot>
+                <template #suffix-btn="{conf, choseData}">
+                    <slot name="s-suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
                 </template>
 
                 <template #buttons="{scope}">

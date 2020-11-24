@@ -2,18 +2,18 @@
     <div class="el-card" style="width: 100%">
         <search-view :meta="spMeta" @search="handleSearch"></search-view>
         <table-tree-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
-            <tempalte #operation-bar="{conf}">
-                <slot name="operation-bar" v-bind:conf="conf"></slot>
+            <tempalte #operation-bar="{conf, choseData}">
+                <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
             </tempalte>
 
-            <template #prefix-btn="{conf}">
-                <slot name="prefix-btn" v-bind:conf="conf"></slot>
+            <template #prefix-btn="{conf, choseData}">
+                <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
             </template>
             <template #add-btn="{conf}">
                 <slot name="add-btn" v-bind:conf="conf"></slot>
             </template>
-            <template #suffix-btn="{conf}">
-                <slot name="suffix-btn" v-bind:conf="conf"></slot>
+            <template #suffix-btn="{conf, choseData}">
+                <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
             </template>
 
             <template #buttons="{scope}">

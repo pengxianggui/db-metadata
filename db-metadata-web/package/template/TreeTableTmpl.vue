@@ -8,19 +8,22 @@
 <!--            SearchView的meta来源-->
             <search-view :meta="svMeta" @search="handleSearch"></search-view>
             <table-view :ref="tlRefName" :meta="tvMeta" :filter-params="filterParams">
-                <template #prefix-btn="{conf}">
-                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                <template #prefix-btn="{conf, choseData}">
+                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
                 </template>
                 <template #add-btn="{conf}">
                   <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId">
                     <el-button v-bind="conf" @click="handleAdd">新增</el-button>
                   </slot>
                 </template>
-                <template #batch-delete-btn="{conf}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                <template #batch-delete-btn="{conf, choseData}">
+                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
                 </template>
-                <template #suffix-btn="{conf}">
-                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+                <template #suffix-btn="{conf, choseData}">
+                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
                 </template>
 
                 <template #buttons="{scope, conf}">
