@@ -8,6 +8,7 @@ import com.hthjsj.analysis.meta.aop.AddPointCut;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.analysis.meta.aop.QueryPointCut;
+import com.hthjsj.web.component.SearchView;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
@@ -59,13 +60,25 @@ public class TreeAndTableController extends FrontRestController {
         TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
         String tableObjectCode = treeAndTableConfig.getTableConfig().getObjectCode();
 
-        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaService().findByCode(tableObjectCode), ComponentType.TABLEVIEW);
-        TableView tableView = (TableView) metaObjectViewAdapter.getComponent();
+        IMetaObject metaObject = metaService().findByCode(tableObjectCode);
+        MetaObjectViewAdapter metaObjectTableViewAdapter = UIManager.getView(metaObject, ComponentType.TABLEVIEW);
+        TableView tableView = (TableView) metaObjectTableViewAdapter.getComponent();
         tableView.dataUrl("/f/tat/tableList?featureCode=" + featureCode);
-        Kv tableMeta = tableView.toKv();
-        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode=" + treeAndTableConfig.getTreeConfig().getObjectCode() + "&featureCode=" + featureCode);
 
-        renderJson(Ret.ok("data", Kv.create().set("table", tableMeta).set("tree", treeMeta)));
+        Kv treeMeta = Kv.by(
+                "data_url",
+                "/f/t?objectCode=" + treeAndTableConfig.getTreeConfig().getObjectCode() + "&featureCode=" + featureCode
+        );
+
+        MetaObjectViewAdapter metaObjectSearchViewAdapter = UIManager.getView(metaObject, ComponentType.SEARCHVIEW);
+        SearchView searchView = (SearchView) metaObjectSearchViewAdapter.getComponent();
+
+        renderJson(Ret.ok("data", Kv.create()
+                        .set("table", tableView.toKv())
+                        .set("tree", treeMeta)
+                        .set("search", searchView.toKv())
+                )
+        );
     }
 
     @Override
@@ -199,11 +212,11 @@ public class TreeAndTableController extends FrontRestController {
             /** 当拦截点未设置时,使用默认查询逻辑 */
             if (pointCutSqlPara == null) {
                 result = metaService().paginate(pageIndex,
-                                                pageSize,
-                                                metaObject,
-                                                sqlPara.getSelect(),
-                                                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                sqlPara.getPara());
+                        pageSize,
+                        metaObject,
+                        sqlPara.getSelect(),
+                        MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                        sqlPara.getPara());
             } else {
                 /** 拦截器干预后的逻辑 */
                 result = metaService().paginate(pageIndex, pageSize, metaObject, pointCutSqlPara.getSelect(), pointCutSqlPara.getFromWhere(), pointCutSqlPara.getPara());

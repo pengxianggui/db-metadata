@@ -17,6 +17,12 @@ export const ConfDesc = `
     |conf|ElementUI(` + elementVersion + `)中el-table的原生配置项|object|-|-|
 `;
 
+
+export const CHOSE_TYPE = {
+    default: 'default',
+    toggle: 'toggle'
+}
+
 export default {
     "component_name": "TableView",
     "name": "TableView",
@@ -79,5 +85,8 @@ export default {
                 "type": "danger"
             }
         }
-    }
+    },
+    "oper_logic": {
+        "chose_type": CHOSE_TYPE.default, // |chose-type|节点点选模式: 再次点选已选中节点时的行为。default表示无行为, toggle会取消已选节点|string|default/toggle|default|
+    },
 }

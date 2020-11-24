@@ -75,7 +75,7 @@ export function getSearchViewMeta(objectCode) {
 
 // 从功能中直接获取meta
 export function getMetaFromFeature_TreeTableTmpl(featureCode) {
-    let url = compile(restUrl.FEATURE_TREE_AND_TABLE_META, { // TODO 补充url
+    let url = compile(restUrl.FEATURE_TREE_AND_TABLE_META, {
         featureCode: featureCode
     })
     return Vue.prototype.$axios.safeGet(url)

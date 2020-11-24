@@ -145,7 +145,7 @@ import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import Meta from '../../mixins/meta'
 import assembleMeta from './assembleMeta'
 import TableCell from './tableCell'
-import DefaultMeta from '../ui-conf'
+import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
 import columnsValid from "./columnsValid";
 import showable from "../../mixins/showable";
 import {isEmpty} from "../../../utils/common";
@@ -328,9 +328,9 @@ export default {
       }
     },
     activeRow(row) {
-      const {primaryKey} = this;
+      const {primaryKey, operLogic: {'chose_type': choseType} = {}} = this;
 
-      if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
+      if (choseType === CHOSE_TYPE.toggle && utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
         this.activeData = {};
         const refName = this.innerMeta['name'];
         this.$refs[refName].setCurrentRow();
@@ -455,6 +455,10 @@ export default {
     tableConf() {
       const {innerMeta: {conf}, $attrs, $reverseMerge} = this
       return $reverseMerge(conf, $attrs)
+    },
+    operLogic() {
+      const {innerMeta: {'oper-logic': operLogic} = {}} = this
+      return operLogic
     },
     operationColumnConf() {
       const {

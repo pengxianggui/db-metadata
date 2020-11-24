@@ -82,7 +82,7 @@
     import utils from '../../../utils'
     import {defaultPrimaryKey} from '../../../config'
     import Meta from '../../mixins/meta'
-    import DefaultMeta from '../ui-conf'
+    import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
     import MetaEasyEdit from "../../meta/src/MetaEasyEdit";
     import {assertEmpty} from "../../../utils/common";
 
@@ -145,10 +145,12 @@
 
             },
             handleNodeClick(row, node, event) {
-                const {primaryKey} = this;
+                const {primaryKey, operLogic: {'chose_type': choseType} = {}} = this;
 
                 if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
-                    this.activeData = {};
+                    if (choseType === CHOSE_TYPE.toggle) {
+                      this.activeData = {};
+                    }
                 } else {
                     this.activeData = row;
                 }
@@ -266,6 +268,10 @@
             editable() {
                 const {innerMeta: {editable} = {}} = this
                 return editable
+            },
+            operLogic() {
+                const {innerMeta: {'oper-logic': operLogic} = {}} = this
+                return operLogic
             },
             props() {
                 return this.innerMeta['conf']['props'];

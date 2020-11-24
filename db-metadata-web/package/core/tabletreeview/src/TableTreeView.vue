@@ -137,7 +137,7 @@ import utils from '../../../utils'
 import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import Meta from '../../mixins/meta'
 import assembleMeta from './assembleMeta'
-import DefaultMeta from '../ui-conf'
+import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
 import TableCell from '../../tableview/src/tableCell'
 import columnsValid from "../../tableview/src/columnsValid";
 import showable from "../../mixins/showable";
@@ -358,9 +358,9 @@ export default {
       }
     },
     activeRow(row) {
-      const {primaryKey} = this;
+      const {primaryKey, operLogic: {'chose_type': choseType} = {}} = this;
 
-      if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
+      if (choseType === CHOSE_TYPE.toggle && utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
         this.activeData = {};
         const {tlRefName} = this;
         this.$refs[tlRefName].setCurrentRow();
@@ -454,6 +454,10 @@ export default {
     multiSelect() {
       const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
       return utils.assertEmpty(multiSelect, multi_select) || false
+    },
+    operLogic() {
+      const {innerMeta: {'oper-logic': operLogic} = {}} = this
+      return operLogic
     },
     operationBarConf() {
       const {innerMeta: {"operation-bar": operationBarConf = {}}} = this

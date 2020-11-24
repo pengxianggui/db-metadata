@@ -649,3 +649,14 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 ### 0.5.66
 新增导出TagViewUtil, 可以使用TagViewUtil.deleteView对当前路由tag进行关闭。也可以使用
 $router.push(TagViewUtil.pop())回到TagView中最后一个路由，从而替代$router.go(-1)
+
+### 0.5.68
+1. TreeView, TableView, TableTreeView添加meta 配置:
+```json
+"oper_logic": {
+    "chose_type": "default"
+}
+```
+表示是否可取消选中的记录;
+
+2. TreeTableTmpl添加SearchView面板支持

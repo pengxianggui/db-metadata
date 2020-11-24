@@ -6,8 +6,8 @@
         </template>
         <template #right>
 <!--            SearchView的meta来源-->
-<!--            <search-view></search-view>-->
-            <table-view :ref="tlRefName" :meta="tvMeta">
+            <search-view :meta="svMeta" @search="handleSearch"></search-view>
+            <table-view :ref="tlRefName" :meta="tvMeta" :filter-params="filterParams">
                 <template #prefix-btn="{conf}">
                     <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
                 </template>
@@ -72,8 +72,10 @@
                 // tableConf: {},
                 tvMeta: {},
                 treeMeta: {},
+                svMeta: {},
                 initTableDataUrl: '', // 不带关联参数的Table数据初始url
-                tableDataUrl: '' // 待编译的Table数据初始url
+                tableDataUrl: '', // 待编译的Table数据初始url
+                filterParams: {}
             }
         },
         methods: {
@@ -87,6 +89,14 @@
             refreshTreeData() {
                 const {treeRefName, $refs} = this
                 $refs[treeRefName].getData()
+            },
+            handleSearch(params) {
+              // const tlRefName = this.tlRefName;
+              this.filterParams = params;
+              this.$nextTick(() => {
+                // this.$refs[tlRefName].getData();
+                this.refreshTableData()
+              })
             },
             refreshTableData() {
                 const {treePrimaryKey, activeTreeData, tableDataUrl, initTableDataUrl, tvMeta, tlRefName} = this
@@ -141,11 +151,12 @@
             },
             initMetaByFeatureCode(featureCode) {
                 getMetaFromFeature_TreeTableTmpl(featureCode).then(resp => {
-                    const {tree: treeMeta, table: tvMeta} = resp.data
+                    const {tree: treeMeta, table: tvMeta, search: svMeta} = resp.data
                     this.treeMeta = treeMeta
                     this.adjustTreeMeta()
                     this.tvMeta = tvMeta
                     this.adjustTvMeta()
+                    this.svMeta = svMeta
                 })
             }
         },
