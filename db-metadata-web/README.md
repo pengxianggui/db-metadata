@@ -642,3 +642,10 @@ RichTextBox改为使用vue-tinymce-text
 修复切换tagview时, RichTextBox会被隐藏的问题：此缺陷原因未知，当router-view加上transition时，此缺陷修复。若未加，此RichTextBox中的
 编辑框会在切换回来后，奇怪的被加上display:none的样式.
 
+### 0.5.65
+TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当路由参数不同时
+也认为是两个不同的路由。这很适用, 当存在某个路由指向编辑页面，而需要开多个编辑页面时，可以满足这种情况。
+
+### 0.5.66
+新增导出TagViewUtil, 可以使用TagViewUtil.deleteView对当前路由tag进行关闭。也可以使用
+$router.push(TagViewUtil.pop())回到TagView中最后一个路由，从而替代$router.go(-1)

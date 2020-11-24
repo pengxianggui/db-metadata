@@ -23,7 +23,7 @@
                         <el-button type="primary" @click="preview">预览</el-button>
                         <el-button type="warning" @click="onUpdate">更新</el-button>
                         <span style="flex: 1"></span>
-                        <el-button @click="$router.go(-1)">返回</el-button>
+                        <el-button @click="goBack()">返回</el-button>
                         <el-button @click="deleteConf" type="danger">删除配置</el-button>
                     </div>
                 </el-form-item>
@@ -124,6 +124,7 @@
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
     import DefaultDropDownBoxMeta from '../../core/dropdownbox/ui-conf'
+    import {TagViewUtil} from '../../index'
 
     let objectMeta = {
         name: "object",
@@ -186,6 +187,10 @@
             initConf() {
                 this.confModel['conf'] = {};
                 this.confModel['fConf'] = {};
+            },
+            goBack() {
+              TagViewUtil.deleteView(this.$route)
+              this.$router.push(TagViewUtil.pop())
             },
             openLogicConf(objectCode, fieldCode) {
                 this.logicConf.objectCode = objectCode;

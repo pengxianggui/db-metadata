@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import {user} from '@/../package/index'
 import Layout from '../layout'
+import {addRoutes} from '@/../package/index'
+import axios from '@/axios'
 
 Vue.use(Router);
 
@@ -24,6 +26,10 @@ const router = new Router({
     // model: 'history', // hash or history
     routes: routes
 });
+
+router.onReady(() => {
+    addRoutes(router, Layout, axios)
+})
 
 router.beforeEach(async (to, from, next) => {
     user.setRoles(["ROOT"]) // 异步获取角色并设置

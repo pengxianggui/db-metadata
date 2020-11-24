@@ -4,7 +4,7 @@
       <router-link
           v-for="(tag, index) in visitedViews"
           ref="tag"
-          :key="tag.path"
+          :key="tag.fullPath"
           :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}"
           :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
           tag="span"
@@ -14,6 +14,7 @@
         <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)">
           <template #label>
             <span>{{ tag.meta.title }}</span>
+<!--            <span>{{ tag.fullPath }}</span>-->
             <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
           </template>
           <list style="width: 80px;">
@@ -40,7 +41,9 @@
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
-import VisitedViewMaintain from "../visitedViewMaintain"
+// import VisitedViewMaintain from "../visitedViewMaintain"
+import * as TagViewUtil from '../visitedViewMaintain'
+import {tagData} from "../data";
 import Conf from '../conf'
 import {isArray, isEmpty} from "../../../utils/common";
 
@@ -61,15 +64,15 @@ export default {
   //   }
   // },
   components: {ScrollPane},
-  mixins: [VisitedViewMaintain],
+  // mixins: [VisitedViewMaintain],
   data() {
     return {
       top: 0,
       left: 0,
       selectedTag: {},
-      affixTags: [],
-      visitedViews: [],
-      cachedViews: [],
+      affixTags: tagData.affixTags,
+      visitedViews: tagData.visitedViews,
+      cachedViews: tagData.cachedViews,
       showPopMenu: false
     }
   },
@@ -97,10 +100,12 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$router)
     this.initTags()
     this.addTags()
   },
   methods: {
+    ...TagViewUtil,
     closePopMenu(refName) {
       const ref = this.$refs[refName]
       if (isEmpty(ref)) return;
@@ -111,7 +116,7 @@ export default {
       }
     },
     isActive(route) {
-      return route.path === this.$route.path
+      return route.fullPath === this.$route.fullPath
     },
     isAffix(tag) {
       return tag.meta && tag.meta.affix
@@ -121,8 +126,9 @@ export default {
       routes.forEach(route => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
+          const tagFullPath = path.resolve(basePath, route.fullPath)
           tags.push({
-            fullPath: tagPath,
+            fullPath: tagFullPath,
             path: tagPath,
             name: route.name,
             meta: {...route.meta}
@@ -156,12 +162,12 @@ export default {
       const tags = this.$refs.tag
       this.$nextTick(() => {
         for (const tag of tags) {
-          if (tag.to.path === this.$route.path) {
+          if (tag.to.fullPath === this.$route.fullPath) {
             this.$refs.scrollPane.moveToTarget(tag)
             // when query is different then update
-            if (tag.to.fullPath !== this.$route.fullPath) {
-              this.updateVisitedView(this.$route)
-            }
+            // if (tag.to.fullPath !== this.$route.fullPath) {
+            //   this.updateVisitedView(this.$route)
+            // }
             break
           }
         }
@@ -185,7 +191,7 @@ export default {
       })
     },
     closeOthersTags(view) {
-      if (view.path !== this.$route.path) {
+      if (view.fullPath !== this.$route.fullPath) {
         this.$router.push(view)
       }
       this.deleteOtherView(this.selectedTag).then(() => {
@@ -194,7 +200,7 @@ export default {
     },
     closeAllTags(view) {
       this.deleteAllViews(view).then(({visitedViews}) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
+        if (this.affixTags.some(tag => tag.fullPath === view.fullPath)) {
           return
         }
         this.toLastView(visitedViews, view)

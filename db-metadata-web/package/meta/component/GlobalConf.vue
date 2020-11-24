@@ -48,6 +48,7 @@
     import EleProps from '../../constant/element-props'
     import DefaultDropDownBoxMeta from '../../core/dropdownbox/ui-conf'
     import DefaultJsonBoxMeta from '../../core/jsonbox/ui-conf'
+    import {TagViewUtil} from "../../index";
 
     export default {
         name: "GlobalConf",
@@ -160,11 +161,10 @@
                 }).catch(({msg = '配置更新失败'}) => {
                     this.$message.error(msg);
                 })
-
-
             },
             onCancel: function () {
-                this.$router.back();
+              TagViewUtil.deleteView(this.$route)
+              this.$router.push(TagViewUtil.pop())
             },
             preview: function () {
                 let data = this.confModel['conf'].hasOwnProperty('default_value') ? this.confModel['conf']['default_value'] : null;

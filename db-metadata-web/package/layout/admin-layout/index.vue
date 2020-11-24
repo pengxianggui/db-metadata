@@ -20,7 +20,7 @@
         </div>
         <transition name="fade-transform" mode="out-in">
           <keep-alive :include="cachedViews">
-            <router-view :key="$route.path" style="margin-top: 40px;"></router-view>
+            <router-view :key="$route.fullPath" style="margin-top: 40px;"></router-view>
           </keep-alive>
         </transition>
       </div>

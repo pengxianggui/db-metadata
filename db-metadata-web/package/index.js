@@ -61,6 +61,9 @@ import addRoutes from "./route";
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
 
+// 暴露tagView操作的接口
+import TagViewUtil from '@/../package/core/tagview/data'
+
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
@@ -173,5 +176,6 @@ export {
     restUrl,
     user,
     MetaMenu,
-    addRoutes
+    addRoutes,
+    TagViewUtil
 }
