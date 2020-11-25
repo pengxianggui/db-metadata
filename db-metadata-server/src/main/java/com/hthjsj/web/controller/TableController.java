@@ -178,7 +178,7 @@ public class TableController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, getKv(), this);
 
         boolean status = Db.tx(new IAtom() {
 
@@ -224,9 +224,9 @@ public class TableController extends FrontRestController {
 
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
         List<Record> result = businessService().findData(metaObject,
-                                                         sqlPara.getSelect(),
-                                                         MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                         sqlPara.getPara());
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
 
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);

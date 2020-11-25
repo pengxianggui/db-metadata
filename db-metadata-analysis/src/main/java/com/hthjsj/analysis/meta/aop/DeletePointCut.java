@@ -8,9 +8,11 @@ package com.hthjsj.analysis.meta.aop;
  */
 public interface DeletePointCut extends IPointCut {
 
-    default void deleteBefore(AopInvocation invocation) {
+    default boolean deleteBefore(AopInvocation invocation) {
+        return true;
     }
 
-    default void deleteAfter(AopInvocation invocation) {
+    default boolean deleteAfter(AopInvocation invocation) {
+        return true;
     }
 }

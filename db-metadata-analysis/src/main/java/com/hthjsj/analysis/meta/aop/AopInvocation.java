@@ -45,8 +45,9 @@ public class AopInvocation {
         this.httpParams = httpParams;
     }
 
-    public AopInvocation(IMetaObject metaObject, Kv httpParams) {
+    public AopInvocation(IMetaObject metaObject, Kv httpParams, Controller controller) {
         this.metaObject = metaObject;
         this.httpParams = httpParams;
+        this.controller = controller;
     }
 }

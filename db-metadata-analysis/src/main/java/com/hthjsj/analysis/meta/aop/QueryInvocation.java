@@ -22,8 +22,8 @@ public abstract class QueryInvocation extends AopInvocation {
         super(metaObject, formData, httpParams);
     }
 
-    private QueryInvocation(IMetaObject metaObject, Kv httpParams) {
-        super(metaObject, httpParams);
+    private QueryInvocation(IMetaObject metaObject, Kv httpParams, Controller controller) {
+        super(metaObject, httpParams, controller);
     }
 
     public QueryInvocation(IMetaObject metaObject, Controller controller) {

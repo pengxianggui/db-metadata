@@ -135,9 +135,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut deletePointCut : pointCuts) {
-            if (deletePointCut instanceof UpdatePointCut) {
-                ((DeletePointCut) deletePointCut).deleteBefore(invocation);
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut deletePointCut = pointCuts[i];
+            if (deletePointCut instanceof DeletePointCut) {
+                boolean s = ((DeletePointCut) deletePointCut).deleteBefore(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", deletePointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }
@@ -149,9 +156,16 @@ public class PointCutChain {
             }
         }
 
-        for (IPointCut deletePointCut : pointCuts) {
-            if (deletePointCut instanceof UpdatePointCut) {
-                ((DeletePointCut) deletePointCut).deleteAfter(invocation);
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut deletePointCut = pointCuts[i];
+            if (deletePointCut instanceof DeletePointCut) {
+                boolean s = ((DeletePointCut) deletePointCut).deleteAfter(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", deletePointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
             }
         }
     }
