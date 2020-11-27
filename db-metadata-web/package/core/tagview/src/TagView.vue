@@ -14,7 +14,6 @@
         <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)">
           <template #label>
             <span>{{ tag.meta.title }}</span>
-<!--            <span>{{ tag.fullPath }}</span>-->
             <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
           </template>
           <list style="width: 80px;">
@@ -41,7 +40,6 @@
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
-// import VisitedViewMaintain from "../visitedViewMaintain"
 import * as TagViewUtil from '../visitedViewMaintain'
 import {tagData} from "../data";
 import Conf from '../conf'
@@ -53,18 +51,7 @@ import {isArray, isEmpty} from "../../../utils/common";
  */
 export default {
   name: "TagView",
-  // props: {
-  //   bgColor: {
-  //     type: String,
-  //     default: () => '#409EFF'
-  //   },
-  //   color: {
-  //     type: String,
-  //     default: () => '#ffffff'
-  //   }
-  // },
   components: {ScrollPane},
-  // mixins: [VisitedViewMaintain],
   data() {
     return {
       top: 0,

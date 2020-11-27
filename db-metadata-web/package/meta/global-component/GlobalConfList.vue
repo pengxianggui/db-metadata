@@ -3,7 +3,8 @@
         <search-view :meta="spMeta" @search="handleSearch"></search-view>
         <table-view :ref="refName" :meta="tlMeta" :filter-params="filterParams">
             <template #add-btn="{conf}">
-                <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
+<!--                <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>-->
+              <span></span>
             </template>
             <template #batch-delete-btn><span></span></template>
             <template #inner-before-extend-btn="{scope}">

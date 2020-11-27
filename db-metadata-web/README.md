@@ -660,3 +660,7 @@ $router.push(TagViewUtil.pop())回到TagView中最后一个路由，从而替代
 表示是否可取消选中的记录;
 
 2. TreeTableTmpl添加SearchView面板支持
+
+### 0.5.70
+1. 优化组件实例配置编辑界面, 新增/编辑二合一;优化该部分的代码, 增加部分组件的复用性; 支持从列表页进入编辑界面编辑指定的MetaField;
+2. TagView支持自定义关闭, 配合路由可实现关闭回到上一个视图;

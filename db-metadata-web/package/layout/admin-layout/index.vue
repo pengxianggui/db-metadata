@@ -19,9 +19,11 @@
           <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
         </div>
         <transition name="fade-transform" mode="out-in">
-          <keep-alive :include="cachedViews">
-            <router-view :key="$route.fullPath" style="margin-top: 40px;"></router-view>
-          </keep-alive>
+          <div class="stage">
+            <keep-alive :include="cachedViews">
+              <router-view :key="$route.fullPath"></router-view>
+            </keep-alive>
+          </div>
         </transition>
       </div>
     </div>
@@ -58,9 +60,10 @@ export default {
   display: flex;
   flex-direction: column;
 
+  $headerHeight: 60px;
   .header {
-    height: 60px;
-    line-height: 60px;
+    height: $headerHeight;
+    line-height: $headerHeight;
     padding: 0 20px;
     display: flex;
     flex-direction: row;
@@ -69,31 +72,41 @@ export default {
   }
 
   .body {
-    width: 100%;
     margin: 0;
     padding: 0;
     flex: 1;
     display: flex;
     flex-direction: row;
-    overflow: auto;
+    overflow: hidden;
 
     $menuWidth: 220px;
+
     .menu {
       width: $menuWidth;
+      min-width: $menuWidth;
       height: 100%;
       overflow: auto;
     }
 
     .main {
       flex: 1;
-      overflow: hidden auto;
+      overflow: auto;
+      height: 100%;
+      $tagViewHeight: 40px;
+      position: relative;
 
       .fixed-header {
         position: absolute;
         right: 0;
         z-index: 9;
-        width: calc(100% - #{$menuWidth});
-        transition: width 0.28s;
+        width: 100%;
+      }
+
+      .stage {
+        height: calc(100% - #{$tagViewHeight});
+        margin-top: $tagViewHeight;
+        overflow: auto;
+        position: relative;
       }
     }
   }

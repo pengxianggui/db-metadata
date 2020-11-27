@@ -1,6 +1,6 @@
 <template>
   <!--    <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>-->
-  <div class="el-card" style="width: 100%">
+  <div class="el-card">
     <search-view :meta="spMeta" @search="handleSearch"></search-view>
     <table-tree-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
       <tempalte #operation-bar="{conf}">

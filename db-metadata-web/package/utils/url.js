@@ -6,14 +6,14 @@
  * @param url
  * @param params
  */
-import {assert, isString, isObject, isEmpty} from "./common";
+import {assert, isString, isObject, isEmpty, assertUndefined} from "./common";
 
 export function compile(url, params) {
     let rex = new RegExp("\{.*?\}", "g");
     let v;
     while (v = url.match(rex)) {
         let xv = v[0].replace(/\{/g, "").replace(/\}/g, "");
-        url = url.replace(/\{.*?\}/, params[xv]);
+        url = url.replace(/\{.*?\}/, assertUndefined(params[xv], ''));
     }
     return url;
 }

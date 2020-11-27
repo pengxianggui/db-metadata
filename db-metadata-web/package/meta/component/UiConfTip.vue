@@ -7,7 +7,7 @@
 
 <script>
     import VueMarkdown from 'vue-markdown'
-    import {metaDesc} from "../../../core";
+    import {metaDesc} from "../../core";
 
     export default {
         name: "UiConfTip",

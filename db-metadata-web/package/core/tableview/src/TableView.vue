@@ -446,7 +446,7 @@ export default {
     },
     multiSelect() {
       const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
-      return utils.assertEmpty(multiSelect, multi_select) || true
+      return utils.assertEmpty(multiSelect, multi_select)
     },
     operationBarConf() {
       const {innerMeta: {"operation-bar": operationBarConf = {}}} = this

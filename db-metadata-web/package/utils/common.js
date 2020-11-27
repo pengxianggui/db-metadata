@@ -544,3 +544,19 @@ export function assert(condition, msg) {
         console.error(msg)
     }
 }
+
+/**
+ * 运行一个函数。返回运行结果。若不是函数，则返回其值
+ * @param value
+ * @param params 参数数组
+ * @returns {*}
+ */
+export function execute(fn, params) {
+    if (isFunction(fn)) {
+        let s = fn.apply(null, params)
+        return s
+    } else {
+        alert('sss')
+        return fn
+    }
+}

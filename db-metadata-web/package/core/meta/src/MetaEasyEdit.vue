@@ -26,7 +26,7 @@
                                 <template #default>
                                     <list>
                                         <list-item v-for="ic in instanceCodes" :key="ic"
-                                                   @click="editInstanceConf(ic)">
+                                                   @click="editInstanceConf(ic, fieldCode)">
                                             {{ic}}
                                         </list-item>
                                     </list>
@@ -160,14 +160,15 @@
                     this.dialogVisible = true
                 });
             },
-            editInstanceConf(ic) {
+            editInstanceConf(ic, fieldCode) {
                 const {objectCode, componentCode: compCode} = this;
                 if (!this.checkObjectCode()) return;
 
                 const url = this.$compile(routeUrl.R_INSTANCE_CONF_EDIT, {
                     componentCode: compCode,
                     objectCode: objectCode,
-                    instanceCode: ic
+                    instanceCode: ic,
+                    fieldCode: fieldCode
                 })
                 const finalRouteUrl = this.$router.resolve({
                     path: url

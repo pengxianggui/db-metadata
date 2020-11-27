@@ -1,10 +1,10 @@
 import MetaDataManager from "../meta/MetaDataManager";
 import FormBuilder from '../meta/form-builder'
-import GlobalConfList from "../meta/component/GlobalConfList";
-import GlobalConf from "../meta/component/GlobalConf";
-import InstanceConfList from "../meta/component-instance/InstanceConfList";
-import InstanceConfEdit from "../meta/component-instance/InstanceConfEdit";
-import InstanceConfNew from "../meta/component-instance/InstanceConfNew";
+import GlobalConfList from "../meta/global-component/GlobalConfList";
+import GlobalConf from "../meta/global-component/GlobalConf";
+import InstanceConfList from "../meta/instance-component/InstanceConfList";
+import InstanceConfEdit from "../meta/instance-component/InstanceConfEdit";
+import InstanceConfNew from "../meta/instance-component/InstanceConfNew";
 import RouterManager from "../meta/route/RouterManager";
 import MenuManager from "../meta/menu/MenuManager";
 import MetaFeatureList from '../meta/feature';
@@ -30,12 +30,18 @@ const jumpOut = [
         component: InstanceConfEdit,
         name: 'InstanceConfEdit',
         meta: {
-            title: '组件实例配置-编辑',
+            title: '组件实例配置-编辑', // TODO 函数回调形式
             icon: 'edit',
             noCache: false,
             roles: [access.root]
         },
-        hidden: true
+        hidden: true,
+        props: (route) => ({
+            instanceCode: route.query.instanceCode,
+            objectCode: route.query.objectCode,
+            componentCode: route.query.componentCode,
+            fieldCode: utils.assertEmpty(route.query.fieldCode, '')
+        })
     }, {
         path: 'instance-conf-new',
         name: 'InstanceConfNew',

@@ -7,9 +7,7 @@
                     <drop-down-box v-model="confModel.objectCode" :meta="objectMeta"></drop-down-box>
                 </el-form-item>
                 <el-form-item label="组件" prop="componentCode" class="inline">
-                    <!-- pxg_todo 暂时硬编码, 等后端接口支持再修改 -->
-                    <radio-box v-model="confModel.componentCode"
-                               :options="['FormView', 'TableView', 'SearchView','TableTreeView']"></radio-box>
+                    <component-selector v-model="confModel.componentCode"></component-selector>
                 </el-form-item>
                 <el-form-item label="实例描述">
                     <text-area-box v-model="confModel.instanceName"></text-area-box>
@@ -121,8 +119,9 @@
     import extractConfig from './extractConfig'
     import buildMeta from '../buildMeta'
     import DefaultDropDownBoxMeta from '../../core/dropdownbox/ui-conf'
-    import UiConfTip from "./ext/UiConfTip";
+    import UiConfTip from "../component/UiConfTip";
     import FieldConf from "./ext/FieldConf";
+    import ComponentSelector from "../component/ComponentSelector";
 
     let objectMeta = {
         name: "object",
@@ -149,7 +148,7 @@
 
     export default {
         name: "InstanceConfNew",
-        components: {FormBuilder, UiConfTip, FieldConf},
+        components: {FormBuilder, UiConfTip, FieldConf, ComponentSelector},
         data() {
             const {componentCode, objectCode} = this.$route.query;
             this.$merge(objectMeta, DefaultDropDownBoxMeta);
