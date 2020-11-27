@@ -18,13 +18,13 @@
         <div class="fixed-header">
           <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
         </div>
-        <transition name="fade-transform" mode="out-in">
-          <div class="stage">
-            <keep-alive :include="cachedViews">
+        <div class="stage">
+          <keep-alive :include="cachedViews">
+            <transition name="fade-transform" mode="out-in">
               <router-view :key="$route.fullPath"></router-view>
-            </keep-alive>
-          </div>
-        </transition>
+            </transition>
+          </keep-alive>
+        </div>
       </div>
     </div>
   </div>
@@ -61,6 +61,7 @@ export default {
   flex-direction: column;
 
   $headerHeight: 60px;
+
   .header {
     height: $headerHeight;
     line-height: $headerHeight;
