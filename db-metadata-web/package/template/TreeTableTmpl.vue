@@ -1,10 +1,10 @@
 <template>
     <row-grid :span="[6, 18]">
-        <template #left>
+        <template #0>
             <tree-view :ref="treeRefName" :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"
             ></tree-view>
         </template>
-        <template #right>
+        <template #1>
 <!--            SearchView的meta来源-->
             <search-view :meta="svMeta" @search="handleSearch"></search-view>
             <table-view :ref="tlRefName" :meta="tvMeta" :filter-params="filterParams">

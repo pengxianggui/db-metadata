@@ -1,95 +1,108 @@
 <template>
-    <div class="el-card container" style="height: 100%; overflow: auto; padding: 0 10px;">
-        <h4 align="center">组件列表({{comps.length}})</h4>
-        <el-row>
-            <draggable
-                    :clone="addFormItem"
-                    :group="{ name: 'form', pull: 'clone', put: false }"
-                    :list="comps"
-                    @end="handleMoveEnd"
-                    @start="handleMoveStart"
-                    :sort="false">
-                <el-col v-for="comp of comps" :key="comp.name" class="el-card">
-                    <el-tooltip class="item" effect="dark" :content="comp.name" :open-delay=1000 placement="top-start">
-                        <span><i class="el-icon-receiving"></i><span>{{comp.label}}</span></span>
-                    </el-tooltip>
-                </el-col>
-            </draggable>
-        </el-row>
+  <div>
+    <div v-for="(v, k, index) in formCompLib" :key="index">
+      <h5 v-text="k" style="margin: 5px"></h5>
+      <draggable :clone="formItemCloneHandler"
+                 :group="{ name: 'form', pull: 'clone', put: false }"
+                 :list="v | extract"
+                 @end="handleMoveEnd"
+                 @start="handleMoveStart"
+                 :sort="false"
+                 class="grid-box">
+        <div v-for="c in v" class="grid-item">
+          <!--            <i class="el-icon-receiving"></i>-->
+          <!--            <svg-icon :value="c.icon"></svg-icon>-->
+          <span>{{ c.comp.label }}</span>
+        </div>
+      </draggable>
     </div>
+<!--    <div class="layout-comp">-->
+<!--      <h5>布局组件</h5>-->
+<!--      <draggable :clone="formItemCloneHandler" :group="{name:'form', pull: 'clone', put: false}" :list="layoutComps"-->
+<!--                 :sort="false" class="grid-box">-->
+<!--        <div v-for="c in layoutComps" class="grid-item">-->
+<!--          <span>{{ c.label }}</span>-->
+<!--        </div>-->
+<!--      </draggable>-->
+<!--    </div>-->
+  </div>
 </template>
 
 <script>
-    import draggable from 'vuedraggable'
-    import {defaultMeta} from '../../core/index'
-    import BoolBox from '../../core/boolbox'
-    import CheckBox from '../../core/checkbox'
-    import DateBox from '../../core/datebox'
-    import DateTimeBox from '../../core/datetimebox'
-    import DropDownBox from '../../core/dropdownbox'
-    import FileBox from '../../core/filebox'
-    import ImgBox from '../../core/imgbox'
-    import JsonBox from '../../core/jsonbox'
-    import FindBox from '../../core/findbox'
-    import NumBox from '../../core/numbox'
-    import PassBox from '../../core/passbox'
-    import RadioBox from '../../core/radiobox'
-    import SqlBox from '../../core/sqlbox'
-    import TextAreaBox from '../../core/textareabox'
-    import TextBox from '../../core/textbox'
-    import TimeBox from '../../core/timebox'
+import draggable from 'vuedraggable'
+import {defaultMeta} from '../../core/index'
+import compLib, {extract, isLayoutComp} from './relate/componentData'
+import RowGrid from "../../core/rowgrid/src/RowGrid";
 
-
-    export default {
-        name: "ComponentList",
-        components: {
-            draggable
-        },
-        data() {
-            return {
-                globalId: 0,
-                comps: [
-                    TextBox, TextAreaBox, PassBox, NumBox, BoolBox, CheckBox, RadioBox, DropDownBox,
-                    DateBox, DateTimeBox, TimeBox, FindBox, FileBox, ImgBox, JsonBox, SqlBox
-                ]
-            }
-        },
-        methods: {
-            addFormItem(data) {
-                let {name, label} = data;
-                let meta = {
-                    name: name + this.globalId++,
-                    label: label
-                };
-                this.$merge(meta, defaultMeta[name]);
-                return meta;
-            },
-            handleMoveEnd() {
-            },
-            handleMoveStart() {
-            }
-        }
+export default {
+  name: "ComponentList",
+  components: {
+    draggable
+  },
+  filters: {
+    extract(value) {
+      return extract(value)
     }
+  },
+  data() {
+    return {
+      globalId: 0,
+      formCompLib: compLib,
+      layoutComps: [RowGrid]
+    }
+  },
+  methods: {
+    layoutCloneHandler(data) {
+      // 容器组件
+    },
+    formItemCloneHandler(data) {
+      let {name, label} = data;
+      let meta = {
+        name: name + this.globalId++,
+        label: label
+      };
+
+      this.$merge(meta, defaultMeta[name]);
+
+      if (isLayoutComp(name)) { // 包装布局组件配置
+        const {conf: {span}} = meta
+        for (let i = 0; i < span.length; i++) {
+          meta['columns'][i] = []
+        }
+      }
+      return meta;
+    },
+    handleMoveEnd() {
+    },
+    handleMoveStart() {
+    }
+  }
+}
 </script>
 
-<style scoped>
-    .el-col {
-        display: inline-block;
-        float: left;
-        width: 130px;
-        margin: 5px 0px 5px 5px;
-        cursor: pointer;
-        text-align: center;
-        border-radius: 2px
-    }
+<style scoped lang="scss">
+.grid-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #EEEEEE;
+  border-left: 1px solid #EEEEEE;
 
-    .el-col > span > i {
-        margin: 2px 5px 2px 0px;
-        float: left;
-    }
+  $gridItemHeight: 50px;
 
-    .el-col > span > span {
-        float: left;
-        font-size: medium;
-    }
+  .grid-item {
+    border: 1px solid #EEEEEE;
+    margin-left: -1px;
+    margin-top: -1px;
+    height: $gridItemHeight;
+    text-align: center;
+    font-size: 12px;
+    cursor: move;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
 </style>

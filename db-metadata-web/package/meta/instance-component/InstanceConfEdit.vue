@@ -49,7 +49,7 @@
           </el-badge>
         </el-button-group>
       </div>
-      <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue">
+      <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue" :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="元对象配置" name="0">
           <el-form-item label="实例描述">
             <text-area-box v-model="confModel.instanceName"></text-area-box>
@@ -309,8 +309,12 @@ export default {
 #form-box {
   #tab-box-instance-conf-edit .el-tabs__content {
     overflow: auto;
-    height: calc(100% - 50px);
+    height: calc(100% - 70px);
     box-sizing: border-box;
+  }
+
+  #tab-box-instance-conf-edit.show-form-builder .el-tabs__content {
+    padding: 0;
   }
 }
 </style>

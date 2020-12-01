@@ -30,6 +30,7 @@
 
     export default {
         name: 'IconBox',
+        label: "图标框",
         mixins: [Meta(DefaultMeta), Val()],
         components: {
             IconPanel

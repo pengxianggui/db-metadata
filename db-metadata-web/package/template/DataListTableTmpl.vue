@@ -1,12 +1,12 @@
 <template>
     <row-grid :span="[6, 18]">
-        <template #left>
+        <template #0>
             <div class="el-card">
                 <data-list :ref="dlRefName" :meta="dlMeta" @active-change="handleActiveChange"
                            @chose-change="handleChoseChange"></data-list>
             </div>
         </template>
-        <template #right>
+        <template #1>
             <div class="el-card" style="margin-left: 5px;">
                 <search-view :meta="spMeta" @search="handleSearch"></search-view>
                 <table-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams" :page="{ size: 5 }">

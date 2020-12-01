@@ -1,12 +1,10 @@
 <template>
-    <el-container style="height: 100%; display: flex; overflow: hidden;">
-        <div style="flex: 2">
-            <ComponentList></ComponentList>
-        </div>
+    <div style="display: flex; padding: 5px;">
+        <ComponentList style="width: 200px"></ComponentList>
         <div style="flex: 5;margin-left: 5px">
-            <WorkArea @select="handleSelectFormItem" v-model="formMeta">
-                <template #operation-extend>
-                    <drop-down-box placeholder="选择元对象" v-model="objectCode" :data-url="metaObjectCodeUrl"
+            <WorkArea v-model="formMeta" :active-item.sync="activeItem">
+                <template #object-code>
+                    <drop-down-box size="mini" placeholder="选择元对象" v-model="objectCode" :data-url="metaObjectCodeUrl"
                                    @change="handleChange" @clear="handleClear" filterable>
                         <template #options="{options}">
                             <el-option v-for="item in options" :key="item.code" :label="item.code"
@@ -15,26 +13,29 @@
                             </el-option>
                         </template>
                     </drop-down-box>
+<!--                  TODO 下面组件找不到？！InstanceConfEdit正常 -->
+<!--                  <meta-object-selector v-model="objectCode" @change="handleChange" @clear="handleClear"></meta-object-selector>-->
                 </template>
             </WorkArea>
         </div>
-        <div style="flex: 3;margin-left: 5px">
-            <ConfArea v-model="formMeta" :select-index="selectIndex"></ConfArea>
+        <div style="width: 300px;">
+            <ConfArea v-model="formMeta" :active-item="activeItem" :object-code="objectCode"></ConfArea>
         </div>
-    </el-container>
+    </div>
 </template>
 
 <script>
     import utils from '../../utils'
-    import {restUrl} from "../../constant/url";
+    import {restUrl} from "../../constant/url"
     import ComponentList from './ComponentList'
     import WorkArea from './WorkArea'
     import ConfArea from './ConfArea'
     import DefaultFormViewMeta from '../../core/formview/ui-conf'
+    import MetaObjectSelector from "../component/MetaObjectSelector"
 
     export default {
         name: "FormBuilder",
-        components: {ComponentList, WorkArea, ConfArea},
+        components: {MetaObjectSelector, ComponentList, WorkArea, ConfArea},
         props: {
             oc: String
         },
@@ -42,7 +43,7 @@
             const objectCode = utils.assertUndefined(this.oc, this.$route.query.objectCode);
             return {
                 formMeta: this.$merge({}, DefaultFormViewMeta),
-                selectIndex: null,
+                activeItem: {},
                 objectCode: objectCode,
                 metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
             }
@@ -60,10 +61,6 @@
             },
             setInitState() {
                 this.formMeta = this.$merge({}, DefaultFormViewMeta);
-            },
-            handleSelectFormItem(formMeta, selectIndex) {
-                this.formMeta = formMeta;
-                this.selectIndex = selectIndex;
             },
             loadConf(objectCode) {
                 if (utils.isEmpty(objectCode)) return;
@@ -94,7 +91,4 @@
 </script>
 
 <style scoped>
-    .el-row, .el-col {
-        height: 100%;
-    }
 </style>

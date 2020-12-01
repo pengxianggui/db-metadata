@@ -1,6 +1,6 @@
 <template>
     <row-grid :span="[14, 10]">
-        <template #left>
+        <template #0>
             <table-view :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange">
                 <template #prefix-btn="{conf, choseData}">
                     <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
@@ -20,7 +20,7 @@
                 </template>
             </table-view>
         </template>
-        <template #right>
+        <template #1>
             <div class="el-card" style="margin-left: 5px">
                 <form-view :meta="fmMeta" @ok="formSubmit">
                     <template #action="{model, conf}">

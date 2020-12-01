@@ -1,7 +1,9 @@
 import DefaultFormViewMeta from '../../../core/formview/ui-conf'
+import {isLayoutComp} from "./componentData";
 
-const FORM_EXCLUDES = ['columns', 'buttons', 'name', 'group', 'objectCode', 'objectPrimaryKey', 'component_name'];
-const FIELD_EXCLUDES = ['name', 'group', 'objectCode', 'objectPrimaryKey'];
+const FORM_EXCLUDES = ['columns', 'buttons', 'name', 'group', 'objectCode', 'objectPrimaryKey', 'component_name']; // 表单隐藏的配置项
+const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey']; // 字段隐藏的配置项
+const LAYOUT_EXCLUDES = ['columns'] // 布局组件隐藏的配置项
 
 
 /**
@@ -11,8 +13,10 @@ const FIELD_EXCLUDES = ['name', 'group', 'objectCode', 'objectPrimaryKey'];
  */
 export default function (componentName, key) {
     if (componentName === DefaultFormViewMeta.component_name) {
-        return FORM_EXCLUDES.indexOf(key) > -1 ? false : true;
+        return FORM_EXCLUDES.indexOf(key) <= -1
+    } else if (isLayoutComp(componentName)) {
+        return LAYOUT_EXCLUDES.indexOf(key) <= -1
     } else {
-        return FIELD_EXCLUDES.indexOf(key) > -1 ? false : true;
+        return FIELD_EXCLUDES.indexOf(key) <= -1
     }
 }

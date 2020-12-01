@@ -4,7 +4,6 @@ import GlobalConfList from "../meta/global-component/GlobalConfList";
 import GlobalConf from "../meta/global-component/GlobalConf";
 import InstanceConfList from "../meta/instance-component/InstanceConfList";
 import InstanceConfEdit from "../meta/instance-component/InstanceConfEdit";
-import InstanceConfNew from "../meta/instance-component/InstanceConfNew";
 import RouterManager from "../meta/route/RouterManager";
 import MenuManager from "../meta/menu/MenuManager";
 import MetaFeatureList from '../meta/feature';
@@ -42,17 +41,6 @@ const jumpOut = [
             componentCode: route.query.componentCode,
             fieldCode: utils.assertEmpty(route.query.fieldCode, '')
         })
-    }, {
-        path: 'instance-conf-new',
-        name: 'InstanceConfNew',
-        meta: {
-            title: "组件实例配置-新增",
-            icon: "el-icon-star-off",
-            noCache: false,
-            roles: [access.root]
-        },
-        hidden: true,
-        component: InstanceConfNew
     }
 ];
 

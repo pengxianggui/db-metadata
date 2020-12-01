@@ -1,6 +1,6 @@
 <template>
     <vue-json-editor v-model="nativeValue"
-                     :mode="mode"
+                     :mode="innerMode"
                      v-bind="$reverseMerge(innerMeta.conf, $attrs)">
     </vue-json-editor>
 </template>
@@ -11,6 +11,7 @@
     import Val from '../../mixins/value'
     import conver from './conver'
     import DefaultMeta from '../ui-conf'
+    import utils from '@/../package/utils'
 
     export default {
         mixins: [Meta(DefaultMeta), Val(conver)],
@@ -23,5 +24,11 @@
             value: [Object, String, Array],
             mode: String
         },
+        computed: {
+          innerMode() {
+            const {$attrs: {mode: attrMode} = {}, innerMeta: {conf: {mode: metaMode} = {}}} = this
+            return utils.assertEmpty(attrMode, metaMode);
+          }
+        }
     };
 </script>

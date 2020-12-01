@@ -2,6 +2,7 @@ import ElementUI from 'element-ui'
 import utils from './utils'
 import * as Rest from './utils/rest'
 import filters from './register/filter'
+import './svg/index' // 内置svg注册
 // 布局组件
 import AdminLayout from "./layout/admin-layout";
 import NavMenu from "./core/navmenu/src/NavMenu";

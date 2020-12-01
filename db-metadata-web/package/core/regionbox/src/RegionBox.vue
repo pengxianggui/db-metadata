@@ -13,6 +13,7 @@ import reverse from "./reverse";
 
 export default {
   name: "RegionBox",
+  label: "省市框",
   mixins: [Meta(DefaultMeta), Val(conver, reverse)],
   components: {
     'vue-address': VueAddress

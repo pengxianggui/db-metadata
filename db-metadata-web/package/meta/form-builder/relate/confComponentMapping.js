@@ -14,7 +14,7 @@ const CUSTOM_CONF_COMPONENT_MAPPING = {
     name: DefaultTextBoxMeta,
     label: DefaultTextBoxMeta,
     component_name: utils.merge({data_url: restUrl.COMPONENT_CODE_LIST}, DefaultDropDownBoxMeta),
-    conf: DefaultMinFormBoxMeta,
+    conf: utils.reverseMerge(DefaultMinFormBoxMeta, {conf: {'label-position': 'top'}}),
     inline: DefaultBoolBoxMeta,
     data_url: DefaultTextBoxMeta,
     delete_url: DefaultTextBoxMeta,

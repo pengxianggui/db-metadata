@@ -10,6 +10,7 @@ import Val from "../../mixins/value";
 
 export default {
   name: "RichTextBox",
+  label: "富文本框",
   mixins: [Val()],
   components: {
     'vue-tinymce-text': VueTinymceText

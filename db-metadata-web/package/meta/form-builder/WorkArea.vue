@@ -1,233 +1,221 @@
 <template>
-    <div class="el-card container">
-        <div class="header">
-            <el-row>
-                <el-col :span="20">
-                    <el-button @click="preview" icon="el-icon-view" size="small" type="primary">视图预览</el-button>
-                    <el-button @click="jsonView" icon="el-icon-view" size="small" type="primary">json预览</el-button>
-                    <el-button @click="submitForm" icon="el-icon-download" size="small" type="success">保存</el-button>
-                    <el-button @click="resetForm" icon="el-icon-delete" size="small" type="danger">重置</el-button>
-                </el-col>
-                <el-col :span="4">
-                    <slot name="operation-extend"></slot>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="work-area">
-            <form-view :ref="formMeta.name" :meta="formMeta">
-                <template #form-item>
-                    <draggable
-                            :animation="200"
-                            :disabled="false"
-                            :list="formMeta.columns"
-                            @add="handleAdd"
-                            @end="handleMoveEnd"
-                            @start="handleMoveStart"
-                            group="form"
-                            style="padding: 5px;border: 1px dotted grey;"
-                            tag="el-row">
-                        <div v-if="formMeta.columns.length === 0" class="blank-tip">
-                            从左侧拖拽来添加表单项
-                        </div>
-                        <template v-else v-for="(item, index) in formMeta.columns">
-                            <div :key="item.name"
-                                 class="form-item"
-                                 :class="{'form-item-active': selectIndex === index, 'inline': item.inline, 'width-align': item.inline}"
-                                 @click="handleFormItemClick(index, $event)">
-                                <el-form-item :key="item.name"
-                                              v-if="!item.hasOwnProperty('showable') || item.showable"
-                                              :label="item.label||item.name" :prop="item.name">
-                                    <component :is="item.component_name"
-                                               :meta="item"></component>
-                                </el-form-item>
-                                <el-button
-                                        @click.stop="handleDelete(index)"
-                                        class="form-item-delete-btn"
-                                        icon="el-icon-delete"
-                                        size="mini"
-                                        style="border-radius: 0"
-                                        type="primary"
-                                        v-if="selectIndex === index"
-                                ></el-button>
-                            </div>
-                        </template>
-                    </draggable>
-                </template>
-            </form-view>
-        </div>
+  <div class="container">
+    <div class="opr-box">
+      <el-button-group>
+        <el-button @click="preview" icon="el-icon-view" size="mini" type="primary">视图预览</el-button>
+        <el-button @click="jsonView" icon="el-icon-view" size="mini" type="primary">json预览</el-button>
+        <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success">保存</el-button>
+        <el-button @click="resetForm" icon="el-icon-delete" size="mini" type="danger">重置</el-button>
+      </el-button-group>
+      <slot name="object-code"></slot>
     </div>
+    <div class="work-area">
+      <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%;">
+        <template #form-item>
+            <nest-form-item :columns="formMeta.columns" :active.sync="selectItemName"
+                            @formItemClick="handleFormItemClick"
+                            @formItemDelete="handleFormItemDelete"
+                            @layoutItemDelete="handleLayoutItemDelete"
+                            @add="handleAdd"
+                            style="height: 100%">
+              <div class="blank-tip">从左侧拖拽来添加表单项</div>
+            </nest-form-item>
+        </template>
+        <template #action><span></span></template>
+      </form-view>
+    </div>
+  </div>
 </template>
 
 <script>
-    import utils from '../../utils'
-    import draggable from 'vuedraggable'
-    import FormView from "../../core/formview/src/FormView";
-    import {restUrl} from "../../constant/url";
-    import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
-    import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
+import utils from '../../utils'
+import draggable from 'vuedraggable'
+import FormView from "../../core/formview/src/FormView";
+import {restUrl} from "../../constant/url";
+import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
+import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
+import {isLayoutComp} from './relate/componentData'
+import NestFormItem from "./NestFormItem";
 
-    export default {
-        name: "WorkArea",
-        components: {
-            DropDownBox,
-            FormView,
-            draggable
-        },
-        props: {
-            value: Object
-        },
-        data() {
-            return {
-                selectIndex: null,
-            }
-        },
-        methods: {
-            handleDelete(index) { // 删除
-                if (this.formMeta.objectCode) {
-                    this.$message.warning('编辑元对象时不允许移除控件');
-                    return;
-                }
-                let columns = this.formMeta.columns;
-                columns.splice(index, 1);
-                if (index >= this.columns.length) {
-                    this.selectIndex = this.columns.length - 1
-                }
-                this.$emit('select', this.formMeta, this.selectIndex); // 防止从中间删除导致未触发emit
-            },
-            // 新增
-            handleAdd(res) {
-                if (this.formMeta.objectCode) { // TODO vuedraggable 再找找到类似beforeAdd事件
-                    this.$message.warning('编辑元对象时不允许新增控件');
-                    this.formMeta.columns.splice(res.newIndex, 1);
-                    return false;
-                }
-                this.selectIndex = res.newIndex;
-            },
-            // 移动开始
-            handleMoveStart(res) {
-                this.selectIndex = res.oldIndex
-            },
-            // 移动结束
-            handleMoveEnd(res) {
-                this.selectIndex = res.newIndex;
-            },
-            // 点击选中
-            handleFormItemClick(index, ev) {
-                if (ev) ev.stopPropagation();
-                this.selectIndex = index
-            },
-            jsonView() {
-                this.$dialog(DefaultJsonBoxMeta, this.formMeta, {
-                    title: "Json预览"
-                })
-            },
-            preview() {
-                this.$dialog(this.formMeta, null, {
-                    title: "视图预览"
-                })
-            },
-            submitForm() {
-                const componentCode = 'FormView';
-                const objectCode = this.formMeta.objectCode;
-                let params = {
-                    componentCode: componentCode,
-                    objectCode: objectCode
-                };
-                let objectMeta = utils.deepClone(this.formMeta);
-                let columnsMeta;
-                if (objectMeta.hasOwnProperty('columns')) {
-                    columnsMeta = utils.deepClone(objectMeta.columns);
-                    delete objectMeta['columns'];
-                }
-
-                params[objectCode] = objectMeta;
-                columnsMeta.forEach(fieldMeta => params[fieldMeta.name] = fieldMeta);
-
-                this.$axios({
-                    method: 'POST',
-                    url: restUrl.COMP_CONF_UPDATE,
-                    data: params
-                }).then(({msg = '提交成功'}) => {
-                    this.$message.success(msg);
-                }).catch(({msg = '提交失败'}) => {
-                    this.$message.error(msg);
-                })
-            },
-            resetForm() {
-                this.$message.error("resetForm action not finished!");
-            },
-        },
-        watch: {
-            selectIndex(newVal) {
-                this.$emit('select', this.formMeta, newVal)
-            }
-        },
-        computed: {
-            formMeta() {
-                let formMeta = this.value;
-                if (!utils.isArray(formMeta.columns)) {
-                    this.$set(formMeta, 'columns', []);
-                }
-                return formMeta;
-            },
-        }
+export default {
+  name: "WorkArea",
+  components: {
+    DropDownBox,
+    FormView,
+    draggable,
+    NestFormItem
+  },
+  props: {
+    value: Object,
+    activeItem: Object
+  },
+  data() {
+    return {
+      selectItemName: null
     }
+  },
+  methods: {
+    isLayoutComps({component_name: componentName}) { // 判断是否容器组件
+      return isLayoutComp(componentName)
+    },
+    handleLayoutItemDelete(columns, item, index, ev){
+      const {formMeta: {objectCode}} = this
+      if (objectCode) {
+        this.$message.warning('编辑元对象时不允许移除控件')
+      }
+      columns.splice(index, 1)
+    },
+    handleFormItemDelete(columns, item, index, ev){
+      const {formMeta: {objectCode}} = this
+      if (objectCode) {
+        this.$message.warning('编辑元对象时不允许移除控件')
+      }
+      columns.splice(index, 1)
+    },
+    // 新增
+    handleAdd({to, from, item, clone, oldIndex, newIndex}) {
+      const {formMeta: {objectCode}} = this
+      if (objectCode) {
+        this.$message.warning('编辑元对象时不允许新增控件')
+        return false;
+      }
+      return true;
+    },
+    // 点击选中
+    handleFormItemClick(column) {
+      const {name} = column
+      this.selectItemName = name
+
+      this.$emit('update:activeItem', column)
+    },
+    jsonView() {
+      this.$dialog(DefaultJsonBoxMeta, this.formMeta, {
+        title: "Json预览"
+      })
+    },
+    preview() {
+      this.$dialog(this.formMeta, null, {
+        title: "视图预览"
+      })
+    },
+    submitForm() {
+      const componentCode = 'FormView';
+      const objectCode = this.formMeta.objectCode;
+      let params = {
+        componentCode: componentCode,
+        objectCode: objectCode
+      };
+      let objectMeta = utils.deepClone(this.formMeta);
+      let columnsMeta;
+      if (objectMeta.hasOwnProperty('columns')) {
+        columnsMeta = utils.deepClone(objectMeta.columns);
+        delete objectMeta['columns'];
+      }
+
+      params[objectCode] = objectMeta;
+      columnsMeta.forEach(fieldMeta => params[fieldMeta.name] = fieldMeta);
+
+      this.$axios({
+        method: 'POST',
+        url: restUrl.COMP_CONF_UPDATE,
+        data: params
+      }).then(({msg = '提交成功'}) => {
+        this.$message.success(msg);
+      }).catch(({msg = '提交失败'}) => {
+        this.$message.error(msg);
+      })
+    },
+    resetForm() {
+      this.$message.error("resetForm action not finished!");
+    },
+  },
+  // watch: {
+  //   selectItemName(newVal) {
+  //     this.$emit('select', newVal)
+  //   }
+  // },
+  computed: {
+    formMeta() {
+      let formMeta = this.value;
+      if (!utils.isArray(formMeta.columns)) {
+        this.$set(formMeta, 'columns', []);
+      }
+      return formMeta;
+    },
+  }
+}
 </script>
 
-<style scoped>
-    .container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+<style scoped lang="scss">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 10px solid #dddddd;
+  padding: 10px;
+}
 
-    .header {
-        height: 50px;
-    }
+.opr-box {
+  display: flex;
+  margin-bottom: 5px;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .work-area {
-        flex: 1;
-        overflow: auto;
-    }
+.work-area {
+  flex: 1;
+  //overflow: auto;
+  position: relative;
 
-    .blank-tip {
-        height: 400px;
-        line-height: 400px;
-        text-align: center;
-        border: 1px solid #eee;
-        margin: 5px 0;
-        color: #999999;
-    }
+  .form-item {
+    background: white;
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    border: 1px dashed #DDDDDD;
+    box-sizing: border-box;
+    margin-bottom: 2px;
+  }
 
-    .form-item {
-        background: white;
-        cursor: move;
-        position: relative;
-        z-index: 1;
-        padding: 0 0px;
-        border: 1px dashed rgba(0, 0, 0, 0);
-    }
+  .form-item-active {
+    border: 3px solid #409eff !important;
 
-    /*!* 遮挡区(遮挡住) *!*/
-    .form-item::after {
-        content: " ";
-        display: block;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        position: absolute;
-        z-index: 2;
-    }
-
-    .form-item-active {
-        border: 1px dashed #409eff;
+    .handle {
+      position: absolute;
+      font-size: 20px;
+      color: #409EFF;
+      cursor: move;
+      z-index: 999;
     }
 
     .form-item-delete-btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        z-index: 3;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
     }
+  }
+}
+
+.blank-tip {
+  height: 100%;
+  line-height: 400px;
+  text-align: center;
+  box-sizing: border-box;
+  color: #999999;
+}
+
+
+/*!* 遮挡区(遮挡住) *!*/
+//.form-item::after {
+//  content: " ";
+//  display: block;
+//  left: 0;
+//  top: 0;
+//  right: 0;
+//  bottom: 0;
+//  position: absolute;
+//  z-index: 2;
+//}
+
 </style>

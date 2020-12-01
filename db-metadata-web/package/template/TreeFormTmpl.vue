@@ -1,9 +1,9 @@
 <template>
     <row-grid :span="[6, 18]">
-        <template #left>
+        <template #0>
             <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
         </template>
-        <template #right>
+        <template #1>
             <form-view :ref="formRefName" :meta="formMeta">
                 <template #action="{model, conf}">
                     <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>

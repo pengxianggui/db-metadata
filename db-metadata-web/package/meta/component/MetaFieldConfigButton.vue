@@ -13,6 +13,7 @@
 
 <script>
 import FieldConf from "../instance-component/ext/FieldConf";
+import {isEmpty} from "../../utils/common";
 
 export default {
   name: "MetaFieldConfigButton",
@@ -33,6 +34,10 @@ export default {
   methods: {
     openLogicConf() {
       const {objectCode, fieldCode} = this
+      if (isEmpty(objectCode) || isEmpty(fieldCode)) {
+        this.$message.error('必须指定元对象编码和元字段编码')
+        return
+      }
       this.logicConf.objectCode = objectCode;
       this.logicConf.fieldCode = fieldCode;
       this.logicConf.dialogShow = true;
