@@ -1,43 +1,40 @@
 <template>
   <div>
-    <div v-for="(v, k, index) in formCompLib" :key="index">
-      <h5 v-text="k" style="margin: 5px"></h5>
-      <draggable :clone="formItemCloneHandler"
-                 :group="{ name: 'form', pull: 'clone', put: false }"
-                 :list="v | extract"
-                 @end="handleMoveEnd"
-                 @start="handleMoveStart"
-                 :sort="false"
-                 class="grid-box">
-        <div v-for="c in v" class="grid-item">
-          <!--            <i class="el-icon-receiving"></i>-->
-          <!--            <svg-icon :value="c.icon"></svg-icon>-->
-          <span>{{ c.comp.label }}</span>
-        </div>
-      </draggable>
-    </div>
-<!--    <div class="layout-comp">-->
-<!--      <h5>布局组件</h5>-->
-<!--      <draggable :clone="formItemCloneHandler" :group="{name:'form', pull: 'clone', put: false}" :list="layoutComps"-->
-<!--                 :sort="false" class="grid-box">-->
-<!--        <div v-for="c in layoutComps" class="grid-item">-->
-<!--          <span>{{ c.label }}</span>-->
-<!--        </div>-->
-<!--      </draggable>-->
-<!--    </div>-->
+    <template v-for="(v, k, index) in formCompLib">
+      <div :key="index" v-if="!editMode || k === '布局组件'">
+        <h5 v-text="k" style="margin: 5px"></h5>
+        <draggable :clone="formItemCloneHandler"
+                   :group="{ name: 'form', pull: 'clone', put: false }"
+                   :list="v | extract"
+                   @end="handleEnd"
+                   @start="handleStart"
+                   :move="handleMove"
+                   :sort="false"
+                   class="grid-box">
+          <div v-for="c in v" class="grid-item">
+            <!--            <i class="el-icon-receiving"></i>-->
+            <!--            <svg-icon :value="c.icon"></svg-icon>-->
+            <span>{{ c.comp.label }}</span>
+          </div>
+        </draggable>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
 import {defaultMeta} from '../../core/index'
-import compLib, {extract, isLayoutComp} from './relate/componentData'
+import compLib, {extract} from './relate/componentData'
 import RowGrid from "../../core/rowgrid/src/RowGrid";
 
 export default {
   name: "ComponentList",
   components: {
     draggable
+  },
+  props: {
+    editMode: Boolean
   },
   filters: {
     extract(value) {
@@ -47,8 +44,7 @@ export default {
   data() {
     return {
       globalId: 0,
-      formCompLib: compLib,
-      layoutComps: [RowGrid]
+      formCompLib: compLib
     }
   },
   methods: {
@@ -63,18 +59,13 @@ export default {
       };
 
       this.$merge(meta, defaultMeta[name]);
-
-      if (isLayoutComp(name)) { // 包装布局组件配置
-        const {conf: {span}} = meta
-        for (let i = 0; i < span.length; i++) {
-          meta['columns'][i] = []
-        }
-      }
       return meta;
     },
-    handleMoveEnd() {
+    handleEnd() {
     },
-    handleMoveStart() {
+    handleStart() {
+    },
+    handleMove(e) {
     }
   }
 }

@@ -560,3 +560,18 @@ export function execute(fn, params) {
         return fn
     }
 }
+
+/**
+ * 删除一个对象所有的属性
+ * @param value
+ */
+export function deleteAllAttrs(value) {
+    if (!isObject(value)) {
+        return {}
+    }
+
+    for (let key of Object.keys(value)) {
+        delete value[key]
+    }
+    return value
+}

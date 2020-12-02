@@ -11,13 +11,21 @@
             <span><span>实例编码:</span><el-tag size="mini" align="center">{{ confModel.instanceCode }}</el-tag></span>&nbsp;
             <span><span>元对象:</span><el-tag size="mini" align="center">{{ confModel.objectCode }}</el-tag></span>&nbsp;
             <span><span>模板:</span><el-tag size="mini" align="center">{{ confModel.componentCode }}</el-tag></span>&nbsp;
+
+            <el-badge value="hot" type="danger" v-if="confModel.componentCode === 'FormView'">
+              <el-tag type="danger" size="mini" style="cursor: pointer"
+                      @click="toFormBuilder(confModel.instanceCode, confModel.objectCode, confModel.componentCode)">
+                表单设计!
+              </el-tag>
+            </el-badge>
           </template>
           <template v-else>
             <el-form-item label="元对象" prop="objectCode" class="inline" style="margin: 0">
               <meta-object-selector v-model="confModel.objectCode" :disabled="EDIT_MODE"></meta-object-selector>
             </el-form-item>
             <el-form-item label="组件" prop="componentCode" class="inline" style="margin: 0">
-              <component-selector v-model="confModel.componentCode" just-view :disabled="EDIT_MODE"></component-selector>
+              <component-selector v-model="confModel.componentCode" scope="view"
+                                  :disabled="EDIT_MODE"></component-selector>
             </el-form-item>
             <span v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
             <el-form-item class="inline" style="margin: 0">
@@ -49,7 +57,8 @@
           </el-badge>
         </el-button-group>
       </div>
-      <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue" :class="{'show-form-builder': elTabValue === '2'}">
+      <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue"
+               :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="元对象配置" name="0">
           <el-form-item label="实例描述">
             <text-area-box v-model="confModel.instanceName"></text-area-box>
@@ -74,30 +83,15 @@
                 <div class="field-conf" v-for="(key, index) in filteredFields" :key="key">
                   <el-form-item label-width="0">
                     <h1 :name="key">{{ index + 1 }}.{{ key }}</h1>
-                    <mini-form-box v-model="confModel.fConf[key]" class="shadow"
-                                   :meta="fieldsConfMeta[key]" :show-change-type="true"
-                                   @json-change="() => buildFieldConfMeta(confModel.fConf[key], key)">
-                      <template #button-expand="{value}">
-                        <el-popover placement="right" trigger="click"
-                                    popper-class="ui-conf-tip-popper">
-                          <ui-conf-tip :component-name="confModel.fConf[key]['component_name']"></ui-conf-tip>
-                          <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
-                        </el-popover>
-                        <meta-field-config-button :object-code="confModel.objectCode" :field-code="key">
-                          <template #default="{open}">
-                            <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>
-                          </template>
-                        </meta-field-config-button>
-                      </template>
-                    </mini-form-box>
+                    <el-card shadow>
+                      <ui-conf-editor :json-value.sync="confModel.fConf[key]"
+                                      :object-code="objectCode" :field-code="key"></ui-conf-editor>
+                    </el-card>
                   </el-form-item>
                 </div>
               </div>
             </div>
           </div>
-        </el-tab-pane>
-        <el-tab-pane v-if="confModel.componentCode=='FormView'" label="表单设计">
-          <form-builder :oc="confModel.objectCode" @oc-change="handleOcChange"></form-builder>
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -116,10 +110,19 @@ import FieldFilter from "../component/FieldFilter";
 import MetaObjectSelector from "../component/MetaObjectSelector";
 import ComponentSelector from "../component/ComponentSelector";
 import MetaFieldConfigButton from "../component/MetaFieldConfigButton";
+import UiConfEditor from "../component/UiConfEditor";
 
 export default {
   name: "InstanceConfEdit",
-  components: {FormBuilder, UiConfTip, FieldFilter, MetaObjectSelector, ComponentSelector, MetaFieldConfigButton},
+  components: {
+    FormBuilder,
+    UiConfTip,
+    FieldFilter,
+    MetaObjectSelector,
+    ComponentSelector,
+    MetaFieldConfigButton,
+    UiConfEditor
+  },
   props: {
     instanceCode: String,
     objectCode: String,
@@ -283,7 +286,7 @@ export default {
         let item = fConf[key];
         meta.columns.push(item);
       }
-
+      console.log(meta)
       this.$dialog(meta, null, {title: '预览'})
     },
     buildObjectConfMeta(value) {
@@ -291,6 +294,9 @@ export default {
     },
     buildFieldConfMeta(value, key) {
       this.fieldsConfMeta[key] = buildMeta(value, key);
+    },
+    toFormBuilder(instanceCode, objectCode, componentCode) {
+      this.$router.push({path: '/meta/form-builder', query: {ic: instanceCode, oc: objectCode, cc: componentCode}})
     }
   },
   computed: {
@@ -313,9 +319,13 @@ export default {
     box-sizing: border-box;
   }
 
-  #tab-box-instance-conf-edit.show-form-builder .el-tabs__content {
-    padding: 0;
-  }
+  //#tab-box-instance-conf-edit.show-form-builder .el-tabs__content {
+  //  padding: 5px;
+  //}
+
+  //#tab-box-instance-conf-edit.show-form-builder #pane-2 {
+  //  height: 100%;
+  //}
 }
 </style>
 <style lang="scss" scoped>

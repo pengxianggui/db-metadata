@@ -127,6 +127,11 @@ export const innerRoute = [
             noCache: false,
             roles: [access.root]
         },
+        props: (route) => ({
+            ic: route.query.ic,
+            oc: route.query.oc,
+            cc: route.query.cc
+        }),
         component: FormBuilder
     }, {
         path: 'meta-conf',

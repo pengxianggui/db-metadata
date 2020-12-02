@@ -1,16 +1,18 @@
 <template>
   <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" :rules="rules">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
-      <template v-for="(item, index) in innerMeta.columns">
-        <slot :name="'form-item-' + item.name" v-bind:column="item" v-bind:model="model">
-          <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"
-                        :label="item.label||item.name" :prop="item.name"
-                        :class="{'inline': item.inline, 'width-align': item.inline}"
-                        :rules="getItemRules(item)">
-            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>
-          </el-form-item>
-        </slot>
-      </template>
+      <!--      <template v-for="(item, index) in innerMeta.columns">-->
+      <!--        <slot :name="'form-item-' + item.name" v-bind:column="item" v-bind:model="model">-->
+      <!--          <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"-->
+      <!--                        :label="item.label||item.name" :prop="item.name"-->
+      <!--                        :class="{'inline': item.inline, 'width-align': item.inline}"-->
+      <!--                        :rules="getItemRules(item)">-->
+      <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
+      <!--          </el-form-item>-->
+      <!--        </slot>-->
+      <!--      </template>-->
+      <nest-form-item :columns="innerMeta.columns" :model="model"></nest-form-item>
+
     </slot>
     <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
           v-if="formType !== 'view' && buttonsConf.show">
@@ -44,10 +46,11 @@ import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import utils from '../../../utils'
 import DefaultBehaviors from './defaultBehaviors'
 import DefaultMeta from '../ui-conf'
+import NestFormItem from "./NestFormItem";
 
 export default {
   name: "FormView",
-  components: {MetaEasyEdit, ...DefaultBehaviors},
+  components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
   data() {
     return {
       model: {},
@@ -142,8 +145,8 @@ export default {
       return newMeta;
     },
     rules() {
-      let rules = this.innerMeta.hasOwnProperty('conf') ? this.innerMeta['conf']['rules'] : {};
-      return utils.isEmpty(rules) ? {} : rules;
+      const {innerMeta: {conf: {rules} = {}} = {}} = this
+      return rules;
     },
     buttonsConf() {
       return this.innerMeta['buttons'];

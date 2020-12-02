@@ -8,7 +8,7 @@
  */
 import {assert, isString, isObject, isEmpty, assertUndefined} from "./common";
 
-export function compile(url, params) {
+export function compile(url, params = {}) {
     let rex = new RegExp("\{.*?\}", "g");
     let v;
     while (v = url.match(rex)) {

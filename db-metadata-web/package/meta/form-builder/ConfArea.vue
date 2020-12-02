@@ -1,54 +1,33 @@
 <template>
   <el-tabs type="border-card" style="height: 100%; overflow: auto;">
     <el-tab-pane label="域配置" style="height: 100%;">
-      <el-form size="mini" v-if="!isEmpty(activeItem)" :key="activeItem.name" label-position="top">
-        <template v-for="(value, key) in activeItem">
-          <template v-if="editableJudge(activeItem.component_name, key)">
-            <el-form-item :key="key" :label="key" v-if="key !== 'default_value'">
-              <component :is="getShowComponentName(key)" :meta="metaMapping[key]" v-model="activeItem[key]"></component>
-            </el-form-item>
-            <el-form-item :key="key" :label="key" v-else>
-                <component :is="activeItem.component_name" :meta="activeItem"
-                           v-model="activeItem[key]"></component>
-            </el-form-item>
-          </template>
-        </template>
-        <el-form-item label="逻辑配置" v-if="!isLayoutComp(activeItem.component_name)">
-          <meta-field-config-button :object-code="objectCode" :field-code="activeItem.name">
-            <template #default="{open}">
-              <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>
-            </template>
-          </meta-field-config-button>
-        </el-form-item>
-      </el-form>
+      <ui-conf-editor :json-value.sync="activeItem"
+                      :object-code="objectCode" :field-code="fieldCode"
+                      v-if="!isEmpty(activeItem)"></ui-conf-editor>
       <div v-else class="blank-tip">
         请先选择一个字段
       </div>
     </el-tab-pane>
 
     <el-tab-pane label="表单配置">
-      <el-form size="mini" label-position="top">
-        <template v-for="(value, key) in formMeta">
-          <template v-if="editableJudge('FormView', key)">
-            <el-form-item :key="key" :label="key">
-              <component :is="getShowComponentName(key)" :meta="metaMapping[key]"
-                         v-model="formMeta[key]"></component>
-            </el-form-item>
-          </template>
-        </template>
-      </el-form>
+      <ui-conf-editor :json-value.sync="formMeta" :object-code="objectCode"></ui-conf-editor>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import OptionsInput from './relate/OptionsInput'
+import UiConfTip from "../component/UiConfTip";
 import confFilter from './relate/confFilter'
 import confComponentMapping from './relate/confComponentMapping'
 import DefaultTextBoxMeta from '../../core/textbox/ui-conf'
 import {isLayoutComp} from "./relate/componentData";
 import MetaFieldConfigButton from "../component/MetaFieldConfigButton";
 import utils from '@/../package/utils'
+import buildMeta from "../buildMeta"
+import ComponentSelector from "../component/ComponentSelector";
+import ComponentPlus from "../component/ComponentPlus";
+import UiConfEditor from "../component/UiConfEditor";
 
 
 export default {
@@ -56,12 +35,12 @@ export default {
   props: {
     value: Object,
     activeItem: Object,
-    objectCode: String
+    objectCode: String,
+    fieldCode: String
   },
-  components: {OptionsInput, MetaFieldConfigButton},
+  components: {OptionsInput, MetaFieldConfigButton, UiConfTip, ComponentSelector, ComponentPlus, UiConfEditor},
   data() {
     return {
-      fieldConf: {},
       metaMapping: confComponentMapping
     }
   },
@@ -81,6 +60,9 @@ export default {
         return metaMapping[key].component_name;
       }
       return DefaultTextBoxMeta.component_name;
+    },
+    buildFieldConfMeta(value) {
+      return buildMeta(value);
     }
   },
   watch: {
@@ -100,9 +82,22 @@ export default {
         this.$emit('input', newVal);
       }
     },
-    // activeFieldMeta() {
-    // return this.formMeta.columns[this.active];
-    // }
+    fieldConfMeta() {
+      const {formMeta} = this
+      const value = {}
+      for (let key of Object.keys(formMeta)) {
+        value[key] = buildMeta(formMeta[key], key)
+      }
+      return value
+    },
+    attrsConfMeta() {
+      const {activeItem} = this
+      const value = {}
+      for (let key of Object.keys(activeItem)) {
+        value[key] = buildMeta(activeItem[key], key)
+      }
+      return value
+    }
   }
 }
 </script>
