@@ -240,7 +240,7 @@ export default {
         let url = this.$compile(restUrl.COMP_INSTANCE_CONF_DELETE, this.confModel);
         this.$axios.delete(url).then(({msg = '配置删除成功'}) => {
           this.$message.success(msg);
-          this.goBack()
+          // this.goBack()
         }).catch(({msg = '配置删除失败'}) => {
           this.$message.error(msg);
         })
@@ -270,7 +270,7 @@ export default {
               data: params
             }).then(({msg = '配置保存成功'}) => {
               this.$message.success(msg);
-              this.goBack()
+              // this.goBack()
             }).catch(({msg = '配置保存失败'}) => {
               this.$message.error(msg);
             })
