@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {isEmpty, strToObject} from "../utils/common";
+import {isEmpty, strToObject, isObject} from "../utils/common";
 
 const getComponent404 = function (componentName) {
     return Vue.component("Component404", {
@@ -44,6 +44,15 @@ const exchangeRouteKey = function (route, r, k) {
     route[k] = value
 }
 
+const storageRouteId = function (route, id) {
+    if (!isEmpty(id) && !isEmpty(route)) {
+        if (!isObject(route.meta)) {
+            route.meta = {}
+        }
+        route.meta['id'] = id
+    }
+}
+
 const exchangeAll = function (routes, Layout) {
     return routes.map(r => {
         if (r.hasOwnProperty("children")) {
@@ -56,9 +65,11 @@ const exchangeAll = function (routes, Layout) {
             exchangeRouteKey(route, r, k)
         })
 
-        // TODO
         const {component: componentName} = route;
         route.component = exchangeComponent(componentName, Layout)
+
+        storageRouteId(route, r.id)
+
         return route
     })
 }

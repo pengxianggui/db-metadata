@@ -30,6 +30,9 @@
             <list-item style="height: 22px; line-height: 22px;"
                        @click="closeAllTags(selectedTag); closePopMenu('popMenu' + index)">关闭所有
             </list-item>
+            <list-item style="height: 22px; line-height: 22px;" @click="editRoute(selectedTag)"
+                       v-if="$isRoot() && currentRouteEditable">编辑路由
+            </list-item>
           </list>
         </pop-menu>
       </router-link>
@@ -44,6 +47,7 @@ import * as TagViewUtil from '../visitedViewMaintain'
 import {tagData} from "../data";
 import Conf from '../conf'
 import {isArray, isEmpty} from "../../../utils/common";
+import {getUpdateFormMeta} from "../../../utils/rest";
 
 /**
  * TODO TagView的切换缓存基于vue 动态组件的 keep-alive, 因此keep-alive中的include只能根据组件名来, 而TagView的数据基于路由,
@@ -72,6 +76,10 @@ export default {
     },
     bgColor() {
       return Conf.bgColor
+    },
+    currentRouteEditable() {
+      const {selectedTag: {meta: {id} = {}}} = this
+      return !isEmpty(id)
     }
   },
   watch: {
@@ -93,6 +101,14 @@ export default {
   },
   methods: {
     ...TagViewUtil,
+    editRoute(route) {
+      const {meta: {id}} = route
+      getUpdateFormMeta('meta_router', id).then(({data: meta}) => {
+        this.$dialog(meta, null, {
+          title: '编辑路由'
+        })
+      })
+    },
     closePopMenu(refName) {
       const ref = this.$refs[refName]
       if (isEmpty(ref)) return;

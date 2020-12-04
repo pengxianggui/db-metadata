@@ -90,7 +90,10 @@ export function deleteOtherView(view) {
 export function deleteOtherVisitedView(view) {
     return new Promise(resolve => {
         const {visitedViews} = tagData
-        tagData.visitedViews = visitedViews.filter(v => v.meta.affix || v.fullPath === view.fullPath)
+        tagData.visitedViews.length = 0
+        let temp = visitedViews.filter(v => v.meta.affix || v.fullPath === view.fullPath)
+        console.log(temp)
+        tagData.visitedViews.push(...temp)
         resolve([...tagData.visitedViews])
     })
 
@@ -98,13 +101,19 @@ export function deleteOtherVisitedView(view) {
 
 export function deleteOtherCachedView(view) {
     return new Promise(resolve => {
+        // const {cachedViews} = tagData
+        // const index = cachedViews.indexOf(view.name)
+        // if (index > -1) {
+        //     tagData.cachedViews = cachedViews.slice(index, index + 1)
+        // } else {
+        //     tagData.cachedViews = []
+        // }
+        // resolve([...tagData.cachedViews])
+
         const {cachedViews} = tagData
-        const index = cachedViews.indexOf(view.name)
-        if (index > -1) {
-            tagData.cachedViews = cachedViews.slice(index, index + 1)
-        } else {
-            tagData.cachedViews = []
-        }
+        tagData.cachedViews.length = 0
+        const temp = cachedViews.filter(v => v.meta.affix || v.fullPath === view.fullPath)
+        tagData.cachedViews.push(...temp)
         resolve([...tagData.cachedViews])
     })
 }
@@ -124,14 +133,16 @@ export function deleteAllViews(view) {
 export function deleteAllVisitedView() {
     return new Promise(resolve => {
         const {visitedViews} = tagData
-        tagData.visitedViews = visitedViews.filter(v => v.meta.affix)
+        tagData.visitedViews.length = 0
+        const temp = visitedViews.filter(v => v.meta.affix)
+        tagData.visitedViews.push(...temp)
         resolve([...tagData.visitedViews])
     })
 }
 
 export function deleteAllCachedView() {
     return new Promise(resolve => {
-        tagData.cachedViews = []
+        tagData.cachedViews.length = 0
         resolve([...tagData.cachedViews])
     })
 }
