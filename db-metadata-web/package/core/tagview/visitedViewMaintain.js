@@ -76,7 +76,6 @@ export function deleteCachedView(view) {
 }
 
 export function deleteOtherView(view) {
-    // const {deleteOtherVisitedView, deleteOtherCachedView} = this
     return new Promise(resolve => {
         deleteOtherVisitedView(view)
         deleteOtherCachedView(view)
@@ -90,9 +89,11 @@ export function deleteOtherView(view) {
 export function deleteOtherVisitedView(view) {
     return new Promise(resolve => {
         const {visitedViews} = tagData
+        let temp = visitedViews.filter(v => {
+            const {meta: {affix} = {}, fullPath} = v
+            return affix || fullPath === view.fullPath
+        })
         tagData.visitedViews.length = 0
-        let temp = visitedViews.filter(v => v.meta.affix || v.fullPath === view.fullPath)
-        console.log(temp)
         tagData.visitedViews.push(...temp)
         resolve([...tagData.visitedViews])
     })
@@ -111,15 +112,17 @@ export function deleteOtherCachedView(view) {
         // resolve([...tagData.cachedViews])
 
         const {cachedViews} = tagData
+        const temp = cachedViews.filter(v => {
+            const {meta: {affix} = {}, fullPath} = v
+            return affix || fullPath === view.fullPath
+        })
         tagData.cachedViews.length = 0
-        const temp = cachedViews.filter(v => v.meta.affix || v.fullPath === view.fullPath)
         tagData.cachedViews.push(...temp)
         resolve([...tagData.cachedViews])
     })
 }
 
 export function deleteAllViews(view) {
-    // const {deleteAllVisitedView, deleteAllCachedView} = this
     return new Promise(resolve => {
         deleteAllVisitedView(view)
         deleteAllCachedView(view)
@@ -133,8 +136,11 @@ export function deleteAllViews(view) {
 export function deleteAllVisitedView() {
     return new Promise(resolve => {
         const {visitedViews} = tagData
+        const temp = visitedViews.filter(v => {
+            const {meta: {affix} = {}} = v
+            return affix
+        })
         tagData.visitedViews.length = 0
-        const temp = visitedViews.filter(v => v.meta.affix)
         tagData.visitedViews.push(...temp)
         resolve([...tagData.visitedViews])
     })

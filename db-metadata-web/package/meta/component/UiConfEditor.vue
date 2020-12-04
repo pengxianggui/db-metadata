@@ -33,7 +33,8 @@
               <!--          </mini-form-box>-->
 
               <!--              常规-->
-              <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]" :meta="attrsConfMeta[key]"
+              <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]"
+                         :meta="attrsConfMeta[key]"
                          v-else></component>
 
             </el-form-item>
@@ -72,14 +73,26 @@ import UiConfTip from "./UiConfTip";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {defaultMeta} from "../../core";
 import Val from "../../core/mixins/value";
+import {isObject} from '@/../package/utils/common'
+
+let conver = function (value) {
+  if (!isObject(value)) {
+    return {}
+  }
+  return value
+}
 
 export default {
   name: "UiConfEditor",
-  mixins: [Val()],
+  mixins: [Val(conver)],
   components: {ComponentSelector, UiConfTip, MetaFieldConfigButton},
   props: {
     value: {
-      type: Object
+      type: {
+        type: Object,
+        default: () => {
+        }
+      }
     },
     objectCode: {
       type: String
