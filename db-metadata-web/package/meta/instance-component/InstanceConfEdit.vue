@@ -84,7 +84,7 @@
                   <el-form-item label-width="0">
                     <h1 :name="key">{{ index + 1 }}.{{ key }}</h1>
                     <el-card shadow>
-                      <ui-conf-editor :json-value.sync="confModel.fConf[key]"
+                      <ui-conf-editor v-model="confModel.fConf[key]"
                                       :object-code="objectCode" :field-code="key"></ui-conf-editor>
                     </el-card>
                   </el-form-item>

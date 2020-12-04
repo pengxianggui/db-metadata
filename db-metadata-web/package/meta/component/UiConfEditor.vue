@@ -1,20 +1,20 @@
 <template>
   <div>
     <template v-if="formType">
-      <el-form size="mini" :key="jsonValue.name" label-position="top">
-        <template v-for="(value, key) in jsonValue">
-          <template v-if="editableJudge(jsonValue.component_name, key)">
+      <el-form size="mini" :key="nativeValue.name" label-position="top">
+        <template v-for="(value, key) in nativeValue">
+          <template v-if="editableJudge(nativeValue.component_name, key)">
             <el-form-item :key="key" :label="key">
 
               <!--              特殊-->
-              <component :is="jsonValue.component_name" :meta="jsonValue"
-                         v-model="jsonValue[key]" v-if="key === 'default_value'"></component>
+              <component :is="nativeValue.component_name" :meta="nativeValue"
+                         v-model="nativeValue[key]" v-if="key === 'default_value'"></component>
 
-              <component-selector v-model="jsonValue['component_name']" scope="field"
-                                  @change="handleCompChange(jsonValue['component_name'])"
+              <component-selector v-model="nativeValue['component_name']" scope="field"
+                                  @change="handleCompChange(nativeValue['component_name'])"
                                   v-else-if="key === 'component_name'"></component-selector>
 
-              <!--          <mini-form-box v-model="jsonValue[key]" :meta="attrsConfMeta[key]" :show-change-type="true"-->
+              <!--          <mini-form-box v-model="nativeValue[key]" :meta="attrsConfMeta[key]" :show-change-type="true"-->
               <!--                         v-else-if="attrsConfMeta[key]['component_name'] === 'MiniFormBox'">-->
               <!--            <template #button-expand="{value}">-->
               <!--              <el-popover placement="right" trigger="click"-->
@@ -23,7 +23,7 @@
               <!--                <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>-->
               <!--              </el-popover>-->
               <!--              <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"-->
-              <!--                                        v-if="objectCode && fieldCode && !isLayoutComp(jsonValue.component_name)">-->
+              <!--                                        v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">-->
               <!--                <template #default="{open}">-->
               <!--                  <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>-->
               <!--                </template>-->
@@ -33,7 +33,7 @@
               <!--          </mini-form-box>-->
 
               <!--              常规-->
-              <component :is="attrsConfMeta[key]['component_name']" v-model="jsonValue[key]" :meta="attrsConfMeta[key]"
+              <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]" :meta="attrsConfMeta[key]"
                          v-else></component>
 
             </el-form-item>
@@ -42,7 +42,7 @@
       </el-form>
     </template>
     <template v-else>
-      <json-box v-model="jsonValue" mode="code" @input="$emit('json-change')"></json-box>
+      <json-box v-model="nativeValue" mode="code" @input="handleJsonChange"></json-box>
     </template>
 
     <div style="display: flex; flex-direction: row">
@@ -54,7 +54,7 @@
         <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
       </el-popover>
       <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"
-                                v-if="objectCode && fieldCode && !isLayoutComp(jsonValue.component_name)">
+                                v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">
         <template #default="{open}">
           <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>
         </template>
@@ -71,12 +71,14 @@ import ComponentSelector from "./ComponentSelector";
 import UiConfTip from "./UiConfTip";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {defaultMeta} from "../../core";
+import Val from "../../core/mixins/value";
 
 export default {
   name: "UiConfEditor",
+  mixins: [Val()],
   components: {ComponentSelector, UiConfTip, MetaFieldConfigButton},
   props: {
-    jsonValue: {
+    value: {
       type: Object
     },
     objectCode: {
@@ -104,26 +106,30 @@ export default {
       this.$emit('change-type', this.formType); // hook
     },
     handleCompChange(value) {
-      const {jsonValue} = this
-      for (let key of Object.keys(jsonValue)) {
+      const {nativeValue} = this
+      for (let key of Object.keys(nativeValue)) {
         if (key !== 'name' && key !== 'label') { // name和label是需要保留的
-          this.$delete(jsonValue, key)
+          this.$delete(nativeValue, key)
         }
       }
-      this.$merge(jsonValue, defaultMeta[value])
+      this.$merge(nativeValue, defaultMeta[value])
+    },
+    handleJsonChange() {
+      // TODO 当值中的component_name发生变化时, 需要重新替换整个nativeValue
+      console.log(this.nativeValue)
     }
   },
   computed: {
     attrsConfMeta() {
-      const {jsonValue} = this
+      const {nativeValue} = this
       const value = {}
-      for (let key of Object.keys(jsonValue)) {
-        value[key] = buildMeta(jsonValue[key], key)
+      for (let key of Object.keys(nativeValue)) {
+        value[key] = buildMeta(nativeValue[key], key)
       }
       return value
     },
     componentCode() {
-      const {jsonValue: {component_name}} = this
+      const {nativeValue: {component_name}} = this
       return component_name
     }
   }
