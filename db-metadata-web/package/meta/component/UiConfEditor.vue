@@ -88,11 +88,8 @@ export default {
   components: {ComponentSelector, UiConfTip, MetaFieldConfigButton},
   props: {
     value: {
-      type: {
-        type: Object,
-        default: () => {
-        }
-      }
+      type: Object,
+      default: () => {}
     },
     objectCode: {
       type: String
