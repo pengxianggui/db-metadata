@@ -14,6 +14,6 @@ export default {
     'inline': true,
     'conf': {
         'type': 'default',
-        'level': '2'
+        'level': 2
     }
 }

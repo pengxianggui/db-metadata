@@ -102,15 +102,6 @@ export function deleteOtherVisitedView(view) {
 
 export function deleteOtherCachedView(view) {
     return new Promise(resolve => {
-        // const {cachedViews} = tagData
-        // const index = cachedViews.indexOf(view.name)
-        // if (index > -1) {
-        //     tagData.cachedViews = cachedViews.slice(index, index + 1)
-        // } else {
-        //     tagData.cachedViews = []
-        // }
-        // resolve([...tagData.cachedViews])
-
         const {cachedViews} = tagData
         const temp = cachedViews.filter(v => {
             const {meta: {affix} = {}, fullPath} = v

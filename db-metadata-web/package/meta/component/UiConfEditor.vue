@@ -14,24 +14,6 @@
                                   @change="handleCompChange(nativeValue['component_name'])"
                                   v-else-if="key === 'component_name'"></component-selector>
 
-              <!--          <mini-form-box v-model="nativeValue[key]" :meta="attrsConfMeta[key]" :show-change-type="true"-->
-              <!--                         v-else-if="attrsConfMeta[key]['component_name'] === 'MiniFormBox'">-->
-              <!--            <template #button-expand="{value}">-->
-              <!--              <el-popover placement="right" trigger="click"-->
-              <!--                          popper-class="ui-conf-tip-popper">-->
-              <!--                <ui-conf-tip :component-name="componentCode"></ui-conf-tip>-->
-              <!--                <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>-->
-              <!--              </el-popover>-->
-              <!--              <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"-->
-              <!--                                        v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">-->
-              <!--                <template #default="{open}">-->
-              <!--                  <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>-->
-              <!--                </template>-->
-              <!--              </meta-field-config-button>-->
-              <!--              TODO 元对象编辑-->
-              <!--            </template>-->
-              <!--          </mini-form-box>-->
-
               <!--              常规-->
               <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]"
                          :meta="attrsConfMeta[key]"
@@ -89,7 +71,9 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {}
+      }
     },
     objectCode: {
       type: String
@@ -101,6 +85,13 @@ export default {
   data() {
     return {
       formType: true
+    }
+  },
+  watch: {
+    'nativeValue.component_name': function (newV) {
+      if (defaultMeta.hasOwnProperty(newV)) {
+        this.handleCompChange(newV)
+      }
     }
   },
   methods: {
@@ -125,8 +116,7 @@ export default {
       this.$merge(nativeValue, defaultMeta[value])
     },
     handleJsonChange() {
-      // TODO 当值中的component_name发生变化时, 需要重新替换整个nativeValue
-      console.log(this.nativeValue)
+      // 当值中的component_name发生变化时, 需要重新替换整个nativeValue: 采用watch替代实现
     }
   },
   computed: {

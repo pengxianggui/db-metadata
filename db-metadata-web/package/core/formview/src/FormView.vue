@@ -1,17 +1,12 @@
 <template>
   <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" :rules="rules">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
-      <!--      <template v-for="(item, index) in innerMeta.columns">-->
-      <!--        <slot :name="'form-item-' + item.name" v-bind:column="item" v-bind:model="model">-->
-      <!--          <el-form-item :key="item.name + index" v-if="!item.hasOwnProperty('showable') || item.showable"-->
-      <!--                        :label="item.label||item.name" :prop="item.name"-->
-      <!--                        :class="{'inline': item.inline, 'width-align': item.inline}"-->
-      <!--                        :rules="getItemRules(item)">-->
-      <!--            <component :is="item.component_name" v-model="model[item.name]" :meta="item"></component>-->
-      <!--          </el-form-item>-->
-      <!--        </slot>-->
-      <!--      </template>-->
-      <nest-form-item :columns="innerMeta.columns" :model="model"></nest-form-item>
+
+      <nest-form-item :columns="innerMeta.columns" :model="model">
+        <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
+          <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
+        </template>
+      </nest-form-item>
 
     </slot>
     <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
@@ -61,10 +56,14 @@ export default {
     meta: {
       type: Object,
       default: () => {
+        return {}
       }
     }
   },
   methods: {
+    dynamicSlotName(name) {
+      console.log(name.call())
+    },
     getItemRules(item) {
       let rules = item.hasOwnProperty('conf') ? item.conf['rules'] : [];
       return utils.isEmpty(rules) ? [] : rules;
@@ -151,6 +150,9 @@ export default {
     buttonsConf() {
       return this.innerMeta['buttons'];
     },
+    fieldSlots() {
+      return this.$scopedSlots
+    }
     // 支持无渲染的行为插槽
     // actions() {
     //     const {onSubmit, doSubmit, onCancel} = this;
@@ -159,6 +161,9 @@ export default {
     // on() {
     //     return this.$on.bind(this);
     // }
+  },
+  mounted() {
+    console.log(this)
   }
 }
 </script>
