@@ -92,14 +92,7 @@ public class ComponentController extends FrontRestController {
         // objectCode + componentCode
         if (StrKit.notBlank(compCode, objectCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            //已存在的配置
-//            if (componentService().hasObjectConfig(compCode, objectCode)) {
-//
-//                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
-//                renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig()));
-//            }
 //            //自动计算的配置
-//            else {
             MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
             renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
 //            }
@@ -148,7 +141,6 @@ public class ComponentController extends FrontRestController {
 
         Kv config = getKv();
         Component component = ViewFactory.createEmptyViewComponent(compCode);
-//        Component component = AbstractComponent.newInstance(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             if (componentService().hasObjectConfig(instanceCode) || componentService().hasObjectConfig(compCode, objectCode)) {

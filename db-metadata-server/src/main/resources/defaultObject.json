@@ -325,8 +325,9 @@
     "config": {
       "objectCode": "meta_component_instance",
       "isNumberSequence": true,
-      "orderBy": "created_time desc",
-      "where": "type='META_OBJECT'"
+      "orderBy": "id desc",
+      "where": "type='META_OBJECT'",
+      "bizInterceptor": "com.hthjsj.web.controller.itp.ComponentConfDeletePointCut"
     },
     "_fields": {
       "config": {
@@ -484,7 +485,7 @@
         "config": {
           "isSearch": false,
           "isFile": false,
-          "scopeSql": "select id, path as cn from meta_router;db-metadata-demo",
+          "scopeSql": "select id, path as cn from meta_router",
           "addStatus": 100,
           "defaultVal": "",
           "isListShow": true,
@@ -592,7 +593,7 @@
         "config": {
           "isSearch": false,
           "isFile": false,
-          "scopeSql": "select id, title as cn from meta_menu;db-metadata-demo",
+          "scopeSql": "select id, title as cn from meta_menu",
           "addStatus": 100,
           "defaultVal": "",
           "isListShow": true,
