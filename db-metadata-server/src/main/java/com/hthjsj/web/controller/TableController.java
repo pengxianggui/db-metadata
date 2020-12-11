@@ -195,7 +195,7 @@ public class TableController extends FrontRestController {
                     log.error(e.getMessage(), e);
                     s = false;
                 }
-                return true;
+                return s;
             }
         });
 

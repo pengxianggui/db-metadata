@@ -51,23 +51,23 @@
 </template>
 
 <script>
-    import utils from '../utils'
-    import {restUrl, routeUrl} from '../constant/url';
-    import {getSearchViewMeta, getTableViewMeta} from "../utils/rest";
-    import MetaImport from './MetaImport'
-    import FeatureAdd from './feature/FeatureAdd'
+import utils from '../utils'
+import {restUrl, routeUrl} from '../constant/url';
+import {getSearchViewMeta, getTableViewMeta} from "../utils/rest";
+import MetaImport from './MetaImport'
+import FeatureAdd from './feature/FeatureAdd'
 
-    export default {
-        name: "MetaDataManager",
-        components: {
-            MetaImport,
-            FeatureAdd
-        },
-        data() {
-            return {
-                object: {
-                    objectCode: 'meta_object',
-                    svMeta: {},
+export default {
+  name: "MetaDataManager",
+  components: {
+    MetaImport,
+    FeatureAdd
+  },
+  data() {
+    return {
+      object: {
+        objectCode: 'meta_object',
+        svMeta: {},
                     tvMeta: {},
                     filterParams: {},
                     activeData: {},
@@ -145,10 +145,10 @@
             jumpToConf(objectCode) {
                 let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
                 //
-                let url = this.$compile(routeUrl.baseURL + routeUrl.R_INSTANCE_CONF_NEW, {
-                    componentCode: 'TableView',
-                    objectCode: objectCode
-                });
+              let url = this.$compile(routeUrl.baseURL + routeUrl.R_INSTANCE_CONF_EDIT, {
+                componentCode: 'TableView',
+                objectCode: objectCode
+              });
                 this.$confirm(title, '提示', {
                     confirmButtonText: '去配置',
                     cancelButtonText: '下次再说',

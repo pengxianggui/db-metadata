@@ -273,6 +273,7 @@ export default {
 
   .associate-box {
     flex: 1;
+    margin-left: 10px;
     overflow: auto;
   }
 }

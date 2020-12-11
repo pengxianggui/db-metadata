@@ -29,7 +29,7 @@ public abstract class MetaSQLExtract implements SQLExtract {
         return mutiple;
     }
 
-    public void setMutiple(boolean m) {
+    protected void setMutiple(boolean m) {
         mutiple = m;
     }
 }

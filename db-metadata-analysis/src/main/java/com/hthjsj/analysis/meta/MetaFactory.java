@@ -23,22 +23,24 @@ import java.util.List;
 public class MetaFactory {
 
     /**
+     * <pre>
      * SQLUtils -> SQLStatement
-     * <p>
+     *
      * SQLSelectStatement包含一个SQLSelect，SQLSelect包含一个SQLSelectQuery
      * 都是组成的关系。SQLSelectQuery有主要的两个派生类，分别是SQLSelectQueryBlock和SQLUnionQuery。
      * SQLSelectQueryBlock 中包含 主要用到的 表,字段,where,group by ,order by 这些信息
-     * <p>
+     *
      * 组成解构
      * **********************************************************************
      * interface SQLObject {}
      * interface SQLExpr extends SQLObject {}
      * interface SQLStatement extends SQLObject {}
-     * <p>
+     *
      * interface SQLTableSource extends SQLObject {}
      * class SQLSelect extends SQLObject {}
      * class SQLSelectQueryBlock extends SQLObject {}
      * **********************************************************************
+     * </pre>
      */
     public static IMetaObject createBySql(String sql, String objectCode) {
         ManualMetaObject manualMetaObject = new ManualMetaObject();
