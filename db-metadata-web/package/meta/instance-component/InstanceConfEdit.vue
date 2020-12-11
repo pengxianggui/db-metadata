@@ -3,7 +3,7 @@
     <el-form id="form-box" size="mini" ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px">
       <div id="opr-box">
         <div style="font-size: 13px;">
-          <el-button size="mini" type="primary" plain @click="goBack()">
+          <el-button size="mini" type="primary" plain @click="$goBack()">
             <i class="el-icon-back"></i><span>返回</span>
           </el-button>
           &nbsp;
@@ -178,11 +178,6 @@ export default {
       this.confModel['conf'] = {};
       this.confModel['fConf'] = {};
     },
-    goBack() {
-      TagViewUtil.close(this.$route).then(() => {
-        this.$router.go(-1)
-      })
-    },
     rollback() {
       // TODO 配置回滚
       this.$message.warning("TODO 待完成")
@@ -240,7 +235,6 @@ export default {
         let url = this.$compile(restUrl.COMP_INSTANCE_CONF_DELETE, this.confModel);
         this.$axios.delete(url).then(({msg = '配置删除成功'}) => {
           this.$message.success(msg);
-          // this.goBack()
         }).catch(({msg = '配置删除失败'}) => {
           this.$message.error(msg);
         })
@@ -249,7 +243,16 @@ export default {
     submit() {
       this.$refs['InstanceConf'].validate((valid) => {
         if (valid) {
-          const {confModel: {instanceCode, instanceName, componentCode, objectCode, conf: objectConf, fConf: fieldsConf}, EDIT_MODE} = this
+          const {
+            confModel: {
+              instanceCode,
+              instanceName,
+              componentCode,
+              objectCode,
+              conf: objectConf,
+              fConf: fieldsConf
+            }, EDIT_MODE
+          } = this
           let $confirm = EDIT_MODE ?
               this.$confirm('确认提交?')
               : this.$prompt(`请为这套配置设定一个唯一编码(instanceCode), 如不输入, 则默认为:${instanceCode}`, {})
@@ -270,7 +273,6 @@ export default {
               data: params
             }).then(({msg = '配置保存成功'}) => {
               this.$message.success(msg);
-              // this.goBack()
             }).catch(({msg = '配置保存失败'}) => {
               this.$message.error(msg);
             })

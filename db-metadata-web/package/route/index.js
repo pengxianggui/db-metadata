@@ -168,13 +168,14 @@ export const innerRoute = [
 ]
 
 /**
- * 外层路由，用于全页面打开ui-conf编辑
+ * 外层路由，用于全页面打开ui-conf编辑等
  * @type {*[]}
  */
 export const outerRoute = jumpOut.map(route => {
     let item = utils.deepClone(route);
-    item.path = '/' + route.path;
-    item.name = 'G_' + route.name; // 避免重名
+    item.path = '/' + route.path
+    item.name = 'G_' + route.name // 避免重名
+    item.meta.newTab = true // newTab表示用于新开窗口
     return item;
 });
 

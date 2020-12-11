@@ -2,6 +2,7 @@ import ElementUI from 'element-ui'
 import utils from './utils'
 import * as Rest from './utils/rest'
 import filters from './register/filter'
+import registerGlobalFunction from './register/global-function'
 import './svg/index' // 内置svg注册
 // 布局组件
 import AdminLayout from "./layout/admin-layout";
@@ -133,13 +134,7 @@ const install = function (Vue, opts = {}) {
     Vue.use(ElementUI, opts);
 
     // 注册全局函数
-    Vue.prototype.$axios = configAxios(opts.axios)
-    Vue.prototype.$merge = utils.merge
-    Vue.prototype.$reverseMerge = utils.reverseMerge
-    Vue.prototype.$compile = utils.compile
-    Vue.prototype.$dialog = utils.dialog
-    Vue.prototype.$isRoot = user.isRoot
-    Vue.prototype.$hasRoles = user.hasRoles
+    registerGlobalFunction(Vue, opts)
 
     // 自定义rest接口url覆盖
     if (opts.restUrl) {

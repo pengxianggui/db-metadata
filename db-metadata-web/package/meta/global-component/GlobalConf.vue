@@ -3,7 +3,7 @@
     <el-form :model="confModel" label-width="80px" class="demo-form-inline" size="mini" style="height: 100%">
       <div class="opr-box">
         <div>
-          <el-button size="mini" type="primary" plain @click="goBack">
+          <el-button size="mini" type="primary" plain @click="$goBack()">
             <i class="el-icon-back"></i><span>返回</span>
           </el-button>
           <el-form-item label="组件" class="inline">
@@ -132,15 +132,10 @@ export default {
           data: params
         }).then(({msg = '配置更新成功'}) => {
           this.$message.success(msg);
-          this.goBack()
+          this.$goBack()
         }).catch(({msg = '配置更新失败'}) => {
           this.$message.error(msg);
         })
-      })
-    },
-    goBack: function () {
-      TagViewUtil.close(this.$route).then(() => {
-        this.$router.go(-1)
       })
     },
     preview: function () {

@@ -1,5 +1,5 @@
 <template>
-  <drop-down-box v-model="nativeValue" :meta="meta" v-bind="$attrs" @change="$emit('change')"></drop-down-box>
+  <drop-down-box v-model="nativeValue" :meta="meta" v-bind="$attrs" @change="$emit('change')" @clear="$emit('clear')"></drop-down-box>
 </template>
 
 <script>

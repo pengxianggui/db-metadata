@@ -11,7 +11,6 @@
                          v-model="nativeValue[key]" v-if="key === 'default_value'"></component>
 
               <component-selector v-model="nativeValue['component_name']" scope="field"
-                                  @change="handleCompChange(nativeValue['component_name'])"
                                   v-else-if="key === 'component_name'"></component-selector>
 
               <!--              常规-->
@@ -55,7 +54,7 @@ import UiConfTip from "./UiConfTip";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {defaultMeta} from "../../core";
 import Val from "../../core/mixins/value";
-import {isObject} from '@/../package/utils/common'
+import {isObject, assertEmpty} from '@/../package/utils/common'
 
 let conver = function (value) {
   if (!isObject(value)) {
@@ -88,8 +87,8 @@ export default {
     }
   },
   watch: {
-    'nativeValue.component_name': function (newV) {
-      if (defaultMeta.hasOwnProperty(newV)) {
+    'nativeValue.component_name': function (newV, oldV) {
+      if (this.formType || defaultMeta.hasOwnProperty(newV)) { // formType时立即重新计算, jsonType时存在则重新计算
         this.handleCompChange(newV)
       }
     }
@@ -113,7 +112,10 @@ export default {
           this.$delete(nativeValue, key)
         }
       }
-      this.$merge(nativeValue, defaultMeta[value])
+
+      this.$merge(nativeValue, assertEmpty(defaultMeta[value], {
+        component_name: ''
+      }))
     },
     handleJsonChange() {
       // 当值中的component_name发生变化时, 需要重新替换整个nativeValue: 采用watch替代实现

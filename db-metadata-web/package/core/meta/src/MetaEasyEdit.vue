@@ -176,7 +176,7 @@
                 window.open(finalRouteUrl.href, '_blank');
             },
             editInstanceFieldConf(componentCode) {
-                this.editInstanceConf(componentCode); // just edit the ui conf of field named fieldCode. anchor point ?
+                this.editInstanceConf(componentCode); // just edit the ui conf of field named fieldCode. anchor point ———— filtered
             }
         }
     }

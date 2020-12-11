@@ -99,11 +99,6 @@ export default {
         title: "视图预览"
       })
     },
-    goBack() {
-      TagViewUtil.close(this.$route).then(() => {
-        this.$router.go(-1)
-      })
-    },
     submitForm() {
       const {formMeta: {objectCode: objectCode, columns}, ic: instanceCode, EDIT_MODE} = this
       if (isEmpty(objectCode)) {
@@ -147,7 +142,7 @@ export default {
           data: params
         }).then(({msg = '配置保存成功'}) => {
           this.$message.success(msg);
-          this.goBack()
+          this.$goBack()
         }).catch(({msg = '配置保存失败'}) => {
           this.$message.error(msg);
         })
