@@ -12,6 +12,7 @@
     <artifactId>jfinal-spring-boot-starter</artifactId>
     <version>1.4</version>
 
+
     <name>jfinal-spring-boot-starter</name>
     <url>https://github.com/ArtIsLong/jfinal-spring-boot-starter</url>
     <description>starter for jfinal</description>
