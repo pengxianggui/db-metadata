@@ -2,6 +2,7 @@ package com.hthjsj.web.user.auth;
 
 import com.google.common.collect.Lists;
 import com.hthjsj.web.user.User;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class MRManager implements MRLoader, MRPermit<User, MResource> {
 
     private static final MRManager me = new MRManager();
 
+    @Getter
+    private MRAuthIntercept mrAuthIntercept;
+
     /**
      * 注册多个资源访问器
      */
@@ -33,6 +37,9 @@ public class MRManager implements MRLoader, MRPermit<User, MResource> {
     }
 
     public static MRManager me() {
+        if (me.mrAuthIntercept == null) {
+            me.mrAuthIntercept = new MRAuthIntercept();
+        }
         return me;
     }
 

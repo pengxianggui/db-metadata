@@ -145,7 +145,7 @@ public class AppWebConfig extends JFinalConfig {
             me.add(UserManager.me().getUserIntercept());
         }
         if (prop.getBoolean(AppConst.NEED_AUTH)) {
-            me.add(new MRAuthIntercept());
+            me.add(MRManager.me().getMrAuthIntercept());
         }
     }
 
