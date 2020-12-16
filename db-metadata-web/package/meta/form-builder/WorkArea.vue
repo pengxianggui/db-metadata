@@ -25,13 +25,9 @@
 import utils from '../../utils'
 import draggable from 'vuedraggable'
 import FormView from "../../core/formview/src/FormView";
-import {restUrl} from "../../constant/url";
 import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
-import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 import {isLayoutComp} from './relate/componentData'
 import NestFormItemEditor from "./NestFormItemEditor";
-import {isEmpty} from "../../utils/common";
-import {TagViewUtil} from "../../index";
 
 export default {
   name: "WorkArea",

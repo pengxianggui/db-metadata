@@ -101,11 +101,9 @@
 <script>
 import utils from '../../utils'
 import {restUrl} from "../../constant/url";
-import FormBuilder from "../form-builder/FormBuilder";
 import UiConfTip from '../component/UiConfTip'
 import extractConfig from './extractConfig'
 import buildMeta from '../buildMeta'
-import {TagViewUtil} from '../../index'
 import FieldFilter from "../component/FieldFilter";
 import MetaObjectSelector from "../component/MetaObjectSelector";
 import ComponentSelector from "../component/ComponentSelector";
@@ -115,7 +113,6 @@ import UiConfEditor from "../component/UiConfEditor";
 export default {
   name: "InstanceConfEdit",
   components: {
-    FormBuilder,
     UiConfTip,
     FieldFilter,
     MetaObjectSelector,

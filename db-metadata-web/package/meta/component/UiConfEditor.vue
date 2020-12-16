@@ -24,7 +24,9 @@
       </el-form>
     </template>
     <template v-else>
-      <json-box v-model="nativeValue" mode="code" @input="handleJsonChange"></json-box>
+      <!-- 倘若直接使用v-model, JsonBox中若更改了component_name,将直接更新到上一层, 无法根据component_name的新值重新刷新配置,
+      此处使用:value和@input组合解构v-model的语法糖-->
+      <json-box :value="nativeValue" mode="code" @input="handleJsonChange"></json-box>
     </template>
 
     <div style="display: flex; flex-direction: row">
@@ -54,18 +56,11 @@ import UiConfTip from "./UiConfTip";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {defaultMeta} from "../../core";
 import Val from "../../core/mixins/value";
-import {isObject, assertEmpty} from '@/../package/utils/common'
-
-let conver = function (value) {
-  if (!isObject(value)) {
-    return {}
-  }
-  return value
-}
+import {assertEmpty} from '@/../package/utils/common'
 
 export default {
   name: "UiConfEditor",
-  mixins: [Val(conver)],
+  mixins: [Val()],
   components: {ComponentSelector, UiConfTip, MetaFieldConfigButton},
   props: {
     value: {
@@ -84,13 +79,6 @@ export default {
   data() {
     return {
       formType: true
-    }
-  },
-  watch: {
-    'nativeValue.component_name': function (newV, oldV) {
-      if (this.formType || defaultMeta.hasOwnProperty(newV)) { // formType时立即重新计算, jsonType时存在则重新计算
-        this.handleCompChange(newV)
-      }
     }
   },
   methods: {
@@ -117,8 +105,15 @@ export default {
         component_name: ''
       }))
     },
-    handleJsonChange() {
-      // 当值中的component_name发生变化时, 需要重新替换整个nativeValue: 采用watch替代实现
+    handleJsonChange(value) {
+      const {component_name: componentName} = value
+      const {value: {component_name: originComponentName}} = this
+
+      if (originComponentName !== componentName && defaultMeta.hasOwnProperty(componentName)) {
+        this.handleCompChange(componentName)
+      } else {
+        this.$emit('input', value)
+      }
     }
   },
   computed: {

@@ -12,6 +12,7 @@
                    :sort="false"
                    class="grid-box">
           <div v-for="c in v" class="grid-item">
+            <!--            TODO icon美化-->
             <!--            <i class="el-icon-receiving"></i>-->
             <!--            <svg-icon :value="c.icon"></svg-icon>-->
             <span>{{ c.comp.label }}</span>
@@ -26,7 +27,6 @@
 import draggable from 'vuedraggable'
 import {defaultMeta} from '../../core/index'
 import compLib, {extract} from './relate/componentData'
-import RowGrid from "../../core/rowgrid/src/RowGrid";
 
 export default {
   name: "ComponentList",

@@ -19,11 +19,12 @@
           <tag-view @cacheViewChange="(value) => cachedViews = value" v-if="showTagView"></tag-view>
         </div>
         <div class="stage">
-          <keep-alive :include="cachedViews">
-            <transition name="fade-transform" mode="out-in">
+          <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->
+          <transition name="fade-transform" mode="out-in">
+            <keep-alive :include="cachedViews">
               <router-view :key="$route.fullPath"></router-view>
-            </transition>
-          </keep-alive>
+            </keep-alive>
+          </transition>
         </div>
       </div>
     </div>

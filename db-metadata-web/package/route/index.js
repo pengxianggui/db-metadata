@@ -29,7 +29,7 @@ const jumpOut = [
         component: InstanceConfEdit,
         name: 'InstanceConfEdit',
         meta: {
-            title: '组件实例配置-编辑', // TODO 函数回调形式
+            title: '组件实例配置-编辑',
             icon: 'edit',
             noCache: false,
             roles: [access.root]

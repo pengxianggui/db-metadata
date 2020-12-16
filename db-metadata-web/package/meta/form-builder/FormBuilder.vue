@@ -8,24 +8,24 @@
             <el-button @click="preview" icon="el-icon-view" size="mini" type="primary">视图预览</el-button>
             <el-button @click="jsonView" icon="el-icon-view" size="mini" type="primary">json预览</el-button>
             <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success">保存</el-button>
-            <el-button @click="resetForm" icon="el-icon-delete" size="mini" type="danger">重置</el-button>
+            <el-button @click="resetForm" icon="el-icon-delete" size="mini" type="danger" v-if="EDIT_MODE">重置
+            </el-button>
           </el-button-group>
-          <drop-down-box size="mini" placeholder="选择元对象" v-model="objectCode" :data-url="metaObjectCodeUrl"
-                         @change="handleChange" @clear="handleClear" filterable>
-            <template #options="{options}">
-              <el-option v-for="item in options" :key="item.code" :label="item.code"
-                         :value="item.code">
-                {{ item.code }}
-              </el-option>
-            </template>
-          </drop-down-box>
-          <!--                  TODO 下面组件找不到？！InstanceConfEdit正常 -->
-          <!--                  <meta-object-selector v-model="objectCode" @change="handleChange" @clear="handleClear"></meta-object-selector>-->
+          <template v-if="!EDIT_MODE">
+            <span v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+            <meta-object-selector size="mini" v-model="formMeta.objectCode" @change="handleChange"
+                                  @clear="handleChange"></meta-object-selector>
+          </template>
+          <template v-else>
+            <span><span>ic:</span><el-tag size="mini" align="center">{{ instanceCode }}</el-tag></span>&nbsp;
+            <span><span>oc:</span><el-tag size="mini" align="center">{{ formMeta.objectCode }}</el-tag></span>&nbsp;
+            <span><span>cc:</span><el-tag size="mini" align="center">FormView</el-tag></span>&nbsp;
+          </template>
         </template>
       </WorkArea>
     </div>
     <div style="width: 300px;">
-      <ConfArea v-model="formMeta" :active-item="activeItem" :object-code="objectCode"
+      <ConfArea v-model="formMeta" :active-item="activeItem" :object-code="formMeta.objectCode"
                 :field-code="fieldCode"></ConfArea>
     </div>
   </div>
@@ -39,53 +39,85 @@ import WorkArea from './WorkArea'
 import ConfArea from './ConfArea'
 import DefaultFormViewMeta from '../../core/formview/ui-conf'
 import MetaObjectSelector from "../component/MetaObjectSelector"
-import {defaultMeta} from "../../core";
 import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 import {isEmpty} from "../../utils/common";
-import {TagViewUtil} from "../../index";
+import extractConfig from "../instance-component/extractConfig";
 
 export default {
   name: "FormBuilder",
-  components: {MetaObjectSelector, ComponentList, WorkArea, ConfArea},
+  components: {
+    ComponentList,
+    WorkArea,
+    ConfArea,
+    MetaObjectSelector
+  },
   props: {
     ic: String,
-    oc: String,
-    cc: String
+    oc: String
   },
   data() {
-    const {oc: objectCode} = this
+    const {oc: objectCode, ic: instanceCode} = this
     return {
-      formMeta: this.$merge({objectCode: objectCode}, DefaultFormViewMeta),
-      activeItem: {},
-      objectCode: objectCode,
       metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
+      formMeta: this.$merge({objectCode: objectCode}, DefaultFormViewMeta), // FormView渲染的元数据
+      isAutoComputed: false,
+      activeItem: {},
+      instanceCode: instanceCode,
+      instanceName: null
     }
   },
   methods: {
-    handleClear() {
-      this.objectCode = null;
-      this.handleChange();
-      this.setInitState();
-    },
     handleChange() {
-      const {objectCode} = this;
-      this.loadConf(objectCode);
+      const {formMeta: {objectCode}} = this;
+      if (objectCode) {
+        this.autoComputedLoad(objectCode);
+      } else {
+        this.setInitState(null)
+      }
       this.$emit('oc-change', objectCode);
     },
-    setInitState() {
-      this.formMeta = this.$merge({}, DefaultFormViewMeta);
+    setInitState(objectCode) {
+      this.formMeta = this.$merge({objectCode: objectCode}, DefaultFormViewMeta);
+      this.activeItem = {}
     },
-    loadConf(objectCode) {
-      if (utils.isEmpty(objectCode)) return;
-      const url = this.$compile(restUrl.COMPONENT_INSTANCE_META, {
-        componentCode: 'FormView',
-        objectCode: objectCode
-      });
-      this.$axios.safeGet(url).then(resp => {
-        let formMeta = resp.data;
-        this.$reverseMerge(this.formMeta, formMeta, true);
-      }).catch(({msg = '加载失败'}) => {
-        this.setInitState();
+    instanceConfLoad(instanceCode, objectCode) {
+      let url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_EDIT, {
+        instanceCode: instanceCode,
+        objectCode: objectCode,
+        componentCode: 'FormView'
+      })
+      this.loadConf(url)
+    },
+    autoComputedLoad(objectCode) {
+      this.$confirm('系统将为您提供自动计算的配置', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_NEW, {
+          objectCode: objectCode,
+          componentCode: 'FormView'
+        });
+        this.loadConf(url)
+      }).catch(() => {
+      })
+    },
+    loadConf(url) {
+      const {$axios, formMeta: {objectCode}} = this;
+      this.setInitState(objectCode);
+      $axios.safeGet(url).then(resp => {
+        let {data} = resp;
+        let {isAutoComputed = false, instanceName, fieldsMap} = data;
+        this.isAutoComputed = isAutoComputed;
+        this.instanceName = instanceName;
+        // extract object config
+        this.$merge(this.formMeta, extractConfig.call(this, data, objectCode));
+
+        // extract field config
+        Object.keys(fieldsMap).forEach(key => this.formMeta.columns.push(extractConfig.call(this, fieldsMap, key)));
+      }).catch(({msg = '配置加载成功'}) => {
+        console.error('[ERROR] url: %s, msg: %s', url, msg);
+        this.setInitState(objectCode);
         this.$message.error(msg);
       })
     },
@@ -99,8 +131,19 @@ export default {
         title: "视图预览"
       })
     },
+    resetForm() {
+      this.$confirm('您当前的更改将丢失', '提示', {
+        confirmButtonText: '继续重置',
+        cancelButtonText: '取消'
+      }).then(() => {
+        const {instanceCode, objectCode} = this
+        this.instanceConfLoad(instanceCode, objectCode)
+      }).catch(() => {
+      })
+    },
     submitForm() {
-      const {formMeta: {objectCode: objectCode, columns}, ic: instanceCode, EDIT_MODE} = this
+      // TODO 由于目前UIConf的接口要求必须拍平字段的配置参数, 所以栅格设置数据先丢失，后面根据更新后的接口调整此处的逻辑
+      const {formMeta: {objectCode: objectCode, columns}, ic: instanceCode = objectCode + '.FormView', EDIT_MODE} = this
       if (isEmpty(objectCode)) {
         this.$message.warning('元对象编码不能为空!')
         return
@@ -147,27 +190,18 @@ export default {
           this.$message.error(msg);
         })
       })
-
-
     },
-    resetForm() {
-      this.$message.error("resetForm action not finished!");
-    },
-  },
-  watch: {
-    objectCode(newVal) {
-      this.objectCode = newVal;
-      this.loadConf(this.objectCode);
-    }
   },
   mounted() {
-    const objectCode = this.objectCode;
-    this.loadConf(objectCode);
+    const {instanceCode, formMeta: {objectCode}} = this
+    if (instanceCode) {
+      this.instanceConfLoad(instanceCode, objectCode)
+    }
   },
   computed: {
     EDIT_MODE() { // 实例配置编辑模式
-      const {oc: objectCode} = this
-      return !utils.isEmpty(objectCode)
+      const {instanceCode} = this
+      return !utils.isEmpty(instanceCode)
     },
     fieldCode() {
       const {activeItem: {name}} = this

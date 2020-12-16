@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="border-card" style="height: 100%; overflow: auto;">
     <el-tab-pane label="域配置" style="height: 100%;">
-      <ui-conf-editor :json-value.sync="activeItem"
+      <ui-conf-editor v-model="activeItem"
                       :object-code="objectCode" :field-code="fieldCode"
                       v-if="!isEmpty(activeItem)"></ui-conf-editor>
       <div v-else class="blank-tip">
@@ -10,7 +10,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="表单配置">
-      <ui-conf-editor :json-value.sync="formMeta" :object-code="objectCode"></ui-conf-editor>
+      <ui-conf-editor v-model="formMeta" :object-code="objectCode"></ui-conf-editor>
     </el-tab-pane>
   </el-tabs>
 </template>
