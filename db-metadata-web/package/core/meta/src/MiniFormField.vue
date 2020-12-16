@@ -71,7 +71,7 @@
                 <div style="padding: 20px; border-left: 3px solid #409EFF">
                     <el-form-item label="指定SQL">
                         <el-col :span="24">
-                            <sql-box v-model="nativeValue.scopeSql"></sql-box>
+                            <sql-box :check="true" v-model="nativeValue.scopeSql"></sql-box>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="静态数组">

@@ -1,13 +1,14 @@
 import {elementVersion} from "../../config";
 
 export const ConfDesc = `
-    |配置项|说明|类型|可选值|默认值|
-    |-----|---|----|----|-----|
-    |component_name|渲染组件名|string|组件列表|-|
-    |name|name属性|string|-|-|
-    |label|该实例标签名,表现为表单域的label|string|-|-|
-    |conf|ElementUI(` + elementVersion + `)中el-tree的原生配置项|object|-|-|
-    |behavior|待完善|object|-|-|
+|配置项|说明|类型|可选值|默认值|
+|-----|---|----|----|-----|
+|component_name|渲染组件名|string|组件列表|-|
+|name|name属性|string|-|-|
+|label|该实例标签名,表现为表单域的label|string|-|-|
+|operation-bar|操作条的配置项|object|-|{"show": true,"size": "mini","type": "primary"}|
+|conf|ElementUI(` + elementVersion + `)中el-tree的原生配置项|object|-|-|
+|behavior|待完善|object|-|-|
 `;
 
 export const CHOSE_TYPE = {

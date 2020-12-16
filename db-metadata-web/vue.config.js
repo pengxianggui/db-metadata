@@ -46,7 +46,7 @@ module.exports = {
             return options;
         })
 
-        // set svg-sprite-loade
+        // set svg-sprite-loader
         config.module
             .rule('svg')
             .exclude.add(path.join(__dirname, 'src/svg'))
