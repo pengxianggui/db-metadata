@@ -1,16 +1,16 @@
 <template>
-  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="model" :rules="rules">
+  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="innerModel" :rules="rules">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
 
-      <nest-form-item :columns="innerMeta.columns" :model="model">
+      <nest-form-item :columns="innerMeta.columns" :model="innerModel">
         <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
           <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
         </template>
       </nest-form-item>
 
     </slot>
-    <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
-          v-if="formType !== 'view' && buttonsConf.show">
+    <slot name="action" v-bind:model="innerModel" v-bind:conf="buttonsConf"
+          v-if="isView && buttonsConf.show">
       <el-form-item>
         <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
                    @click="onSubmit"
@@ -42,14 +42,21 @@ import utils from '../../../utils'
 import DefaultBehaviors from './defaultBehaviors'
 import DefaultMeta from '../ui-conf'
 import NestFormItem from "./NestFormItem";
+import {formTypes} from "../ui-conf";
 
 export default {
   name: "FormView",
   components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
+  provide() {
+    return {
+      isView: this.isView // 注入子field, 以便实现FormView的view形态
+    }
+  },
   data() {
     return {
-      model: {},
-      isEdit: false
+      innerModel: {},
+      isEdit: false,
+      formTypes: formTypes
     }
   },
   props: {
@@ -58,21 +65,24 @@ export default {
       default: () => {
         return {}
       }
+    },
+    model: { // 外部model的值拥有最高优先级, 但是key却是依据meta来确定
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   methods: {
-    dynamicSlotName(name) {
-      console.log(name.call())
-    },
     getItemRules(item) {
       let rules = item.hasOwnProperty('conf') ? item.conf['rules'] : [];
       return utils.isEmpty(rules) ? [] : rules;
     },
     setItem(name, value) {
-      this.$set(this.model, name, value)
+      this.$set(this.innerModel, name, value)
     },
     doSubmit(ev) {
-      let {innerMeta, model: params} = this;
+      let {innerMeta, innerModel: params} = this;
       const {action, objectCode} = innerMeta;
 
       let url = this.$compile(action, {objectCode: objectCode});
@@ -87,14 +97,14 @@ export default {
       })
     },
     onSubmit(ev) {
-      const {innerMeta: {name: refName}, formType} = this
-      if (formType === 'view') {
+      const {innerMeta: {name: refName}, isView} = this
+      if (isView) {
         return
       }
 
       const fn = 'submit';
       if (this.$listeners.hasOwnProperty(fn)) {
-        this.$emit(fn, this.model);
+        this.$emit(fn, this.innerModel);
       } else {
         this.$refs[refName].validate((valid) => {
           if (valid) {
@@ -108,13 +118,14 @@ export default {
     onCancel: function (ev) {
       const fn = 'cancel';
       if (this.$listeners.hasOwnProperty(fn)) {
-        this.$emit(fn, this.model);
+        this.$emit(fn, this.innerModel);
       } else {
         console.log('FormView default onCancel behavior.');
       }
     },
     assemblyModel(meta) {
-      this.model = {};
+      const {model: model} = this
+      this.innerModel = {};
       let columns = utils.isArray(meta.columns) ? meta.columns : [];
 
       // 编辑/新增 模式根据是否含有record字段 && record非空
@@ -123,19 +134,20 @@ export default {
       if (this.isEdit) {
         let record = utils.isObject(meta['record']) ? meta['record'] : {};
         columns.forEach(item => {
-          this.$set(this.model, item.name, record[item.name]);
+          this.$set(this.innerModel, item.name, utils.assertUndefined(model[item.name], record[item.name]));
         });
       } else {
         columns.forEach(item => {
-          this.$set(this.model, item.name, item.default_value);
+          this.$set(this.innerModel, item.name, utils.assertUndefined(model[item.name], item.default_value));
         });
       }
     }
   },
   computed: {
-    formType() {
-      const {innerMeta: {formType}} = this
-      return formType
+    isView() {
+      const {innerMeta: {form_type: metaFormType}, $attrs: {formType: attrFormType}} = this
+      const formType = utils.assertUndefined(attrFormType, metaFormType)
+      return formTypes.view.toUpperCase() === formType.toUpperCase()
     },
     innerMeta() {
       let newMeta = utils.deepClone(this.meta);
@@ -161,9 +173,6 @@ export default {
     // on() {
     //     return this.$on.bind(this);
     // }
-  },
-  mounted() {
-    console.log(this)
   }
 }
 </script>
