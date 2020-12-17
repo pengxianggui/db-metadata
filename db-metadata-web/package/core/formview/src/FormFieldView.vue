@@ -1,7 +1,9 @@
 <template>
-  <component :is="innerMeta.component_name" :meta="innerMeta" v-bind="innerMeta.conf"
-             :value="innerMeta.conf.value" v-if="innerMeta.component_name !== 'div'"></component>
-  <div v-html="innerMeta.conf.value" v-else></div>
+  <div class="container">
+    <component :is="innerMeta.component_name" :meta="innerMeta" v-bind="innerMeta.conf"
+               :value="innerMeta.conf.value" v-if="innerMeta.component_name !== 'div'"></component>
+    <div v-html="innerMeta.conf.value" v-else></div>
+  </div>
 </template>
 
 <script>
@@ -91,6 +93,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  .container {
+    width: 100%;
+    overflow: auto;
+  }
 </style>

@@ -3,7 +3,8 @@
     <el-row justify="end">
       <el-col :span="24">
         <!-- operation bar -->
-        <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData" v-if="operationBarConf['show']">
+        <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
+              v-if="operationBarConf['show']">
           <el-button-group>
             <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
             <slot name="add-btn" v-bind:conf="operationBarConf">
@@ -222,10 +223,13 @@ export default {
     },
     dialog(url, conf = {title: ''}) {
       this.$axios.get(url).then(resp => {
-        this.dialogComponentMea = resp.data;
+        const {width} = this.dialogComponentMea = resp.data;
         this.dialogMeta = {
           component_name: "DialogBox",
-          conf: conf
+          conf: {
+            ...conf,
+            width: width
+          }
         };
         this.dialogVisible = true
       }).catch(({msg = '发生错误'}) => {

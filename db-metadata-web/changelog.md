@@ -226,3 +226,12 @@ $router.push(TagViewUtil.pop())回到TagView中最后一个路由，从而替代
 ### 0.3.71
 1. FormBuilder支持栅格布局配置( TODO 配置保存待后端接口支持), FormView支持栅格布局展示;
 2. 动态路由的TagView支持快捷编辑路由数据
+
+### 0.3.72
+1. FormView支持编码指定model值, 优先级:model的value > default_value = record。 但是key以meta中的columns配置为主;
+2. FormView支持form_type为VIEW时的显示;
+3. 修复RegionBox传入可转换为Array的字符串时未执行转换;
+
+### 0.3.73
+优化FormView VIEW下的展示;
+FormView增加一个width配置;

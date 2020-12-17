@@ -285,8 +285,7 @@ export default {
         let item = fConf[key];
         meta.columns.push(item);
       }
-      console.log(meta)
-      this.$dialog(meta, null, {title: '预览'})
+      this.$dialog(meta, null, {title: '预览', width: meta.width})
     },
     buildObjectConfMeta(value) {
       this.objConfMeta = buildMeta(value);

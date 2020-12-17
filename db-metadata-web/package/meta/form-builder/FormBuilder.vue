@@ -127,8 +127,10 @@ export default {
       })
     },
     preview() {
+      const {formMeta: {width}} = this
       this.$dialog(this.formMeta, null, {
-        title: "视图预览"
+        title: "视图预览",
+        width: width
       })
     },
     resetForm() {
