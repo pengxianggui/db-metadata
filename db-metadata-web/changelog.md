@@ -235,3 +235,7 @@ $router.push(TagViewUtil.pop())回到TagView中最后一个路由，从而替代
 ### 0.3.73
 优化FormView VIEW下的展示;
 FormView增加一个width配置;
+
+### 0.3.74 ~ 0.3.75
+修复部分缺陷
+FormView在VIEW模式下inline无效, 否则容易出现错位.
