@@ -133,7 +133,9 @@ public class ViewFactory {
                 component = new TableTreeView(type.getCn(), type.getCode());
                 break;
             default:
-                throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
+                if (type.isView()) {
+                    throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);
+                }
         }
         return component;
     }
