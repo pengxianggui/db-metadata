@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
+import com.hthjsj.web.component.AbstractComponent;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
@@ -91,10 +92,10 @@ public class ComponentController extends FrontRestController {
         // objectCode + componentCode
         if (StrKit.notBlank(compCode, objectCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-            //            //自动计算的配置
+//            //自动计算的配置
             MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
             renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
-            //            }
+//            }
         } else {
             renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
         }
@@ -148,10 +149,10 @@ public class ComponentController extends FrontRestController {
             }
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                                                                                          metaObject.code(),
-                                                                                          instanceCode,
-                                                                                          instanceName,
-                                                                                          component.componentType());
+                    metaObject.code(),
+                    instanceCode,
+                    instanceName,
+                    component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -172,14 +173,14 @@ public class ComponentController extends FrontRestController {
         String instanceName = queryHelper.getInstanceName();
         Kv config = getKv();
 
-        Component component = ViewFactory.createEmptyViewComponent(compCode);
+        Component component = AbstractComponent.newInstance(compCode);
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                                                                                          metaObject.code(),
-                                                                                          instanceCode,
-                                                                                          instanceName,
-                                                                                          component.componentType());
+                    metaObject.code(),
+                    instanceCode,
+                    instanceName,
+                    component.componentType());
             componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));

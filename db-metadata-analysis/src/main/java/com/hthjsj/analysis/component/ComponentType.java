@@ -4,9 +4,6 @@ import com.jfinal.kit.StrKit;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * 组件枚举,显示注册,新增组件时需要在此处增加
  * name: 类名
@@ -39,15 +36,6 @@ public enum ComponentType {
     IMAGEBOX("imagebox", "图片控件", "ImgBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
-    static Set<ComponentType> views = new HashSet<ComponentType>();
-
-    static {
-        views.add(FORMVIEW);
-        views.add(SEARCHVIEW);
-        views.add(TABLEVIEW);
-        views.add(TABLETREEVIEW);
-    }
-
     @Getter(AccessLevel.PUBLIC)
     String name;
 
@@ -72,9 +60,5 @@ public enum ComponentType {
             }
         }
         return UNKNOWN;
-    }
-
-    public boolean isView() {
-        return views.contains(this);
     }
 }
