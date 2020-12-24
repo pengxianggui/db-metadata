@@ -2,16 +2,14 @@
   <div class="layout">
     <slot name="header">
       <div class="header">
-        <div>
-          <span class="h2" style="font-family: unset">元数据管理系统</span>
-          <span style="font-family: cursive;">—— Data Drive Everything</span>
-        </div>
+        <span class="h2" style="font-family: unset">元数据管理系统</span>
+        <span style="font-family: cursive;">—— Data Drive Everything</span>
       </div>
     </slot>
     <div class="body">
       <slot name="menu">
         <div class="menu">
-          <nav-menu></nav-menu>
+          <nav-menu :collapse.sync="collapse" :show-collapse-button="true"></nav-menu>
         </div>
       </slot>
       <div class="main">
@@ -44,6 +42,7 @@ export default {
   },
   data() {
     return {
+      collapse: false,
       cachedViews: [],
       showTagView: Conf.show
     }
@@ -81,13 +80,10 @@ export default {
     flex-direction: row;
     overflow: hidden;
 
-    $menuWidth: 220px;
-
     .menu {
-      width: $menuWidth;
-      min-width: $menuWidth;
       height: 100%;
       overflow: auto;
+      position: relative;
     }
 
     .main {

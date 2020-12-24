@@ -28,7 +28,8 @@ const router = new Router({
 });
 
 router.onReady(() => {
-    addRoutes(router, Layout, axios)
+    addRoutes(router, axios, Layout)
+    // addRoutes(router, axios)
 })
 
 router.beforeEach(async (to, from, next) => {

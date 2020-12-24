@@ -1,30 +1,27 @@
 <template>
-    <div class="menu-wrapper" v-if="$hasRoles(item.roles) && !item.hidden">
-        <template v-if="noChild(item)">
-            <app-link :to="item.path"
-                      :query="resolveParams(item['params'])">
-                <el-menu-item :index="item.path">
-                    <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
-                    <span slot="title">{{item.title}}</span>
-                </el-menu-item>
-            </app-link>
-        </template>
+  <div v-if="!item.hidden &&  $hasRoles(item.roles)">
+    <app-link v-if="noChild(item)" :to="item.path" :query="resolveParams(item['params'])">
+        <el-menu-item :index="item.path">
+            <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
+            <span slot="title">{{item.title}}</span>
+        </el-menu-item>
+    </app-link>
 
-        <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
-            <template #title>
-                <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
-                <span slot="title">{{item.title}}</span>
-            </template>
-            <menu-item v-for="subMenu in item.children"
-                       :key="subMenu.path"
-                       :item="subMenu"/>
-        </el-submenu>
-    </div>
+    <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
+        <template slot="title">
+            <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
+            <span slot="title">{{item.title}}</span>
+        </template>
+        <template v-for="subMenu in item.children">
+          <menu-item :key="subMenu.path"
+                     :item="subMenu"></menu-item>
+        </template>
+    </el-submenu>
+  </div>
 </template>
 
 <script>
     import AppLink from './Link'
-
 
     export default {
         name: "MenuItem",
@@ -80,7 +77,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

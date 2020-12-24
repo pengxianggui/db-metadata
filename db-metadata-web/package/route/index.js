@@ -214,7 +214,11 @@ function addMetaRoutes(router, Layout = AdminLayout) {
 }
 
 // 异步装载动态路由
-function addDynamicRoutes(router, Layout = AdminLayout, axios, url = restUrl.ROUTE_DATA, formatCallback = exchange) {
+function addDynamicRoutes(router,
+                          axios,
+                          Layout = AdminLayout,
+                          url = restUrl.ROUTE_DATA,
+                          formatCallback = exchange) {
     getDynamicRoutesFromRemote(axios, url).then(resp => {
         const {data: routes} = resp
         console.info('[MetaElement] 装配动态路由, %o', routes)
@@ -224,7 +228,19 @@ function addDynamicRoutes(router, Layout = AdminLayout, axios, url = restUrl.ROU
     })
 }
 
-export default function (router, Layout, axios, url, formatCallback) {
+/**
+ * 装载动态路由，如果系统存在静态配置的路由，则必须在route.onReady中调用此方法进行动态路由装配。否则由于异步路由数据可能导致动态路由还未装配，
+ * 路由跳转已经发生，从而导致路由不存在。
+ * @param router 必填项。VueRouter对象。
+ * @param axios 必填项。此axios将承担起动态路由数据的异步获取职责
+ * @param Layout 可选项，默认AdminLayout。布局组件。你可以利用插槽重写AdminLayout, 再进行传入。也可以不传，默认meta-element提供的AdminLayout。注意，如果传了此布局组件，
+ *                  则此组件的name必须与动态路由数据中对应的由的component名称相同。否则由于动态路由数据是不约束层次结构的，系统并不知道这个Layout将装配到哪个
+ *                  路由上。特别的是，meta路由一定会生效，而不受此条件限制。因为meta路由是固定的结构，系统知道Layout组件将应用在哪个路由上。
+ * @param url 可选项, 默认为db-meta服务端动态路由数据接口地址。url告诉axios从哪个资源地址获取动态路由数据
+ * @param formatCallback 可选项，默认装配规则。 动态路由数据获取后，将执行一个格式化动态路由数据的回调函数。例如，由于动态路由数据中的component没法是一个Vue组件数据，它可能只能是一个组件名，
+ *                      那么这个回调函数中就得根据这个组件名找到对应的Vue组件实例，然后替换上去。你也可以做一些其他数据过滤和装配的事情。
+ */
+export default function (router, axios, Layout, url, formatCallback) {
     addMetaRoutes(router, Layout)
-    addDynamicRoutes(router, Layout, axios, url, formatCallback)
+    addDynamicRoutes(router, axios, Layout, url, formatCallback)
 }

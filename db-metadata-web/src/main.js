@@ -4,7 +4,6 @@ import './svg'
 import MetaElement from '../package/index' // 如果将index省略, 则会发生下面Vue.use无法正常调用的异常情况
 import router from './router'
 import {mockXHR} from '../mock'
-import Layout from './layout'
 import axios from './axios'
 import ArticleForm from "@/view/ArticleForm";
 Vue.component(ArticleForm.name, ArticleForm)

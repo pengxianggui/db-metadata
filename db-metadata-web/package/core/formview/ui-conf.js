@@ -24,7 +24,7 @@ export default {
     "name": "FormView",
     "label": "表单模板",
     // "action": "/form/doAdd/{objectCode}", // form action (url), pxg_todo 屏蔽, FormBuilder实例配置时,会导致此属性和值配入库中, 但是此值需要区分三种表单环境
-    "width": "100%", // 宽度
+    "width": "60%", // 宽度
     "form_type": formTypes.add, // 默认新增
     "conf": {
         "label-width": '100px',

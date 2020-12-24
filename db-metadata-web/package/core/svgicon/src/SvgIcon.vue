@@ -1,12 +1,10 @@
 <template>
     <div v-if="isExternal" :style="styleExternalIcon"
          class="svg-external-icon svg-icon" v-on="$listeners" v-bind="$attrs"></div>
-    <span v-else>
-        <i v-if="value.startsWith('el-icon')" :class="value" class="svg-icon"></i>
-        <svg v-else aria-hidden="true" class="svg-icon" v-on="$listeners" v-bind="$attrs">
-            <use :xlink:href="iconName"/>
-        </svg>
-    </span>
+    <i v-else-if="value.startsWith('el-icon')" :class="value" class="svg-icon"></i>
+    <svg v-else aria-hidden="true" class="svg-icon" v-on="$listeners" v-bind="$attrs">
+        <use :xlink:href="iconName"/>
+    </svg>
 </template>
 
 <script>
@@ -44,6 +42,7 @@
         vertical-align: -0.15em;
         fill: currentColor;
         overflow: hidden;
+        text-align: center;
     }
 
     .svg-external-icon {
