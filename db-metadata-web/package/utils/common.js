@@ -575,3 +575,19 @@ export function deleteAllAttrs(value) {
     }
     return value
 }
+
+/**
+ * 剪切一个对象的属性，并返回其属性值。剪切后改对象无此属性
+ * @param obj
+ * @param attr
+ * @returns {null}
+ */
+export function shearAttr(obj, attr) {
+    if (!isObject(obj)) {
+        return null
+    }
+
+    let result = obj[attr]
+    delete obj[attr]
+    return result
+}
