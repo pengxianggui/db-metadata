@@ -1,6 +1,8 @@
 package com.hthjsj.web.query;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.hthjsj.analysis.db.MetaDataTypeConvert;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -181,7 +183,13 @@ public class FormDataFactory {
                 if (StrKit.isBlank(filepath)) {
                     filepath = "[]";
                 }
-                record.set(metaField.fieldCode(), JSON.parseArray(filepath));
+                JSONArray value = new JSONArray();
+                try {
+                    value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
+                } catch (JSONException e) {
+                    log.error(e.getMessage());
+                }
+                record.set(metaField.fieldCode(), value);
             }
         }
     }

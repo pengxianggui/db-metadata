@@ -16,7 +16,7 @@ export function dialog(meta, data, conf) {
             template: `
                 <el-dialog :visible.sync="visible" v-bind="conf" center>
                     <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
-                               @ok="ok" @cancel="cancel"></component>
+                               @ok="ok" @cancel="cancel" style="width: 100%"></component>
                     <slot name="footer" v-if="conf.showButtons">
                         <div class="dialog-footer" style="margin-top: 10px; text-align: center">
                             <el-button @click="visible = false">取 消</el-button>

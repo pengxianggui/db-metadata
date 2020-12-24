@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <component :is="innerMeta.component_name" :meta="innerMeta" v-bind="innerMeta.conf"
-               :value="innerMeta.conf.value" v-if="innerMeta.component_name !== 'div'"></component>
-    <div v-html="innerMeta.conf.value" v-else></div>
+    <template v-for="meta in innerMetas">
+      <component :is="meta.component_name" :meta="meta" v-bind="meta.conf"
+                 :value="meta.conf.value" v-if="meta.component_name !== 'div'"></component>
+      <div v-html="meta.conf.value" v-else></div>
+    </template>
   </div>
 </template>
 
@@ -13,47 +15,68 @@ import {isArray, strToArray} from "../../../utils/common";
 // 给合理的结合起来
 const mapping = {
   ImgBox: function (value, meta) {
-    return this.$merge({
-      conf: {
-        disabled: true,
-        value: value
+    let v = strToArray(value)
+    if (!isArray(v) || v.length <= 0) {
+      return [{
+        component_name: 'div',
+        conf: {
+          value: v
+        }
+      }]
+    }
+
+    return v.map(item => {
+      return {
+        component_name: 'el-image',
+        conf: {
+          src: item.url
+        }
       }
-    }, meta)
+    })
   },
   FileBox: function (value, meta) {
-    return this.$merge({
+    let v = strToArray(value)
+    if (!isArray(v) || v.length <= 0) {
+      return [{
+        component_name: 'div',
+        conf: {
+          value: v
+        }
+      }]
+    }
+    return [this.$merge({
       conf: {
         disabled: true,
-        value: value
+        value: v
       }
-    }, meta)
+    }, meta)]
   },
   RegionBox: function (value) {
     value = strToArray(value)
     let v = isArray(value) ? value.map(i => i.name).join('/') : value
-    return {
+    return [{
       component_name: 'div',
       conf: {
         value: v
       }
-    }
+    }]
   },
   IconBox: function (value) {
-    return {
+    return [{
       component_name: 'SvgIcon',
       conf: {
         value: value
       }
-    }
+    }]
   },
   JsonBox: function (value) {
-    return {
+    return [{
       component_name: 'JsonBox',
       conf: {
         value: value,
         disabled: true
       }
-    }
+    }]
   },
   DropDownBox: function (value, meta) {
     const {options} = meta
@@ -63,12 +86,12 @@ const mapping = {
     } else {
       v = options.filter(o => o.value === value)['value']
     }
-    return {
+    return [{
       component_name: 'div',
       conf: {
         value: v
       }
-    }
+    }]
   }
 }
 
@@ -76,17 +99,17 @@ export default {
   name: "FormFieldReadOnly",
   props: ['value', 'meta'],
   computed: {
-    innerMeta() {
+    innerMetas() {
       const {meta, meta: {component_name: cc}, value} = this
       if (mapping.hasOwnProperty(cc)) {
         return mapping[cc].call(this, value, meta)
       } else {
-        return {
+        return [{
           component_name: 'div',
           conf: {
             value: value
           }
-        }
+        }]
       }
     }
   }
@@ -94,8 +117,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .container {
-    width: 100%;
-    overflow: auto;
-  }
+.container {
+  width: 100%;
+  overflow: auto;
+}
 </style>
