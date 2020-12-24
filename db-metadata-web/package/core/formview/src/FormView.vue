@@ -1,5 +1,6 @@
 <template>
-  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="innerModel" :rules="rules">
+  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="innerModel" :rules="rules"
+      :style="formStyle">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
 
       <nest-form-item :columns="innerMeta.columns" :model="innerModel">
@@ -56,7 +57,7 @@ export default {
     return {
       innerModel: {},
       isEdit: false,
-      formTypes: formTypes
+      formTypes: formTypes,
     }
   },
   props: {
@@ -158,6 +159,13 @@ export default {
     rules() {
       const {innerMeta: {conf: {rules} = {}} = {}} = this
       return rules;
+    },
+    formStyle() {
+      const {$attrs: {width: attrWidth}, innerMeta: {width: metaWidth}} = this
+      return {
+        margin: 'auto',
+        width: utils.assertUndefined(attrWidth, metaWidth)
+      }
     },
     buttonsConf() {
       return this.innerMeta['buttons'];

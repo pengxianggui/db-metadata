@@ -6,7 +6,7 @@
             <slot>
                 <template v-if="componentMeta !== undefined">
                     <component :is="componentMeta.component_name" v-if="componentMeta.component_name"
-                               @ok="ok" @cancel="cancel" :meta="componentMeta"></component>
+                               @ok="ok" @cancel="cancel" :meta="componentMeta" style="width: 100%"></component>
                 </template>
                 <template v-else>
                     body
