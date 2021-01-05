@@ -1,5 +1,9 @@
 <template>
   <div>
+
+
+    <sql-box :check="true" v-model="model.sql"></sql-box>
+
     <h1>组件开发调试页面</h1>
     <form-view :meta="meta" :model="model"></form-view>
   </div>
@@ -15,6 +19,7 @@ export default {
     return {
       model: {
         username: 'pengxg',
+        sql: '',
         age: 26,
         content: `
             <table style="border-collapse: collapse; width: 100%;" border="1">
