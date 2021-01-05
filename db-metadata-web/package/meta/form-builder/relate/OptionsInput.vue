@@ -67,7 +67,8 @@ export default {
 <style scoped>
 ul.container {
   list-style: none;
-  margin: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 ul.container li {

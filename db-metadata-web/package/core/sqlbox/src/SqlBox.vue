@@ -127,7 +127,7 @@ export default {
       return assertUndefined(assertUndefined(attrCheckUrl, metaCheckUrl), restUrl.CHECK_SQL)
     },
     lineNumber() {
-      const {innerMeta: {line_number: metaLineNumber}, $attrs: {line_number: attrLineNumber}} = this
+      const {innerMeta: {line_number: metaLineNumber}, $attrs: {'line-number': attrLineNumber}} = this
       return assertUndefined(attrLineNumber, metaLineNumber)
     }
   }
