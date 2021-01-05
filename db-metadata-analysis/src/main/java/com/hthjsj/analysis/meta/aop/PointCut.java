@@ -50,13 +50,15 @@ public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, Vi
     }
 
     @Override
-    public void viewBefore(AopInvocation invocation) {
+    public boolean viewBefore(AopInvocation invocation) {
         log.error("[PointCut] default operation : this is viewBefore!");
+        return false;
     }
 
     @Override
-    public void viewAfter(AopInvocation invocation) {
+    public boolean viewAfter(AopInvocation invocation) {
         log.error("[PointCut] default operation : this is viewAfter!");
+        return false;
     }
 
     @Override

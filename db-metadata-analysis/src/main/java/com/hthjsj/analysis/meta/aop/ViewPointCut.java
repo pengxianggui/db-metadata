@@ -8,10 +8,11 @@ package com.hthjsj.analysis.meta.aop;
  */
 public interface ViewPointCut extends IPointCut {
 
-    default void viewBefore(AopInvocation invocation) {
+    default boolean viewBefore(AopInvocation invocation) {
+        return false;
     }
 
-    default void viewAfter(AopInvocation invocation) {
-
+    default boolean viewAfter(AopInvocation invocation) {
+        return false;
     }
 }

@@ -169,4 +169,46 @@ public class PointCutChain {
             }
         }
     }
+
+    public static void viewBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut viewPointCut : viewPointCuts) {
+            if (viewPointCut instanceof ViewPointCut) {
+                ((ViewPointCut) viewPointCut).viewBefore(invocation);
+            }
+        }
+
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut viewPointCut = pointCuts[i];
+            if (viewPointCut instanceof ViewPointCut) {
+                boolean s = ((ViewPointCut) viewPointCut).viewBefore(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", viewPointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void viewAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+        for (IPointCut viewPointCut : viewPointCuts) {
+            if (viewPointCut instanceof ViewPointCut) {
+                ((ViewPointCut) viewPointCut).viewAfter(invocation);
+            }
+        }
+
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut viewPointCut = pointCuts[i];
+            if (viewPointCut instanceof ViewPointCut) {
+                boolean s = ((ViewPointCut) viewPointCut).viewAfter(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", viewPointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
+            }
+        }
+    }
 }

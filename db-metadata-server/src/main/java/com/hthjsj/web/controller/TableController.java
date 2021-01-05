@@ -193,7 +193,7 @@ public class TableController extends FrontRestController {
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    s = false;
+                    throw e;
                 }
                 return s;
             }

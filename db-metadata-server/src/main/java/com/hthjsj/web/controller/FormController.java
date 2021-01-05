@@ -87,7 +87,7 @@ public class FormController extends FrontRestController {
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    s = false;
+                    throw e;
                 }
                 return s;
             }
@@ -142,7 +142,7 @@ public class FormController extends FrontRestController {
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    s = false;
+                    throw e;
                 }
                 return s;
             }
