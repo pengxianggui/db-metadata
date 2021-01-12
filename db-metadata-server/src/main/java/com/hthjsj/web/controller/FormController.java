@@ -87,15 +87,18 @@ public class FormController extends FrontRestController {
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    throw e;
+                    invocation.getRet().setFail();
+                    s = false;
                 }
                 return s;
             }
         });
 
-        EventKit.post(FormMessage.AddMessage(invocation));
+        if (status) {
+            EventKit.post(FormMessage.AddMessage(invocation));
+        }
 
-        renderJson(status ? Ret.ok() : Ret.fail());
+        renderJson(invocation.getRet());
     }
 
     @Override
