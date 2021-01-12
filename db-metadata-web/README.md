@@ -5,18 +5,29 @@
 
 ## 使用方式
 1. iframe嵌入: 基于fatjar(前段整合进后端中), 具体使用参见后端说明
-2. 代码集成(npm install): 前端组件已经发布至npm,　可以下载使用,　基于组件库(配合后端接口)快速开发业务模块;
+2. 代码集成(npm install): 前端组件已经发布至npm, 可以下载使用, 基于组件库(配合后端接口)快速开发业务模块;
 
 ### iframe引入
-在fatjar项目中创建对应的元对象和菜单功能后, 访问对应的url,　即可渲染既定的模板实例.　如:
+
+在fatjar项目中创建对应的元对象和菜单功能后, 访问对应的url, 即可渲染既定的模板实例. 如:
 
 ```html
 <iframe style="width: 100%; height: 100%;" src="http://localhost:8080/#/table?featureCode=iot_dict" frameborder="0"></iframe>
 ```
+
 其中src的值需要参考系统支持的[内置模板]().
 
+### 项目启动
+
+```shell
+npm install;
+npm run serve;
+``` 
+
 ### 代码集成
+
 1.`cdn`
+
 ```javascript
 
 ```

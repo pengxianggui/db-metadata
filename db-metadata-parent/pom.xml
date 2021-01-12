@@ -21,7 +21,7 @@
     <modules>
         <module>../db-metadata-analysis</module>
         <module>../db-metadata-server</module>
-<!--        <module>../db-metadata-web</module>-->
+        <!--        <module>../db-metadata-web</module>-->
         <module>../jfinal-spring-boot-starter</module>
     </modules>
 
@@ -31,6 +31,21 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.7</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -53,6 +68,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.16</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.29</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
