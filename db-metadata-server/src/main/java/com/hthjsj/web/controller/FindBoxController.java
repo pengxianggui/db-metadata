@@ -1,6 +1,5 @@
 package com.hthjsj.web.controller;
 
-import com.google.common.base.Preconditions;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaFactory;
@@ -28,24 +27,6 @@ import com.jfinal.plugin.activerecord.Record;
  * <p> @author konbluesky </p>
  */
 public class FindBoxController extends FrontRestController {
-
-    /**
-     * TODO 调试用
-     */
-    public void immediate() {
-        String sql = getPara("sql");
-        Preconditions.checkNotNull(sql, "sql条件不能为空");
-        TableView tableView = null;
-        SearchView searchView = null;
-        String alignName = sql.replaceFirst("select ", "").replaceAll("from.*", "").replaceAll("\\s|\\,", "_");
-        IMetaObject metaObject = MetaFactory.createBySql(sql, alignName);
-        tableView = ViewFactory.tableView(metaObject);
-        searchView = ViewFactory.searchView(metaObject);
-        Kv result = Kv.create();
-        result.set("table", tableView.toKv());
-        result.set("search", searchView.toKv());
-        renderJson(Ret.ok("data", result));
-    }
 
     public void meta() {
         QueryHelper queryHelper = new QueryHelper(this);
