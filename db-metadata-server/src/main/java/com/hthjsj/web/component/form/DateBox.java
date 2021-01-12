@@ -22,7 +22,7 @@ public class DateBox extends FormField {
 
     @Override
     public Kv toKv() {
-        getFieldInject().inject(meta);
+
         return render.render();
     }
 }

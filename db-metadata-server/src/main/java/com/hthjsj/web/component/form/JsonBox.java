@@ -22,7 +22,7 @@ public class JsonBox extends FormField {
 
     @Override
     public Kv toKv() {
-        getFieldInject().inject(meta);
+
         return render.render();
     }
 }
