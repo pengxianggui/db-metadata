@@ -242,7 +242,7 @@ public class ComponentService {
 
         Okv fieldsMap = Okv.create();
         List<Record> fields = AnalysisConfig.me().dbMain().find(
-                "select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'%') and type=?",
+                "select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and dest_object like concat(?,'.%') and type=?",
                 componentCode,
                 destCode,
                 INSTANCE.META_FIELD.toString());
