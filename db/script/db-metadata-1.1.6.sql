@@ -1,13 +1,17 @@
 /*
  Navicat Premium Data Transfer
+
+ Source Server         : localhost_mysql
  Source Server Type    : MySQL
  Source Server Version : 50730
+ Source Host           : localhost:3306
+ Source Schema         : db-metadata-demo
 
  Target Server Type    : MySQL
  Target Server Version : 50730
  File Encoding         : 65001
 
- Date: 11/09/2020 10:40:19
+ Date: 16/01/2021 17:43:54
 */
 
 SET NAMES utf8mb4;
@@ -192,6 +196,7 @@ CREATE TABLE `meta_menu` (
   `updated_by` varchar(64) DEFAULT NULL COMMENT '更新人',
   `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(32) DEFAULT NULL COMMENT '备注',
+  `meta` json DEFAULT NULL COMMENT '配置信息',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
 
