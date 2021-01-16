@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden &&  $hasRoles(item.roles)">
+  <div v-if="!item.hidden &&  $hasRoles(needRoles)">
     <app-link v-if="noChild(item)" :to="item.path" :query="resolveParams(item['params'])">
         <el-menu-item :index="item.path">
             <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
@@ -22,6 +22,7 @@
 
 <script>
     import AppLink from './Link'
+    import utils from '@/../package/utils'
 
     export default {
         name: "MenuItem",
@@ -74,6 +75,17 @@
                 }
                 return params;
             }
+        },
+        computed: {
+          needRoles() {
+            let {item: {meta}} = this
+            meta = utils.strToObject(meta)
+            if (!meta) {
+              meta = {}
+            }
+            const {roles} = meta
+            return roles
+          }
         }
     }
 </script>

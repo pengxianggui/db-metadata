@@ -1,6 +1,6 @@
 <template>
   <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="innerModel" :rules="rules"
-      :style="formStyle">
+           :style="formStyle">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
 
       <nest-form-item :columns="innerMeta.columns" :model="innerModel">
@@ -104,17 +104,17 @@ export default {
       }
 
       const fn = 'submit';
-      if (this.$listeners.hasOwnProperty(fn)) {
-        this.$emit(fn, this.innerModel);
-      } else {
-        this.$refs[refName].validate((valid) => {
-          if (valid) {
-            this.doSubmit(ev) // do submit
-          } else {
-            return false;
+      this.$refs[refName].validate((valid) => {
+        if (valid) {
+          if (this.$listeners.hasOwnProperty(fn)) {
+            this.$emit(fn, this.innerModel)
+            return;
           }
-        });
-      }
+          this.doSubmit(ev) // do submit
+        } else {
+          return false;
+        }
+      });
     },
     onCancel: function (ev) {
       const fn = 'cancel';
