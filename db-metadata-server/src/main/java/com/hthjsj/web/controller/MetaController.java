@@ -40,14 +40,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MetaController extends FrontRestController {
 
-    /**
-     * <pre>
-     *
-     * param :
-     *      objectCode
-     *
-     * </pre>
-     */
     @Override
     public void index() {
         String metaObjectCode = getPara(0, getPara("objectCode"));
@@ -164,8 +156,8 @@ public class MetaController extends FrontRestController {
      * </pre>
      */
     public void incrementImport() {
-        String objectCode = new QueryHelper(this).getObjectCode();
         String scope = getPara("scope", "single");
+        String objectCode = new QueryHelper(this).getObjectCode();
         IMetaObject seedMetaObject = metaService().findByCode(objectCode);
 
         List<IMetaObject> toBeUpdateObjects = Lists.newArrayList(seedMetaObject);
@@ -231,10 +223,11 @@ public class MetaController extends FrontRestController {
          * 3. [可选]重新导入元对象
          * 4. [可选]对已经有的配置是否进行重新计算
          */
-        QueryHelper queryHelper = new QueryHelper(this);
-        String objectCode = queryHelper.getObjectCode();
         boolean deleteInstanceConfig = getParaToBoolean("deleteInstanceConfig", false);
         boolean autoImport = getParaToBoolean("autoImport", false);
+
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
         //1. 删除元对象
         boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());

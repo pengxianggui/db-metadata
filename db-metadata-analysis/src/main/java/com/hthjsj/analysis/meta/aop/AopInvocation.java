@@ -21,7 +21,7 @@ public class AopInvocation {
 
     private MetaData formData;
 
-    private Ret ret = new Ret();
+    private Ret ret = new Ret().setOk();
 
     private Kv httpParams;
 

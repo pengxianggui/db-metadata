@@ -163,4 +163,7 @@ div.container.min-width {
     display: inline-block;
   }
 }
+.el-menu {
+  margin-right: 5px;
+}
 </style>

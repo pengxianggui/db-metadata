@@ -1,8 +1,6 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.analysis.component.ComponentInjectFactory;
-import com.hthjsj.analysis.component.ViewInject;
 import com.hthjsj.analysis.meta.aop.*;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -72,10 +70,6 @@ public class MetaObjectConfigParse extends MetaData {
             return getStr("where").replaceFirst("where", "");
         }
         return "";
-    }
-
-    public ViewInject[] viewInjects() {
-        return ComponentInjectFactory.viewInjects(getStr("viewInject"));
     }
 
     /**

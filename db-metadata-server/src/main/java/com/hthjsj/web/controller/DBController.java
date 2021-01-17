@@ -65,7 +65,7 @@ public class DBController extends FrontRestController {
     public void truncate() {
         String token = getPara(0, "");
         StringBuilder sb = new StringBuilder();
-        sb.append("即将清除的数据表:meta_component, meta_component_instance,meta_config,meta_field,meta_object");
+        sb.append("即将清除的数据表:").append(AppConst.SYS_TABLE.rowKeySet());
         Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
         Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "开发token不正确:{}", sb.toString());
         log.warn("清空meta相关表{}", sb.toString());

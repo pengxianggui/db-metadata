@@ -1,8 +1,6 @@
 package com.hthjsj.analysis.component;
 
 import com.jfinal.kit.Kv;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +12,6 @@ import java.util.stream.Collectors;
  * @author konbluesky
  */
 public abstract class ViewContainer extends Component {
-
-    @Getter
-    @Setter
-    ViewInject viewInject = new ViewInject.DefaultViewInject();
 
     boolean isPreBuild = false;
 
@@ -53,7 +47,6 @@ public abstract class ViewContainer extends Component {
     protected void renderFieldsMeta(List<Component> fields, Kv meta) {
         List<Kv> fieldsMetas = new ArrayList<>();
         for (Component field : fields) {
-            field.setFieldInject(getFieldInject());
             //子元素自身渲染
             Kv fieldConf = field.toKv();
             fieldsMetas.add(fieldConf);

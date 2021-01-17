@@ -24,16 +24,6 @@ public abstract class Component {
     @Setter
     protected ViewContainer viewContainer;
 
-    @Getter
-    @Setter
-    FieldInject fieldInject = new FieldInject.DefaultFieldInject() {
-
-        @Override
-        public Kv inject(Kv meta) {
-            return super.inject(meta);
-        }
-    };
-
     public Component() {
     }
 

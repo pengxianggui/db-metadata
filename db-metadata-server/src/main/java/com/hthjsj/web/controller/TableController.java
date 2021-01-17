@@ -193,13 +193,14 @@ public class TableController extends FrontRestController {
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    throw e;
+                    invocation.getRet().setFail();
+                    s = false;
                 }
                 return s;
             }
         });
 
-        renderJson(status ? Ret.ok() : Ret.fail());
+        renderJson(invocation.getRet());
     }
 
     /**
@@ -224,9 +225,9 @@ public class TableController extends FrontRestController {
 
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
         List<Record> result = businessService().findData(metaObject,
-                sqlPara.getSelect(),
-                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                sqlPara.getPara());
+                                                         sqlPara.getSelect(),
+                                                         MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                                                         sqlPara.getPara());
 
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
