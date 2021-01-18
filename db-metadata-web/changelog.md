@@ -294,3 +294,4 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 
 ## 0.3.78
 1. ImgBox 预览图片遮罩优化
+2. 支持ImgBox上传后隐藏上传按钮;考虑显示效果,FileBox是否需要支持待定
