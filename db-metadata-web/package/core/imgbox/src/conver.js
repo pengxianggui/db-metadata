@@ -13,7 +13,7 @@ export default function (value) {
     if (isArray(value)) {
         return value.filter(i => !isEmpty(i));
     } else {
-        console.error(`[MetaElement] 参数 输入错误, 只接受数组，或可转换为数组的字符串， 请查看ImgBox的入参规则:`)
+        console.warn(`[MetaElement] 参数 输入错误, 只接受数组，或可转换为数组的字符串， 请查看ImgBox的入参规则:` + JSON.stringify(value))
         this.$emit('input', [])
         return [];
     }
