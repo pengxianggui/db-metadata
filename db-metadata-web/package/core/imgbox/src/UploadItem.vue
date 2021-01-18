@@ -10,12 +10,13 @@
                 :on-exceed="handleExceed"
                 :before-upload="handleBeforeUpload"
                 accept="image/*"
-                :file-list="fileList">
-            <i class="el-icon-plus"></i>
+                :on-change="handleChange"
+                :file-list="fileList" :class="{__hide: hideUploadButton}">
+          <i class="el-icon-plus"></i>
         </el-upload>
         <p class="name">{{seat}}</p>
         <el-dialog :visible.sync="dialogVisible" :append-to-body="true">
-            <img width="100%" :src="dialogImageUrl" alt="">
+            <img width="100%" :src="imageUrl" alt="">
         </el-dialog>
     </div>
 </template>
@@ -48,13 +49,20 @@
             }
         },
         data() {
+            const {value} = this
+            const hideUploadButton = !utils.isEmpty(value)
+
             return {
+                hideUploadButton: hideUploadButton,
                 fileList: [],
-                dialogImageUrl: '',
+                imageUrl: '',
                 dialogVisible: false
             };
         },
         methods: {
+            handleChange(file, fileList) {
+              this.hideUploadButton = fileList.length >= 1
+            },
             handleBeforeUpload(file) {
                 let isImage = utils.isImageFile(file);
                 if (!isImage) {
@@ -63,9 +71,11 @@
                 return isImage;
             },
             handleRemove(file, fileList) {
+              this.handleChange(file, fileList)
+              this.nativeValue = []
             },
             handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
+                this.imageUrl = file.url;
                 this.dialogVisible = true;
             },
             handleExceed(files, fileList) {
@@ -83,6 +93,7 @@
                     this.$message.success('文件上传成功!');
                     const {url, name, value} = response.data
 
+                    this.imageUrl = file.url;
                     this.fileList = fileList
                     this.nativeValue = [{url: url, name: name, value: value, uid: file.uid, seat: seat}]
                 } else {
@@ -104,11 +115,17 @@
     }
 </script>
 
+<style lang="scss">
+  .upload-item > .__hide .el-upload--picture-card{
+    display: none;
+  }
+</style>
 <style lang="scss" scoped>
     .upload-item {
         p.name {
-            /* TODO 居中效果不佳 */
-            text-align: center;
+          margin: 0;
+          text-align: left;
+          color: #666666;
         }
     }
 </style>
