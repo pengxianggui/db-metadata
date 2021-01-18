@@ -1,7 +1,7 @@
 <template>
     <!-- v-if 确保了弹框每次打开, 弹框中的组件都会被重新创建. destroy-on-close 没有如愿销毁掉弹框中的组件内容, 因此采用 v-if -->
     <el-dialog :visible.sync="nativeVisible" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :title="innerTitle"
-               v-if="visible" append-to-body>
+               v-if="visible" :append-to-body="true">
         <template #default>
             <slot>
                 <template v-if="componentMeta !== undefined">

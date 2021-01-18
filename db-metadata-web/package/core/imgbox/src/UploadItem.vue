@@ -14,7 +14,7 @@
             <i class="el-icon-plus"></i>
         </el-upload>
         <p class="name">{{seat}}</p>
-        <el-dialog :visible.sync="dialogVisible">
+        <el-dialog :visible.sync="dialogVisible" :append-to-body="true">
             <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
     </div>
