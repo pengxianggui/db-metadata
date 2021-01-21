@@ -282,7 +282,7 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 
 ### 0.3.76
 
-1. FormView的宽度默认为60%;
+1. FormView的宽度默认为60%;s
 2. NavMenu菜单支持展开/搜索(支持配置化);
 3. 调整动态路由装配函数的参数顺序(必填项排前面);
 4. 优化部分代码;
@@ -295,3 +295,7 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 ## 0.3.78
 1. ImgBox 预览图片遮罩优化
 2. 支持ImgBox上传后隐藏上传按钮;考虑显示效果,FileBox是否需要支持待定
+
+## 0.3.79
+1. 修复一处缺陷,现在可以指定ROOT角色的角色编码了
+2. user新增一个api： getRoles

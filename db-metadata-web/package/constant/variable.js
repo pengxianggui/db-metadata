@@ -17,12 +17,3 @@ export const metaObjectCode = {
     exceptionList: 'meta_exception', // 异常管理
     MenuList: 'meta_menu', // 菜单管理
 }
-
-/**
- * 访问控制
- * @type {{root: string, roles: []}}
- */
-export const access = {
-    root: 'ROOT', // 只有ROOT角色的用户才能访问元数据快捷编辑、平台维护模块(菜单的控制目前还有些技术问题)
-    roles: [] // 当前用户角色
-}
