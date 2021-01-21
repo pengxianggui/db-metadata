@@ -67,6 +67,7 @@ public class MetaDataTypeConvert {
             put("LONGBLOB", Byte[].class);
             put("VARCHAR", String.class);
             put("MEDIUMTEXT", String.class);
+            put("LONGTEXT", String.class);
             put("JSON", String.class);
         }
     };
