@@ -1,20 +1,20 @@
 <template>
-  <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane ref="scrollPane" class="tags-view-wrapper">
-      <router-link
-          v-for="(tag, index) in visitedViews"
-          ref="tag"
-          :key="tag.fullPath"
-          :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}"
-          :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-          tag="span"
-          class="tags-view-item"
-          @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-      >
-        <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)">
+    <scroll-pane  id="tags-view-container" ref="scrollPane">
+      <template v-for="(tag, index) in visitedViews">
+        <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
+                  :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}">
           <template #label>
-            <span>{{ tag.meta.title }}</span>
-            <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+            <router-link
+                ref="tag"
+                :key="tag.fullPath"
+                :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+                tag="span"
+                class="router-link"
+                @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
+            >
+              <span>{{ tag.meta.title }}</span>
+              <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+            </router-link>
           </template>
           <list style="width: 80px;">
             <list-item style="height: 22px; line-height: 22px;"
@@ -35,9 +35,8 @@
             </list-item>
           </list>
         </pop-menu>
-      </router-link>
+      </template>
     </scroll-pane>
-  </div>
 </template>
 
 <script>
@@ -225,33 +224,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tags-view-container {
-  height: 34px;
+$tagBarHeight: 38px;
+#tags-view-container {
+  height: $tagBarHeight;
   width: 100%;
   background: #ffffff;
-  //margin-bottom: 1px;
-  //border-bottom: 1px solid #d8dce5;
   box-shadow: 0 6px 6px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
 
-  .tags-view-wrapper {
-    .tags-view-item {
-      display: inline-block;
-      position: relative;
-      cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
-      padding: 0 8px;
-      font-size: 12px;
-      margin: 4px 2px;
+  $tagHeight: $tagBarHeight - 8;
 
-      &:first-of-type {
-        margin-left: 5px;
-      }
+  .tags-view-item {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    height: $tagHeight;
+    line-height: $tagHeight;
+    border: 1px solid #d8dce5;
+    font-size: 12px;
+    margin: 4px 2px;
 
-      &:last-of-type {
-        margin-right: 5px;
-      }
+    .router-link {
+      display: block;
+      padding: 0 10px;
+    }
+
+    &:first-of-type {
+      margin-left: 5px;
+    }
+
+    &:last-of-type {
+      margin-right: 5px;
     }
   }
 }
