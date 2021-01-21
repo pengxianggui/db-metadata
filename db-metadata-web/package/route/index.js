@@ -13,7 +13,7 @@ import ExceptionList from '../meta/exception'
 import AdminLayout from '../layout/admin-layout'
 import Redirect from './redirect'
 
-import {access} from '../constant/variable'
+import {access} from '../access'
 import utils from "../utils";
 import {restUrl} from "../constant/url";
 import exchange from "./exchange";

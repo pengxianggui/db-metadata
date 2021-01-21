@@ -73,8 +73,13 @@ export function setRoles(roles = []) {
     return access.roles;
 }
 
+export function getRoles() {
+    return access.roles
+}
+
 export default {
     isRoot,
     setRoles,
-    hasRoles
+    hasRoles,
+    getRoles
 }
