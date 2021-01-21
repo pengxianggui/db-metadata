@@ -51,11 +51,6 @@ export default {
       cacheValue: this.value
     }
   },
-  // watch: {
-  //     value: function (newVal) {
-  //         this.editor.setValue(newVal)
-  //     }
-  // },
   methods: {
     setTip(state, msg) {
       this.tip['state'] = state;
@@ -69,16 +64,14 @@ export default {
           this.nativeValue = value;
         } else {
           this.setTip(resp.state, resp.msg)
-          // this.nativeValue = null;
         }
       }).catch(err => {
         this.setTip('fail', err.msg);
-        // this.nativeValue = null;
       })
     },
     initEditor() {
       let self = this;
-      const {lineNumber} = this
+      const {lineNumber, check} = this
       let mime = self.innerMeta['mode'];
       let theme = self.innerMeta['theme'];
       self.editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, {
@@ -93,17 +86,11 @@ export default {
 
       self.editor.on('change', function (instance) {
         let newVal = instance.getValue();
-        // self.cacheValue = newVal;
-        // self.nativeValue = newVal;
         self.setTip(null, null)
-        // if (newVal === null || newVal.trim() === '') {
-        //     self.cleanValue();
-        // }
 
-        if (!self.innerMeta['check']) { // needn't be checked
+        if (!check) { // needn't be checked
           self.nativeValue = newVal;
         } else {
-          // if (self.tip['state'] === 'ok') self.setTip(null, null);
           self.cacheValue = newVal
           if (isEmpty(newVal)) {
             self.nativeValue = newVal
