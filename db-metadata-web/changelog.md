@@ -299,3 +299,6 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 ## 0.3.79
 1. 修复一处缺陷,现在可以指定ROOT角色的角色编码了
 2. user新增一个api： getRoles
+
+## 0.3.80
+1. 修复SqlBox异常

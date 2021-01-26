@@ -7,7 +7,7 @@
         </span>
     <br>
     <template v-if="check">
-      <el-button circle icon="el-icon-search" @click="checkSql(cacheValue)"></el-button>
+      <el-button circle icon="el-icon-search" @click="checkSql"></el-button>
       &nbsp;&nbsp
       <el-tooltip content="必须执行校验操作并通过, 否则不予保存" placement="right">
         <i class="el-icon-question"></i>
@@ -47,8 +47,7 @@ export default {
         state: null, // fail or ok, otherwise null
         msg: null
       },
-      editor: {},
-      cacheValue: this.value
+      editor: {}
     }
   },
   methods: {
@@ -56,7 +55,8 @@ export default {
       this.tip['state'] = state;
       this.tip['msg'] = msg;
     },
-    checkSql(value) {
+    checkSql() {
+      const value = this.editor.getValue
       const {checkUrl} = this
       this.$axios.get(this.$compile(checkUrl, {sql: value})).then(resp => {
         if (resp.state === 'ok') {
@@ -91,7 +91,6 @@ export default {
         if (!check) { // needn't be checked
           self.nativeValue = newVal;
         } else {
-          self.cacheValue = newVal
           if (isEmpty(newVal)) {
             self.nativeValue = newVal
           }
