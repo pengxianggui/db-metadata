@@ -44,15 +44,17 @@ jfinal:
 
 
   db-meta: # db-metadata相关配置
-    config-allow-replace: true
-    upload-dir: /opt/www/db-meta-serve
-    user-login: false
-    component-allow-replace: false
-    user-auth: false
+    config-allow-replace: true # 是否允许从defaultObject.json文件中读取数据并覆盖数据库实例配置。db-meta默认的defaultObject.json中都是关于dbmeta配置表自身的元数据。所以这项配不配关系不大。至于业务系统如果需要覆盖此文件，后面还需要单独对配置格式进行介绍。
+    upload-dir: /opt/www/db-meta-serve # 上传接口的文件保存路径。
+    user-login: false # 是否开启登录认证。默认的登录采用的json文件中的静态用户数据
+    component-allow-replace: false # dbmeta类路径中有一个jsonTemplate.json文件，记录了各个前端组件的默认配置，开启此项，会将这个配置自动初始化到库中(如果库中没有这些数据的话)，如果同时还处于开发模式则每次启动都会从jsonTemplate.json同步到库中，并且增加版本号。
+    user-auth: false # 是否开启用户鉴权。默认的鉴权采用的json文件中的静态数据。实际应用时，请覆盖userConfig类配置自定义的鉴权逻辑
 #    api-prefix: /jf # 指定db-meta内置接口前缀。必须是jfinal.filter-prefix子集。必须是一个具体的路径
+    # 主数据库配置信息。为db-meta配置库
     main-jdbc-url: jdbc:mysql://localhost:3306/comprehensive_evaluation_dbmeta?useSSL=false&characterEncoding=utf-8
     main-jdbc-username: root
     main-jdbc-password: 123456
+    # 业务数据库配置信息。支持多个业务数据库。规则如下。业务数据库也可以和主数据库是同一个库。那么下面配置可以省略，但是还是建议拆分。
     biz-db: comprehensive_evaluation,db-metadata-business-demo
     biz-db-config:
       comprehensive_evaluation:
