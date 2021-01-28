@@ -1,6 +1,6 @@
 package com.hthjsj.web.user;
 
-import com.jfinal.config.Routes;
+import com.hthjsj.web.DefaultRouter;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -8,7 +8,7 @@ import com.jfinal.config.Routes;
  *
  * <p> @author konbluesky </p>
  */
-public class UserRouter extends Routes {
+public class UserRouter extends DefaultRouter {
 
     public static final String URL_PREFIX = "/user";
 

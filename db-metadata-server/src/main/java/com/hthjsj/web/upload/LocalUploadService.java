@@ -3,6 +3,7 @@ package com.hthjsj.web.upload;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.hthjsj.AnalysisConfig;
+import com.hthjsj.web.AppConst;
 import com.jfinal.ext.kit.DateKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,7 +60,7 @@ public class LocalUploadService implements UploadService {
 
     @Override
     public String getBasePath() {
-        return AnalysisConfig.me().getProp().get("upload.dir");
+        return AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR);
     }
 
     @Override

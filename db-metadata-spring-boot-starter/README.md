@@ -19,6 +19,7 @@
 支持Spring原生配置文件。使用方法如下:
 
 ```yaml
+
 jfinal:
   dialect: com.jfinal.plugin.activerecord.dialect.MysqlDialect # 数据库方言
   #  kit-classes:
@@ -33,6 +34,7 @@ jfinal:
   inject-dependency: false # 设置对 Controller、Interceptor、Validator 进行依赖注入， 默认为false
   date-pattern: 'yyyy-MM-dd HH:mm:ss' # 设置json转换日期格式
   max-post-size: 10485760 # 设置http post最大值, 默认为10M, 文件上传也收此配置限制
+#  filter-prefix: /jf/* # 由JFinal接管的Servlet API通配符。必须是一个匹配路径
   #  task-info-map: # 配置定时任务，依赖cron4j
   #    task1:
   #      enable:
@@ -40,12 +42,14 @@ jfinal:
   #      task: it.sauronsoftware.cron4j或Runnable的继承类全路径
   #      daemon:
 
+
   db-meta: # db-metadata相关配置
     config-allow-replace: true
     upload-dir: /opt/www/db-meta-serve
     user-login: false
     component-allow-replace: false
     user-auth: false
+#    api-prefix: /jf # 指定db-meta内置接口前缀。必须是jfinal.filter-prefix子集。必须是一个具体的路径
     main-jdbc-url: jdbc:mysql://localhost:3306/comprehensive_evaluation_dbmeta?useSSL=false&characterEncoding=utf-8
     main-jdbc-username: root
     main-jdbc-password: 123456

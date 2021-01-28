@@ -1,6 +1,6 @@
 package com.hthjsj.web.controller;
 
-import com.jfinal.config.Routes;
+import com.hthjsj.web.DefaultRouter;
 
 /**
  * 核心开关的控制路由
@@ -9,7 +9,7 @@ import com.jfinal.config.Routes;
  *
  * <p> @author konbluesky </p>
  */
-public class CoreRouter extends Routes {
+public class CoreRouter extends DefaultRouter {
 
     @Override
     public void config() {

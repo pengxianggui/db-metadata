@@ -26,6 +26,8 @@ public class AppConst {
     public static final String NEED_LOGIN = "user.login";
 
     public static final String NEED_AUTH = "user.auth";
+    public static final String ROUTER_PREFIX = "router.prefix";
+    public static final String UPLOAD_DIR = "upload.dir";
 
     static {
         SYS_TABLE.put("meta_object", "config", true);

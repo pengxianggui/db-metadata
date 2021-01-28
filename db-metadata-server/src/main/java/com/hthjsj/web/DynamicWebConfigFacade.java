@@ -75,8 +75,13 @@ public class DynamicWebConfigFacade extends JFinalConfig {
             me.add(new CoreRouter());
             me.add(new FeatureRouter());
             me.add(new MenuModuleRouter());
-            me.add("/file/upload", UploadController.class);
-            me.add("/file", FileController.class);
+            me.add(new DefaultRouter() {
+                @Override
+                public void config() {
+                    add("/file/upload", UploadController.class);
+                    add("/file", FileController.class);
+                }
+            });
         }
 
         @Override

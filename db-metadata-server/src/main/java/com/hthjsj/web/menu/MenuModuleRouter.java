@@ -1,6 +1,6 @@
 package com.hthjsj.web.menu;
 
-import com.jfinal.config.Routes;
+import com.hthjsj.web.DefaultRouter;
 
 /**
  * <p> @Date : 2020/8/6 </p>
@@ -8,7 +8,7 @@ import com.jfinal.config.Routes;
  *
  * <p> @author konbluesky </p>
  */
-public class MenuModuleRouter extends Routes {
+public class MenuModuleRouter extends DefaultRouter {
 
     @Override
     public void config() {
