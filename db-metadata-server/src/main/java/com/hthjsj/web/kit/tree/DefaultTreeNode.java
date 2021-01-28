@@ -1,10 +1,13 @@
 package com.hthjsj.web.kit.tree;
 
 import com.jfinal.plugin.activerecord.Record;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p> @Date : 2019/12/18 </p>
@@ -12,6 +15,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Getter
 public class DefaultTreeNode implements TreeNode<String, Record> {
 
     Record node = new Record();
@@ -74,8 +78,24 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
     }
 
     @Override
+    public int compareTo(TreeNode node) {
+        if (this.getTreeConfig().isAsc()) {
+            return getOrder().compareTo(node.getOrder());
+        } else {
+            return 0 - getOrder().compareTo(node.getOrder());
+        }
+    }
+
+    @Override
     public Comparable getOrder() {
-        Object value = this.node.getObject(treeConfig.getOrderBy(), Integer.MAX_VALUE);
+        if (treeConfig.getOrderBy() == null) {
+            return Integer.MAX_VALUE;
+        }
+
+        Object value = this.node.getObject(strippingQuotes(treeConfig.getOrderBy()), Integer.MAX_VALUE);
+        if (value instanceof String) {
+            return (String) value;
+        }
         if (value instanceof Number) {
             return ((Number) value).intValue();
         }
@@ -83,10 +103,20 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
             return (int) ((Date) value).getTime();
         }
 
-        if (value instanceof String) {
-            return ((String) value).length();
-        }
-
         return Integer.MAX_VALUE;
+    }
+
+    /**
+     * 防止 数据库 内置字段时会带上反引号。如: `index`
+     * @param orderBy
+     * @return
+     */
+    private String strippingQuotes(String orderBy) {
+        Pattern pattern = Pattern.compile("^`(.*)`$");
+        Matcher matcher = pattern.matcher(orderBy);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return orderBy;
     }
 }

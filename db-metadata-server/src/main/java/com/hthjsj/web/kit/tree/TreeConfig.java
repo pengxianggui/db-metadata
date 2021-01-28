@@ -29,12 +29,22 @@ public class TreeConfig {
 
     private String orderBy;
 
+    private boolean asc;
+
     public void setOrderBy(String orderBy) {
         if (StrKit.notBlank(orderBy)) {
+            String firstOrder;
             if (orderBy.contains(",")) {
-                this.orderBy = orderBy.split(",")[0].split(" ")[0];
+                firstOrder = orderBy.split(",")[0];
             } else {
-                this.orderBy = orderBy.split(" ")[0];
+                firstOrder = orderBy;
+            }
+
+            if (firstOrder.contains(" ")) {
+                this.orderBy = firstOrder.split(" ")[0];
+                this.asc = ("asc".equalsIgnoreCase(firstOrder.split(" ")[1]));
+            } else {
+                this.orderBy = firstOrder;
             }
         }
     }
