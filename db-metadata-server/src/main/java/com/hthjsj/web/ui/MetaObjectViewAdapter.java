@@ -7,6 +7,7 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.kit.UtilKit;
 import com.jfinal.kit.Kv;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class MetaObjectViewAdapter {
 
     @Getter
@@ -57,6 +59,10 @@ public class MetaObjectViewAdapter {
         for (MetaFieldViewAdapter metaFieldViewAdapter : fields) {
             metaFieldViewAdapter.setContainer(this);
             fieldsMap.put(metaFieldViewAdapter.getMetaField().fieldCode(), metaFieldViewAdapter);
+        }
+
+        if (metaObject.fields().size() != fields.size()) {
+            log.error("元对象 {} 的元字段和元字段实例配置({})数量不匹配! 请检查！", metaObject.code(), component.code());
         }
     }
 
