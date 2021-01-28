@@ -152,6 +152,7 @@ export function spliceKvs(keys, values, separatorBetweenKAndV = '_', separatorBe
     }
 
     let kvs = [];
+    debugger
     for (let i = 0; i < keys.length; i++) {
         let key = toString(keys[i]);
         let value = toString(values[i]);
@@ -160,10 +161,22 @@ export function spliceKvs(keys, values, separatorBetweenKAndV = '_', separatorBe
     return kvs.join(separatorBetweenKVs);
 }
 
+/**
+ * 拼接kv, 如:
+ * key: a
+ * value: 1
+ * 结果为: a_b
+ * @param key
+ * @param value
+ * @param separatorBetweenKAndV
+ * @returns {string}
+ */
 export function spliceKv(key, value, separatorBetweenKAndV = '_') {
-    if (!isString(key) || !isString(value)) {
-        throw "key:" + key + "; value:" + value + ", all should be String!";
+    if (!isString(key)) {
+        throw "key:" + key + " should be String!";
     }
+    key = toString(key)
+    value = toString(value)
     return key + separatorBetweenKAndV + value;
 }
 

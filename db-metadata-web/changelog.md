@@ -302,3 +302,6 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 
 ## 0.3.80
 1. 修复SqlBox异常
+
+## 0.3.81
+修复部分缺陷
