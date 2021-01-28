@@ -1,9 +1,9 @@
 package com.hthjsj.web.feature;
 
+import com.hthjsj.web.DefaultRouter;
 import com.hthjsj.web.feature.ms.MasterSlaveController;
 import com.hthjsj.web.feature.tree.TreeAndTableController;
 import com.hthjsj.web.feature.tree.TreeController;
-import com.jfinal.config.Routes;
 
 /**
  * [功能] 模块的设计,集中管理该模块下的映射规则
@@ -12,7 +12,7 @@ import com.jfinal.config.Routes;
  *
  * <p> @author konbluesky </p>
  */
-public class FeatureRouter extends Routes {
+public class FeatureRouter extends DefaultRouter {
 
     @Override
     public void config() {
