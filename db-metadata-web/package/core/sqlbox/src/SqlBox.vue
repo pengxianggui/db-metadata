@@ -56,7 +56,7 @@ export default {
       this.tip['msg'] = msg;
     },
     checkSql() {
-      const value = this.editor.getValue
+      const value = this.editor.getValue()
       const {checkUrl} = this
       this.$axios.get(this.$compile(checkUrl, {sql: value})).then(resp => {
         if (resp.state === 'ok') {
