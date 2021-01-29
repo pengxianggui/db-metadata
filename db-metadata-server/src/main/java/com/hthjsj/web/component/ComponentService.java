@@ -238,7 +238,7 @@ public class ComponentService {
                                                                      INSTANCE.META_OBJECT.toString());
         //ensure return avalible value, like "" , "{}"
         String strConfig = objectConfig.getStr("config");
-        Kv objConf = Kv.by(destCode, StrKit.isBlank(strConfig) ? Maps.newHashMapWithExpectedSize(0) : strConfig);
+        Kv objConf = Kv.by(destCode, StrKit.isBlank(strConfig) ? Maps.newHashMapWithExpectedSize(0) : UtilKit.getKv(strConfig));
 
         Okv fieldsMap = Okv.create();
         List<Record> fields = AnalysisConfig.me().dbMain().find(
@@ -344,6 +344,25 @@ public class ComponentService {
         fieldInstance.set("updated_time", timestamp);
         fieldInstance.set("remark", "from file" + DateKit.toStr(timestamp));
         return AnalysisConfig.me().dbMain().update(META_COMPONENT_INSTANCE, fieldInstance);
+    }
+
+    /**
+     * 单独更新实例容器配置(不更新字段配置), 只在InitKit中使用
+     * @param containerType
+     * @param metaObject
+     * @param config
+     * @return
+     */
+    public boolean updateObjectConfigSelf(ComponentType containerType, IMetaObject metaObject, Kv config) {
+        Record objectInstance = AnalysisConfig.me().dbMain().findFirst("select * from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+                containerType.getCode(),
+                INSTANCE.META_OBJECT.toString(),
+                metaObject.code());
+        objectInstance.set("config", config.toJson());
+        Date timestamp = new Date();
+        objectInstance.set("updated_time", timestamp);
+        objectInstance.set("remark", "from file " + DateKit.toStr(timestamp));
+        return AnalysisConfig.me().dbMain().update(META_COMPONENT_INSTANCE, objectInstance);
     }
 
     /**
