@@ -61,6 +61,14 @@ public class UtilKit {
     }
 
     public static Kv getKv(Kv kv, String key) {
+        if (!kv.containsKey(key)) {
+            return Kv.create();
+        }
+
+        if (kv.get(key) instanceof Kv) {
+            return (Kv) kv.get(key);
+        }
+
         Kv result = JSON.parseObject(kv.getStr(key), Kv.class);
         return result != null ? result : Kv.create();
     }
@@ -84,6 +92,9 @@ public class UtilKit {
     }
 
     public static Kv getKv(String json) {
+        if (StrKit.isBlank(json)) {
+            return Kv.create();
+        }
         return JSON.parseObject(json, Kv.class);
     }
 

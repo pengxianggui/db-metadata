@@ -8,6 +8,7 @@ import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.ui.MetaFieldViewAdapter;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.UIManager;
 import com.jfinal.kit.Kv;
@@ -73,6 +74,7 @@ public class InitKit {
             //TODO 只自动覆盖FORMVIEW
             resolveMetaComponentInstance(metaObject, ComponentType.FORMVIEW);
             resolveMetaComponentInstance(metaObject, ComponentType.SEARCHVIEW);
+            resolveMetaComponentInstance(metaObject, ComponentType.TABLEVIEW);
         }
         return this;
     }
@@ -162,28 +164,55 @@ public class InitKit {
     }
 
     public void resolveMetaComponentInstance(IMetaObject metaObject, ComponentType componentType) {
-        if (!jsonInstanceConfig.containsKey(metaObject.code()))
+        if (!jsonInstanceConfig.containsKey(metaObject.code())) {
             return;
+        }
         log.info("found the component instance configuration of {} - {}", metaObject.code(), componentType);
+
         //识别元对象
         JSONObject objectSelf = jsonInstanceConfig.getJSONObject(metaObject.code());
-        if (objectSelf == null || objectSelf.isEmpty() || !objectSelf.containsKey(componentType.getCode()))
+        if (objectSelf == null || objectSelf.isEmpty() || !objectSelf.containsKey(componentType.getCode())) {
             return;
+        }
+
         //识别组件
         JSONObject component = objectSelf.getJSONObject(componentType.getCode());
-
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, componentType);
+
+        if (component.containsKey("config") && (component.get("config") instanceof JSONObject)) {
+            // 单独更新容器实例配置
+            Kv containerConfig = UtilKit.getKv(component.getString("config"));
+            if (!containerConfig.isEmpty()) {
+                Kv original = metaObjectViewAdapter.getInstanceConfig().getObjectConfig();
+                //merge操作
+                Kv mergedResult = Kv.create().set(UtilKit.deepMerge(original, containerConfig, true));
+                ServiceManager.componentService().updateObjectConfigSelf(
+                        metaObjectViewAdapter.getComponent().componentType(),
+                        metaObjectViewAdapter.getMetaObject(),
+                        mergedResult
+                );
+            }
+        }
+
+        if (!component.containsKey("_fields") || !(component.get("_fields") instanceof JSONObject)) {
+            return;
+        }
+
+        JSONObject fieldsConf = component.getJSONObject("_fields");
+
         for (IMetaField metaField : metaObject.fields()) {
             //json中未配置的field 直接放行;
-            if (!component.containsKey(metaField.fieldCode()))
+            if (!fieldsConf.containsKey(metaField.fieldCode()) || !(fieldsConf.get(metaField.fieldCode()) instanceof JSONObject)) {
                 continue;
+            }
 
             //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
             //WARN 仅支持配置config字段
-            if (component.get(metaField.fieldCode()) instanceof JSONObject) {
-                Kv config = UtilKit.getKv(component.getString(metaField.fieldCode()));
-                if (!config.isEmpty()) {
-                    UIManager.update(metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode()), config);
+            Kv fieldConfig = UtilKit.getKv(fieldsConf.getString(metaField.fieldCode()));
+            if (!fieldConfig.isEmpty()) {
+                MetaFieldViewAdapter fieldAdapter = metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode());
+                if (fieldAdapter != null) {
+                    UIManager.update(fieldAdapter, fieldConfig);
                     log.info("update new Component Instance Config by {} - {} - {} ", componentType.getCode(), metaObject.code(), metaField.fieldCode());
                 }
             }
