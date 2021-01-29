@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="el-card">
         <search-view :meta="spMeta" @search="handleSearch"></search-view>
         <table-view :ref="refName" :meta="tlMeta" :filter-params="filterParams">
             <template #add-btn="{conf}">
