@@ -54,6 +54,7 @@ public class AnalysisConfig {
     public static final String DB_MAIN_PASSWORD = "main.jdbc.password";
 
     private static final AnalysisConfig me = new AnalysisConfig();
+    public static final String SHOW_SQL = "show.sql";
 
     private final List<DBSource> dbSources = new ArrayList<>();
 
@@ -212,7 +213,7 @@ public class AnalysisConfig {
             //            arp_info.addSqlTemplate("schema_init.sql.txt");
             //            arp_info.addSqlTemplate("meta_operator.sql.txt");
             arp_info.setDialect(new MysqlDialect());
-            arp_info.setShowSql(true);
+            arp_info.setShowSql(getProp().getBoolean(SHOW_SQL, true));
 
 
             me.add(dp_info).add(arp_info);
