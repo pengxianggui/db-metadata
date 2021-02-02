@@ -4,7 +4,7 @@
                   :key="item.key"
                   :label="item.value | stringify"
                   v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                  @change="$emit('change')">
+                  @change="handleChange">
             <slot name="label" v-bind:option="item">
                 {{item.key}}
             </slot>
@@ -30,6 +30,13 @@
         },
         props: {
             value: [String, Number, Boolean]
+        },
+        methods: {
+            handleChange(value) {
+              const {innerOptions} = this
+              const activeOption = innerOptions.find(o => o.value === value)
+              this.$emit('change', {value, activeOption})
+            }
         }
     }
 </script>

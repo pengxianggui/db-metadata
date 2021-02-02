@@ -305,3 +305,7 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 
 ## 0.3.81
 修复部分缺陷
+
+## 0.3.82
+1. 优化功能创建页面
+2. DropDownBox和RadioBox change事件参数添加选中的option对象

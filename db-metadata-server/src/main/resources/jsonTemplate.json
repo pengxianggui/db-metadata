@@ -222,6 +222,16 @@
       ]
     }
   },
+  "RegionBox": {
+    "component_name": "RegionBox",
+    "name": "RegionBox",
+    "label": "地区/省市框",
+    "inline": true,
+    "conf": {
+      "type": "default",
+      "level": 2
+    }
+  },
   "ImgBox": {
     "component_name": "ImgBox",
     "name": "ImgBox",

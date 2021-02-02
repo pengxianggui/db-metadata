@@ -138,8 +138,12 @@ public class MultipartRequest extends HttpServletRequestWrapper {
             this.sizeLimitExceeded = true;
         } finally {
             try {
-                bis.close();
-                bos.close();
+                if (bis != null) {
+                    bis.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

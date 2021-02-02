@@ -11,7 +11,7 @@
 
     </slot>
     <slot name="action" v-bind:model="innerModel" v-bind:conf="buttonsConf"
-          v-if="!isView && buttonsConf.show">
+          v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
       <el-form-item>
         <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
                    @click="onSubmit"

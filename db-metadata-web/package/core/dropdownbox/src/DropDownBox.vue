@@ -1,7 +1,7 @@
 <template>
     <el-select v-model="nativeValue"
                v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-               @change="$emit('change', $event)"
+               @change="handleChange"
                @remove-tag="$emit('remove-tag', $event)"
                @clear="$emit('clear', $event)"
                @blur="$emit('blur', $event)"
@@ -59,6 +59,11 @@
             }
         },
         methods: {
+            handleChange(value) {
+                const {innerOptions} = this
+                const activeOption = innerOptions.find(o => o.value === value)
+                this.$emit('change', {value, activeOption})
+            },
             groupify(options) {
                 let groupOptions = [];
                 let groups = {};
