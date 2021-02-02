@@ -244,4 +244,11 @@ CREATE TABLE `meta_router` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='路由信息';
 
+-- ----------------------------
+-- Records of meta_router
+-- ----------------------------
+BEGIN;
+INSERT INTO `meta_router` VALUES ('65934fdf33694b11b820060d785ffc5b', '', '默认根路由', 'Default', '/default', '', 'AdminLayout', '{}', '{}', '2021-02-02 01:40:45', 'db-meta-web-devUser', NULL, NULL, '默认根路由, 指向db-meta默认布局组件AdminLayout');
+COMMIT;
+
 SET FOREIGN_KEY_CHECKS = 1;
