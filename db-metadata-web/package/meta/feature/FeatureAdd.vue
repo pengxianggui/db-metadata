@@ -1,68 +1,78 @@
 <template>
   <div class="container">
-    <el-card class="feature-form">
-      <el-form ref="featureForm" :model="feature" label-width="120px">
-        <el-form-item label="功能类别" prop="type" required>
-          <radio-box :data-url="featureTypeUrl" v-model="feature.type" @change="initFeatureConfMeta"></radio-box>
-        </el-form-item>
-        <el-form-item label="功能名" class="inline" prop="name" required>
-          <text-box v-model="feature.name"></text-box>
-        </el-form-item>
-        <el-form-item label="功能代码" class="inline" prop="code" required>
-          <text-box v-model="feature.code"></text-box>
-        </el-form-item>
-        <!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
-        <!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
-        <!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
-        <!--        </el-form-item>-->
-        <el-form-item label="业务拦截器">
-          <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
-                    v-model="feature.config.bizInterceptor"></el-input>
-        </el-form-item>
+    <el-steps :active="step" finish-status="success" class="step">
+      <el-step title="功能配置"></el-step>
+      <el-step title="创建路由"></el-step>
+      <el-step title="关联菜单"></el-step>
+    </el-steps>
+    <el-form ref="featureForm" :model="feature" label-width="120px" v-show="step == 0">
+      <el-form-item label="功能类别" prop="type" required>
+        <radio-box :data-url="featureTypeUrl" v-model="feature.type" @active-option="initFeatureConfMeta"></radio-box>
+      </el-form-item>
+      <el-form-item label="功能名" class="inline" prop="name" required>
+        <text-box v-model="feature.name"></text-box>
+      </el-form-item>
+      <el-form-item label="功能代码" class="inline" prop="code" required>
+        <text-box v-model="feature.code"></text-box>
+      </el-form-item>
+      <!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
+      <!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
+      <!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
+      <!--        </el-form-item>-->
+      <el-form-item label="业务拦截器">
+        <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+                  v-model="feature.config.bizInterceptor"></el-input>
+      </el-form-item>
 
-        <!--扩展配置-->
-        <component ref="extendConf" :is="feature.type" :config.sync="feature.config"></component>
+      <!--扩展配置-->
+      <component ref="extendConf" :is="feature.type" :config.sync="feature.config"></component>
 
-        <el-form-item>
-          <el-button @click="onSubmit('featureForm')" type="primary">保存</el-button>
-          <el-button @click="onCancel">取消</el-button>
+      <el-form-item>
+        <el-button size="small" type="success" @click="submitFeatureForm('featureForm')">提交</el-button>
+<!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
+        <el-button size="small" type="danger" @click="close">关闭</el-button>
+      </el-form-item>
+    </el-form>
+
+    <form-view :ref="route.objectCode" :meta="route.meta" @ok="next" v-show="step == 1">
+      <template #form-item-pid="{column, model}">
+        <el-form-item :name="column.name" :label="column.label">
+          <drop-down-box :data-url="column.data_url" v-model="model[column.name]"
+                         @change="baseRoutePathChange"></drop-down-box>
         </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card class="associate-box">
-      <h3>关联路由</h3>
-      <form-view :ref="route.objectCode" :meta="route.meta" @ok="route.saved = true"
-                 :disabled="route.saved">
-        <template #form-item-pid="{column, model}">
-          <el-form-item :name="column.name" :label="column.label">
-            <drop-down-box :data-url="column.data_url" v-model="model[column.name]"></drop-down-box>
-          </el-form-item>
-        </template>
-        <template #form-item-cn="{column, model}">
-          <el-form-item :name="column.name" :label="column.label">
-            <text-box v-model="model[column.name]"
-                      @change="$refs[route.objectCode].setItem('meta', {'title': model[column.name]});
+      </template>
+      <template #form-item-cn="{column, model}">
+        <el-form-item :name="column.name" :label="column.label">
+          <text-box v-model="model[column.name]"
+                    @change="$refs[route.objectCode].setItem('meta', {'title': model[column.name]});
                       $refs[menu.objectCode].setItem('title', model[column.name]);"></text-box>
-          </el-form-item>
-        </template>
-        <template #form-item-component="{column, model}">
-          <el-form-item :name="column.name" :label="column.label">
-            <drop-down-box v-if="!customComponent" :options="tmplOptions" v-model="model[column.name]"></drop-down-box>
-            <text-box v-else v-model="model[column.name]"></text-box>&nbsp;
-            <bool-box v-model="customComponent">是否自定义组件</bool-box>
-          </el-form-item>
-        </template>
-        <template #form-item-path="{column, model}">
-          <el-form-item :name="column.name" :label="column.label">
-            <text-box v-model="model[column.name]"
-                      @change="$refs[menu.objectCode].setItem('path', model[column.name] + '?fc=' + feature.code)"></text-box>
-          </el-form-item>
-        </template>
-      </form-view>
-      <h3>关联菜单</h3>
-      <form-view :ref="menu.objectCode" :meta="menu.meta" @ok="menu.saved = true"
-                 :disabled="menu.saved"></form-view>
-    </el-card>
+        </el-form-item>
+      </template>
+      <template #form-item-component="{column, model}">
+        <el-form-item :name="column.name" :label="column.label">
+          <drop-down-box v-if="!customComponent" :options="tmplOptions" v-model="model[column.name]"></drop-down-box>
+          <text-box v-else v-model="model[column.name]"></text-box>&nbsp;
+          <bool-box v-model="customComponent">是否自定义组件</bool-box>
+        </el-form-item>
+      </template>
+      <template #form-item-path="{column, model}">
+        <el-form-item :name="column.name" :label="column.label">
+          <text-box v-model="model[column.name]" @change="pathChange(model)"></text-box>
+        </el-form-item>
+      </template>
+      <template #action="{submit}">
+        <el-button size="small" type="success" @click="submit">提交</el-button>
+<!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
+        <el-button size="small" type="danger" @click="close">关闭</el-button>
+      </template>
+    </form-view>
+
+    <form-view :ref="menu.objectCode" :meta="menu.meta" @ok="close" v-show="step == 2">
+      <template #action="{submit}">
+        <el-button size="small" type="success" @click="submit">提交</el-button>
+        <el-button size="small" type="danger" @click="close">关闭</el-button>
+      </template>
+    </form-view>
   </div>
 </template>
 
@@ -74,6 +84,7 @@ import TreeSingleGrid from './conf-mini/TreeSingleGrid'
 import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
 import utils from '../../utils'
 import {getAddFormMeta} from '../../utils/rest'
+import {isEmpty} from "../../utils/common";
 
 // 后端功能类别代码 和 前端功能类别代码的映射： TODO 统一
 const FEATURE_TYPE = {
@@ -104,6 +115,8 @@ export default {
   data() {
     const {params: {objectCode = null, primaryKey = null} = {}} = this
     return {
+      baseRoutePath: '',
+      step: 0,
       FEATURE_TYPE: FEATURE_TYPE,
       objectCode: objectCode,
       primaryKey: primaryKey,
@@ -121,13 +134,11 @@ export default {
       },
       route: {
         objectCode: 'meta_router',
-        meta: {},
-        saved: false,
+        meta: {}
       },
       menu: {
         objectCode: 'meta_menu',
-        meta: {},
-        saved: false
+        meta: {}
       },
       customComponent: false,
       tmplOptions: [ // TODO 后端的功能编码应当与模板名保持一致，此处先静态配置options
@@ -197,6 +208,18 @@ export default {
           break;
       }
     },
+    baseRoutePathChange({activeOption}) {
+      const {key} = activeOption
+      this.baseRoutePath = key
+    },
+    pathChange(model) {
+      const {menu: {objectCode}, feature: {code: fc}, baseRoutePath} = this
+      let {path: value} = model
+      if (!isEmpty(baseRoutePath) && !value.startsWith("/")) {
+        value = (baseRoutePath.endsWith("/") ? baseRoutePath : baseRoutePath + '/') + value
+      }
+      this.$refs[objectCode].setItem('path', value + '?fc=' + fc)
+    },
     initAssociateMeta() {
       const {route: {objectCode: routeObjectCode}, menu: {objectCode: menuObjectCode}} = this
       getAddFormMeta(routeObjectCode).then(resp => {
@@ -208,47 +231,32 @@ export default {
         this.menu.meta = meta
       })
     },
-    doSubmit() {
-      const {feature: {type: featureType}, feature} = this
-
-      let url = this.$compile(restUrl.FEATURE_ADD, {
-        featureType: featureType
-      });
-      this.$axios.post(url, feature).then(({msg = '操作成功'}) => {
-        this.$message.success(msg);
-        this.$emit('ok', this.params);
-      }).catch(({msg = '操作失败'}) => {
-        this.$message.error(msg);
-      })
+    close() {
+      this.$emit('ok', this.params);
     },
-
-    onSubmit(formName) {
-      const {route: {saved: routeSaved}, menu: {saved: menuSaved}} = this
-      this.$refs[formName].validate((valid) => {
-        this.$refs['extendConf'].validate(subValid => {
+    submitFeatureForm(formName) {
+      const {feature: {type: featureType}, feature} = this
+      const _this = this
+      _this.$refs[formName].validate((valid) => {
+        _this.$refs['extendConf'].validate(subValid => {
           if (valid && subValid) {
-            if (!(routeSaved && menuSaved)) {
-              let msg = ''
-              msg += (!routeSaved ? '路由表单没有保存,' : '')
-              msg += (!menuSaved ? '菜单表单没有保存,' : '')
-              this.$confirm(`${msg}建议你填写并手动保存下, 我可不会自动帮你保存, 因为我不知道你要不要保存.`, '提示', {
-                type: 'warning',
-                showCancelButton: true,
-                cancelButtonText: '不了, 就保存功能吧',
-                showConfirmButton: true,
-                confirmButtonText: '采纳你的建议'
-              }).then(() => {
-              }).catch(() => {
-                this.doSubmit()
-              })
-            } else {
-              this.doSubmit() // submit
-            }
+            let url = _this.$compile(restUrl.FEATURE_ADD, {
+              featureType: featureType
+            });
+            _this.$axios.post(url, feature).then(({msg = '操作成功'}) => {
+              _this.$message.success(msg);
+              _this.next()
+            }).catch(({msg = '操作失败'}) => {
+              _this.$message.error(msg);
+            })
           } else {
             return false
           }
         })
       });
+    },
+    next() {
+      if (this.step++ > 2) this.step = 0;
     },
     onCancel: function (event) {
       this.$emit('cancel', event);
@@ -264,17 +272,10 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  //height: 600px;
+  flex-direction: column;
 
-  .feature-form {
-    flex: 1;
-    overflow: auto;
-  }
-
-  .associate-box {
-    flex: 1;
-    margin-left: 10px;
-    overflow: auto;
+  .step {
+    margin: 20px;
   }
 }
 </style>
