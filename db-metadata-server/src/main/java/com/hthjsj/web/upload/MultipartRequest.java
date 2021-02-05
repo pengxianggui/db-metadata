@@ -101,6 +101,7 @@ public class MultipartRequest extends HttpServletRequestWrapper {
 
         DiskFileItemFactory factory = new DiskFileItemFactory();
         upload = new ServletFileUpload(factory);
+        upload.setFileSizeMax(JFinal.me().getConstants().getMaxPostSize());
         uploadFiles = new ArrayList<UploadFile>();
 
         FileItemIterator iter;
