@@ -25,6 +25,7 @@ public enum ComponentType {
     RADIOBOX("radiobox", "单选框", "RadioBox"),
     TABLEVIEW("tableview", "表格组件", "TableView"),
     TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
+    RICHTEXTBOX("richtextbox", "富文本", "RichTextBox"),
     TEXTBOX("textbox", "输入框组件", "TextBox"),
     PASSBOX("passbox", "密码框组件", "PassBox"),
     TIMEBOX("timebox", "时间框", "TimeBox"),
