@@ -37,7 +37,7 @@
 <script>
     import utils from '../../../utils'
     import Meta from '../../mixins/meta'
-    import {options} from "../../mixins/methods";
+    import options from "../../mixins/options"
     import Val from '../../mixins/value'
     import conver from './conver'
     import reverse from './reverse'
@@ -59,11 +59,6 @@
             }
         },
         methods: {
-            handleChange(value) {
-                const {innerOptions} = this
-                const activeOption = innerOptions.find(o => o.value === value)
-                this.$emit('change', {value, activeOption})
-            },
             groupify(options) {
                 let groupOptions = [];
                 let groups = {};
@@ -86,6 +81,11 @@
                 }
 
                 return groupOptions;
+            },
+            handleChange(value) {
+                const {innerOptions} = this
+                const activeOption = innerOptions.find(o => o.value === value)
+                this.$emit('change', {value, activeOption})
             }
         },
         computed: {

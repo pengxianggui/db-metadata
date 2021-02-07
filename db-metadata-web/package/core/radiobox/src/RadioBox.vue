@@ -14,7 +14,7 @@
 
 <script>
     import Meta from '../../mixins/meta'
-    import {options} from "../../mixins/methods";
+    import options from "../../mixins/options"
     import Val from '../../mixins/value'
     import conver from './conver'
     import DefaultMeta from '../ui-conf'
