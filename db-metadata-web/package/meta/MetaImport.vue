@@ -3,7 +3,7 @@
         <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
                 <drop-down-box :ref="schemaMeta['name']" :meta="schemaMeta" v-model="model[schemaMeta.name]"
-                               @change="refreshTables()" filterable></drop-down-box>
+                               @change="refreshTables" filterable></drop-down-box>
             </el-form-item>
             <el-form-item :label="tableMeta.label" :prop="tableMeta.name">
                 <drop-down-box :ref="tableMeta['name']" :meta="tableMeta" v-model="model[tableMeta.name]"
@@ -58,7 +58,7 @@
                 let url = this.$compile(tableUrl, this.model);
                 this.$refs[tableKey].getOptions(url);
             },
-            handleTableChange(tableName) {
+            handleTableChange({value: tableName}) {
                 this.model[this.objectMeta.name] = tableName;
                 this.model[this.codeMeta.name] = tableName;
             },
