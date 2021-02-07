@@ -154,9 +154,10 @@ public class OptionsKit {
                     Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
                     mappeds.set(field.fieldCode(), mapped);
                 }
-            }
-            if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
-                mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
+            } else {
+                if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
+                    mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
+                }
             }
         }
         //转义数据
