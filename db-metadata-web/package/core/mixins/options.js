@@ -3,7 +3,7 @@ import utils from '../../utils'
  * 针对RadioBox, CheckBox, DropDownBox这一类选项数据处理进行集中抽取
  * @type {{methods: {initOptions(): (undefined), getOptions(*=): void}, mounted(): void}}
  */
-export default options = {
+export default {
     props: {
         options: Array,
         dataUrl: String,
