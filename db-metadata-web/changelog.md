@@ -315,3 +315,6 @@ TagView由path作为唯一键, 改为fullPath。对于相同的路由path，当�
 
 ## 0.3.84
 修复部分问题
+
+## 0.3.85
+TableView控制字段显隐时，优先使用label展示字段;
