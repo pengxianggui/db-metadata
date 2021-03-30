@@ -30,7 +30,6 @@ public class MetaSqlKit {
      * @param appendWhere   1. where c=d
      *                      2. c=d
      * @param appendOrderby a asc,b esc
-     *
      * @return
      */
     public static String where(String fullSql, String appendWhere, String appendOrderby) {
@@ -43,7 +42,8 @@ public class MetaSqlKit {
                 sqlSelectBuilder.orderBy(s);
             }
         }
-        return " from " + sqlSelectBuilder.toString().split("(?i)from")[1];
+
+        return " from " + sqlSelectBuilder.toString().split("(?i)(\\sfrom\\s)", 2)[1];
     }
 
     /**
@@ -51,7 +51,6 @@ public class MetaSqlKit {
      * 如正常的Column命名 直接返回
      *
      * @param columnName
-     *
      * @return
      */
     public static String discernColumns(String columnName) {

@@ -219,7 +219,13 @@ public class TreeAndTableController extends FrontRestController {
                         sqlPara.getPara());
             } else {
                 /** 拦截器干预后的逻辑 */
-                result = metaService().paginate(pageIndex, pageSize, metaObject, pointCutSqlPara.getSelect(), pointCutSqlPara.getFromWhere(), pointCutSqlPara.getPara());
+                result = metaService().paginate(pageIndex,
+                        pageSize,
+                        metaObject,
+                        pointCutSqlPara.getSelect(),
+//                        pointCutSqlPara.getFromWhere(),
+                        MetaSqlKit.where(pointCutSqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                        pointCutSqlPara.getPara());
             }
         }
 
