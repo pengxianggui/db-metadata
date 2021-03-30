@@ -70,7 +70,7 @@
                         <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
                         <el-checkbox v-for="(item, index) in columns"
                                      :key="item.name + '' + index"
-                                     :label="item.name"
+                                     :label="item.label || item.name"
                                      v-model="item.showable"
                                      @change="$forceUpdate(); getData()"
                                      style="display: block;"></el-checkbox>
