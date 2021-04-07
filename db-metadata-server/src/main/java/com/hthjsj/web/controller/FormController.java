@@ -1,5 +1,6 @@
 package com.hthjsj.web.controller;
 
+import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
@@ -9,10 +10,13 @@ import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jms.EventKit;
 import com.hthjsj.web.jms.FormMessage;
 import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.ui.OptionsKit;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -21,6 +25,7 @@ import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * <p> @Date : 2019/10/16 </p>
@@ -157,6 +162,7 @@ public class FormController extends FrontRestController {
         renderJson(invocation.getRet());
     }
 
+    @Before(HttpRequestHolder.class)
     @Override
     public void detail() {
         QueryHelper queryHelper = new QueryHelper(this);
@@ -170,6 +176,14 @@ public class FormController extends FrontRestController {
         Record d = metaService().findDataByIds(metaObject, dataIds);
 
         FormDataFactory.buildUpdateFormData(metaObject, d);
+
+        /**
+         * escape field value;
+         * 1. 是否需要转义的规则;
+         */
+        if (!queryHelper.list().raw()) {
+            d = OptionsKit.trans(metaObject.fields(), Lists.newArrayList(d)).get(0);
+        }
 
         renderJson(Ret.ok("data", formView.toKv().set("record", d)));
     }
