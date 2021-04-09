@@ -6,13 +6,13 @@ package com.hthjsj.analysis.meta.aop;
  *
  * <p> @author konbluesky </p>
  */
-public interface ViewPointCut extends IPointCut {
+public interface ViewPointCut<T extends AopInvocation> extends IPointCut {
 
-    default boolean viewBefore(AopInvocation invocation) {
+    default boolean viewBefore(T invocation) {
         return false;
     }
 
-    default boolean viewAfter(AopInvocation invocation) {
+    default boolean viewAfter(T invocation) {
         return false;
     }
 }
