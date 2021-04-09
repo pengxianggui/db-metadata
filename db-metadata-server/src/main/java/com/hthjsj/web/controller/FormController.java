@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaObjectConfigParse;
-import com.hthjsj.analysis.meta.aop.AddPointCut;
-import com.hthjsj.analysis.meta.aop.AopInvocation;
-import com.hthjsj.analysis.meta.aop.PointCutChain;
-import com.hthjsj.analysis.meta.aop.UpdatePointCut;
+import com.hthjsj.analysis.meta.aop.*;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.jfinal.HttpRequestHolder;
@@ -25,7 +22,6 @@ import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * <p> @Date : 2019/10/16 </p>
@@ -166,22 +162,37 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
-        Object[] dataIds = queryHelper.getPks(metaObject);
 
         FormView formView = ViewFactory.formView(metaObject).viewForm();
 
-        Record d = metaService().findDataByIds(metaObject, dataIds);
+        ViewPointCut[] viewPointCuts = metaObject.configParser().viewPointCut();
+        FormQueryInvocation invocation = new FormQueryInvocation(metaObject, this);
 
-        FormDataFactory.buildUpdateFormData(metaObject, d);
+        boolean status = Db.tx(() -> {
+            boolean s = true;
+            try {
+                PointCutChain.viewBefore(viewPointCuts, invocation);
+                Object[] dataIds = queryHelper.getPks(metaObject);
+                Record d = metaService().findDataByIds(metaObject, dataIds);
+//                    FormDataFactory.buildUpdateFormData(metaObject, d);
+                /**
+                 * escape field value;
+                 * 1. 是否需要转义的规则;
+                 */
+                if (!queryHelper.list().raw()) {
+                    d = OptionsKit.trans(metaObject.fields(), Lists.newArrayList(d)).get(0);
+                }
+                invocation.setData(d);
+                PointCutChain.viewAfter(viewPointCuts, invocation);
+            } catch (Exception e) {
+                log.error("获取记录详情错误\n元对象:{}, 错误信息:{}", metaObject.code(), e.getMessage());
+                invocation.getRet().setFail();
+                s = false;
+            }
+            return s;
+        });
 
-        /**
-         * escape field value;
-         * 1. 是否需要转义的规则;
-         */
-        if (!queryHelper.list().raw()) {
-            d = OptionsKit.trans(metaObject.fields(), Lists.newArrayList(d)).get(0);
-        }
-
-        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
+//        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
+        renderJson(invocation.getRet().setOk().set("data", formView.toKv().set("record", invocation.getData())));
     }
 }
