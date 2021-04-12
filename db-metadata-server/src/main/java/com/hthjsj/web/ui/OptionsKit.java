@@ -8,6 +8,7 @@ import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
+import com.hthjsj.web.query.dynamic.DefaultContext;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -30,7 +31,6 @@ public class OptionsKit {
      * 前端直接能用的value,key
      *
      * @param values
-     *
      * @return
      */
     public static List<Kv> transKeyValue(String[] values) {
@@ -51,7 +51,6 @@ public class OptionsKit {
      * id,cn -> value,key
      *
      * @param records
-     *
      * @return
      */
     public static List<Kv> transKeyValue(List<Record> records) {
@@ -79,7 +78,6 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
-     *
      * @return
      */
     public static List<Kv> transKeyValueBySql(String sql, String dbConfig) {
@@ -96,7 +94,6 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
-     *
      * @return
      */
     public static Kv transIdCnFlatMapBySql(String sql, String dbConfig) {
@@ -132,41 +129,46 @@ public class OptionsKit {
      *
      * @param fields
      * @param dataRecords
-     *
      * @return
      */
     public static <T extends Record> List<T> trans(Collection<IMetaField> fields, List<T> dataRecords) {
         List<T> result = Lists.newArrayList(dataRecords);
         MetaFieldConfigParse configWrapper = null;
-        Kv mappeds = Kv.create();
-        //计算需要转义的字段的映射关系
-        for (IMetaField field : fields) {
-            configWrapper = field.configParser();
-            if (configWrapper.hasTranslation()) {
-                if (configWrapper.isSql()) {
-                    log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
-                    String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
-                    String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(), HttpRequestHolder.getRequest());
-                    Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
-                    mappeds.set(field.fieldCode(), mapped);
-                }
-                if (configWrapper.isOptions()) {
-                    Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
-                    mappeds.set(field.fieldCode(), mapped);
-                }
-            } else {
-                if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
-                    mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
+
+        // compileSql时, 有些是有依赖关系的。例如一级分类和二级分类, 二级分类需要根据一级分类的数据不同，而编译不同的 compileSql。
+        // 因此, 对于不同的record, mapped可能是不同的
+        for (T record : dataRecords) {
+            final Kv mappeds = Kv.create();
+
+            //计算需要转义的字段的映射关系
+            for (IMetaField field : fields) {
+                configWrapper = field.configParser();
+                if (configWrapper.hasTranslation()) {
+                    if (configWrapper.isSql()) {
+                        log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
+                        String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
+                        String compileSql = new CompileRuntime().compile(
+                                configWrapper.scopeSql(), HttpRequestHolder.getRequest(), new DefaultContext(record.getColumns()));
+
+                        Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
+                        mappeds.set(field.fieldCode(), mapped);
+                    }
+                    if (configWrapper.isOptions()) {
+                        Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
+                        mappeds.set(field.fieldCode(), mapped);
+                    }
+                } else {
+                    if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
+                        mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
+                    }
                 }
             }
-        }
-        //转义数据
-        for (Record record : dataRecords) {
+
             mappeds.forEach((fieldCode, mapped) -> {
                 //旧值
                 String oldVal = record.getStr((String) fieldCode);
                 if (StrKit.notBlank(oldVal) && oldVal.contains(",")) {//多值逻辑
-                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(oldVal).toArray(new String[] {});
+                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(oldVal).toArray(new String[]{});
                     for (int i = 0; i < ss.length; i++) {
                         ss[i] = ((Kv) mapped).getStr(ss[i]);
                     }

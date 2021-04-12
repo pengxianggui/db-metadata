@@ -28,11 +28,13 @@ public class ValidatorController extends Controller {
      * http://0.0.0.0:8888/check/sql?sql=select id ,name cn from meta_dict
      */
     public void sql() {
-        String exeSql = getPara("sql", "");
-        Preconditions.checkArgument(SqlAnalysis.check(exeSql), "无效SQL [%s]", exeSql);
-        Preconditions.checkArgument(SqlAnalysis.checkIdCn(exeSql), "非法列的查询,只允许以ID,CN列返回,查询SQL:[%s]", exeSql);
-        List<Record> result = Db.use(SqlAnalysis.getSchema(exeSql)).find(SqlAnalysis.getExecSql(exeSql));
-        renderJson(Ret.ok("data", result));
+//        String exeSql = getPara("sql", "");
+//        Preconditions.checkArgument(SqlAnalysis.check(exeSql), "无效SQL [%s]", exeSql);
+//        Preconditions.checkArgument(SqlAnalysis.checkIdCn(exeSql), "非法列的查询,只允许以ID,CN列返回,查询SQL:[%s]", exeSql);
+//        List<Record> result = Db.use(SqlAnalysis.getSchema(exeSql)).find(SqlAnalysis.getExecSql(exeSql));
+//        renderJson(Ret.ok("data", result));
+        // TODO 由于sql中可能含有变量 #(), 而标量语法的"#" 恰好被CodeMirror当做了注释, 导致服务端获取的sql始终是有问题的。这里先放开校验， 解决这个问题后再打开
+        renderJson(Ret.ok());
     }
 
     /**

@@ -47,6 +47,23 @@ public class CompileRuntime {
         return result;
     }
 
+    public String compile(String sqlTemplate, HttpServletRequest request, Context context) {
+        if (StrKit.isBlank(sqlTemplate)) {
+            return "";
+        }
+        String result;
+        try {
+            Template template = engine.getTemplateByString(sqlTemplate);
+            UserVariable userVariable = new UserVariable(request);
+            context.set(userVariable.name(), userVariable.init());
+            result = template.renderToString(context.data());
+            log.info("Compile sqlTemplate:{}", result);
+        } catch (Exception e) {
+            throw new QueryCompileException("动态SQL: %s 编译出错,错误信息:%s ", sqlTemplate, e.getMessage());
+        }
+        return result;
+    }
+
     public String compile(String sqlTemplate, Context context) {
         Template template = engine.getTemplateByString(sqlTemplate);
         String result = template.renderToString(context.data());
