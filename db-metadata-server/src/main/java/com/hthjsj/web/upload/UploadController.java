@@ -113,6 +113,7 @@ public class UploadController extends FrontRestController {
 
         if (!file.exists()) {
             renderJson(Ret.fail("msg", "文件找不到了"));
+            log.warn("文件找不到了, path: {}", path);
             return;
         }
         renderImageOrFile(uploadService.getFile(path));

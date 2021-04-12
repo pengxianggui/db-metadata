@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {isArray, strToArray} from "../../../utils/common";
+import {isArray, isEmpty, strToArray} from "../../../utils/common";
 
 // TODO 在Form Field组件中进行判断显示效果会更准确，不过显得很侵入, 需要有更合适的语法糖将Form Field component在两种模式(view,edit)下的display
 // 给合理的结合起来
@@ -78,14 +78,17 @@ const mapping = {
       }
     }]
   },
-  DropDownBox: function (value, meta) {
-    const {options} = meta
-    let v
-    if (!isArray(options)) { // TODO 还有可能是data_url动态渲染
-      v = value
-    } else {
-      v = options.filter(o => o.value === value)['value']
+  DropDownBox: function (value, meta) { // 前端需要自行转义通过ui conf配置的k:v
+    const {options, data_url: dataUrl} = meta
+    let v = value
+    // 前端转义
+    if (isArray(options) && options.length > 0) {
+      v = options.filter(o => o.value === value)['key']
+    } else if (!isEmpty(dataUrl)) {
+      // TODO 通过dataUrl从服务端获取k:v, 再命中key
+
     }
+
     return [{
       component_name: 'div',
       conf: {
