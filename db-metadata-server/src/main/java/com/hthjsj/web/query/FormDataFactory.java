@@ -136,7 +136,7 @@ public class FormDataFactory {
                     continue;
                 }
 
-                if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
+                if (metaField.dbType().isBoolean()) {
                     formData.set(metaField.fieldCode(), Boolean.parseBoolean(String.valueOf(castedValue)));
                     continue;
                 }

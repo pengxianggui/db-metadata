@@ -87,12 +87,12 @@ public class MetaDataTypeConvert {
             return null;
         }
         String typeName = field.dbType().rawData();
-        Integer size = field.dbTypeLength().intValue();
+//        Integer size = field.dbTypeLength().intValue();
         Class clazz = getType(typeName);
-        // DB类型特殊转换规则
-        if ((typeName.equalsIgnoreCase("tinyint")) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
-            clazz = Boolean.class;
-        }
+//        // DB类型特殊转换规则
+//        if ((typeName.equalsIgnoreCase("tinyint")) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
+//            clazz = Boolean.class;
+//        }
         o = cast(String.valueOf(o), clazz);
         if (String.valueOf(o).equalsIgnoreCase("null")) {
             return null;

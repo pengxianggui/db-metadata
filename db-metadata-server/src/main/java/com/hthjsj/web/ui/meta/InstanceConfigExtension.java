@@ -22,18 +22,30 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
 
     private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
         if (metaField.dbType().isText()) {
-            if (metaField.dbTypeLength() == 1L || metaField.dbType().isTinyInt()) {
-                builder.componentName(ComponentType.BOOLBOX);
-            } else {
-                builder.maxlength(metaField.dbTypeLength().intValue());
+            if (metaField.dbType().is1Text(metaField.dbTypeLength().intValue())) { // 一个字符长度的text类型，视为下拉
+                builder.componentName(ComponentType.DROPDOWN);
             }
             if (metaField.dbTypeLength() > 255L) {
                 builder.componentName(ComponentType.TEXTAREABOX);
                 builder.resizeable("none");
                 builder.showOverflowTooltip(true);
             }
+            builder.maxlength(metaField.dbTypeLength().intValue());
         }
     };
+
+    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> boolRecommend = ((metaField, builder, containerType) -> {
+        if (metaField.dbType().isBoolean()) {
+            switch (containerType) {
+                case FORMVIEW:
+                    builder.componentName(ComponentType.BOOLBOX);
+                    break;
+                case SEARCHVIEW:
+                    builder.componentName(ComponentType.DROPDOWN);
+                    break;
+            }
+        }
+    });
 
     private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> dateRecommend = (metaField, builder, containerType) -> {
         //日期
@@ -111,6 +123,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
     @Override
     public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder config, ComponentType containerType) {
         textRecommend.config(metaField, config, containerType);
+        boolRecommend.config(metaField, config, containerType);
         dateRecommend.config(metaField, config, containerType);
         numberRecommend.config(metaField, config, containerType);
         jsonRecommend.config(metaField, config, containerType);

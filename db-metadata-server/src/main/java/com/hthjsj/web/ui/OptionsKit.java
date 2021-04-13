@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> @Date : 2019/11/18 </p>
@@ -42,7 +43,7 @@ public class OptionsKit {
     }
 
     public static Kv transKeyValueFlatMapByBoolean() {
-        return Kv.by("1", "是").set("0", "否");
+        return Kv.by("1", "是").set("0", "否").set(true, "是").set(false, "否");
     }
 
     /**
@@ -138,7 +139,8 @@ public class OptionsKit {
         // compileSql时, 有些是有依赖关系的。例如一级分类和二级分类, 二级分类需要根据一级分类的数据不同，而编译不同的 compileSql。
         // 因此, 对于不同的record, mapped可能是不同的
         for (T record : dataRecords) {
-            final Kv mappeds = Kv.create();
+//            final Kv mappeds = Kv.create();
+            final Map<String, Kv> mappeds = Kv.create();
 
             //计算需要转义的字段的映射关系
             for (IMetaField field : fields) {
@@ -151,30 +153,30 @@ public class OptionsKit {
                                 configWrapper.scopeSql(), HttpRequestHolder.getRequest(), new DefaultContext(record.getColumns()));
 
                         Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
-                        mappeds.set(field.fieldCode(), mapped);
+                        mappeds.put(field.fieldCode(), mapped);
                     }
                     if (configWrapper.isOptions()) {
                         Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
-                        mappeds.set(field.fieldCode(), mapped);
+                        mappeds.put(field.fieldCode(), mapped);
                     }
                 } else {
-                    if (field.dbType().isBoolean(field.dbTypeLength().intValue())) {
-                        mappeds.set(field.fieldCode(), transKeyValueFlatMapByBoolean());
+                    if (field.dbType().isBoolean()) {
+                        mappeds.put(field.fieldCode(), transKeyValueFlatMapByBoolean());
                     }
                 }
             }
 
             mappeds.forEach((fieldCode, mapped) -> {
                 //旧值
-                String oldVal = record.getStr((String) fieldCode);
-                if (StrKit.notBlank(oldVal) && oldVal.contains(",")) {//多值逻辑
-                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(oldVal).toArray(new String[]{});
+                Object oldVal = record.getObject(fieldCode);
+                if ((oldVal instanceof String) && StrKit.notBlank((String) oldVal) && ((String) oldVal).contains(",")) { // 多值逻辑
+                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList((String) oldVal).toArray(new String[]{});
                     for (int i = 0; i < ss.length; i++) {
-                        ss[i] = ((Kv) mapped).getStr(ss[i]);
+                        ss[i] = mapped.getStr(ss[i]);
                     }
-                    record.set((String) fieldCode, Joiner.on(",").skipNulls().join(ss));
-                } else {//单值逻辑
-                    record.set((String) fieldCode, ((Kv) mapped).getStr(oldVal));
+                    record.set(fieldCode, Joiner.on(",").skipNulls().join(ss));
+                } else { // 单值逻辑
+                    record.set(fieldCode, mapped.get(oldVal));
                 }
             });
         }
