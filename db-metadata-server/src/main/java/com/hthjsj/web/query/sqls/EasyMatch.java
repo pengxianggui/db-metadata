@@ -29,12 +29,12 @@ public class EasyMatch extends MetaSQLExtract {
     private final static List<String[]> rules = new ArrayList<String[]>();
 
     static {
-        rules.add(new String[] { "lt", "<?" });
-        rules.add(new String[] { "gt", ">?" });
-        rules.add(new String[] { "le", "<=?" });
-        rules.add(new String[] { "ge", ">=?" });
-        rules.add(new String[] { "eq", "=?" });
-        rules.add(new String[] { "ne", "<>?" });
+        rules.add(new String[]{"lt", "<?"});
+        rules.add(new String[]{"gt", ">?"});
+        rules.add(new String[]{"le", "<=?"});
+        rules.add(new String[]{"ge", ">=?"});
+        rules.add(new String[]{"eq", "=?"});
+        rules.add(new String[]{"ne", "<>?"});
     }
 
     Map<String, Object> values = new HashMap<>();
@@ -45,7 +45,6 @@ public class EasyMatch extends MetaSQLExtract {
      * 2003-2-29 是无效的
      *
      * @param sDate
-     *
      * @return
      */
     private boolean isLegalDate(String sDate, String fmt) {
@@ -82,6 +81,9 @@ public class EasyMatch extends MetaSQLExtract {
         for (String[] ss : rules) {
             Object v = httpParams.get(buildQueryKey(metaField.en(), ss[0]));
 
+            if (v == null) {
+                continue;
+            }
             //对时间日期类型数据,进行对齐
             //普通日期 2019-01-01 -> 2019-01-01 00:00:00.000  便于生成 date>2019-01-01 00:00:00.000 sql
 //            if (metaField.dbType().isDate()) {
@@ -93,14 +95,7 @@ public class EasyMatch extends MetaSQLExtract {
 //                }
 //            }
 
-            //boolean 转义
-            if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
-                v = MetaDataTypeConvert.convert(metaField, v);
-            }
-
-            if (v != null) {
-                values.put(SQL_PREFIX + MetaSqlKit.discernColumns(metaField.en()) + ss[1], v);
-            }
+            values.put(SQL_PREFIX + MetaSqlKit.discernColumns(metaField.en()) + ss[1], v);
         }
     }
 

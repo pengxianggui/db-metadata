@@ -21,10 +21,10 @@ public class FieldEqualsMatch extends MetaSQLExtract {
     public void init(IMetaField metaField, Map<String, Object> httpParams) {
         Object value = httpParams.get(metaField.en());
 
-        //boolean 转义
-        if (metaField.dbType().isBoolean(metaField.dbTypeLength().intValue())) {
-            value = MetaDataTypeConvert.convert(metaField, value);
-        }
+//        //boolean 转义
+//        if (metaField.dbType().isLooseBoolean(metaField.dbTypeLength().intValue())) {
+//            value = MetaDataTypeConvert.convert(metaField, value);
+//        }
 
         if (httpParams.get(metaField.en()) != null) {
             values.put(SQL_PREFIX + MetaSqlKit.discernColumns(metaField.fieldCode()) + "=?", value);

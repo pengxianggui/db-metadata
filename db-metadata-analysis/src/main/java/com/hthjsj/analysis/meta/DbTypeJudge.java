@@ -67,15 +67,28 @@ public class DbTypeJudge {
         return value.equalsIgnoreCase("json");
     }
 
+    public boolean isBit() {
+        return value.equalsIgnoreCase("bit");
+    }
+
     /**
-     * DbTypeJudge 不持有dbTypeLength,需外部传入
+     * 是否为一个字符长度的text类型
+     * DbTypeJudge 不持有dbTypeLength,需外部传入。
      *
      * @param length
+     * @return
+     */
+    public boolean is1Text(int length) {
+        return isText() && length == 1;
+    }
+
+    /**
+     * 严格研判，仅当字段为bit类型，才视为boolean
      *
      * @return
      */
-    public boolean isBoolean(int length) {
-        return isText() && length == 1;
+    public boolean isBoolean() {
+        return isBit();
     }
 
     public String rawData() {
