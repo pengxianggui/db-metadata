@@ -240,7 +240,7 @@ CREATE TABLE `meta_router` (
   `created_by` varchar(64) DEFAULT NULL COMMENT '创建人',
   `updated_by` varchar(64) DEFAULT NULL COMMENT '更新人',
   `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(32) DEFAULT NULL COMMENT '备注',
+  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='路由信息';
 
@@ -248,7 +248,7 @@ CREATE TABLE `meta_router` (
 -- Records of meta_router
 -- ----------------------------
 BEGIN;
-INSERT INTO `meta_router` VALUES ('65934fdf33694b11b820060d785ffc5b', '', '默认根路由', 'Default', '/default', '', 'AdminLayout', '{}', '{}', '2021-02-02 01:40:45', 'db-meta-web-devUser', NULL, NULL, '默认根路由, 指向db-meta默认布局组件AdminLayout');
+INSERT INTO `meta_router` VALUES ('0', '', '默认根路由', 'Default', '/default', '', 'AdminLayout', '{}', '{}', '2021-02-02 01:40:45', 'db-meta-web-devUser', NULL, NULL, '默认根路由, 指向db-meta默认布局组件AdminLayout');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
