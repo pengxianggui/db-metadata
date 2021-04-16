@@ -3,6 +3,7 @@
     {
       "userId": 1,
       "userName": "administrator",
+      "password": "123456",
       "attrs": {
         "sex": 1,
         "address": "嘉兴市南湖区"
@@ -11,6 +12,7 @@
     {
       "userId": 2,
       "userName": "gongwei",
+      "password": "123456",
       "attrs": {
         "sex": 1,
         "address": "嘉兴市嘉善县魏塘镇"

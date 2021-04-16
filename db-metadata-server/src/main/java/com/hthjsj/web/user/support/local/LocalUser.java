@@ -26,7 +26,12 @@ public class LocalUser implements User, UserWithRolesWrapper {
 
     public LocalUser(Map attr, MRRole role) {
         this.attrs = Kv.create().set(attr);
-        this.roles = new MRRole[] { role };
+        this.roles = new MRRole[]{role};
+    }
+
+    public LocalUser(Map attr, MRRole... roles) {
+        this.attrs = Kv.create().set(attr);
+        this.roles = roles;
     }
 
     @Override
@@ -37,6 +42,10 @@ public class LocalUser implements User, UserWithRolesWrapper {
     @Override
     public String userName() {
         return attrs.getStr("userName");
+    }
+
+    public String password() {
+        return attrs.getStr("password");
     }
 
     @Override
