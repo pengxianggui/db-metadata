@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2020/1/21 </p>
@@ -25,6 +26,13 @@ import java.util.Set;
 @Before(Tx.class)
 public class TreeService {
 
+    /**
+     * 根据元数据构建所有数据的树群
+     *
+     * @param metaObject
+     * @param treeConfig
+     * @return
+     */
     public List<TreeNode<String, Record>> tree(IMetaObject metaObject, TreeConfig treeConfig) {
         List<TreeNode<String, Record>> nodes = Lists.newArrayList();
         List<Record> records = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
@@ -41,16 +49,61 @@ public class TreeService {
         return root == null ? treeNodes : Lists.newArrayList(treeBuilder.level1Tree(root, treeNodes.toArray(new DefaultTreeNode[treeNodes.size()])));
     }
 
+    /**
+     * 根据关键字构建树群，先筛选记录(根据所有字段值做模糊匹配keywords)，再构建树
+     *
+     * @param metaObject
+     * @param treeConfig
+     * @param keywords
+     * @return
+     */
     public List<TreeNode<String, Record>> treeByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
         List<Record> hitRecords = findHitRecordByKeyWords(allRecords, keywords);
         return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig).getTreeList();
     }
 
+    /**
+     * 根据确定的records构建树。hitRecords作为节点，它们所在的树都会被构建出来。
+     * <p>
+     * 只保留树干
+     *
+     * @param metaObject
+     * @param hitRecords
+     * @param treeConfig
+     * @return
+     */
     public List<TreeNode<String, Record>> treeByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
         List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
         return buildTreeRelyOnHitRecords(allRecords, hitRecords, treeConfig).getTreeList();
     }
+
+    /**
+     * 根据确定的records构建树。hitRecords作为节点，它们所在的树都会被构建出来。
+     * <p>
+     * 只保留树杈。这意味着，可能存在多个彼此不连接的树杈。
+     *
+     * @param metaObject
+     * @param hitRecords
+     * @param treeConfig
+     */
+    public List<TreeNode<String, Record>> treeByHitRecordKeepBranch(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
+        List<Record> allRecords = Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+        List<TreeNode<String, Record>> nodeList = allRecords.stream().map(r -> new DefaultTreeNode(treeConfig, r)).collect(Collectors.toList());
+
+        List<TreeNode<String, Record>> result = Lists.newArrayList();
+
+        for (Record hitRecord : hitRecords) {
+            List<TreeNode<String, Record>> treeNodes = new TreeBuilder<TreeNode<String, Record>>()
+                    .getChildTreeObjects(nodeList, hitRecord.get(treeConfig.getIdKey()));
+            DefaultTreeNode branch = new DefaultTreeNode(treeConfig, hitRecord);
+            branch.setChildren(treeNodes);
+            result.add(branch);
+        }
+
+        return result;
+    }
+
 
     /**
      * 返回构建树阶段数据
@@ -58,7 +111,6 @@ public class TreeService {
      * @param metaObject
      * @param hitRecords
      * @param treeConfig
-     *
      * @return
      */
     public TreePhases treePhasesByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
@@ -116,6 +168,7 @@ public class TreeService {
         recursiveParent(Lists.newArrayList(nextSets), allRecordsMap, resultRecords, treeConfig);
     }
 
+
     /**
      * 根据关键字在List<Record>中找到匹配的记录
      * <pre>
@@ -126,12 +179,21 @@ public class TreeService {
      *
      * @param records
      * @param keywords
-     *
      * @return
      */
     private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {
         List<Record> hitRecords = Lists.newArrayList();
         for (Record record : records) {
+//            for (Map.Entry<String, Object> recordEntry : record.getColumns().entrySet()) {
+//                for (String keyword : keywords) {
+//                    if (String.valueOf(recordEntry.getValue()).contains(keyword)) {
+//                        hitRecords.add(record);
+//                        break;
+//                    }
+//                }
+//            }
+
+            // FIXME 下面这段代码可能导致record 被重复添加到hitRecords中, 完善上面的注释代码并替换
             record.getColumns().forEach((key, value) -> {
                 for (String keyword : keywords) {
                     if (String.valueOf(value).contains(keyword)) {

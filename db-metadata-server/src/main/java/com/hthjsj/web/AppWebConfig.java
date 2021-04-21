@@ -45,7 +45,10 @@ import java.io.File;
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
+ *
+ * @deprecated 请使用 {@link DynamicWebConfigFacade}
  */
+@Deprecated
 public class AppWebConfig extends JFinalConfig {
 
     public static void main(String[] args) {
