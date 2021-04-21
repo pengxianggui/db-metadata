@@ -11,6 +11,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,24 +184,14 @@ public class TreeService {
      */
     private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {
         List<Record> hitRecords = Lists.newArrayList();
-        for (Record record : records) {
-//            for (Map.Entry<String, Object> recordEntry : record.getColumns().entrySet()) {
-//                for (String keyword : keywords) {
-//                    if (String.valueOf(recordEntry.getValue()).contains(keyword)) {
-//                        hitRecords.add(record);
-//                        break;
-//                    }
-//                }
-//            }
 
-            // FIXME 下面这段代码可能导致record 被重复添加到hitRecords中, 完善上面的注释代码并替换
-            record.getColumns().forEach((key, value) -> {
-                for (String keyword : keywords) {
-                    if (String.valueOf(value).contains(keyword)) {
-                        hitRecords.add(record);
-                    }
+        for (Record record : records) {
+            for (Map.Entry<String, Object> recordEntry : record.getColumns().entrySet()) {
+                if (Arrays.stream(keywords).anyMatch(k -> String.valueOf(recordEntry.getValue()).contains(k))) {
+                    hitRecords.add(record);
+                    break;
                 }
-            });
+            }
         }
         return hitRecords;
     }
