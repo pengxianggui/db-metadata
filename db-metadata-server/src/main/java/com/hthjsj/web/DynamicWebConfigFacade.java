@@ -3,10 +3,12 @@ package com.hthjsj.web;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.AnalysisManager;
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.controller.FileController;
 import com.hthjsj.web.feature.FeatureRouter;
+import com.hthjsj.web.feature.tree.PreventInfiniteLoopAop;
 import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
@@ -89,6 +91,11 @@ public class DynamicWebConfigFacade extends JFinalConfig {
             me.add(new ExceptionIntercept());
             me.add(new JsonParamIntercept());
         }
+
+        @Override
+        public void onStart() {
+            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopAop());
+        }
     };
 
     private JFinalConfig userConfig = new ExtJFinalConfig() {
@@ -129,9 +136,9 @@ public class DynamicWebConfigFacade extends JFinalConfig {
                 //component register
                 Components.me().init();
                 Components.me()
-                          .addAutoInitComponents(ComponentType.SEARCHVIEW)
-                          .addAutoInitComponents(ComponentType.TABLEVIEW)
-                          .addAutoInitComponents(ComponentType.FORMVIEW);
+                        .addAutoInitComponents(ComponentType.SEARCHVIEW)
+                        .addAutoInitComponents(ComponentType.TABLEVIEW)
+                        .addAutoInitComponents(ComponentType.FORMVIEW);
             }
             //Auto import anyConfig from json file;
             if (AppConst.getProp().getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
