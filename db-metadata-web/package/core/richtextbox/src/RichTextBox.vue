@@ -1,17 +1,19 @@
 <template>
   <vue-tinymce-text v-model="nativeValue"
                     :toolbar="toolbar" :menubar="menubar"
-                    :width="width" :height="height"></vue-tinymce-text>
+                    :width="width" :height="height" v-bind:config="innerMeta['conf']"></vue-tinymce-text>
 </template>
 
 <script>
 import VueTinymceText from 'vue-tinymce-text'
-import Val from "../../mixins/value";
+import Val from "../../mixins/value"
+import Meta from '../../mixins/meta'
+import defaultMeta from '../ui-conf'
 
 export default {
   name: "RichTextBox",
   label: "富文本框",
-  mixins: [Val()],
+  mixins: [Meta(defaultMeta), Val()],
   components: {
     'vue-tinymce-text': VueTinymceText
   },
