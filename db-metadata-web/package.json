@@ -1,6 +1,6 @@
 {
   "name": "meta-element",
-  "version": "0.3.86",
+  "version": "0.3.87",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/meta-element.common.js",
   "keywords": [
@@ -21,7 +21,7 @@
   "dependencies": {
     "@pxg/vue-address": "0.0.4",
     "@tinymce/tinymce-vue": "^3.2.2",
-    "vue-tinymce-text": "0.1.1",
+    "vue-tinymce-text": "0.1.2",
     "axios": "^0.19.0",
     "clipboard-copy": "^3.1.0",
     "codemirror": "^5.49.2",
