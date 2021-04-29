@@ -28,7 +28,7 @@ public class LocalUploadService implements UploadService {
     }
 
     @Override
-    public File upload(File file, String... splitMarkers) {
+    public String upload(File file, String... splitMarkers) {
         String basePath = getBasePath();
         String destPath = Joiner.on("/").skipNulls().join(splitMarkers);
         log.info("Joiner filePath : {}", destPath);
@@ -55,11 +55,12 @@ public class LocalUploadService implements UploadService {
             log.error("File upload failed , The file original name is {}, new name is", file.getName(), destFile.getName());
             log.error(e.getMessage(), e);
         }
-        return destFile;
+
+        log.info("destFile.getPath : {}", destFile.getPath());
+        return destFile.getPath().replaceFirst(getBasePath(), "");
     }
 
-    @Override
-    public String getBasePath() {
+    private String getBasePath() {
         return AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR);
     }
 
@@ -67,5 +68,4 @@ public class LocalUploadService implements UploadService {
     public File getFile(String filePath) {
         return new File(getBasePath() + filePath);
     }
-
 }

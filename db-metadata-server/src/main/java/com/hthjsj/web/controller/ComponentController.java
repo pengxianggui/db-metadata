@@ -67,6 +67,8 @@ public class ComponentController extends FrontRestController {
     }
 
     /**
+     * TODO 自动计算入口。应当可以支持 根据元字段 + 字段组件类型 来自动计算。实例配置界面切换字段组件类型时，触发该自动的重新自动计算。另外应当支持ui实例配置界面，先为每个字段
+     *  选定组件，然后一键自动计算。这样得到的自动计算配置会更精确。而且，就无需前端去和组件的默认配置做一个 $merge 了!
      * 获取实例配置,2种方式
      * 1. objectCode + componentCode
      * 2. instanceCode

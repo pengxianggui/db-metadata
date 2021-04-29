@@ -69,6 +69,7 @@ public class FormController extends FrontRestController {
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
+        // TODO 在buildFormData 前应当校验 getRequest().getParameterMap() 参数的合法性
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
@@ -127,6 +128,7 @@ public class FormController extends FrontRestController {
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
+        // TODO 在buildFormData 前应当校验 getRequest().getParameterMap() 参数的合法性
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, false);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();

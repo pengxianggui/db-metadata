@@ -61,7 +61,7 @@ public class MultipartRequest extends HttpServletRequestWrapper {
         wrapMultipartRequest(request, getFinalPath(baseUploadPath), maxPostSize, encoding);
     }
 
-    static void init(String saveDirectory, int maxPostSize, String encoding) {
+    public static void init(String saveDirectory, int maxPostSize, String encoding) {
         MultipartRequest.baseUploadPath = saveDirectory;
         MultipartRequest.maxPostSize = maxPostSize;
         MultipartRequest.encoding = encoding;
