@@ -52,6 +52,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().addStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
+                        // TODO 实现隐藏功能
                         throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus() not finished");
                     }
                 }
@@ -64,6 +65,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().updateStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
+                        // TODO 实现隐藏
                         throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus() not finished");
                     }
                 }
@@ -76,6 +78,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().viewStatus()) {
                         builder.disabled(true);
                     } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().viewStatus()) {
+                        // TODO 实现隐藏
                         throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().viewStatus() not finished");
                     }
                 }

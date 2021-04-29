@@ -17,8 +17,8 @@ public class MetaFieldConfigExtension implements ConfigExtension<IMetaField, Kv,
     @Override
     public void config(IMetaField metaField, Kv config, ComponentType containerType) {
 
-        //TODO 初始化field配置时 , 名称包含file的 默认设定isFile = true
-        if (metaField.fieldCode().contains("file")) {
+        // attention: 初始化field配置时 , 名称包含file的 并且 数据库字段类型为json的 默认设定isFile = true
+        if (metaField.fieldCode().contains("file") && metaField.dbType().isJson()) {
             config.set("isFile", true);
             config.set("seats", "[]");
         }

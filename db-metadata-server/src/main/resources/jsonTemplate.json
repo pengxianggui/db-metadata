@@ -393,7 +393,9 @@
     "component_name": "RichTextBox",
     "name": "RichTextBox",
     "label": "富文本",
-    "conf": {}
+    "conf": {
+      "images_upload_url": "/file/upload/richText"
+    }
   },
   "IconBox": {
     "component_name": "IconBox",

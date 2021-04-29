@@ -324,3 +324,6 @@ TableView控制字段显隐时，优先使用label展示字段;
 
 ## 0.3.87
 RichTextBox 支持 tinymce完整配置
+
+## 0.3.88
+RichTextBox 自动计算时自动配置好图片上传相关内容

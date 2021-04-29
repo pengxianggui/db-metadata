@@ -6,8 +6,8 @@ import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.ui.SqlAnalysis;
-import com.hthjsj.web.upload.LocalUploadService;
 import com.hthjsj.web.upload.UploadService;
+import com.hthjsj.web.upload.UploadServiceManager;
 import com.jfinal.aop.Aop;
 
 /**
@@ -30,7 +30,7 @@ public class ServiceManager {
     }
 
     public static UploadService fileService() {
-        return LocalUploadService.me();
+        return UploadServiceManager.me().getUploadService();
     }
 
     public static FeatureService featureService() {
