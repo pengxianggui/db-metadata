@@ -29,14 +29,20 @@ public class AppConst {
     public static final String ROUTER_PREFIX = "router.prefix";
     public static final String UPLOAD_DIR = "upload.dir";
 
+    public static final String INITABLE = "initable";
+
     static {
-        SYS_TABLE.put("meta_object", "config", true);
-        SYS_TABLE.put("meta_field", "config", true);
-        SYS_TABLE.put("meta_component", "config", true);
-        SYS_TABLE.put("meta_component_instance", "config", true);
-        SYS_TABLE.put("meta_router", "config", true);
-        SYS_TABLE.put("meta_menu", "config", true);
-        SYS_TABLE.put("meta_feature", "config", true);
+        SYS_TABLE.put("meta_object", INITABLE, true);
+        SYS_TABLE.put("meta_field", INITABLE, true);
+        SYS_TABLE.put("meta_component", INITABLE, true);
+        SYS_TABLE.put("meta_component_instance", INITABLE, true);
+        SYS_TABLE.put("meta_router", INITABLE, true);
+        SYS_TABLE.put("meta_menu", INITABLE, true);
+        SYS_TABLE.put("meta_feature", INITABLE, true);
+        SYS_TABLE.put("meta_config", INITABLE, true);
+        SYS_TABLE.put("change_log", INITABLE, false);
+        SYS_TABLE.put("meta_exception", INITABLE, false);
+        SYS_TABLE.put("meta_dict", INITABLE, false);
     }
 
     public static Prop getProp() {

@@ -23,6 +23,9 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/10/9 </p>
@@ -63,39 +66,56 @@ public class DBController extends FrontRestController {
     }
 
     public void truncate() {
-        String token = getPara(0, "");
+        preConditionCheck();
+
         StringBuilder sb = new StringBuilder();
-        sb.append("即将清除的数据表:").append(AppConst.SYS_TABLE.rowKeySet());
-        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
-        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "开发token不正确:{}", sb.toString());
+
+        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.INITABLE).entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey).collect(Collectors.toSet());
+
+        sb.append("即将清除的数据表:").append(tables);
         log.warn("清空meta相关表{}", sb.toString());
-        AppConst.SYS_TABLE.rowKeySet().forEach(key -> {
+        tables.forEach(key -> {
             Db.delete("delete from " + key);
         });
+
         renderJson(Ret.ok("msg", sb.toString()));
     }
 
     @Before(Tx.class)
     public void init() {
-        String token = getPara(0, "");
-        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
-        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
-        String mainDB = AnalysisConfig.me().dbMainStr();
-        List<Table> tables = Aop.get(MysqlService.class).showTables(AnalysisConfig.me().dbMainStr());
+        preConditionCheck();
 
-        Components.me().init();
-        for (Table t : tables) {
+        Components.me().init(); // 初始化组件(包括组件配置)
+
+        String mainDB = AnalysisConfig.me().dbMainStr();
+        List<Table> sysTables = Aop.get(MysqlService.class).showTables(AnalysisConfig.me().dbMainStr())
+                // 过滤出系统表
+                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName()))
+                .collect(Collectors.toList());
+
+        for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
             IMetaObject metaObject = metaService().importFromTable(mainDB, t.getTableName());
             metaService().saveMetaObject(metaObject, true);
             metaObject = metaService().findByCode(t.getTableName());
-            //自动初始化一些控件
-            for (ComponentType type : Components.me().getAutoInitComponents()) {
+
+            // 根据 defaultInstance.json 初始化系统表元对象对应的容器组件
+            for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
                 componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
             }
         }
-        InitKit.me().importMetaObjectConfig().importInstanceConfig();
+
+        // 根据固定文件(defaultInstance.json和defaultObject.json)更新元数据、实例配置
+        InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
         renderJson(Ret.ok());
+    }
+
+    private void preConditionCheck() {
+        String token = getPara(0, "");
+        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
+        Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
     }
 }

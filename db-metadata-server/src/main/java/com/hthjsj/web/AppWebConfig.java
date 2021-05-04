@@ -28,7 +28,6 @@ import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserManager;
 import com.hthjsj.web.user.UserRouter;
 import com.hthjsj.web.user.auth.JsonUserPermit;
-import com.hthjsj.web.user.auth.MRAuthIntercept;
 import com.hthjsj.web.user.auth.MRManager;
 import com.hthjsj.web.user.auth.jfinal.JFinalResourceLoader;
 import com.jfinal.config.*;
@@ -130,7 +129,7 @@ public class AppWebConfig extends JFinalConfig {
         ExtensibleListenerManager.me().addFormListeners(new TestFormExtensibleListener());
         //Auto import anyConfig from json file;
         if (prop.getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
-            InitKit.me().importMetaObjectConfig().importInstanceConfig();
+            InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
         }
 
         if (prop.getBoolean(AppConst.NEED_AUTH)) {
