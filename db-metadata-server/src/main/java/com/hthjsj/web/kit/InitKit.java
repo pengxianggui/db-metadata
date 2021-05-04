@@ -3,6 +3,7 @@ package com.hthjsj.web.kit;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
@@ -15,8 +16,10 @@ import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
+ * 只初始化系统表对应的元数据和实例配置, 参考 {@link com.hthjsj.web.AppConst#SYS_TABLE}
  * <p> @Date : 2019/11/30 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -43,7 +46,7 @@ public class InitKit {
         return me;
     }
 
-    public static void loadConfig() {
+    private static void loadConfig() {
         String objectConfig = UtilKit.loadConfigByFile(OBJECT_CONFIG);
         String instanceConfig = UtilKit.loadConfigByFile(INSTANCE_JSON);
         jsonObjectConfig = JSON.parseObject(objectConfig, Feature.OrderedField);
@@ -51,37 +54,38 @@ public class InitKit {
     }
 
     /**
-     * 加载元对象配置
+     * 更新元对象配置(依据defaultObject.json, 文件中未定义的元对象将不会被更新)
      *
      * @return
      */
-    public InitKit importMetaObjectConfig() {
+    public InitKit updateMetaObjectConfig() {
         log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
-        resolveMetaObjects(lists);
+        updateMetaObjects(lists);
         return this;
     }
 
     /**
-     * 加载组件实例配置
+     * 更新组件实例配置(依据defaultInstance.json, 文件中未定义的元对象将不会被更新)
      *
      * @return
      */
-    public InitKit importInstanceConfig() {
+    public InitKit updateInstanceConfig() {
         log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
         for (IMetaObject metaObject : lists) {
-            //TODO 只自动覆盖FORMVIEW
-            resolveMetaComponentInstance(metaObject, ComponentType.FORMVIEW);
-            resolveMetaComponentInstance(metaObject, ComponentType.SEARCHVIEW);
-            resolveMetaComponentInstance(metaObject, ComponentType.TABLEVIEW);
+            // 应当由defaultInstance.json中的配置决定要更新那些容器组件
+            for (ComponentType componentType : getPredefinedComponentType(metaObject.code())) {
+                updateMetaComponentInstance(metaObject, componentType);
+            }
+
         }
         return this;
     }
 
-    public void resolveMetaObjects(List<IMetaObject> metaObjects) {
+    private void updateMetaObjects(List<IMetaObject> metaObjects) {
         for (IMetaObject metaObject : metaObjects) {
-            resolveMetaObject(metaObject);
+            updateMetaObject(metaObject);
         }
     }
 
@@ -96,7 +100,7 @@ public class InitKit {
      *      4.1-2 同上
      *  </pre>
      */
-    public void resolveMetaObject(IMetaObject metaObject) {
+    private void updateMetaObject(IMetaObject metaObject) {
         if (!jsonObjectConfig.containsKey(metaObject.code()))
             return;
         log.info("found the object configuration of {}", metaObject.code());
@@ -163,7 +167,13 @@ public class InitKit {
         }
     }
 
-    public void resolveMetaComponentInstance(IMetaObject metaObject, ComponentType componentType) {
+    /**
+     * 解析并更新元对象实例配置(包括元字段实例配置)
+     *
+     * @param metaObject
+     * @param componentType
+     */
+    private void updateMetaComponentInstance(IMetaObject metaObject, ComponentType componentType) {
         if (!jsonInstanceConfig.containsKey(metaObject.code())) {
             return;
         }
@@ -217,6 +227,22 @@ public class InitKit {
                 }
             }
         }
+    }
+
+    /**
+     * 获取defaultInstance.json中指定元对象编码预定义的组件类型
+     *
+     * @param code
+     * @return
+     */
+    public List<ComponentType> getPredefinedComponentType(String code) {
+        List<ComponentType> componentTypes = Lists.newArrayList();
+        if (!jsonInstanceConfig.containsKey(code)) {
+            return componentTypes;
+        }
+
+        return jsonInstanceConfig.getJSONObject(code).keySet().stream()
+                .map(type -> ComponentType.V(type)).collect(Collectors.toList());
     }
 }
 

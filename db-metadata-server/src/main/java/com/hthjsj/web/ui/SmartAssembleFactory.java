@@ -100,7 +100,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
          * 适配选择Component,进行构建IViewAdapter
          */
         Component containerComponent = ViewFactory.createEmptyViewComponent(componentType.getCode());
-        //全部全局配置
+        // 全部全局配置
         Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
         //某一组件全局配置
         Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentType.getCode());

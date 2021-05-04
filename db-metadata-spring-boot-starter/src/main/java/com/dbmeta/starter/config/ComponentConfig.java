@@ -29,7 +29,7 @@ public class ComponentConfig extends ExtJFinalConfig {
         }
         //Auto import anyConfig from json file;
         if (AppConst.getProp().getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
-            InitKit.me().importMetaObjectConfig().importInstanceConfig();
+            InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
         }
         AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
         ComputeKit.addInstanceExtension(new InstanceConfigExtension());

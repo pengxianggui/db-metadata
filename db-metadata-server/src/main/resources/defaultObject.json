@@ -843,5 +843,217 @@
         }
       }
     }
+  },
+  "change_log": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "change_log",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "object_code": {
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "table_name": {
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "pkey": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "pvalue": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "action": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "olddata": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "newdata": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "diff": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      }
+    }
+  },
+  "meta_config": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_config",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "module": {
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "module_name": {
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "config": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "version": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      }
+    }
   }
 }

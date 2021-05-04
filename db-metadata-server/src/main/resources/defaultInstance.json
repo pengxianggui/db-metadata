@@ -5,6 +5,7 @@
         "expand": true
       }
     },
+    "TableView": {},
     "FormView": {
       "config": {
       },
@@ -42,6 +43,22 @@
     }
   },
   "meta_object": {
+    "SearchView": {
+      "config": {
+        "expand": true,
+        "directly_trigger": [
+          "schema_name"
+        ]
+      },
+      "_fields": {
+        "schema_name": {
+          "component_name": "DropDownBox",
+          "data_url": "/db/index",
+          "filterable": true
+        }
+      }
+    },
+    "TableView": {},
     "FormView": {
       "_fields": {
         "config": {
@@ -60,21 +77,6 @@
           "conf": {
             "size": "mini"
           }
-        }
-      }
-    },
-    "SearchView": {
-      "config": {
-        "expand": true,
-        "directly_trigger": [
-          "schema_name"
-        ]
-      },
-      "_fields": {
-        "schema_name": {
-          "component_name": "DropDownBox",
-          "data_url": "/db/index",
-          "filterable": true
         }
       }
     }
@@ -118,7 +120,8 @@
           "component_name": "TextAreaBox"
         }
       }
-    }
+    },
+    "TableView": {}
   },
   "meta_component": {
     "SearchView": {
@@ -149,7 +152,8 @@
           "width": "220"
         }
       }
-    }
+    },
+    "FormView": {}
   },
   "meta_component_instance": {
     "SearchView": {
@@ -231,12 +235,12 @@
     }
   },
   "meta_menu": {
-    "TableTreeView": {},
     "SearchView": {
       "config": {
         "expand": true
       }
     },
+    "TableTreeView": {},
     "FormView": {
       "_fields": {
         "pid": {
@@ -261,6 +265,7 @@
         "expand": true
       }
     },
+    "TableView": {},
     "FormView": {
       "_fields": {
         "live_flag": {
@@ -286,6 +291,25 @@
           "component_name": "TextBox"
         }
       }
-    }
+    },
+    "TableView": {},
+    "FormView": {}
+  },
+  "meta_config": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      },
+      "_fields": {
+        "module": {
+          "component_name": "TextBox"
+        },
+        "module_code": {
+          "component_name": "TextBox"
+        }
+      }
+    },
+    "TableView": {},
+    "FormView": {}
   }
 }
