@@ -310,6 +310,7 @@
       "rules": {}
     },
     "columns": [],
+    "layout": [],
     "btns": {
       "submit": {
         "label": "提交",

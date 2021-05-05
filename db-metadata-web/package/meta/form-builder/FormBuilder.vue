@@ -42,6 +42,7 @@ import MetaObjectSelector from "../component/MetaObjectSelector"
 import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 import {isEmpty} from "../../utils/common";
 import extractConfig from "../instance-component/extractConfig";
+import {gridInfoFattened, gridInfoStructured} from "./formViewMetaParser";
 
 export default {
   name: "FormBuilder",
@@ -107,14 +108,21 @@ export default {
       this.setInitState(objectCode);
       $axios.safeGet(url).then(resp => {
         let {data} = resp;
+
         let {isAutoComputed = false, instanceName, fieldsMap} = data;
         this.isAutoComputed = isAutoComputed;
         this.instanceName = instanceName;
         // extract object config
-        this.$merge(this.formMeta, extractConfig.call(this, data, objectCode));
+        this.$reverseMerge(this.formMeta, extractConfig.call(this, data, objectCode));
+
+        console.log(JSON.stringify(this.formMeta))
 
         // extract field config
         Object.keys(fieldsMap).forEach(key => this.formMeta.columns.push(extractConfig.call(this, fieldsMap, key)));
+
+        console.log(JSON.stringify(this.formMeta))
+        gridInfoStructured(this.formMeta)
+        console.log(JSON.stringify(this.formMeta))
       }).catch(({msg = '配置加载成功'}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
         this.setInitState(objectCode);
@@ -167,6 +175,8 @@ export default {
         let fieldsMap = {};
 
         if (objectConf.hasOwnProperty('columns')) {
+          gridInfoFattened(objectConf)
+
           objectConf.columns.forEach(c => {
             fieldsMap[c.name] = c
           })
@@ -179,6 +189,7 @@ export default {
           objectCode: objectCode,
           fieldsMap: fieldsMap
         };
+
         params[objectCode] = objectConf;
 
         this.$axios({

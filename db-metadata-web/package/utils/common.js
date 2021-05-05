@@ -603,3 +603,16 @@ export function shearAttr(obj, attr) {
     delete obj[attr]
     return result
 }
+
+/**
+ * 生成指定长度的随机数
+ * @param length
+ * @returns {string}
+ */
+export function randomNum(length) {
+    let num = "";
+    for (let i = 0; i < length; i++) {
+        num += Math.floor(Math.random() * 10);
+    }
+    return num;
+}
