@@ -17,10 +17,8 @@
       <!-- 表单组件-->
       <template v-else>
         <slot :name="'form-item-' + item.name" v-bind:column="item" v-bind:model="model">
-          <!-- TODO 完全支持栅格布局后, inline样式配置将弃用 -->
           <el-form-item :label="getLabel(item)" :prop="item.name" :key="i"
-                        :rules="getItemRules(item)" v-if="!item.hasOwnProperty('showable') || item.showable"
-                        :class="{'inline': item.inline && !isView, 'width-align': item.inline && !isView}">
+                        :rules="getItemRules(item)" v-if="!item.hasOwnProperty('showable') || item.showable">
             <component :is="item.component_name" :meta="item" v-model="model[item.name]" v-if="!isView"></component>
             <form-field-view :value="model[item.name]" :meta="item" v-else></form-field-view>
           </el-form-item>

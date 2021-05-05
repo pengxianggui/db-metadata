@@ -23,7 +23,6 @@
                     "conf": {
                         "clearable": true,
                         "placeholder": "戳我展开搜索面板..",
-                        "inline": true
                     }
                 }
             }

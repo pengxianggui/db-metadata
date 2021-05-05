@@ -16,7 +16,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
           "label-width": "100px",
           "size": "medium",
           "disabled": false,
-          "inline": false,
           "rules": {}
         },
         "columns": [
@@ -51,7 +50,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
                     },
                     "name": "id",
                     "label": "主键",
-                    "inline": false,
                     "default_value": "",
                     "component_name": "TextBox"
                   }
@@ -65,7 +63,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
                     },
                     "name": "pid",
                     "label": "父层标志",
-                    "inline": false,
                     "default_value": "",
                     "component_name": "TextBox"
                   }
@@ -90,7 +87,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
           "label-width": "100px",
           "size": "medium",
           "disabled": false,
-          "inline": false,
           "rules": {}
         },
         "columns": [
@@ -112,7 +108,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
                 },
                 "name": "id",
                 "label": "主键",
-                "inline": false,
                 "default_value": "",
                 "component_name": "TextBox"
             },
@@ -124,7 +119,6 @@ import {deepClone, isObject, isString} from "../../utils/common";
                 },
                 "name": "pid",
                 "label": "父层标志",
-                "inline": false,
                 "default_value": "",
                 "component_name": "TextBox"
             }
