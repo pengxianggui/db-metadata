@@ -30,7 +30,7 @@ import EleProps from '../../constant/element-props'
  * @returns 例如: {"btns":{"cancel":{"conf":{},"label":"取消"},"submit":{"conf":{"type":"primary"},"label":"提交"}},"conf":{"size":"medium","rules":{},"inline":false,"disabled":false,"label-width":"100px"},"name":"FormView","label":"表单模板","columns":[],"component_name":"FormView"}
  * 注意:
  * 1. 返回值为json对象
- * 2. 并且会将其中的conf字段转为json对象
+ * 2. 并且会将其中的conf字段转为json对象, layout字段转为json arr对象
  * 3. 其中的conf字段会根据组件名合并该组件默认的配置
  */
 export default function (configMap, key, mergeDefault = true) {
@@ -48,6 +48,7 @@ export default function (configMap, key, mergeDefault = true) {
         console.error(e);
     }
     config['conf'] = utils.strToObject(config['conf']);
+    config['layout'] = utils.strToArray(config['layout'])
     if (mergeDefault) {
         this.$merge(config['conf'], EleProps(config['component_name']));
     }

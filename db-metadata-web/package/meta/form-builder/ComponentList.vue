@@ -27,6 +27,7 @@
 import draggable from 'vuedraggable'
 import {defaultMeta} from '../../core/index'
 import compLib, {extract} from './relate/componentData'
+import {randomNum} from '../../utils/common'
 
 export default {
   name: "ComponentList",
@@ -43,7 +44,6 @@ export default {
   },
   data() {
     return {
-      globalId: 0,
       formCompLib: compLib
     }
   },
@@ -54,7 +54,7 @@ export default {
     formItemCloneHandler(data) {
       let {name, label} = data;
       let meta = {
-        name: name + this.globalId++,
+        name: name + randomNum(5),
         label: label
       };
 

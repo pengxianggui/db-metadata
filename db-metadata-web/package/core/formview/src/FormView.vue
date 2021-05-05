@@ -44,6 +44,7 @@ import DefaultBehaviors from './defaultBehaviors'
 import DefaultMeta from '../ui-conf'
 import NestFormItem from "./NestFormItem";
 import {formTypes} from "../ui-conf";
+import {gridInfoStructured} from "../../../meta/form-builder/formViewMetaParser";
 
 export default {
   name: "FormView",
@@ -154,7 +155,7 @@ export default {
       let newMeta = utils.deepClone(this.meta);
       this.$merge(newMeta, DefaultMeta);
       this.assemblyModel(newMeta);
-      return newMeta;
+      return gridInfoStructured(newMeta);
     },
     rules() {
       const {innerMeta: {conf: {rules} = {}} = {}} = this

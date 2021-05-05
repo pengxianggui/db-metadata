@@ -39,6 +39,7 @@ export default {
         // ...
     },
     "columns": [],
+    "layout": [], // 布局, 记录栅格嵌套信息
     "buttons": {
         "show": true,
         "submit": {
