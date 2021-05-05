@@ -115,14 +115,10 @@ export default {
         // extract object config
         this.$reverseMerge(this.formMeta, extractConfig.call(this, data, objectCode));
 
-        console.log(JSON.stringify(this.formMeta))
-
         // extract field config
         Object.keys(fieldsMap).forEach(key => this.formMeta.columns.push(extractConfig.call(this, fieldsMap, key)));
 
-        console.log(JSON.stringify(this.formMeta))
         gridInfoStructured(this.formMeta)
-        console.log(JSON.stringify(this.formMeta))
       }).catch(({msg = '配置加载成功'}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
         this.setInitState(objectCode);

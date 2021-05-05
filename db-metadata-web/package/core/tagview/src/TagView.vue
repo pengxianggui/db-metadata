@@ -94,7 +94,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$router)
     this.initTags()
     this.addTags()
   },

@@ -168,7 +168,7 @@ export function gridInfoFattened(formMeta) {
         formMeta['columns'] = fields
         formMeta['layout'] = layout
     } catch (err) {
-        console.log(err)
+        console.error(err)
     }
     return formMeta
 }
@@ -191,7 +191,7 @@ export function gridInfoStructured(formMeta) {
         columns.sort((c1, c2) => c1.sort - c2.sort)
         formMeta['layout'] = [] // 防止提交时重复归并到layout
     } catch (err) {
-        console.log(err)
+        console.error(err)
     }
     refreshColumnsSort(formMeta.columns)
     return formMeta
