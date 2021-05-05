@@ -15,6 +15,7 @@ export default {
     "component_name": "SqlBox",
     "name": "SqlBox",
     "label": "SQL输入框",
+    'sort': 0,
     "check": false,
     "check_url": "/check/sql?sql={sql}",
     "theme": "default", // default、ambiance

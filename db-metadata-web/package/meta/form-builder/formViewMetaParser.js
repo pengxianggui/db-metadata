@@ -179,6 +179,8 @@ export function gridInfoFattened(formMeta) {
     return formMeta
 }
 
+
+
 /**
  * 将拍平的栅格信息结构化到columns属性上。与 {@link gridInfoFattened} 正好相反
  * @param formViewMeta
@@ -192,11 +194,23 @@ export function gridInfoStructured(formMeta) {
             columns.push(rowGrid)
         }
 
+        columns.sort((c1, c2) => c1.sort - c2.sort)
         formMeta['layout'] = [] // 防止提交时重复归并到layout
     } catch (err) {
         console.log(err)
     }
+    refreshColumnsSort(formMeta.columns)
     return formMeta
+}
+
+/**
+ * 按照columns的顺序为item.sort 初始化值。仅需对第一层进行排序即可, 子层由栅格信息记录了具体位置
+ * @param columns
+ */
+export function refreshColumnsSort(columns) {
+    for (let i = 0; i < columns.length; i++) {
+        columns[i].sort = i
+    }
 }
 
 const restoreField = function (obj, key, formColumns) {

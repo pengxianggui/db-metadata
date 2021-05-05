@@ -14,6 +14,7 @@ export default {
     "component_name": "TimeBox",
     "name": "TimeBox",
     "label": "时间框",
+    'sort': 0,
     "inline": true,
     "conf": {
         "value-format": "HH:mm:ss",

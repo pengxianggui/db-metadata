@@ -1,10 +1,15 @@
 import DefaultFormViewMeta from '../../../core/formview/ui-conf'
 import {isLayoutComp} from "./componentData";
 
-const FORM_EXCLUDES = ['columns', 'buttons', 'name', 'group', 'objectCode', 'objectPrimaryKey', 'component_name']; // 表单隐藏的配置项
-const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey']; // 字段隐藏的配置项
-const LAYOUT_EXCLUDES = ['columns'] // 布局组件隐藏的配置项
+// inline 由 栅格布局支持后移除
+const FORM_EXCLUDES = [
+    'columns', 'buttons', 'name',
+    'group', 'objectCode', 'objectPrimaryKey',
+    'component_name', 'layout', 'inline']; // 表单隐藏的配置项
 
+const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey', 'sort', 'inline']; // 字段隐藏的配置项
+
+const LAYOUT_EXCLUDES = ['columns'] // 布局组件隐藏的配置项
 
 /**
  * 判断某些控件的配置项是否显示

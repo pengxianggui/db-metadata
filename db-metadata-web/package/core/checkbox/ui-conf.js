@@ -18,6 +18,7 @@ export default {
     "component_name": "CheckBox",
     "name": "CheckBox",
     "label": "多选框",
+    'sort': 0,
     "inline": true,
     "data_url": "/dict/yn",
     "options": [

@@ -41,5 +41,6 @@ export const ConfDesc = `
 export default {
     "component_name": "IconBox",
     "name": "IconBox",
-    "label": "图标框"
+    "label": "图标框",
+    'sort': 0
 }

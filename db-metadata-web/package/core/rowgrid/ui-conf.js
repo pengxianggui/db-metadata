@@ -11,6 +11,7 @@ export default {
     "component_name": "RowGrid",
     "name": "RowGrid",
     "label": "栅格布局",
+    'sort': 0,
     "conf": {
         "span": [12, 12],
         "show-line": false, // 显示虚线边框

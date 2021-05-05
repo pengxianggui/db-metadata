@@ -16,6 +16,7 @@ export const panelMeta = {
     "name": "FindPanel",
     "label": "查找面板",
     "data_url": "/table/list/{objectCode}",
+    'sort': 0,
     "columns": [// {
         //     component_name: 'TextBox',
         //     name: 'id',

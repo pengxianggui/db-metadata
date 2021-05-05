@@ -17,6 +17,7 @@ export default {
     "component_name": "DropDownBox",
     "name": "DropDownBox",
     "label": "下拉框",
+    'sort': 0,
     "inline": true,
     "group": false,
     "data_url": "/dict/yn",

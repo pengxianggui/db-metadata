@@ -11,6 +11,8 @@
                                  @formItemDelete="handleFormItemDelete"
                                  @layoutItemDelete="handleLayoutItemDelete"
                                  @add="handleAdd"
+                                 @move="handleMove"
+                                 @end="handleEnd"
                                  style="height: 100%">
             <div class="blank-tip">从左侧拖拽来添加表单项</div>
           </nest-form-item-editor>
@@ -27,7 +29,8 @@ import draggable from 'vuedraggable'
 import FormView from "../../core/formview/src/FormView";
 import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
 import {isLayoutComp} from './relate/componentData'
-import NestFormItemEditor from "./NestFormItemEditor";
+import NestFormItemEditor from "./NestFormItemEditor"
+import {refreshColumnsSort} from './formViewMetaParser'
 
 export default {
   name: "WorkArea",
@@ -74,6 +77,12 @@ export default {
       //   return false
       // }
       // return true
+    },
+    handleEnd(e) {
+      // 重新计算排序值
+      refreshColumnsSort(this.formMeta.columns)
+    },
+    handleMove(e) {
     },
     // 点击选中
     handleFormItemClick(column) {
