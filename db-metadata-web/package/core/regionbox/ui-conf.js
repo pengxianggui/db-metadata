@@ -11,6 +11,7 @@ export default {
     'component_name': 'RegionBox',
     'name': 'RegionBox',
     'label': '地区/省市框',
+    'sort': 0,
     'inline': true,
     'conf': {
         'type': 'default',

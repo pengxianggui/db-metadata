@@ -12,6 +12,7 @@ export default {
     "component_name": "RichTextBox",
     "name": "RichTextBox",
     "label": "富文本",
+    'sort': 0,
     "conf": {
         "images_upload_url": "/file/upload/richText" // 富文本的上传路径
     }

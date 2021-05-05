@@ -15,6 +15,7 @@ export default {
     "component_name": "NumBox",
     "name": "NumBox",
     "label": "数字框",
+    'sort': 0,
     "inline": true,
     "default_value": 0,
     "conf": {

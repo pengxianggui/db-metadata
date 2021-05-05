@@ -16,6 +16,7 @@ export default {
     "component_name": "RadioBox",
     "name": "RadioBox",
     "label": "单选框",
+    'sort': 0,
     "inline": true,
     "data_url": "/dict/yn",
     "options": [

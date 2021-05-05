@@ -14,6 +14,7 @@ export default {
     "component_name": "FileBox",
     "name": "FileBox",
     "label": "文件上传框",
+    'sort': 0,
     "inline": false,
     "seats": [''],
     "conf": {

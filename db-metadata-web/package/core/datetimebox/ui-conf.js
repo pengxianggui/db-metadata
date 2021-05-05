@@ -14,6 +14,7 @@ export default {
     "component_name": "DateTimeBox",
     "name": "DateTimeBox",
     "label": "日期时间框",
+    'sort': 0,
     "inline": true,
     "conf": {
         "value-format": "yyyy-MM-dd HH:mm:ss",

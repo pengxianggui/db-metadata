@@ -14,6 +14,7 @@ export default {
     "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
+    'sort': 0,
     "inline": false,
     "seats": [''],
     "conf": {

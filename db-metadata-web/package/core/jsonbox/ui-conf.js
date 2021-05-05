@@ -13,6 +13,7 @@ export default {
     "component_name": "JsonBox",
     "name": "JsonBox",
     "label": "Json框",
+    'sort': 0,
     "inline": false,
     "default_value": {},
     "conf": {

@@ -17,6 +17,7 @@ export default {
     'name': 'BoolBox',
     'label': '布尔框',
     'default_value': false,
+    'sort': 0,
     'inline': true,
     'conf': {}
 }

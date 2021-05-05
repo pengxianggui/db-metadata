@@ -12,6 +12,7 @@ export default {
     "component_name": "MiniFormBox",
     "name": "MiniFormBox",
     "label": "迷你表单框",
+    'sort': 0,
     "inline": false,
     "conf": {
         "label-width": "80px",

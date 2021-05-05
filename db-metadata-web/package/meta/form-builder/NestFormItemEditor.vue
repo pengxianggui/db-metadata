@@ -1,5 +1,6 @@
 <template>
-  <draggable tag="div" :list="columns" :group="{name: 'form'}" :animation="200" handle=".handle" @add="handleAdd" :move="handleMove">
+  <draggable tag="div" :list="columns" :group="{name: 'form'}" :animation="200" handle=".handle"
+             @add="handleAdd" :move="handleMove" @end="handleEnd">
     <slot v-if="columns.length === 0"></slot>
 
     <template v-else>
@@ -88,7 +89,10 @@ export default {
       this.$emit('add', row)
     },
     handleMove(e) {
-      console.log(e)
+      this.$emit('move', e)
+    },
+    handleEnd(e) {
+      this.$emit('end', e)
     }
   }
 }
