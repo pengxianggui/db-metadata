@@ -424,11 +424,13 @@ public class ComponentService {
     }
 
     public boolean hasObjectConfig(String componentCode, String objectCode) {
-        return hasObjectConfig(Joiner.on(".").join(objectCode, componentCode));
+        return AnalysisConfig.me().dbMain().queryInt(
+                "select count(1) from " + META_COMPONENT_INSTANCE + " where comp_code = ? and dest_object = ?",
+                componentCode, objectCode) >= 1;
     }
 
     public boolean hasObjectConfig(String instanceCode) {
-        return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 1;
+        return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) >= 1;
     }
 
     private Record getRecord(Component component, String destObject, String instanceCode, String instanceName, INSTANCE specific, Kv config) {

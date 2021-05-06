@@ -145,10 +145,17 @@ public class ComponentController extends FrontRestController {
         Component component = ViewFactory.createEmptyViewComponent(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
-            if (componentService().hasObjectConfig(instanceCode) || componentService().hasObjectConfig(compCode, objectCode)) {
+            if (componentService().hasObjectConfig(instanceCode)) {
                 renderJson(Ret.fail("msg", String.format("%s配置信息已存在,请重新输入唯一编码", instanceCode)));
                 return;
             }
+
+            // TODO 需要整体统一更改为instanceCode唯一, compCode + objectCode 可多套
+            if (componentService().hasObjectConfig(compCode, objectCode)) {
+                renderJson(Ret.fail("msg", String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode)));
+                return;
+            }
+
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
                     metaObject.code(),

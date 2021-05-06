@@ -1,7 +1,7 @@
 <template>
   <div style="border: 2px solid #dddddd;">
     <template v-for="(v, k, index) in formCompLib">
-      <div :key="index" v-if="!editMode || k === '布局组件'">
+      <div :key="index" v-if="!hiddenNonLayoutComponent || k === '布局组件'">
         <h5 v-text="k" style="margin: 5px"></h5>
         <draggable :clone="formItemCloneHandler"
                    :group="{ name: 'form', pull: 'clone', put: false }"
@@ -27,7 +27,7 @@
 import draggable from 'vuedraggable'
 import {defaultMeta} from '../../core/index'
 import compLib, {extract} from './relate/componentData'
-import {randomNum} from '../../utils/common'
+import {randomNum, isEmpty} from '../../utils/common'
 
 export default {
   name: "ComponentList",
@@ -35,7 +35,8 @@ export default {
     draggable
   },
   props: {
-    editMode: Boolean
+    editMode: Boolean,
+    formMeta: Object
   },
   filters: {
     extract(value) {
@@ -66,6 +67,12 @@ export default {
     handleStart() {
     },
     handleMove(e) {
+    }
+  },
+  computed: {
+    hiddenNonLayoutComponent() {
+      const {editModel, formMeta: {objectCode}} = this
+      return editModel || !isEmpty(objectCode)
     }
   }
 }
