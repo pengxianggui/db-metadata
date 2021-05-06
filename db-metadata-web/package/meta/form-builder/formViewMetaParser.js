@@ -1,4 +1,5 @@
 import {deepClone, isObject, isString} from "../../utils/common";
+import {isLayoutComp} from "./relate/componentData";
 
 /**
  * 将栅格信息拍平，并提取到layout属性上
@@ -197,16 +198,6 @@ export function gridInfoStructured(formMeta) {
     return formMeta
 }
 
-/**
- * 按照columns的顺序为item.sort 初始化值。仅需对第一层进行排序即可, 子层由栅格信息记录了具体位置
- * @param columns
- */
-export function refreshColumnsSort(columns) {
-    for (let i = 0; i < columns.length; i++) {
-        columns[i].sort = i
-    }
-}
-
 const restoreField = function (obj, key, formColumns) {
     const rowGrid = obj[key]
     if (isString(rowGrid)) {
@@ -240,6 +231,41 @@ const extractField = function (obj, key, fields) {
         fields.push(deepClone(formItem))
         obj[key] = formItem.name
     }
+}
+
+/**
+ * 按照columns的顺序为item.sort 初始化值。仅需对第一层进行排序即可, 子层由栅格信息记录了具体位置
+ * @param columns
+ */
+export function refreshColumnsSort(columns) {
+    for (let i = 0; i < columns.length; i++) {
+        columns[i].sort = i
+    }
+}
+
+/**
+ * 判断是否为空的栅格布局
+ * @param gridRowMeta
+ */
+export function isEmptyGridRow(gridRowMeta) {
+    console.log(gridRowMeta)
+    const {component_name: componentName, columns = []} = gridRowMeta
+
+    if (!isLayoutComp(componentName)) {
+        return false;
+    }
+
+    const keys = Object.keys(columns)
+    for (let i = 0; i < keys.length; i++) {
+        let k = keys[i]
+        let v = columns[k]
+        for (let j = 0; j < v.length; j++) {
+            if (!isEmptyGridRow(v[j])) {
+                return false
+            }
+        }
+    }
+    return true;
 }
 
 

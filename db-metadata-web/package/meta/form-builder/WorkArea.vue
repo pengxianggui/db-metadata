@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div class="opr-box">
-      <slot name="opr-box"></slot>
-    </div>
     <div class="work-area">
       <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%; width:100%">
         <template #form-item>
@@ -30,7 +27,7 @@ import FormView from "../../core/formview/src/FormView";
 import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
 import {isLayoutComp} from './relate/componentData'
 import NestFormItemEditor from "./NestFormItemEditor"
-import {refreshColumnsSort} from './formViewMetaParser'
+import {refreshColumnsSort, isEmptyGridRow} from './formViewMetaParser'
 
 export default {
   name: "WorkArea",
@@ -55,8 +52,8 @@ export default {
     },
     handleLayoutItemDelete(columns, item, index, ev) {
       const {formMeta: {objectCode}} = this
-      if (objectCode) {
-        this.$message.warning('编辑元对象时不允许移除控件')
+      if (objectCode && !isEmptyGridRow(item)) {
+        this.$message.warning('当前处于编辑模式, 只允许删除空的栅格容器')
         return false;
       }
       columns.splice(index, 1)

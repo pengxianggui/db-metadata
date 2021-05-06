@@ -43,7 +43,8 @@ import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
 import TreeView from './core/treeview'
 import ZTogglePanel from './core/ztogglepanel'
-import SvgIcon from "./core/svgicon";
+import SvgIcon from "./core/svgicon"
+import FullScreen from "./core/fullscreen/src/FullScreen"
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
@@ -111,6 +112,7 @@ const components = [
     TimeBox,
     ZTogglePanel,
     SvgIcon,
+    FullScreen,
 
     // 布局组件layout
     AdminLayout,
