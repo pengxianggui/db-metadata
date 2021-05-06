@@ -48,7 +48,6 @@ export default function (configMap, key, mergeDefault = true) {
         console.error(e);
     }
     config['conf'] = utils.strToObject(config['conf']);
-    config['layout'] = utils.strToArray(config['layout'])
     if (mergeDefault) {
         this.$merge(config['conf'], EleProps(config['component_name']));
     }

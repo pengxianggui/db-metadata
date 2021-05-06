@@ -4,7 +4,7 @@
       <slot name="opr-box"></slot>
     </div>
     <div class="work-area">
-      <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%;">
+      <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%; width:100%">
         <template #form-item>
           <nest-form-item-editor :columns="formMeta.columns" :active.sync="selectItemName"
                                  @formItemClick="handleFormItemClick"

@@ -5,7 +5,7 @@ import {isLayoutComp} from "./componentData";
 const FORM_EXCLUDES = [
     'columns', 'buttons', 'name',
     'group', 'objectCode', 'objectPrimaryKey',
-    'component_name', 'layout', 'inline']; // 表单隐藏的配置项
+    'component_name', 'layout', 'inline', 'form_type']; // 表单隐藏的配置项
 
 const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey', 'sort', 'inline']; // 字段隐藏的配置项
 
