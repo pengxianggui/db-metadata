@@ -14,12 +14,11 @@
 
       <span style="flex: 1"></span>
       <el-button-group style="margin-right: 10px;">
-        <!--          <template #full-screen-button></template>-->
         <el-tooltip content="视图预览" placement="top">
           <el-button @click="preview" icon="el-icon-view" size="mini" type="primary"></el-button>
         </el-tooltip>
         <el-tooltip content="JSON预览" placement="top">
-          <el-button @click="jsonView" icon="el-icon-view" size="mini" type="primary"></el-button>
+          <el-button @click="jsonView" icon="el-icon-view" size="mini" type="warning"></el-button>
         </el-tooltip>
         <el-tooltip content="保存" placement="top">
           <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success"></el-button>
@@ -32,7 +31,7 @@
       <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
     <div id="form-builder-main">
-      <ComponentList :edit-mode="EDIT_MODE" style="width: 200px; overflow: auto;"></ComponentList>
+      <ComponentList :form-meta="formMeta" :edit-mode="EDIT_MODE" style="width: 200px; overflow: auto;"></ComponentList>
       <div style="flex: 5;margin:0 5px">
         <WorkArea v-model="formMeta" :active-item.sync="activeItem"></WorkArea>
       </div>
@@ -87,6 +86,7 @@ export default {
         this.autoComputedLoad(objectCode);
       } else {
         this.setInitState(null)
+        this.isAutoComputed = false
       }
       this.$emit('oc-change', objectCode);
     },
@@ -117,25 +117,31 @@ export default {
       })
     },
     loadConf(url) {
-      const {$axios, formMeta: {objectCode}} = this;
-      this.setInitState(objectCode);
-      $axios.safeGet(url).then(resp => {
-        let {data} = resp;
+      const _this = this
+      const {$axios, formMeta: {objectCode}} = _this;
+      _this.setInitState(objectCode);
 
-        let {isAutoComputed = false, instanceName, fieldsMap} = data;
-        this.isAutoComputed = isAutoComputed;
-        this.instanceName = instanceName;
-        // extract object config
-        this.$reverseMerge(this.formMeta, extractConfig.call(this, data, objectCode));
+      return new Promise((resolve, reject) => {
+        $axios.safeGet(url).then(resp => {
+          let {data} = resp;
 
-        // extract field config
-        Object.keys(fieldsMap).forEach(key => this.formMeta.columns.push(extractConfig.call(this, fieldsMap, key)));
+          let {isAutoComputed = false, instanceName, fieldsMap} = data;
+          _this.isAutoComputed = isAutoComputed;
+          _this.instanceName = instanceName;
+          // extract object config
+          _this.$reverseMerge(_this.formMeta, extractConfig.call(_this, data, objectCode));
 
-        gridInfoStructured(this.formMeta)
-      }).catch(({msg = '配置加载成功'}) => {
-        console.error('[ERROR] url: %s, msg: %s', url, msg);
-        this.setInitState(objectCode);
-        this.$message.error(msg);
+          // extract field config
+          Object.keys(fieldsMap).forEach(key => _this.formMeta.columns.push(extractConfig.call(_this, fieldsMap, key)));
+
+          gridInfoStructured(_this.formMeta)
+          resolve()
+        }).catch(({msg = '配置加载成功'}) => {
+          console.error('[ERROR] url: %s, msg: %s', url, msg);
+          _this.setInitState(objectCode);
+          _this.$message.error(msg);
+          reject()
+        })
       })
     },
     jsonView() {
@@ -221,7 +227,7 @@ export default {
     }
   },
   computed: {
-    EDIT_MODE() { // 实例配置编辑模式
+    EDIT_MODE() { // 编辑模式: 实例配置编辑
       const {instanceCode} = this
       return !utils.isEmpty(instanceCode)
     },
