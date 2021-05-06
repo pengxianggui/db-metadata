@@ -327,3 +327,7 @@ RichTextBox 支持 tinymce完整配置
 
 ## 0.3.88
 RichTextBox 自动计算时自动配置好图片上传相关内容
+
+## 0.3.90
+1. FormView支持栅格布局
+2. 优化FormBuilder布局
