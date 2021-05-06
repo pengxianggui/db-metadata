@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="border: 2px solid #dddddd;">
     <template v-for="(v, k, index) in formCompLib">
       <div :key="index" v-if="!editMode || k === '布局组件'">
         <h5 v-text="k" style="margin: 5px"></h5>

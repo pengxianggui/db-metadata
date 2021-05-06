@@ -1,32 +1,45 @@
 <template>
-  <div style="display: flex; padding: 5px;height: 100%;box-sizing: border-box;">
-    <ComponentList :edit-mode="EDIT_MODE" style="width: 200px; overflow: auto;"></ComponentList>
-    <div style="flex: 5;margin:0 5px">
-      <WorkArea v-model="formMeta" :active-item.sync="activeItem">
-        <template #opr-box>
-          <el-button-group>
-            <el-button @click="preview" icon="el-icon-view" size="mini" type="primary">视图预览</el-button>
-            <el-button @click="jsonView" icon="el-icon-view" size="mini" type="primary">json预览</el-button>
-            <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success">保存</el-button>
-            <el-button @click="resetForm" icon="el-icon-delete" size="mini" type="danger" v-if="EDIT_MODE">重置
-            </el-button>
-          </el-button-group>
-          <template v-if="!EDIT_MODE">
-            <span v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
-            <meta-object-selector size="mini" v-model="formMeta.objectCode" @change="handleChange"
-                                  @clear="handleChange"></meta-object-selector>
-          </template>
-          <template v-else>
-            <span><span>ic:</span><el-tag size="mini" align="center">{{ instanceCode }}</el-tag></span>&nbsp;
-            <span><span>oc:</span><el-tag size="mini" align="center">{{ formMeta.objectCode }}</el-tag></span>&nbsp;
-            <span><span>cc:</span><el-tag size="mini" align="center">FormView</el-tag></span>&nbsp;
-          </template>
-        </template>
-      </WorkArea>
+  <div ref="formBuilder" id="form-builder">
+    <div class="opr-box">
+      <template v-if="!EDIT_MODE">
+        <meta-object-selector size="mini" v-model="formMeta.objectCode" @change="handleChange"
+                              @clear="handleChange"></meta-object-selector>
+        <span v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
+      </template>
+      <template v-else>
+        <span><span>实例编码:</span><el-tag size="mini" align="center">{{ instanceCode }}</el-tag></span>&nbsp;&nbsp;
+        <span><span>元对象:</span><el-tag size="mini" align="center">{{ formMeta.objectCode }}</el-tag></span>&nbsp;&nbsp;
+        <span><span>组件编码:</span><el-tag size="mini" align="center">FormView</el-tag></span>&nbsp;
+      </template>
+
+      <span style="flex: 1"></span>
+      <el-button-group style="margin-right: 10px;">
+        <!--          <template #full-screen-button></template>-->
+        <el-tooltip content="视图预览" placement="top">
+          <el-button @click="preview" icon="el-icon-view" size="mini" type="primary"></el-button>
+        </el-tooltip>
+        <el-tooltip content="JSON预览" placement="top">
+          <el-button @click="jsonView" icon="el-icon-view" size="mini" type="primary"></el-button>
+        </el-tooltip>
+        <el-tooltip content="保存" placement="top">
+          <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success"></el-button>
+        </el-tooltip>
+        <el-tooltip content="重置" placement="top">
+          <el-button @click="resetForm" icon="el-icon-refresh-left" size="mini" type="danger"
+                     v-if="EDIT_MODE"></el-button>
+        </el-tooltip>
+      </el-button-group>
+      <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
-    <div style="width: 300px;">
-      <ConfArea v-model="formMeta" :active-item="activeItem" :object-code="formMeta.objectCode"
-                :field-code="fieldCode"></ConfArea>
+    <div id="form-builder-main">
+      <ComponentList :edit-mode="EDIT_MODE" style="width: 200px; overflow: auto;"></ComponentList>
+      <div style="flex: 5;margin:0 5px">
+        <WorkArea v-model="formMeta" :active-item.sync="activeItem"></WorkArea>
+      </div>
+      <div style="width: 300px;">
+        <ConfArea v-model="formMeta" :active-item="activeItem" :object-code="formMeta.objectCode"
+                  :field-code="fieldCode"></ConfArea>
+      </div>
     </div>
   </div>
 </template>
@@ -220,5 +233,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  #form-builder {
+    display: flex; flex-direction: column; padding: 5px;height: 100%;box-sizing: border-box; background-color: white;
+
+    .opr-box {
+      display: flex; margin: 2px; align-items: center;
+    }
+
+    #form-builder-main {
+      display: flex; height: calc(100% - 32px); box-sizing: border-box;
+    }
+  }
 </style>
