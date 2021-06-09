@@ -12,9 +12,11 @@ import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
+import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
@@ -68,7 +70,7 @@ public class ComponentController extends FrontRestController {
 
     /**
      * TODO 自动计算入口。应当可以支持 根据元字段 + 字段组件类型 来自动计算。实例配置界面切换字段组件类型时，触发该自动的重新自动计算。另外应当支持ui实例配置界面，先为每个字段
-     *  选定组件，然后一键自动计算。这样得到的自动计算配置会更精确。而且，就无需前端去和组件的默认配置做一个 $merge 了!
+     * 选定组件，然后一键自动计算。这样得到的自动计算配置会更精确。而且，就无需前端去和组件的默认配置做一个 $merge 了!
      * 获取实例配置,2种方式
      * 1. objectCode + componentCode
      * 2. instanceCode
@@ -140,20 +142,31 @@ public class ComponentController extends FrontRestController {
 
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
+        addInstanceConf(objectCode, compCode, instanceCode, instanceName);
+        renderJson(Ret.ok());
+    }
 
+    /**
+     * 添加实例配置
+     *
+     * @param objectCode
+     * @param compCode
+     * @param instanceCode
+     * @param instanceName
+     * @return
+     */
+    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName) {
         Kv config = getKv();
         Component component = ViewFactory.createEmptyViewComponent(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             if (componentService().hasObjectConfig(instanceCode)) {
-                renderJson(Ret.fail("msg", String.format("%s配置信息已存在,请重新输入唯一编码", instanceCode)));
-                return;
+                throw new RuntimeException(String.format("%s配置信息已存在,请重新输入唯一编码", instanceCode));
             }
 
             // TODO 需要整体统一更改为instanceCode唯一, compCode + objectCode 可多套
             if (componentService().hasObjectConfig(compCode, objectCode)) {
-                renderJson(Ret.fail("msg", String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode)));
-                return;
+                throw new RuntimeException(String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode));
             }
 
             IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -166,6 +179,28 @@ public class ComponentController extends FrontRestController {
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
+        return true;
+    }
+
+    /**
+     * 一键自动计算
+     */
+    @ActionKey("component/import-auto-computed")
+    public void oneKeyAutoComputed() {
+        QueryHelper queryHelper = new QueryHelper(this);
+        String objectCode = queryHelper.getObjectCode();
+        String compCodes = getPara("componentCodes");
+
+        Db.tx(() -> {
+            for (String compCode : compCodes.split(",")) {
+                boolean r = addInstanceConf(objectCode, compCode, objectCode + "." + compCode, "系统自动计算");
+                if (!r) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
         renderJson(Ret.ok());
     }
 

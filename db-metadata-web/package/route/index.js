@@ -1,4 +1,4 @@
-import MetaDataManager from "../meta/MetaDataManager";
+import MetaDataManager from "../meta/meta-data-manager/MetaDataManager";
 import FormBuilder from '../meta/form-builder'
 import GlobalConfList from "../meta/global-component/GlobalConfList";
 import GlobalConf from "../meta/global-component/GlobalConf";
