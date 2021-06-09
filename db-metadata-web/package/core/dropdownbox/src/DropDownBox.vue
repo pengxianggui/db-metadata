@@ -90,8 +90,9 @@
         },
         computed: {
             multiple() {    // is multiple value
-                let {innerMeta} = this;
-                return (utils.hasProp(innerMeta, 'conf') && innerMeta['conf']['multiple'] === true);
+                let {innerMeta: {conf: metaConf}, $attrs} = this;
+                return ($attrs.hasOwnProperty('multiple') && $attrs['multiple'] !== false)
+                    || (metaConf.hasOwnProperty('multiple') && metaConf['multiple'] !== false)
             }
         }
     }

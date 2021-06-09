@@ -38,7 +38,7 @@ public class BusinessService {
      * @return
      */
     public Record findDataByIds(IMetaObject object, Object... ids) {
-        return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), (Object[]) ids[0]);
+        return Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), (Object[]) ids[0]); // FIXME ids参数优化兼容
     }
 
     public Page<Record> paginate(Integer pageIndex, Integer pageSize, IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {

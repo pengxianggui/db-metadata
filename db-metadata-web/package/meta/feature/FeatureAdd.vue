@@ -7,7 +7,8 @@
     </el-steps>
     <el-form ref="featureForm" :model="feature" label-width="120px" v-show="step == 0">
       <el-form-item label="功能类别" prop="type" required>
-        <radio-box :data-url="featureTypeUrl" v-model="feature.type" @active-option="initFeatureConfMeta"></radio-box>
+        <radio-box :data-url="featureTypeUrl" v-model="feature.type" @active-option="initFeatureConfMeta"
+                   @change="initFeatureConfMeta"></radio-box>
       </el-form-item>
       <el-form-item label="功能名" class="inline" prop="name" required>
         <text-box v-model="feature.name"></text-box>
@@ -29,7 +30,7 @@
 
       <el-form-item>
         <el-button size="small" type="success" @click="submitFeatureForm('featureForm')">提交</el-button>
-<!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
+        <!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
         <el-button size="small" type="danger" @click="close">关闭</el-button>
       </el-form-item>
     </el-form>
@@ -62,7 +63,7 @@
       </template>
       <template #action="{submit}">
         <el-button size="small" type="success" @click="submit">提交</el-button>
-<!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
+        <!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
         <el-button size="small" type="danger" @click="close">关闭</el-button>
       </template>
     </form-view>
@@ -85,14 +86,7 @@ import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
 import utils from '../../utils'
 import {getAddFormMeta} from '../../utils/rest'
 import {isEmpty} from "../../utils/common";
-
-// 后端功能类别代码 和 前端功能类别代码的映射： TODO 统一
-const FEATURE_TYPE = {
-  MasterSlaveGrid: 'MasterSlaveGrid',
-  SingleGrid: 'SingleGrid',
-  TreeSingleGrid: 'TreeInTable',
-  TreeAndSingleGrid: 'TreeAndTable'
-};
+import {FEATURE_TYPE_MAPPING} from './ext/featureType'
 
 export default {
   name: "FeatureAdd",
@@ -117,7 +111,6 @@ export default {
     return {
       baseRoutePath: '',
       step: 0,
-      FEATURE_TYPE: FEATURE_TYPE,
       objectCode: objectCode,
       primaryKey: primaryKey,
       featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
@@ -125,7 +118,7 @@ export default {
         type: 'META_OBJECT'
       }),
       feature: {
-        type: FEATURE_TYPE['SingleGrid'],
+        type: 'SingleGrid',
         name: objectCode,
         code: objectCode,
         instanceCode: null,
@@ -152,61 +145,7 @@ export default {
   methods: {
     initFeatureConfMeta() {
       const {feature: {type: featureType}, objectCode, primaryKey} = this
-      switch (featureType) {
-        case FEATURE_TYPE['MasterSlaveGrid']:
-          this.feature.config = {
-            master: {
-              objectCode: objectCode,
-              primaryKey: primaryKey
-            },
-            slaves: [{
-              objectCode: null,
-              foreignFieldCode: null,
-              order: 0
-            }]
-          }
-
-          break;
-        case FEATURE_TYPE['SingleGrid']:
-          this.feature.config = {
-            singleGrid: {
-              objectCode: objectCode
-            }
-          }
-
-          break;
-        case FEATURE_TYPE['TreeSingleGrid']:
-          this.feature.config = {
-            table: {
-              objectCode: objectCode,
-              idKey: null,
-              pidKey: null,
-              rootIdentify: null,
-              label: null,
-              isSync: false
-            }
-          }
-
-          break;
-        case FEATURE_TYPE['TreeAndSingleGrid']:
-          this.feature.config = {
-            tree: {
-              objectCode: null,
-              idKey: primaryKey,
-              pidKey: null,
-              rootIdentify: null,
-              label: null,
-              isSync: false,
-              // primaryKey: primaryKey
-            },
-            table: {
-              objectCode: objectCode,
-              primaryKey: null,
-              foreignFieldCode: null
-            }
-          }
-          break;
-      }
+      this.feature.config = utils.deepClone(FEATURE_TYPE_MAPPING[featureType].getInitConf(objectCode, primaryKey))
     },
     baseRoutePathChange({activeOption}) {
       const {key} = activeOption

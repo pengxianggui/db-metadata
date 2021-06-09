@@ -11,7 +11,9 @@ export default {
   name: "ComponentSelector",
   mixins: [Val()],
   props: {
-    value: String,
+    value: {
+      type: [String, Array]
+    },
     scope: {
       type: String,
       default: () => 'default',
@@ -42,6 +44,11 @@ export default {
       meta: meta
     }
 
+  },
+  computed: {
+    attrs() {
+      return this.$attrs;
+    }
   }
 }
 </script>
