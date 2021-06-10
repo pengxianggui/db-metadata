@@ -1,5 +1,6 @@
 package com.hthjsj.web.ui;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.kit.UtilKit;
@@ -43,7 +44,7 @@ public class ComponentInstanceConfig extends Kv {
     ComponentType containerType;
 
     private ComponentInstanceConfig(Kv configs, String objectCode, String instanceCode, String instanceName, ComponentType containerType) {
-        this.self = Kv.by(objectCode, UtilKit.getKv(configs.getStr(objectCode)));
+        this.self = Kv.by(objectCode, UtilKit.getKv(configs.getStr(objectCode))); // TODO getStr引起的问题
         this.fieldsMap = UtilKit.getOKv(configs, "fieldsMap");
         this.objectCode = objectCode;
         this.instanceCode = instanceCode;
@@ -82,5 +83,10 @@ public class ComponentInstanceConfig extends Kv {
 
     public Okv getFieldsMap() {
         return fieldsMap;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
