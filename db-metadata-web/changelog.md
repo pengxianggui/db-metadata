@@ -331,3 +331,7 @@ RichTextBox 自动计算时自动配置好图片上传相关内容
 ## 0.3.90
 1. FormView支持栅格布局
 2. 优化FormBuilder布局
+
+## 0.3.91
+1. 支持元对象创建后的一键创建UI配置
+2. 支持一些render snippet

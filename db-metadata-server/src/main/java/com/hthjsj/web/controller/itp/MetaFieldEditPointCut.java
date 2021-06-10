@@ -43,7 +43,8 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
             IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
 
             log.info("Update {} - field {},Biz data Primary key:{}", metaObject.code(), fieldCode, formData.getPks(metaObject.primaryKey()));
-            //TODO 无法作用到自定义instanceCode上的实例配置;
+            // TODO 无法作用到自定义instanceCode上的实例配置;
+            // TODO 元字段更新后，需要让用户去决定是否需要更新UI配置，否则容易覆盖用户自己的UI配置
             List<ComponentType> existTypes = ServiceManager.componentService().loadTypesByObjectCode(metaObject.code());
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);
