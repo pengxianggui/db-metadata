@@ -1,10 +1,12 @@
 package com.hthjsj.web.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.Component;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.component.AbstractComponent;
+import com.hthjsj.web.component.ComponentException;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
@@ -104,7 +106,6 @@ public class ComponentController extends FrontRestController {
             renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
         }
 
-
         /**t
          * {
          *   "data": {
@@ -142,7 +143,8 @@ public class ComponentController extends FrontRestController {
 
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
-        addInstanceConf(objectCode, compCode, instanceCode, instanceName);
+        Kv config = getKv();
+        addInstanceConf(objectCode, compCode, instanceCode, instanceName, config);
         renderJson(Ret.ok());
     }
 
@@ -155,8 +157,8 @@ public class ComponentController extends FrontRestController {
      * @param instanceName
      * @return
      */
-    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName) {
-        Kv config = getKv();
+    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName,
+                                    Kv config) {
         Component component = ViewFactory.createEmptyViewComponent(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
@@ -193,7 +195,23 @@ public class ComponentController extends FrontRestController {
 
         Db.tx(() -> {
             for (String compCode : compCodes.split(",")) {
-                boolean r = addInstanceConf(objectCode, compCode, objectCode + "." + compCode, "系统自动计算");
+                final String instanceCode = objectCode + "." + compCode;
+                if (componentService().hasObjectConfig(instanceCode)) {
+                    throw new ComponentException("默认的instanceCode:%s已经存在!", instanceCode);
+                }
+
+                IMetaObject metaObject = metaService().findByCode(objectCode);
+                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
+                Kv config = metaObjectViewAdapter.getInstanceConfig();
+                config.set(objectCode, JSONObject.toJSONString(config.get(objectCode)));
+                config.set("fieldsMap", JSONObject.toJSONString(config.get("fieldsMap")));
+
+                boolean r = addInstanceConf(
+                        objectCode,
+                        compCode,
+                        instanceCode,
+                        "系统自动计算", config
+                );
                 if (!r) {
                     return false;
                 }

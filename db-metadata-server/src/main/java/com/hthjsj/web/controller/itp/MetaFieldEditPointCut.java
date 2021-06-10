@@ -6,6 +6,7 @@ import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.aop.AopInvocation;
 import com.hthjsj.analysis.meta.aop.UpdatePointCut;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.component.ComponentException;
 import com.hthjsj.web.ui.MetaFieldViewAdapter;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.UIManager;
@@ -47,6 +48,9 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
             for (ComponentType type : existTypes) {
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);
                 MetaFieldViewAdapter metaFieldViewAdapter = metaObjectViewAdapter.getFieldAdapter(fieldCode);
+                if (metaFieldViewAdapter == null) {
+                    throw new ComponentException("元字段[%s > %s]在容器[%s]下无UI配置，请确认", objectCode, fieldCode, type.getCode());
+                }
                 UIManager.update(metaFieldViewAdapter, metaObjectViewAdapter.getComponent().componentType());
             }
         }
