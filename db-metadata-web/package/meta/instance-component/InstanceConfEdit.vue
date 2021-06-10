@@ -34,6 +34,7 @@
           </template>
         </div>
         <el-button-group>
+          <ui-config-help></ui-config-help>
           <el-button size="mini" type="primary" @click="preview">
             <i class="el-icon-view"></i>
             <span>预览</span>
@@ -56,6 +57,7 @@
             </el-dropdown>
           </el-badge>
         </el-button-group>
+
       </div>
       <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue"
                :class="{'show-form-builder': elTabValue === '2'}">
