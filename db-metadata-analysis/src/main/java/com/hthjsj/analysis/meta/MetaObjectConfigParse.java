@@ -25,7 +25,7 @@ public class MetaObjectConfigParse extends MetaData {
     }
 
     MetaObjectConfigParse(String config) {
-        set(JSON.parseObject(config));
+        set(JSON.parseObject(StrKit.defaultIfBlank(config, "{}")));
     }
 
     public boolean isUUIDPrimary() {
@@ -57,7 +57,8 @@ public class MetaObjectConfigParse extends MetaData {
      */
     public String orderBy() {
         if (StrKit.notBlank(getStr("orderBy"))) {
-            return getStr("orderBy").trim().replaceFirst("order by", "");
+            return getStr("orderBy").trim()
+                                    .replaceFirst("order by", "");
         }
         return "";
     }

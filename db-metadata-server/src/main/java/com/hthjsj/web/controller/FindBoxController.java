@@ -68,18 +68,24 @@ public class FindBoxController extends FrontRestController {
         QueryHelper queryHelper = new QueryHelper(this);
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
-        IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
+        IMetaField metaField = ServiceManager.metaService()
+                                             .findFieldByCode(objectCode, fieldCode);
 
 
         boolean raw = getParaToBoolean("raw", false);
-        String[] fields = QueryHelper.queryBuilder().list().fields();
-        String[] excludeFields = QueryHelper.queryBuilder().list().excludeFields();
+        String[] fields = queryHelper.list()
+                                     .fields();
+        String[] excludeFields = queryHelper.list()
+                                            .excludeFields();
         IMetaObject metaObject = null;
 
-        if (metaField.configParser().isSql()) {
-            String sql = metaField.configParser().scopeSql();
+        if (metaField.configParser()
+                     .isSql()) {
+            String sql = metaField.configParser()
+                                  .scopeSql();
             metaObject = MetaFactory.createBySql(sql, objectCode);
-            metaObject.schemaName(metaField.configParser().dbConfig());
+            metaObject.schemaName(metaField.configParser()
+                                           .dbConfig());
         }
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
