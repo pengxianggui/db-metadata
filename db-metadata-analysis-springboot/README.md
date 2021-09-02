@@ -66,6 +66,8 @@
 ### 低优先级
 
 - [ ] Druid中ast部分 考虑用JSqlParse替换
+- [ ] hthjsj包名待server重构完毕后统一替换;
+-
 
 ##### 参考
 
