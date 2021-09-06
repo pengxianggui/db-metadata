@@ -1,0 +1,14 @@
+package com.hthjsj.web.user;
+
+/**
+ * <p> @Date : 2019/12/13 </p>
+ * <p> @Project : db-meta-serve</p>
+ *
+ * <p> @author konbluesky </p>
+ */
+public interface UserFactory<U extends User> {
+
+    UserService<U> userService();
+
+    LoginService<U> loginService();
+}
