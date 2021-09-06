@@ -5,7 +5,6 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.aop.QueryInvocation;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.Controller;
 import lombok.Data;
 
 import java.util.Collection;
@@ -29,8 +28,8 @@ public class TableQueryInvocation extends QueryInvocation {
 
     private boolean prevent;
 
-    public TableQueryInvocation(IMetaObject metaObject, Controller controller, QueryHelper queryHelper) {
-        super(metaObject, controller);
+    public TableQueryInvocation(IMetaObject object, QueryHelper queryHelper) {
+        super(object);
         this.queryHelper = queryHelper;
     }
 }

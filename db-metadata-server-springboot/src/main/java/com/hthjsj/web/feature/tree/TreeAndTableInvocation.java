@@ -17,7 +17,7 @@ public class TreeAndTableInvocation extends TableQueryInvocation {
 
     private TreeAndTableConfig treeAndTableConfig;
 
-    public TreeAndTableInvocation(IMetaObject metaObject, Controller controller, QueryHelper queryHelper) {
-        super(metaObject, controller, queryHelper);
+    public TreeAndTableInvocation(IMetaObject metaObject, QueryHelper queryHelper) {
+        super(metaObject, queryHelper);
     }
 }

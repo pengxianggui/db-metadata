@@ -140,7 +140,7 @@ public class TreeAndTableController extends FrontRestController {
         AddPointCut addPointCut = (AddPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
         /** 将TreeAndTable中拦截器取出合并到AddPointCut拦截器中 */
         AddPointCut[] pointCut = Lists.asList(addPointCut, metaObjectConfigParse.addPointCut()).toArray(new AddPointCut[0]);
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -198,7 +198,7 @@ public class TreeAndTableController extends FrontRestController {
 
         /** pointCut构建 */
         QueryPointCut queryPointCut = (QueryPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
-        TreeAndTableInvocation treeAndTableInvocation = new TreeAndTableInvocation(metaObject, this, queryHelper);
+        TreeAndTableInvocation treeAndTableInvocation = new TreeAndTableInvocation(metaObject, queryHelper);
         treeAndTableInvocation.setSqlParaExt(sqlPara);
         treeAndTableInvocation.setCompileWhere(compileWhere);
         treeAndTableInvocation.setFilteredFields(filteredFields);

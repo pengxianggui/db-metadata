@@ -74,7 +74,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut[] pointCut = metaObjectConfigParse.addPointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -133,7 +133,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut[] pointCut = metaObjectConfigParse.updatePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv(), this);
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -171,7 +171,7 @@ public class FormController extends FrontRestController {
         FormView formView = ViewFactory.formView(metaObject).viewForm();
 
         ViewPointCut[] viewPointCuts = metaObject.configParser().viewPointCut();
-        FormQueryInvocation invocation = new FormQueryInvocation(metaObject, this);
+        FormQueryInvocation invocation = new FormQueryInvocation(metaObject);
 
         boolean status = Db.tx(() -> {
             boolean s = true;

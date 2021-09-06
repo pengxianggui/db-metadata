@@ -16,7 +16,7 @@ public class FormQueryInvocation extends QueryInvocation {
     @Getter
     private Record data;
 
-    public FormQueryInvocation(IMetaObject metaObject, Controller controller) {
-        super(metaObject, controller);
+    public FormQueryInvocation(IMetaObject metaObject) {
+        super(metaObject);
     }
 }

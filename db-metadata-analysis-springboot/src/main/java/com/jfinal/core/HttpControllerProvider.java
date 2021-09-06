@@ -9,9 +9,10 @@ import com.jfinal.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public interface Controller {
+public interface HttpControllerProvider{
 
     default Kv getKv() {
         throw new RuntimeException("该接口用来保证迁移时编译通过,未实现");
     }
+
 }

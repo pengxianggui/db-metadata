@@ -2,7 +2,6 @@ package com.hthjsj.analysis.meta.aop;
 
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 
 /**
@@ -14,20 +13,16 @@ import com.jfinal.kit.Kv;
  */
 public abstract class QueryInvocation extends AopInvocation {
 
-    private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams, Controller controller) {
-        super(metaObject, formData, httpParams, controller);
-    }
-
     private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
         super(metaObject, formData, httpParams);
     }
 
-    private QueryInvocation(IMetaObject metaObject, Kv httpParams, Controller controller) {
-        super(metaObject, httpParams, controller);
+    private QueryInvocation(IMetaObject metaObject, Kv httpParams) {
+        super(metaObject, httpParams);
     }
 
-    public QueryInvocation(IMetaObject metaObject, Controller controller) {
-        super(metaObject, null, controller.getKv(), controller);
+    public QueryInvocation(IMetaObject metaObject) {
+        super(metaObject, null, null);
     }
 
     @Override

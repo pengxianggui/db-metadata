@@ -28,7 +28,7 @@ public class ComponentConfDeletePointCut implements DeletePointCut {
 
     @Override
     public boolean deleteBefore(AopInvocation invocation) {
-        QueryHelper queryHelper = new QueryHelper(invocation.getController());
+        QueryHelper queryHelper = new QueryHelper(null);
         IMetaObject metaObject = invocation.getMetaObject();
         Preconditions.checkArgument("meta_component_instance".equalsIgnoreCase(metaObject.code()), "该拦截器仅对meta_component_instance元对象启用");
 

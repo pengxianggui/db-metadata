@@ -2,7 +2,6 @@ package com.hthjsj.analysis.meta.aop;
 
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.MetaData;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import lombok.Data;
@@ -25,8 +24,6 @@ public class AopInvocation {
 
     private Kv httpParams;
 
-    private Controller controller;
-
     /**
      * 用来标记前置操作状态是否完成,如上一个动作是save or update;
      */
@@ -36,22 +33,14 @@ public class AopInvocation {
      * FIXME 遗留债务,构造函数未能形成约束,三个构造函数初始化无法保证对所有参数初始统一;
      * 会导致PointCut调用时出现空指针异常,加重了使用负担;
      */
-    public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams, Controller controller) {
-        this.metaObject = metaObject;
-        this.formData = formData;
-        this.httpParams = httpParams;
-        this.controller = controller;
-    }
-
     public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
         this.metaObject = metaObject;
         this.formData = formData;
         this.httpParams = httpParams;
     }
 
-    public AopInvocation(IMetaObject metaObject, Kv httpParams, Controller controller) {
+    public AopInvocation(IMetaObject metaObject, Kv httpParams) {
         this.metaObject = metaObject;
         this.httpParams = httpParams;
-        this.controller = controller;
     }
 }

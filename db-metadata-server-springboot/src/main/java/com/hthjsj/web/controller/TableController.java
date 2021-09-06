@@ -81,7 +81,7 @@ public class TableController extends FrontRestController {
 
         /** pointCut构建 */
         QueryPointCut queryPointCut = metaObject.configParser().queryPointCut();
-        TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject, this, queryHelper);
+        TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject,  queryHelper);
         tableQueryInvocation.setSqlParaExt(sqlPara);
         tableQueryInvocation.setCompileWhere(compileWhere);
         tableQueryInvocation.setFilteredFields(filteredFields);
@@ -178,7 +178,7 @@ public class TableController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, getKv(), this);
+        AopInvocation invocation = new AopInvocation(metaObject, getKv());
 
         boolean status = Db.tx(new IAtom() {
 
