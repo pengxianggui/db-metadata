@@ -2,6 +2,8 @@ package com.hthjsj.analysis.db.registry;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,19 +29,26 @@ import static com.hthjsj.analysis.AnalysisConstant.*;
 @Configuration
 public class DataSourceInitializer {
 
-    @Bean(MAIN_DATA_SOURCE + ".source")
-    @ConfigurationProperties("spring.datasource")
+    /**
+     * 1. 自动初始化Spring source 的 bean
+     * 2. 不满足时从业务库中取第一个
+     */
+    @Bean(MAIN_DATA_SOURCE_RAW_BEAN_NAME)
+    @ConfigurationProperties(DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+//    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
     public DruidDataSource mainDataSource() {
         return new DruidDataSource();
     }
 
-    @Bean(MAIN_DATA_SOURCE)
-    public IDataSource mainSource(@Qualifier(MAIN_DATA_SOURCE + ".source") DruidDataSource druidDataSource) {
+    @Bean(MAIN_DATA_SOURCE_BEAN_NAME)
+//    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+    public IDataSource mainSource(@Qualifier(MAIN_DATA_SOURCE_RAW_BEAN_NAME) DruidDataSource druidDataSource) {
         return MDDataSource.Main(druidDataSource);
     }
 
     @Bean
-    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE) IDataSource dataSource) {
+//    @ConditionalOnBean(IDataSource.class)
+    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource dataSource) {
         return new DefaultDataSourceRegistrar(dataSource);
     }
 

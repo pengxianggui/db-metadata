@@ -2,6 +2,7 @@ package com.hthjsj.analysis.meta;
 
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.db.*;
+import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Page;
@@ -25,7 +26,7 @@ import java.util.List;
 //@TxConfig(DbKit.MAIN_CONFIG_NAME)
 @Service
 @Transactional
-@ConditionalOnBean(ActiveRecordPlugin.class)
+//@ConditionalOnBean(JFinalActiveRecordPluginManager.class)
 public class DbMetaService {
 
     private BusinessService businessService;

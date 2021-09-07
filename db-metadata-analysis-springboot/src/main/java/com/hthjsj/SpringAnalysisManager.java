@@ -4,6 +4,7 @@ import com.hthjsj.analysis.db.registry.DataSourceManager;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
  */
 @Slf4j
 @Configuration
+//@ConditionalOnBean(DataSourceManager.class)
 public class SpringAnalysisManager {
 
     private static SpringAnalysisManager me;

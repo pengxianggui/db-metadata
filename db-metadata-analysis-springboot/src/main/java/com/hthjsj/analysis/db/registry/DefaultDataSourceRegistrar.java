@@ -2,7 +2,6 @@ package com.hthjsj.analysis.db.registry;
 
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.jfinal.kit.StrKit;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +18,6 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-@Configuration
-//@ConditionalOnProperty(name = "md.analysis.registrar", havingValue = "default", matchIfMissing = true)
 public class DefaultDataSourceRegistrar implements DataSourceRegistrar {
 
     private final Map<String, IDataSource> dataSourceMap = new HashMap<>();

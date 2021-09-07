@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.db.SnowFlake;
+import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
@@ -27,7 +28,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @Transactional
-@ConditionalOnBean(ActiveRecordPlugin.class)
+//@ConditionalOnBean(JFinalActiveRecordPluginManager.class)
 public class BusinessService {
 
     /**
