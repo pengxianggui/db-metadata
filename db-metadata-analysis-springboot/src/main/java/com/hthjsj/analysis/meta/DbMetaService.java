@@ -28,9 +28,9 @@ import java.util.List;
 @ConditionalOnBean(ActiveRecordPlugin.class)
 public class DbMetaService {
 
-    BusinessService businessService;
+    private BusinessService businessService;
 
-    MysqlService dbService;
+    private MysqlService dbService;
 
     public DbMetaService(BusinessService businessService, MysqlService dbService) {
         this.businessService = businessService;

@@ -11,6 +11,7 @@
     <groupId>com.github.konbluesky</groupId>
     <artifactId>db-metadata-analysis-springboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <name>db-metadata-analysis-springboot</name>
     <description>db-metadata-analysis-springboot</description>
     <properties>
@@ -37,6 +38,12 @@
             <artifactId>activerecord</artifactId>
             <version>4.9.16</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jfinal</groupId>-->
+<!--            <artifactId>jfinal</artifactId>-->
+<!--            <version>4.9.16</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -61,16 +68,24 @@
 
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <excludes>-->
+<!--                        <exclude>-->
+<!--                            <groupId>org.projectlombok</groupId>-->
+<!--                            <artifactId>lombok</artifactId>-->
+<!--                        </exclude>-->
+<!--                    </excludes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

@@ -72,3 +72,4 @@
 ##### 参考
 
 - [Spring Boot DataSource Configuration](https://howtodoinjava.com/spring-boot2/datasource-configuration/)
+- [jfinal-orm-spring-boot-starter](https://gitee.com/blingking/jfinal-orm-spring-boot-starter)

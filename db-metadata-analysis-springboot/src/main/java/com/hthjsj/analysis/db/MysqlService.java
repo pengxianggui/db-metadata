@@ -3,8 +3,12 @@ package com.hthjsj.analysis.db;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.stream.Collectors;
  *
  * <p> @author konbluesky </p>
  */
+@Service
+@Transactional
 public class MysqlService implements DbService {
 
     @Override
