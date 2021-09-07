@@ -1,20 +1,17 @@
 package com.hthjsj.analysis.db;
 
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.MetaAnalysisException;
-import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
+import com.hthjsj.analysis.db.registry.DataSourceManager;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * <p> Mysql 元数据的默认获取方法</p>
@@ -28,9 +25,15 @@ import java.util.stream.Collectors;
 @Transactional
 public class MysqlService implements DbService {
 
+    DataSourceManager dataSourceManager;
+
+    public MysqlService(DataSourceManager dataSourceManager) {
+        this.dataSourceManager = dataSourceManager;
+    }
+
     @Override
     public List<String> showSchema() {
-        return AnalysisConfig.me().getDbSources().stream().map(AnalysisConfig.DBSource::configName).collect(Collectors.toList());
+        return dataSourceManager.sourceNameList();
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             records = Db.use(schema).find(showTablesSql, schema);
         } else {
-            records = AnalysisConfig.me().dbMain().find(showTablesSql, schema);
+            records = SpringAnalysisManager.me().dbMain().find(showTablesSql, schema);
         }
 
         if (records == null || records.isEmpty()) {
@@ -70,7 +73,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             record = Db.use(schema).findFirst(getTableSql, schema, tableName);
         } else {
-            record = AnalysisConfig.me().dbMain().findFirst(getTableSql, schema, tableName);
+            record = SpringAnalysisManager.me().dbMain().findFirst(getTableSql, schema, tableName);
         }
         Table table = new Table(record);
         return table.setColumns(getColumns(schema, tableName));
@@ -87,7 +90,7 @@ public class MysqlService implements DbService {
         if (schemaName.isPresent()) {
             records = Db.use(schema).find(showColumns, schema, tableName);
         } else {
-            records = AnalysisConfig.me().dbMain().find(showColumns, schema, tableName);
+            records = SpringAnalysisManager.me().dbMain().find(showColumns, schema, tableName);
         }
         List<Column> result = new ArrayList<>();
         for (Record record : records) {

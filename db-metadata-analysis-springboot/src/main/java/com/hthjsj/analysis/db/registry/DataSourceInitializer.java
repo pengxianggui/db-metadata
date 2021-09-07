@@ -2,8 +2,6 @@ package com.hthjsj.analysis.db.registry;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,19 +33,19 @@ public class DataSourceInitializer {
      */
     @Bean(MAIN_DATA_SOURCE_RAW_BEAN_NAME)
     @ConfigurationProperties(DEFAULT_DATA_SOURCE_PROPERTY_NAME)
-//    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+    //    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
     public DruidDataSource mainDataSource() {
         return new DruidDataSource();
     }
 
     @Bean(MAIN_DATA_SOURCE_BEAN_NAME)
-//    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+    //    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
     public IDataSource mainSource(@Qualifier(MAIN_DATA_SOURCE_RAW_BEAN_NAME) DruidDataSource druidDataSource) {
         return MDDataSource.Main(druidDataSource);
     }
 
     @Bean
-//    @ConditionalOnBean(IDataSource.class)
+    //    @ConditionalOnBean(IDataSource.class)
     public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource dataSource) {
         return new DefaultDataSourceRegistrar(dataSource);
     }

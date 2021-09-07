@@ -1,14 +1,11 @@
 package com.hthjsj.analysis.meta;
 
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.db.*;
-import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +26,9 @@ import java.util.List;
 //@ConditionalOnBean(JFinalActiveRecordPluginManager.class)
 public class DbMetaService {
 
-    private BusinessService businessService;
+    private final BusinessService businessService;
 
-    private MysqlService dbService;
+    private final MysqlService dbService;
 
     public DbMetaService(BusinessService businessService, MysqlService dbService) {
         this.businessService = businessService;
@@ -53,7 +50,7 @@ public class DbMetaService {
      * @return
      */
     public List<IMetaObject> seriesOfTable(String schemaName, String tableName) {
-        List<String> objs = AnalysisConfig.me().dbMain().query("select code from meta_object where schema_name=? and table_name=? ", schemaName, tableName);
+        List<String> objs = SpringAnalysisManager.me().dbMain().query("select code from meta_object where schema_name=? and table_name=? ", schemaName, tableName);
         List<IMetaObject> result = new ArrayList<>();
         for (String metaObjectCode : objs) {
             result.add(findByCode(metaObjectCode));
@@ -62,17 +59,17 @@ public class DbMetaService {
     }
 
     public boolean isExists(String objectCode) {
-        return AnalysisConfig.me().dbMain().queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
+        return SpringAnalysisManager.me().dbMain().queryInt("select count(1) from meta_object where code=?", objectCode) == 0;
     }
 
     public boolean isExists(IMetaObject metaObject, IMetaField metaField, Object value) {
-        return AnalysisConfig.me().dbMain().queryInt("select count(1) from " + metaObject.tableName() + " where " + metaField.fieldCode() + "=?", value) > 0;
+        return SpringAnalysisManager.me().dbMain().queryInt("select count(1) from " + metaObject.tableName() + " where " + metaField.fieldCode() + "=?", value) > 0;
     }
 
     public List<IMetaObject> findAll() {
         List<IMetaObject> result = new ArrayList<>();
 
-        List<String> objs = AnalysisConfig.me().dbMain().query("select code from meta_object");
+        List<String> objs = SpringAnalysisManager.me().dbMain().query("select code from meta_object");
         for (String metaObjectCode : objs) {
             result.add(findByCode(metaObjectCode));
         }
@@ -83,11 +80,11 @@ public class DbMetaService {
         if (StrKit.isBlank(objectCode)) {
             throw new MetaOperateException("必须指定元对象编码,当前元对象编码:%s", objectCode);
         }
-        Record moRecord = AnalysisConfig.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
+        Record moRecord = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
         if (moRecord == null) {
             throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
         }
-        List<Record> metafields = AnalysisConfig.me().dbMain().find("select * from meta_field where object_code=? order by order_num ", objectCode);
+        List<Record> metafields = SpringAnalysisManager.me().dbMain().find("select * from meta_field where object_code=? order by order_num ", objectCode);
         IMetaObject metaObject = new MetaObject(moRecord.getColumns());
         for (Record metafield : metafields) {
             MetaField defaultMetaField = new MetaField(metaObject);
@@ -100,9 +97,9 @@ public class DbMetaService {
     public IMetaField findFieldByCode(String objectCode, String fieldCode) {
         IMetaField metaField = null;
         if (StrKit.notBlank(objectCode, fieldCode)) {
-            Record field = AnalysisConfig.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=? order by order_num",
-                                                                  objectCode,
-                                                                  fieldCode);
+            Record field = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=? order by order_num",
+                                                                         objectCode,
+                                                                         fieldCode);
             if (field == null) {
                 throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
             }
@@ -118,7 +115,7 @@ public class DbMetaService {
 
     public boolean saveMetaObject(IMetaObject metaObject, boolean saveFields) {
         metaObject.dataMap().put("id", SnowFlake.me().nextId());
-        boolean moSaved = AnalysisConfig.me().dbMain().save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
+        boolean moSaved = SpringAnalysisManager.me().dbMain().save("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         if (saveFields) {
             List<Record> updateRecords = new ArrayList<>();
             metaObject.fields().forEach((re) -> {
@@ -127,24 +124,24 @@ public class DbMetaService {
                 re.objectCode(metaObject.code());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
-            int[] result = AnalysisConfig.me().dbMain().batchSave("meta_field", updateRecords, 50);
+            int[] result = SpringAnalysisManager.me().dbMain().batchSave("meta_field", updateRecords, 50);
             log.info("batchSave result:{}", Arrays.toString(result));
         }
         return moSaved;
     }
 
     public boolean updateMetaObject(IMetaObject metaObject) {
-        boolean moUpdated = AnalysisConfig.me().dbMain().update("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
+        boolean moUpdated = SpringAnalysisManager.me().dbMain().update("meta_object", metaObject.primaryKey(), new Record().setColumns(metaObject.dataMap()));
         List<Record> updateRecords = new ArrayList<>();
         metaObject.fields().forEach((re) -> {
             updateRecords.add(new Record().setColumns(re.dataMap()));
         });
-        AnalysisConfig.me().dbMain().batchUpdate("meta_field", updateRecords, 50);
+        SpringAnalysisManager.me().dbMain().batchUpdate("meta_field", updateRecords, 50);
         return moUpdated;
     }
 
     public boolean deleteMetaObject(String objectCode) {
-        return AnalysisConfig.me().dbMain().delete("delete from meta_object where code=?", objectCode) > 0 && AnalysisConfig.me().dbMain().delete(
+        return SpringAnalysisManager.me().dbMain().delete("delete from meta_object where code=?", objectCode) > 0 && SpringAnalysisManager.me().dbMain().delete(
                 "delete from meta_field where object_code=?",
                 objectCode) > 0;
     }
@@ -158,7 +155,7 @@ public class DbMetaService {
      * @return
      */
     public Record findObjectRecordByCode(String objectCode) {
-        Record moRecord = AnalysisConfig.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
+        Record moRecord = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_object where code=?", objectCode);
         if (moRecord == null) {
             throw new MetaOperateException("无效的元对象编码: %s ", objectCode);
         }
@@ -175,7 +172,7 @@ public class DbMetaService {
      * @return
      */
     public Record findFieldRecordByCode(String code, String fieldCode) {
-        return AnalysisConfig.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
+        return SpringAnalysisManager.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=?", code, fieldCode);
     }
 
     //*****************业务操作(metadata数据库以外的操作迁移至businessService)**************************

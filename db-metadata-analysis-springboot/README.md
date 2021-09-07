@@ -62,7 +62,8 @@
 ### 中优先级
 
 - [ ] JFinal包中的依赖逐步去除,部分工具类通过Copy Class方式移植到项目中
-
+- [ ] 一些bean的载入顺序问题
+  - @ConditionalOnBean(JFinalActiveRecordPluginManager.class)
 ### 低优先级
 
 - [ ] Druid中ast部分 考虑用JSqlParse替换

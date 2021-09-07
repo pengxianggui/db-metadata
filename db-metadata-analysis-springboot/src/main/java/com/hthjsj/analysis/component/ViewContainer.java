@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
  */
 public abstract class ViewContainer extends Component {
 
-    boolean isPreBuild = false;
-
     private final List<Component> fields = new ArrayList<>(0);
+
+    boolean isPreBuild = false;
 
     public ViewContainer(String name, String label) {
         this.name = name;

@@ -1,17 +1,17 @@
 package com.hthjsj;
 
 import com.hthjsj.analysis.db.registry.DataSourceManager;
+import com.hthjsj.analysis.meta.ConfigExtension;
+import com.hthjsj.analysis.meta.MetaConfigFactory;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019-08-20 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -19,12 +19,11 @@ import javax.annotation.PostConstruct;
  */
 @Slf4j
 @Configuration
-//@ConditionalOnBean(DataSourceManager.class)
 public class SpringAnalysisManager {
 
     private static SpringAnalysisManager me;
 
-    private DataSourceManager dataSourceManager;
+    private final DataSourceManager dataSourceManager;
 
     public SpringAnalysisManager(DataSourceManager dataSourceManager) {
         this.dataSourceManager = dataSourceManager;
@@ -41,5 +40,21 @@ public class SpringAnalysisManager {
     @PostConstruct
     private void init() {
         me = this;
+    }
+
+    public void addMetaFieldConfigExtension(ConfigExtension extension) {
+        MetaConfigFactory.addFieldExtension(extension);
+    }
+
+    public List<ConfigExtension> getMetaFieldConfigExtension() {
+        return MetaConfigFactory.getFieldExtensions();
+    }
+
+    public void addMetaObjectConfigExtension(ConfigExtension extension) {
+        MetaConfigFactory.addObjectExtension(extension);
+    }
+
+    public List<ConfigExtension> getMetaObjectConfigExtension() {
+        return MetaConfigFactory.getObjectExtensions();
     }
 }

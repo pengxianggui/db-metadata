@@ -14,12 +14,12 @@ public class Column {
 
     Record record;
 
-    public Map<String, Object> dataMap() {
-        return record.getColumns();
-    }
-
     public Column(Map<String, Object> dataMap) {
         this.record = new Record().setColumns(dataMap);
+    }
+
+    public Map<String, Object> dataMap() {
+        return record.getColumns();
     }
 
     public String getTableCatalog() {

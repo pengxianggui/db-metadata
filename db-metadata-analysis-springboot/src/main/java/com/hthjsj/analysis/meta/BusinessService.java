@@ -1,17 +1,14 @@
 package com.hthjsj.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.MetaAnalysisException;
 import com.hthjsj.analysis.db.SnowFlake;
-import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.jfinal.kit.Kv;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,6 +119,6 @@ public class BusinessService {
         record.set("pvalue", newData.get(object.primaryKey()));
         record.set("olddata", JSON.toJSONString(oldData));
         record.set("newData", JSON.toJSONString(newData));
-        AnalysisConfig.me().dbMain().save("change_log", record);
+        SpringAnalysisManager.me().dbMain().save("change_log", record);
     }
 }

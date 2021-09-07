@@ -21,11 +21,11 @@ import java.util.Map;
  */
 public class Table {
 
+    private final Map<String, Object> dataMap;
+
     Record record;
 
     List<Column> columns;
-
-    private final Map<String, Object> dataMap;
 
     public Table(Record record) {
         this.record = record;

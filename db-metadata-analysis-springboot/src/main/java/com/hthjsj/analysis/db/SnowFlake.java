@@ -10,10 +10,6 @@ public class SnowFlake {
 
     private final static SnowFlake me = new SnowFlake(1, 1);
 
-    public static SnowFlake me() {
-        return me;
-    }
-
     /**
      * 起始的时间戳
      */
@@ -63,6 +59,10 @@ public class SnowFlake {
         }
         this.datacenterId = datacenterId;
         this.machineId = machineId;
+    }
+
+    public static SnowFlake me() {
+        return me;
     }
 
     public static void main(String[] args) {
