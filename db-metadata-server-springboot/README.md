@@ -16,6 +16,13 @@
   - @Before(Tx.class) 替代方案
   - @Before(HttpRequestHolder.class)
 
+
+## Tips
+### 兼容
+
+- JFinal中getPara() 默认取 `http://xxx/avb/b/b/c` 出的是`c`,为了兼容Springboot,每个Mapping后都加了`/{object_code}`
+  - [ ] 这种方式不够优雅,后期考虑通过`RequestMappingInfoHandlerMapping`集中改写看看
+  
 ##### 参考
 
 - https://gitee.com/blingking/jfinal-orm-spring-boot-starter

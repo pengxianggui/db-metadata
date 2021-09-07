@@ -1,6 +1,7 @@
 package com.hthjsj.web;
 
 import com.hthjsj.AnalysisSpringUtil;
+import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
@@ -24,6 +25,9 @@ public class ServiceManager {
 
     public static DbMetaService metaService() {
         return AnalysisSpringUtil.getBean(DbMetaService.class);
+    }
+    public static MysqlService mysqlService(){
+        return AnalysisSpringUtil.getBean(MysqlService.class);
     }
 
     public static ComponentService componentService() {

@@ -90,4 +90,36 @@ public class ControllerAdapter {
         }
     }
 
+
+    /**
+     * <pre>
+     *     当与springboot 集成时上传文件会出现异常(无论使用tomcat容器或jetty容器)
+     *     java.lang.RuntimeException: java.io.IOException: Corrupt form data: premature ending
+     * </pre>
+     * 因此将此逻辑提到 FrontRestController类，做一个兼容处理。
+     * FIXME 此兼容处理还比较牵强，不够健壮和优雅， 而且其他 super.getFile 并未收到此影响。 需要从根本上解决
+     *
+     * @return
+     */
+//    @Override
+//    public UploadFile getFile() {
+//        UploadFile file = null;
+//        try {
+//            file = super.getFile();
+//        } catch (RuntimeException e) {
+//            if (e.getMessage().contains("premature ending")) {
+//                log.error("该上传动作出现错误,可能是oreilly组件引起;建议使用Common UploadFile 组件 ");
+//                log.info("尝试使用 Apache Common UploadFile 组件");
+//                MultipartRequest.init(
+//                        AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR, "/"),
+//                        JFinal.me().getConstants().getMaxPostSize(),
+//                        JFinal.me().getConstants().getEncoding());
+//
+//                MultipartRequest multipartRequest = new MultipartRequest(getRequest());
+//                List<UploadFile> files = multipartRequest.getFiles();
+//                files.forEach(f -> log.info("fetched file: {} ", f.getFileName()));
+//            }
+//        }
+//        return file;
+//    }
 }

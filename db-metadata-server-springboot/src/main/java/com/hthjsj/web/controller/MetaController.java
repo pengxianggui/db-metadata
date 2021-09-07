@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @RequestMapping("meta")
 public class MetaController extends ControllerAdapter {
 
-    @GetMapping("/")
+    @GetMapping("/{object_code}")
     public Ret index() {
         String metaObjectCode = queryHelper().getObjectCode();
         IMetaObject metaObject = metaService().findByCode(metaObjectCode);
@@ -58,7 +58,7 @@ public class MetaController extends ControllerAdapter {
      *
      * @return
      */
-    @GetMapping("toAdd")
+    @GetMapping("toAdd/{object_code}")
     public Ret toAdd() {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
         formView.getFields().add(new DropDownBox("schemaName", "数据源").dataUrl("/db/index"));
@@ -74,7 +74,7 @@ public class MetaController extends ControllerAdapter {
      *
      * @deprecated
      */
-    @GetMapping("fields")
+    @GetMapping("fields/{object_code}")
     public Ret fields() {
         log.error("接口废弃 -> /table/meta");
         //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
@@ -87,7 +87,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 右键菜单使用,直接编辑元对象配置信息
      */
-    @GetMapping("editObject")
+    @GetMapping("editObject/{object_code}")
     public Ret editObject() {
         String objectCode = queryHelper().getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
@@ -104,7 +104,7 @@ public class MetaController extends ControllerAdapter {
      * 右键菜单使用,直接编辑元字段配置信息
      * 成功更新后 -> 重新计算配置;
      */
-    @GetMapping("editField")
+    @GetMapping("editField/{object_code}")
     public Ret editField() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -136,7 +136,7 @@ public class MetaController extends ControllerAdapter {
         return status ? Ret.ok() : Ret.fail();
     }
 
-    @GetMapping
+    @GetMapping("delete/{object_code}")
     public Ret delete() {
         String objectCodess = queryHelper().getObjectCode();
         DbMetaService dbMetaService = metaService();
@@ -165,7 +165,7 @@ public class MetaController extends ControllerAdapter {
      *      scope: vertical | single (default)
      * </pre>
      */
-    @GetMapping("incrementImport")
+    @GetMapping("incrementImport/{object_code}")
     public Ret incrementImport() {
         String scope = parameterHelper().getPara("scope", "single");
         String objectCode = queryHelper().getObjectCode();
@@ -224,7 +224,7 @@ public class MetaController extends ControllerAdapter {
      * 重新导入元对象
      */
     @Before(Tx.class)
-    @GetMapping("resetImport")
+    @GetMapping("resetImport/{object_code}")
     public Ret resetImport() {
         /**
          * 1. 重新解析元对象对应的Table
@@ -272,7 +272,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 返回某元对象的关联Component 实例
      */
-    @GetMapping("contact")
+    @GetMapping("contact/{object_code}")
     public Ret contact() {
         String objectCode = queryHelper().getObjectCode();
         boolean kv = parameterHelper().getBoolean("kv", false);

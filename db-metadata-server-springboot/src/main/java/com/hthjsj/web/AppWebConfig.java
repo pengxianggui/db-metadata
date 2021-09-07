@@ -2,7 +2,7 @@ package com.hthjsj.web;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.AnalysisManager;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.controller.CoreRouter;
@@ -139,7 +139,7 @@ public class AppWebConfig extends JFinalConfig {
             mrManager.load();
         }
 
-        AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
+        SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
         ComputeKit.addInstanceExtension(new InstanceConfigExtension());
         ComputeKit.addInstanceExtension(new CCUUConfigExtension());
     }

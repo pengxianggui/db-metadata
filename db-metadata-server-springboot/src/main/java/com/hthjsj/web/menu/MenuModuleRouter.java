@@ -12,7 +12,7 @@ public class MenuModuleRouter extends DefaultRouter {
 
     @Override
     public void config() {
-        add("/menu", MenuController.class);
-        add("/router", RouterController.class);
+//        add("/menu", MenuController.class);
+//        add("/router", RouterController.class);
     }
 }

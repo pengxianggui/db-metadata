@@ -29,7 +29,7 @@ public class OptionsController extends ControllerAdapter {
     /**
      * URL: /component/options/meta_object?f=field_code_abc
      */
-    @GetMapping("/")
+    @GetMapping("/{object_code}")
     public Ret index() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();

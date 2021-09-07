@@ -4,16 +4,15 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.component.ComponentType;
-import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.AppConst;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.Components;
 import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
-import com.jfinal.aop.Aop;
 import com.jfinal.aop.Before;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
@@ -43,7 +42,7 @@ public class DBController extends ControllerAdapter {
 
     @GetMapping("list")
     public Ret list() {
-        List<String> schemas = Aop.get(MysqlService.class).showSchema();
+        List<String> schemas = ServiceManager.mysqlService().showSchema();
         return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
     }
 
@@ -59,7 +58,7 @@ public class DBController extends ControllerAdapter {
         ParameterHelper parameterHelper = parameterHelper();
         String schemaName = parameterHelper.getPara(0, parameterHelper.getPara("schemaName"));
         Preconditions.checkNotNull(schemaName, "[schemaName]数据库名称是必填参数");
-        List<Table> tables = Aop.get(MysqlService.class).showTables(schemaName);
+        List<Table> tables = ServiceManager.mysqlService().showTables(schemaName);
         List<Kv> results = Lists.newArrayList();
         tables.forEach(r -> {
             results.add(Kv.create().set("key", r.getTableName()).set("value", r.getTableName()));
@@ -93,9 +92,9 @@ public class DBController extends ControllerAdapter {
         Components.me().init(); // 初始化组件(包括组件配置)
 
         String mainDB = AnalysisConfig.me().dbMainStr();
-        List<Table> sysTables = Aop.get(MysqlService.class).showTables(AnalysisConfig.me().dbMainStr())
-                                   // 过滤出系统表
-                                   .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
+        List<Table> sysTables = ServiceManager.mysqlService().showTables(AnalysisConfig.me().dbMainStr())
+                                              // 过滤出系统表
+                                              .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
 
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());

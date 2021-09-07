@@ -2,13 +2,17 @@ package com.hthjsj.web.menu;
 
 import com.alibaba.fastjson.JSON;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.controller.ControllerAdapter;
+import com.hthjsj.web.controller.ParameterHelper;
 import com.hthjsj.web.kit.tree.TreeConfig;
 import com.hthjsj.web.kit.tree.TreeKit;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,25 +22,28 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class MenuController extends FrontRestController {
+@RestController
+@RequestMapping("menu")
+public class MenuController extends ControllerAdapter {
 
     private String objectCode() {
         return "meta_menu";
     }
 
-    @Override
-    public void index() {
+    @GetMapping("/")
+    public Ret index() {
         IMetaObject metaObject = metaService().findByCode(objectCode());
+        ParameterHelper parameterHelper = parameterHelper();
         TreeConfig treeConfig = treeConfig();
-        String pid = getPara(treeConfig.getPidKey(), "").trim();
+        String pid = parameterHelper.getPara(treeConfig.getPidKey(), "").trim();
 
-        treeConfig.setKeepRoot(getParaToBoolean("keep", false));
+        treeConfig.setKeepRoot(parameterHelper.getParaToBoolean("keep", false));
         if (StrKit.notBlank(pid)) {
             treeConfig.setRootIdentify(pid);
         }
-        
+
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
-        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
+        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 
     private TreeConfig treeConfig() {

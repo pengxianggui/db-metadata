@@ -5,7 +5,8 @@ import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.form.RichTextBox;
-import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.config.NotFinishException;
+import com.hthjsj.web.controller.ControllerAdapter;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
@@ -13,6 +14,11 @@ import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.upload.UploadFile;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.system.ApplicationHome;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
@@ -28,15 +34,19 @@ import java.io.File;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class UploadController extends FrontRestController {
+@RestController
+@RequestMapping("file/upload")
+public class UploadController extends ControllerAdapter {
 
+    /**
     /**
      * param objectCode
      * param fieldCode
      * param file
      */
-    public void index() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @PostMapping("/")
+    public Ret index(MultipartFile uploadFile) {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
@@ -44,14 +54,22 @@ public class UploadController extends FrontRestController {
 
         Preconditions.checkArgument(metaField.configParser().isFile(), "对象{}-字段{}未配置文件属性不正确: 请配置元字段类型为文件", objectCode, fieldCode);
 
-        UploadFile file = getFile();
+        ApplicationHome home = new ApplicationHome(getClass());
+
+        try {
+            throw new NotFinishException("上传功能待改写");
+        } catch (Exception e) {
+            throw new NotFinishException("上传功能待改写");
+        }
+
+        UploadFile file = new UploadFile("", "", null, null, null);
         UploadService uploadService = ServiceManager.fileService();
 
         String url = uploadService.upload(file.getFile(), objectCode, fieldCode);
         Kv result = Kv.by("name", file.getFileName());
         result.set("value", url);
         result.set("url", UploadKit.previewUrl(url));
-        renderJson(Ret.ok("data", result));
+        return Ret.ok("data", result);
     }
 
     /**
@@ -108,4 +126,5 @@ public class UploadController extends FrontRestController {
         }
         renderImageOrFile(uploadService.getFile(path));
     }
+
 }

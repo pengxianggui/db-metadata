@@ -2,7 +2,6 @@ package com.hthjsj.web.controller;
 
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.analysis.meta.aop.QueryInvocation;
-import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.Getter;
 import lombok.Setter;
