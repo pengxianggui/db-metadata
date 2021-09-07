@@ -1,12 +1,15 @@
 package com.hthjsj.web.feature.tree;
 
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.controller.ControllerAdapter;
 import com.hthjsj.web.kit.tree.TreeNode;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -24,15 +27,18 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class TreeController extends FrontRestController {
+@RestController
+@RequestMapping(value = { "f/t", "feature/tree" })
+public class TreeController extends ControllerAdapter {
 
     /**
      * test:
      * objectCode=js_sys_area
      * config -> getConfig()
      */
-    public void index() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("/")
+    public Ret index() {
+        QueryHelper queryHelper = queryHelper();
         String featureCode = queryHelper.getFeatureCode();
         String objectCode = queryHelper.getObjectCode();
 
@@ -40,6 +46,6 @@ public class TreeController extends FrontRestController {
         TreeConfigGetter treeConfigGetter = featureService().loadFeatureConfig(featureCode);
 
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
-        renderJson(Ret.ok("data", tree));
+        return Ret.ok("data", tree);
     }
 }

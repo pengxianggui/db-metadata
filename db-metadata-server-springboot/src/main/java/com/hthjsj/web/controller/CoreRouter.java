@@ -13,15 +13,15 @@ public class CoreRouter extends DefaultRouter {
 
     @Override
     public void config() {
-        add("/db", DBController.class);
-        add("/meta", MetaController.class);
-        add("/component", ComponentController.class);
-        add("/component/options", OptionsController.class);
-        add("/form", FormController.class);
-        add("/dict", DictController.class);
-        add("/check", ValidatorController.class);
+//        add("/db", DBController.class);
+//        add("/meta", MetaController.class);
+//        add("/component", ComponentController.class);
+//        add("/component/options", OptionsController.class);
+//        add("/form", FormController.class);
+//        add("/dict", DictController.class);
+//        add("/check", ValidatorController.class);
 
-        add("/table", TableController.class);
-        add("/find", FindBoxController.class);
+//        add("/table", TableController.class);
+//        add("/find", FindBoxController.class);
     }
 }

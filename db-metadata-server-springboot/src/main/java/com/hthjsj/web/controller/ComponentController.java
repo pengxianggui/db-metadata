@@ -14,12 +14,15 @@ import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
-import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -31,43 +34,46 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-public class ComponentController extends FrontRestController {
+@RestController
+@RequestMapping("/component")
+public class ComponentController extends ControllerAdapter {
 
-    public void meta() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("meta")
+    public Ret meta() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
 
-        renderJson(Ret.ok("data", metaObjectViewAdapter.getComponent().toKv()));
+        return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
     }
 
     /**
      * 返回某Component的关联元对象实例
      */
-    public void contact() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("contact")
+    public Ret contact() {
+        QueryHelper queryHelper = queryHelper();
         String componentCode = queryHelper.getComponentCode();
         String objectCode = queryHelper.getObjectCode();
-        boolean kv = getBoolean("kv", false);
+        boolean kv = parameterHelper().getBoolean("kv", false);
         List<String> result = componentService().loadInstanceCodeByObjectCode(objectCode, ComponentType.V(componentCode));
         if (kv) {
-            renderJson(Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0]))));
-            return;
+            return Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0])));
         }
-        renderJson(Ret.ok("data", result));
+        return Ret.ok("data", result);
     }
 
-    @Override
-    public void list() {
+    @GetMapping("list")
+    public Ret list() {
         List<Record> components = componentService().loadComponents();
         List<Kv> results = Lists.newArrayList();
         components.forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
         });
-        renderJson(Ret.ok("data", results));
+        return Ret.ok("data", results);
     }
 
     /**
@@ -77,8 +83,9 @@ public class ComponentController extends FrontRestController {
      * 1. objectCode + componentCode
      * 2. instanceCode
      */
-    public void load() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("load")
+    public Ret load() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
@@ -86,24 +93,23 @@ public class ComponentController extends FrontRestController {
         // instanceCode 获取
         if (StrKit.notBlank(instanceCode)) {
             if (componentService().hasObjectConfig(instanceCode)) {
-                renderJson(Ret.ok("data", componentService().loadObjectConfig(instanceCode)));
+                return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
             } else {
                 IMetaObject metaObject = metaService().findByCode(objectCode);
                 MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-                renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
+                return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
             }
-            return;
         }
 
         // objectCode + componentCode
         if (StrKit.notBlank(compCode, objectCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
-//            //自动计算的配置
+            //            //自动计算的配置
             MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-            renderJson(Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true)));
-//            }
+            return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
+            //            }
         } else {
-            renderJson(Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config"))));
+            return Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config")));
         }
 
         /**t
@@ -131,21 +137,21 @@ public class ComponentController extends FrontRestController {
          */
     }
 
-    @Override
-    public void doAdd() {
+    @PostMapping("doAdd")
+    public Ret doAdd() {
         /**
          * object Code
          * component Type
          */
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
-        Kv config = getKv();
+        Kv config = parameterHelper().getKv();
         addInstanceConf(objectCode, compCode, instanceCode, instanceName, config);
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     /**
@@ -155,10 +161,10 @@ public class ComponentController extends FrontRestController {
      * @param compCode
      * @param instanceCode
      * @param instanceName
+     *
      * @return
      */
-    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName,
-                                    Kv config) {
+    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName, Kv config) {
         Component component = ViewFactory.createEmptyViewComponent(compCode);
 
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
@@ -173,10 +179,10 @@ public class ComponentController extends FrontRestController {
 
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                    metaObject.code(),
-                    instanceCode,
-                    instanceName,
-                    component.componentType());
+                                                                                          metaObject.code(),
+                                                                                          instanceCode,
+                                                                                          instanceName,
+                                                                                          component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -187,11 +193,11 @@ public class ComponentController extends FrontRestController {
     /**
      * 一键自动计算
      */
-    @ActionKey("component/import-auto-computed")
-    public void oneKeyAutoComputed() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("import-auto-computed")
+    public Ret oneKeyAutoComputed() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
-        String compCodes = getPara("componentCodes");
+        String compCodes = parameterHelper().getPara("componentCodes");
 
         Db.tx(() -> {
             for (String compCode : compCodes.split(",")) {
@@ -206,12 +212,7 @@ public class ComponentController extends FrontRestController {
                 config.set(objectCode, JSONObject.toJSONString(config.get(objectCode)));
                 config.set("fieldsMap", JSONObject.toJSONString(config.get("fieldsMap")));
 
-                boolean r = addInstanceConf(
-                        objectCode,
-                        compCode,
-                        instanceCode,
-                        "系统自动计算", config
-                );
+                boolean r = addInstanceConf(objectCode, compCode, instanceCode, "系统自动计算", config);
                 if (!r) {
                     return false;
                 }
@@ -219,49 +220,49 @@ public class ComponentController extends FrontRestController {
             return true;
         });
 
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
-    @Override
-    public void doUpdate() {
+    @PostMapping("doUpdate")
+    public Ret doUpdate() {
         /**
          * object Code
          * component Type
          */
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
-        Kv config = getKv();
+        Kv config = parameterHelper().getKv();
 
         Component component = AbstractComponent.newInstance(compCode);
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                    metaObject.code(),
-                    instanceCode,
-                    instanceName,
-                    component.componentType());
+                                                                                          metaObject.code(),
+                                                                                          instanceCode,
+                                                                                          instanceName,
+                                                                                          component.componentType());
             componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
-    @Override
-    public void delete() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("delete")
+    public Ret delete() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
 
         if (StrKit.notBlank(objectCode, compCode)) {
             componentService().deleteObjectConfig(compCode, objectCode, false);
-            renderJson(Ret.ok());
+            return Ret.ok();
         } else {
             componentService().deleteDefault(compCode);
-            renderJson(Ret.ok());
+            return Ret.ok();
         }
     }
 }

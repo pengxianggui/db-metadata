@@ -5,10 +5,14 @@ import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
+import com.hthjsj.web.controller.ControllerAdapter;
+import com.hthjsj.web.controller.ParameterHelper;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <pre>
@@ -45,14 +49,17 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class MasterSlaveController extends Controller {
+@RestController
+@RequestMapping(value = { "f/ms", "feature/masterSlave" })
+public class MasterSlaveController extends ControllerAdapter {
 
     /**
      * ?featureCode=feature1&
      * objectCode=meta_field&
      * object_code=aasdf
      */
-    public void toAddS() {
+    @GetMapping("toAddS")
+    public Ret toAddS() {
         /**
          * 1. 获取功能配置
          * 2. 获取子元对象
@@ -60,12 +67,13 @@ public class MasterSlaveController extends Controller {
          * 4. render
          */
 
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
+        ParameterHelper parameterHelper = parameterHelper();
         String objectCode = queryHelper.getObjectCode();
         MasterSlaveConfig config = getConfig();
         Preconditions.checkNotNull(config, "功能配置加载失败");
         String slaveFieldCode = config.get(objectCode).getForeignFieldCode();
-        String foreignValue = getPara(slaveFieldCode);
+        String foreignValue = parameterHelper.getPara(slaveFieldCode);
 
         IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
         FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
@@ -74,7 +82,7 @@ public class MasterSlaveController extends Controller {
         formView.buildChildren();
         formView.getField(slaveFieldCode).disabled(true).defaultVal(foreignValue);
 
-        renderJson(Ret.ok("data", formView.toKv()));
+        return Ret.ok("data", formView.toKv());
     }
 
     /**
@@ -83,7 +91,7 @@ public class MasterSlaveController extends Controller {
      * @return
      */
     private MasterSlaveConfig getConfig() {
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String featureCode = queryHelper.getFeatureCode();
         MasterSlaveConfig masterSlaveConfig = ServiceManager.featureService().loadFeatureConfig(featureCode);
         return masterSlaveConfig;

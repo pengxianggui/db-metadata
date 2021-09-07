@@ -24,7 +24,7 @@ import com.hthjsj.web.ui.ComputeKit;
 import com.hthjsj.web.ui.meta.CCUUConfigExtension;
 import com.hthjsj.web.ui.meta.InstanceConfigExtension;
 import com.hthjsj.web.ui.meta.MetaFieldConfigExtension;
-import com.hthjsj.web.upload.UploadController;
+//import com.hthjsj.web.upload.UploadController;
 import com.hthjsj.web.user.UserIntercept;
 import com.hthjsj.web.user.UserRouter;
 import com.hthjsj.web.user.auth.JsonUserPermit;
@@ -80,8 +80,8 @@ public class DynamicWebConfigFacade extends JFinalConfig {
             me.add(new DefaultRouter() {
                 @Override
                 public void config() {
-                    add("/file/upload", UploadController.class);
-                    add("/file", FileController.class);
+//                    add("/file/upload", UploadController.class);
+//                    add("/file", FileController.class);
                 }
             });
         }

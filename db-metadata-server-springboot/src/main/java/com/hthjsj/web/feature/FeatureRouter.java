@@ -16,14 +16,14 @@ public class FeatureRouter extends DefaultRouter {
 
     @Override
     public void config() {
-        add("/f/t", TreeController.class);
-        add("/f/ms", MasterSlaveController.class);
-        add("/f/tat", TreeAndTableController.class);
-        add("/f", FeatureController.class);
+//        add("/f/t", TreeController.class);
+//        add("/f/ms", MasterSlaveController.class);
+//        add("/f/tat", TreeAndTableController.class);
+//        add("/f", FeatureController.class);
 
-        add("/feature/tree", TreeController.class);
-        add("/feature/masterSlave", MasterSlaveController.class);
-        add("/feature/treeAndTable", TreeAndTableController.class);
-        add("/feature", FeatureController.class);
+//        add("/feature/tree", TreeController.class);
+//        add("/feature/masterSlave", MasterSlaveController.class);
+//        add("/feature/treeAndTable", TreeAndTableController.class);
+//        add("/feature", FeatureController.class);
     }
 }

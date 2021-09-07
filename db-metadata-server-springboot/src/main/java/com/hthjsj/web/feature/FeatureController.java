@@ -6,7 +6,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.hthjsj.web.controller.FrontRestController;
+import com.hthjsj.web.controller.ControllerAdapter;
+import com.hthjsj.web.controller.ParameterHelper;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
@@ -14,6 +15,10 @@ import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,45 +27,50 @@ import java.util.List;
 /**
  * @author konbluesky
  */
-public class FeatureController extends FrontRestController {
+@RestController
+@RequestMapping(value = { "feature", "f" })
+public class FeatureController extends ControllerAdapter {
 
-    @Override
-    public void list() {
+    @GetMapping("list")
+    public Ret list() {
         List<Kv> results = Lists.newArrayList();
         for (FeatureType type : FeatureType.values()) {
             if (type != FeatureType.UNKNOWN) {
                 results.add(Kv.by("key", type.name).set("value", type.code));
             }
         }
-        renderJson(Ret.ok("data", results));
+        return Ret.ok("data", results);
     }
 
-    @Override
-    public void doAdd() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @PostMapping("doAdd")
+    public Ret doAdd() {
+        QueryHelper queryHelper = queryHelper();
+        ParameterHelper parameterHelper = parameterHelper();
+
         FeatureType type = FeatureType.V(queryHelper.getFeatureType());
         Preconditions.checkArgument(type != FeatureType.UNKNOWN, "未知的功能模板" + queryHelper.getFeatureType());
-        String name = getPara("name");
-        String code = getPara("code");
-        String jsonStr = getPara("config");
+        String name = parameterHelper.getPara("name");
+        String code = parameterHelper.getPara("code");
+        String jsonStr = parameterHelper.getPara("config");
         featureService().createFeature(type, name, code, JSON.parseObject(jsonStr, type.configEntity));
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     /**
      * 功能 = ((元对象(表),元对象(视图),元对象(非表)) + 控件) * n
      */
-    public void load() {
-        QueryHelper queryHelper = new QueryHelper(this);
-        String featureCode = queryHelper.getFeatureCode();
+    @GetMapping("load")
+    public Ret load() {
+        String featureCode = queryHelper().getFeatureCode();
         FeatureConfig feature = featureService().loadFeatureConfig(featureCode);
-        renderJson(Ret.ok("data", feature));
+        return Ret.ok("data", feature);
     }
 
     /**
      * 获取树型的功能数据
      */
-    public void menu() {
+    @GetMapping("menu")
+    public Ret menu() {
         //1. 拼接功能菜单树
         FeatureNode root = new FeatureNode("business", "", "业务模块", null);
         TreeBuilder<FeatureNode> treeBuilder = new TreeBuilder<>();
@@ -74,7 +84,7 @@ public class FeatureController extends FrontRestController {
         JSONArray jsonRoot = new JSONArray();
         treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
         jsonRoot.set(0, root);
-        renderJson(Ret.ok("data", jsonRoot));
+        return Ret.ok("data", jsonRoot);
     }
 
     private String url(FeatureType featureType, String featureCode, FeatureConfig config) {
@@ -99,12 +109,12 @@ public class FeatureController extends FrontRestController {
         return "/main" + prefix + "?featureCode=" + featureCode;
     }
 
-    @Override
-    public void delete() {
-        String idss = getPara("ids");
+    @GetMapping("delete")
+    public Ret delete() {
+        String idss = parameterHelper().getPara("ids");
         List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         boolean status = featureService().deleteFeature(ids.toArray(new String[0]));
-        renderJson(status ? Ret.ok() : Ret.fail());
+        return (status ? Ret.ok() : Ret.fail());
     }
 
     class FeatureNode implements TreeNode<String, Record> {

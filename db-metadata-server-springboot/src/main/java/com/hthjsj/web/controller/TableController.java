@@ -30,6 +30,9 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -48,11 +51,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class TableController extends FrontRestController {
+@RestController
+@RequestMapping("table")
+public class TableController extends ControllerAdapter {
 
-    @Override
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
-    public void list() {
+    @GetMapping("list")
+    public Object list() {
         /**
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -64,7 +69,7 @@ public class TableController extends FrontRestController {
          * 5. escape fields value
          * 6. supported alias columns;
          */
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         Integer pageIndex = queryHelper.getPageIndex();
         Integer pageSize = queryHelper.getPageSize();
@@ -81,7 +86,7 @@ public class TableController extends FrontRestController {
 
         /** pointCut构建 */
         QueryPointCut queryPointCut = metaObject.configParser().queryPointCut();
-        TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject,  queryHelper);
+        TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject, queryHelper);
         tableQueryInvocation.setSqlParaExt(sqlPara);
         tableQueryInvocation.setCompileWhere(compileWhere);
         tableQueryInvocation.setFilteredFields(filteredFields);
@@ -126,7 +131,8 @@ public class TableController extends FrontRestController {
             result.setList(UtilKit.aliasList(result.getList(), alias));
         }
 
-        renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
+        return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
+                                  excludeFields);
     }
 
     /**
@@ -146,17 +152,18 @@ public class TableController extends FrontRestController {
      *     3. 构建Object[] ids 与普通原对象共用删除逻辑
      * </pre>
      */
-    @Override
-    public void delete() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("delete")
+    public Ret delete() {
+        QueryHelper queryHelper = queryHelper();
+        ParameterHelper parameterHelper = parameterHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
         Object[] ids;
 
         if (metaObject.configParser().isTreeStructure()) {
-            String id = getPara("id", "").trim();
-            boolean containsRoot = getParaToBoolean("self", true);
+            String id = parameterHelper.getPara("id", "").trim();
+            boolean containsRoot = parameterHelper.getParaToBoolean("self", true);
             List<Object> idss = new ArrayList<>();
 
             TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
@@ -178,7 +185,7 @@ public class TableController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, parameterHelper.getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -200,15 +207,16 @@ public class TableController extends FrontRestController {
             }
         });
 
-        renderJson(invocation.getRet());
+        return invocation.getRet();
     }
 
     /**
      * 树型数据
      * https://blog.csdn.net/u011627980/article/details/51454323?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
      */
-    public void tree() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("tree")
+    public Ret tree() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
@@ -232,6 +240,6 @@ public class TableController extends FrontRestController {
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 
-        renderJson(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))));
+        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 }

@@ -1,22 +1,25 @@
 package com.hthjsj.web.query;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.jfinal.core.Controller;
+import com.hthjsj.web.controller.ParameterHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
+ * <p>
+ *
+ * @Describe: QueryHelper的目的是一个全局的统一获取系统核心参数的工具类
+ * 防止Controller中散落大量的参数名
+ * </p>
  * <p> @Date : 2019/10/15 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -24,30 +27,25 @@ import java.util.List;
  */
 public class QueryHelper {
 
-    private final Controller tp;
+    private final ParameterHelper tp;
 
     private final Kv params = Kv.create();
 
     private ListHelper listHelper;
 
-    public QueryHelper(Controller controller) {
-        tp = controller;
-    }
-
-    /**
-     * 参数构建器
-     *
-     * @return
-     */
-    public static QueryHelper queryBuilder() {
-        return new QueryHelper(null);
+    public QueryHelper(HttpServletRequest request) {
+        this.tp = new ParameterHelper(request);
     }
 
     public ListHelper list() {
         if (listHelper == null) {
-            listHelper = new ListHelper(tp);
+            listHelper = new ListHelper();
         }
         return listHelper;
+    }
+
+    public QueryBuilder queryBuilder() {
+        return new QueryBuilder();
     }
 
     public String getObjectCode() {
@@ -117,23 +115,6 @@ public class QueryHelper {
         return kv;
     }
 
-    public QueryHelper builder(String key, String value) {
-        params.setIfNotBlank(key, value);
-        return this;
-    }
-
-    public String buildQueryString(boolean questionMark) {
-        StringBuilder sb = new StringBuilder();
-        if (questionMark) {
-            sb.append("?");
-        }
-        List<String> ss = Lists.newArrayList();
-        params.forEach((key, value) -> {
-            ss.add(key + "=" + value);
-        });
-        return Joiner.on("&").appendTo(sb, ss).toString();
-    }
-
     /**
      * 前后端id传输,用"id"作为key,
      * 复合主键处理
@@ -199,18 +180,12 @@ public class QueryHelper {
 
     public class ListHelper {
 
-        Controller controller;
-
-        public ListHelper(Controller controller) {
-            this.controller = controller;
-        }
-
         public String fs() {
-            return controller.getPara("fs", controller.getPara("fields", ""));
+            return tp.getPara("fs", tp.getPara("fields", ""));
         }
 
         public String efs() {
-            return controller.getPara("efs", controller.getPara("exfields", ""));
+            return tp.getPara("efs", tp.getPara("exfields", ""));
         }
 
         public String[] fields() {
@@ -222,7 +197,7 @@ public class QueryHelper {
         }
 
         public boolean raw() {
-            return controller.getParaToBoolean("raw", false);
+            return tp.getParaToBoolean("raw", false);
         }
     }
 }

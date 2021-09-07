@@ -21,6 +21,9 @@ import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -34,17 +37,14 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class DBController extends FrontRestController {
+@RestController
+@RequestMapping("db")
+public class DBController extends ControllerAdapter {
 
-    @Override
-    public void index() {
-        list();
-    }
-
-    @Override
-    public void list() {
+    @GetMapping("list")
+    public Ret list() {
         List<String> schemas = Aop.get(MysqlService.class).showSchema();
-        renderJson(Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()]))));
+        return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
     }
 
     /**
@@ -54,25 +54,27 @@ public class DBController extends FrontRestController {
      *  @return
      * </pre>
      */
-    public void tables() {
-        String schemaName = getPara(0, getPara("schemaName"));
+    @GetMapping("tables")
+    public Ret tables() {
+        ParameterHelper parameterHelper = parameterHelper();
+        String schemaName = parameterHelper.getPara(0, parameterHelper.getPara("schemaName"));
         Preconditions.checkNotNull(schemaName, "[schemaName]数据库名称是必填参数");
         List<Table> tables = Aop.get(MysqlService.class).showTables(schemaName);
         List<Kv> results = Lists.newArrayList();
         tables.forEach(r -> {
             results.add(Kv.create().set("key", r.getTableName()).set("value", r.getTableName()));
         });
-        renderJson(Ret.ok("data", results));
+        return Ret.ok("data", results);
     }
 
-    public void truncate() {
+    @GetMapping("truncate")
+    public Ret truncate() {
         preConditionCheck();
 
         StringBuilder sb = new StringBuilder();
 
-        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.INITABLE).entrySet().stream()
-                .filter(Map.Entry::getValue)
-                .map(Map.Entry::getKey).collect(Collectors.toSet());
+        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.INITABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                                               .collect(Collectors.toSet());
 
         sb.append("即将清除的数据表:").append(tables);
         log.warn("清空meta相关表{}", sb.toString());
@@ -80,20 +82,20 @@ public class DBController extends FrontRestController {
             Db.delete("delete from " + key);
         });
 
-        renderJson(Ret.ok("msg", sb.toString()));
+        return Ret.ok("msg", sb.toString());
     }
 
     @Before(Tx.class)
-    public void init() {
+    @GetMapping("init")
+    public Ret init() {
         preConditionCheck();
 
         Components.me().init(); // 初始化组件(包括组件配置)
 
         String mainDB = AnalysisConfig.me().dbMainStr();
         List<Table> sysTables = Aop.get(MysqlService.class).showTables(AnalysisConfig.me().dbMainStr())
-                // 过滤出系统表
-                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName()))
-                .collect(Collectors.toList());
+                                   // 过滤出系统表
+                                   .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
 
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
@@ -110,11 +112,11 @@ public class DBController extends FrontRestController {
 
         // 根据固定文件(defaultInstance.json和defaultObject.json)更新元数据、实例配置
         InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     private void preConditionCheck() {
-        String token = getPara(0, "");
+        String token = parameterHelper().getPara(0, "");
         Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
         Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
     }

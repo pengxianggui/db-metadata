@@ -116,12 +116,12 @@ public class FrontRestController extends Controller {
             simplePropertyPreFilter.getExcludes().addAll(Arrays.asList(excludes));
 
             renderJson(JSON.toJSONString(data,
-                    simplePropertyPreFilter,
-                    SerializerFeature.DisableCircularReferenceDetect,
-                    SerializerFeature.WriteDateUseDateFormat,
-                    SerializerFeature.WriteNullListAsEmpty,
-                    SerializerFeature.WriteMapNullValue,
-                    SerializerFeature.WriteNullStringAsEmpty));
+                                         simplePropertyPreFilter,
+                                         SerializerFeature.DisableCircularReferenceDetect,
+                                         SerializerFeature.WriteDateUseDateFormat,
+                                         SerializerFeature.WriteNullListAsEmpty,
+                                         SerializerFeature.WriteMapNullValue,
+                                         SerializerFeature.WriteNullStringAsEmpty));
         } else {
             renderJson(data);
         }

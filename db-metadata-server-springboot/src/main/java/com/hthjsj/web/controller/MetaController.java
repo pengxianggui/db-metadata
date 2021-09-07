@@ -24,6 +24,10 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;
@@ -38,13 +42,15 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class MetaController extends FrontRestController {
+@RestController
+@RequestMapping("meta")
+public class MetaController extends ControllerAdapter {
 
-    @Override
-    public void index() {
-        String metaObjectCode = getPara(0, getPara("objectCode"));
+    @GetMapping("/")
+    public Ret index() {
+        String metaObjectCode = queryHelper().getObjectCode();
         IMetaObject metaObject = metaService().findByCode(metaObjectCode);
-        renderJson(Ret.ok("data", metaObject));
+        return Ret.ok("data", metaObject);
     }
 
     /**
@@ -52,14 +58,14 @@ public class MetaController extends FrontRestController {
      *
      * @return
      */
-    @Override
-    public void toAdd() {
+    @GetMapping("toAdd")
+    public Ret toAdd() {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
         formView.getFields().add(new DropDownBox("schemaName", "数据源").dataUrl("/db/index"));
         formView.getFields().add(new DropDownBox("tableName", "数据表名").dataUrl("/db/tables?schemaName={schemaName}").dependency("schemaName"));
         formView.getFields().add(new TextBox("objectName", "元对象名称"));
         formView.getFields().add(new TextBox("objectCode", "元对象编码"));
-        renderJson(Ret.ok("data", formView.toKv()));
+        return Ret.ok("data", formView.toKv());
     }
 
     /**
@@ -68,20 +74,22 @@ public class MetaController extends FrontRestController {
      *
      * @deprecated
      */
-    public void fields() {
+    @GetMapping("fields")
+    public Ret fields() {
         log.error("接口废弃 -> /table/meta");
         //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
-        String objectCode = new QueryHelper(this).getObjectCode("meta_field");
+        String objectCode = queryHelper().getObjectCode("meta_field");
         IMetaObject metaObject = metaService().findByCode(objectCode);
         TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list/" + metaObject.code());
-        renderJson(Ret.ok("data", tableView.toKv()));
+        return Ret.ok("data", tableView.toKv());
     }
 
     /**
      * 右键菜单使用,直接编辑元对象配置信息
      */
-    public void editObject() {
-        String objectCode = new QueryHelper(this).getObjectCode();
+    @GetMapping("editObject")
+    public Ret editObject() {
+        String objectCode = queryHelper().getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
 
         IMetaObject metaObject = metaService().findByCode("meta_object");
@@ -89,15 +97,16 @@ public class MetaController extends FrontRestController {
         Record data = metaService().findObjectRecordByCode(objectCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
-        renderJson(Ret.ok("data", formView.toKv().set("record", data)));
+        return Ret.ok("data", formView.toKv().set("record", data));
     }
 
     /**
      * 右键菜单使用,直接编辑元字段配置信息
      * 成功更新后 -> 重新计算配置;
      */
-    public void editField() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("editField")
+    public Ret editField() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元字段的更新动作,必须指定objectCode和fieldCode");
@@ -107,15 +116,16 @@ public class MetaController extends FrontRestController {
         Record data = metaService().findFieldRecordByCode(objectCode, fieldCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
-        renderJson(Ret.ok("data", formView.toKv().set("record", data)));
+        return Ret.ok("data", formView.toKv().set("record", data));
     }
 
-    @Override
-    public void doAdd() {
-        String schemaName = getPara("schemaName");
-        String tableName = getPara("tableName");
-        String objectName = getPara("objectName");
-        String objectCode = getPara("objectCode");
+    @PostMapping("doAdd")
+    public Ret doAdd() {
+        ParameterHelper parameterHelper = parameterHelper();
+        String schemaName = parameterHelper.getPara("schemaName");
+        String tableName = parameterHelper.getPara("tableName");
+        String objectName = parameterHelper.getPara("objectName");
+        String objectCode = parameterHelper.getPara("objectCode");
         DbMetaService dbMetaService = metaService();
         Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
         IMetaObject metaObject = dbMetaService.importFromTable(schemaName, tableName);
@@ -123,12 +133,12 @@ public class MetaController extends FrontRestController {
         metaObject.code(objectCode);
         UtilKit.setCreateUser(metaObject.dataMap());  //set createBy,createTime
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
-        renderJson(status ? Ret.ok() : Ret.fail());
+        return status ? Ret.ok() : Ret.fail();
     }
 
-    @Override
-    public void delete() {
-        String objectCodess = new QueryHelper(this).getObjectCode();
+    @GetMapping
+    public Ret delete() {
+        String objectCodess = queryHelper().getObjectCode();
         DbMetaService dbMetaService = metaService();
         String[] objectCodes = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(objectCodess).toArray(new String[0]);
         for (String objectCode : objectCodes) {
@@ -141,7 +151,7 @@ public class MetaController extends FrontRestController {
             log.info("删除元对象{}实例配置", metaObject.code());
             componentService().deleteObjectAll(objectCode);
         }
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     /**
@@ -155,9 +165,10 @@ public class MetaController extends FrontRestController {
      *      scope: vertical | single (default)
      * </pre>
      */
-    public void incrementImport() {
-        String scope = getPara("scope", "single");
-        String objectCode = new QueryHelper(this).getObjectCode();
+    @GetMapping("incrementImport")
+    public Ret incrementImport() {
+        String scope = parameterHelper().getPara("scope", "single");
+        String objectCode = queryHelper().getObjectCode();
         IMetaObject seedMetaObject = metaService().findByCode(objectCode);
 
         List<IMetaObject> toBeUpdateObjects = Lists.newArrayList(seedMetaObject);
@@ -175,8 +186,7 @@ public class MetaController extends FrontRestController {
             Set<String> incrementFields = Sets.difference(newFieldNames, oldFieldNames);
             if (incrementFields.isEmpty()) {
                 log.info("未检测到新字段");
-                renderJson(Ret.ok().set("msg", "未检测到新字段，不会执行同步操作"));
-                return;
+                return Ret.ok().set("msg", "未检测到新字段，不会执行同步操作");
             } else {
                 for (String fieldName : incrementFields) {
                     IMetaField metaField = newMetaObject.getField(fieldName);
@@ -207,14 +217,15 @@ public class MetaController extends FrontRestController {
                 }
             }
         }
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     /**
      * 重新导入元对象
      */
     @Before(Tx.class)
-    public void resetImport() {
+    @GetMapping("resetImport")
+    public Ret resetImport() {
         /**
          * 1. 重新解析元对象对应的Table
          * 2. 删除原元对象
@@ -223,10 +234,10 @@ public class MetaController extends FrontRestController {
          * 3. [可选]重新导入元对象
          * 4. [可选]对已经有的配置是否进行重新计算
          */
-        boolean deleteInstanceConfig = getParaToBoolean("deleteInstanceConfig", false);
-        boolean autoImport = getParaToBoolean("autoImport", false);
+        boolean deleteInstanceConfig = parameterHelper().getParaToBoolean("deleteInstanceConfig", false);
+        boolean autoImport = parameterHelper().getParaToBoolean("autoImport", false);
 
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
         //1. 删除元对象
@@ -255,22 +266,21 @@ public class MetaController extends FrontRestController {
             }
         }
 
-        renderJson(Ret.ok());
+        return Ret.ok();
     }
 
     /**
      * 返回某元对象的关联Component 实例
      */
-    public void contact() {
-        String objectCode = new QueryHelper(this).getObjectCode();
-        boolean kv = getBoolean("kv", false);
+    @GetMapping("contact")
+    public Ret contact() {
+        String objectCode = queryHelper().getObjectCode();
+        boolean kv = parameterHelper().getBoolean("kv", false);
         List<String> result = componentService().loadTypesByObjectCode(objectCode).stream().map(c -> c.getCode()).collect(Collectors.toList());
 
         if (kv) {
-            renderJson(Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0]))));
-            return;
+            return Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0])));
         }
-
-        renderJson(Ret.ok("data", result));
+        return Ret.ok("data", result);
     }
 }

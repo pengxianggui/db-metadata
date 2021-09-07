@@ -20,6 +20,10 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 
@@ -30,7 +34,9 @@ import java.sql.SQLException;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class FormController extends FrontRestController {
+@RestController
+@RequestMapping("form")
+public class FormController extends ControllerAdapter {
 
     /**
      * <pre>
@@ -41,9 +47,9 @@ public class FormController extends FrontRestController {
      *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
      * </pre>
      */
-    @Override
-    public void toAdd() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("toAdd")
+    public Ret toAdd() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -58,13 +64,13 @@ public class FormController extends FrontRestController {
                 formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
             });
         }
-        renderJson(Ret.ok("data", formView.toKv()));
+        return Ret.ok("data", formView.toKv());
     }
 
-    @Override
-    public void doAdd() {
+    @PostMapping("doAdd")
+    public Ret doAdd() {
 
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -74,7 +80,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut[] pointCut = metaObjectConfigParse.addPointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -100,13 +106,13 @@ public class FormController extends FrontRestController {
             EventKit.post(FormMessage.AddMessage(invocation));
         }
 
-        renderJson(invocation.getRet());
+        return invocation.getRet();
     }
 
-    @Override
-    public void toUpdate() {
+    @GetMapping("toUpdate")
+    public Ret toUpdate() {
 
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -119,12 +125,12 @@ public class FormController extends FrontRestController {
 
         FormDataFactory.buildUpdateFormData(metaObject, d);
 
-        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
+        return (Ret.ok("data", formView.toKv().set("record", d)));
     }
 
-    @Override
-    public void doUpdate() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @PostMapping("doUpdate")
+    public Ret doUpdate() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -133,7 +139,7 @@ public class FormController extends FrontRestController {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut[] pointCut = metaObjectConfigParse.updatePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -157,13 +163,13 @@ public class FormController extends FrontRestController {
         if (status) {
             EventKit.post(FormMessage.UpdateMessage(invocation));
         }
-        renderJson(invocation.getRet());
+        return invocation.getRet();
     }
 
     @Before(HttpRequestHolder.class)
-    @Override
-    public void detail() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("detail")
+    public Ret detail() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -179,7 +185,7 @@ public class FormController extends FrontRestController {
                 PointCutChain.viewBefore(viewPointCuts, invocation);
                 Object[] dataIds = queryHelper.getPks(metaObject);
                 Record d = metaService().findDataByIds(metaObject, dataIds);
-//                    FormDataFactory.buildUpdateFormData(metaObject, d);
+                //                    FormDataFactory.buildUpdateFormData(metaObject, d);
                 /**
                  * escape field value;
                  * 1. 是否需要转义的规则;
@@ -197,7 +203,7 @@ public class FormController extends FrontRestController {
             return s;
         });
 
-//        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
-        renderJson(invocation.getRet().setOk().set("data", formView.toKv().set("record", invocation.getData())));
+        //        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
+        return invocation.getRet().setOk().set("data", formView.toKv().set("record", invocation.getData()));
     }
 }

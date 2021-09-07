@@ -19,6 +19,9 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p> @Date : 2019/12/11 </p>
@@ -26,10 +29,13 @@ import com.jfinal.plugin.activerecord.Record;
  *
  * <p> @author konbluesky </p>
  */
-public class FindBoxController extends FrontRestController {
+@RestController
+@RequestMapping("find")
+public class FindBoxController extends ControllerAdapter {
 
-    public void meta() {
-        QueryHelper queryHelper = new QueryHelper(this);
+    @GetMapping("meta")
+    public Ret meta() {
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
@@ -40,7 +46,7 @@ public class FindBoxController extends FrontRestController {
             IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
             tableView = ViewFactory.tableView(metaObject);
             // url : /find/meta/?objectCode=aaa&fieldCode=111
-            String url = "/find/list/" + queryHelper.builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
+            String url = "/find/list/" + queryHelper.queryBuilder().builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
             tableView.dataUrl(url);
             searchView = ViewFactory.searchView(metaObject);
         }
@@ -49,12 +55,12 @@ public class FindBoxController extends FrontRestController {
         result.set("search", searchView.toKv());
 
 
-        renderJson(Ret.ok("data", result));
+        return Ret.ok("data", result);
     }
 
-    @Override
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
-    public void list() {
+    @GetMapping("list")
+    public Object list() {
         /**
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -65,15 +71,15 @@ public class FindBoxController extends FrontRestController {
          * [x] 4. paging
          * 5. escape fields value
          */
-        QueryHelper queryHelper = new QueryHelper(this);
+        QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
 
-        boolean raw = getParaToBoolean("raw", false);
-        String[] fields = QueryHelper.queryBuilder().list().fields();
-        String[] excludeFields = QueryHelper.queryBuilder().list().excludeFields();
+        boolean raw = parameterHelper().getParaToBoolean("raw", false);
+        String[] fields = queryHelper.list().fields();
+        String[] excludeFields = queryHelper.list().excludeFields();
         IMetaObject metaObject = null;
 
         if (metaField.configParser().isSql()) {
@@ -100,6 +106,7 @@ public class FindBoxController extends FrontRestController {
             result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
         }
 
-        renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())), excludeFields);
+        return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
+                                  excludeFields);
     }
 }
