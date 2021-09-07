@@ -1,8 +1,21 @@
-#TODO
+# 改造思路
+
+顺序:
+以Controller为中心,逐步迁移到SpringBoot中
+
+## TODO
 
 - [ ] Controller API 显式转换 -> SpringBoot
-  - [ ] 编程式注册url
-    - https://my.oschina.net/u/3101282/blog/3022154
-  - [ ] QueryHelper 优雅的替代方案
-  - [ ] getPara系列方法的迁移
+    - [ ] 编程式注册url
+        - https://my.oschina.net/u/3101282/blog/3022154
+    - [ ] QueryHelper 优雅的替代方案
+    - [ ] getPara系列方法的迁移
 - [ ] JFinal interceptor 拦截器 -> Spring Interceptor
+- [ ] @Service 临时使用,后期核心Service需要通过显式注册到容器中,方便外部控制
+- [ ] 事务的兼容
+  - @Before(Tx.class) 替代方案
+  - @Before(HttpRequestHolder.class)
+
+##### 参考
+
+- https://gitee.com/blingking/jfinal-orm-spring-boot-starter

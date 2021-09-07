@@ -21,6 +21,7 @@ import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p> @author konbluesky </p>
  */
 @Before(Tx.class)
+@Service
 public class ComponentService {
 
     private static final String META_COMPONENT = "meta_component";

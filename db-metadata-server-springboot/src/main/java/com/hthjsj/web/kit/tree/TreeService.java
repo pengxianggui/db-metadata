@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 @Slf4j
+@Service
 @Before(Tx.class)
 public class TreeService {
 

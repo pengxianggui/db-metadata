@@ -7,7 +7,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 md:
-  devMode: true
+  dev-mode: true
   analysis:
     db-source:
       ds1:

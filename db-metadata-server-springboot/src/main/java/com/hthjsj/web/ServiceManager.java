@@ -1,5 +1,6 @@
 package com.hthjsj.web;
 
+import com.hthjsj.AnalysisSpringUtil;
 import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
@@ -22,11 +23,11 @@ public class ServiceManager {
     }
 
     public static DbMetaService metaService() {
-        return Aop.get(DbMetaService.class);
+        return AnalysisSpringUtil.getBean(DbMetaService.class);
     }
 
     public static ComponentService componentService() {
-        return Aop.get(ComponentService.class);
+        return AnalysisSpringUtil.getBean(ComponentService.class);
     }
 
     public static UploadService fileService() {
@@ -34,15 +35,15 @@ public class ServiceManager {
     }
 
     public static FeatureService featureService() {
-        return Aop.get(FeatureService.class);
+        return AnalysisSpringUtil.getBean(FeatureService.class);
     }
 
     public static TreeService treeService() {
-        return Aop.get(TreeService.class);
+        return AnalysisSpringUtil.getBean(TreeService.class);
     }
 
     public static BusinessService businessService() {
-        return Aop.get(BusinessService.class);
+        return AnalysisSpringUtil.getBean(BusinessService.class);
     }
 
     public static SqlAnalysis sqlAnalysis() {

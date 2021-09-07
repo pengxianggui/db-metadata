@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Slf4j
+@Service
 @Before(Tx.class)
 public class FeatureService {
 
