@@ -20,6 +20,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.system.ApplicationHome;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -211,14 +212,18 @@ public class UtilKit {
          *      PathKitExt.getWebRootPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/webapp
          *      PathKitExt.getLocationPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa
          *      PathKitExt.getRootClassPath():/Users/konbluesky/work/db-meta-serve/db-metadata-web-jfinal/aaa/config
+         *
+         * SpringBoot ApplicationHome:
+         *  applicationHome.getSource().toString()  : /Users/konbluesky/work/spring-boot-snippets/target/spring-boot-snippets-0.0.1-SNAPSHOT.jar
+         *  applicationHome.getDir().toString()     : /Users/konbluesky/work/spring-boot-snippets/target
          */
-        String locationPath = PathKitExt.getLocationPath();
-        // /fileName
+        String locationPath = new ApplicationHome().getDir().toString();
+        //fileName
         {
             String destFilePath = Joiner.on(File.separator).join(locationPath, fileName);
             File f = new File(destFilePath);
             if (f.exists()) {
-                log.info("load success file content in {}", destFilePath);
+                log.info("Load success file content in {}", destFilePath);
                 return f;
             }
         }
