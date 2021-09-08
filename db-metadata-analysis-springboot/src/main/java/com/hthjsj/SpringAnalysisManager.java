@@ -1,6 +1,7 @@
 package com.hthjsj;
 
 import com.hthjsj.analysis.db.registry.DataSourceManager;
+import com.hthjsj.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.hthjsj.analysis.meta.ConfigExtension;
 import com.hthjsj.analysis.meta.MetaConfigFactory;
 import com.jfinal.plugin.activerecord.Db;
@@ -25,8 +26,11 @@ public class SpringAnalysisManager {
 
     private final DataSourceManager dataSourceManager;
 
-    public SpringAnalysisManager(DataSourceManager dataSourceManager) {
+    private final JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager;
+
+    public SpringAnalysisManager(DataSourceManager dataSourceManager, JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager) {
         this.dataSourceManager = dataSourceManager;
+        this.jFinalActiveRecordPluginManager = jFinalActiveRecordPluginManager;
     }
 
     public static SpringAnalysisManager me() {

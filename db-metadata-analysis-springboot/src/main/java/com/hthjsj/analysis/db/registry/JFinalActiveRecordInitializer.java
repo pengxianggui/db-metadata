@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 public class JFinalActiveRecordInitializer {
 
     @Bean
-    public JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager(DataSourceManager dataSourceManager) {
+    public JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager(DataSourceRegistrar dataSourceRegistrar) {
         JFinalActiveRecordPluginManager manager = new JFinalActiveRecordPluginManager();
-        dataSourceManager.dataSourceRegistrar.allSource().forEach((key, value) -> {
+        dataSourceRegistrar.allSource().forEach((key, value) -> {
             manager.add(key, new ActiveRecordPlugin(value.schemaName(), value.dataSource()));
         });
         // " manager.start() " very important

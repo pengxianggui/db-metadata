@@ -4,6 +4,7 @@ import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.wall.WallFilter;
 import com.hthjsj.analysis.MetaAnalysisException;
+import com.hthjsj.analysis.db.auth.DataSourcePermission;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
@@ -77,7 +78,7 @@ public class AnalysisConfig {
                                            getProp().get(DB_MAIN_URL),
                                            getProp().get(DB_MAIN_USERNAME),
                                            getProp().get(DB_MAIN_PASSWORD),
-                                           DbSourceConfig.Permission.RW,
+                                           DataSourcePermission.RW,
                                            plugins);
         dbSources.add(mainSource);
 
@@ -89,8 +90,8 @@ public class AnalysisConfig {
                 String username = getProp().get(dbName + SUFFIX_BIZ_USERNAME);
                 String password = getProp().get(dbName + SUFFIX_BIZ_PASSWORD);
                 String permissionString = getProp().get(dbName + SUFFIX_BIZ_PERMISSION);
-                DbSourceConfig.Permission permission = DbSourceConfig.Permission.get(permissionString);
-                if (permission == DbSourceConfig.Permission.UNKNOW) {
+                DataSourcePermission permission = DataSourcePermission.get(permissionString);
+                if (permission == DataSourcePermission.UNKNOW) {
                     throw new MetaAnalysisException("%s 数据库的权限设置有误,当前配置项 [%s] ;支持的配置项:[r,w,rw]", dbName, permissionString);
                 }
                 if (StrKit.isBlank(url) || StrKit.isBlank(username) || StrKit.isBlank(password)) {
@@ -152,27 +153,7 @@ public class AnalysisConfig {
          *
          * @return
          */
-        Permission getPermission();
-
-        enum Permission {
-            UNKNOW,
-            R,//读
-            W,//写
-            RW;//读写
-
-            static Permission get(String s) {
-                if (StrKit.isBlank(s)) {
-                    return R;
-                }
-                if (s.equalsIgnoreCase("r"))
-                    return R;
-                else if (s.equalsIgnoreCase("w"))
-                    return W;
-                else if (s.equalsIgnoreCase("rw"))
-                    return RW;
-                return UNKNOW;
-            }
-        }
+        DataSourcePermission getPermission();
     }
 
     /**
@@ -193,9 +174,9 @@ public class AnalysisConfig {
 
         String configName, url, username, password;
 
-        Permission permission;
+        DataSourcePermission permission;
 
-        public DBSource(String configName, String jdbcUrl, String username, String password, Permission permission, Plugins plugins) {
+        public DBSource(String configName, String jdbcUrl, String username, String password, DataSourcePermission permission, Plugins plugins) {
             this.configName = configName;
             this.url = jdbcUrl;
             this.username = username;
@@ -234,7 +215,7 @@ public class AnalysisConfig {
         }
 
         @Override
-        public Permission getPermission() {
+        public DataSourcePermission getPermission() {
             return permission;
         }
     }
