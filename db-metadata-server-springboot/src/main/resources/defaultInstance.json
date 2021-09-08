@@ -1,0 +1,315 @@
+{
+  "meta_field": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      }
+    },
+    "TableView": {},
+    "FormView": {
+      "config": {
+      },
+      "_fields": {
+        "is_primary": {
+          "inline": false
+        },
+        "cn": {
+          "inline": true
+        },
+        "en": {
+          "inline": true
+        },
+        "order_num": {
+          "inline": false
+        },
+        "remark": {
+          "component_name": "TextAreaBox",
+          "name": "remark",
+          "inline": false,
+          "conf": {
+            "size": "mini"
+          }
+        },
+        "config": {
+          "conf": {
+            "size": "mini"
+          },
+          "name": "config",
+          "label": "配置",
+          "inline": false,
+          "component_name": "MiniFormField"
+        }
+      }
+    }
+  },
+  "meta_object": {
+    "SearchView": {
+      "config": {
+        "expand": true,
+        "directly_trigger": [
+          "schema_name"
+        ]
+      },
+      "_fields": {
+        "schema_name": {
+          "component_name": "DropDownBox",
+          "data_url": "/db/index",
+          "filterable": true
+        }
+      }
+    },
+    "TableView": {},
+    "FormView": {
+      "_fields": {
+        "config": {
+          "conf": {
+            "size": "mini"
+          },
+          "name": "config",
+          "label": "配置",
+          "inline": false,
+          "component_name": "MiniFormObject"
+        },
+        "remark": {
+          "component_name": "TextAreaBox",
+          "name": "remark",
+          "inline": false,
+          "conf": {
+            "size": "mini"
+          }
+        }
+      }
+    }
+  },
+  "meta_feature": {
+    "SearchView": {
+      "config": {
+        "expand": true,
+        "directly_trigger": [
+          "type"
+        ]
+      },
+      "_fields": {
+        "type": {
+          "name": "type",
+          "label": "类型",
+          "component_name": "DropDownBox",
+          "data_url": "/feature/list",
+          "conf": {
+            "multiple": false,
+            "filterable": true
+          }
+        }
+      }
+    },
+    "FormView": {
+      "_fields": {
+        "type": {
+          "name": "type",
+          "label": "类型",
+          "component_name": "DropDownBox",
+          "data_url": "/feature/list",
+          "conf": {
+            "multiple": false,
+            "filterable": true
+          }
+        },
+        "remark": {
+          "name": "remark",
+          "label": "备注",
+          "component_name": "TextAreaBox"
+        }
+      }
+    },
+    "TableView": {}
+  },
+  "meta_component": {
+    "SearchView": {
+      "config": {
+        "expand": true,
+        "directly_trigger": ["code"]
+      },
+      "_fields": {
+        "code": {
+          "name": "code",
+          "label": "组件编码",
+          "component_name": "DropDownBox",
+          "data_url": "/component/list",
+          "conf": {
+            "multiple": false,
+            "filterable": true
+          }
+        }
+      }
+    },
+    "TableView": {
+      "config": {
+        "multi_select": false,
+        "operation-bar": {
+          "show": false
+        },
+        "operation-column": {
+          "width": "220"
+        }
+      }
+    },
+    "FormView": {}
+  },
+  "meta_component_instance": {
+    "SearchView": {
+      "config": {
+        "expand": true,
+        "directly_trigger": [
+          "type"
+        ]
+      },
+      "_fields": {
+        "comp_code": {
+          "component_name": "DropDownBox",
+          "data_url": "/component/list",
+          "conf": {
+            "multiple": false,
+            "filterable": true
+          }
+        },
+        "type": {
+          "component_name": "DropDownBox",
+          "options": [
+            {
+              "key": "元对象",
+              "value": "META_OBJECT"
+            },
+            {
+              "key": "元字段",
+              "value": "META_FIELD"
+            }
+          ],
+          "default_value": "META_OBJECT",
+          "name": "type",
+          "label": "类型"
+        }
+      }
+    },
+    "TableView": {
+      "config": {
+        "operation-column": {
+          "width": "220"
+        }
+      }
+    },
+    "FormView": {
+      "_fields": {
+        "type": {
+          "component_name": "DropDownBox",
+          "data_url": "/dict/metaType",
+          "conf": {
+            "multiple": false
+          }
+        },
+        "comp_code": {
+          "component_name": "DropDownBox",
+          "data_url": "/component/list",
+          "conf": {
+            "multiple": false,
+            "filterable": true
+          }
+        }
+      }
+    }
+  },
+  "meta_router": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      }
+    },
+    "TableTreeView": {
+    },
+    "FormView": {
+      "_fields": {
+        "pid": {
+          "component_name": "DropDownBox",
+          "data_url": "/component/options/meta_router?f=pid"
+        }
+      }
+    }
+  },
+  "meta_menu": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      }
+    },
+    "TableTreeView": {},
+    "FormView": {
+      "_fields": {
+        "pid": {
+          "component_name": "DropDownBox",
+          "data_url": "/component/options/meta_menu?f=pid"
+        },
+        "icon": {
+          "component_name": "IconBox"
+        },
+        "hidden": {
+          "component_name": "BoolBox"
+        },
+        "disable": {
+          "component_name": "BoolBox"
+        }
+      }
+    }
+  },
+  "meta_dict": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      }
+    },
+    "TableView": {},
+    "FormView": {
+      "_fields": {
+        "live_flag": {
+          "component_name": "BoolBox"
+        },
+        "is_sys": {
+          "component_name": "BoolBox",
+          "default_value": false
+        }
+      }
+    }
+  },
+  "meta_exception": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      },
+      "_fields": {
+        "exp_msg": {
+          "component_name": "TextBox"
+        },
+        "ext_url": {
+          "component_name": "TextBox"
+        }
+      }
+    },
+    "TableView": {},
+    "FormView": {}
+  },
+  "meta_config": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      },
+      "_fields": {
+        "module": {
+          "component_name": "TextBox"
+        },
+        "module_code": {
+          "component_name": "TextBox"
+        }
+      }
+    },
+    "TableView": {},
+    "FormView": {}
+  }
+}

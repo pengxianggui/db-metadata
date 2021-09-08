@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     username: root
@@ -22,3 +23,5 @@ md:
         url: jdbc:mysql://localhost:3309/mcms?useSSL=false&characterEncoding=utf-8
         driver-class-name: com.mysql.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
+server:
+  port: 8888
