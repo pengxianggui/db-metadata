@@ -23,13 +23,13 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @RestController
-@RequestMapping("options")
+@RequestMapping("component/options")
 public class OptionsController extends ControllerAdapter {
 
     /**
      * URL: /component/options/meta_object?f=field_code_abc
      */
-    @GetMapping("/{object_code}")
+    @GetMapping
     public Ret index() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();

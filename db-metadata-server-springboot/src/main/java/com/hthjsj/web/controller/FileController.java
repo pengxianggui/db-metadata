@@ -7,11 +7,13 @@ import com.google.common.collect.Lists;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
-import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -26,7 +28,9 @@ import java.util.*;
  * Project : oss    <br/>
  */
 @Slf4j
-public class FileController extends Controller {
+@RestController
+@RequestMapping("file")
+public class FileController extends ControllerAdapter {
 
     /** 指定构建树时 根的默认标识(TreeBuilder和前端ztree)都需要 */
     public static final String ROOTPATH = "ROOT_PATH";
@@ -52,31 +56,34 @@ public class FileController extends Controller {
      *      path 默认 / ->  PathKit.getWebRootPath()
      * </pre>
      */
-    public void view() {
-        boolean refresh = getParaToBoolean("refresh", false);
+    @GetMapping("view")
+    public Ret view() {
+        ParameterHelper parameterHelper = parameterHelper();
+        boolean refresh = parameterHelper.getParaToBoolean("refresh", false);
         Object jsons = null;
-        String path = PathKit.getWebRootPath() + getPara("path", "");
+        String path = PathKit.getWebRootPath() + parameterHelper.getPara("path", "");
 
         jsons = getTreeJson(path, refresh, DEFAULT_FILTER);
-        renderJson(Ret.ok("data", jsons));
+        return Ret.ok("data", jsons);
     }
 
     /**
      * TODO 透传文件给前端
      */
-    public void index() {
-        String filename = getPara();
+    @GetMapping
+    public Ret index() {
+        String filename = parameterHelper().getPara();
         Preconditions.checkNotNull(filename);
         filename += ".json";
         if (JFinal.me().getConstants().getDevMode()) {
             Optional<String> result = Optional.ofNullable(UtilKit.loadConfigByFile(filename));
             if (result.isPresent()) {
-                renderJson(Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));
+                return (Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));
             } else {
-                renderJson(Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
+                return (Ret.fail().set("msg", "[" + filename + "]无法成功读取该文件内容!"));
             }
         } else {
-            renderJson(Ret.fail().set("msg", "开发功能已关闭,不能直接通过本接口获得[" + filename + "]文件内容"));
+            return (Ret.fail().set("msg", "开发功能已关闭,不能直接通过本接口获得[" + filename + "]文件内容"));
         }
     }
 
@@ -94,13 +101,13 @@ public class FileController extends Controller {
         Object jsons = null;
         if (isrefresh) {
             jsons = JSON.toJSON(buildTree(filepath, filter));
-//            CacheKit.put(AppConst.DEFAULT_CACHE_NAME, filepath, jsons);//TODO cache
+            //            CacheKit.put(AppConst.DEFAULT_CACHE_NAME, filepath, jsons);//TODO cache
         } else {
-//            jsons = CacheKit.get(AppConst.DEFAULT_CACHE_NAME, filepath);//TODO cache
+            //            jsons = CacheKit.get(AppConst.DEFAULT_CACHE_NAME, filepath);//TODO cache
             //如果缓存过期 获取null值 重新计算;
             if (jsons == null || (jsons instanceof JSONArray && ((JSONArray) jsons).size() == 0)) {
                 jsons = JSON.toJSON(buildTree(filepath, filter));
-//                CacheKit.put(AppConst.DEFAULT_CACHE_NAME, filepath, jsons);//TODO cache
+                //                CacheKit.put(AppConst.DEFAULT_CACHE_NAME, filepath, jsons);//TODO cache
             }
         }
         return jsons;
@@ -164,9 +171,9 @@ public class FileController extends Controller {
             }
             if (f.isDirectory()) {
                 //如执行过滤后无,文件夹下无文件,跳过
-//                if(f.listFiles(filter).length==0){
-//                    continue;
-//                }
+                //                if(f.listFiles(filter).length==0){
+                //                    continue;
+                //                }
                 resultfiles.add(new FileView(currPath, parentpath, f.getName()));
                 ergodic(f, resultfiles, filter, parentPath);// 调用自身,查找子目录
             } else {

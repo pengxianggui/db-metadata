@@ -3,26 +3,23 @@ package com.hthjsj.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.AnalysisSpringUtil;
 import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
-import com.hthjsj.web.AppConst;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.config.MetaProperties;
+import com.hthjsj.web.config.QuickJudge;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.query.QueryHelper;
-import com.hthjsj.web.upload.MultipartRequest;
-import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
-import com.jfinal.upload.UploadFile;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p> @Date : 2021/9/7 </p>
@@ -50,6 +47,10 @@ public class ControllerAdapter {
 
     public FeatureService featureService() {
         return ServiceManager.featureService();
+    }
+
+    public QuickJudge quickJudge() {
+        return AnalysisSpringUtil.getBean(QuickJudge.class);
     }
 
     public HttpServletRequest getRequest() {
@@ -101,25 +102,25 @@ public class ControllerAdapter {
      *
      * @return
      */
-//    @Override
-//    public UploadFile getFile() {
-//        UploadFile file = null;
-//        try {
-//            file = super.getFile();
-//        } catch (RuntimeException e) {
-//            if (e.getMessage().contains("premature ending")) {
-//                log.error("该上传动作出现错误,可能是oreilly组件引起;建议使用Common UploadFile 组件 ");
-//                log.info("尝试使用 Apache Common UploadFile 组件");
-//                MultipartRequest.init(
-//                        AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR, "/"),
-//                        JFinal.me().getConstants().getMaxPostSize(),
-//                        JFinal.me().getConstants().getEncoding());
-//
-//                MultipartRequest multipartRequest = new MultipartRequest(getRequest());
-//                List<UploadFile> files = multipartRequest.getFiles();
-//                files.forEach(f -> log.info("fetched file: {} ", f.getFileName()));
-//            }
-//        }
-//        return file;
-//    }
+    //    @Override
+    //    public UploadFile getFile() {
+    //        UploadFile file = null;
+    //        try {
+    //            file = super.getFile();
+    //        } catch (RuntimeException e) {
+    //            if (e.getMessage().contains("premature ending")) {
+    //                log.error("该上传动作出现错误,可能是oreilly组件引起;建议使用Common UploadFile 组件 ");
+    //                log.info("尝试使用 Apache Common UploadFile 组件");
+    //                MultipartRequest.init(
+    //                        AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR, "/"),
+    //                        JFinal.me().getConstants().getMaxPostSize(),
+    //                        JFinal.me().getConstants().getEncoding());
+    //
+    //                MultipartRequest multipartRequest = new MultipartRequest(getRequest());
+    //                List<UploadFile> files = multipartRequest.getFiles();
+    //                files.forEach(f -> log.info("fetched file: {} ", f.getFileName()));
+    //            }
+    //        }
+    //        return file;
+    //    }
 }

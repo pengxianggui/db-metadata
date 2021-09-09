@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("find")
 public class FindBoxController extends ControllerAdapter {
 
-    @GetMapping("meta/{object_code}")
+    @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -59,7 +59,7 @@ public class FindBoxController extends ControllerAdapter {
     }
 
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
-    @GetMapping("list/{object_code}")
+    @GetMapping("list")
     public Object list() {
         /**
          * 1. query data by metaObject

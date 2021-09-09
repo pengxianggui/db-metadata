@@ -14,7 +14,6 @@ import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
 import com.jfinal.aop.Before;
-import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping("db")
 public class DBController extends ControllerAdapter {
 
-    @GetMapping("list")
+    @GetMapping(value = { "list", "index" })
     public Ret list() {
         List<String> schemas = ServiceManager.mysqlService().showSchema();
         return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
@@ -91,8 +90,8 @@ public class DBController extends ControllerAdapter {
 
         Components.me().init(); // 初始化组件(包括组件配置)
 
-        String mainDB = AnalysisConfig.me().dbMainStr();
-        List<Table> sysTables = ServiceManager.mysqlService().showTables(AnalysisConfig.me().dbMainStr())
+        String mainDB = quickJudge().mainDbStr();
+        List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge().mainDbStr())
                                               // 过滤出系统表
                                               .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
 
@@ -115,8 +114,8 @@ public class DBController extends ControllerAdapter {
     }
 
     private void preConditionCheck() {
-        String token = parameterHelper().getPara(0, "");
-        Preconditions.checkArgument(JFinal.me().getConstants().getDevMode(), "未处于开发模式,无法执行该操作");
+        String token = parameterHelper().getPara("token");
+        Preconditions.checkArgument(quickJudge().isDevMode(), "未处于开发模式,无法执行该操作");
         Preconditions.checkArgument(token.equalsIgnoreCase("hello"), "口令错误,不能初始化系统");
     }
 }

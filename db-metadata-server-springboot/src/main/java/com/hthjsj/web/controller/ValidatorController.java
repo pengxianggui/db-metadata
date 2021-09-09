@@ -22,7 +22,7 @@ public class ValidatorController extends ControllerAdapter {
     /**
      * 验证唯一性
      */
-    @GetMapping("one/{object_code}")
+    @GetMapping("one")
     public Ret one() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();

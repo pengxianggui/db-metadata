@@ -56,7 +56,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TableController extends ControllerAdapter {
 
     @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
-    @GetMapping("list/{object_code}")
+    @GetMapping("list")
     public Object list() {
         /**
          * 1. query data by metaObject
@@ -152,7 +152,7 @@ public class TableController extends ControllerAdapter {
      *     3. 构建Object[] ids 与普通原对象共用删除逻辑
      * </pre>
      */
-    @GetMapping("delete/{object_code}")
+    @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
@@ -214,7 +214,7 @@ public class TableController extends ControllerAdapter {
      * 树型数据
      * https://blog.csdn.net/u011627980/article/details/51454323?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
      */
-    @GetMapping("tree/{object_code}")
+    @GetMapping("tree")
     public Ret tree() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();

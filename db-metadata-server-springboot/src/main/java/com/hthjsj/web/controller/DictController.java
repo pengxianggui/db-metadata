@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("dict")
 public class DictController extends ControllerAdapter {
 
-    @GetMapping
+    @GetMapping("/{key}")
     public Ret index() {
         ParameterHelper parameterHelper = parameterHelper();
         String key = parameterHelper.getPara(0, parameterHelper.getPara("key"));

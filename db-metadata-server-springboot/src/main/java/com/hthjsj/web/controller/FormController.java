@@ -47,7 +47,7 @@ public class FormController extends ControllerAdapter {
      *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
      * </pre>
      */
-    @GetMapping("toAdd/{object_code}")
+    @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -67,7 +67,7 @@ public class FormController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
-    @PostMapping("doAdd/{object_code}")
+    @PostMapping("doAdd")
     public Ret doAdd() {
 
         QueryHelper queryHelper = queryHelper();
@@ -109,7 +109,7 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @GetMapping("toUpdate/{object_code}")
+    @GetMapping("toUpdate")
     public Ret toUpdate() {
 
         QueryHelper queryHelper = queryHelper();
@@ -128,7 +128,7 @@ public class FormController extends ControllerAdapter {
         return (Ret.ok("data", formView.toKv().set("record", d)));
     }
 
-    @PostMapping("doUpdate/{object_code}")
+    @PostMapping("doUpdate")
     public Ret doUpdate() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -167,7 +167,7 @@ public class FormController extends ControllerAdapter {
     }
 
     @Before(HttpRequestHolder.class)
-    @GetMapping("detail/{object_code}")
+    @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();

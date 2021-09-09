@@ -38,7 +38,7 @@ import java.util.List;
 @RequestMapping("/component")
 public class ComponentController extends ControllerAdapter {
 
-    @GetMapping("meta/{object_code}")
+    @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -53,7 +53,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 返回某Component的关联元对象实例
      */
-    @GetMapping("contact/{object_code}")
+    @GetMapping("contact")
     public Ret contact() {
         QueryHelper queryHelper = queryHelper();
         String componentCode = queryHelper.getComponentCode();
@@ -83,7 +83,7 @@ public class ComponentController extends ControllerAdapter {
      * 1. objectCode + componentCode
      * 2. instanceCode
      */
-    @GetMapping("load/{object_code}")
+    @GetMapping("load")
     public Ret load() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -137,7 +137,7 @@ public class ComponentController extends ControllerAdapter {
          */
     }
 
-    @PostMapping("doAdd/{object_code}")
+    @PostMapping("doAdd")
     public Ret doAdd() {
         /**
          * object Code
@@ -193,7 +193,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 一键自动计算
      */
-    @GetMapping("import-auto-computed/{object_code}")
+    @GetMapping("import-auto-computed")
     public Ret oneKeyAutoComputed() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -223,7 +223,7 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok();
     }
 
-    @PostMapping("doUpdate/{object_code}")
+    @PostMapping("doUpdate")
     public Ret doUpdate() {
         /**
          * object Code
@@ -251,7 +251,7 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok();
     }
 
-    @GetMapping("delete/{object_code}")
+    @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
