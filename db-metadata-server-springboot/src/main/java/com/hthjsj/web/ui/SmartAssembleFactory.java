@@ -39,17 +39,17 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         builder.componentName(componentType);
         switch (componentType) {
             case TABLEVIEW:
-                builder.dataUrl("/table/list/" + metaObject.code());
-                builder.deleteUrl("/table/delete/" + metaObject.code());
+                builder.dataUrl("/table/list?objectCode=" + metaObject.code());
+                builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
                 break;
             case SEARCHVIEW:
                 if (metaObject.configParser().isTreeStructure()) {
-                    builder.dataUrl("/table/tree/" + metaObject.code());
+                    builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
                 }
                 break;
             case TABLETREEVIEW:
-                builder.dataUrl("/table/tree/" + metaObject.code());
-                builder.deleteUrl("/table/delete/" + metaObject.code());
+                builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
+                builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
                 break;
         }
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());

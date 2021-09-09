@@ -10,9 +10,9 @@ import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.hthjsj.web.upload.UploadService;
 import com.hthjsj.web.upload.UploadServiceManager;
-import com.jfinal.aop.Aop;
 
 /**
+ * FIXME 这个类逐步过度 0908
  * <p> @Date : 2019/10/22 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -20,13 +20,11 @@ import com.jfinal.aop.Aop;
  */
 public class ServiceManager {
 
-    private ServiceManager() {
-    }
-
     public static DbMetaService metaService() {
         return AnalysisSpringUtil.getBean(DbMetaService.class);
     }
-    public static MysqlService mysqlService(){
+
+    public static MysqlService mysqlService() {
         return AnalysisSpringUtil.getBean(MysqlService.class);
     }
 

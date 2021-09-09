@@ -29,8 +29,6 @@ public class QueryHelper {
 
     private final ParameterHelper tp;
 
-    private final Kv params = Kv.create();
-
     private ListHelper listHelper;
 
     public QueryHelper(HttpServletRequest request) {
@@ -53,7 +51,7 @@ public class QueryHelper {
     }
 
     public String getObjectCode(String defaultCode) {
-        return tp.getPara(0, tp.getPara("objectCode", defaultCode));
+        return tp.getPara("objectCode", defaultCode);
     }
 
     public String getFeatureCode() {

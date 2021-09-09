@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     username: root
@@ -7,9 +6,28 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
+logging:
+  level:
+    mb: debug
+    root: info
+  group:
+    mb: com.hthjsj.web
+
 md:
   dev-mode: true
+  server:
+    base-upload-path: /a/b/c
+    event-enabled: true
+    component:
+      replace-from-json-file: true
+    meta-object:
+      replace-from-json-file: true
+
   analysis:
+    extension:
+      meta-object-enabled: true
+      meta-field-enabled: true
+      component-instance-enabled: true
     db-source:
       ds1:
         username: root

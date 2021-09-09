@@ -30,7 +30,7 @@ public class MenuController extends ControllerAdapter {
         return "meta_menu";
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Ret index() {
         IMetaObject metaObject = metaService().findByCode(objectCode());
         ParameterHelper parameterHelper = parameterHelper();

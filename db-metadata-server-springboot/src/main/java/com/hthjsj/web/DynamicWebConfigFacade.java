@@ -9,7 +9,6 @@ import com.hthjsj.web.controller.CoreRouter;
 import com.hthjsj.web.controller.FileController;
 import com.hthjsj.web.feature.FeatureRouter;
 import com.hthjsj.web.feature.tree.PreventInfiniteLoopAop;
-import com.hthjsj.web.jfinal.ExceptionIntercept;
 import com.hthjsj.web.jfinal.JsonParamIntercept;
 import com.hthjsj.web.jfinal.fastjson.CrackFastJsonFactory;
 import com.hthjsj.web.jfinal.render.ErrorJsonRenderFactory;
@@ -88,8 +87,8 @@ public class DynamicWebConfigFacade extends JFinalConfig {
 
         @Override
         public void configInterceptor(Interceptors me) {
-            me.add(new ExceptionIntercept());
-            me.add(new JsonParamIntercept());
+//            me.add(new ExceptionIntercept());
+//            me.add(new JsonParamIntercept());
         }
 
         @Override

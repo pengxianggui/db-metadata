@@ -108,7 +108,7 @@ public class OptionsKit {
     }
 
     public static String buildUrl(String objectCode, String fieldCode) {
-        return new StringBuilder("/component/options/").append(objectCode).append("?f=").append(fieldCode).toString();
+        return new StringBuilder("/component/options").append("?objectCode=").append(objectCode).append("&f=").append(fieldCode).toString();
     }
 
     /**
