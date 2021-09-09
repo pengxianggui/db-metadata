@@ -2,6 +2,7 @@ package com.hthjsj.web.config;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
+import com.hthjsj.AnalysisSpringUtil;
 import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.web.WebException;
@@ -12,6 +13,8 @@ import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -34,7 +37,9 @@ import java.util.regex.Pattern;
 public class GlobalMetaException {
 
     @ExceptionHandler(value = { Exception.class })
-    public Ret arithmeticExceptionHandle(Exception e, HttpServletRequest request, MetaServerManager metaServerManager) {
+    public Ret arithmeticExceptionHandle(Exception e) {
+        HttpServletRequest request= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        MetaServerManager metaServerManager = AnalysisSpringUtil.getBean(MetaServerManager.class);
         Ret ret = Ret.fail();
         log.error(e.getMessage(), e);
         if (metaServerManager.getMetaServerProperties().isDevMode()) {

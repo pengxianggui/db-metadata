@@ -24,10 +24,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -136,7 +133,7 @@ public class MetaController extends ControllerAdapter {
         return status ? Ret.ok() : Ret.fail();
     }
 
-    @GetMapping("delete")
+    @DeleteMapping("delete")
     public Ret delete() {
         String objectCodess = queryHelper().getObjectCode();
         DbMetaService dbMetaService = metaService();
