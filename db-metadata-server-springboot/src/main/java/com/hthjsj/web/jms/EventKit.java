@@ -36,7 +36,7 @@ public class EventKit {
         }
     }
 
-    public static <T extends EventListener> void register(T listener) {
+    public static <T extends MetaEventListener> void register(T listener) {
         if (isInit) {
             eventBus.register(listener);
         } else {
@@ -44,7 +44,7 @@ public class EventKit {
         }
     }
 
-    public static <T extends EventListener> void unregister(T listener) {
+    public static <T extends MetaEventListener> void unregister(T listener) {
         if (isInit) {
             eventBus.unregister(listener);
         } else {

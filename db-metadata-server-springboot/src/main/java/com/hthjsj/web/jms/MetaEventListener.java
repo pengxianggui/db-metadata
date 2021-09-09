@@ -6,7 +6,7 @@ package com.hthjsj.web.jms;
  *
  * <p> @author konbluesky </p>
  */
-public interface EventListener<Event extends EventMessage> {
+public interface MetaEventListener<Event extends EventMessage> {
 
     void handler(Event event);
 }

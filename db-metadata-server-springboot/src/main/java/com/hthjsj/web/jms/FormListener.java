@@ -8,7 +8,7 @@ import com.google.common.eventbus.Subscribe;
  *
  * <p> @author konbluesky </p>
  */
-public class FormListener implements EventListener<FormMessage> {
+public class FormListener implements MetaEventListener<FormMessage> {
 
     @Subscribe
     @Override
