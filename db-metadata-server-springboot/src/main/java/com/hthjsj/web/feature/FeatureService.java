@@ -1,7 +1,7 @@
 package com.hthjsj.web.feature;
 
 import com.alibaba.fastjson.JSON;
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.user.User;
@@ -30,7 +30,7 @@ import java.util.List;
 public class FeatureService {
 
     private DbPro db() {
-        return AnalysisConfig.me().dbMain();
+        return SpringAnalysisManager.me().dbMain();
     }
 
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {

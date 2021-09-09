@@ -1,7 +1,7 @@
 package com.hthjsj.web;
 
 import com.hthjsj.AnalysisConfig;
-import com.hthjsj.AnalysisManager;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.component.Components;
@@ -144,7 +144,7 @@ public class DynamicWebConfigFacade extends JFinalConfig {
             if (AppConst.getProp().getBoolean(AppConst.CONFIG_ALLOW_REPLACE)) {
                 InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
             }
-            AnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
+            SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());
         }
