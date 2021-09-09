@@ -55,7 +55,7 @@ public class DBController extends ControllerAdapter {
     @GetMapping("tables")
     public Ret tables() {
         ParameterHelper parameterHelper = parameterHelper();
-        String schemaName = parameterHelper.getPara(0, parameterHelper.getPara("schemaName"));
+        String schemaName = parameterHelper.getPara("schemaName");
         Preconditions.checkNotNull(schemaName, "[schemaName]数据库名称是必填参数");
         List<Table> tables = ServiceManager.mysqlService().showTables(schemaName);
         List<Kv> results = Lists.newArrayList();

@@ -26,7 +26,7 @@ public class DictController extends ControllerAdapter {
     @GetMapping("/{key}")
     public Ret index() {
         ParameterHelper parameterHelper = parameterHelper();
-        String key = parameterHelper.getPara(0, parameterHelper.getPara("key"));
+        String key = parameterHelper.getPara("key");
 
         Preconditions.checkNotNull(key, "参数:key必须填写,参考 dict.json");
 
