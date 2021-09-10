@@ -6,8 +6,8 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.AnalysisProperties;
+import com.hthjsj.web.config.json.FastJsonRecordSerializer;
 import com.hthjsj.web.config.json.JsonParameterToMapHandler;
-import com.jfinal.json.FastJsonRecordSerializer;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
-public class MetaInitializer implements WebMvcConfigurer {
+public class MetaInitializer {
 
     @Bean
     @ConfigurationProperties("md")
@@ -55,37 +55,4 @@ public class MetaInitializer implements WebMvcConfigurer {
         return new QuickJudgeImpl(metaServerManager);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JsonParameterToMapHandler());
-    }
-
-    @Bean
-    public HttpMessageConverter configureMessageConverters() {
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-        FastJsonConfig config = new FastJsonConfig();
-        config.setSerializerFeatures(
-                // 保留map空的字段
-                SerializerFeature.WriteMapNullValue,
-                // 将String类型的null转成""
-                SerializerFeature.WriteNullStringAsEmpty,
-                // 将Number类型的null转成0
-                SerializerFeature.WriteNullNumberAsZero,
-                // 将List类型的null转成[]
-                SerializerFeature.WriteNullListAsEmpty,
-                // 将Boolean类型的null转成false
-                SerializerFeature.WriteNullBooleanAsFalse,
-                // 避免循环引用
-                SerializerFeature.DisableCircularReferenceDetect);
-
-        converter.setFastJsonConfig(config);
-        converter.setDefaultCharset(Charset.forName("UTF-8"));
-        List<MediaType> mediaTypeList = new ArrayList<>();
-        // 解决中文乱码问题，相当于在Controller上的@RequestMapping中加了个属性produces = "application/json"
-        mediaTypeList.add(MediaType.APPLICATION_JSON);
-        converter.setSupportedMediaTypes(mediaTypeList);
-        // 支持序列化 ActiveRecord 的 Record 类型
-        SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
-        return converter;
-    }
 }

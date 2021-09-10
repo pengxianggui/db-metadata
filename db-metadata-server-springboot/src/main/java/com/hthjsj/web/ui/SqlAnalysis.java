@@ -62,7 +62,7 @@ public class SqlAnalysis {
         ParseModel parseModel = new ParseModel(sqlStatementParser.parseStatement());
         MySqlSchemaStatVisitor mySqlSchemaStatVisitor = new MySqlSchemaStatVisitor();
         parseModel.getSelectStatement().accept(mySqlSchemaStatVisitor);
-//        Preconditions.checkArgument(parseModel.getQuery().getSelectList().size() == 2, "该sql只允许返回2列内容");
+        //        Preconditions.checkArgument(parseModel.getQuery().getSelectList().size() == 2, "该sql只允许返回2列内容");
         int i = 0;
         for (SQLSelectItem item : parseModel.getQuery().getSelectList()) {
             if ("id".equalsIgnoreCase(item.getExpr().toString()) || "id".equalsIgnoreCase(item.getAlias())) {
@@ -73,31 +73,6 @@ public class SqlAnalysis {
             }
         }
         return i == 2;
-    }
-
-    public static void main(String[] args) {
-        SQLStatementParser sqlStatementParser = SQLParserUtils.createSQLStatementParser(
-                "select name,age,dd as id" + " from meta_component\n" + "where code = 'JsonBox'\n" + "\tand version = (\n" + "\t\tselect max(version)\n"
-                        + "\t\tfrom meta_component\n" + "\t\twhere code = 'JsonBox'\n" + "\t)", JdbcConstants.MYSQL);
-        SQLStatement sqlStatement = sqlStatementParser.parseStatement();
-        ParseModel parseModel = new ParseModel(sqlStatement);
-        //        System.out.println(parseModel.getQuery().getFrom());
-        //        System.out.println(parseModel.getQuery().getFirst());
-        //        System.out.println(parseModel.getQuery().getSelectList());
-        //        System.out.println(parseModel.getQuery().getOrderBy());
-        //        System.out.println(parseModel.getQuery().getWhere());
-
-        MySqlSchemaStatVisitor mySqlSchemaStatVisitor = new MySqlSchemaStatVisitor();
-        parseModel.getSelectStatement().accept(mySqlSchemaStatVisitor);
-
-        System.out.println(mySqlSchemaStatVisitor.getColumns());
-
-        for (SQLSelectItem item : parseModel.getQuery().getSelectList()) {
-            System.out.println(item.getExpr().toString());
-            System.out.println(item.getAlias());
-        }
-
-        System.out.println(parseModel.getQuery().getSelectList());
     }
 
     @Data

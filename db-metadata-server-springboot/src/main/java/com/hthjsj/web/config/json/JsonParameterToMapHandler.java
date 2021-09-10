@@ -5,6 +5,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Maps;
 import com.hthjsj.web.kit.HttpKit;
 import io.undertow.servlet.util.IteratorEnumeration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,26 +29,31 @@ import java.util.Set;
  *
  * <p> @author konbluesky </p>
  */
-//RequestMappingHandlerAdapter
 public class JsonParameterToMapHandler implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        /**
+        /*
          * 1. 根据请求头预判json
-         * 2. 分解json,写入paramterMap
+         * 2. 分解json,写入parameterMap
          */
         WriteHttpServletRequestWrapper httpServletRequestWrapper = new WriteHttpServletRequestWrapper(request);
-        if (request.getMethod().equalsIgnoreCase("post") && request.getContentType().contains("application/json")) {
+        if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString().toLowerCase()) && request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
             Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(request), new TypeReference<Map<String, String>>() {
 
             });
             httpServletRequestWrapper.init(jsonParams);
         }
-        /**
+        /*
          * TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
-         * 方法并不优雅,非RequestContextHolder方式取到的requets会出现问题;
-         * 比如:通过方法签名注入的request;
+         * 方法并不优雅,非RequestContextHolder方式取到的request会出现问题;
+         *
+         * 比如:
+         *  a. 通过方法签名注入到Controller.method 的request; ( 通过RequestMappingHandlerAdapter.handleInternal 方法可以干预)
+         *  b. 通过Autowire注入到Controller的request;
+         *  c. 等等
+         *
+         *  这些地方有可能取到RequestFacade对象,而Facade包装的并没有被改写,要多处干预来达到目的;
          */
 
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequestWrapper));

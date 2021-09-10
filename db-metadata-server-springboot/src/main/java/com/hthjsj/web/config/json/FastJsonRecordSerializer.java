@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
+ * Support JFinal Record object Serializer
  * <p> @Date : 2021/9/9 </p>
  * <p> @Project : db-metadata-server-springboot</p>
  *

@@ -1,19 +1,19 @@
 package com.hthjsj.web.jfinal;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
-import com.hthjsj.AnalysisConfig;
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
-import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.core.JFinal;
-import com.jfinal.json.Json;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class ExceptionIntercept implements Interceptor {
+public class ExceptionIntercept implements HandlerInterceptor {
 
     @Override
     public void intercept(Invocation inv) {
@@ -63,11 +63,11 @@ public class ExceptionIntercept implements Interceptor {
                 se.set("exp_chain", allMsgString);
                 se.set("exp_msg", Arrays.toString(msg));
                 se.set("ext_url", controller.getRequest().getRequestURI());
-                se.set("req_data", Json.getJson().toJson(controller.getRequest().getParameterMap()));
-                se.set("res_data", Json.getJson().toJson(controller.getRequest().getParameterMap()));
+                se.set("req_data", JSON.toJSONString(controller.getRequest().getParameterMap()));
+                se.set("res_data", JSON.toJSONString(controller.getRequest().getParameterMap()));
                 se.set("created_by", "db-metadata-server");
                 se.set("created_time", new Date());
-                AnalysisConfig.me().dbMain().save("meta_exception", se);
+                SpringAnalysisManager.me().dbMain().save("meta_exception", se);
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }

@@ -201,7 +201,7 @@
       "_fields": {
         "type": {
           "component_name": "DropDownBox",
-          "data_url": "/dict/metaType",
+          "data_url": "/dict?key=metaType",
           "conf": {
             "multiple": false
           }
@@ -229,7 +229,7 @@
       "_fields": {
         "pid": {
           "component_name": "DropDownBox",
-          "data_url": "/component/options/?objectCode=meta_router&f=pid"
+          "data_url": "/component/options?objectCode=meta_router&f=pid"
         }
       }
     }
@@ -245,7 +245,7 @@
       "_fields": {
         "pid": {
           "component_name": "DropDownBox",
-          "data_url": "/component/options/?objectCode=meta_menu&f=pid"
+          "data_url": "/component/options?objectCode=meta_menu&f=pid"
         },
         "icon": {
           "component_name": "IconBox"
