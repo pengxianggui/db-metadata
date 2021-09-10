@@ -7,7 +7,6 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.AnalysisProperties;
 import com.hthjsj.web.config.json.JsonParameterToMapHandler;
-import com.hthjsj.web.kit.Dicts;
 import com.jfinal.json.FastJsonRecordSerializer;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ public class MetaInitializer implements WebMvcConfigurer {
         return new MetaProperties(analysisProperties);
     }
 
+    /** Some logic that needs to be triggered automatically after the program is started */
     @Bean
     public MetaBootstrap metaBootstrap(MetaProperties metaProperties) {
         return new MetaBootstrap(metaProperties);
@@ -56,11 +54,6 @@ public class MetaInitializer implements WebMvcConfigurer {
     public QuickJudge quickJudge(MetaServerManager metaServerManager) {
         return new QuickJudgeImpl(metaServerManager);
     }
-
-//    @Bean
-//    public JsonParameterToMapHandler jsonParameterToMapHandler(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-//        return new JsonParameterToMapHandler();
-//    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -94,18 +87,5 @@ public class MetaInitializer implements WebMvcConfigurer {
         // 支持序列化 ActiveRecord 的 Record 类型
         SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
         return converter;
-    }
-
-    @PostConstruct
-    public void init() {
-        //dictionary register
-        Dicts.me().init();
-
-        //component register
-        //        Components.me().init();
-        //        Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW)
-        //                  .addAutoInitComponents(ComponentType.TABLEVIEW)
-        //                  .addAutoInitComponents(ComponentType.TABLETREEVIEW)
-        //                  .addAutoInitComponents(ComponentType.FORMVIEW);
     }
 }

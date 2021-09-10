@@ -1,12 +1,17 @@
 package com.hthjsj.web.config;
 
+import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.web.component.Components;
-import com.hthjsj.web.config.json.JsonParameterToMapHandler;
 import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import com.hthjsj.web.ui.ComputeKit;
+import com.hthjsj.web.ui.meta.CCUUConfigExtension;
+import com.hthjsj.web.ui.meta.InstanceConfigExtension;
+import com.hthjsj.web.ui.meta.MetaFieldConfigExtension;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Specially perform some initialization actions
@@ -20,24 +25,64 @@ public class MetaBootstrap {
 
     MetaProperties metaProperties;
 
+    List<InitStep> stepList = new LinkedList<>();
+
     MetaBootstrap(MetaProperties metaProperties) {
         this.metaProperties = metaProperties;
-        init();
+        startInit();
     }
-    private void init(){
 
-        Dicts.me().init();
+    private void startInit() {
+        stepList.add(new StaticDictInitStep());
+        stepList.add(new ComponentInitStep());
+        stepList.add(new MetaObjectAndInstanceInitStep());
+        stepList.add(new ExtensionInitStep());
+        stepList.forEach(s -> s.init());
+    }
 
-        if (metaProperties.getServer().getMetaObject().isReplaceFromJsonFile()) {
-            InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
+    interface InitStep {
+
+        public void init();
+    }
+
+    class ExtensionInitStep implements InitStep {
+
+        @Override
+        public void init() {
+
+            SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
+            ComputeKit.addInstanceExtension(new InstanceConfigExtension());
+            ComputeKit.addInstanceExtension(new CCUUConfigExtension());
         }
-        if(metaProperties.getServer().getComponent().isReplaceFromJsonFile()){
-            Components.me().init();
-            Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW)
-                      .addAutoInitComponents(ComponentType.TABLEVIEW)
-                      .addAutoInitComponents(ComponentType.TABLETREEVIEW)
-                      .addAutoInitComponents(ComponentType.FORMVIEW);
-        }
+    }
 
+    class ComponentInitStep implements InitStep {
+
+        @Override
+        public void init() {
+            if (metaProperties.getServer().getComponent().isReplaceFromJsonFile()) {
+                Components.me().init();
+                Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW)
+                          .addAutoInitComponents(ComponentType.TABLETREEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+            }
+        }
+    }
+
+    class MetaObjectAndInstanceInitStep implements InitStep {
+
+        @Override
+        public void init() {
+            if (metaProperties.getServer().getMetaObject().isReplaceFromJsonFile()) {
+                InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
+            }
+        }
+    }
+
+    class StaticDictInitStep implements InitStep {
+
+        @Override
+        public void init() {
+            Dicts.me().init();
+        }
     }
 }
