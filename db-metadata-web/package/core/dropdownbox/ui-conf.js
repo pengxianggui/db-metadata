@@ -20,7 +20,7 @@ export default {
     'sort': 0,
     "inline": true,
     "group": false,
-    "data_url": "/dict/yn",
+    "data_url": "/dict?key=yn",
     "options": [
         //     {"key":"value"}
     ],

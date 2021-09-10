@@ -6,7 +6,7 @@ export const ConfDesc = `
     |component_name|渲染组件名|string|组件列表|-|
     |name|name属性|string|-|-|
     |label|该实例标签名,表现为表单域的label|string|-|-|
-    |data_url|数据接口url|string|-|/table/list/{objectCode}|
+    |data_url|数据接口url|string|-|/table/list?objectCode={objectCode}|
     |delete_url|删除数据接口|string|-|暂未支持|
     |multi_select|是否多选模式|boolean|true/false|false|
     |editable|是否编辑模式(暂未支持)|boolean|true/false|false|
@@ -24,8 +24,8 @@ export default {
     "component_name": "TableTreeView",
     "name": "TableTreeView",
     "label": "树型表",
-    "data_url": "/table/tree/{objectCode}",
-    "delete_url": "/table/tree/delete/{objectCode}?ids={ids}",
+    "data_url": "/table/tree?objectCode={objectCode}",
+    "delete_url": "/table/tree/delete?objectCode={objectCode}&ids={ids}",
     // "children_data_url": "/table/list/{objectCode}?parentPrimary={parentPrimary}",
     "multi_select": false,
     "editable": false,

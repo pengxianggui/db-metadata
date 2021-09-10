@@ -39,7 +39,7 @@ export default {
   methods: {
     initDb: function () {
       this.$prompt('提示:请输入口令', '确定要初始化系统', {}).then(data => {
-        this.$axios.get('/db/init/' + data.value).then(({msg = '初始化成功'}) => {
+        this.$axios.get('/db/init?token=' + data.value).then(({msg = '初始化成功'}) => {
           this.$message.success(msg);
           this.$router.go(0);
         }).catch(({msg = '发生错误'}) => {
@@ -49,7 +49,7 @@ export default {
     },
     cleanDb: function () {
       this.$prompt('提示:请输入口令', '确定要清空数据库', {}).then(data => {
-        this.$axios.get('/db/truncate/' + data.value).then(({msg = '操作成功'}) => {
+        this.$axios.get('/db/truncate?token=' + data.value).then(({msg = '操作成功'}) => {
           this.$message.success(msg);
         }).catch(({msg = '操作失败'}) => {
           this.$message.error(msg);

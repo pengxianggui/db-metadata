@@ -257,7 +257,7 @@ export default {
     })
     getTableViewMeta(metaFieldCode).then(({data = {}}) => {
       const meta = data;
-      this.field.urlTemplate = meta['data_url'] + '?object_code={objectCode}';
+      this.field.urlTemplate = meta['data_url'] + '&object_code={objectCode}';
       meta.data_url = this.field.urlTemplate
       this.field.tvMeta = meta
     })

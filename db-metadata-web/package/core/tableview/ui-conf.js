@@ -6,8 +6,8 @@ export const ConfDesc = `
 |component_name|渲染组件名|string|组件列表|-|
 |name|name属性|string|-|-|
 |label|该实例标签名,表现为表单域的label|string|-|-|
-|data_url|数据接口url|string|-|/table/list/{objectCode}|
-|delete_url|删除数据接口|string|-|/table/delete/{objectCode}?{primaryKvExp}|
+|data_url|数据接口url|string|-|/table/list?objectCode={objectCode}|
+|delete_url|删除数据接口|string|-|/table/delete?{primaryKvExp}&objectCode={objectCode}|
 |multi_select|是否多选模式|boolean|true/false|true|
 |editable|是否编辑模式(暂未支持)|boolean|true/false|false|
 |operation-bar|操作条的配置项|object|-|{"show": true,"size": "mini","type": "primary"}|
@@ -29,8 +29,8 @@ export default {
     "component_name": "TableView",
     "name": "TableView",
     "label": "表格模板",
-    "data_url": "/table/list/{objectCode}", // required
-    "delete_url": '/table/delete/{objectCode}?{primaryKvExp}',
+    "data_url": "/table/list?objectCode={objectCode}", // required
+    "delete_url": '/table/delete?objectCode={objectCode}&{primaryKvExp}',
     "multi_select": true, //多选
     "editable": false,
     "conf": {

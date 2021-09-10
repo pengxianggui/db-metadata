@@ -9,7 +9,28 @@ export default function (axios) {
         console.error('[MetaElement] 必须配置axios!请实例化axios并配置')
         return
     }
-    axios.safeGet = function (url, config) {
+
+    /**
+     * http://localhost:8080/meta/table/list?objectCode=meta_field?object_code=&fs=object_code,field_code,is_primary,en,cn,order_num,db_type,db_type_length,id&p=1&s=5
+     * 兼容处理
+     * @author: konbluesky
+     * @date : 20210909
+     */
+    function resolve(url, config = {}) {
+        console.log("before url: ", url)
+        if (url.indexOf("?") > -1) {
+            const q = {};
+            url.replace(/([^?&=]+)=([^&]*)/g, (_, k, v) => q[k] = v);
+            config.params = Object.assign(config.params || {}, q);
+            url = url.replace(/\?.*/g, "");
+            console.log("q: ", q)
+            console.log("config: ", config)
+        }
+        console.log("after url: ", url)
+        return url
+    }
+
+    axios.safeGet = function (url, config = {}) {
         if (url.indexOf("{") > 0 || url.indexOf("}") > 0) { // 请求url中含有{或}表示有参数未填充, 取消请求
             // return Promise.cancel('url: ' + url + ' 未编译 ...');
             console.warn('url: ' + url + ' 未编译 ...')
@@ -17,16 +38,21 @@ export default function (axios) {
             }, reject => {
             })
         }
-        return axios.get(url, config);
+        console.log("before get:config", config);
+        let compileUrl = resolve(url, config);
+        console.log("after get:config", config);
+        return axios.get(compileUrl, config);
     }
-    axios.safePost = function (url, data, config) {
+    axios.safePost = function (url, data, config = {}) {
         if (url.indexOf("{") > 0 || url.indexOf("}") > 0) { // 请求url中含有{或}表示有参数未填充, 取消请求
             console.warn('url: ' + url + ' 未编译 ...')
             return new Promise(resolve => {
             }, reject => {
             })
         }
-        return axios.post(url, data, config);
+        let compileUrl = resolve(url, config);
+        console.log("get:config", config);
+        return axios.post(compileUrl, data, config);
     }
     return axios
 }

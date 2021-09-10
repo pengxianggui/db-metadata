@@ -3,7 +3,7 @@ import utils from "../../package/utils";
 
 const componentMetas = {
     'meta_object&DataList': {
-        "data_url": "/table/list/meta_object",
+        "data_url": "/table/list?objectCode=meta_object",
         "conf": {
             "label-props": {"label": "code"}
         }
@@ -12,7 +12,7 @@ const componentMetas = {
         "component_name": "Tree",
         "name": "Tree",
         "label": "Tree",
-        "data_url": "/tree/list/meta_object",
+        "data_url": "/tree/list?objectCode=meta_object",
         "conf": {
             "props": {"label": "name"},
             "show-checkbox": true
@@ -111,10 +111,10 @@ export default [
         }
     },
     {
-        url: '/tree/list/meta_object',
+        url: '/tree/list?objectCode=meta_object',
         type: 'get',
         response: config => {
-            console.log('mock: /tree/list/meta_object');
+            console.log('mock: /tree/list?objectCode=meta_object');
             return {
                 code: 200,
                 state: 'ok',
