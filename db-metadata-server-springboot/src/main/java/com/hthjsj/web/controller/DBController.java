@@ -2,7 +2,6 @@ package com.hthjsj.web.controller;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.hthjsj.AnalysisConfig;
 import com.hthjsj.analysis.component.ComponentType;
 import com.hthjsj.analysis.db.Table;
 import com.hthjsj.analysis.meta.IMetaObject;
@@ -13,12 +12,11 @@ import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,7 +81,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("msg", sb.toString());
     }
 
-    @Before(Tx.class)
+    @Transactional
     @GetMapping("init")
     public Ret init() {
         preConditionCheck();

@@ -18,12 +18,11 @@ import com.hthjsj.web.component.form.TextBox;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.*;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -220,7 +219,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 重新导入元对象
      */
-    @Before(Tx.class)
+    @Transactional
     @GetMapping("resetImport")
     public Ret resetImport() {
         /**

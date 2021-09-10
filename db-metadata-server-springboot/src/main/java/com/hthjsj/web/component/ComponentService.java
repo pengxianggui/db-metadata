@@ -13,14 +13,13 @@ import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.ui.ComponentInstanceConfig;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
-import com.jfinal.aop.Before;
 import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Okv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * <p> @author konbluesky </p>
  */
-@Before(Tx.class)
+@Transactional
 @Service
 public class ComponentService {
 

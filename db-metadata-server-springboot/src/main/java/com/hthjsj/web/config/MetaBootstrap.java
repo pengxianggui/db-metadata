@@ -2,7 +2,11 @@ package com.hthjsj.web.config;
 
 import com.hthjsj.SpringAnalysisManager;
 import com.hthjsj.analysis.component.ComponentType;
+import com.hthjsj.analysis.meta.aop.PointCutChain;
 import com.hthjsj.web.component.Components;
+import com.hthjsj.web.feature.tree.PreventInfiniteLoopAop;
+import com.hthjsj.web.jms.EventKit;
+import com.hthjsj.web.jms.FormListener;
 import com.hthjsj.web.kit.Dicts;
 import com.hthjsj.web.kit.InitKit;
 import com.hthjsj.web.ui.ComputeKit;
@@ -37,12 +41,39 @@ public class MetaBootstrap {
         stepList.add(new ComponentInitStep());
         stepList.add(new MetaObjectAndInstanceInitStep());
         stepList.add(new ExtensionInitStep());
+        stepList.add(new EventInitStep());
         stepList.forEach(s -> s.init());
+
+
+        /**
+         * 待迁移代码
+         */
+
+        //        MRManager mrManager = MRManager.me();
+        //        mrManager.addLoader(new JFinalResourceLoader());
+        //        mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
+        //        mrManager.load();
+
+        //        me.add(new UserRouter());
+        //        me.add(new UserIntercept());
+        //        me.add(new MRAuthIntercept());
+
+
     }
 
     interface InitStep {
 
         public void init();
+    }
+
+    class EventInitStep implements InitStep {
+
+        @Override
+        public void init() {
+            EventKit.init(false, "db-event-bus");
+            EventKit.register(new FormListener());
+            //            ExtensibleListenerManager.me().addFormListeners(new TestFormExtensibleListener());
+        }
     }
 
     class ExtensionInitStep implements InitStep {
@@ -53,6 +84,8 @@ public class MetaBootstrap {
             SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());
+
+            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopAop());
         }
     }
 

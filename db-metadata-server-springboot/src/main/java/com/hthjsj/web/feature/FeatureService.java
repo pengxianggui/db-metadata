@@ -6,14 +6,13 @@ import com.hthjsj.analysis.db.SnowFlake;
 import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.web.user.User;
 import com.hthjsj.web.user.UserThreadLocal;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Before(Tx.class)
+@Transactional
 public class FeatureService {
 
     private DbPro db() {

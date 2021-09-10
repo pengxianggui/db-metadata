@@ -14,7 +14,6 @@ import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
 import com.hthjsj.web.controller.ControllerAdapter;
 import com.hthjsj.web.controller.ParameterHelper;
-import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.jms.EventKit;
 import com.hthjsj.web.jms.FormMessage;
@@ -27,7 +26,6 @@ import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.MetaObjectViewAdapter;
 import com.hthjsj.web.ui.OptionsKit;
 import com.hthjsj.web.ui.UIManager;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
@@ -171,7 +169,6 @@ public class TreeAndTableController extends ControllerAdapter {
         return (status ? Ret.ok() : Ret.fail());
     }
 
-    @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
     @GetMapping("tableList")
     public Object tableList() {
         /**

@@ -6,7 +6,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
-import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.query.dynamic.DefaultContext;
 import com.jfinal.kit.Kv;
@@ -32,6 +31,7 @@ public class OptionsKit {
      * 前端直接能用的value,key
      *
      * @param values
+     *
      * @return
      */
     public static List<Kv> transKeyValue(String[] values) {
@@ -52,6 +52,7 @@ public class OptionsKit {
      * id,cn -> value,key
      *
      * @param records
+     *
      * @return
      */
     public static List<Kv> transKeyValue(List<Record> records) {
@@ -79,6 +80,7 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
+     *
      * @return
      */
     public static List<Kv> transKeyValueBySql(String sql, String dbConfig) {
@@ -95,6 +97,7 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
+     *
      * @return
      */
     public static Kv transIdCnFlatMapBySql(String sql, String dbConfig) {
@@ -130,6 +133,7 @@ public class OptionsKit {
      *
      * @param fields
      * @param dataRecords
+     *
      * @return
      */
     public static <T extends Record> List<T> trans(Collection<IMetaField> fields, List<T> dataRecords) {
@@ -139,7 +143,7 @@ public class OptionsKit {
         // compileSql时, 有些是有依赖关系的。例如一级分类和二级分类, 二级分类需要根据一级分类的数据不同，而编译不同的 compileSql。
         // 因此, 对于不同的record, mapped可能是不同的
         for (T record : dataRecords) {
-//            final Kv mappeds = Kv.create();
+            //            final Kv mappeds = Kv.create();
             final Map<String, Kv> mappeds = Kv.create();
 
             //计算需要转义的字段的映射关系
@@ -149,8 +153,9 @@ public class OptionsKit {
                     if (configWrapper.isSql()) {
                         log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
                         String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
-                        String compileSql = new CompileRuntime().compile(
-                                configWrapper.scopeSql(), HttpRequestHolder.getRequest(), new DefaultContext(record.getColumns()));
+                        String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(),
+                                                                         HttpRequestHolder.getRequest(),
+                                                                         new DefaultContext(record.getColumns()));
 
                         Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
                         mappeds.put(field.fieldCode(), mapped);
@@ -170,7 +175,7 @@ public class OptionsKit {
                 //旧值
                 Object oldVal = record.getObject(fieldCode);
                 if ((oldVal instanceof String) && StrKit.notBlank((String) oldVal) && ((String) oldVal).contains(",")) { // 多值逻辑
-                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList((String) oldVal).toArray(new String[]{});
+                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList((String) oldVal).toArray(new String[] {});
                     for (int i = 0; i < ss.length; i++) {
                         ss[i] = mapped.getStr(ss[i]);
                     }

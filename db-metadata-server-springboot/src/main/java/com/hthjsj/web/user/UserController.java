@@ -3,8 +3,6 @@ package com.hthjsj.web.user;
 import com.google.common.base.Preconditions;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.user.auth.MRAuthIntercept;
-import com.jfinal.aop.Clear;
-import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 
@@ -14,9 +12,9 @@ import com.jfinal.kit.Ret;
  *
  * <p> @author konbluesky </p>
  */
-public class UserController extends Controller {
+public class UserController /*extends Controller*/ {
 
-    @Clear({MRAuthIntercept.class, UserIntercept.class})
+   /* @Clear({MRAuthIntercept.class, UserIntercept.class})
     public void login() {
         LoginService loginService = UserManager.me().loginService();
         String uid = getPara(loginService.loginKey());
@@ -48,5 +46,5 @@ public class UserController extends Controller {
     public void list() {
         UserService userService = UserManager.me().userService();
         renderJson(Ret.ok("data", userService.findAll()));
-    }
+    }*/
 }

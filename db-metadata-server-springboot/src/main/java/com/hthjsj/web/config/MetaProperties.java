@@ -2,8 +2,6 @@ package com.hthjsj.web.config;
 
 import com.hthjsj.analysis.AnalysisProperties;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * <p> @Date : 2021/9/6 </p>
@@ -31,11 +29,20 @@ public class MetaProperties {
     @Data
     public static class ServerProperties {
 
-        private String baseUploadPath;
-
         private MetaObjectProperties metaObject;
 
         private ComponentProperties component;
+    }
+
+    @Data
+    public static class UploadProperties {
+
+        //local,other
+        private String mode = "local";
+
+        private String baseUploadPath;
+
+        private long maxPostSize;
     }
 
     @Data

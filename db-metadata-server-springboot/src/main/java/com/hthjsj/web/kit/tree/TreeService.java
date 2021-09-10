@@ -4,13 +4,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hthjsj.analysis.meta.IMetaObject;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@Before(Tx.class)
+@Transactional
 public class TreeService {
 
     /**
@@ -34,6 +33,7 @@ public class TreeService {
      *
      * @param metaObject
      * @param treeConfig
+     *
      * @return
      */
     public List<TreeNode<String, Record>> tree(IMetaObject metaObject, TreeConfig treeConfig) {
@@ -58,6 +58,7 @@ public class TreeService {
      * @param metaObject
      * @param treeConfig
      * @param keywords
+     *
      * @return
      */
     public List<TreeNode<String, Record>> treeByKeywords(IMetaObject metaObject, TreeConfig treeConfig, String... keywords) {
@@ -74,6 +75,7 @@ public class TreeService {
      * @param metaObject
      * @param hitRecords
      * @param treeConfig
+     *
      * @return
      */
     public List<TreeNode<String, Record>> treeByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
@@ -97,8 +99,7 @@ public class TreeService {
         List<TreeNode<String, Record>> result = Lists.newArrayList();
 
         for (Record hitRecord : hitRecords) {
-            List<TreeNode<String, Record>> treeNodes = new TreeBuilder<TreeNode<String, Record>>()
-                    .getChildTreeObjects(nodeList, hitRecord.get(treeConfig.getIdKey()));
+            List<TreeNode<String, Record>> treeNodes = new TreeBuilder<TreeNode<String, Record>>().getChildTreeObjects(nodeList, hitRecord.get(treeConfig.getIdKey()));
             DefaultTreeNode branch = new DefaultTreeNode(treeConfig, hitRecord);
             branch.setChildren(treeNodes);
             result.add(branch);
@@ -107,13 +108,13 @@ public class TreeService {
         return result;
     }
 
-
     /**
      * 返回构建树阶段数据
      *
      * @param metaObject
      * @param hitRecords
      * @param treeConfig
+     *
      * @return
      */
     public TreePhases treePhasesByHitRecords(IMetaObject metaObject, List<Record> hitRecords, TreeConfig treeConfig) {
@@ -171,7 +172,6 @@ public class TreeService {
         recursiveParent(Lists.newArrayList(nextSets), allRecordsMap, resultRecords, treeConfig);
     }
 
-
     /**
      * 根据关键字在List<Record>中找到匹配的记录
      * <pre>
@@ -182,6 +182,7 @@ public class TreeService {
      *
      * @param records
      * @param keywords
+     *
      * @return
      */
     private List<Record> findHitRecordByKeyWords(List<Record> records, String... keywords) {

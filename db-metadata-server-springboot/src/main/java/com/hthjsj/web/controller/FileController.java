@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.hthjsj.web.kit.UtilKit;
 import com.hthjsj.web.kit.tree.TreeBuilder;
 import com.hthjsj.web.kit.tree.TreeNode;
-import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Ret;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +74,7 @@ public class FileController extends ControllerAdapter {
         String filename = parameterHelper().getPara();
         Preconditions.checkNotNull(filename);
         filename += ".json";
-        if (JFinal.me().getConstants().getDevMode()) {
+        if (quickJudge().isDevMode()) {
             Optional<String> result = Optional.ofNullable(UtilKit.loadConfigByFile(filename));
             if (result.isPresent()) {
                 return (Ret.ok("data", UtilKit.getKv(UtilKit.loadConfigByFile(filename))));

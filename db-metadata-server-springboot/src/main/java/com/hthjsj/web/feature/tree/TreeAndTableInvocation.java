@@ -3,7 +3,6 @@ package com.hthjsj.web.feature.tree;
 import com.hthjsj.analysis.meta.IMetaObject;
 import com.hthjsj.web.controller.TableQueryInvocation;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.Controller;
 import lombok.Data;
 
 /**

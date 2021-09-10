@@ -3,9 +3,6 @@ package com.hthjsj.web.user;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.hthjsj.web.kit.PatternPathMatcher;
-import com.jfinal.aop.Interceptor;
-import com.jfinal.aop.Invocation;
-import com.jfinal.core.JFinal;
 import com.jfinal.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class UserIntercept implements Interceptor {
+public class UserIntercept /*implements Interceptor */{
 
     private List<String> skipPathPatterns = Lists.newArrayList(UserRouter.URL_LOGIN);
 
@@ -50,8 +47,8 @@ public class UserIntercept implements Interceptor {
     public UserIntercept() {
     }
 
-    @Override
-    public void intercept(Invocation inv) {
+//    @Override
+//    public void intercept(Invocation inv) {
         /**
          * 获取 LoginService ,进行登录校验
          * 1. 获取LoginService实例
@@ -65,34 +62,34 @@ public class UserIntercept implements Interceptor {
          *  > 已登录和过期 ,用两种状态表示, 用是否过期来表示用户是否登录虽然也可以,但是语义不明确
          * 4. 放行后更新用户过期时间.
          */
-        User user = null;
-        try {
-            // 放行
-            if (PatternPathMatcher.matchAny(inv.getActionKey(),
-                    skipPathPatterns.toArray(new String[skipPathPatterns.size()]))) {
-                inv.invoke();
-                return;
-            }
-
-            LoginService<User> loginService = UserManager.me().loginService();
-            user = loginService.getUser(inv.getController().getRequest());
-            //开发模式时 指定开发用户
-            if (JFinal.me().getConstants().getDevMode()) {
-                if (user == null) {
-                    user = staticUser;
-                }
-            }
-            if (user != null) {
-                UserThreadLocal.setUser(user);
-                inv.invoke();
-                inv.getController().setCookie(loginService.cookieKey(), user.userId(), (int) TimeUnit.HOURS.toSeconds(6));
-            } else {
-                throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey()).loginError();
-            }
-        } finally {
-            UserThreadLocal.removeUser(user);
-        }
-    }
+//        User user = null;
+//        try {
+//            // 放行
+//            if (PatternPathMatcher.matchAny(inv.getActionKey(),
+//                    skipPathPatterns.toArray(new String[skipPathPatterns.size()]))) {
+//                inv.invoke();
+//                return;
+//            }
+//
+//            LoginService<User> loginService = UserManager.me().loginService();
+//            user = loginService.getUser(inv.getController().getRequest());
+//            //开发模式时 指定开发用户
+//            if (JFinal.me().getConstants().getDevMode()) {
+//                if (user == null) {
+//                    user = staticUser;
+//                }
+//            }
+//            if (user != null) {
+//                UserThreadLocal.setUser(user);
+//                inv.invoke();
+//                inv.getController().setCookie(loginService.cookieKey(), user.userId(), (int) TimeUnit.HOURS.toSeconds(6));
+//            } else {
+//                throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", loginService.tokenKey()).loginError();
+//            }
+//        } finally {
+//            UserThreadLocal.removeUser(user);
+//        }
+//    }
 
     public void addSkipPathPatterns(String... skipPathPatterns) {
         Preconditions.checkNotNull(skipPathPatterns);

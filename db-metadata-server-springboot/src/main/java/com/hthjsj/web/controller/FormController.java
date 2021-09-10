@@ -7,13 +7,11 @@ import com.hthjsj.analysis.meta.MetaObjectConfigParse;
 import com.hthjsj.analysis.meta.aop.*;
 import com.hthjsj.web.component.ViewFactory;
 import com.hthjsj.web.component.form.FormView;
-import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jms.EventKit;
 import com.hthjsj.web.jms.FormMessage;
 import com.hthjsj.web.query.FormDataFactory;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.ui.OptionsKit;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -166,7 +164,6 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @Before(HttpRequestHolder.class)
     @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();

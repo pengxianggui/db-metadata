@@ -24,11 +24,12 @@
 - [ ] PointCut中的queryHelper替换
 - [ ] com.hthjsj.web.config.json.JsonParameterToMapHandler.preHandle
   - TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
-
+- 用户模块
+- 权限模块
 ## 构想
 
-- 每一次Controller的链路跟踪
--
+- 每一次Controller的链路跟踪 都能跟踪到的功能
+- 
 
 ## Tips
 

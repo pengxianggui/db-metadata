@@ -1,10 +1,9 @@
-package com.hthjsj.web.jfinal.render;
+package com.hthjsj.web.config.render;
 
-import com.jfinal.render.Render;
-import com.jfinal.render.RenderException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +15,7 @@ import java.io.InputStream;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class PictureRender extends Render {
+public class PictureRender {
 
     protected static final String DEFAULT_CONTENT_TYPE = "image/jpeg";
 
@@ -24,8 +23,10 @@ public class PictureRender extends Render {
 
     protected String sFileExt;
 
-    public PictureRender() {
+    protected HttpServletResponse response;
 
+    public PictureRender(HttpServletResponse response) {
+        this.response = response;
     }
 
     /**
@@ -39,7 +40,6 @@ public class PictureRender extends Render {
         this.sFileExt = contentType;
     }
 
-    @Override
     public void render() {
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -52,12 +52,8 @@ public class PictureRender extends Render {
             while (inputStream.read(buf) != -1) {
                 sos.write(buf);
             }
-        } catch (IOException e) {
-            if (getDevMode()) {
-                throw new RenderException(e);
-            }
         } catch (Exception e) {
-            throw new RenderException(e);
+            throw new RenderException("图片渲染失败{%s}",e.getMessage());
         } finally {
             if (sos != null) {
                 try {

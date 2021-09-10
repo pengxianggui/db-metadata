@@ -42,11 +42,11 @@
             <artifactId>guava</artifactId>
             <version>30.1.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jfinal</artifactId>
-            <version>4.9</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jfinal</groupId>-->
+<!--            <artifactId>jfinal</artifactId>-->
+<!--            <version>4.9</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal-undertow</artifactId>

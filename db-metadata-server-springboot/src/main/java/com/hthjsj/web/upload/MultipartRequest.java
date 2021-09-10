@@ -1,7 +1,5 @@
 package com.hthjsj.web.upload;
 
-import com.jfinal.core.JFinal;
-import com.jfinal.upload.UploadFile;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;

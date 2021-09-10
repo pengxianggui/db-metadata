@@ -8,13 +8,12 @@ import com.hthjsj.web.component.form.RichTextBox;
 import com.hthjsj.web.config.NotFinishException;
 import com.hthjsj.web.controller.ControllerAdapter;
 import com.hthjsj.web.query.QueryHelper;
-import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
-import com.jfinal.upload.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +38,7 @@ import java.io.File;
 public class UploadController extends ControllerAdapter {
 
     /**
-    /**
+     * /**
      * param objectCode
      * param fieldCode
      * param file
@@ -75,9 +74,8 @@ public class UploadController extends ControllerAdapter {
     /**
      * 富文本中的图片上传
      */
-    @ActionKey(RichTextBox.UPLOAD_API_PATH)
-    public void richText() {
-        UploadFile file = getFile();
+    @PostMapping(RichTextBox.UPLOAD_API_PATH)
+    public void richText(MultipartFile uploadFile) {
         UploadService uploadService = ServiceManager.fileService();
 
         String url = uploadService.upload(file.getFile());
@@ -113,18 +111,16 @@ public class UploadController extends ControllerAdapter {
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
-    @ActionKey("file/preview")
+    @GetMapping("file/preview")
     public void tmpPre() {
         String path = getPara("path", "");
         UploadService uploadService = ServiceManager.fileService();
         File file = uploadService.getFile(path);
 
         if (!file.exists()) {
-            renderJson(Ret.fail("msg", "文件找不到了"));
             log.warn("文件找不到了, path: {}", path);
-            return;
+            return Ret.fail("msg", "文件找不到了");
         }
         renderImageOrFile(uploadService.getFile(path));
     }
-
 }

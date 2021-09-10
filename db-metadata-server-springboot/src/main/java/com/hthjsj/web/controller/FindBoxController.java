@@ -8,13 +8,11 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.SearchView;
 import com.hthjsj.web.component.TableView;
 import com.hthjsj.web.component.ViewFactory;
-import com.hthjsj.web.jfinal.HttpRequestHolder;
 import com.hthjsj.web.jfinal.SqlParaExt;
 import com.hthjsj.web.query.QueryConditionForMetaObject;
 import com.hthjsj.web.query.QueryHelper;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.ui.OptionsKit;
-import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Page;
@@ -58,7 +56,6 @@ public class FindBoxController extends ControllerAdapter {
         return Ret.ok("data", result);
     }
 
-    @Before(HttpRequestHolder.class)//OptionKit.trans->compileRuntime->需要从request中获取user对象;
     @GetMapping("list")
     public Object list() {
         /**
