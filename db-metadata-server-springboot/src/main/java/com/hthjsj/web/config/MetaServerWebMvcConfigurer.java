@@ -6,15 +6,18 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.hthjsj.web.config.json.FastJsonRecordSerializer;
 import com.hthjsj.web.config.json.JsonParameterToMapHandler;
+import com.hthjsj.web.config.register.DynamicRegisterControllerHandlerMapping;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,18 +30,27 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 @Configuration
-public class MetaServerWebMvcConfigurer implements WebMvcConfigurer {
+public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistrations {
+
+    /**
+     * 可定制MetaServer系统URl的前缀
+     * @return
+     */
+    @Override
+    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+        return new DynamicRegisterControllerHandlerMapping();
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JsonParameterToMapHandler());
+        InterceptorRegistration jsonParameterToMap = registry.addInterceptor(new JsonParameterToMapHandler());
     }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         /**
          * SpringBoot 默认使用Jackson作为json序列化工具,为了避免干扰需要将Jackson关掉
-         * 关掉有2中方式:
+         * 关掉有2种方式:
          * 1. 从pom.xml中排除jackson引用
          * 2. 代码中动态remove
          * 这里使用第二种

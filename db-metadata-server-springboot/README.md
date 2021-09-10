@@ -51,3 +51,7 @@ RequestMappingHandlerMapping
 - https://blog.csdn.net/philip502/article/details/98502246
 - https://www.jianshu.com/p/a501bea7535f
 - https://blog.csdn.net/wangwei19871103/article/details/105527962/
+
+Dynamically registering controller
+- https://stackoverflow.com/questions/33603950/registering-spring-mvc-controllers-dynamically
+- https://my.oschina.net/u/3101282/blog/3022154
