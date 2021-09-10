@@ -5,6 +5,7 @@ import com.hthjsj.analysis.db.MysqlService;
 import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.component.ComponentService;
+import com.hthjsj.web.config.QuickJudge;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.ui.SqlAnalysis;
@@ -46,6 +47,10 @@ public class ServiceManager {
 
     public static BusinessService businessService() {
         return AnalysisSpringUtil.getBean(BusinessService.class);
+    }
+
+    public static QuickJudge quickJudge(){
+        return AnalysisSpringUtil.getBean(QuickJudge.class);
     }
 
     public static SqlAnalysis sqlAnalysis() {

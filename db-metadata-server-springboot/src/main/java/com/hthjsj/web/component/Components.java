@@ -71,7 +71,7 @@ final public class Components {
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
             if (!ServiceManager.componentService().newDefault(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()))) {
-                if (JFinal.me().getConstants().getDevMode()) {
+                if (ServiceManager.quickJudge().isDevMode()) {
                     ServiceManager.componentService().updateDefault(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()));
                 }
             }
