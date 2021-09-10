@@ -6,7 +6,7 @@
 ## TODO
 
 - [ ] Controller API 显式转换 -> SpringBoot
-  - [ ] 编程式注册url
+  - [x] 编程式注册url (初步做到集中对某一类Controller加前缀)
     - https://my.oschina.net/u/3101282/blog/3022154
   - [x] QueryHelper 优雅的替代方案
   - [x] getPara系列方法的迁移

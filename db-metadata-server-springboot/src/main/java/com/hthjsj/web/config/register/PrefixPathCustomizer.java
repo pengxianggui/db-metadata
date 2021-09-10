@@ -32,11 +32,11 @@ public class PrefixPathCustomizer implements PathCustomizer {
 
     @Override
     public boolean isPattern(Class<?> clazz) {
-        boolean status=false;
+        boolean status = false;
         if (null != clazz) {
             for (String packageName : packageNames) {
                 status = clazz.getPackage().getName().startsWith(packageName);
-                if(status){
+                if (status) {
                     return status;
                 }
             }

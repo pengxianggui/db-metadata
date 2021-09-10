@@ -44,6 +44,7 @@ public class MetaInitializer {
 
     @Bean
     public PathCustomizer pathCustomizer(){
-        return new PrefixPathCustomizer("v1","com.hthjsj.web.controller","com.hthjsj.web.feature");
+//        return new PrefixPathCustomizer("v1","com.hthjsj.web.controller","com.hthjsj.web.feature");
+        return new PrefixPathCustomizer("v1","com.hthjsj.web");
     }
 }
