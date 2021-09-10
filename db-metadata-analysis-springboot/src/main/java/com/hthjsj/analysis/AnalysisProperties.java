@@ -1,5 +1,6 @@
 package com.hthjsj.analysis;
 
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -25,5 +26,15 @@ public class AnalysisProperties {
 
     public AnalysisProperties(@Qualifier(BIZ_DATA_SOURCE_PROPERTIES) Map<String, DataSourceProperties> sourceConfig) {
         this.sourceConfig = sourceConfig;
+    }
+
+    @Data
+    public static class Extension {
+
+        private boolean metaObjectEnabled;
+
+        private boolean metaFieldEnabled;
+
+        private boolean componentInstanceEnabled;
     }
 }

@@ -6,6 +6,7 @@ import com.hthjsj.analysis.meta.ConfigExtension;
 import com.hthjsj.analysis.meta.MetaConfigFactory;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,8 +25,10 @@ public class SpringAnalysisManager {
 
     private static SpringAnalysisManager me;
 
+    @Getter
     private final DataSourceManager dataSourceManager;
 
+    @Getter
     private final JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager;
 
     public SpringAnalysisManager(DataSourceManager dataSourceManager, JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager) {
