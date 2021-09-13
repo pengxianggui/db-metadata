@@ -5,6 +5,11 @@ spring:
     url: jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
 
 logging:
   level:
@@ -16,7 +21,8 @@ logging:
 md:
   dev-mode: true
   server:
-    base-upload-path: /a/b/c
+#    upload:
+#      base-upload-path: ./upload1
     event-enabled: true
     component:
       replace-from-json-file: true

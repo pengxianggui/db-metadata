@@ -10,7 +10,6 @@ import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.ui.SqlAnalysis;
 import com.hthjsj.web.upload.UploadService;
-import com.hthjsj.web.upload.UploadServiceManager;
 
 /**
  * FIXME 这个类逐步过度 0908
@@ -34,7 +33,7 @@ public class ServiceManager {
     }
 
     public static UploadService fileService() {
-        return UploadServiceManager.me().getUploadService();
+        return AnalysisSpringUtil.getBean(UploadService.class);
     }
 
     public static FeatureService featureService() {
@@ -49,7 +48,7 @@ public class ServiceManager {
         return AnalysisSpringUtil.getBean(BusinessService.class);
     }
 
-    public static QuickJudge quickJudge(){
+    public static QuickJudge quickJudge() {
         return AnalysisSpringUtil.getBean(QuickJudge.class);
     }
 

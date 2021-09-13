@@ -6,6 +6,11 @@ import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 可以混入代码的工具类
@@ -19,6 +24,8 @@ public interface QuickJudge {
     boolean isDevMode();
 
     String mainDbStr();
+
+    String baseUploadPath();
 
     /**
      * ===========================================================================
@@ -44,6 +51,16 @@ public interface QuickJudge {
     default BusinessService businessService() {
         return ServiceManager.businessService();
     }
+
+    default HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    }
+
+    default HttpServletResponse getResponse() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    }
+
+    ;
 
     //    final class INSTANCE {
     //

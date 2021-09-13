@@ -1,25 +1,31 @@
 package com.hthjsj.web.upload;
 
 import com.google.common.base.Preconditions;
-import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.web.ServiceManager;
+import com.hthjsj.web.WebException;
 import com.hthjsj.web.component.form.RichTextBox;
-import com.hthjsj.web.config.NotFinishException;
 import com.hthjsj.web.controller.ControllerAdapter;
 import com.hthjsj.web.query.QueryHelper;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.system.ApplicationHome;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件上传/下载
@@ -34,7 +40,7 @@ import java.io.File;
  */
 @Slf4j
 @RestController
-@RequestMapping("file/upload")
+@RequestMapping("file")
 public class UploadController extends ControllerAdapter {
 
     /**
@@ -43,8 +49,8 @@ public class UploadController extends ControllerAdapter {
      * param fieldCode
      * param file
      */
-    @PostMapping("/")
-    public Ret index(MultipartFile uploadFile) {
+    @PostMapping("upload")
+    public Ret index(MultipartRequest request) {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -52,20 +58,24 @@ public class UploadController extends ControllerAdapter {
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
 
         Preconditions.checkArgument(metaField.configParser().isFile(), "对象{}-字段{}未配置文件属性不正确: 请配置元字段类型为文件", objectCode, fieldCode);
+        Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
 
-        ApplicationHome home = new ApplicationHome(getClass());
+        List<MultipartFile> uploadFiles = new ArrayList<>();
+        request.getFileMap().forEach((k, v) -> {
+            uploadFiles.add(v);
+        });
+
+        String tmpdir = System.getProperty("java.io.tmpdir");
+        File destFile = Paths.get(tmpdir, uploadFiles.get(0).getOriginalFilename()).toFile();
 
         try {
-            throw new NotFinishException("上传功能待改写");
+            uploadFiles.get(0).transferTo(destFile);
         } catch (Exception e) {
-            throw new NotFinishException("上传功能待改写");
+            throw new WebException(e.getMessage());
         }
 
-        UploadFile file = new UploadFile("", "", null, null, null);
-        UploadService uploadService = ServiceManager.fileService();
-
-        String url = uploadService.upload(file.getFile(), objectCode, fieldCode);
-        Kv result = Kv.by("name", file.getFileName());
+        String url = uploadService().upload(destFile, objectCode, fieldCode);
+        Kv result = Kv.by("name", destFile.getName());
         result.set("value", url);
         result.set("url", UploadKit.previewUrl(url));
         return Ret.ok("data", result);
@@ -76,11 +86,11 @@ public class UploadController extends ControllerAdapter {
      */
     @PostMapping(RichTextBox.UPLOAD_API_PATH)
     public void richText(MultipartFile uploadFile) {
-        UploadService uploadService = ServiceManager.fileService();
-
-        String url = uploadService.upload(file.getFile());
-        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, UploadKit.previewUrl(url));
-        renderJson(result); // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
+        //        UploadService uploadService = ServiceManager.fileService();
+        //
+        //        String url = uploadService.upload(file.getFile());
+        //        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, UploadKit.previewUrl(url));
+        //        renderJson(result); // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
     }
 
     /**
@@ -88,22 +98,34 @@ public class UploadController extends ControllerAdapter {
      * param fieldCode
      * param 业务记录 id
      */
-    @ActionKey("file/down")
-    public void down() {
-        QueryHelper queryHelper = new QueryHelper(this);
-        String objectCode = queryHelper.getObjectCode();
-        String fieldCode = queryHelper.getFieldCode();
-        String id = getPara("id");
-        Preconditions.checkArgument(StrKit.notBlank(objectCode, fieldCode, id), "必传参数条件不满足:objectCode=%s,fieldCode=%s,id=%s", objectCode, fieldCode, id);
-        DbMetaService dbMetaService = ServiceManager.metaService();
-        IMetaField metaField = dbMetaService.findFieldByCode(objectCode, fieldCode);
-
+    @GetMapping("down")
+    public ResponseEntity<FileSystemResource> down() {
+        String id = parameterHelper().get("id");
         Preconditions.checkNotNull(id, "必须指定业务记录id");
 
-        String filePath = dbMetaService.findDataFieldById(metaField.getParent(), metaField, id);
+        QueryHelper queryHelper = queryHelper();
+        String objectCode = queryHelper.getObjectCode();
+        String fieldCode = queryHelper.getFieldCode();
 
-        Preconditions.checkNotNull(filePath, "未找到可下载的文件地址");
-        renderImageOrFile(ServiceManager.fileService().getFile(filePath));
+        Preconditions.checkArgument(StrKit.notBlank(objectCode, fieldCode, id), "必传参数条件不满足:objectCode=%s,fieldCode=%s,id=%s", objectCode, fieldCode, id);
+
+        IMetaField metaField = metaService().findFieldByCode(objectCode, fieldCode);
+        String fileJsonData = metaService().findDataFieldById(metaField.getParent(), metaField, id);
+
+        Preconditions.checkNotNull(fileJsonData, "未找到可下载的文件地址");
+
+        UploadFileResolve fileResolve = uploadService().getFileResovler(fileJsonData);
+        UploadFile file = fileResolve.getDefaultSeat();
+        File targetFile = uploadService().getFile(Paths.get(uploadService().getBasePath(), objectCode, fieldCode, file.getUploadedName()).toString());
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(file.getName()).get()).body(new FileSystemResource(targetFile));
     }
 
     /**
@@ -111,16 +133,12 @@ public class UploadController extends ControllerAdapter {
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
-    @GetMapping("file/preview")
-    public void tmpPre() {
-        String path = getPara("path", "");
-        UploadService uploadService = ServiceManager.fileService();
-        File file = uploadService.getFile(path);
+    @GetMapping("preview")
+    public ResponseEntity<FileSystemResource> tmpPre() {
+        String path = parameterHelper().getPara("path", "");
 
-        if (!file.exists()) {
-            log.warn("文件找不到了, path: {}", path);
-            return Ret.fail("msg", "文件找不到了");
-        }
-        renderImageOrFile(uploadService.getFile(path));
+        File targetFile = uploadService().getFile(Paths.get(uploadService().getBasePath(), path).toString());
+
+        return ResponseEntity.ok().contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
     }
 }

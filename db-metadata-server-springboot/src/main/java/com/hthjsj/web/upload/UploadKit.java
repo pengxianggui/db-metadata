@@ -14,14 +14,14 @@ import java.nio.file.Paths;
  */
 public class UploadKit {
 
-    public static String getUploadDir() {
+    public static File getUploadDir() {
         ApplicationHome applicationHome = new ApplicationHome();
         File uploadDir = Paths.get(applicationHome.getDir().toString(), "upload").toFile();
         if (uploadDir.exists()) {
-            return uploadDir.getAbsolutePath();
+            return uploadDir;
         }
         uploadDir.mkdir();
-        return uploadDir.getAbsolutePath();
+        return uploadDir;
     }
 
     public static String uploadUrl(String objectCode, String fieldCode) {

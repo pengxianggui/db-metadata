@@ -23,4 +23,9 @@ public class QuickJudgeImpl implements QuickJudge {
     public String mainDbStr() {
         return metaServerManager.getAnalysisManager().getDataSourceManager().mainSource().schemaName();
     }
+
+    @Override
+    public String baseUploadPath() {
+        return metaServerManager.getMetaServerProperties().getServer().getUpload().getBaseUploadPath();
+    }
 }

@@ -8,14 +8,12 @@ import com.hthjsj.analysis.meta.BusinessService;
 import com.hthjsj.analysis.meta.DbMetaService;
 import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.component.ComponentService;
-import com.hthjsj.web.config.MetaProperties;
 import com.hthjsj.web.config.QuickJudge;
 import com.hthjsj.web.feature.FeatureService;
 import com.hthjsj.web.kit.tree.TreeService;
 import com.hthjsj.web.query.QueryHelper;
+import com.hthjsj.web.upload.UploadService;
 import com.jfinal.kit.Kv;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,16 +47,20 @@ public class ControllerAdapter {
         return ServiceManager.featureService();
     }
 
+    public UploadService uploadService() {
+        return ServiceManager.fileService();
+    }
+
     public QuickJudge quickJudge() {
         return AnalysisSpringUtil.getBean(QuickJudge.class);
     }
 
     public HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return quickJudge().getRequest();
     }
 
     public HttpServletResponse getResponse() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        return quickJudge().getResponse();
     }
 
     public ParameterHelper parameterHelper() {

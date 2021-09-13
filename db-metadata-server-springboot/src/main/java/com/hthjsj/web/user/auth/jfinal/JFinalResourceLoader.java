@@ -2,7 +2,7 @@ package com.hthjsj.web.user.auth.jfinal;
 
 import com.hthjsj.web.user.auth.MRLoader;
 import com.hthjsj.web.user.auth.MResource;
-import com.jfinal.core.JFinal;
+//import com.jfinal.core.JFinal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,9 @@ public class JFinalResourceLoader implements MRLoader {
 
     @Override
     public void load() {
-        for (String action : JFinal.me().getAllActionKeys()) {
-            resources.add(new ActionResource(action, action, true));
-        }
+//        for (String action : JFinal.me().getAllActionKeys()) {
+//            resources.add(new ActionResource(action, action, true));
+//        }
     }
 
     @Override

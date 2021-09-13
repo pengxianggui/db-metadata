@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class MetaProperties {
 
-    private ServerProperties server;
+    private ServerProperties server = new ServerProperties();
 
     private AnalysisProperties analysis;
 
@@ -29,9 +29,11 @@ public class MetaProperties {
     @Data
     public static class ServerProperties {
 
-        private MetaObjectProperties metaObject;
+        private MetaObjectProperties metaObject = new MetaObjectProperties();
 
-        private ComponentProperties component;
+        private UploadProperties upload = new UploadProperties();
+
+        private ComponentProperties component = new ComponentProperties();
     }
 
     @Data
@@ -41,8 +43,6 @@ public class MetaProperties {
         private String mode = "local";
 
         private String baseUploadPath;
-
-        private long maxPostSize;
     }
 
     @Data

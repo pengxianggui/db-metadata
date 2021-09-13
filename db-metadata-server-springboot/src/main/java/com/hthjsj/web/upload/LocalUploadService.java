@@ -2,10 +2,12 @@ package com.hthjsj.web.upload;
 
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
-import com.hthjsj.AnalysisConfig;
-import com.hthjsj.web.AppConst;
+import com.hthjsj.AnalysisSpringUtil;
+import com.hthjsj.web.config.QuickJudge;
 import com.jfinal.ext.kit.DateKit;
+import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,14 +20,9 @@ import java.util.Date;
  *
  * <p> @author konbluesky </p>
  */
+@Service
 @Slf4j
 public class LocalUploadService implements UploadService {
-
-    private final static UploadService me = new LocalUploadService();
-
-    public static UploadService me() {
-        return me;
-    }
 
     @Override
     public String upload(File file, String... splitMarkers) {
@@ -60,12 +57,19 @@ public class LocalUploadService implements UploadService {
         return destFile.getPath().replaceFirst(getBasePath(), "");
     }
 
-    private String getBasePath() {
-        return AnalysisConfig.me().getProp().get(AppConst.UPLOAD_DIR);
+    @Override
+    public String getBasePath() {
+        QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);
+        return StrKit.isBlank(quickJudge.baseUploadPath()) ? UploadKit.getUploadDir().toString() : quickJudge.baseUploadPath();
     }
 
     @Override
     public File getFile(String filePath) {
-        return new File(getBasePath() + filePath);
+        return new File(filePath);
+    }
+
+    @Override
+    public UploadFileResolve getFileResovler(String fileJsonData) {
+        return new UploadFileResolve(fileJsonData);
     }
 }

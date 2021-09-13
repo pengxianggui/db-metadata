@@ -11,10 +11,10 @@ import com.hthjsj.analysis.meta.MetaData;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
 import com.hthjsj.web.WebException;
 import com.hthjsj.web.kit.UtilKit;
+import com.hthjsj.web.upload.UploadFile;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -192,15 +192,5 @@ public class FormDataFactory {
                 record.set(metaField.fieldCode(), value);
             }
         }
-    }
-
-    @Data
-    public static class UploadFile {
-
-        String name;
-
-        String url;
-
-        String seat;
     }
 }

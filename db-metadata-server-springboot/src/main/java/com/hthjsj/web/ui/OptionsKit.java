@@ -6,6 +6,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.hthjsj.analysis.meta.IMetaField;
 import com.hthjsj.analysis.meta.MetaFieldConfigParse;
+import com.hthjsj.web.ServiceManager;
 import com.hthjsj.web.query.dynamic.CompileRuntime;
 import com.hthjsj.web.query.dynamic.DefaultContext;
 import com.jfinal.kit.Kv;
@@ -154,7 +155,7 @@ public class OptionsKit {
                         log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
                         String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
                         String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(),
-                                                                         HttpRequestHolder.getRequest(),
+                                                                         ServiceManager.quickJudge().getRequest(),
                                                                          new DefaultContext(record.getColumns()));
 
                         Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);

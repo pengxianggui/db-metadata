@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * WebMvcConfigurationSupport 中对requestMappingHandlerAdapter有注入动作
  * 是否可以通过改写这部分内容
  *
@@ -37,7 +36,7 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
          * 1. 根据请求头预判json
          * 2. 分解json,写入parameterMap
          */
-        WriteHttpServletRequestWrapper httpServletRequestWrapper = new WriteHttpServletRequestWrapper(request);
+        WritableHttpServletRequestWrapper httpServletRequestWrapper = new WritableHttpServletRequestWrapper(request);
         if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString().toLowerCase()) && request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
             Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(request), new TypeReference<Map<String, String>>() {
 
@@ -60,7 +59,7 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
         return true;
     }
 
-    class WriteHttpServletRequestWrapper extends HttpServletRequestWrapper {
+    static class WritableHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
         Map<String, String[]> params = Maps.newHashMap();
 
@@ -71,7 +70,7 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
          *
          * @throws IllegalArgumentException if the request is null
          */
-        public WriteHttpServletRequestWrapper(HttpServletRequest request) {
+        public WritableHttpServletRequestWrapper(HttpServletRequest request) {
             super(request);
             params.putAll(request.getParameterMap());
         }
