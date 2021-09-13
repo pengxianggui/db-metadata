@@ -12,17 +12,15 @@ import com.hthjsj.web.user.UserManager;
 import com.hthjsj.web.user.auth.MRRole;
 import com.hthjsj.web.user.auth.RoleFactory;
 import com.jfinal.kit.Kv;
-import com.jfinal.server.undertow.PathKitExt;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.system.ApplicationHome;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -64,9 +62,8 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
     @Override
     public LocalUser login(String username, String password) {
         LocalUser user = null;
-        List<LocalUser> userList = findAll().stream().filter(l ->
-                l.userName().equalsIgnoreCase(username) && l.password().equals(password)).collect(Collectors.toList());
-        
+        List<LocalUser> userList = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username) && l.password().equals(password)).collect(Collectors.toList());
+
         if (!userList.isEmpty()) {
             user = userList.get(0);
         }
@@ -116,15 +113,15 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
 
     @Override
     public LocalUser findById(Object idValue) {
-//        String userJson = UtilKit.loadConfigByFile(fileName);
-//        JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
-//        LocalUser user = null;
-//        for (int i = 0; i < userObjs.size(); i++) {
-//            JSONObject j = (JSONObject) userObjs.get(i);
-//            if (j.getString("userId").equalsIgnoreCase(String.valueOf(idValue))) {
-//                user = new LocalUser(j.getInnerMap());
-//            }
-//        }
+        //        String userJson = UtilKit.loadConfigByFile(fileName);
+        //        JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
+        //        LocalUser user = null;
+        //        for (int i = 0; i < userObjs.size(); i++) {
+        //            JSONObject j = (JSONObject) userObjs.get(i);
+        //            if (j.getString("userId").equalsIgnoreCase(String.valueOf(idValue))) {
+        //                user = new LocalUser(j.getInnerMap());
+        //            }
+        //        }
         List<LocalUser> userList = findAll();
         return userList.stream().filter(u -> String.valueOf(idValue).equals(u.userId())).findFirst().orElse(null);
     }
@@ -136,7 +133,7 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
      */
     @Override
     public boolean updateById(LocalUser user) {
-        String locationPath = PathKitExt.getLocationPath();
+        String locationPath = new ApplicationHome().getDir().toString();
         try {
             Iterator<LocalUser> it = findAll().iterator();
             while (it.hasNext()) {

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Maps;
 import com.hthjsj.web.kit.HttpKit;
-import io.undertow.servlet.util.IteratorEnumeration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -14,10 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * WebMvcConfigurationSupport 中对requestMappingHandlerAdapter有注入动作
@@ -109,6 +105,25 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
         @Override
         public String[] getParameterValues(String name) {
             return params.get(name);
+        }
+    }
+
+    static class IteratorEnumeration<T> implements Enumeration<T> {
+
+        private final Iterator<T> iterator;
+
+        public IteratorEnumeration(final Iterator<T> iterator) {
+            this.iterator = iterator;
+        }
+
+        @Override
+        public boolean hasMoreElements() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public T nextElement() {
+            return iterator.next();
         }
     }
 }
