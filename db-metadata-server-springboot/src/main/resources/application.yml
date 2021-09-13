@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: gongwei911
-    url: jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://192.168.9.187:3309/metadata?useSSL=false&characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   servlet:
@@ -38,13 +38,13 @@ md:
       ds1:
         username: root
         password: gongwei911
-        url: jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8
+        url: jdbc:mysql://192.168.9.187:3309/metadata?useSSL=false&characterEncoding=utf-8
         driver-class-name: com.mysql.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
       ds2:
         username: root
         password: gongwei911
-        url: jdbc:mysql://localhost:3309/mcms?useSSL=false&characterEncoding=utf-8
+        url: jdbc:mysql://192.168.9.187:3309/mcms?useSSL=false&characterEncoding=utf-8
         driver-class-name: com.mysql.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
 server:
