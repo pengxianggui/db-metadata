@@ -16,7 +16,7 @@ logging:
     mb: debug
     root: info
   group:
-    mb: com.hthjsj.web
+    mb: com.github.md.web
 
 md:
   dev-mode: true

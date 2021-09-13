@@ -79,12 +79,12 @@ final public class Components {
     }
 
     /**
-     * 扫描 com.hthjsj.web.component 包下,根据ComponentType 进行注册;
+     * 扫描 com.github.md.web.component 包下,根据ComponentType 进行注册;
      */
     private void autoRegister() {
         try {
             ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("com.hthjsj.web.component")) {
+            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("com.github.md.web.component")) {
                 Class<?> clazz = classInfo.load();
                 if (ComponentType.V(clazz.getSimpleName()) != ComponentType.UNKNOWN) {
                     registry.put(ComponentType.V(clazz.getSimpleName()), (Class<? extends Component>) clazz);

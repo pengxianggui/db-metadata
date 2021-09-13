@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * <p> @author konbluesky </p>
  */
-@SpringBootApplication(scanBasePackages = "com.hthjsj.*")
+@SpringBootApplication(scanBasePackages = "com.github.md.*")
 public class MetaServerApplication {
 
     public static void main(String[] args) {

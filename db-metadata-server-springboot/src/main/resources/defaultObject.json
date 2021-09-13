@@ -2,7 +2,7 @@
   "meta_field": {
     "is_sys": true,
     "config": {
-      "bizInterceptor": "com.hthjsj.web.controller.itp.MetaFieldEditPointCut",
+      "bizInterceptor": "com.github.md.web.controller.itp.MetaFieldEditPointCut",
       "orderBy": "order_num asc"
     },
     "_fields": {
@@ -389,7 +389,7 @@
       "objectCode": "meta_component_instance",
       "isNumberSequence": true,
       "orderBy": "created_time desc",
-      "bizInterceptor": "com.hthjsj.web.controller.itp.ComponentConfDeletePointCut"
+      "bizInterceptor": "com.github.md.web.controller.itp.ComponentConfDeletePointCut"
     },
     "_fields": {
       "config": {
