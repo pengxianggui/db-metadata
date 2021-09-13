@@ -2,9 +2,13 @@ package com.github.md.analysis.db.registry;
 
 import com.github.md.analysis.MetaAnalysisException;
 import com.jfinal.kit.StrKit;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.github.md.analysis.AnalysisConstant.BIZ_DATA_SOURCE;
 
 /**
  * Data source registration tool, taking into account the following centralized situations：
@@ -24,11 +28,17 @@ public class DefaultDataSourceRegistrar implements DataSourceRegistrar {
 
     private String cacheSchameKey;
 
-    public DefaultDataSourceRegistrar(IDataSource dataSource) {
-        if (dataSource.dataSourceType() == DataSourceType.MAIN) {
-            cacheSchameKey = dataSource.schemaName();
+    public DefaultDataSourceRegistrar(IDataSource mainDataSource, @Qualifier(BIZ_DATA_SOURCE) List<IDataSource> bizDataSource) {
+        if (mainDataSource.dataSourceType() == DataSourceType.MAIN) {
+            cacheSchameKey = mainDataSource.schemaName();
+            dataSourceMap.put(mainDataSource.schemaName(), mainDataSource);
         }
-        dataSourceMap.put(dataSource.schemaName(), dataSource);
+        bizDataSource.forEach(s -> {
+            if (dataSourceMap.containsKey(s.schemaName())) {
+                throw new MetaAnalysisException("数据源 schemaName [%s]重复", s.schemaName());
+            }
+            dataSourceMap.put(s.schemaName(), s);
+        });
     }
 
     @Override
@@ -44,6 +54,7 @@ public class DefaultDataSourceRegistrar implements DataSourceRegistrar {
         return dataSourceMap;
     }
 
+    @Override
     public IDataSource source(String sourceName) {
         if (!dataSourceMap.containsKey(sourceName)) {
             throw new MetaAnalysisException("[" + sourceName + "] not found");

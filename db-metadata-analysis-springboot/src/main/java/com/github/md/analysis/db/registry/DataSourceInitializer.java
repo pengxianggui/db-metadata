@@ -39,15 +39,14 @@ public class DataSourceInitializer {
     }
 
     @Bean(MAIN_DATA_SOURCE_BEAN_NAME)
-    //    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
     public IDataSource mainSource(@Qualifier(MAIN_DATA_SOURCE_RAW_BEAN_NAME) DruidDataSource druidDataSource) {
         return MDDataSource.Main(druidDataSource);
     }
 
     @Bean
-    //    @ConditionalOnBean(IDataSource.class)
-    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource dataSource) {
-        return new DefaultDataSourceRegistrar(dataSource);
+    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource dataSource,
+                                                   @Qualifier(BIZ_DATA_SOURCE) List<IDataSource> bizDataSources) {
+        return new DefaultDataSourceRegistrar(dataSource, bizDataSources);
     }
 
     @Bean(BIZ_DATA_SOURCE_PROPERTIES)

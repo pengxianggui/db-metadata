@@ -57,7 +57,6 @@ public interface Controller {
 
 - [x] 完成DataSource初始化和业务中频繁调用的方法
     - [x] 支持动态切换数据源
-- [ ] 使用JdbcTemplate 重写DbMetaService,BusinessService
 
 ### 中优先级
 
