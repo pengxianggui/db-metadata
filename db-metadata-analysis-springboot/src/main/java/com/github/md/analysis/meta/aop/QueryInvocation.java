@@ -1,0 +1,32 @@
+package com.github.md.analysis.meta.aop;
+
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaData;
+import com.github.md.analysis.kit.Kv;
+
+/**
+ * 查询拦截用的Invocation,因为最终Invocation中的数据结构是需要根据具体场景来确定的,所以此处只定义成抽象类
+ * <p> @Date : 2020/9/10 </p>
+ * <p> @Project : db-meta-serve</p>
+ *
+ * <p> @author konbluesky </p>
+ */
+public abstract class QueryInvocation extends AopInvocation {
+
+    private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
+        super(metaObject, formData, httpParams);
+    }
+
+    private QueryInvocation(IMetaObject metaObject, Kv httpParams) {
+        super(metaObject, httpParams);
+    }
+
+    public QueryInvocation(IMetaObject metaObject) {
+        super(metaObject, null, null);
+    }
+
+    @Override
+    public MetaData getFormData() {
+        throw new RuntimeException("错误的使用方式: QueryInvocation 中不能获取 FormData");
+    }
+}

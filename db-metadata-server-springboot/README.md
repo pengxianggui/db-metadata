@@ -22,8 +22,8 @@
   - @Before(HttpRequestHolder.class)
 - [ ] sql动态编译的改造 JFinal.Enjoy -> Spring.El
 - [ ] PointCut中的queryHelper替换
-- [ ] com.hthjsj.web.config.json.JsonParameterToMapHandler.preHandle
-  - TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
+- [ ] JsonParameterToMapHandler.preHandle
+    - TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
 - 用户模块
 - 权限模块
 ## 构想

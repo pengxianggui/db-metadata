@@ -1,5 +1,5 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.hthjsj.AnalysisAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.md.AnalysisAutoConfiguration
 
 # Replace FailureAnalysisReporter
 #org.springframework.boot.diagnostics.FailureAnalysisReporter=\
-# com.hthjsj.MetaFailureAnalysisReporter
+# MetaFailureAnalysisReporter
