@@ -1,25 +1,29 @@
 # db-metadata-serve
 > 工程的缩写DBMS 与数据库的那个DBMSDBMS Database Management System）有区别，但本质又相近。（工程名字并没有仔细推敲过，主要想做一个解决crud和常规业务场景的一个引擎
 ## 介绍
->我对于快速开发框架和快速开发平台的定义,一个具备基本开发工具的整合后框架,同时具备一些基本的模块(RBAC权限,菜单,用户,字典等)的脚手架.这些框架的初衷都是想
->让开发人员不必在重头搭建一套完备的系统后,才开始开发和自己业务相关的模块,尽可能把"公共"模块抽离,达到复用
+>对于快速开发框架和快速开发平台的定义,一个具备基本开发工具的整合后框架,同时具备一些基本的模块(RBAC权限,菜单,用户,字典等)的脚手架.
+> 这些框架的初衷都是想让开发不必在重头搭建一套完备的系统后,才开始开发和自己业务相关的模块,尽可能把"公共"模块抽离,达到复用的目的;
 >
 >但现状是一个大型项目,或者系统中通常有很多子系统或子模块组成,并不是每个子模块都要具有完整的用户权限、登录、菜单管理、字典等等功能。
->如果是在人员有限、项目规模不大、并且是从0->1这个阶段开始的话，选择任何一个开源的快速开发框架都是合适的，如果系统非0->1这个阶段，已经上线且具备一些功能了，再引入快速开发框架的意义就不是很大了
+>如果是在人员有限且项目规模不大,而且又是从0->1这个阶段开始的话，选择任何一个开源的快速开发框架都是合适的，如果系统非0->1这个阶段已经上线且具备一些功能了，再引入快速开发框架的效果和成本就值得考虑了；
 >
 >DMBS 的定位首先是一套功能引擎,其次才是开发平台
-#### 市面上一些主流的快速开发平台
+> 
+#### 社区的一些参考的快速开发平台
 > 社区相对活跃,功能完备,技术栈新的
 - [jeesite - https://jeesite.gitee.io/](https://jeesite.gitee.io/) - [演示地址](http://demo.jeesite.com/)
 - [jeecg - http://www.jeecg.com/](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
 - [eova - http://www.eova.cn/](http://www.eova.cn/) - [演示地址](http://pro.eova.cn/)
+  - 元对象的一些设计思路来源
 
 ### 技术栈
-- JFinal
+- SpringBoot
+- JFinal ActiveRecord
 - Mysql 5.7 / Druid 
 - Jdk1.8
 - Guava
 - FastJson
+
 ### 能干什么
 - 迅速构建一个CRUD模块
 - 各类模板配置 
@@ -35,20 +39,11 @@
 ## 快速开始
 ### 工程结构
 ```bash
-├── arthas-output
-├── db                          # 数据库文件
-├── db-metadata-analysis        # 元数据分析工程,元对象的构建,基于元对象的操作
-├── db-metadata-parent          # Maven Root工程
-├── db-metadata-web-iview       # 前端工程 使用ElementUI，为了保留git提交记录，暂未将iview更名
-├── db-metadata-web-jfinal      # 服务端工程
-│   └── src
-├── jfinal-spring-boot-demo     # springboot-jfinal 整合 demo
-│   ├── src
-│   └── target
-└── jfinal-spring-boot-starter  # springboot-jfinal- start
-    ├── src
-    └── target
-
+├── db
+├── db-metadata-analysis-springboot
+├── db-metadata-parent
+├── db-metadata-server-springboot
+└── db-metadata-we
 ```
 ### 安装部署
 ### 依赖配置
@@ -83,6 +78,7 @@
 ```
 #### Component实例
 > 单纯的组件是没有灵魂的，元对象和元字段是组件的数据灵魂
+> 
 #### 模板
 什么是模板，模板是各种前端组件的集合,模板不能直接使用，模板硬编码编辑
 #### 功能
@@ -148,7 +144,6 @@
 - DB上配置信息存放在json字段,虽保证了灵活度,但是不利于检索,Mysql5.7对于Json字段的支持有限
 - 元对象config,字段config,component.config,实例config,为了做到各层独立,分别设置了不同作用,不同意义的配置信息.在开始接触的时候对于这些
 配置信息需要消化的成本太高,而且config未做结构校验,很可能在功能大面积爆发时出现无用无效的脏字段
-- 
 
 ## RoadMap
 - server 源代码方式集成,剥离db-metadata-server业务逻辑和容器有关的逻辑,目的为了上层使用其他mvc框架做支持;
