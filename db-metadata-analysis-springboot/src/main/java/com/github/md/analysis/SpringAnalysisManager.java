@@ -1,4 +1,4 @@
-package com.github.md;
+package com.github.md.analysis;
 
 import com.github.md.analysis.db.registry.DataSourceManager;
 import com.github.md.analysis.db.registry.JFinalActiveRecordPluginManager;

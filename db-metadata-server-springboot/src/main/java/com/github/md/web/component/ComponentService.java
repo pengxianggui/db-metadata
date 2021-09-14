@@ -3,7 +3,7 @@ package com.github.md.web.component;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.SnowFlake;

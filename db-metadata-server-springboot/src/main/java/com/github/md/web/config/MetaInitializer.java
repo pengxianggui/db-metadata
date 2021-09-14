@@ -1,6 +1,6 @@
 package com.github.md.web.config;
 
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.AnalysisProperties;
 import com.github.md.web.config.register.PathCustomizer;
 import com.github.md.web.config.register.PrefixPathCustomizer;

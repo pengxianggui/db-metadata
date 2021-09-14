@@ -1,4 +1,4 @@
-package com.github.md;
+package com.github.md.analysis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

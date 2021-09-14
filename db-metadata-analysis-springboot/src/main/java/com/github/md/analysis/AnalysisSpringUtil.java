@@ -1,4 +1,4 @@
-package com.github.md;
+package com.github.md.analysis;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

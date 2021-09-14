@@ -1,6 +1,6 @@
 package com.github.md.web.upload;
 
-import com.github.md.AnalysisSpringUtil;
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.github.md.web.config.QuickJudge;

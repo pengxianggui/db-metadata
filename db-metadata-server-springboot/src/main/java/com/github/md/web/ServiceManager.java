@@ -1,6 +1,6 @@
 package com.github.md.web;
 
-import com.github.md.AnalysisSpringUtil;
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.component.ComponentService;
 import com.github.md.analysis.db.MysqlService;
 import com.github.md.analysis.meta.BusinessService;

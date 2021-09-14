@@ -2,7 +2,7 @@ package com.github.md.web.config;
 
 import com.github.md.web.component.Components;
 import com.github.md.web.feature.tree.PreventInfiniteLoopAop;
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.jms.EventKit;

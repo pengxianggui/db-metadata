@@ -2,8 +2,8 @@ package com.github.md.web.config;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
-import com.github.md.AnalysisSpringUtil;
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.SnowFlake;
 import com.github.md.web.WebException;
 import com.github.md.web.kit.UtilKit;

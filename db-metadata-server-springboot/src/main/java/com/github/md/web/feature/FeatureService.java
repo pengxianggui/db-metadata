@@ -1,7 +1,7 @@
 package com.github.md.web.feature;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.SnowFlake;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.user.User;

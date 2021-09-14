@@ -1,6 +1,6 @@
 package com.github.md.analysis.db;
 
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.MetaAnalysisException;
 import com.github.md.analysis.db.registry.DataSourceManager;
 import com.jfinal.kit.StrKit;

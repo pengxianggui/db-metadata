@@ -1,6 +1,6 @@
 package com.github.md.analysis.meta;
 
-import com.github.md.SpringAnalysisManager;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.*;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;

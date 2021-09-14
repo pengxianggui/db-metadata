@@ -1,5 +1,6 @@
 package com.github.md;
 
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.github.md.analysis.AnalysisProperties;
 import com.github.md.analysis.db.registry.DataSourceInitializer;
