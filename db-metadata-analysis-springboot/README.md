@@ -60,13 +60,13 @@ public interface Controller {
 
 ### 中优先级
 
-- [ ] JFinal包中的依赖逐步去除,部分工具类通过Copy Class方式移植到项目中
-- [ ] 一些bean的载入顺序问题
+- [x] JFinal包中的依赖逐步去除,部分工具类通过Copy Class方式移植到项目中
+- [x] 一些bean的载入顺序问题
   - @ConditionalOnBean(JFinalActiveRecordPluginManager.class)
 ### 低优先级
 
 - [ ] Druid中ast部分 考虑用JSqlParse替换
-- [ ] hthjsj包名待server重构完毕后统一替换;
+- [x] hthjsj包名待server重构完毕后统一替换;
 -
 
 ##### 参考
