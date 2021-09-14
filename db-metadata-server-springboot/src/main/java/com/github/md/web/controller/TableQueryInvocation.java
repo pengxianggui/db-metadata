@@ -3,7 +3,7 @@ package com.github.md.web.controller;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.aop.QueryInvocation;
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.query.QueryHelper;
 import lombok.Data;
 

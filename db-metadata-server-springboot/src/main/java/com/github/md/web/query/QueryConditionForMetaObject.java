@@ -1,6 +1,6 @@
 package com.github.md.web.query;
 
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.meta.IMetaField;

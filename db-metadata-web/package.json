@@ -12,7 +12,7 @@
   "private": false,
   "license": "MIT",
   "scripts": {
-    "serve": "vue-cli-service serve --open",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name meta-element --dest lib package/index.js",

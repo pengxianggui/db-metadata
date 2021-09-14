@@ -12,7 +12,7 @@ import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.analysis.meta.aop.QueryPointCut;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.kit.tree.TreeConfig;
 import com.github.md.web.kit.tree.TreeKit;

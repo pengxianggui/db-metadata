@@ -8,7 +8,7 @@ import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
 import com.github.md.web.component.ViewFactory;
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;

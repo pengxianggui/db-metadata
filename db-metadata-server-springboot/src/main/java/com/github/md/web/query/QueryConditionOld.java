@@ -1,7 +1,7 @@
 package com.github.md.web.query;
 
 import com.github.md.web.WebException;
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.MetaObject;
 import com.github.md.analysis.kit.Kv;

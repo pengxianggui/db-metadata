@@ -15,7 +15,7 @@ import com.github.md.analysis.meta.aop.QueryPointCut;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.jms.EventKit;
 import com.github.md.web.jms.FormMessage;
 import com.github.md.web.kit.UtilKit;

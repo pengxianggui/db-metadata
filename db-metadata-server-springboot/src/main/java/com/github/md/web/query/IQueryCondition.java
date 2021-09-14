@@ -1,6 +1,6 @@
 package com.github.md.web.query;
 
-import com.github.md.web.jfinal.SqlParaExt;
+import com.github.md.web.kit.SqlParaExt;
 
 import java.util.Map;
 

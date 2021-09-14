@@ -22,6 +22,23 @@
 ```shell
 npm install;
 npm run serve;
+
+# node-gyp
+npm ERR! gyp: No Xcode or CLT version detected!
+npm ERR! gyp ERR! configure error 
+npm ERR! gyp ERR! stack Error: `gyp` failed with exit code: 1
+npm ERR! gyp ERR! stack     at ChildProcess.onCpExit (/Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/node-gyp/lib/configure.js:345:16)
+npm ERR! gyp ERR! stack     at ChildProcess.emit (node:events:394:28)
+npm ERR! gyp ERR! stack     at Process.ChildProcess._handle.onexit (node:internal/child_process:290:12)
+npm ERR! gyp ERR! System Darwin 20.6.0
+npm ERR! gyp ERR! command "/Users/konbluesky/.nvm/versions/node/v16.9.1/bin/node" "/Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/.bin/node-gyp" "rebuild"
+npm ERR! gyp ERR! cwd /Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/node-sass
+npm ERR! gyp ERR! node -v v16.9.1
+npm ERR! gyp ERR! node-gyp -v v3.8.0
+npm ERR! gyp ERR! not ok
+
+#上述错误可以尝试手动安装gyp 模块
+npm install -g node-gyp
 ``` 
 
 ### 代码集成

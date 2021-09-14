@@ -32,22 +32,22 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.48</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>activerecord</artifactId>
             <version>4.9.16</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.jfinal</groupId>-->
-<!--            <artifactId>jfinal</artifactId>-->
-<!--            <version>4.9.16</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.jfinal</groupId>-->
+        <!--            <artifactId>jfinal</artifactId>-->
+        <!--            <version>4.9.16</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -68,18 +68,19 @@
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <excludes>-->
-<!--                        <exclude>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                        </exclude>-->
-<!--                    </excludes>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--            https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#?.?  -->
+            <!--            <plugin>-->
+            <!--                <groupId>org.springframework.boot</groupId>-->
+            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <excludes>-->
+            <!--                        <exclude>-->
+            <!--                            <groupId>org.projectlombok</groupId>-->
+            <!--                            <artifactId>lombok</artifactId>-->
+            <!--                        </exclude>-->
+            <!--                    </excludes>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
