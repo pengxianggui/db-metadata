@@ -1,9 +1,10 @@
 package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.component.AbstractComponent;
 import com.github.md.web.component.ComponentException;
@@ -14,8 +15,7 @@ import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.ui.UIManager;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -193,7 +193,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 一键自动计算
      */
-    @GetMapping("import-auto-computed")
+    @PostMapping("import-auto-computed")
     public Ret oneKeyAutoComputed() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
