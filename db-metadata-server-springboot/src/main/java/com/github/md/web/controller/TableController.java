@@ -28,6 +28,7 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -149,7 +150,7 @@ public class TableController extends ControllerAdapter {
      *     3. 构建Object[] ids 与普通原对象共用删除逻辑
      * </pre>
      */
-    @GetMapping("delete")
+    @DeleteMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();

@@ -38,7 +38,7 @@
             <el-input placeholder="默认过滤条件: a=1 and b=2" v-model="nativeValue.where"></el-input>
         </el-form-item>
         <el-form-item label="业务拦截器">
-            <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.hthjsj.web.controller.itp.MetaFieldEditPointCut"
+            <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.github.md.web.controller.itp.MetaFieldEditPointCut"
                       v-model="nativeValue.bizInterceptor"></el-input>
         </el-form-item>
     </el-form>

@@ -295,7 +295,12 @@ export default {
         type: 'warning'
       }).then(() => {
         const {delete_url} = this.innerMeta;
-        const url = delete_url + '?' + primaryKvExp;
+        let url;
+        if (delete_url.indexOf("?") > 0) {
+          url = delete_url + '&' + primaryKvExp;
+        } else {
+          url = delete_url + '?' + primaryKvExp
+        }
         this.$axios.delete(url).then(({msg = '删除成功'}) => {
           this.getData();
           this.$message.success(msg);

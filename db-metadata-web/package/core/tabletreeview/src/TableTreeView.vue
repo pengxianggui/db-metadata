@@ -324,7 +324,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const url = deleteUrl + '?' + primaryKvExp;
+        let url;
+        if (deleteUrl.indexOf("?") > 0) {
+          url = deleteUrl + '&' + primaryKvExp;
+        } else {
+          url = deleteUrl + '?' + primaryKvExp
+        }
         this.$axios.delete(url).then(resp => {
           const {msg = '删除成功'} = resp
           this.$message.success(msg);

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>db-metadata-parent</artifactId>
-        <groupId>com.hthjsj</groupId>
-        <version>1.1.7-SNAPSHOT</version>
+        <groupId>com.github.md</groupId>
+        <version>2.0-SNAPSHOT</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
     <packaging>pom</packaging>
