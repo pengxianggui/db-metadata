@@ -1,4 +1,4 @@
-package com.github.md.web.jfinal;
+package com.github.md.web.kit;
 
 import com.github.md.web.query.sqls.InNotInMatch;
 import com.github.md.web.ui.SqlAnalysis;
