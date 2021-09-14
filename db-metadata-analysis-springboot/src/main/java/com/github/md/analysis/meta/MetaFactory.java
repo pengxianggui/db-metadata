@@ -10,6 +10,9 @@ import com.jfinal.kit.StrKit;
 import java.util.List;
 
 /**
+ * MetaObject Factory
+ * Responsible for the creation of specific scenes of metaobject and metafield
+ *
  * <p> @Date : 2019/12/11 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -59,9 +62,9 @@ public class MetaFactory {
         String tableName = sqlTableSource.computeAlias();
         ManualMetaField manualMetaField = null;
         for (SQLSelectItem item : columns) {
-            //列名
+            //column name
             String name = item.getExpr().toString();
-            //别名
+            //column alias name
             String label = StrKit.defaultIfBlank(item.getAlias(), name);
             manualMetaField = new ManualMetaField(manualMetaObject);
             manualMetaField.fieldCode(name);
@@ -72,7 +75,7 @@ public class MetaFactory {
             manualMetaField.config("{}");
             manualMetaField.config(MetaConfigFactory.createV1FieldConfig(manualMetaField, null, null).toJson());
             manualMetaObject.addField(manualMetaField);
-            //指定主键
+            //Specify the primary key
             if ("id".equalsIgnoreCase(name) || "id".equalsIgnoreCase(label)) {
                 manualMetaObject.primaryKey(name);
             }

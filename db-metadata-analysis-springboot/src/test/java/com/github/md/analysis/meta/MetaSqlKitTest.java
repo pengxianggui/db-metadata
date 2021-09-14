@@ -15,4 +15,10 @@ class MetaSqlKitTest {
         String ss = MetaSqlKit.where("from a where 1=1", "a in (?,?,?)", "");
         System.out.println(ss);
     }
+
+    @Test
+    void testMain() {
+        String ss = MetaSqlKit.where("from a where 1=1", "a in (?,?,?)", "");
+        System.out.println(ss);
+    }
 }

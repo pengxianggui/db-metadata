@@ -1,8 +1,6 @@
 package com.github.md.analysis;
 
 /**
- * <p> Class title: </p>
- * <p> @Describe: </p>
  * <p> @Date : 2019/10/12 </p>
  * <p> @Project : db-meta-serve</p>
  *

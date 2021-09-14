@@ -62,9 +62,4 @@ public class MetaSqlKit {
         }
         return columnName;
     }
-
-    public static void main(String[] args) {
-        String ss = MetaSqlKit.where("from a where 1=1", "a in (?,?,?)", "");
-        System.out.println(ss);
-    }
 }
