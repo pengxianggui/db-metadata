@@ -1,5 +1,7 @@
 package com.github.md.web.controller;
 
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaFactory;
@@ -13,8 +15,7 @@ import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.google.common.base.Preconditions;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,17 +38,17 @@ public class FindBoxController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
+        Preconditions.checkArgument(metaField.configParser().isSql(), "必须为该元子段配置数据源属性,指定sql");
+
         TableView tableView = null;
         SearchView searchView = null;
-        if (metaField.configParser().isSql()) {
-            String sql = metaField.configParser().scopeSql();
-            IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
-            tableView = ViewFactory.tableView(metaObject);
-            // url : /find/meta/?objectCode=aaa&fieldCode=111
-            String url = "/find/list/" + queryHelper.queryBuilder().builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
-            tableView.dataUrl(url);
-            searchView = ViewFactory.searchView(metaObject);
-        }
+        String sql = metaField.configParser().scopeSql();
+        IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
+        tableView = ViewFactory.tableView(metaObject);
+        // url : /find/meta/?objectCode=aaa&fieldCode=111
+        String url = "/find/list" + queryHelper.queryBuilder().builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
+        tableView.dataUrl(url);
+        searchView = ViewFactory.searchView(metaObject);
         Kv result = Kv.create();
         result.set("table", tableView.toKv());
         result.set("search", searchView.toKv());

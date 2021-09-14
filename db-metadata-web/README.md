@@ -39,6 +39,9 @@ npm ERR! gyp ERR! not ok
 
 #上述错误可以尝试手动安装gyp 模块
 npm install -g node-gyp
+
+
+https://blog.csdn.net/qq_42762909/article/details/119361279
 ``` 
 
 ### 代码集成
