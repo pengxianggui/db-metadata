@@ -48,7 +48,7 @@ public class PrefixPathCustomizer implements PathCustomizer {
     public RequestMappingInfo combineToOriginal(RequestMappingInfo originalRequest) {
         RequestMappingInfo rmi = RequestMappingInfo.paths(adJustUrl()).build().combine(originalRequest);
         if (log.isInfoEnabled()) {
-            log.info("will change {} onto {};", originalRequest, rmi);
+            log.info("Will change {} onto {};", originalRequest, rmi);
         }
         return rmi;
     }

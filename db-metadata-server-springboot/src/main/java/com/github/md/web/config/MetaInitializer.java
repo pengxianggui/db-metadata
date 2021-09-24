@@ -44,7 +44,6 @@ public class MetaInitializer {
 
 //    @Bean
     public PathCustomizer pathCustomizer(){
-        //        return new PrefixPathCustomizer("v1","com.github.md.web.controller","com.github.md.web.feature");
         return new PrefixPathCustomizer("v1", "com.github.md.web");
     }
 }

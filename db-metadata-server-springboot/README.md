@@ -23,9 +23,16 @@
 - [ ] sql动态编译的改造 JFinal.Enjoy -> Spring.El
 - [ ] PointCut中的queryHelper替换
 - [ ] JsonParameterToMapHandler.preHandle
-    - TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
+  - TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
+- [ ] Mysql 8.0 的支持
+  - [ ] autoreimport 时，默认路由的添加
+    ```
+    INSERT INTO `meta_router` VALUES ('0', '', '默认根路由', 'Default', '/default', '', 'AdminLayout', '{}', '{}', '2021-02-02 01:40:45',
+    'db-meta-web-devUser', NULL, NULL, '默认根路由, 指向db-meta默认布局组件AdminLayout');
+      ```
 - 用户模块
 - 权限模块
+- [ ] [Bug] 下拉框显示（）
 ## 构想
 
 - 每一次Controller的链路跟踪 都能跟踪到的功能
