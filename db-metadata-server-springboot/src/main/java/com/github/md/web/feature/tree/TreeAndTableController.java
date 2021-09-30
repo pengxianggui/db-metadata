@@ -1,33 +1,33 @@
 package com.github.md.web.feature.tree;
 
-import com.github.md.analysis.meta.*;
-import com.github.md.web.component.SearchView;
-import com.github.md.web.component.TableView;
-import com.github.md.web.component.ViewFactory;
-import com.github.md.web.query.QueryBuilder;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.analysis.meta.aop.QueryPointCut;
+import com.github.md.web.component.SearchView;
+import com.github.md.web.component.TableView;
+import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
-import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormMessage;
+import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.query.FormDataFactory;
 import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
+import com.github.md.web.query.QueryUrlBuilder;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.ui.UIManager;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
@@ -70,9 +70,9 @@ public class TreeAndTableController extends ControllerAdapter {
         IMetaObject metaObject = metaService().findByCode(tableObjectCode);
         MetaObjectViewAdapter metaObjectTableViewAdapter = UIManager.getView(metaObject, ComponentType.TABLEVIEW);
         TableView tableView = (TableView) metaObjectTableViewAdapter.getComponent();
-        tableView.dataUrl("/f/tat/tableList?featureCode=" + featureCode);
+        tableView.dataUrl(FeatureTreeUrlBuilder.tableDataUrl(featureCode));
 
-        Kv treeMeta = Kv.by("data_url", "/f/t?objectCode=" + treeAndTableConfig.getTreeConfig().getObjectCode() + "&featureCode=" + featureCode);
+        Kv treeMeta = Kv.by("data_url", FeatureTreeUrlBuilder.treeDataUrl(featureCode, treeAndTableConfig.getTreeConfig().getObjectCode()));
 
         MetaObjectViewAdapter metaObjectSearchViewAdapter = UIManager.getView(metaObject, ComponentType.SEARCHVIEW);
         SearchView searchView = (SearchView) metaObjectSearchViewAdapter.getComponent();
@@ -104,10 +104,10 @@ public class TreeAndTableController extends ControllerAdapter {
             metaObject.addField(virtualField);
         }
 
-        QueryBuilder queryBuilder = queryHelper.queryBuilder();
-        queryBuilder.builder("featureCode", featureCode);
+        QueryUrlBuilder queryUrlBuilder = queryHelper.queryBuilder();
+        queryUrlBuilder.param("featureCode", featureCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/f/tat/doAdd" + queryBuilder.buildQueryString(true)).addForm();
+        FormView formView = ViewFactory.formView(metaObject).action("/f/tat/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
 

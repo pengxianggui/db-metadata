@@ -45,13 +45,12 @@ public class FindBoxController extends ControllerAdapter {
         String sql = metaField.configParser().scopeSql();
         IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
         tableView = ViewFactory.tableView(metaObject);
-        // url : /find/meta/?objectCode=aaa&fieldCode=111
-        String url = "/find/list" + queryHelper.queryBuilder().builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
+
+        String url = CoreUrlBuilder.findBoxMetaUrl(objectCode, fieldCode);
         tableView.dataUrl(url);
+
         searchView = ViewFactory.searchView(metaObject);
-        Kv result = Kv.create();
-        result.set("table", tableView.toKv());
-        result.set("search", searchView.toKv());
+        Kv result = Kv.by("table", tableView.toKv()).set("search", searchView.toKv());
 
 
         return Ret.ok("data", result);

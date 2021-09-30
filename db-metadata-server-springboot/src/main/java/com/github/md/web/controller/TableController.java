@@ -56,7 +56,7 @@ public class TableController extends ControllerAdapter {
 
     @GetMapping("list")
     public Object list() {
-        /**
+        /*
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
          *  [x] 1.2 query data by fields
@@ -79,10 +79,10 @@ public class TableController extends ControllerAdapter {
         Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
-        /** 编译where后条件 */
+        /* 编译where后条件 */
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
-        /** pointCut构建 */
+        /* pointCut构建 */
         QueryPointCut queryPointCut = metaObject.configParser().queryPointCut();
         TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject, queryHelper);
         tableQueryInvocation.setSqlParaExt(sqlPara);
@@ -102,7 +102,7 @@ public class TableController extends ControllerAdapter {
         }
 
 
-        /**
+        /*
          * escape field value;
          * 1. 是否需要转义的规则;
          */
@@ -110,7 +110,7 @@ public class TableController extends ControllerAdapter {
             result.setList(OptionsKit.trans(filteredFields, result.getList()));
         }
 
-        /**
+        /*
          * 别名替换,参数中遇
          * a->b=123
          * c->d=123

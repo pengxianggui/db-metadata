@@ -1,6 +1,6 @@
 package com.github.md.web.upload;
 
-import com.github.md.web.query.QueryBuilder;
+import com.github.md.web.query.QueryUrlBuilder;
 import org.springframework.boot.system.ApplicationHome;
 
 import java.io.File;
@@ -25,14 +25,14 @@ public class UploadKit {
     }
 
     public static String uploadUrl(String objectCode, String fieldCode) {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        String params = queryBuilder.builder("objectCode", objectCode).builder("fieldCode", fieldCode).buildQueryString(true);
+        QueryUrlBuilder queryUrlBuilder = new QueryUrlBuilder();
+        String params = queryUrlBuilder.param("objectCode", objectCode).param("fieldCode", fieldCode).toQueryString(true);
         return "/file/upload" + params;
     }
 
     public static String downloadUrl(String objectCode, String fieldCode, String id) {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        String params = queryBuilder.builder("objectCode", objectCode).builder("fieldCode", fieldCode).builder("id", id).buildQueryString(true);
+        QueryUrlBuilder queryUrlBuilder = new QueryUrlBuilder();
+        String params = queryUrlBuilder.param("objectCode", objectCode).param("fieldCode", fieldCode).param("id", id).toQueryString(true);
         return "/file/down" + params;
     }
 

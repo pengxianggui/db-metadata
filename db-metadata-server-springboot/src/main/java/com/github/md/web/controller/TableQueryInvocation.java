@@ -10,6 +10,7 @@ import lombok.Data;
 import java.util.Collection;
 
 /**
+ * TableView 场景下拦截器中用的上下文
  * <p> @Date : 2020/9/10 </p>
  * <p> @Project : db-meta-serve</p>
  *

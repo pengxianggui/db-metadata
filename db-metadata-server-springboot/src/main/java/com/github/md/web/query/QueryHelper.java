@@ -42,8 +42,8 @@ public class QueryHelper {
         return listHelper;
     }
 
-    public QueryBuilder queryBuilder() {
-        return new QueryBuilder();
+    public QueryUrlBuilder queryBuilder() {
+        return new QueryUrlBuilder();
     }
 
     public String getObjectCode() {

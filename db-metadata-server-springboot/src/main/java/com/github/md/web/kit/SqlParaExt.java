@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p> Class title: </p>
+ * <p>Sql条件的实体，与JFinal的SqlPara相比，增加了一些实用方法</p>
  * <p> @Describe: </p>
  * <p> @Date : 2019/10/14 </p>
  * <p> @Project : db-meta-serve</p>
