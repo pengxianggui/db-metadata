@@ -1,4 +1,4 @@
-package com.github.md.web.jms;
+package com.github.md.web.event;
 
 /**
  * <p> @Date : 2020/1/15 </p>

@@ -1,4 +1,4 @@
-package com.github.md.web.jms;
+package com.github.md.web.event;
 
 import com.github.md.analysis.meta.aop.AopInvocation;
 
