@@ -131,16 +131,17 @@
 </template>
 
 <script>
-import {restUrl} from "../../../constant/url";
-import {defaultPrimaryKey} from "../../../config";
+import {restUrl} from "../../../constant/url"
+import {defaultPrimaryKey} from "../../../config"
 import utils from '../../../utils'
 import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import Meta from '../../mixins/meta'
 import assembleMeta from './assembleMeta'
 import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
 import TableCell from '../../tableview/src/tableCell'
-import columnsValid from "../../tableview/src/columnsValid";
-import showable from "../../mixins/showable";
+import columnsValid from "../../tableview/src/columnsValid"
+import showable from "../../mixins/showable"
+import {resolvePath} from '../../../utils/url'
 
 export default {
   name: "TableTreeView",
@@ -258,7 +259,9 @@ export default {
         title = '新增';
         let fillParams = function (path) {
           if (!utils.isEmpty(activeData)) {
-            path += ('?' + pidKey + '=' + activeData[idKey])
+            let params = {}
+            params[pidKey] = activeData[idKey]
+            path = resolvePath(path, params)
           }
           return path
         }
