@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: dev
+
   datasource:
     username: root
     password: gongwei911
@@ -34,18 +37,5 @@ md:
       meta-object-enabled: true
       meta-field-enabled: true
       component-instance-enabled: true
-    db-source:
-#      ds1:
-      #        username: root
-      #        password: gongwei911
-      #        url: jdbc:mysql://192.168.9.187:3309/metadata?useSSL=false&characterEncoding=utf-8
-      #        driver-class-name: com.mysql.jdbc.Driver
-      #        type: com.alibaba.druid.pool.DruidDataSource
-      ds2:
-        username: root
-        password: gongwei911
-        url: jdbc:mysql://192.168.9.187:3309/mcms?useSSL=false&characterEncoding=utf-8
-        driver-class-name: com.mysql.jdbc.Driver
-        type: com.alibaba.druid.pool.DruidDataSource
 server:
   port: 8888
