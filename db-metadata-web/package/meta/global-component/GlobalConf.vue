@@ -110,7 +110,6 @@ export default {
         }
       }).catch(({msg = '配置加载失败'}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
-        this.$message.error(msg);
       })
     },
     submit: function () {
@@ -133,8 +132,6 @@ export default {
         }).then(({msg = '配置更新成功'}) => {
           this.$message.success(msg);
           this.$goBack()
-        }).catch(({msg = '配置更新失败'}) => {
-          this.$message.error(msg);
         })
       })
     },

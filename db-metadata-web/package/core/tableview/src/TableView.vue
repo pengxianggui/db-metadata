@@ -233,7 +233,7 @@ export default {
         };
         this.dialogVisible = true
       }).catch(({msg = '发生错误'}) => {
-        this.$message.error(msg)
+        console.error(msg)
       });
     },
     // 删除单行
@@ -304,9 +304,7 @@ export default {
         this.$axios.delete(url).then(({msg = '删除成功'}) => {
           this.getData();
           this.$message.success(msg);
-        }).catch(({msg = '删除失败'}) => {
-          this.$message.error(msg);
-        });
+        })
       });
     },
     // 新增一行
@@ -403,9 +401,7 @@ export default {
         if (index > 1 && (isEmpty(data) || data.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
-      }).catch(({msg = '加载TableView数据发生错误'}) => {
-        this.$message.error(msg);
-      });
+      })
     },
     initData() { // init business data
       let {page, data} = this;

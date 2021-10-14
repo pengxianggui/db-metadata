@@ -43,7 +43,7 @@ export default {
           this.$message.success(msg);
           this.$router.go(0);
         }).catch(({msg = '发生错误'}) => {
-          this.$message.error(msg);
+          console.error(msg)
         })
       })
     },
@@ -52,7 +52,7 @@ export default {
         this.$axios.get('/db/truncate?token=' + data.value).then(({msg = '操作成功'}) => {
           this.$message.success(msg);
         }).catch(({msg = '操作失败'}) => {
-          this.$message.error(msg);
+          console.error(msg)
         })
       }).catch(() => {
       });

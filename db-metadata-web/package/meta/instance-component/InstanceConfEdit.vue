@@ -222,7 +222,6 @@ export default {
         });
       }).catch(({msg = '配置加载成功'}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
-        this.$message.error(msg);
       })
     },
     deleteConf: function () {
@@ -235,7 +234,7 @@ export default {
         this.$axios.delete(url).then(({msg = '配置删除成功'}) => {
           this.$message.success(msg);
         }).catch(({msg = '配置删除失败'}) => {
-          this.$message.error(msg);
+          console.error(msg)
         })
       })
     },
@@ -273,7 +272,7 @@ export default {
             }).then(({msg = '配置保存成功'}) => {
               this.$message.success(msg);
             }).catch(({msg = '配置保存失败'}) => {
-              this.$message.error(msg);
+              console.error(msg)
             })
           })
         }

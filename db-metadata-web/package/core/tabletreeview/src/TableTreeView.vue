@@ -212,7 +212,7 @@ export default {
       }).then(({data}) => {
         resolve(data);
       }).catch(({msg = 'Error'}) => {
-        this.$message.error(msg);
+        console.error(msg)
       })
     },
     handleSelectionChange(selection) {
@@ -337,9 +337,7 @@ export default {
           const {msg = '删除成功'} = resp
           this.$message.success(msg);
           this.getData();
-        }).catch(({msg = 'Error'}) => {
-          this.$message.error(msg);
-        });
+        })
       });
     },
     // 新增一行
@@ -412,9 +410,7 @@ export default {
       }).then(resp => {
         this.innerData = resp.data;
         this.$emit("update:data", resp.data);
-      }).catch(({msg = 'Error'}) => {
-        this.$message.error(msg);
-      });
+      })
     },
     initData() { // init business data
       let {data} = this;

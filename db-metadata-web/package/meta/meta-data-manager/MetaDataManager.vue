@@ -149,7 +149,7 @@ export default {
             .then(({msg = '同步成功'}) => {
               this.$message.success(msg)
             }).catch(({msg = '同步发生错误'}) => {
-          this.$message.error(msg)
+          console.error(msg)
         })
       })
     },
@@ -197,7 +197,7 @@ export default {
         // this.jumpToConf(oc);
         this.directConf(oc);
       }).catch(({msg = '元对象导入失败'}) => {
-        this.$message.error(msg);
+        console.error(msg)
       })
     },
     handleDelete(row) {
@@ -229,7 +229,7 @@ export default {
           $refs[objectCode].getData();
           $refs[fieldCode].getData();
         }).catch(({msg = '删除失败'}) => {
-          this.$message.error(msg);
+          console.error(msg)
         });
       });
     },
@@ -238,7 +238,7 @@ export default {
         this.metaImportFormMeta = resp.data
         this.metaImportFormVisible = true
       }).catch(({msg = '发生错误'}) => {
-        this.$message.error(msg);
+        console.error(msg)
       });
     }
   },

@@ -114,7 +114,7 @@
                         this.setPageModel(resp['page']);
                     }
                 }).catch(({msg = 'Error'}) => {
-                    this.$message.error(msg);
+                    console.error(msg)
                 });
             },
             initData() { // init business data

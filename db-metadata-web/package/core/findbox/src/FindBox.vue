@@ -54,7 +54,7 @@
                     this.findPanelMeta.component_name = 'FindPanel';
                     this.dialogVisible = true;
                 }).catch(({msg ='Error'}) => {
-                    this.$message.error(msg);
+                    console.error(msg)
                 })
             },
             handlerOk(row) {

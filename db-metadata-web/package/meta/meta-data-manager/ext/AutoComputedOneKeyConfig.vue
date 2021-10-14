@@ -42,7 +42,7 @@ export default {
         this.$message.success(msg)
         this.$emit('ok')
       }).catch(({msg = '发生错误'}) => {
-        this.$message.error(msg)
+        console.error(msg)
       })
     }
   }

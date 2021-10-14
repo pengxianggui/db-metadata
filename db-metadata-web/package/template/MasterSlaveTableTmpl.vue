@@ -248,7 +248,6 @@
                         this.$set(slave, 'tableUrl', data_url); // 暂存
                     }).catch(({msg = '获取TableView meta数据错误'}) => {
                         console.error('[ERROR] msg: %s', msg);
-                        this.$message.error(msg);
                     });
 
                     // 获取从表SearchPanel 组件meta

@@ -95,7 +95,7 @@ export default {
         this.$emit('ok', params); //  default callback
         this.$message.success(msg);
       }).catch(({msg = 'Error'}) => {
-        this.$message.error(msg);
+        console.error(msg)
       })
     },
     onSubmit(ev) {

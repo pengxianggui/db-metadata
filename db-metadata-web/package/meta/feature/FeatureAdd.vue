@@ -186,7 +186,7 @@ export default {
               _this.$message.success(msg);
               _this.next()
             }).catch(({msg = '操作失败'}) => {
-              _this.$message.error(msg);
+              console.error(msg)
             })
           } else {
             return false

@@ -71,7 +71,7 @@
                     this.$axios.post(url, params).then(({msg = '提交成功'}) => {
                         this.$message.success(msg);
                     }).catch(({msg = '提交失败'}) => {
-                        this.$message.error(msg);
+                        console.error(msg)
                     })
                 }
             },

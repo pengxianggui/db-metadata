@@ -223,7 +223,7 @@
                     this.innerData = resp.data;
                     this.$emit("update:data", resp.data);
                 }).catch(({msg = '获取TreeView数据发生异常'}) => {
-                    this.$message.error(msg);
+                    console.error(msg)
                 });
             },
             initData() { // init business data
