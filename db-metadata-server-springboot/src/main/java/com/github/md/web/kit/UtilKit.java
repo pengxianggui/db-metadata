@@ -3,18 +3,18 @@ package com.github.md.web.kit;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.WebException;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.user.User;
-import com.github.md.web.user.UserIntercept;
+import com.github.md.web.user.UserManager;
 import com.github.md.web.user.UserThreadLocal;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,6 @@ public class UtilKit {
      * 为了方便存取,统一转换为Map<String, Object> 格式;
      *
      * @param maps
-     *
      * @return
      */
     public static Map<String, Object> toObjectFlat(Map<String, String[]> maps) {
@@ -103,7 +102,7 @@ public class UtilKit {
             data.put("created_by", user.userId());
             data.put("created_time", new Date());
         } else {
-            data.put("created_by", UserIntercept.staticUser.userId());
+            data.put("created_by", UserManager.staticUser.userId());
             data.put("created_time", new Date());
         }
     }
@@ -114,7 +113,7 @@ public class UtilKit {
             data.put("updated_by", user.userId());
             data.put("updated_time", new Date());
         } else {
-            data.put("created_by", UserIntercept.staticUser.userId());
+            data.put("created_by", UserManager.staticUser.userId());
             data.put("created_time", new Date());
         }
     }
@@ -133,7 +132,6 @@ public class UtilKit {
      *
      * @param mergeMap 等待合并的对象
      * @param newMap
-     *
      * @return
      */
     public static Kv mergeUseOld(Kv mergeMap, Kv newMap) {
@@ -146,7 +144,6 @@ public class UtilKit {
      *
      * @param mergeMap
      * @param newMap
-     *
      * @return
      */
     public static Kv mergeUseNew(Kv mergeMap, Kv newMap) {
@@ -158,7 +155,6 @@ public class UtilKit {
      * 从 class path下读取json文件;
      *
      * @param fileName
-     *
      * @return
      */
     public static String loadContentInCurrentJar(String fileName) {
@@ -198,7 +194,6 @@ public class UtilKit {
      *
      * @param fileName         文件名
      * @param defaultDirectory fileName读取失败后,再使用defaultDirectory目录继续读取
-     *
      * @return File
      */
     public static File stairsLoad(String fileName, String... defaultDirectory) {
@@ -251,7 +246,6 @@ public class UtilKit {
      *
      * @param mergeMap
      * @param newMap
-     *
      * @return
      */
     public static Map deepMerge(Map mergeMap, Map newMap, boolean overwrite) {
@@ -300,7 +294,6 @@ public class UtilKit {
      *
      * @param dataList
      * @param aliasMap
-     *
      * @return
      */
     public static List<Record> aliasList(List<Record> dataList, Kv aliasMap) {
@@ -333,7 +326,6 @@ public class UtilKit {
      * @param fields
      * @param efields
      * @param metaFields
-     *
      * @return
      */
     public static Collection<IMetaField> filter(String[] fields, String[] efields, Collection<IMetaField> metaFields) {
@@ -378,7 +370,6 @@ public class UtilKit {
      * @param str   目标字符串
      * @param flags 匹配模式
      *              Pattern.CASE_INSENSITIVE忽略大小写
-     *
      * @return
      */
     public static String[] getMatcherValue(String regex, String str, int flags) {

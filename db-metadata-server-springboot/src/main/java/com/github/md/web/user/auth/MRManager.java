@@ -79,6 +79,10 @@ public class MRManager {
         return allMResource.get(resourceKey);
     }
 
+    public void configResourcePermitMapping(Class<? extends MResource> clazz, MRPermit permit) {
+        this.resourcePermitMapping.put(clazz, permit);
+    }
+
     public boolean permit(User user, MResource mResource) {
         if (!mResource.needPermit()) {
             return true;

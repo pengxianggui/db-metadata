@@ -1,20 +1,10 @@
 package com.github.md.web.user;
 
-import com.github.md.analysis.kit.Kv;
-import com.github.md.web.config.MetaProperties;
-import com.github.md.web.user.auth.MRRole;
-import com.github.md.web.user.auth.Permission;
-import com.github.md.web.user.role.UserWithRolesWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p> @Date : 2019/10/18 </p>
@@ -24,91 +14,16 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class UserIntercept implements HandlerInterceptor {
-    private MetaProperties metaProperties;
 
-    public UserIntercept(MetaProperties metaProperties) {
-        this.metaProperties = metaProperties;
+    private UserInterceptDoer userInterceptDoer;
+
+    public UserIntercept(UserInterceptDoer userInterceptDoer) {
+        this.userInterceptDoer = userInterceptDoer;
     }
-
-    public static User staticUser = new UserWithRolesWrapper() {
-
-        @Override
-        public MRRole[] roles() {
-            return new MRRole[0];
-        }
-
-        @Override
-        public boolean hasRole(String nameOrCode) {
-            return false;
-        }
-
-        @Override
-        public Permission[] permissions() {
-            return new Permission[0];
-        }
-
-        @Override
-        public boolean hasPermission(String... permissions) {
-            return true;
-        }
-
-        @Override
-        public boolean hasPermission(Permission... permissions) {
-            return true;
-        }
-
-        @Override
-        public String userId() {
-            return "db-meta-web-devUser";
-        }
-
-        @Override
-        public String userName() {
-            return null;
-        }
-
-        @Override
-        public Kv attrs() {
-            return null;
-        }
-
-        @Override
-        public Kv attrs(Map attrs) {
-            return null;
-        }
-    };
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        User user = getUser(request);
-
-        if (Objects.isNull(user)) {
-            throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", UserManager.me().loginService().tokenKey()).loginError();
-        }
-
-        Cookie cookie = new Cookie(UserManager.me().loginService().cookieKey(), user.userId());
-        cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
-        response.addCookie(cookie);
-        return true;
-    }
-
-    private User getUser(HttpServletRequest request) {
-        User user = null;
-        try {
-            LoginService<User> loginService = UserManager.me().loginService();
-            user = loginService.getUser(request);
-            Assert.notNull(user, "user为null");
-        } catch (Exception e) {
-            if (this.metaProperties.getServer().isDevMode()) {
-                user = staticUser;
-            } else {
-                log.error(e.getMessage());
-            }
-        }
-        if (!Objects.isNull(user)) {
-            UserThreadLocal.setUser(user);
-        }
-        return user;
+        return this.userInterceptDoer.preCertify(request, response, handler);
     }
 
     @Override

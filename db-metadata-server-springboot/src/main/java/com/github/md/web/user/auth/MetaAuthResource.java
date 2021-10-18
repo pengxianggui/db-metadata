@@ -26,7 +26,7 @@ public class MetaAuthResource implements MResource {
     private String metaCode;
     private boolean needPermit = true;
 
-    MetaAuthResource(HttpServletRequest request, HandlerMethod handlerMethod) {
+    public MetaAuthResource(HttpServletRequest request, HandlerMethod handlerMethod) {
         this.uri = removeEndSlash(request.getServletPath());
         AuthTypeRefered authTypeRefered = handlerMethod.getMethodAnnotation(AuthTypeRefered.class);
         if (Objects.isNull(authTypeRefered)) {
