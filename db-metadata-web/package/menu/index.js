@@ -110,6 +110,16 @@ export default [{
                 "roles": [access.root]
             }
         },
+        {
+            "path": "/meta/meta-auth",
+            "title": "权限配置",
+            "icon": "el-icon-warning",
+            "hidden": false,
+            "disable": false,
+            "meta": {
+                "roles": [access.root]
+            }
+        },
         // {
         //     "path": "/meta/meta-version",
         //     "title": "DbVersion",

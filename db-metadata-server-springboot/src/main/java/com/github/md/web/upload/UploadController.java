@@ -1,5 +1,7 @@
 package com.github.md.web.upload;
 
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.google.common.base.Preconditions;
@@ -49,6 +51,7 @@ public class UploadController extends ControllerAdapter {
      * param fieldCode
      * param file
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @PostMapping("upload")
     public Ret index(MultipartRequest request) {
         QueryHelper queryHelper = queryHelper();
@@ -84,6 +87,7 @@ public class UploadController extends ControllerAdapter {
     /**
      * 富文本中的图片上传
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @PostMapping(RichTextBox.UPLOAD_API_PATH)
     public void richText(MultipartFile uploadFile) {
         //        UploadService uploadService = ServiceManager.fileService();
@@ -98,6 +102,7 @@ public class UploadController extends ControllerAdapter {
      * param fieldCode
      * param 业务记录 id
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("down")
     public ResponseEntity<FileSystemResource> down() {
         String id = parameterHelper().get("id");
@@ -133,6 +138,7 @@ public class UploadController extends ControllerAdapter {
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("preview")
     public ResponseEntity<FileSystemResource> tmpPre() {
         String path = parameterHelper().getPara("path", "");

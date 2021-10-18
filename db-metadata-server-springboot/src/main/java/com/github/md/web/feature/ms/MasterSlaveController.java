@@ -1,5 +1,7 @@
 package com.github.md.web.feature.ms;
 
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ViewFactory;
 import com.google.common.base.Preconditions;
@@ -58,6 +60,7 @@ public class MasterSlaveController extends ControllerAdapter {
      * objectCode=meta_field&
      * object_code=aasdf
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("toAddS")
     public Ret toAddS() {
         /**

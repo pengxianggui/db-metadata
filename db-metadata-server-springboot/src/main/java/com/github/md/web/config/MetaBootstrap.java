@@ -1,12 +1,12 @@
 package com.github.md.web.config;
 
-import com.github.md.web.component.Components;
-import com.github.md.web.feature.tree.PreventInfiniteLoopAop;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.aop.PointCutChain;
+import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
+import com.github.md.web.feature.tree.PreventInfiniteLoopAop;
 import com.github.md.web.kit.Dicts;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.ui.ComputeKit;
@@ -96,7 +96,7 @@ public class MetaBootstrap {
             if (metaProperties.getServer().getComponent().isReplaceFromJsonFile()) {
                 Components.me().init();
                 Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW)
-                          .addAutoInitComponents(ComponentType.TABLETREEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+                        .addAutoInitComponents(ComponentType.TABLETREEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
             }
         }
     }

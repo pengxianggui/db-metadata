@@ -1,5 +1,7 @@
 package com.github.md.web.controller;
 
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.component.ComponentType;
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping("db")
 public class DBController extends ControllerAdapter {
 
-    @GetMapping(value = { "list", "index" })
+    @GetMapping(value = {"list", "index"})
     public Ret list() {
         List<String> schemas = ServiceManager.mysqlService().showSchema();
         return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
@@ -63,6 +65,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("data", results);
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("truncate")
     public Ret truncate() {
         preConditionCheck();
@@ -70,7 +73,7 @@ public class DBController extends ControllerAdapter {
         StringBuilder sb = new StringBuilder();
 
         Set<String> tables = AppConst.SYS_TABLE.column(AppConst.INITABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
-                                               .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
 
         sb.append("即将清除的数据表:").append(tables);
         log.warn("清空meta相关表{}", sb);
@@ -81,6 +84,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("msg", sb.toString());
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @Transactional
     @GetMapping("init")
     public Ret init() {
@@ -90,8 +94,8 @@ public class DBController extends ControllerAdapter {
 
         String mainDB = quickJudge().mainDbStr();
         List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge().mainDbStr())
-                                              // 过滤出系统表
-                                              .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
+                // 过滤出系统表
+                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
 
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());

@@ -1,6 +1,8 @@
 package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.web.kit.tree.TreeConfig;
@@ -30,6 +32,7 @@ public class MenuController extends ControllerAdapter {
         return "meta_menu";
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping
     public Ret index() {
         IMetaObject metaObject = metaService().findByCode(objectCode());

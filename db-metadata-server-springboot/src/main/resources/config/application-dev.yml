@@ -16,15 +16,20 @@ logging:
 
 md:
   dev-mode: true
-  analysis:
-    source-config:
-      db-metadata-business-demo:
-        username: root
-        password: 123456
-        url: jdbc:mysql://127.0.0.1:3306/db-metadata-business-demo?useSSL=false&characterEncoding=utf-8
-        driver-class-name: com.mysql.jdbc.Driver
-        type: com.alibaba.druid.pool.DruidDataSource
+#  analysis:
+#    source-config:
+#      db-metadata-business-demo:
+#        username: root
+#        password: 123456
+#        url: jdbc:mysql://127.0.0.1:3306/db-metadata-business-demo?useSSL=false&characterEncoding=utf-8
+#        driver-class-name: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
   server:
+    dev-mode: true
+    login:
+      enable: true
+    auth:
+      enable: true
     meta-object:
       replace-from-json-file: true
     component:

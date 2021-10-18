@@ -20,7 +20,7 @@ public class UserThreadLocal {
         userThreadLocal.set(user);
     }
 
-    public static void removeUser(User user) {
+    public static void removeUser() {
         userThreadLocal.remove();
     }
 }

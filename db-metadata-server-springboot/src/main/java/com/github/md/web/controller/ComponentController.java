@@ -5,6 +5,8 @@ import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.component.AbstractComponent;
 import com.github.md.web.component.ComponentException;
@@ -38,6 +40,7 @@ import java.util.List;
 @RequestMapping("/component")
 public class ComponentController extends ControllerAdapter {
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
@@ -53,6 +56,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 返回某Component的关联元对象实例
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("contact")
     public Ret contact() {
         QueryHelper queryHelper = queryHelper();
@@ -83,6 +87,7 @@ public class ComponentController extends ControllerAdapter {
      * 1. objectCode + componentCode
      * 2. instanceCode
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("load")
     public Ret load() {
         QueryHelper queryHelper = queryHelper();
@@ -137,6 +142,7 @@ public class ComponentController extends ControllerAdapter {
          */
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @PostMapping("doAdd")
     public Ret doAdd() {
         /**
@@ -161,7 +167,6 @@ public class ComponentController extends ControllerAdapter {
      * @param compCode
      * @param instanceCode
      * @param instanceName
-     *
      * @return
      */
     private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName, Kv config) {
@@ -179,10 +184,10 @@ public class ComponentController extends ControllerAdapter {
 
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                                                                                          metaObject.code(),
-                                                                                          instanceCode,
-                                                                                          instanceName,
-                                                                                          component.componentType());
+                    metaObject.code(),
+                    instanceCode,
+                    instanceName,
+                    component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -193,6 +198,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 一键自动计算
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @PostMapping("import-auto-computed")
     public Ret oneKeyAutoComputed() {
         QueryHelper queryHelper = queryHelper();
@@ -223,6 +229,7 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok();
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
     public Ret doUpdate() {
         /**
@@ -240,10 +247,10 @@ public class ComponentController extends ControllerAdapter {
         if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                                                                                          metaObject.code(),
-                                                                                          instanceCode,
-                                                                                          instanceName,
-                                                                                          component.componentType());
+                    metaObject.code(),
+                    instanceCode,
+                    instanceName,
+                    component.componentType());
             componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
@@ -251,6 +258,7 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok();
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();

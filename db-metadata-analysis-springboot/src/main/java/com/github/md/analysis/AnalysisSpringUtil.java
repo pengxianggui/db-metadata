@@ -4,6 +4,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p> @Date : 2021/9/7 </p>
@@ -33,5 +37,10 @@ public class AnalysisSpringUtil implements ApplicationContextAware {
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<?> clz) throws BeansException {
         return (T) applicationContext.getBean(clz);
+    }
+
+    public static <T> Map<String, T> getBeansOfTypes(Class<T> type) {
+        Map<String, T> map = applicationContext.getBeansOfType(type);
+        return CollectionUtils.isEmpty(map) ? new HashMap<>() : map;
     }
 }

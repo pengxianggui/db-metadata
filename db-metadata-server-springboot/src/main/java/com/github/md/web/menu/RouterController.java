@@ -1,6 +1,8 @@
 package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.analysis.meta.IMetaObject;
@@ -30,6 +32,7 @@ public class RouterController extends ControllerAdapter {
         return "meta_router";
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping
     public Object index() {
         ParameterHelper parameterHelper = parameterHelper();

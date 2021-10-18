@@ -40,5 +40,6 @@ public class AppConst {
         SYS_TABLE.put("change_log", INITABLE, false);
         SYS_TABLE.put("meta_exception", INITABLE, false);
         SYS_TABLE.put("meta_dict", INITABLE, false);
+        SYS_TABLE.put("meta_auth", INITABLE, false);
     }
 }

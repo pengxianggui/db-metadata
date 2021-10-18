@@ -2,10 +2,7 @@ package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.MetaFactory;
-import com.github.md.analysis.meta.MetaSqlKit;
+import com.github.md.analysis.meta.*;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
@@ -32,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("find")
 public class FindBoxController extends ControllerAdapter {
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
@@ -56,6 +54,7 @@ public class FindBoxController extends ControllerAdapter {
         return Ret.ok("data", result);
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("list")
     public Object list() {
         /**

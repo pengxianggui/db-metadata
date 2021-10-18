@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {e_format, s_format} from "./responseExchange"
+import {Message} from "element-ui";
 
 let instance = axios.create({
     baseURL: '/meta'
@@ -16,13 +16,22 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截器
 instance.interceptors.response.use(res => {
-    const {state} = res.data
+    const {state, msg: message} = res.data
     if (state !== 'ok') {
+        Message({
+            message: message,
+            type: "error"
+        })
         return Promise.reject(res.data);
     }
+
     return Promise.resolve(res.data);
 }, err => {
     console.error("[ERROR] ", err);
+    Message({
+        message: err.message,
+        type: "error"
+    })
     return Promise.reject(err)
 });
 

@@ -1,5 +1,7 @@
 package com.github.md.web.user;
 
+import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.web.config.MetaProperties;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.github.md.web.user.role.UserWithRolesWrapper;
@@ -34,7 +36,8 @@ public class UserManager {
         }
 
         if (me.userIntercept == null) {
-            me.userIntercept = new UserIntercept();
+            MetaProperties metaProperties = AnalysisSpringUtil.getBean(MetaProperties.class);
+            me.userIntercept = new UserIntercept(metaProperties);
         }
         return me;
     }

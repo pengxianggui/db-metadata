@@ -12,7 +12,9 @@ import java.util.List;
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
+ * @deprecated springboot迁移后无效
  */
+@Deprecated
 public class JFinalResourceLoader implements MRLoader {
 
     private final List<MResource> resources = new ArrayList<>(0);

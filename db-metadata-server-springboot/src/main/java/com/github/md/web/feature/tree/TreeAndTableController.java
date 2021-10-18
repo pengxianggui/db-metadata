@@ -59,6 +59,7 @@ public class TreeAndTableController extends ControllerAdapter {
      * 1. 显式指定Tree组件的Data_Url
      * 2. 显式指定Table组件的DataUrl
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_FEATURE)
     @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
@@ -80,6 +81,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return (Ret.ok("data", Kv.create().set("table", tableView.toKv()).set("tree", treeMeta).set("search", searchView.toKv())));
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_FEATURE)
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -128,6 +130,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_FEATURE)
     @PostMapping("doAdd")
     public Ret doAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -169,6 +172,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return (status ? Ret.ok() : Ret.fail());
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_FEATURE)
     @GetMapping("tableList")
     public Object tableList() {
         /**

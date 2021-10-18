@@ -1,5 +1,7 @@
 package com.github.md.web.feature.tree;
 
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.kit.tree.TreeNode;
@@ -36,6 +38,7 @@ public class TreeController extends ControllerAdapter {
      * objectCode=js_sys_area
      * config -> getConfig()
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_FEATURE)
     @GetMapping("/")
     public Ret index() {
         QueryHelper queryHelper = queryHelper();

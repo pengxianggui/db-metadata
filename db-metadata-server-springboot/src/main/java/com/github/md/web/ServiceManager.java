@@ -10,6 +10,7 @@ import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.ui.SqlAnalysis;
 import com.github.md.web.upload.UploadService;
+import com.github.md.web.user.auth.MetaAuthService;
 
 /**
  * FIXME 这个类逐步过度 0908
@@ -46,6 +47,10 @@ public class ServiceManager {
 
     public static BusinessService businessService() {
         return AnalysisSpringUtil.getBean(BusinessService.class);
+    }
+
+    public static MetaAuthService authService() {
+        return AnalysisSpringUtil.getBean(MetaAuthService.class);
     }
 
     public static QuickJudge quickJudge() {

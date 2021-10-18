@@ -311,5 +311,16 @@
     },
     "TableView": {},
     "FormView": {}
+  },
+  "meta_auth": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      }
+    },
+    "TableView": {
+    },
+    "FormView": {
+    }
   }
 }

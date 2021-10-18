@@ -1,10 +1,8 @@
 package com.github.md.web.controller;
 
+import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.*;
 import com.google.common.collect.Lists;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.MetaData;
-import com.github.md.analysis.meta.MetaObjectConfigParse;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.event.EventKit;
@@ -45,6 +43,7 @@ public class FormController extends ControllerAdapter {
      *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
      * </pre>
      */
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -65,6 +64,7 @@ public class FormController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @PostMapping("doAdd")
     public Ret doAdd() {
 
@@ -107,6 +107,7 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("toUpdate")
     public Ret toUpdate() {
 
@@ -126,6 +127,7 @@ public class FormController extends ControllerAdapter {
         return (Ret.ok("data", formView.toKv().set("record", d)));
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
     public Ret doUpdate() {
         QueryHelper queryHelper = queryHelper();
@@ -164,6 +166,7 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
+    @AuthTypeRefered(value = AuthForType.API_WITH_META_OBJECT)
     @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();

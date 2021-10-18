@@ -3,6 +3,9 @@ package com.github.md.web.config;
 import com.github.md.analysis.AnalysisProperties;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p> @Date : 2021/9/6 </p>
  * <p> @Project : db-metadata-server-springboot</p>
@@ -34,6 +37,15 @@ public class MetaProperties {
         private UploadProperties upload = new UploadProperties();
 
         private ComponentProperties component = new ComponentProperties();
+
+        private Login login = new Login();
+
+        private Auth auth = new Auth();
+
+        /**
+         * 开发模式。开发模式下，若登录无用户，则会取静态缓存的用户。还有一些其他接口可以访问
+         */
+        private boolean devMode;
     }
 
     @Data
@@ -55,5 +67,19 @@ public class MetaProperties {
     public static class MetaObjectProperties {
 
         boolean replaceFromJsonFile;
+    }
+
+    @Data
+    public static class Login {
+        boolean enable = false;
+        List<String> includes = new ArrayList<>();
+        List<String> excludes = new ArrayList<>();
+    }
+
+    @Data
+    public static class Auth {
+        boolean enable = false;
+        List<String> includes = new ArrayList<>();
+        List<String> excludes = new ArrayList<>();
     }
 }

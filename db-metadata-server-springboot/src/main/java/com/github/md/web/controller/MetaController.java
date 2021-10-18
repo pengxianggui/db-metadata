@@ -1,14 +1,12 @@
 package com.github.md.web.controller;
 
+import com.github.md.analysis.meta.*;
 import com.github.md.web.ui.*;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.github.md.analysis.component.ComponentType;
-import com.github.md.analysis.meta.DbMetaService;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.component.TableView;
@@ -83,6 +81,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 右键菜单使用,直接编辑元对象配置信息
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("editObject")
     public Ret editObject() {
         String objectCode = queryHelper().getObjectCode();
@@ -100,6 +99,7 @@ public class MetaController extends ControllerAdapter {
      * 右键菜单使用,直接编辑元字段配置信息
      * 成功更新后 -> 重新计算配置;
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("editField")
     public Ret editField() {
         QueryHelper queryHelper = queryHelper();
@@ -115,6 +115,7 @@ public class MetaController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv().set("record", data));
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @PostMapping("doAdd")
     public Ret doAdd() {
         ParameterHelper parameterHelper = parameterHelper();
@@ -132,6 +133,7 @@ public class MetaController extends ControllerAdapter {
         return status ? Ret.ok() : Ret.fail();
     }
 
+    @AuthTypeRefered(value = AuthForType.API)
     @DeleteMapping("delete")
     public Ret delete() {
         String objectCodess = queryHelper().getObjectCode();
@@ -161,6 +163,7 @@ public class MetaController extends ControllerAdapter {
      *      scope: vertical | single (default)
      * </pre>
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("incrementImport")
     public Ret incrementImport() {
         String scope = parameterHelper().getPara("scope", "single");
@@ -219,6 +222,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 重新导入元对象
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @Transactional
     @GetMapping("resetImport")
     public Ret resetImport() {

@@ -2,6 +2,8 @@ package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.github.md.analysis.meta.AuthForType;
+import com.github.md.analysis.meta.AuthTypeRefered;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.web.kit.UtilKit;
@@ -55,6 +57,7 @@ public class FileController extends ControllerAdapter {
      *      path 默认 / ->  PathKit.getWebRootPath()
      * </pre>
      */
+    @AuthTypeRefered(value = AuthForType.API)
     @GetMapping("view")
     public Ret view() {
         ParameterHelper parameterHelper = parameterHelper();

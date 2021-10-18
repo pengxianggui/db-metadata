@@ -1036,13 +1036,19 @@
       "updated_by": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "updated_time": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "remark": {
@@ -1052,6 +1058,98 @@
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
+        }
+      }
+    }
+  },
+  "meta_auth": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_auth",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "type": {
+        "cn": "鉴权类型",
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "scopeOptions": [
+            {"key": "api接口鉴权","value": "0"},
+            {"key": "基于api接口+元对象进行鉴权","value": "1"},
+            {"key": "基于api接口+功能进行鉴权","value": "2"}
+          ]
+        }
+      },
+      "meta_code": {
+        "cn": "元编码",
+        "config": {
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "uri": {
+        "cn": "接口path",
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "auth_name": {
+        "cn": "权限名",
+        "config": {
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "auth_code": {
+        "cn": "权限编码",
+        "config": {
+          "isListShow": true,
+          "isSearch": true
         }
       }
     }

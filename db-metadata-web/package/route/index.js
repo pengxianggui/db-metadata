@@ -6,6 +6,7 @@ import InstanceConfList from "../meta/instance-component/InstanceConfList";
 import InstanceConfEdit from "../meta/instance-component/InstanceConfEdit";
 import RouterManager from "../meta/route/RouterManager";
 import MenuManager from "../meta/menu/MenuManager";
+import AuthList from "../meta/auth/AuthList";
 import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
@@ -163,6 +164,16 @@ export const innerRoute = [
             roles: [access.root]
         },
         component: ExceptionList
+    },{
+        path: 'meta-auth',
+        name: 'MetaAuth',
+        meta: {
+            title: '权限配置',
+            icon: 'el-icon-warning',
+            noCache: false,
+            roles: [access.root]
+        },
+        component: AuthList
     },
     ...jumpOut
 ]
