@@ -244,6 +244,29 @@ CREATE TABLE `meta_router` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='路由信息';
 
+
+-- ----------------------------
+-- Table structure for meta_auth
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_auth`;
+CREATE TABLE `meta_auth`
+(
+    `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_time` timestamp NULL DEFAULT NULL,
+    `created_by`   varchar(32) DEFAULT NULL,
+    `updated_by`   varchar(32) DEFAULT NULL,
+    `id`           varchar(32)  NOT NULL,
+    `meta_code`    varchar(64) DEFAULT NULL,
+    `type`         varchar(64)  NOT NULL COMMENT '鉴权类型',
+    `uri`          varchar(100) NOT NULL COMMENT '接口uri',
+    `auth_name`    varchar(100) NOT NULL COMMENT '权限名',
+    `auth_code`    varchar(100) NOT NULL COMMENT '权限编码',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限控制表';
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
 -- ----------------------------
 -- Records of meta_router
 -- ----------------------------
