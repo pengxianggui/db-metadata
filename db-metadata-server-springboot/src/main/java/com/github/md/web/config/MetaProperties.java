@@ -41,11 +41,6 @@ public class MetaProperties {
         private Login login = new Login();
 
         private Auth auth = new Auth();
-
-        /**
-         * 开发模式。开发模式下，若登录无用户，则会取静态缓存的用户。还有一些其他接口可以访问
-         */
-        private boolean devMode;
     }
 
     @Data

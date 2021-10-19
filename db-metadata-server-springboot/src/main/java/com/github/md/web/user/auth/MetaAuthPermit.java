@@ -2,6 +2,7 @@ package com.github.md.web.user.auth;
 
 import com.github.md.web.ServiceManager;
 import com.github.md.web.user.User;
+import com.github.md.web.user.UserException;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +29,10 @@ class MetaAuthPermit implements MRPermit<User, MetaAuthResource> {
             log.warn("无针对此资源的权限配置: type:{}, meta_code:{},uri:{}, 将裸奔",
                     mResource.getType(), mResource.getMetaCode(), mResource.getUri());
             return true;
+        }
+        
+        if (Objects.isNull(user)) {
+            throw new UserException("无用户信息!");
         }
 
         if (!(user instanceof UserWithRolesWrapper)) {

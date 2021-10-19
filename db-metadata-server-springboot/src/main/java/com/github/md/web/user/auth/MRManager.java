@@ -2,12 +2,14 @@ package com.github.md.web.user.auth;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.user.User;
-import com.github.md.web.user.UserException;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p> @Date : 2019/12/16 </p>
@@ -86,10 +88,6 @@ public class MRManager {
     public boolean permit(User user, MResource mResource) {
         if (!mResource.needPermit()) {
             return true;
-        }
-
-        if (Objects.isNull(user)) {
-            throw new UserException("无用户信息!");
         }
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {

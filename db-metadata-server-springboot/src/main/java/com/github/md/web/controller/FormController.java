@@ -51,7 +51,7 @@ public class FormController extends ControllerAdapter {
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd").addForm();
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd?objectCode={objectCode}").addForm();
 
         //TODO 手工build,方便后面编程式操作表单内元子控件
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
@@ -118,7 +118,7 @@ public class FormController extends ControllerAdapter {
 
         Object[] dataIds = queryHelper.getPks(metaObject);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
+        FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate?objectCode={objectCode}").updateForm();
 
         Record d = metaService().findDataByIds(metaObject, dataIds);
 
