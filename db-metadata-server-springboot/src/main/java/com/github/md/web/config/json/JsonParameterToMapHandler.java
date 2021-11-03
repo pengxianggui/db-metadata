@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.github.md.web.kit.HttpKit;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -41,7 +42,9 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
             Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(request), new TypeReference<Map<String, String>>() {
 
             });
-            httpServletRequestWrapper.init(jsonParams);
+            if (!CollectionUtils.isEmpty(jsonParams)) {
+                httpServletRequestWrapper.init(jsonParams);
+            }
         }
         /*
          * TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
