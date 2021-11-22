@@ -127,5 +127,6 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // TODO 如何动态决定使用哪个HttpMessageConverter？
+        //  从而实现dbmeta内置请求使用内置 HttpMessageConverter，内置Converter不会影响外部系统
     }
 }
