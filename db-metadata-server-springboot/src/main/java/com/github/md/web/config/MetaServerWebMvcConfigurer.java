@@ -24,6 +24,8 @@ import javax.servlet.Filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -64,6 +66,7 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
 
     /**
      * 可定制MetaServer系统URl的前缀
+     *
      * @return
      */
     @Override
@@ -117,6 +120,12 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
         converter.setSupportedMediaTypes(mediaTypeList);
         // 支持序列化 ActiveRecord 的 Record 类型
         SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
+        SerializeConfig.getGlobalInstance().put(Timestamp.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Timestamp) o)));
         converters.add(converter);
+    }
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // TODO 如何动态决定使用哪个HttpMessageConverter？
     }
 }
