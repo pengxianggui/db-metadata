@@ -22,6 +22,7 @@ steps:
     image: maven:3-alpine
     commands:
       - ls /root/.m2/repository
+      - cd db-metadata-parent
       - mvn clean -U package -DskipTests
     volumes:
       - name: maven-repo
@@ -77,23 +78,23 @@ steps:
         - push
       local: false
 
-  - name: dingtalk-notify
-    image: lddsb/drone-dingtalk-message
-    settings:
-      token: 995b07b81d51597aefad72f4ee44994f69b338d539c6286c6808a9fdb0c1b8f5
-      type: markdown
-      secret: SECcd53d6ab9391cd9592afbfc5496f963dfdf5db3afeb40b95bdf3e3ffe2d087d5
-      tips_title: db-metadata演示环境CI/CD
-      tpl: .dingtalk_tpl.md
-      success_color: 00FF00
-      failure_color: FF0000
-      debug: true
-      sha_link: true
-    when:
-      status:
-        - failure
-        - success
-      local: false
+#  - name: dingtalk-notify
+#    image: lddsb/drone-dingtalk-message
+#    settings:
+#      token: 995b07b81d51597aefad72f4ee44994f69b338d539c6286c6808a9fdb0c1b8f5
+#      type: markdown
+#      secret: SECcd53d6ab9391cd9592afbfc5496f963dfdf5db3afeb40b95bdf3e3ffe2d087d5
+#      tips_title: db-metadata演示环境CI/CD
+#      tpl: .dingtalk_tpl.md
+#      success_color: 00FF00
+#      failure_color: FF0000
+#      debug: true
+#      sha_link: true
+#    when:
+#      status:
+#        - failure
+#        - success
+#      local: false
 
 # 添加一个step: 当master分支发生提交时，自动打tag。关键在于tag名如何关联版本号
 
