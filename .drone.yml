@@ -8,6 +8,19 @@ name: db-metadata演示环境CI/CD
 # 代码提交的message格式为{}内的内容,不包含{}：{1.0.0;更新了一个服务;approval-web} 版本号;更新了内容;项目名称
 
 steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      restore: true
+      mount:
+        - ./.m2
+        - ./db-metadata-web/node_modules
+    when:
+      local: false
+
   - name: build-web
     image: node:12.16
     commands:
@@ -27,6 +40,19 @@ steps:
     volumes:
       - name: maven-repo
         path: /root/.m2/repository
+    when:
+      local: false
+
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - ./.m2
+        - ./db-metadata-web/node_modules
     when:
       local: false
 
@@ -96,7 +122,6 @@ steps:
 #        - success
 #      local: false
 
-# 添加一个step: 当master分支发生提交时，自动打tag。关键在于tag名如何关联版本号
 
 # 限定只有dev、release-*、master分支才会触发drone ci/cd
 trigger:
