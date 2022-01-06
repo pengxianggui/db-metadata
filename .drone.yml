@@ -9,7 +9,7 @@ name: db-metadata演示环境CI/CD
 
 steps:
   - name: build-web
-    image: maven:3-alpine
+    image: node:12.16
     commands:
       - cd db-metadata-web
       - npm cache clean
