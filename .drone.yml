@@ -1,0 +1,115 @@
+kind: pipeline
+type: docker
+name: db-metadata演示环境CI/CD
+
+# 集中式的大仓库使用如下方式进行代码提交
+# ${DRONE_COMMIT_MESSAGE%%;*} 获取版本号
+# ${DRONE_COMMIT_MESSAGE##*;} 项目名称
+# 代码提交的message格式为{}内的内容,不包含{}：{1.0.0;更新了一个服务;approval-web} 版本号;更新了内容;项目名称
+
+steps:
+  - name: build-web
+    image: maven:3-alpine
+    commands:
+      - cd db-metadata-web
+      - npm cache clean
+      - npm install
+      - npm run build
+    when:
+      local: false
+
+  - name: build-server
+    image: maven:3-alpine
+    commands:
+      - ls /root/.m2/repository
+      - mvn clean -U package -DskipTests
+    volumes:
+      - name: maven-repo
+        path: /root/.m2/repository
+    when:
+      local: false
+
+  - name: push
+    image: plugins/docker
+    privileged: true
+    settings:
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+      DOCKER_USERNAME:
+        from_secret: docker_username
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    commands:
+      - sh build.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+    when:
+      local: false
+
+  - name: deploy-ui
+    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
+    settings:
+      kubernetes_server: https://rancher.asoco.com.cn/k8s/clusters/local
+      kubernetes_token:
+        from_secret: k8s_token
+      namespace: tool
+      deployment: db-metadata-web
+      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata-web
+      container: db-metadata-web
+      tag: ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+    when:
+      event:
+        - push
+      local: false
+
+  - name: deploy-server
+    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
+    settings:
+      kubernetes_server: https://rancher.asoco.com.cn/k8s/clusters/local
+      kubernetes_token:
+        from_secret: k8s_token
+      namespace: tool
+      deployment: db-metadata-server
+      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata-server
+      container: db-metadata-server
+      tag: ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+    when:
+      event:
+        - push
+      local: false
+
+  - name: dingtalk-notify
+    image: lddsb/drone-dingtalk-message
+    settings:
+      token: 995b07b81d51597aefad72f4ee44994f69b338d539c6286c6808a9fdb0c1b8f5
+      type: markdown
+      secret: SECcd53d6ab9391cd9592afbfc5496f963dfdf5db3afeb40b95bdf3e3ffe2d087d5
+      tips_title: db-metadata演示环境CI/CD
+      tpl: .dingtalk_tpl.md
+      success_color: 00FF00
+      failure_color: FF0000
+      debug: true
+      sha_link: true
+    when:
+      status:
+        - failure
+        - success
+      local: false
+
+# 添加一个step: 当master分支发生提交时，自动打tag。关键在于tag名如何关联版本号
+
+# 限定只有dev、release-*、master分支才会触发drone ci/cd
+trigger:
+  ref:
+    - refs/heads/spring-boot
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+  - name: maven-repo
+    host:
+      path: /tem/maven-repo
+
