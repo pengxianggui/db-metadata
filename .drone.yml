@@ -12,7 +12,7 @@ steps:
     image: node:12.16
     commands:
       - cd db-metadata-web
-      - npm cache clean
+      - npm cache clean --force
       - npm install
       - npm run build
     when:
