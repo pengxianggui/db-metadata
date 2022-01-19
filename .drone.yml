@@ -139,3 +139,27 @@ volumes:
     host:
       path: /tem/maven-repo
 
+---
+kind: pipeline
+type: docker
+name: db-metadata 发布到maven 私服
+
+steps:
+    # 添加认证信息
+  - name: authenticate
+    image: robertstettner/drone-mvn-auth
+    pull: always
+    settings:
+      servers:
+        - id: asoco-nexus-release
+          username: admin
+          password: hthj.m2
+        - id: asoco-nexus-snapshot
+          username: admin
+          password: hthj.m2
+
+  # 打包发布到nexus仓库中
+  - name: deploy-to-nexus
+    image: maven:3-alpine
+    commands:
+      - mvn -DskipTests clean deploy -gs settings.xml
