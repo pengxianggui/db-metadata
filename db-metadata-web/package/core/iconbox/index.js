@@ -1,7 +1,9 @@
 import IconBox from './src/IconBox'
+import IconPanel from "./src/IconPanel";
 
 IconBox.install = function (Vue) {
     Vue.component(IconBox.name, IconBox);
+    Vue.component(IconPanel.name, IconPanel);
 };
 
 export default IconBox;

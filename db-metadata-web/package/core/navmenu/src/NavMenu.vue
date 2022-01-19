@@ -8,14 +8,18 @@
     <el-menu :default-active="activeMenu"
              :collapse="nativeCollapse"
              v-bind="conf" id="__DEFAULT_MENU">
-      <template v-for="menu in metaMenus" v-if="$isRoot()">
-        <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path"></menu-item>
+      <!-- 编程菜单 -->
+      <slot></slot>
+
+      <!-- 动态菜单 -->
+      <template v-for="menu in menus">
+        <menu-item :item="menu" :base-path="menu.path" :key="menu.title + menu.path"></menu-item>
       </template>
 
-      <template v-for="menu in menus">
-        <menu-item :item="menu" :base-path="menu.path"></menu-item>
+      <!-- dbmeta 维护菜单 -->
+      <template v-for="menu in metaMenus" v-if="$isRoot()">
+        <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path" :key="menu.title + menu.path"></menu-item>
       </template>
-      <slot></slot>
     </el-menu>
   </div>
 </template>
@@ -163,6 +167,7 @@ div.container.min-width {
     display: inline-block;
   }
 }
+
 .el-menu {
   margin-right: 5px;
 }

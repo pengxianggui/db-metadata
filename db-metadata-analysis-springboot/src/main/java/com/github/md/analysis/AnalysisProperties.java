@@ -28,6 +28,7 @@ public class AnalysisProperties {
         this.sourceConfig = sourceConfig;
     }
 
+    @Deprecated
     @Data
     public static class Extension {
 

@@ -67,8 +67,10 @@ public class MetaProperties {
     @Data
     public static class Login {
         boolean enable = false;
+        LoginCtrl ctrl = new LoginCtrl();
         List<String> includes = new ArrayList<>();
         List<String> excludes = new ArrayList<>();
+
     }
 
     @Data
@@ -76,5 +78,13 @@ public class MetaProperties {
         boolean enable = false;
         List<String> includes = new ArrayList<>();
         List<String> excludes = new ArrayList<>();
+    }
+
+    @Data
+    public static class LoginCtrl {
+        boolean enable = true;
+        String loginPath = "/user/login";
+        String logoutPath = "/user/logout";
+        String infoPath = "/user/info";
     }
 }

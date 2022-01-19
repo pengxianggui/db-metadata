@@ -11,12 +11,27 @@ export const routes = [
     {
         path: '/',
         redirect: '/meta',
+        hidden: true
     },
     {
         name: 'WorkSpace',
         path: '/workspace',
         hidden: true,
         component: () => import('@/components/demo/WorkSpace')
+    },
+    {
+        name: 'Route1',
+        path: '/route1',
+        component: () => import('@/layout'),
+        meta: {title: '路由1'},
+        children: [
+            {
+                name: 'Route1-1',
+                path: 'route1-1',
+                component: () => import('@/../package/template/SingleGridTmpl'),
+                meta: {title: '路由1-1', icon: 'more'}
+            }
+        ]
     }
 ];
 

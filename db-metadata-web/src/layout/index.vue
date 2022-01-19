@@ -22,13 +22,19 @@
     <template #menu>
       <div class="menu">
         <nav-menu :collapse.sync="collapse" :show-collapse-button="true" :unique-opened="true"
-                  style="height: 100%"></nav-menu>
+                  style="height: 100%">
+          <template v-for="(menu, index) in programMenus">
+            <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path" :key="menu.path + index"></menu-item>
+          </template>
+        </nav-menu>
       </div>
     </template>
   </admin-layout>
 </template>
 
 <script>
+import {routes} from "@/router";
+
 export default {
   name: "Layout",
   data() {
@@ -56,6 +62,31 @@ export default {
         })
       }).catch(() => {
       });
+    }
+  },
+  computed: {
+    programMenus() {
+      const routeToMenu = function (routes, menus) {
+        routes.forEach(r => {
+          const {hidden} = r
+          if (hidden !== true) {
+            let childrenMenus = []
+            let {meta = {}, path, children: childrenRoutes = []} = r
+
+            menus.push({
+              ...meta,
+              path,
+              children: childrenMenus
+            })
+            routeToMenu(childrenRoutes, childrenMenus)
+          }
+        })
+      }
+
+      const menus = []
+      routeToMenu(routes, menus)
+      console.log(menus)
+      return menus
     }
   }
 }
