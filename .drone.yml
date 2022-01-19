@@ -162,4 +162,5 @@ steps:
   - name: deploy-to-nexus
     image: maven:3-alpine
     commands:
+      - cd db-metadata-parent
       - mvn -DskipTests clean deploy -gs settings.xml
