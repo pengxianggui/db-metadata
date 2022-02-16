@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/db-metadata-demo?useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/metadata?useSSL=false&characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -16,24 +16,3 @@ logging:
 
 md:
   dev-mode: true
-#  analysis:
-#    source-config:
-#      db-metadata-business-demo:
-#        username: root
-#        password: 123456
-#        url: jdbc:mysql://127.0.0.1:3306/db-metadata-business-demo?useSSL=false&characterEncoding=utf-8
-#        driver-class-name: com.mysql.jdbc.Driver
-#        type: com.alibaba.druid.pool.DruidDataSource
-  server:
-    dev-mode: true
-    login:
-      enable: true
-    auth:
-      enable: true
-    meta-object:
-      replace-from-json-file: true
-    component:
-      replace-from-json-file: true
-    upload:
-      mode: local # default, 可以不配置
-      base-upload-path: /opt/www/db-meta-serve # 当mode为本地时，配置的本地上传根路径

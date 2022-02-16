@@ -27,6 +27,16 @@ public class MetaAuthService {
         return db().findAll("meta_auth");
     }
 
+    public List<Record> findByRole(String roleId) {
+        // TODO
+        return null;
+    }
+
+    public List<Record> findByUser(String userId) {
+        // TODO
+        return null;
+    }
+
     public String findAuthCode(AuthForType type, String metaCode, String uri) {
         Record record = db().findFirst("select * from meta_auth where type = ? and meta_code = ? and uri = ?",
                 type.getCode(), metaCode, uri);

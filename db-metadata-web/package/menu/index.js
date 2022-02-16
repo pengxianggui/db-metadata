@@ -9,6 +9,7 @@ export default [{
     "icon": "el-icon-s-tools",
     "hidden": false,
     "disable": false,
+    "orderNum": Number.MAX_VALUE, // 平台维护总是排最后
     "children": [
         {
             "path": "/meta/meta-data",
@@ -119,27 +120,12 @@ export default [{
             "meta": {
                 "roles": [access.root]
             }
-        },
-        // {
-        //     "path": "/meta/meta-version",
-        //     "title": "DbVersion",
-        //     "icon": "el-icon-paperclip",
-        //     "hidden": false,
-        //     "disable": false
-        // },
-        // {
-        //     "path": "/meta/objects",
-        //     "title": "动态元对象",
-        //     "icon": "el-icon-menu",
-        //     "hidden": false,
-        //     "disable": false
-        // },
-        // {
-        //     "path": "/meta/demo",
-        //     "title": "组件概览",
-        //     "icon": "el-icon-menu",
-        //     "hidden": false,
-        //     "disable": false
-        // }
+        }
     ]
 }]
+
+/**
+ * 编程路由生成的菜单
+ * @type {*[]}
+ */
+export const programMenus = []

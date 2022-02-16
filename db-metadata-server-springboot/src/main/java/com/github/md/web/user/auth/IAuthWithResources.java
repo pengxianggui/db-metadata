@@ -6,7 +6,7 @@ package com.github.md.web.user.auth;
  *
  * <p> @author konbluesky </p>
  */
-public interface PermissionWithResources extends Permission {
+public interface IAuthWithResources extends IAuth {
 
     MResource[] resources();
 

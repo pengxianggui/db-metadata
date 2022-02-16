@@ -1,4 +1,6 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.role;
+
+import com.github.md.web.user.auth.IAuth;
 
 /**
  * <pre>
@@ -12,10 +14,10 @@ package com.github.md.web.user.auth;
  */
 public class RoleFactory {
 
-    public static MRRole createRole(String code, String name, Permission... permissions) {
+    public static MRRole createRole(String code, String name, IAuth... auths) {
         DefaultRole role = new DefaultRole(code, name);
-        for (Permission permission : permissions) {
-            role.addPermission(permission);
+        for (IAuth auth : auths) {
+            role.addPermission(auth);
         }
         return role;
     }

@@ -3,11 +3,13 @@ package com.github.md.web.user.auth.jfinal;
 import com.github.md.web.user.auth.MResource;
 
 /**
+ * JFinal接口资源
  * <p> @Date : 2019/12/16 </p>
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 public class ActionResource implements MResource {
 
     private final String rid;

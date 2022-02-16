@@ -39,8 +39,8 @@
                             },
                             {
                                 "id": "1-2",
-                                "name": "change_log",
-                                "code": "change_log"
+                                "name": "meta_change_log",
+                                "code": "meta_change_log"
                             }
                         ]
                     },

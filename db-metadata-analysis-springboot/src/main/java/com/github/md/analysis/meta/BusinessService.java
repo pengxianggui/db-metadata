@@ -119,6 +119,6 @@ public class BusinessService {
         record.set("pvalue", newData.get(object.primaryKey()));
         record.set("olddata", JSON.toJSONString(oldData));
         record.set("newData", JSON.toJSONString(newData));
-        SpringAnalysisManager.me().dbMain().save("change_log", record);
+        SpringAnalysisManager.me().dbMain().save("meta_change_log", record);
     }
 }

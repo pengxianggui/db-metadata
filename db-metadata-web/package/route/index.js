@@ -6,7 +6,7 @@ import InstanceConfList from "../meta/instance-component/InstanceConfList";
 import InstanceConfEdit from "../meta/instance-component/InstanceConfEdit";
 import RouterManager from "../meta/route/RouterManager";
 import MenuManager from "../meta/menu/MenuManager";
-import AuthList from "../meta/auth/AuthList";
+import AuthList from "../meta/rbac/AuthList";
 import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
@@ -23,7 +23,6 @@ import exchange from "./exchange";
  * Meta 平台维护路由数据
  * @type {any}
  */
-
 const jumpOut = [
     {
         path: 'instance-conf-edit',
@@ -53,7 +52,7 @@ export const innerRoute = [
             title: "元数据管理",
             icon: "el-icon-warning",
             noCache: false,
-            roles: [access.root]
+            roles: [access.root] // TODO 采用权限编码 鉴权
         },
         component: MetaDataManager
     }, {
@@ -164,7 +163,7 @@ export const innerRoute = [
             roles: [access.root]
         },
         component: ExceptionList
-    },{
+    }, {
         path: 'meta-auth',
         name: 'MetaAuth',
         meta: {
@@ -177,7 +176,6 @@ export const innerRoute = [
     },
     ...jumpOut
 ]
-
 /**
  * 外层路由，用于全页面打开ui-conf编辑等
  * @type {*[]}
@@ -219,24 +217,33 @@ async function getDynamicRoutesFromRemote(axios, url) {
     return await axios.get(url)
 }
 
-// 装载 meta 路由
-function addMetaRoutes(router, Layout = AdminLayout) {
-    router.addRoutes(metaRoute(Layout))
+// 异步装载动态路由
+function addDynamicRoutes(rootRoute,
+                          axios,
+                          Layout,
+                          url,
+                          formatCallback) {
+    return new Promise((resolve, reject) => {
+        getDynamicRoutesFromRemote(axios, url).then(resp => {
+            const {data: routes} = resp
+            console.info('[MetaElement] 装配动态路由, %o', routes)
+            const dynamicRoutes = formatCallback(routes, Layout)
+            console.debug('[MetaElement] 动态路由数据为: %o', dynamicRoutes)
+            rootRoute.children.push(...dynamicRoutes)
+            resolve()
+        }).catch(err => {
+            reject()
+        })
+    })
 }
 
-// 异步装载动态路由
-function addDynamicRoutes(router,
-                          axios,
-                          Layout = AdminLayout,
-                          url = restUrl.ROUTE_DATA,
-                          formatCallback = exchange) {
-    getDynamicRoutesFromRemote(axios, url).then(resp => {
-        const {data: routes} = resp
-        console.info('[MetaElement] 装配动态路由, %o', routes)
-        const dynamicRoutes = formatCallback(routes, Layout)
-        console.debug('[MetaElement] 动态路由数据为: %o', dynamicRoutes)
-        router.addRoutes(dynamicRoutes)
+function sort(routes = []) {
+    routes.sort((r1, r2) => {
+        const {meta: {order: order1 = 10} = {}} = r1
+        const {meta: {order: order2 = 10} = {}} = r2
+        return order1 - order2
     })
+    routes.forEach(r => sort(r.children))
 }
 
 /**
@@ -251,7 +258,33 @@ function addDynamicRoutes(router,
  * @param formatCallback 可选项，默认装配规则。 动态路由数据获取后，将执行一个格式化动态路由数据的回调函数。例如，由于动态路由数据中的component没法是一个Vue组件数据，它可能只能是一个组件名，
  *                      那么这个回调函数中就得根据这个组件名找到对应的Vue组件实例，然后替换上去。你也可以做一些其他数据过滤和装配的事情。
  */
-export default function (router, axios, Layout, url, formatCallback) {
-    addMetaRoutes(router, Layout)
-    addDynamicRoutes(router, axios, Layout, url, formatCallback)
+const addRoutes = function (router, axios, Layout = AdminLayout, url = restUrl.ROUTE_DATA, formatCallback = exchange) {
+    // 动态业务根路由
+    const bizRootRoute = {
+        path: '/',
+        name: 'Layout',
+        hidden: true,
+        component: Layout,
+        children: []
+    }
+
+    let routes = [
+        ...metaRoute(Layout),
+        bizRootRoute
+    ]
+
+    addDynamicRoutes(bizRootRoute, axios, Layout, url, formatCallback).then(() => {
+        sort(routes);
+        console.log(routes)
+        router.addRoutes(routes)
+    })
+}
+
+export default addRoutes;
+
+export const registerRoute = function (Vue, opts) {
+    const {axios, router, layout} = opts
+    router.onReady(() => {
+        addRoutes(router, axios, layout)
+    })
 }

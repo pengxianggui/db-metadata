@@ -27,8 +27,10 @@ public class MRManager {
     /**
      * 注册多个资源访问器
      */
+    @Deprecated
     private final List<MRLoader> mrLoaders = new ArrayList<>();
 
+    @Deprecated
     private final Map<String, MResource> allMResource = new HashMap<>();
 
     /**
@@ -56,10 +58,12 @@ public class MRManager {
         return me;
     }
 
+    @Deprecated
     public void addLoader(MRLoader loader) {
         mrLoaders.add(loader);
     }
 
+    @Deprecated
     public void load() {
         for (MRLoader m : mrLoaders) {
             m.load();
@@ -69,14 +73,17 @@ public class MRManager {
         }
     }
 
+    @Deprecated
     public List<MResource> resources() {
         return Lists.newArrayList(allMResource.values());
     }
 
+    @Deprecated
     public Map<String, MResource> resourcesMap() {
         return allMResource;
     }
 
+    @Deprecated
     public MResource getResource(String resourceKey) {
         return allMResource.get(resourceKey);
     }

@@ -24,19 +24,20 @@
     <!-- 有1个以上要展示的子节点 -->
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <pop-menu trigger="right-click" :disabled="!metaEditable">
-          <template #label>
-            <div>
-              <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
+        <div>
+          <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
+
+          <pop-menu trigger="right-click" :disabled="!metaEditable">
+            <template #label>
               <span slot="title">{{ item.title }}</span>
-            </div>
-          </template>
-          <list>
-            <list-item @click="editMenuMeta(item)">编辑元菜单</list-item>
-          </list>
-        </pop-menu>
+            </template>
+            <list>
+              <list-item @click="editMenuMeta(item)">编辑元菜单</list-item>
+            </list>
+          </pop-menu>
+        </div>
       </template>
-      <template v-for="(subMenu, index) in item.children">
+      <template v-for="(subMenu, index) in childrenMenus">
         <menu-item :key="subMenu.path + index"
                    :is-nest="true"
                    :item="subMenu"
@@ -136,10 +137,12 @@ export default {
     },
     metaEditable() { // 是否可编辑菜单元数据
       const {item: {id}} = this
-      return this.$isRoot() && !isEmpty(id)
+      return this.$isRoot() && !isEmpty(id) // 有id值表示是数据库数据
+    },
+    childrenMenus() {
+      const {children} = this.item
+      return children.sort((m1, m2) => m1.order - m2.order)
     }
-  },
-  created() {
   }
 }
 </script>

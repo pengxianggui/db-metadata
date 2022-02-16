@@ -33,8 +33,8 @@ const treeData = [
             },
             {
                 "id": "410126904214032384",
-                "name": "change_log",
-                "code": "change_log"
+                "name": "meta_change_log",
+                "code": "meta_change_log"
             }
         ]
     },

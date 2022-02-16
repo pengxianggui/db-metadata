@@ -2,8 +2,7 @@ package com.github.md.web.user;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.web.user.auth.MRRole;
-import com.github.md.web.user.auth.Permission;
+import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.local.LocalUserFactory;
 import com.google.common.cache.Cache;
@@ -89,21 +88,6 @@ public class UserManager {
 
         @Override
         public boolean hasRole(String nameOrCode) {
-            return false;
-        }
-
-        @Override
-        public Permission[] permissions() {
-            return new Permission[0];
-        }
-
-        @Override
-        public boolean hasPermission(String... permissions) {
-            return false;
-        }
-
-        @Override
-        public boolean hasPermission(Permission... permissions) {
             return false;
         }
 

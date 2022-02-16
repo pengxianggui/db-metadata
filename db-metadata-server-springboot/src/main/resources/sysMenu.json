@@ -39,7 +39,7 @@
       "label": "字典"
     },
     {
-      "path": "/main/table?objectCode=change_log",
+      "path": "/main/table?objectCode=meta_change_log",
       "icon": "el-icon-finished",
       "label": "ChangeLog"
     },

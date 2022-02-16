@@ -1,10 +1,10 @@
 package com.github.md.web.user.support.local;
 
-import com.github.md.web.user.User;
-import com.github.md.web.kit.UtilKit;
-import com.github.md.web.user.auth.MRRole;
-import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.analysis.kit.Kv;
+import com.github.md.web.kit.UtilKit;
+import com.github.md.web.user.User;
+import com.github.md.web.user.role.MRRole;
+import com.github.md.web.user.role.UserWithRolesWrapper;
 
 import java.util.Map;
 

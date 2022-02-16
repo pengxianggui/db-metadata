@@ -11,7 +11,10 @@ import java.util.List;
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
+ *
+ * @deprecated 资源无需载入，由判定器 {@link MRPermit} 直接在判定的时候自取资源即可
  */
+@Deprecated
 public interface MRLoader {
 
     void load();

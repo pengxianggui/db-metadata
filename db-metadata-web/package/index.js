@@ -59,6 +59,9 @@ import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import {restUrl} from './constant/url'
 import {access} from "./access";
 import user from './access'
+// 内置业务组件
+import {UserList, RoleList} from '@/../package/meta/rbac'
+
 // 路由装配对象
 import addRoutes from "./route";
 // 内置菜单: Meta维护菜单
@@ -72,6 +75,7 @@ import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
 import configAxios from "./axios/configAxios";
 
+// 全局注册的组件
 const components = [
     // atom or container
     BoolBox,
@@ -127,8 +131,14 @@ const components = [
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
-    TreeSingleGridTmpl
+    TreeSingleGridTmpl,
+
+    // 内置业务组件
+    UserList,
+    RoleList
 ];
+
+import {registerRoute} from "./route";
 
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
@@ -137,6 +147,7 @@ const install = function (Vue, opts = {}) {
 
     // 注册全局函数
     registerGlobalFunction(Vue, opts)
+
 
     // 自定义rest接口url覆盖
     if (opts.restUrl) {
@@ -158,6 +169,9 @@ const install = function (Vue, opts = {}) {
             Vue.component(component.name, component)
         }
     })
+
+    // 注册路由
+    registerRoute(Vue, opts)
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -174,6 +188,6 @@ export {
     restUrl,
     user,
     MetaMenu,
-    addRoutes,
-    TagViewUtil
+    TagViewUtil,
+    AdminLayout
 }

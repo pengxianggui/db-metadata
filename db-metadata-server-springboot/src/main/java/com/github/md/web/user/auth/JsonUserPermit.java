@@ -12,6 +12,20 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 从json文件中加载用户信息。json文件中存储用户和用户拥有的资源, 依次作为判定用户是否拥有资源权限的依据。
+ * <p>
+ * json文件内容格式如下:
+ * <pre>
+ *     {
+ *         "rules": [
+ *          {
+ *              "userId": "0",
+ *              "resources": ["xxx", "yyy"]
+ *          },
+ *          ...
+ *         ]
+ *     }
+ * </pre>
  * <p> @Date : 2019/12/16 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -43,7 +57,6 @@ public class JsonUserPermit implements MRPermit<User, MResource> {
      *
      * @param user
      * @param mResource
-     *
      * @return
      */
     @Override

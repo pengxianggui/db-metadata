@@ -9,37 +9,30 @@ import com.google.common.collect.HashBasedTable;
  * <p> @author konbluesky </p>
  */
 public class AppConst {
-
-    public static final String VERSION = "1.0";
-
+    /**
+     * row代表表名, column代表属性, value代表值
+     */
     public static final HashBasedTable<String, String, Boolean> SYS_TABLE = HashBasedTable.create();
 
-    public static final String CONFIG_ALLOW_REPLACE = "config.allow.replace";
-
-    public static final String COMPONENT_ALLOW_REPLACE = "component.allow.replace";
-
-    public static final String NEED_LOGIN = "user.login";
-
-    public static final String NEED_AUTH = "user.auth";
-
-    public static final String ROUTER_PREFIX = "router.prefix";
-
-    public static final String UPLOAD_DIR = "upload.dir";
-
-    public static final String INITABLE = "initable";
+    /**
+     * 是否可清理
+     */
+    public static final String CLEARABLE = "clearable";
 
     static {
-        SYS_TABLE.put("meta_object", INITABLE, true);
-        SYS_TABLE.put("meta_field", INITABLE, true);
-        SYS_TABLE.put("meta_component", INITABLE, true);
-        SYS_TABLE.put("meta_component_instance", INITABLE, true);
-        SYS_TABLE.put("meta_router", INITABLE, true);
-        SYS_TABLE.put("meta_menu", INITABLE, true);
-        SYS_TABLE.put("meta_feature", INITABLE, true);
-        SYS_TABLE.put("meta_config", INITABLE, true);
-        SYS_TABLE.put("change_log", INITABLE, false);
-        SYS_TABLE.put("meta_exception", INITABLE, false);
-        SYS_TABLE.put("meta_dict", INITABLE, false);
-        SYS_TABLE.put("meta_auth", INITABLE, false);
+        SYS_TABLE.put("meta_object", CLEARABLE, true);
+        SYS_TABLE.put("meta_field", CLEARABLE, true);
+        SYS_TABLE.put("meta_component", CLEARABLE, true);
+        SYS_TABLE.put("meta_component_instance", CLEARABLE, true);
+        SYS_TABLE.put("meta_router", CLEARABLE, false);
+        SYS_TABLE.put("meta_menu", CLEARABLE, false);
+        SYS_TABLE.put("meta_feature", CLEARABLE, false);
+        SYS_TABLE.put("meta_config", CLEARABLE, false);
+        SYS_TABLE.put("meta_change_log", CLEARABLE, false);
+        SYS_TABLE.put("meta_exception", CLEARABLE, false);
+        SYS_TABLE.put("meta_dict", CLEARABLE, false);
+        SYS_TABLE.put("meta_auth", CLEARABLE, false);
+        SYS_TABLE.put("meta_role", CLEARABLE, false);
+        SYS_TABLE.put("meta_user", CLEARABLE, false);
     }
 }

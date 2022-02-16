@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**
- * 兼容元编码的接口资源(meta_auth表)
+ * 兼容元编码的接口资源(meta_auth表)。<br>
+ * Rest接口的鉴权通常由在接口上打上注解标记，标识接口关联的权限编码。从而在接口访问前，判定用户是否具有此权限。
+ * <p>
+ * 而当前资源标记，不是硬编码在接口上的，而是存储在数据表meta_auth中。而且由于dbmeta一些内置接口的特殊性(不同元对象共享一个接口), 因此扩展出
+ * {@link AuthForType}的概念
  *
  * @author pengxg
  * @date 2021/10/15 9:51 上午
@@ -22,6 +26,9 @@ public class MetaAuthResource implements MResource {
     private String uri;
     @Getter
     private AuthForType type;
+    /**
+     * 元数据: 元对象编码或元功能编码
+     */
     @Getter
     private String metaCode;
     private boolean needPermit = true;
@@ -30,7 +37,7 @@ public class MetaAuthResource implements MResource {
         this.uri = removeEndSlash(request.getServletPath());
         AuthTypeRefered authTypeRefered = handlerMethod.getMethodAnnotation(AuthTypeRefered.class);
         if (Objects.isNull(authTypeRefered)) {
-            this.needPermit = false;
+            this.type = AuthForType.API; // 默认基于API接口鉴权
             return;
         }
 

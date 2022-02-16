@@ -1,8 +1,7 @@
 package com.github.md.web.user.role;
 
-import com.github.md.web.user.User;
-import com.github.md.web.user.auth.MRRole;
 import com.github.md.analysis.kit.Kv;
+import com.github.md.web.user.User;
 import lombok.Data;
 
 import java.util.Map;
@@ -22,7 +21,7 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
 
     public DefaultUserWithRoles(User user, MRRole role) {
         this.user = user;
-        this.roles = new MRRole[] { role };
+        this.roles = new MRRole[]{role};
     }
 
     @Override

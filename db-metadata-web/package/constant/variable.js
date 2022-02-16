@@ -16,5 +16,7 @@ export const metaObjectCode = {
     dictList: 'meta_dict', // 字典维护
     exceptionList: 'meta_exception', // 异常管理
     MenuList: 'meta_menu', // 菜单管理
-    AuthList: 'meta_auth'
+    AuthList: 'meta_auth', // 权限管理
+    RoleList: 'meta_role', // 角色管理
+    UserList: 'meta_user', // 用户管理
 }

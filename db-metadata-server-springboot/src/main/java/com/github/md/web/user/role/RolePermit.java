@@ -1,4 +1,6 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.role;
+
+import com.github.md.web.user.auth.MRPermit;
 
 /**
  * <p> @Date : 2020/8/12 </p>

@@ -142,8 +142,8 @@ public class ComponentService {
 
     public List<ComponentType> loadTypesByObjectCode(String objectCode) {
         List<String> codes = SpringAnalysisManager.me().dbMain().query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
-                                                                       INSTANCE.META_OBJECT.toString(),
-                                                                       objectCode);
+                INSTANCE.META_OBJECT.toString(),
+                objectCode);
         List<ComponentType> types = new ArrayList<>();
         codes.forEach(s -> {
             types.add(ComponentType.V(s));
@@ -155,7 +155,6 @@ public class ComponentService {
      * 根据元对象 返回所有相关的 ComponentInstanceConfig
      *
      * @param objectCode
-     *
      * @return
      */
     public List<ComponentInstanceConfig> loadInstanceByObjectCode(String objectCode) {
@@ -173,19 +172,18 @@ public class ComponentService {
      *
      * @param objectCode
      * @param type       UNKNOWN时查询所有
-     *
      * @return
      */
     public List<String> loadInstanceCodeByObjectCode(String objectCode, ComponentType type) {
         if (type == ComponentType.UNKNOWN) {
             return SpringAnalysisManager.me().dbMain().query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and type=?",
-                                                             objectCode,
-                                                             INSTANCE.META_OBJECT.toString());
+                    objectCode,
+                    INSTANCE.META_OBJECT.toString());
         } else {
             return SpringAnalysisManager.me().dbMain().query("select code from " + META_COMPONENT_INSTANCE + " where dest_object=? and comp_code=? and type=?",
-                                                             objectCode,
-                                                             type.getCode(),
-                                                             INSTANCE.META_OBJECT.toString());
+                    objectCode,
+                    type.getCode(),
+                    INSTANCE.META_OBJECT.toString());
         }
     }
 
@@ -194,7 +192,6 @@ public class ComponentService {
      * 注: instanceCode 的唯一是指以instanceCode为准的这套配置唯一,并不是记录唯一
      *
      * @param instanceCode
-     *
      * @return
      */
     public ComponentInstanceConfig loadObjectConfig(String instanceCode) {
@@ -227,7 +224,6 @@ public class ComponentService {
      *
      * @param componentCode
      * @param destCode
-     *
      * @return
      */
     public ComponentInstanceConfig loadObjectConfig(String componentCode, String destCode) {
@@ -254,17 +250,25 @@ public class ComponentService {
         return ComponentInstanceConfig.Load(objConf, fieldsMap, destCode, instanceCode, instanceName, ComponentType.V(componentCode));
     }
 
+    /**
+     * 创建新的实例配置
+     *
+     * @param component
+     * @param object
+     * @param componentInstanceConfig
+     * @return
+     */
     public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
         /**
          * new objectConfig
          * foreach fieldsConfig
          */
         Record record = getRecord(component,
-                                  object.code(),
-                                  componentInstanceConfig.getInstanceCode(),
-                                  componentInstanceConfig.getInstanceName(),
-                                  INSTANCE.META_OBJECT,
-                                  componentInstanceConfig.getObjectConfig());
+                object.code(),
+                componentInstanceConfig.getInstanceCode(),
+                componentInstanceConfig.getInstanceName(),
+                INSTANCE.META_OBJECT,
+                componentInstanceConfig.getObjectConfig());
         SpringAnalysisManager.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         List<Record> fieldRecords = Lists.newArrayList();
@@ -272,11 +276,11 @@ public class ComponentService {
         object.fields().forEach(f -> {
             Kv fkv = UtilKit.getKv(fieldsMap, f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component,
-                                                  object.code(),
-                                                  f.fieldCode(),
-                                                  componentInstanceConfig.getInstanceCode(),
-                                                  componentInstanceConfig.getInstanceName(),
-                                                  fkv));
+                    object.code(),
+                    f.fieldCode(),
+                    componentInstanceConfig.getInstanceCode(),
+                    componentInstanceConfig.getInstanceName(),
+                    fkv));
         });
 
         SpringAnalysisManager.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
@@ -290,7 +294,6 @@ public class ComponentService {
      * @param component
      * @param object
      * @param componentInstanceConfig
-     *
      * @return
      */
     public boolean updateObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
@@ -298,11 +301,11 @@ public class ComponentService {
         deleteObjectConfig(component.code(), object.code(), false);
 
         Record record = getRecord(component,
-                                  object.code(),
-                                  componentInstanceConfig.getInstanceCode(),
-                                  componentInstanceConfig.getInstanceName(),
-                                  INSTANCE.META_OBJECT,
-                                  componentInstanceConfig.getObjectConfig());
+                object.code(),
+                componentInstanceConfig.getInstanceCode(),
+                componentInstanceConfig.getInstanceName(),
+                INSTANCE.META_OBJECT,
+                componentInstanceConfig.getObjectConfig());
         SpringAnalysisManager.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         Collection<IMetaField> fields = object.fields();
@@ -311,11 +314,11 @@ public class ComponentService {
         fields.forEach(f -> {
             Kv fkv = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), f.fieldCode());
             fieldRecords.add(getFieldConfigRecord(component,
-                                                  object.code(),
-                                                  f.fieldCode(),
-                                                  componentInstanceConfig.getInstanceCode(),
-                                                  componentInstanceConfig.getInstanceName(),
-                                                  fkv));
+                    object.code(),
+                    f.fieldCode(),
+                    componentInstanceConfig.getInstanceCode(),
+                    componentInstanceConfig.getInstanceName(),
+                    fkv));
         });
 
         SpringAnalysisManager.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
@@ -329,7 +332,6 @@ public class ComponentService {
      * @param containerType
      * @param metaField
      * @param config
-     *
      * @return
      */
     public boolean updateFieldConfig(ComponentType containerType, IMetaField metaField, Kv config) {
@@ -351,7 +353,6 @@ public class ComponentService {
      * @param containerType
      * @param metaObject
      * @param config
-     *
      * @return
      */
     public boolean updateObjectConfigSelf(ComponentType containerType, IMetaObject metaObject, Kv config) {
@@ -373,7 +374,6 @@ public class ComponentService {
      * @param component 传容器的Component
      * @param metaField
      * @param config
-     *
      * @return
      */
     public boolean newFieldConfig(Component component, IMetaField metaField, String instanceCode, String instanceName, Kv config) {
@@ -390,47 +390,46 @@ public class ComponentService {
      * 删除某元对象下所有关联配置信息
      *
      * @param objectCode
-     *
      * @return
      */
     public boolean deleteObjectAll(String objectCode) {
         SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
-                                                   INSTANCE.META_OBJECT.toString(),
-                                                   objectCode);
+                INSTANCE.META_OBJECT.toString(),
+                objectCode);
         SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where type=? and dest_object like concat(?,'%')",
-                                                   INSTANCE.META_FIELD.toString(),
-                                                   objectCode);
+                INSTANCE.META_FIELD.toString(),
+                objectCode);
         return true;
     }
 
     public boolean deleteObjectConfig(String componentCode, String objectCode, boolean isSingle) {
 
         SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                                   componentCode,
-                                                   INSTANCE.META_OBJECT.toString(),
-                                                   objectCode);
+                componentCode,
+                INSTANCE.META_OBJECT.toString(),
+                objectCode);
 
         if (!isSingle) {
             SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object like concat(?,'%')",
-                                                       componentCode,
-                                                       INSTANCE.META_FIELD.toString(),
-                                                       objectCode);
+                    componentCode,
+                    INSTANCE.META_FIELD.toString(),
+                    objectCode);
         }
         return true;
     }
 
     public boolean deleteFieldConfig(String componentCode, String objectCode, String fieldCode) {
         SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
-                                                   componentCode,
-                                                   INSTANCE.META_FIELD.toString(),
-                                                   objectCode + "." + fieldCode);
+                componentCode,
+                INSTANCE.META_FIELD.toString(),
+                objectCode + "." + fieldCode);
         return true;
     }
 
     public boolean hasObjectConfig(String componentCode, String objectCode) {
         return SpringAnalysisManager.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where comp_code = ? and dest_object = ?",
-                                                            componentCode,
-                                                            objectCode) >= 1;
+                componentCode,
+                objectCode) >= 1;
     }
 
     public boolean hasObjectConfig(String instanceCode) {

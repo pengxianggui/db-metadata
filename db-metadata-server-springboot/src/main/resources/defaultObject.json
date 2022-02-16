@@ -534,6 +534,16 @@
           "isListShow": false,
           "isSearch": false
         }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
       }
     }
   },
@@ -645,6 +655,16 @@
         "config": {
           "isListShow": false,
           "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       }
     }
@@ -766,6 +786,16 @@
           "isListShow": false,
           "isSearch": false
         }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
       }
     }
   },
@@ -844,10 +874,10 @@
       }
     }
   },
-  "change_log": {
+  "meta_change_log": {
     "is_sys": true,
     "config": {
-      "objectCode": "change_log",
+      "objectCode": "meta_change_log",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
     },
@@ -1118,6 +1148,7 @@
           "isListShow": true,
           "isSearch": true,
           "scopeOptions": [
+            {"key": "自行实现","value": "-1"},
             {"key": "api接口鉴权","value": "0"},
             {"key": "基于api接口+元对象进行鉴权","value": "1"},
             {"key": "基于api接口+功能进行鉴权","value": "2"}
@@ -1141,6 +1172,7 @@
       "auth_name": {
         "cn": "权限名",
         "config": {
+          "isNullable": false,
           "isListShow": true,
           "isSearch": true
         }
@@ -1148,8 +1180,193 @@
       "auth_code": {
         "cn": "权限编码",
         "config": {
+          "isNullable": false,
           "isListShow": true,
           "isSearch": true
+        }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      }
+    }
+  },
+  "meta_role": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_role",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "code": {
+        "cn": "角色编码",
+        "config": {
+          "isNullable": false,
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "name": {
+        "cn": "角色名",
+        "config": {
+          "isNullable": false,
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "remark": {
+        "cn": "备注",
+        "config": {
+          "isNullable": true,
+          "isListShow": true
+        }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      }
+    }
+  },
+  "meta_user": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_user",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "username": {
+        "cn": "用户名",
+        "config": {
+          "isNullable": false,
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "password": {
+        "cn": "用户密码",
+        "config": {
+          "isNullable": false,
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "attrs": {
+        "cn": "其他属性",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       }
     }

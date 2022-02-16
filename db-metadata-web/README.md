@@ -362,7 +362,7 @@ Vue.use(metaElement, config)
           "order": 1
         },
         {
-          "objectCode": "change_log",
+          "objectCode": "meta_change_log",
           "foreignFieldCode": "object_code",
           "order": 2
         }

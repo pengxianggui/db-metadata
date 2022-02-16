@@ -9,6 +9,7 @@ import lombok.Getter;
  * @date 2021/10/16 7:40 上午
  */
 public enum AuthForType {
+    NORMAL("-1", "普通权限，需要自行鉴别用户是否有权限"),
     /**
      * api接口直接鉴权。
      * 鉴权时，直接根据 uri关联的auth_code进行权限认证

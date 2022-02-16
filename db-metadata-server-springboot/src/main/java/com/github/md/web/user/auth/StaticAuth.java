@@ -1,5 +1,6 @@
 package com.github.md.web.user.auth;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,14 +11,14 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 @Getter
-@AllArgsConstructor
-public class StaticPermission implements Permission {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class StaticAuth implements IAuth {
 
     private final String code;
 
     private final String name;
 
-    public static Permission of(String code, String name) {
-        return new StaticPermission(code, name);
+    public static IAuth of(String code, String name) {
+        return new StaticAuth(code, name);
     }
 }

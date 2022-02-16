@@ -79,7 +79,6 @@ public class InitKit {
             for (ComponentType componentType : getPredefinedComponentType(metaObject.code())) {
                 updateMetaComponentInstance(metaObject, componentType);
             }
-
         }
         return this;
     }

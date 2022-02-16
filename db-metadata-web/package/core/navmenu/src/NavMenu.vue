@@ -8,18 +8,7 @@
     <el-menu :default-active="activeMenu"
              :collapse="nativeCollapse"
              v-bind="conf" id="__DEFAULT_MENU">
-      <!-- 编程菜单 -->
       <slot></slot>
-
-      <!-- 动态菜单 -->
-      <template v-for="menu in menus">
-        <menu-item :item="menu" :base-path="menu.path" :key="menu.title + menu.path"></menu-item>
-      </template>
-
-      <!-- dbmeta 维护菜单 -->
-      <template v-for="menu in metaMenus" v-if="$isRoot()">
-        <menu-item v-if="!menu.hidden" :item="menu" :base-path="menu.path" :key="menu.title + menu.path"></menu-item>
-      </template>
     </el-menu>
   </div>
 </template>
@@ -27,9 +16,7 @@
 <script>
 import Meta from "../../mixins/meta";
 import DefaultMeta from "../../navmenu/ui-conf";
-import {restUrl} from "../../../constant/url";
 import MenuItem from './MenuItem'
-import MetaMenuData from '../../../menu'
 import {resolvePath} from '@/../package/utils/url'
 import utils from '@/../package/utils'
 
@@ -40,39 +27,15 @@ export default {
     MenuItem
   },
   props: {
-    dataUrl: {
-      type: String,
-      default: () => restUrl.MENU_DATA
-    },
     collapse: {
       type: Boolean,
       default: () => false
     }
   },
-  data() {
-    return {
-      metaMenus: MetaMenuData,
-      menus: []
-    }
-  },
-  watch: {
-    dataUrl: function (newV, oldV) {
-      this.getData(newV)
-    }
-  },
   methods: {
-    getData(url) {
-      this.$axios.get(url).then(resp => {
-        const {data: dynamicMenu} = resp
-        this.menus.push(...dynamicMenu)
-      })
-    },
     toggleMenu() {
       this.nativeCollapse = !this.nativeCollapse
     }
-  },
-  created() {
-    this.getData(this.dataUrl)
   },
   computed: {
     activeMenu() {

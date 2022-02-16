@@ -7,7 +7,7 @@ import EleProps from '../../constant/element-props'
 /**
  * ui配置数据提取函数。
  * @param configMap 例如: {
-    "instanceCode": "change_log.FormView",
+    "instanceCode": "meta_change_log.FormView",
     "fieldsMap": {
       "id": "{\"conf\": {\"rules\": [{\"type\": \"string\", \"message\": \"[主键]是必须填写的\", \"trigger\": [\"blur\"], \"required\": true}], \"maxlength\": 32}, \"name\": \"id\", \"label\": \"主键\", \"inline\": false, \"default_value\": \"\", \"component_name\": \"TextBox\"}",
       "object_code": "{\"conf\": {\"maxlength\": 64}, \"name\": \"object_code\", \"label\": \"元对象\", \"inline\": false, \"default_value\": \"\", \"component_name\": \"TextBox\"}",
@@ -23,9 +23,9 @@ import EleProps from '../../constant/element-props'
       "remark": "{\"conf\": {\"maxlength\": 32}, \"name\": \"remark\", \"label\": \"备注\", \"inline\": false, \"default_value\": \"\", \"component_name\": \"TextBox\"}"
     },
     "instanceName": "自动计算配置",
-    "change_log": "{\"btns\": {\"cancel\": {\"conf\": {}, \"label\": \"取消\"}, \"submit\": {\"conf\": {\"type\": \"primary\"}, \"label\": \"提交\"}}, \"conf\": {\"size\": \"medium\", \"rules\": {}, \"inline\": false, \"disabled\": false, \"label-width\": \"100px\"}, \"name\": \"FormView\", \"label\": \"表单模板\", \"columns\": [], \"component_name\": \"FormView\"}"
+    "meta_change_log": "{\"btns\": {\"cancel\": {\"conf\": {}, \"label\": \"取消\"}, \"submit\": {\"conf\": {\"type\": \"primary\"}, \"label\": \"提交\"}}, \"conf\": {\"size\": \"medium\", \"rules\": {}, \"inline\": false, \"disabled\": false, \"label-width\": \"100px\"}, \"name\": \"FormView\", \"label\": \"表单模板\", \"columns\": [], \"component_name\": \"FormView\"}"
   }
- * @param key 例如: change_log
+ * @param key 例如: meta_change_log
  * @param mergeDefault 是否需要合并组件默认的ui配置, 默认为true
  * @returns 例如: {"btns":{"cancel":{"conf":{},"label":"取消"},"submit":{"conf":{"type":"primary"},"label":"提交"}},"conf":{"size":"medium","rules":{},"inline":false,"disabled":false,"label-width":"100px"},"name":"FormView","label":"表单模板","columns":[],"component_name":"FormView"}
  * 注意:

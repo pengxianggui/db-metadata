@@ -1,4 +1,6 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.role;
+
+import com.github.md.web.user.auth.IAuth;
 
 /**
  * 角色抽象
@@ -28,14 +30,14 @@ public interface MRRole {
      *
      * @return
      */
-    Permission[] permissions();
+    IAuth[] auths();
 
     /**
      * 权限判定
      *
-     * @param permission
+     * @param auth
      *
      * @return
      */
-    boolean hasPermission(Permission permission);
+    boolean hasAuth(IAuth auth);
 }

@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class ResourcePermission implements Permission {
+public class ResourceAuth implements IAuth {
 
     MResource mResource;
 

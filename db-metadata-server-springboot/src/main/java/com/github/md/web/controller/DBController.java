@@ -72,7 +72,7 @@ public class DBController extends ControllerAdapter {
 
         StringBuilder sb = new StringBuilder();
 
-        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.INITABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
+        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.CLEARABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
 
         sb.append("即将清除的数据表:").append(tables);
@@ -103,7 +103,7 @@ public class DBController extends ControllerAdapter {
             metaService().saveMetaObject(metaObject, true);
             metaObject = metaService().findByCode(t.getTableName());
 
-            // 根据 defaultInstance.json 初始化系统表元对象对应的容器组件
+            // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
                 componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
