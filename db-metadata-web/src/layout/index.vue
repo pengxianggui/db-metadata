@@ -1,16 +1,23 @@
 <template>
-  <admin-layout :routes="routes">
+  <meta-layout>
     <template #header>
       <div class="header">
         <div>
           <span class="h2" style="font-family: unset">元数据管理系统</span>
           <span style="font-family: cursive;">—— Data Drive Everything</span>
         </div>
+
+        <list class="nav">
+          <list-item><router-link to="/index">首页</router-link></list-item>
+          <list-item><router-link to="/about">关于我们</router-link></list-item>
+          <list-item><router-link to="/dashboard">后台</router-link></list-item>
+          <list-item><router-link to="/workspace">workspace</router-link></list-item>
+        </list>
+
         <span style="flex: 1"></span>
-        <router-link to="/workspace" style="cursor: pointer;">
-          workspace
-        </router-link>
-        &nbsp;&nbsp;
+
+
+        &nbsp;&nbsp
         <el-tooltip class="item" effect="dark" content="初始化数据库" placement="bottom">
           <el-button @click="initDb" type="primary" icon="el-icon-magic-stick" size="mini"></el-button>
         </el-tooltip>
@@ -19,14 +26,14 @@
         </el-tooltip>
       </div>
     </template>
-  </admin-layout>
+  </meta-layout>
 </template>
 
 <script>
 import {routes} from "@/router";
 
 export default {
-  name: "Layout",
+  name: "MyLayout",
   data() {
     return {
       routes: routes
@@ -58,11 +65,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  /*background-color: #3b3e3f;*/
-}
-
-.menu {
-  height: 100%;
+.nav {
+  width: 500px;
+  li {
+    border: none;
+    a {
+      color: #3f9eff;
+      text-decoration: none;
+    }
+  }
 }
 </style>

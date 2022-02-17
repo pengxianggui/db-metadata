@@ -11,13 +11,14 @@ import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
 import ExceptionList from '../meta/exception'
-import AdminLayout from '../layout/admin-layout'
 import Redirect from './redirect'
 
 import {access} from '../access'
 import utils from "../utils";
 import {restUrl} from "../constant/url";
 import exchange from "./exchange";
+import MetaLayout from "../layout/MetaLayout";
+import MetaMain from '../layout/admin'
 
 /**
  * Meta 平台维护路由数据
@@ -44,9 +45,9 @@ const jumpOut = [
     }
 ];
 
-export const innerRoute = [
+const innerRoute = [
     {
-        path: 'meta-data',
+        path: '/meta/meta-data',
         name: 'Metadata',
         meta: {
             title: "元数据管理",
@@ -56,7 +57,7 @@ export const innerRoute = [
         },
         component: MetaDataManager
     }, {
-        path: 'feature',
+        path: '/meta/feature',
         name: 'Feature',
         meta: {
             title: '功能维护',
@@ -66,7 +67,7 @@ export const innerRoute = [
         },
         component: MetaFeatureList
     }, {
-        path: 'global-conf-list',
+        path: '/meta/global-conf-list',
         name: 'MetaComponent',
         meta: {
             title: "组件全局配置",
@@ -76,7 +77,7 @@ export const innerRoute = [
         },
         component: GlobalConfList
     }, {
-        path: 'global-conf',
+        path: '/meta/global-conf',
         name: 'MetaComponentEdit',
         meta: {
             title: "组件全局配置-编辑",
@@ -87,7 +88,7 @@ export const innerRoute = [
         hidden: true,
         component: GlobalConf
     }, {
-        path: 'instance-conf-list',
+        path: '/meta/instance-conf-list',
         name: 'MetaComponentInstance',
         meta: {
             title: "组件实例配置",
@@ -97,7 +98,7 @@ export const innerRoute = [
         },
         component: InstanceConfList
     }, {
-        path: 'meta-router',
+        path: '/meta/meta-router',
         name: 'MetaRouter',
         meta: {
             title: "路由维护",
@@ -108,7 +109,7 @@ export const innerRoute = [
         hidden: false,
         component: RouterManager
     }, {
-        path: 'meta-menu',
+        path: '/meta/meta-menu',
         name: 'MetaMenu',
         meta: {
             title: "菜单维护",
@@ -119,7 +120,7 @@ export const innerRoute = [
         hidden: false,
         component: MenuManager
     }, {
-        path: 'form-builder',
+        path: '/meta/form-builder',
         name: 'FormBuilder',
         meta: {
             title: "表单构建",
@@ -134,7 +135,7 @@ export const innerRoute = [
         }),
         component: FormBuilder
     }, {
-        path: 'meta-conf',
+        path: '/meta/meta-conf',
         name: 'MetaConf',
         meta: {
             title: 'MetaConf',
@@ -144,7 +145,7 @@ export const innerRoute = [
         },
         component: MetaConfList
     }, {
-        path: 'meta-dict',
+        path: '/meta/meta-dict',
         name: 'MetaDict',
         meta: {
             title: '字典',
@@ -154,7 +155,7 @@ export const innerRoute = [
         },
         component: DictList
     }, {
-        path: 'meta-exception',
+        path: '/meta/meta-exception',
         name: 'MetaException',
         meta: {
             title: '异常',
@@ -164,7 +165,7 @@ export const innerRoute = [
         },
         component: ExceptionList
     }, {
-        path: 'meta-auth',
+        path: '/meta/meta-auth',
         name: 'MetaAuth',
         meta: {
             title: '权限配置',
@@ -180,7 +181,7 @@ export const innerRoute = [
  * 外层路由，用于全页面打开ui-conf编辑等
  * @type {*[]}
  */
-export const outerRoute = jumpOut.map(route => {
+const outerRoute = jumpOut.map(route => {
     let item = utils.deepClone(route);
     item.path = '/' + route.path
     item.name = 'G_' + route.name // 避免重名
@@ -188,6 +189,7 @@ export const outerRoute = jumpOut.map(route => {
     return item;
 });
 
+// 组装meta平台维护路由
 function metaRoute(layout) {
     return [
         {
@@ -213,21 +215,15 @@ function metaRoute(layout) {
     ]
 }
 
-async function getDynamicRoutesFromRemote(axios, url) {
-    return await axios.get(url)
-}
-
 // 异步装载动态路由
 function addDynamicRoutes(rootRoute,
                           axios,
-                          Layout,
-                          url,
-                          formatCallback) {
+                          Layout) {
     return new Promise((resolve, reject) => {
-        getDynamicRoutesFromRemote(axios, url).then(resp => {
+        axios.get(restUrl.ROUTE_DATA).then(resp => {
             const {data: routes} = resp
             console.info('[MetaElement] 装配动态路由, %o', routes)
-            const dynamicRoutes = formatCallback(routes, Layout)
+            const dynamicRoutes = exchange(routes, Layout)
             console.debug('[MetaElement] 动态路由数据为: %o', dynamicRoutes)
             rootRoute.children.push(...dynamicRoutes)
             resolve()
@@ -237,54 +233,39 @@ function addDynamicRoutes(rootRoute,
     })
 }
 
-function sort(routes = []) {
-    routes.sort((r1, r2) => {
-        const {meta: {order: order1 = 10} = {}} = r1
-        const {meta: {order: order2 = 10} = {}} = r2
-        return order1 - order2
-    })
-    routes.forEach(r => sort(r.children))
-}
-
-/**
- * 装载动态路由，如果系统存在静态配置的路由，则必须在route.onReady中调用此方法进行动态路由装配。否则由于异步路由数据可能导致动态路由还未装配，
- * 路由跳转已经发生，从而导致路由不存在。
- * @param router 必填项。VueRouter对象。
- * @param axios 必填项。此axios将承担起动态路由数据的异步获取职责
- * @param Layout 可选项，默认AdminLayout。布局组件。你可以利用插槽重写AdminLayout, 再进行传入。也可以不传，默认meta-element提供的AdminLayout。注意，如果传了此布局组件，
- *                  则此组件的name必须与动态路由数据中对应的由的component名称相同。否则由于动态路由数据是不约束层次结构的，系统并不知道这个Layout将装配到哪个
- *                  路由上。特别的是，meta路由一定会生效，而不受此条件限制。因为meta路由是固定的结构，系统知道Layout组件将应用在哪个路由上。
- * @param url 可选项, 默认为db-meta服务端动态路由数据接口地址。url告诉axios从哪个资源地址获取动态路由数据
- * @param formatCallback 可选项，默认装配规则。 动态路由数据获取后，将执行一个格式化动态路由数据的回调函数。例如，由于动态路由数据中的component没法是一个Vue组件数据，它可能只能是一个组件名，
- *                      那么这个回调函数中就得根据这个组件名找到对应的Vue组件实例，然后替换上去。你也可以做一些其他数据过滤和装配的事情。
- */
-const addRoutes = function (router, axios, Layout = AdminLayout, url = restUrl.ROUTE_DATA, formatCallback = exchange) {
-    // 动态业务根路由
-    const bizRootRoute = {
-        path: '/',
-        name: 'Layout',
-        hidden: true,
-        component: Layout,
-        children: []
-    }
-
-    let routes = [
-        ...metaRoute(Layout),
-        bizRootRoute
-    ]
-
-    addDynamicRoutes(bizRootRoute, axios, Layout, url, formatCallback).then(() => {
-        sort(routes);
-        console.log(routes)
-        router.addRoutes(routes)
-    })
-}
-
-export default addRoutes;
-
-export const registerRoute = function (Vue, opts) {
-    const {axios, router, layout} = opts
+// 路由注册
+function registerRoute(Vue, opts) {
+    const {axios, router, layout = MetaLayout} = opts
     router.onReady(() => {
-        addRoutes(router, axios, layout)
+        const mainRoute = {
+            path: '/main',
+            name: 'MetaMain',
+            hidden: true,
+            component: MetaMain,
+            children: [
+            ]
+        }
+
+        let routes = [
+            {
+                path: '/',
+                name: 'MetaLayout',
+                hidden: true,
+                component: layout,
+                children: [
+                    mainRoute,
+                    ...metaRoute(MetaMain),
+                ]
+            }
+        ]
+
+        // 装配动态路由
+        addDynamicRoutes(mainRoute, axios, layout).then(() => {
+            router.addRoutes(routes)
+        })
     })
+}
+
+export default {
+    registerRoute
 }

@@ -17,16 +17,12 @@ export default function (axios) {
      * @date : 20210909
      */
     function resolve(url, config = {}) {
-        console.log("before url: ", url)
         if (url.indexOf("?") > -1) {
             const q = {};
             url.replace(/([^?&=]+)=([^&]*)/g, (_, k, v) => q[k] = v);
             config.params = Object.assign(config.params || {}, q);
             url = url.replace(/\?.*/g, "");
-            console.log("q: ", q)
-            console.log("config: ", config)
         }
-        console.log("after url: ", url)
         return url
     }
 
@@ -38,9 +34,7 @@ export default function (axios) {
             }, reject => {
             })
         }
-        console.log("before get:config", config);
         let compileUrl = resolve(url, config);
-        console.log("after get:config", config);
         return axios.get(compileUrl, config);
     }
     axios.safePost = function (url, data, config = {}) {
@@ -51,7 +45,6 @@ export default function (axios) {
             })
         }
         let compileUrl = resolve(url, config);
-        console.log("get:config", config);
         return axios.post(compileUrl, data, config);
     }
     return axios

@@ -1,5 +1,7 @@
 <template>
-  <single-grid-tmpl :oc="oc"></single-grid-tmpl>
+  <single-grid-tmpl :oc="oc">
+
+  </single-grid-tmpl>
 </template>
 
 <script>

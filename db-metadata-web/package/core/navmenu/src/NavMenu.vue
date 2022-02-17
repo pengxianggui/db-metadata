@@ -16,16 +16,12 @@
 <script>
 import Meta from "../../mixins/meta";
 import DefaultMeta from "../../navmenu/ui-conf";
-import MenuItem from './MenuItem'
 import {resolvePath} from '@/../package/utils/url'
 import utils from '@/../package/utils'
 
 export default {
   name: "NavMenu",
   mixins: [Meta(DefaultMeta)],
-  components: {
-    MenuItem
-  },
   props: {
     collapse: {
       type: Boolean,

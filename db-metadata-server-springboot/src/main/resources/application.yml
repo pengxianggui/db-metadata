@@ -14,7 +14,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 50MB
 
-
 logging:
   level:
     mb: debug
@@ -24,7 +23,15 @@ logging:
 
 md:
   dev-mode: false
+  app:
+    name: 元数据管理系统 # 系统名
+    logo: logo.png # 系统logo地址
   server:
+    user:
+      model: REG_ADD # REG-注册; ADD-手动添加; REG_ADD-两者都有
+      pass_encrypt_key: # 密码加密密钥
+      pass_default: 888888 # 默认(初始)密码
+
     login:
       enable: true
     auth:

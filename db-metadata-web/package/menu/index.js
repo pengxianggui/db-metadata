@@ -1,9 +1,6 @@
 import {access} from "../access";
 
-/**
- * Meta 平台维护 菜单数据
- */
-export default [{
+const metaMenus = [{
     "path": "/meta",
     "title": "平台维护",
     "icon": "el-icon-s-tools",
@@ -123,9 +120,18 @@ export default [{
         }
     ]
 }]
+const programMenus = []
+
+function registerMenu(Vue, opts = {}) {
+    const {menus} = opts
+    programMenus.push(...menus)
+}
 
 /**
- * 编程路由生成的菜单
- * @type {*[]}
+ * Meta 平台维护 菜单数据
  */
-export const programMenus = []
+export default {
+    metaMenus,
+    programMenus,
+    registerMenu
+}

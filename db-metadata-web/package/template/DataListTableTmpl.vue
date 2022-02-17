@@ -1,4 +1,5 @@
 <template>
+  <div class="container-view">
     <row-grid :span="[6, 18]">
         <template #0>
             <div class="el-card">
@@ -32,6 +33,7 @@
             </div>
         </template>
     </row-grid>
+  </div>
 </template>
 
 <script>

@@ -1,58 +1,100 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {user} from '@/../package/index'
+import {user, MetaMain} from '@/../package/index'
 
 Vue.use(Router);
 
-export const routes = [
+export const menus = [
     {
-        path: '/',
+        path: '/dashboard',
+        title: '首页',
+        icon: 'el-icon-menu',
         hidden: false,
-        component: () => import('@/layout'),
-        meta: {title: '', icon: 'dashboard', order: -99999}, // order是对菜单的排序
+        disable: false,
+        order: -99999
+    },
+    {
+        path: '/admin/route1',
+        title: '菜单1',
+        icon: 'el-icon-menu',
+        hidden: false,
+        disable: false,
+        order: 1,
         children: [
             {
-                name: 'Dashboard',
-                path: '/dashboard',
-                component: () => import('../view/Dashboard'),
-                meta: {title: '首页', icon: 'el-icon-menu', order: -99999},
-                props: {oc: 'meta_dict'}
+                path: '/admin/route1-1',
+                title: '菜单1-1',
+                icon: 'el-icon-menu',
+                hidden: false,
+                disable: true,
+                order: 0
+            },
+            {
+                path: '/admin/route1-2',
+                title: '菜单1-2',
+                icon: 'el-icon-menu',
+                hidden: false,
+                disable: false,
+                order: 1
             }
+        ]
+    }
+]
+
+export const routes = [
+    {
+        path: "/",
+        component: () => import('@/layout'),
+        redirect: '/meta/meta-data',
+        children: [
+            {
+                path: '/admin',
+                name: 'Admin',
+                component: MetaMain,
+                children: [
+                    {
+                        name: 'Dashboard',
+                        path: '/dashboard',
+                        component: () => import('../view/Dashboard'),
+                        meta: {title: '首页', icon: 'el-icon-menu', order: -99999},
+                        props: {oc: 'meta_dict'}
+                    },
+                    {
+                        name: 'Route1-1',
+                        path: 'route1-1',
+                        component: () => import('@/../package/template/SingleGridTmpl'),
+                        meta: {title: '路由1-1', icon: 'more', order: 1},
+                        props: {oc: 'meta_dict'}
+                    },
+                    {
+                        name: 'Route1-2',
+                        path: 'route1-2',
+                        component: () => import('@/../package/template/SingleGridTmpl'),
+                        meta: {title: '路由1-2', icon: 'more', order: 0},
+                        props: {oc: 'meta_dict'}
+                    }
+                ]
+            }, {
+                path: '/index',
+                name: 'Index',
+                component: () => import('@/view/Index')
+            },
+            {
+                name: 'About',
+                path: '/about',
+                component: () => import('@/view/About')
+            },
         ]
     },
     {
         name: 'WorkSpace',
         path: '/workspace',
-        hidden: true,
         component: () => import('@/components/demo/WorkSpace')
     },
     {
-        name: 'Route1',
-        path: '/route1',
-        component: () => import('@/layout'),
-        meta: {title: '路由1', order: 0, icon: 'more'},
-        children: [
-            {
-                name: 'Route1-1',
-                path: 'route1-1',
-                component: () => import('@/../package/template/SingleGridTmpl'),
-                meta: {title: '路由1-1', icon: 'more', order: 1},
-                props: {oc: 'meta_dict'}
-            },
-            {
-                name: 'Route1-2',
-                path: 'route1-2',
-                component: () => import('@/../package/template/SingleGridTmpl'),
-                meta: {title: '路由1-2', icon: 'more', order: 0},
-                props: {oc: 'meta_dict'}
-            }
-        ]
-    }, {
         name: 'Page404',
         path: '*',
-        component: () => import('@/view/404'),
-        meta: {order: Number.MAX_VALUE},
-        hidden: true
+        component: () => import('@/view/404')
     }
 ];
 
@@ -66,4 +108,5 @@ router.beforeEach(async (to, from, next) => {
     next()
 })
 
+// console.log(router.getRoutes())
 export default router

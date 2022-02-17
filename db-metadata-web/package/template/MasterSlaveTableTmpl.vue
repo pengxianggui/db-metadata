@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-view">
         <div class="el-card">
             <search-view :meta="master.spMeta" @search="mHandleSearch"></search-view>
             <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"

@@ -1,15 +1,14 @@
 <template>
     <div v-if="$isRoot()">
         <template v-for="m in menus">
-            <menu-item v-if="!m.hidden" :item="m" :base-path="basePath" :key="m.path">
-            </menu-item>
+            <menu-item v-if="!m.hidden" :item="m" :base-path="basePath" :key="m.path"></menu-item>
         </template>
     </div>
 </template>
 
 <script>
     import MenuItem from '../core/navmenu/src/MenuItem'
-    import MetaMenu from './index'
+    import {metaMenus} from './index'
 
     export default {
         name: "MetaMenu",
@@ -24,7 +23,7 @@
         },
         data() {
             return {
-                menus: MetaMenu
+                menus: metaMenus
             }
         }
     }

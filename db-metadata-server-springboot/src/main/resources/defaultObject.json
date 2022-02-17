@@ -1287,6 +1287,7 @@
     "config": {
       "objectCode": "meta_user",
       "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.user.UserAop",
       "orderBy": "created_time desc"
     },
     "_fields": {
@@ -1348,7 +1349,7 @@
           "isSearch": false,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 10
         }
       },
       "attrs": {

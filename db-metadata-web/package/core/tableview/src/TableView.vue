@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical" class="el-card" ref="container">
+  <el-container direction="vertical" class="el-card container-view" ref="container">
     <el-row justify="end">
       <el-col :span="24">
         <!-- operation bar -->

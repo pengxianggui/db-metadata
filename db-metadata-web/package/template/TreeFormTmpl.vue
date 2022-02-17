@@ -1,4 +1,5 @@
 <template>
+  <div class="el-card container-view">
     <row-grid :span="[6, 18]">
         <template #0>
             <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
@@ -11,6 +12,7 @@
             </form-view>
         </template>
     </row-grid>
+  </div>
 </template>
 
 <script>

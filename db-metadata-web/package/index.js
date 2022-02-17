@@ -5,9 +5,11 @@ import filters from './register/filter'
 import registerGlobalFunction from './register/global-function'
 import './svg/index' // 内置svg注册
 // 布局组件
-import AdminLayout from "./layout/admin-layout";
-import NavMenu from "./core/navmenu/src/NavMenu";
+import NavMenu from "./core/navmenu";
 import TagView from "./core/tagview";
+import MetaLayout from "./layout/MetaLayout";
+import MetaHeader from "./layout/MetaHeader";
+import MetaMain from './layout/admin/index'
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -62,8 +64,6 @@ import user from './access'
 // 内置业务组件
 import {UserList, RoleList} from '@/../package/meta/rbac'
 
-// 路由装配对象
-import addRoutes from "./route";
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
 
@@ -119,7 +119,9 @@ const components = [
     FullScreen,
 
     // 布局组件layout
-    AdminLayout,
+    MetaLayout,
+    MetaHeader,
+    MetaMain,
     NavMenu,
     TagView,
 
@@ -138,7 +140,8 @@ const components = [
     RoleList
 ];
 
-import {registerRoute} from "./route";
+import Route from "./route";
+import Menu from "./menu";
 
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
@@ -171,7 +174,8 @@ const install = function (Vue, opts = {}) {
     })
 
     // 注册路由
-    registerRoute(Vue, opts)
+    Route.registerRoute(Vue, opts)
+    Menu.registerMenu(Vue, opts)
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -188,6 +192,9 @@ export {
     restUrl,
     user,
     MetaMenu,
+
     TagViewUtil,
-    AdminLayout
+    MetaLayout,
+    MetaHeader,
+    MetaMain
 }

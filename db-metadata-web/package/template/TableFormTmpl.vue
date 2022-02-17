@@ -1,4 +1,5 @@
 <template>
+  <div class="el-card container-view">
     <row-grid :span="[14, 10]">
         <template #0>
             <table-view :ref="tlRefName" :meta="tlMeta" @active-change="handleActiveChange">
@@ -30,6 +31,7 @@
             </div>
         </template>
     </row-grid>
+  </div>
 </template>
 
 <script>
