@@ -15,31 +15,15 @@ public class UserException extends WebException {
         super(messageTmpl, args);
     }
 
+    public UserException(String msg, int code) {
+        super(msg, code);
+    }
+
     public UserException(String message) {
         super(message);
     }
 
     public UserException loginError() {
-        setError(USER.USER_LOGIN_FAILED);
         return this;
-    }
-
-    @AllArgsConstructor
-    enum USER implements IErrorMsg {
-        USER_LOGIN_FAILED(40000001, "登录用户名错误");
-
-        int code;
-
-        String msg;
-
-        @Override
-        public int code() {
-            return this.code;
-        }
-
-        @Override
-        public String msg() {
-            return this.msg;
-        }
     }
 }

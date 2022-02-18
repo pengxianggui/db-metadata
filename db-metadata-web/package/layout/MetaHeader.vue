@@ -1,13 +1,19 @@
 <template>
   <div class="header">
-    <span class="h2" style="font-family: unset">元数据管理系统</span>
-    <span style="font-family: cursive;">—— Data Drive Everything</span>
+    <span class="h2" style="font-family: unset">{{ appConfig.name }}</span>
   </div>
 </template>
 
 <script>
+import {appConfig} from "../config";
+
 export default {
-  name: "MetaHeader"
+  name: "MetaHeader",
+  data() {
+    return {
+      appConfig: appConfig
+    }
+  }
 }
 </script>
 <style scoped lang="scss">

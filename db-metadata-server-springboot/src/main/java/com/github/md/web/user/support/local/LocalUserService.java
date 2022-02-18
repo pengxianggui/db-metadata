@@ -155,4 +155,9 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
         }
         return true;
     }
+
+    @Override
+    public boolean bindRolesForUser(String userId, String... roleIds) {
+        return false;
+    }
 }

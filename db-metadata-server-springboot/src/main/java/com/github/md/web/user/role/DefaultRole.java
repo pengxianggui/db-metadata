@@ -1,8 +1,10 @@
 package com.github.md.web.user.role;
 
+import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
+import com.google.common.collect.Lists;
+import com.jfinal.plugin.activerecord.Record;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,38 +13,34 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
-class DefaultRole implements MRRole {
+public class DefaultRole implements MRRole {
 
-    private final List<IAuth> innerAuthList;
+    private Record data;
+    private List<IAuth> auths;
 
-    private final String code;
+    public DefaultRole(Record record) {
+        this.data = record;
+        this.auths = Lists.newArrayList();
+    }
 
-    private final String name;
-
-    private IAuth[] auths;
-
-    public DefaultRole(String code, String name) {
-        this.code = code;
-        this.name = name;
-        this.innerAuthList = new ArrayList<>();
+    @Override
+    public String id() {
+        return null;
     }
 
     @Override
     public String code() {
-        return code;
+        return data.getStr("code");
     }
 
     @Override
     public String name() {
-        return name;
+        return data.getStr("name");
     }
 
     @Override
     public IAuth[] auths() {
-        if (!innerAuthList.isEmpty()) {
-            return innerAuthList.toArray(auths);
-        }
-        return auths;
+        return this.auths.toArray(new IAuth[this.auths.size()]);
     }
 
     @Override
@@ -55,7 +53,12 @@ class DefaultRole implements MRRole {
         return false;
     }
 
+    @Override
+    public Kv toKv() {
+        return Kv.create().set(this.data.getColumns());
+    }
+
     public void addPermission(IAuth auth) {
-        innerAuthList.add(auth);
+        this.auths.add(auth);
     }
 }

@@ -1,6 +1,6 @@
 package com.github.md.web;
 
-import lombok.AllArgsConstructor;
+import cn.com.asoco.exception.UserInVisibleException;
 import lombok.Getter;
 
 /**
@@ -14,20 +14,19 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 @Getter
-public class WebException extends RuntimeException {
-
-    protected int code;
-
-    protected String msg;
+public class WebException extends UserInVisibleException {
 
     public WebException(String message) {
-        super(message);
-        set(500, message);
+        super(message, 500);
     }
 
     public WebException(String messageTmpl, String... args) {
         super(resolveString(messageTmpl, args));
         set(500, resolveString(messageTmpl, args));
+    }
+
+    public WebException(String msg, int code) {
+        super(msg, code);
     }
 
     private static String resolveString(String errorMsgTemplate, String... args) {
@@ -43,41 +42,9 @@ public class WebException extends RuntimeException {
      * @param code
      * @param msg
      */
-    private void set(int code, String msg) {
+    protected void set(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public void setError(IErrorMsg error) {
-        set(error.code(), error.msg());
-    }
-
-    /**
-     * 使用enum类型,确保系统中存在的Code,msg都是已知的
-     */
-    @AllArgsConstructor
-    protected enum WEB_ERROR implements IErrorMsg {
-        UNKNOWN(500, "系统发生错误");
-
-        private final int code;
-
-        private final String msg;
-
-        @Override
-        public int code() {
-            return this.code;
-        }
-
-        @Override
-        public String msg() {
-            return this.msg;
-        }
-    }
-
-    public interface IErrorMsg {
-
-        int code();
-
-        String msg();
-    }
 }

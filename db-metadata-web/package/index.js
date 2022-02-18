@@ -67,6 +67,10 @@ import {UserList, RoleList} from '@/../package/meta/rbac'
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
 
+import Route from "./route";
+import Menu from "./menu";
+import {configApp} from "./config";
+
 // 暴露tagView操作的接口
 import TagViewUtil from '@/../package/core/tagview/data'
 
@@ -140,30 +144,31 @@ const components = [
     RoleList
 ];
 
-import Route from "./route";
-import Menu from "./menu";
-
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
     Vue.use(ElementUI, opts);
 
-    // 注册全局函数
-    registerGlobalFunction(Vue, opts)
-
-
-    // 自定义rest接口url覆盖
+    // 自定义rest接口url覆盖: 优先级最高
     if (opts.restUrl) {
         utils.reverseMerge(restUrl, opts.restUrl, false);
     }
+
+    // 注册全局函数
+    registerGlobalFunction(Vue, opts)
+
+    // 注册全局过滤器
+    Object.keys(filters).map(key => Vue.filter(key, filters[key]))
 
     // 静态角色配置
     if (opts.access) {
         utils.reverseMerge(access, opts.access, false);
     }
 
-    // 注册全局过滤器
-    Object.keys(filters).map(key => Vue.filter(key, filters[key]))
+    // 注册路由
+    Route.registerRoute(Vue, opts)
+    Menu.registerMenu(Vue, opts)
+    configApp(Vue, opts)
 
     components.map(component => {
         if (component.install) {
@@ -172,10 +177,6 @@ const install = function (Vue, opts = {}) {
             Vue.component(component.name, component)
         }
     })
-
-    // 注册路由
-    Route.registerRoute(Vue, opts)
-    Menu.registerMenu(Vue, opts)
 };
 
 if (typeof window !== 'undefined' && window.Vue) {

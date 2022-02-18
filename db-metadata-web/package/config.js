@@ -1,3 +1,6 @@
+import {restUrl} from "./constant/url";
+import utils from "./utils";
+
 export const elementVersion = '2.12.0';
 
 export const pageNumArea = [5, 10, 20, 50, 100, 200];
@@ -9,3 +12,21 @@ export const defaultPrimaryKey = 'id';
  * @type {string}
  */
 export const relatedId = '_relate_id'
+
+/**
+ * 系统配置
+ * @type {{}}
+ */
+export const appConfig = {}
+
+export const configApp = function (Vue, opts = {}) {
+    const {axios} = opts
+    if (!axios) {
+        console.error('[MetaElement]请配置axios')
+        return
+    }
+
+    axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
+        utils.reverseMerge(appConfig, data)
+    })
+}

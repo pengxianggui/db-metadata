@@ -4,7 +4,7 @@
             <template v-if="all">
                 <pop-menu trigger="right-click">
                     <template #label>{{label}}</template>
-                    <list>
+                    <list direction="column">
                         <list-item @click="editMetaObject">编辑元对象({{objectCode}})</list-item>
                         <list-item @click="editMetaField">编辑元字段({{fieldCode}})</list-item>
                         <list-item @hover="getInstanceCode">

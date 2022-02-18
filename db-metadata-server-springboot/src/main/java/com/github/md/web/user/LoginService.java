@@ -1,5 +1,7 @@
 package com.github.md.web.user;
 
+import com.github.md.web.ServiceManager;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -16,7 +18,9 @@ public interface LoginService<U extends User> {
      *
      * @return
      */
-    String tokenKey();
+    default String tokenKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getTokenKey();
+    }
 
     /**
      * 登录时 获取用户名的key
@@ -24,16 +28,23 @@ public interface LoginService<U extends User> {
      *
      * @return
      */
-    String loginKey();
+    default String loginKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getLoginKey();
+    }
 
     /**
      * 登录时 获取密码的key
      *
      * @return
      */
-    String pwdKey();
+    default String pwdKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
+    }
 
-    String cookieKey();
+    @Deprecated
+    default String cookieKey() {
+        return null;
+    }
 
     U getUser(HttpServletRequest request);
 

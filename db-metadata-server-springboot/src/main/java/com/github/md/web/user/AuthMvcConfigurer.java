@@ -3,7 +3,6 @@ package com.github.md.web.user;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.user.auth.MRManager;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2021/10/18 9:00 上午
  */
 @Slf4j
-@ConditionalOnMissingBean(AuthMvcConfigurer.class)
 @Configuration
 public class AuthMvcConfigurer implements WebMvcConfigurer {
 

@@ -1,5 +1,6 @@
 package com.github.md.web.user.role;
 
+import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
 
 /**
@@ -10,6 +11,8 @@ import com.github.md.web.user.auth.IAuth;
  * <p> @author konbluesky </p>
  */
 public interface MRRole {
+
+    String id();
 
     /**
      * 角色的编码
@@ -40,4 +43,6 @@ public interface MRRole {
      * @return
      */
     boolean hasAuth(IAuth auth);
+
+    Kv toKv();
 }

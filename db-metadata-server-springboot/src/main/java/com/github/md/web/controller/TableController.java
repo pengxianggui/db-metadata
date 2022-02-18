@@ -182,7 +182,7 @@ public class TableController extends ControllerAdapter {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, parameterHelper.getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, parameterHelper.getKv(), getRequest());
 
         boolean status = Db.tx(new IAtom() {
 

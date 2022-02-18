@@ -15,4 +15,13 @@ public interface UserService<U extends User> {
     U findById(Object idValue);
 
     boolean updateById(U user);
+
+    /**
+     * 幂等
+     *
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    boolean bindRolesForUser(String userId, String... roleIds);
 }

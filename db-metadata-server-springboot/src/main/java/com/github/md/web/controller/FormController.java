@@ -78,7 +78,7 @@ public class FormController extends ControllerAdapter {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut[] pointCut = metaObjectConfigParse.addPointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv(), getRequest());
 
         boolean status = Db.tx(new IAtom() {
 
@@ -139,7 +139,7 @@ public class FormController extends ControllerAdapter {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut[] pointCut = metaObjectConfigParse.updatePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv(), getRequest());
 
         boolean status = Db.tx(new IAtom() {
 

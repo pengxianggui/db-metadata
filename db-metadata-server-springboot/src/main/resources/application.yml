@@ -1,3 +1,13 @@
+server:
+  port: 8888
+
+logging:
+  level:
+    mb: debug
+    root: info
+  group:
+    mb: com.github.md.web
+
 spring:
   profiles:
     active: dev
@@ -14,41 +24,53 @@ spring:
       max-file-size: 10MB
       max-request-size: 50MB
 
-logging:
-  level:
-    mb: debug
-    root: info
-  group:
-    mb: com.github.md.web
-
+# db-metadata完整的默认配置
 md:
-  dev-mode: false
-  app:
-    name: 元数据管理系统 # 系统名
+  dev-mode: false # 开发模式。为true时系统将允许一些操作(比如清空元对象，重新全量生成等)
+  app: # 应用配置
+    name: 元数据管理系统————Data drive everything # 系统名
     logo: logo.png # 系统logo地址
-  server:
-    user:
-      model: REG_ADD # REG-注册; ADD-手动添加; REG_ADD-两者都有
-      pass_encrypt_key: # 密码加密密钥
-      pass_default: 888888 # 默认(初始)密码
+    registerable: true # 系统是否支持用户自行注册
+    addable: true # 系统是否支持用户添加其他用户
+    default_pass: 888888 # 默认(初始)密码， 当添加用户时、用户注册(未提供密码时)，将使用此默认密码
+    pass-encrypt-key: DB-Metadata is delicious # 用户密码加密密钥。无论什么方式，入库的明文密码都需要使用此密钥进行加密。加密方式为AES对称加密
 
-    login:
-      enable: true
-    auth:
-      enable: true
-    upload:
+  server:
+    login: # 认证配置
+      enable: false # 是否启用认证
+      token-key: X-TOKEN # 登录后存放在header里的token的 key
+      login-key: username # 登录表单账号的key
+      pwd-key: password # 登录表单密码的key
+      includes: # 需要认证的接口
+        - /*
+      excludes: # 无需认证的接口url
+        - /app/config
+        - /router
+        - /user/login
+      ctrl:
+        enable: true # 是否启用内置登录控制器(接口)，若关闭则以下接口无效。需要自行提供登录接口
+        login-path: /user/login # 内置登录接口
+        logout-path: /user/logout # 内置登出接口
+        info-path: /user/info # 内置用户信息接口
+    auth: # 鉴权配置
+      enable: false # 是否启用鉴权
+      includes: # 需要鉴权的接口
+        - /*
+      excludes: # 无需鉴权的接口url
+        - /app/config
+        - /router
+        - /user/login
+    upload: # 上传配置
       mode: local # default, 可以不配置
       base-upload-path: /opt/www/db-meta-serve # 当mode为本地时，配置的本地上传根路径
     event-enabled: true
     component:
-      replace-from-json-file: true
+      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultInstance.json)中推导组件实例配置，并覆盖数据库
     meta-object:
-      replace-from-json-file: true
+      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultObject.json)中推导元对象逻辑配置，并覆盖数据库
 
   analysis:
     extension:
       meta-object-enabled: true
       meta-field-enabled: true
       component-instance-enabled: true
-server:
-  port: 8888

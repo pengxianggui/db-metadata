@@ -386,7 +386,15 @@
         "expand": true
       }
     },
-    "TableView": {},
+    "TableView": {
+      "config": {
+        "operation-column": {
+          "show": true,
+          "fixed": "right",
+          "width": "220"
+        }
+      }
+    },
     "FormView": {}
   }
 }

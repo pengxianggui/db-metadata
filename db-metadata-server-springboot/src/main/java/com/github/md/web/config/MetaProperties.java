@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 public class MetaProperties {
 
+    private AppProperties app = new AppProperties();
+
     private ServerProperties server = new ServerProperties();
 
     private AnalysisProperties analysis;
@@ -30,6 +32,16 @@ public class MetaProperties {
     }
 
     @Data
+    public static class AppProperties {
+        private String name = "DB-Metadata元数据管理系统";
+        private String logo;
+        private Boolean registerable = true;
+        private Boolean addable = true;
+        private String defaultPass = "888888";
+        private String passEncryptKey = "DB-Metadata is delicious";
+    }
+
+    @Data
     public static class ServerProperties {
 
         private MetaObjectProperties metaObject = new MetaObjectProperties();
@@ -41,6 +53,7 @@ public class MetaProperties {
         private Login login = new Login();
 
         private Auth auth = new Auth();
+
     }
 
     @Data
@@ -67,10 +80,19 @@ public class MetaProperties {
     @Data
     public static class Login {
         boolean enable = false;
+        private String tokenKey = "X-TOKEN";
+        private String loginKey = "username";
+        private String pwdKey = "password";
+
         LoginCtrl ctrl = new LoginCtrl();
         List<String> includes = new ArrayList<>();
         List<String> excludes = new ArrayList<>();
 
+        public List<String> getExcludes() {
+            excludes.add("/app/config");
+            excludes.add("/router");
+            return excludes;
+        }
     }
 
     @Data

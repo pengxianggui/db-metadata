@@ -15,7 +15,7 @@ import com.github.md.web.user.auth.IAuth;
 public class RoleFactory {
 
     public static MRRole createRole(String code, String name, IAuth... auths) {
-        DefaultRole role = new DefaultRole(code, name);
+        StaticRole role = new StaticRole(code, name);
         for (IAuth auth : auths) {
             role.addPermission(auth);
         }

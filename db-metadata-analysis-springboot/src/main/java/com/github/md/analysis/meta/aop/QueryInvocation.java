@@ -4,6 +4,8 @@ import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.kit.Kv;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 查询拦截用的Invocation,因为最终Invocation中的数据结构是需要根据具体场景来确定的,所以此处只定义成抽象类
  * <p> @Date : 2020/9/10 </p>
@@ -13,12 +15,12 @@ import com.github.md.analysis.kit.Kv;
  */
 public abstract class QueryInvocation extends AopInvocation {
 
-    private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams) {
-        super(metaObject, formData, httpParams);
+    private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams, HttpServletRequest request) {
+        super(metaObject, formData, httpParams, request);
     }
 
-    private QueryInvocation(IMetaObject metaObject, Kv httpParams) {
-        super(metaObject, httpParams);
+    private QueryInvocation(IMetaObject metaObject, Kv httpParams, HttpServletRequest request) {
+        super(metaObject, httpParams, request);
     }
 
     public QueryInvocation(IMetaObject metaObject) {

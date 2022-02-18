@@ -132,7 +132,7 @@
                 let value = self.value;
 
                 if (typeof value === 'string') {
-                    value = JSON.parse(value);
+                    value = utils.parse(value);
                 }
 
                 Object.keys(self.config).forEach(key => {
@@ -144,7 +144,7 @@
                 return self.config;
             },
             hasTranslation() {
-                let value = utils.isString(this.value) ? JSON.parse(this.value) : this.value;
+                let value = utils.isString(this.value) ? utils.parse(this.value) : this.value;
                 return (utils.isString(value.scopeSql) && value.scopeSql.trim() !== '')
                     || (utils.isArray(value.scopeOptions) && value.scopeOptions.length > 0)
             }

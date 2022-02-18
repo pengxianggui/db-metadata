@@ -80,6 +80,11 @@ export const routes = [
                 component: () => import('@/view/Index')
             },
             {
+                path: '/login',
+                name: 'Login',
+                component: () => import('@/view/Login')
+            },
+            {
                 name: 'About',
                 path: '/about',
                 component: () => import('@/view/About')
@@ -104,7 +109,9 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-    user.setRoles(["ROOT"]) // 异步获取角色并设置
+    user.setUser({
+        roles: ['ROOT']
+    }) // 异步获取角色并设置
     next()
 })
 

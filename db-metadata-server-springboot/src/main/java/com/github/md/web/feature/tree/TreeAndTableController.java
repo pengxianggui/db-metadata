@@ -146,7 +146,7 @@ public class TreeAndTableController extends ControllerAdapter {
         AddPointCut addPointCut = (AddPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
         /** 将TreeAndTable中拦截器取出合并到AddPointCut拦截器中 */
         AddPointCut[] pointCut = Lists.asList(addPointCut, metaObjectConfigParse.addPointCut()).toArray(new AddPointCut[0]);
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper.getKv());
+        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper.getKv(), getRequest());
 
         boolean status = Db.tx(new IAtom() {
 

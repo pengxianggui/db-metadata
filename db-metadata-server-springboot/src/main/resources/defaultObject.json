@@ -1267,7 +1267,8 @@
         "cn": "备注",
         "config": {
           "isNullable": true,
-          "isListShow": true
+          "isListShow": true,
+          "isSearch": false
         }
       },
       "build_in": {
@@ -1362,6 +1363,16 @@
       },
       "build_in": {
         "cn": "内建数据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "roles": {
+        "cn": "角色",
         "config": {
           "isListShow": true,
           "isSearch": false,

@@ -18,6 +18,8 @@
 </template>
 
 <script>
+    // TODO 需要支持 1. 多选！ 2. 控件上需要能够显示key, 值为value
+
     import utils from '../../../utils'
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'

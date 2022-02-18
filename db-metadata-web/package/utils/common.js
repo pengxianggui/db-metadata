@@ -103,6 +103,19 @@ export function isEmpty(value) {
 }
 
 /**
+ * 将字符串转为对象或数组
+ * @param str
+ * @returns {{}|any}
+ */
+export function parse(str) {
+    if (isEmpty(str)) {
+        return {}
+    }
+
+    return JSON.parse(str)
+}
+
+/**
  * 提供一个keys数组和一个对象, 从此对象中提取出keys数组对应的values数组, eg:
  * object: {
  *     a: '1',

@@ -7,6 +7,7 @@ export const routeUrl = {
 };
 
 export const restUrl = {
+    GET_APP_CONFIG: '/app/config',
     META_OBJECT_TO_ADD: '/meta/toAdd',   // 元对象新增(TO)
     META_OBJECT_TO_EDIT: '/meta/editObject/?objectCode={objectCode}', // 元对象编辑(TO)
     META_OBJECT_DELETE: '/meta/delete?objectCode={objectCode}',  // 元对象删除(DO)
@@ -40,5 +41,9 @@ export const restUrl = {
     MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
     LIST_FEATURE_TYPE: '/feature/list', // 列出所有的功能类型code
     MENU_DATA: '/menu',
-    ROUTE_DATA: '/router'
+    ROUTE_DATA: '/router',
+
+    ROLE_LIST: '/table/list?objectCode=meta_role&s=10000', // 所有角色列表
+    ROLE_LIST_FOR_USER: '/user/{userId}/roles', // 用户拥有的角色
+    ROLE_SET_FOR_USER: '/user/{userId}/roles', // 用户角色绑定
 };

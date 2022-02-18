@@ -41,7 +41,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
      * @return
      */
     public User ifNullUser() {
-        throw new UserException("未从请求内发现有效用户标志,请检查参数:%s", UserManager.me().loginService().tokenKey()).loginError();
+        throw new UserException("未认证", 401);
     }
 
     public User getUser(HttpServletRequest request) {

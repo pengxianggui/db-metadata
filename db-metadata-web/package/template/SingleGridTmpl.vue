@@ -50,7 +50,15 @@
         name: "SingleGridTmpl",
         props: {
             fc: String,
-            oc: String
+            oc: String,
+            searchMeta: {
+              type: Object,
+              default: () => {}
+            },
+            tableMeta: {
+              type: Object,
+              default: () => {}
+            }
         },
         data() {
             const {fc: R_fc, oc: R_oc} = this.$route.query;
@@ -78,13 +86,15 @@
             },
             initMeta(objectCode) {
                 getTableViewMeta(objectCode).then(resp => {
-                    this.tlMeta = resp.data;
+                    const {tableMeta} = this
+                    this.tlMeta = utils.reverseMerge(resp.data, tableMeta);
                 }).catch(({msg = '获取TableView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
 
                 getSearchViewMeta(objectCode).then(resp => {
-                    this.spMeta = resp.data;
+                    const {searchMeta} = this
+                    this.spMeta = utils.reverseMerge(resp.data, searchMeta);
                 }).catch(({msg = '获取SearchView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });

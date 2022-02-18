@@ -4,7 +4,7 @@ import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.github.md.web.user.support.local.LocalUserFactory;
+import com.github.md.web.user.support.defaults.DefaultUserFactory;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class UserManager {
 
     public static UserManager me() {
         if (me.userFactory == null) {
-            me.userFactory = new LocalUserFactory();
+            me.userFactory = new DefaultUserFactory();
         }
 
         if (me.userIntercept == null) {

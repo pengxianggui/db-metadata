@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {Message} from "element-ui";
+import router from "@/router";
 
 let instance = axios.create({
     baseURL: '/meta'
@@ -16,12 +17,16 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截器
 instance.interceptors.response.use(res => {
-    const {state, msg: message} = res.data
+    const {state, msg: message, code} = res.data
     if (state !== 'ok') {
         Message({
             message: message,
             type: "error"
         })
+
+        if (code === 401) {
+            router.push('/login')
+        }
         return Promise.reject(res.data);
     }
 

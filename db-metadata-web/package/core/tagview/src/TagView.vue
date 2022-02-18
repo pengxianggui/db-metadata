@@ -16,7 +16,7 @@
               <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
             </router-link>
           </template>
-          <list style="width: 80px;">
+          <list style="width: 80px;" direction="column">
             <list-item style="height: 22px; line-height: 22px;"
                        @click="refreshSelectedTag(selectedTag); closePopMenu('popMenu' + index)"
                        v-if="isActive(tag)">刷新

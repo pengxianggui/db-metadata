@@ -84,4 +84,9 @@ public class JeesiteUserService extends AbstractUserService<JeesiteUser> {
     public boolean updateById(JeesiteUser user) {
         return false;
     }
+
+    @Override
+    public boolean bindRolesForUser(String userId, String... roleIds) {
+        return false;
+    }
 }
