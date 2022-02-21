@@ -51,5 +51,6 @@ export default {
     "conf": {
         "clearable": true,
         "placeholder": "戳我展开搜索面板.."
-    }
+    },
+    "explain": "" // 字段解释
 }

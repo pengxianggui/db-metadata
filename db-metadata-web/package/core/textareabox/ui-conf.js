@@ -18,5 +18,6 @@ export default {
     "inline": false,
     "conf": {
         "placeholder": "请输入文本内容.."
-    }
+    },
+    "explain": "" // 字段解释
 }

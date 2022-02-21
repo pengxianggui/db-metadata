@@ -15,5 +15,6 @@ export default {
     'sort': 0,
     "conf": {
         "images_upload_url": "/file/upload/richText" // 富文本的上传路径
-    }
+    },
+    "explain": "" // 字段解释
 }

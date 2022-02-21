@@ -26,7 +26,7 @@ public class DefaultDoerConfiguration {
                 return true;
             }
 
-            MetaAuthResource resource = new MetaAuthResource(request, (HandlerMethod) handler);
+            MetaAuthResource resource = MetaAuthResource.buildByRequest(request, (HandlerMethod) handler);
             User user = UserThreadLocal.getUser();
             return MRManager.me().permit(user, resource);
         };

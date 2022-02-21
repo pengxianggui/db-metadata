@@ -21,9 +21,9 @@ import {restUrl} from "../../../constant/url";
 import {utils} from "../../../index";
 
 export default {
-  name: "RoleSet",
+  name: "AuthSet",
   props: {
-    userId: {
+    roleId: {
       type: String,
       required: true
     }
@@ -48,8 +48,8 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.options.length;
     },
     doBindRole() {
-      return this.$axios.safePost(utils.compile(restUrl.ROLE_SET_FOR_USER, {userId: this.userId}), {
-        roleId: this.value.join(',')
+      return this.$axios.safePost(utils.compile(restUrl.AUTH_SET_FOR_ROLE, {roleId: this.roleId}), {
+        authId: this.value.join(',')
       })
     }
   },
@@ -61,12 +61,12 @@ export default {
     console.log('beforeDestroy')
   },
   mounted() {
-    this.$axios.safeGet(restUrl.ROLE_LIST).then(({data: roles}) => {
+    this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: roles}) => {
       this.options = roles
     });
-    this.$axios.safeGet(utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId}))
-        .then(({data: roles}) => {
-          this.value = roles.map(r => r.id)
+    this.$axios.safeGet(utils.compile(restUrl.AUTH_LIST_FOR_ROLE, {roleId: this.roleId}))
+        .then(({data: auths}) => {
+          this.value = auths.map(r => r.id)
         })
   },
   computed: {

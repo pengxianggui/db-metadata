@@ -19,5 +19,6 @@ export default {
     'default_value': false,
     'sort': 0,
     'inline': true,
-    'conf': {}
+    'conf': {},
+    "explain": "" // 字段解释
 }

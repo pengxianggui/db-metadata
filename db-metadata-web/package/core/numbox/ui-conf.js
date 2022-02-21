@@ -21,5 +21,6 @@ export default {
     "conf": {
         "controls": true,
         "placeholder": "请输入数值.."
-    }
+    },
+    "explain": "" // 字段解释
 }

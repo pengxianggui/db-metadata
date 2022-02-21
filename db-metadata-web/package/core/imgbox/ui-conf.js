@@ -25,5 +25,6 @@ export default {
         "show-file-list": true,
         "limit": 1,
         "multiple": false,  // 暂时单选
-    }
+    },
+    "explain": "" // 字段解释
 }

@@ -5,7 +5,7 @@
         <el-button size="mini" icon="el-icon-s-custom" @click="toBindRole(scope)"></el-button>
       </template>
     </single-grid-tmpl>
-    <el-dialog :visible.sync="visible" width="600px"
+    <el-dialog :visible.sync="visible" width="800px"
                :title="'为用户' + activeRow.username + '设置角色:'">
       <role-set ref="RoleSet" :user-id="activeRow.id" v-if="visible"></role-set>
       <template #footer>

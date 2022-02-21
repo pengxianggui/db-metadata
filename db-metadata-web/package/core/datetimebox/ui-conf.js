@@ -19,5 +19,6 @@ export default {
     "conf": {
         "value-format": "yyyy-MM-dd HH:mm:ss",
         "clearable": true
-    }
+    },
+    "explain": "" // 字段解释
 }

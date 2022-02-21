@@ -23,18 +23,10 @@ import java.util.Objects;
  */
 @Slf4j
 class MetaAuthPermit implements MRPermit<User, MetaAuthResource> {
-    private MetaAuthService metaAuthService = ServiceManager.authService();
 
     @Override
     public boolean permit(User user, MetaAuthResource mResource) {
         if (!mResource.needPermit()) {
-            return true;
-        }
-
-        String authCode = metaAuthService.findAuthCode(mResource.getType(), mResource.getMetaCode(), mResource.getUri());
-        if (Objects.isNull(authCode)) {
-            log.debug("无针对此资源的权限配置: type:{}, meta_code:{},uri:{}, 放行",
-                    mResource.getType(), mResource.getMetaCode(), mResource.getUri());
             return true;
         }
 
@@ -46,6 +38,6 @@ class MetaAuthPermit implements MRPermit<User, MetaAuthResource> {
             log.error("从上下文获取的用户对象不是{}类型，无法判断用户拥有的权限。默认为无权限", UserWithRolesWrapper.class.toString());
             throw new MRException("无法获取用户权限，请确保用户对象是一个%s实例", UserWithRolesWrapper.class.toString());
         }
-        return ((UserWithRolesWrapper) user).hasAuth(authCode);
+        return ((UserWithRolesWrapper) user).hasAuth(mResource);
     }
 }

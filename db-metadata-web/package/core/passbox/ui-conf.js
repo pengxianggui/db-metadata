@@ -19,5 +19,6 @@ export default {
     "conf": {
         "placeholder": "请输入密码..",
         "clearable": true
-    }
+    },
+    "explain": "" // 字段解释
 }

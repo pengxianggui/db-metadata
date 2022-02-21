@@ -30,5 +30,6 @@ export default {
         "smartIndent": true,
         "matchBrackets": true,
         "extraKeys": {'Ctrl': 'autocomplete'}, //自定义快捷键
-    }
+    },
+    "explain": "" // 字段解释
 }

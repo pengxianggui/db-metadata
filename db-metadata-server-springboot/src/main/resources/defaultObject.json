@@ -1143,15 +1143,15 @@
         }
       },
       "type": {
-        "cn": "鉴权类型",
+        "cn": "接口映射",
         "config": {
           "isListShow": true,
-          "isSearch": true,
+          "isSearch": false,
           "scopeOptions": [
-            {"key": "自行实现","value": "-1"},
-            {"key": "api接口鉴权","value": "0"},
-            {"key": "基于api接口+元对象进行鉴权","value": "1"},
-            {"key": "基于api接口+功能进行鉴权","value": "2"}
+            {"key": "默认(不映射资源:需自行关联)","value": "-1"},
+            {"key": "api接口(仅映射接口url)","value": "0"},
+            {"key": "api接口+元对象(映射接口url+元对象)","value": "1"},
+            {"key": "api接口+功能(映射接口url+功能)","value": "2"}
           ]
         }
       },
@@ -1159,7 +1159,7 @@
         "cn": "元编码",
         "config": {
           "isListShow": true,
-          "isSearch": true
+          "isSearch": false
         }
       },
       "uri": {
@@ -1169,7 +1169,7 @@
           "isSearch": false
         }
       },
-      "auth_name": {
+      "name": {
         "cn": "权限名",
         "config": {
           "isNullable": false,
@@ -1177,7 +1177,7 @@
           "isSearch": true
         }
       },
-      "auth_code": {
+      "code": {
         "cn": "权限编码",
         "config": {
           "isNullable": false,

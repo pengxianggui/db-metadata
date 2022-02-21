@@ -1,5 +1,6 @@
 package com.github.md.web.user.auth;
 
+import com.github.md.analysis.kit.Kv;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +21,10 @@ public class StaticAuth implements IAuth {
 
     public static IAuth of(String code, String name) {
         return new StaticAuth(code, name);
+    }
+
+    @Override
+    public Kv toKv() {
+        return Kv.create().set("code", code).set("name", name);
     }
 }

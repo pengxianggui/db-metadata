@@ -43,7 +43,14 @@ export const restUrl = {
     MENU_DATA: '/menu',
     ROUTE_DATA: '/router',
 
-    ROLE_LIST: '/table/list?objectCode=meta_role&s=10000', // 所有角色列表
+    // TODO 这部分太偏业务了，耦合在db-meta里显得比较突兀，有两个优化方案：
+    //  1. db-meta提供多对多关联的数据维护功能。这样给用户绑定角色、给角色绑定权限，就通过内置的多对多功能模板实现
+    //  2. 认证和授权这块内容，挪到单独的模块里。比如后端单独通过pom坐标引入，前端通过单独的npm包引入。
+    //  优选方案1
+    ROLE_LIST: '/table/list?objectCode=meta_role&s=100000', // 所有角色列表
     ROLE_LIST_FOR_USER: '/user/{userId}/roles', // 用户拥有的角色
     ROLE_SET_FOR_USER: '/user/{userId}/roles', // 用户角色绑定
+    AUTH_LIST: '/table/list?objectCode=meta_auth&s=100000', // 所有权限列表
+    AUTH_SET_FOR_ROLE: '/role/{roleId}/auths', // 角色权限绑定
+    AUTH_LIST_FOR_ROLE: '/role/{roleId}/auths' // 角色拥有的权限
 };

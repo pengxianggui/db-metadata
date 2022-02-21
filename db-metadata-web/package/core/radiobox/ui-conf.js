@@ -22,5 +22,6 @@ export default {
     "options": [
         //     {"key":"value"}
     ],
-    "conf": {}
+    "conf": {},
+    "explain": "" // 字段解释
 }

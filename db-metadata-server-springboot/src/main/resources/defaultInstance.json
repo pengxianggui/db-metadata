@@ -318,55 +318,42 @@
     "SearchView": {
       "config": {
         "expand": true
-      },
-      "_fields": {
-        "type": {
-          "component_name": "DropDownBox",
-          "options": [
-            {
-              "key": "自行实现",
-              "value": "-1"
-            },
-            {
-              "key": "api接口鉴权",
-              "value": "0"
-            },
-            {
-              "key": "基于api接口+元对象进行鉴权",
-              "value": "1"
-            },
-            {
-              "key": "基于api接口+功能进行鉴权",
-              "value": "2"
-            }
-          ]
-        }
       }
     },
     "TableView": {
     },
     "FormView": {
+      "config": {
+        "conf": {
+          "label-width": "120px"
+        }
+      },
       "_fields": {
         "type": {
+          "label": "接口映射",
           "component_name": "DropDownBox",
           "options": [
             {
-              "key": "自行实现",
+              "key": "默认(不映射资源:需自行关联)",
               "value": "-1"
             },
             {
-              "key": "api接口鉴权",
+              "key": "api接口(仅映射接口url)",
               "value": "0"
             },
             {
-              "key": "基于api接口+元对象进行鉴权",
+              "key": "api接口+元对象(映射接口url+元对象)",
               "value": "1"
             },
             {
-              "key": "基于api接口+功能进行鉴权",
+              "key": "api接口+功能(映射接口url+功能)",
               "value": "2"
             }
-          ]
+          ],
+          "explain": "接口映射类型决定了此权限映射的接口资源的深度，系统会据此进行鉴权判定。"
+        },
+        "meta_code": {
+          "explain": "元对象编码或功能编码, 取决于【接口映射】"
         }
       }
     }
@@ -377,7 +364,15 @@
         "expand": true
       }
     },
-    "TableView": {},
+    "TableView": {
+      "config": {
+        "operation-column": {
+          "show": true,
+          "fixed": "right",
+          "width": "220"
+        }
+      }
+    },
     "FormView": {}
   },
   "meta_user": {
@@ -395,6 +390,12 @@
         }
       }
     },
-    "FormView": {}
+    "FormView": {
+      "_fields": {
+        "attrs": {
+          "explain": "您可以在此处扩展任意属性, 数据将保存到数据表json字段中。"
+        }
+      }
+    }
   }
 }

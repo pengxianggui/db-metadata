@@ -27,5 +27,6 @@ export default {
     "conf": {
         "clearable": true,
         "multiple": false
-    }
+    },
+    "explain": "" // 字段解释
 }

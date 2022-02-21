@@ -25,5 +25,6 @@ export default {
             "view",
             "form"
         ]
-    }
+    },
+    "explain": "" // 字段解释
 }

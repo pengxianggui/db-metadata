@@ -19,5 +19,6 @@ export default {
         "size": "mini",
         "disabled": false,
         "inline": false
-    }
+    },
+    "explain": "" // 字段解释
 }

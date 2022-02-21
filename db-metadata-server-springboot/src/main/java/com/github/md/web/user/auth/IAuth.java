@@ -1,5 +1,7 @@
 package com.github.md.web.user.auth;
 
+import com.github.md.analysis.kit.Kv;
+
 /**
  * 权限抽象
  * <p> @Date : 2020/8/12 </p>
@@ -26,4 +28,6 @@ public interface IAuth {
     default String name() {
         return "Empty permission name.";
     }
+
+    Kv toKv();
 }

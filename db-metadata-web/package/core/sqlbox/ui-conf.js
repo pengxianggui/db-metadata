@@ -21,5 +21,6 @@ export default {
     "theme": "default", // default、ambiance
     "line_number": true,
     "mode": 'text/x-mysql',
-    "conf": {}
+    "conf": {},
+    "explain": "" // 字段解释
 }

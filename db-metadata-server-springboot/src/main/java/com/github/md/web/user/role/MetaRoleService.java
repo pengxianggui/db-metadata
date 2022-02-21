@@ -2,11 +2,15 @@ package com.github.md.web.user.role;
 
 import com.github.md.analysis.SpringAnalysisManager;
 import com.google.common.collect.Lists;
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO
@@ -38,5 +42,20 @@ public class MetaRoleService {
             roles.add(new DefaultRole(record));
         }
         return roles;
+    }
+
+    public boolean bindAuthsForRole(String roleId, String... authIds) {
+        return Db.tx(() -> {
+            db().delete("delete from meta_role_auth_rela where role_id=?", roleId);
+
+            List<Record> inserts = Arrays.stream(authIds).filter(authId -> StrKit.notBlank(authId))
+                    .map(authId -> {
+                        Record rela = new Record();
+                        rela.set("role_id", roleId);
+                        rela.set("auth_id", authId);
+                        return rela;
+                    }).collect(Collectors.toList());
+            return db().batchSave("meta_role_auth_rela", inserts, 20).length == inserts.size();
+        });
     }
 }

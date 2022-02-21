@@ -16,5 +16,6 @@ export default {
     'conf': {
         'type': 'default',
         'level': 2
-    }
+    },
+    "explain": "" // 字段解释
 }
