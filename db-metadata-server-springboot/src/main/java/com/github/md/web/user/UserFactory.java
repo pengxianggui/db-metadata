@@ -6,6 +6,7 @@ package com.github.md.web.user;
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 public interface UserFactory<U extends User> {
 
     UserService<U> userService();

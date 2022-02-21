@@ -3,8 +3,8 @@ package com.github.md.web.feature;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.github.md.analysis.meta.AuthForType;
-import com.github.md.analysis.meta.AuthTypeRefered;
+import com.github.md.web.user.auth.meta.Type;
+import com.github.md.web.user.auth.meta.MetaAccess;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.google.common.base.Preconditions;
@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping(value = { "feature", "f" })
 public class FeatureController extends ControllerAdapter {
 
-    @AuthTypeRefered(value = AuthForType.API)
+    @MetaAccess(value = Type.API)
     @GetMapping("list")
     public Ret list() {
         List<Kv> results = Lists.newArrayList();
@@ -45,7 +45,7 @@ public class FeatureController extends ControllerAdapter {
         return Ret.ok("data", results);
     }
 
-    @AuthTypeRefered(value = AuthForType.API)
+    @MetaAccess(value = Type.API)
     @PostMapping("doAdd")
     public Ret doAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -113,7 +113,7 @@ public class FeatureController extends ControllerAdapter {
         return "/main" + prefix + "?featureCode=" + featureCode;
     }
 
-    @AuthTypeRefered(value = AuthForType.API)
+    @MetaAccess(value = Type.API)
     @GetMapping("delete")
     public Ret delete() {
         String idss = parameterHelper().getPara("ids");

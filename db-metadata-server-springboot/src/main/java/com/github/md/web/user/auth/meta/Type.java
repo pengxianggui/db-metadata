@@ -1,15 +1,14 @@
-package com.github.md.analysis.meta;
+package com.github.md.web.user.auth.meta;
 
 import lombok.Getter;
 
 /**
- * 鉴权类型。
+ * 接口资源的鉴权标注类型。
  *
  * @author pengxg
  * @date 2021/10/16 7:40 上午
  */
-public enum AuthForType {
-    NORMAL("-1", "普通权限，需要自行鉴别用户是否有权限"),
+public enum Type {
     /**
      * api接口直接鉴权。
      * 鉴权时，直接根据 uri关联的code进行权限认证
@@ -31,13 +30,13 @@ public enum AuthForType {
     @Getter
     private String remark;
 
-    AuthForType(String code, String remark) {
+    Type(String code, String remark) {
         this.code = code;
         this.remark = remark;
     }
 
-    public static AuthForType byCode(String code) {
-        for (AuthForType value : AuthForType.values()) {
+    public static Type byCode(String code) {
+        for (Type value : Type.values()) {
             if (value.code.equals(code)) {
                 return value;
             }

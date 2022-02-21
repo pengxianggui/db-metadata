@@ -1,12 +1,15 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.auth.meta;
 
-import com.github.md.analysis.meta.AuthTypeRefered;
-import com.github.md.web.ServiceManager;
 import com.github.md.web.user.User;
 import com.github.md.web.user.UserException;
+import com.github.md.web.user.UserManager;
+import com.github.md.web.user.auth.IAuth;
+import com.github.md.web.user.auth.MRException;
+import com.github.md.web.user.auth.MRPermit;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,25 +22,23 @@ import java.util.Objects;
  * @author pengxg
  * @date 2021/10/15 9:49 上午
  * @see MetaAuthResource
- * @see AuthTypeRefered
+ * @see MetaAccess
  */
 @Slf4j
-class MetaAuthPermit implements MRPermit<User, MetaAuthResource> {
+public class MetaAuthPermit implements MRPermit<User, MetaAuthResource> {
 
     @Override
     public boolean permit(User user, MetaAuthResource mResource) {
-        if (!mResource.needPermit()) {
-            return true;
-        }
-
         if (Objects.isNull(user)) {
-            throw new UserException("无用户信息!");
+            log.debug("无用户信息! 视为无权限访问.");
+            return false;
         }
 
-        if (!(user instanceof UserWithRolesWrapper)) {
-            log.error("从上下文获取的用户对象不是{}类型，无法判断用户拥有的权限。默认为无权限", UserWithRolesWrapper.class.toString());
-            throw new MRException("无法获取用户权限，请确保用户对象是一个%s实例", UserWithRolesWrapper.class.toString());
+        if (user instanceof UserWithRolesWrapper) {
+            return ((UserWithRolesWrapper) user).hasAuth(mResource);
         }
-        return ((UserWithRolesWrapper) user).hasAuth(mResource);
+
+        List<IAuth> auths = UserManager.me().getMetaAuthService().findByUser(user.userId());
+        return auths.contains(mResource);
     }
 }

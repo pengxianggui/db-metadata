@@ -41,6 +41,7 @@ public class GlobalMetaException {
         HttpServletRequest request= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         MetaServerManager metaServerManager = AnalysisSpringUtil.getBean(MetaServerManager.class);
         Ret ret = Ret.fail();
+        log.error("url: {}", request.getRequestURI());
         log.error(e.getMessage(), e);
         if (metaServerManager.getMetaServerProperties().isDevMode()) {
             ret.set("request_uri", request.getRequestURI());

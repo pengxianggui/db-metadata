@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -22,12 +25,20 @@ import java.util.Objects;
 public class LoginController extends ControllerAdapter {
 
     @PostMapping("login")
-    public Ret login() {
+    public Ret login(HttpServletResponse response) {
         String uid = parameterHelper().getPara(UserManager.me().loginService().loginKey());
         String pwd = parameterHelper().getPara(UserManager.me().loginService().pwdKey());
 
         User user = UserManager.me().loginService().login(uid, pwd);
-        return Objects.nonNull(user) ? Ret.ok("data", user) : Ret.fail();
+        if (user != null) {
+            Cookie cookie = new Cookie(UserManager.me().loginService().cookieKey(), user.userId());
+            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
+            response.addCookie(cookie);
+            // TODO token生成并塞入
+            return Ret.ok("data", user.toKv());
+        } else {
+            return Ret.fail();
+        }
     }
 
     @PostMapping("logout")

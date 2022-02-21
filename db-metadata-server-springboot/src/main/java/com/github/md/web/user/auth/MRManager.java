@@ -2,6 +2,10 @@ package com.github.md.web.user.auth;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.user.User;
+import com.github.md.web.user.auth.defaults.ApiResource;
+import com.github.md.web.user.auth.defaults.AuthorizePermit;
+import com.github.md.web.user.auth.meta.MetaAuthPermit;
+import com.github.md.web.user.auth.meta.MetaAuthResource;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +51,8 @@ public class MRManager {
 
     private MRManager() {
         // 内置
-        resourcePermitMapping.put(MetaAuthResource.class, new MetaAuthPermit());
+        configResourcePermitMapping(MetaAuthResource.class, new MetaAuthPermit());
+        configResourcePermitMapping(ApiResource.class, new AuthorizePermit());
     }
 
     public static MRManager me() {
@@ -88,6 +93,12 @@ public class MRManager {
         return allMResource.get(resourceKey);
     }
 
+    /**
+     * 配置不同的资源，应当使用什么权限判定器来判定。
+     *
+     * @param clazz  资源类的Class
+     * @param permit 权限判定器
+     */
     public void configResourcePermitMapping(Class<? extends MResource> clazz, MRPermit permit) {
         this.resourcePermitMapping.put(clazz, permit);
     }

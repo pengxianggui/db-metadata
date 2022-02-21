@@ -10,6 +10,7 @@ import com.github.md.web.user.UserService;
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 public class JeesiteUserFactory extends AbstractUserFactory<JeesiteUser> {
 
     @Override

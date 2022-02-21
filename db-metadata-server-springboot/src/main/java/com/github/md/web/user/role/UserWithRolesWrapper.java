@@ -1,5 +1,6 @@
 package com.github.md.web.user.role;
 
+import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.google.common.collect.Lists;
@@ -72,5 +73,14 @@ public interface UserWithRolesWrapper extends User {
         // 依据权限编码
         List<String> codes = Arrays.stream(auths).map(IAuth::code).collect(Collectors.toList());
         return hasAuth(codes.toArray(new String[codes.size()]));
+    }
+
+    @Override
+    default Kv toKv() {
+        return Kv.create().set("userId", userId())
+                .set("userName", userName())
+                .set("attrs", attrs())
+                .set("roles", roles())
+                .set("auths", auths());
     }
 }

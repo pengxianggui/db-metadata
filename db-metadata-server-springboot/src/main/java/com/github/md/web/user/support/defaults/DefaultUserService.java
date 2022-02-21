@@ -3,6 +3,7 @@ package com.github.md.web.user.support.defaults;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.AbstractUserService;
+import com.github.md.web.user.UserManager;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -70,6 +71,8 @@ public class DefaultUserService extends AbstractUserService<DefaultUser> {
         if (record == null) {
             return null;
         }
-        return new DefaultUser(record);
+        DefaultUser user = new DefaultUser(record);
+        UserManager.me().getLoginUsers().put(user.userId(), user); // 设置登录状态
+        return user;
     }
 }

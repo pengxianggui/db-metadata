@@ -1,33 +1,35 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.auth.defaults;
 
 import com.github.md.analysis.SpringAnalysisManager;
-import com.github.md.analysis.meta.AuthForType;
+import com.github.md.web.user.auth.AuthService;
+import com.github.md.web.user.auth.IAuth;
+import com.github.md.web.user.auth.meta.MetaAuthResource;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author pengxg
- * @date 2021/10/15 11:20 上午
+ * @date 2022/2/21 1:12 下午
  */
-@Slf4j
-@Transactional
-@Service
-public class MetaAuthService {
-    private DbPro db() {
+public class DefaultAuthService implements AuthService {
+
+    protected DbPro db() {
         return SpringAnalysisManager.me().dbMain();
     }
 
-    public List<Record> findAll() {
-        return db().findAll("meta_auth");
+    @Override
+    public List<IAuth> findAll() {
+        List<IAuth> auths = Lists.newArrayList();
+        for (Record record : db().findAll("meta_auth")) {
+            auths.add(new MetaAuthResource(record));
+        }
+        return auths;
     }
 
+    @Override
     public List<IAuth> findByRole(String roleId) {
         List<IAuth> auths = Lists.newArrayList();
         List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela r where a.id = r.auth_id and r.role_id=?", roleId);
@@ -37,6 +39,7 @@ public class MetaAuthService {
         return auths;
     }
 
+    @Override
     public List<IAuth> findByUser(String userId) {
         List<IAuth> auths = Lists.newArrayList();
         List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela ra, meta_user_role_rela ur, meta_user u where a.id = ra.auth_id and ra.role_id = ur.role_id and u.id=?", userId);
@@ -46,18 +49,12 @@ public class MetaAuthService {
         return auths;
     }
 
-    @Deprecated
-    public String findAuthCode(AuthForType type, String metaCode, String uri) {
-        Record record = db().findFirst("select * from meta_auth where type = ? and meta_code = ? and uri = ?",
-                type.getCode(), metaCode, uri);
-        if (Objects.isNull(record)) {
+    @Override
+    public IAuth findOne(String id) {
+        Record record = db().findById("meta_auth", id);
+        if (record == null) {
             return null;
         }
-        return record.getStr("code");
-    }
-
-    public Record findOne(AuthForType type, String metaCode, String uri) {
-        return db().findFirst("select * from meta_auth where type=? and meta_code=? and uri=?",
-                type.getCode(), metaCode, uri);
+        return new MetaAuthResource(record);
     }
 }

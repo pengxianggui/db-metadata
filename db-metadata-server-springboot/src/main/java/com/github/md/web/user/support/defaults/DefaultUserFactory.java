@@ -8,6 +8,7 @@ import com.github.md.web.user.UserService;
  * @author pengxg
  * @date 2022/2/18 3:24 下午
  */
+@Deprecated
 public class DefaultUserFactory implements UserFactory<DefaultUser> {
 
     @Override

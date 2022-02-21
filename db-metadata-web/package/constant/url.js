@@ -52,5 +52,6 @@ export const restUrl = {
     ROLE_SET_FOR_USER: '/user/{userId}/roles', // 用户角色绑定
     AUTH_LIST: '/table/list?objectCode=meta_auth&s=100000', // 所有权限列表
     AUTH_SET_FOR_ROLE: '/role/{roleId}/auths', // 角色权限绑定
-    AUTH_LIST_FOR_ROLE: '/role/{roleId}/auths' // 角色拥有的权限
+    AUTH_LIST_FOR_ROLE: '/role/{roleId}/auths', // 角色拥有的权限
+    LOGIN_URL: '/user/login', // 登录接口地址
 };

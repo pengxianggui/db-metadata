@@ -6,6 +6,7 @@ package com.github.md.web.user;
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 public abstract class AbstractUserFactory<U extends User> implements UserFactory<U> {
 
 }

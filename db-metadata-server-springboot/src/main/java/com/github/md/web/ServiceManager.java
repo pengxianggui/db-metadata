@@ -11,9 +11,8 @@ import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.ui.SqlAnalysis;
 import com.github.md.web.upload.UploadService;
-import com.github.md.web.user.UserService;
-import com.github.md.web.user.auth.MetaAuthService;
-import com.github.md.web.user.role.MetaRoleService;
+import com.github.md.web.user.auth.meta.MetaAuthService;
+import com.github.md.web.user.role.DefaultRoleService;
 
 /**
  * FIXME 这个类逐步过度 0908
@@ -56,8 +55,8 @@ public class ServiceManager {
         return AnalysisSpringUtil.getBean(MetaAuthService.class);
     }
 
-    public static MetaRoleService roleService() {
-        return AnalysisSpringUtil.getBean(MetaRoleService.class);
+    public static DefaultRoleService roleService() {
+        return AnalysisSpringUtil.getBean(DefaultRoleService.class);
     }
 
     public static QuickJudge quickJudge() {

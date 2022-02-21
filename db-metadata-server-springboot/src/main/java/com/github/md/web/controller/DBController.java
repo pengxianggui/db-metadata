@@ -1,7 +1,7 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.meta.AuthForType;
-import com.github.md.analysis.meta.AuthTypeRefered;
+import com.github.md.web.user.auth.meta.Type;
+import com.github.md.web.user.auth.meta.MetaAccess;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.component.ComponentType;
@@ -65,7 +65,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("data", results);
     }
 
-    @AuthTypeRefered(value = AuthForType.API)
+    @MetaAccess(value = Type.API)
     @GetMapping("truncate")
     public Ret truncate() {
         preConditionCheck();
@@ -84,7 +84,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("msg", sb.toString());
     }
 
-    @AuthTypeRefered(value = AuthForType.API)
+    @MetaAccess(value = Type.API)
     @Transactional
     @GetMapping("init")
     public Ret init() {

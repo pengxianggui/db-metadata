@@ -1,8 +1,11 @@
 package com.github.md.web.user;
 
+import cn.com.asoco.annotation.Authorize;
 import com.github.md.web.user.auth.MRAuthInterceptDoer;
 import com.github.md.web.user.auth.MRManager;
-import com.github.md.web.user.auth.MetaAuthResource;
+import com.github.md.web.user.auth.defaults.ApiResource;
+import com.github.md.web.user.auth.meta.MetaAccess;
+import com.github.md.web.user.auth.meta.MetaAuthResource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +22,29 @@ import org.springframework.web.method.HandlerMethod;
 @Configuration
 public class DefaultDoerConfiguration {
 
+    /**
+     * 内置的鉴权执行者，基于{@link MetaAccess}注解的访问控制
+     *
+     * @return
+     */
+    @Bean
+    public MRAuthInterceptDoer metaMRAuthInterceptDoer() {
+        return (request, response, handler) -> {
+            if (!(handler instanceof HandlerMethod)) {
+                return true;
+            }
+
+            MetaAuthResource resource = MetaAuthResource.by(request, (HandlerMethod) handler);
+            User user = UserThreadLocal.getUser();
+            return MRManager.me().permit(user, resource);
+        };
+    }
+
+    /**
+     * 内置的基于{@link Authorize}的访问控制
+     *
+     * @return
+     */
     @Bean
     public MRAuthInterceptDoer defaultMRAuthInterceptDoer() {
         return (request, response, handler) -> {
@@ -26,7 +52,7 @@ public class DefaultDoerConfiguration {
                 return true;
             }
 
-            MetaAuthResource resource = MetaAuthResource.buildByRequest(request, (HandlerMethod) handler);
+            ApiResource resource = ApiResource.by(request, (HandlerMethod) handler);
             User user = UserThreadLocal.getUser();
             return MRManager.me().permit(user, resource);
         };

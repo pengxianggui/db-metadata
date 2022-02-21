@@ -10,6 +10,7 @@ import com.github.md.web.user.AbstractUserFactory;
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 public class LocalUserFactory extends AbstractUserFactory<LocalUser> {
 
     @Override

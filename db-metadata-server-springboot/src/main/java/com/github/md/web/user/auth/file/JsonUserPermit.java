@@ -1,9 +1,11 @@
-package com.github.md.web.user.auth;
+package com.github.md.web.user.auth.file;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.web.user.User;
+import com.github.md.web.user.auth.MRPermit;
+import com.github.md.web.user.auth.MResource;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.github.md.web.kit.UtilKit;

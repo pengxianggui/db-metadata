@@ -23,4 +23,15 @@ public interface User {
     Kv attrs();
 
     Kv attrs(Map attrs);
+
+    /**
+     * 转换为kv键值对。用于输出
+     *
+     * @return
+     */
+    default Kv toKv() {
+        return Kv.create().set("userId", userId())
+                .set("userName", userName())
+                .set("attrs", attrs());
+    }
 }

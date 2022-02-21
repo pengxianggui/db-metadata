@@ -22,6 +22,10 @@ public interface LoginService<U extends User> {
         return ServiceManager.getAppProperties().getServer().getLogin().getTokenKey();
     }
 
+    default String cookieKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getCookieKey();
+    }
+
     /**
      * 登录时 获取用户名的key
      * 如:username
@@ -41,13 +45,15 @@ public interface LoginService<U extends User> {
         return ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
     }
 
-    @Deprecated
-    default String cookieKey() {
-        return null;
-    }
-
     U getUser(HttpServletRequest request);
 
+    /**
+     * 实现登录。并设置好登录状态。例如缓存到redis，或内存，或生成jwt
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     U login(String username, String password);
 
     /**
@@ -66,7 +72,6 @@ public interface LoginService<U extends User> {
      * 方法主要逻辑在于显示得将某个用户注册到验证容器中
      *
      * @param user
-     *
      * @return
      */
     default U login(U user) {

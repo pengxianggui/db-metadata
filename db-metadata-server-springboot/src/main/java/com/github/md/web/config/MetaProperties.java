@@ -81,6 +81,7 @@ public class MetaProperties {
     public static class Login {
         boolean enable = false;
         private String tokenKey = "X-TOKEN";
+        private String cookieKey = "DB-Metadata";
         private String loginKey = "username";
         private String pwdKey = "password";
 

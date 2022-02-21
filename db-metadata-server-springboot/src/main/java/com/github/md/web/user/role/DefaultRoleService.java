@@ -22,11 +22,12 @@ import java.util.stream.Collectors;
  * @date 2022/2/15 5:04 下午
  */
 @Service
-public class MetaRoleService {
+public class DefaultRoleService implements RoleService {
     private DbPro db() {
         return SpringAnalysisManager.me().dbMain();
     }
 
+    @Override
     public List<MRRole> findAll() {
         List<MRRole> roles = Lists.newArrayList();
         for (Record record : db().findAll("meta_role")) {
@@ -35,6 +36,7 @@ public class MetaRoleService {
         return roles;
     }
 
+    @Override
     public List<MRRole> findByUser(String userId) {
         List<MRRole> roles = Lists.newArrayList();
         List<Record> records = db().find("select r.* from meta_role r,  meta_user_role_rela rela where r.id = rela.role_id and rela.user_id=?", userId);
@@ -44,6 +46,7 @@ public class MetaRoleService {
         return roles;
     }
 
+    @Override
     public boolean bindAuthsForRole(String roleId, String... authIds) {
         return Db.tx(() -> {
             db().delete("delete from meta_role_auth_rela where role_id=?", roleId);
@@ -57,5 +60,14 @@ public class MetaRoleService {
                     }).collect(Collectors.toList());
             return db().batchSave("meta_role_auth_rela", inserts, 20).length == inserts.size();
         });
+    }
+
+    @Override
+    public MRRole findOne(String id) {
+        Record record = db().findById("meta_role", id);
+        if (record == null) {
+            return null;
+        }
+        return new DefaultRole(record);
     }
 }

@@ -46,7 +46,7 @@ public class DefaultUser implements User {
 
     @Override
     public Kv attrs() {
-        return data.get("attrs");
+        return Kv.create().set((Map) data.get("attrs"));
     }
 
     @Override

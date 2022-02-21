@@ -8,6 +8,7 @@ let instance = axios.create({
 
 // 添加一个请求拦截器
 instance.interceptors.request.use(config => {
+        config.headers['X-TOKEN'] = sessionStorage.getItem("X-TOKEN")
         return config
     },
     err => {
