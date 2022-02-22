@@ -10,7 +10,7 @@
       <auth-set ref="AuthSet" :role-id="activeRow.id" v-if="visible"></auth-set>
       <template #footer>
         <el-button size="mini" @click="visible = false">取消</el-button>
-        <el-button type="primary" size="mini" @click="doBindRole">保存</el-button>
+        <el-button type="primary" size="mini" @click="doBind">保存</el-button>
       </template>
     </el-dialog>
   </div>
@@ -36,8 +36,8 @@ export default {
       this.activeRow = row
       this.visible = true
     },
-    doBindRole() {
-      this.$refs['AuthSet'].doBindRole().then(() => {
+    doBind() {
+      this.$refs['AuthSet'].doBind().then(() => {
         this.visible = false;
       })
     }

@@ -32,7 +32,6 @@ export default {
     return {
       value: [],
       options: [],
-
       checkAll: false,
       isIndeterminate: true
     }
@@ -47,18 +46,11 @@ export default {
       this.checkAll = checkedCount === this.options.length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.options.length;
     },
-    doBindRole() {
+    doBind() {
       return this.$axios.safePost(utils.compile(restUrl.AUTH_SET_FOR_ROLE, {roleId: this.roleId}), {
         authId: this.value.join(',')
       })
     }
-  },
-  beforeCreate() {
-    console.log('beforeCreate')
-    this.value = []
-  },
-  beforeDestroy() {
-    console.log('beforeDestroy')
   },
   mounted() {
     this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: roles}) => {

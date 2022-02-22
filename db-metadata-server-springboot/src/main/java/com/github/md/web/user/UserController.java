@@ -30,7 +30,7 @@ public class UserController extends ControllerAdapter {
         Kv kv = parameterHelper().getKv();
         String roleId = StrKit.defaultIfBlank(kv.getStr("roleId"), "");
 
-        boolean flag = UserManager.me().getUserFactory().userService()
+        boolean flag = UserManager.me().userService()
                 .bindRolesForUser(userId, roleId.split(","));
         return flag ? Ret.ok() : Ret.fail();
     }

@@ -92,6 +92,26 @@ public class UserManager {
         return this.authService;
     }
 
+    public UserManager config(UserService userService) {
+        this.userService = userService;
+        return this;
+    }
+
+    public UserManager config(LoginService loginService) {
+        this.loginService = loginService;
+        return this;
+    }
+
+    public UserManager config(RoleService roleService) {
+        this.roleService = roleService;
+        return this;
+    }
+
+    public UserManager config(AuthService authService) {
+        this.authService = authService;
+        return this;
+    }
+
     public User getUser(HttpServletRequest request) {
         return this.loginService.getUser(request);
     }

@@ -37,7 +37,7 @@ md:
 
   server:
     login: # 认证配置
-      enable: true # 是否启用内置认证
+      enable: false # 是否启用内置认证
       cookie-key: DB-Metadata # 登录后自动存放到cookie中的token的key
       token-key: X-TOKEN # 登录后存放在header里的token的 key
       login-key: username # 登录表单账号的key
@@ -49,12 +49,12 @@ md:
         - /router
         - /user/login
       ctrl:
-        enable: true # 是否启用内置登录控制器(接口)，若关闭则以下接口无效。需要自行提供登录接口
+        enable: false # 是否启用内置登录控制器(接口)，若关闭则以下接口无效。需要自行提供登录接口
         login-path: /user/login # 内置登录接口
         logout-path: /user/logout # 内置登出接口
         info-path: /user/info # 内置用户信息接口
     auth: # 鉴权配置
-      enable: true # 是否启用内置鉴权
+      enable: false # 是否启用内置鉴权
       includes: # 需要鉴权的接口
         - /*
       excludes: # 无需鉴权的接口url

@@ -6,8 +6,8 @@
     <div style="margin: 15px 0;"></div>
 
     <el-checkbox-group v-model="value" @change="handleCheckedCitiesChange">
-      <div  v-for="(v, k) in groups">
-        <h4 class="group-title">【{{k}}】</h4>
+      <div v-for="(v, k) in groups">
+        <h4 class="group-title">【{{ k }}】</h4>
         <div class="group-options">
           <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">{{ r.name }}</el-checkbox>
         </div>
@@ -47,27 +47,21 @@ export default {
       this.checkAll = checkedCount === this.options.length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.options.length;
     },
-    doBindRole() {
+    doBind() {
       return this.$axios.safePost(utils.compile(restUrl.ROLE_SET_FOR_USER, {userId: this.userId}), {
         roleId: this.value.join(',')
       })
     }
   },
-  beforeCreate() {
-    console.log('beforeCreate')
-    this.value = []
-  },
-  beforeDestroy() {
-    console.log('beforeDestroy')
-  },
   mounted() {
     this.$axios.safeGet(restUrl.ROLE_LIST).then(({data: roles}) => {
       this.options = roles
     });
-    this.$axios.safeGet(utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId}))
-        .then(({data: roles}) => {
-          this.value = roles.map(r => r.id)
-        })
+
+    let url = utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId});
+    this.$axios.safeGet(url).then(({data: roles}) => {
+      this.value = roles.map(r => r.id)
+    })
   },
   computed: {
     groups() {

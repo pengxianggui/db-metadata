@@ -27,4 +27,3 @@ yarn-error.log*
 target/
 /db-metadata-web/node/
 /db-metadata-web/lib/
-/db-metadata-web/package-lock.json

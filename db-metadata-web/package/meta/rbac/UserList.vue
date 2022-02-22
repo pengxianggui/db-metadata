@@ -10,7 +10,7 @@
       <role-set ref="RoleSet" :user-id="activeRow.id" v-if="visible"></role-set>
       <template #footer>
         <el-button size="mini" @click="visible = false">取消</el-button>
-        <el-button type="primary" size="mini" @click="doBindRole">保存</el-button>
+        <el-button type="primary" size="mini" @click="doBind">保存</el-button>
       </template>
     </el-dialog>
   </div>
@@ -39,8 +39,8 @@ export default {
       this.activeRow = row
       this.visible = true
     },
-    doBindRole() {
-      this.$refs['RoleSet'].doBindRole().then(() => {
+    doBind() {
+      this.$refs['RoleSet'].doBind().then(() => {
         this.visible = false;
       })
     }

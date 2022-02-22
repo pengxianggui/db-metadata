@@ -8,7 +8,7 @@
 
 <script>
     import MenuItem from '../core/navmenu/src/MenuItem'
-    import {metaMenus} from './index'
+    import Menu from "../menu";
 
     export default {
         name: "MetaMenu",
@@ -23,7 +23,7 @@
         },
         data() {
             return {
-                menus: metaMenus
+                menus: Menu.metaMenus
             }
         }
     }

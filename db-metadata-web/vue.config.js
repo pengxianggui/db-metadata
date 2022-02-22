@@ -5,6 +5,7 @@ const name = "db-metadata-web";
 module.exports = {
     publicPath: "/",
     outputDir: 'dist',
+    lintOnSave: false,
     assetsDir: 'static',    // 静态资源存放目录,相对于outputDir
     indexPath: 'index.html', // 生成的index.html的输出路径(相对于outputDir), 也可以是绝对路径
     runtimeCompiler: true, // 运行时编译, 支持运行时动态template, dialog.js等部分内容需要此项目支持

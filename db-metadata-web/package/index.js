@@ -77,7 +77,6 @@ import TagViewUtil from '@/../package/core/tagview/data'
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
 import './style/index.scss'
-import configAxios from "./axios/configAxios";
 
 // 全局注册的组件
 const components = [

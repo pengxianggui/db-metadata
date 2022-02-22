@@ -92,6 +92,7 @@ public class MetaProperties {
         public List<String> getExcludes() {
             excludes.add("/app/config");
             excludes.add("/router");
+            excludes.add("/user/login");
             return excludes;
         }
     }
