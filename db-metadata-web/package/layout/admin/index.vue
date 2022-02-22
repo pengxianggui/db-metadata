@@ -45,8 +45,9 @@ export default {
     TagView
   },
   data() {
+    let collapse = localStorage.getItem("META-ELEMENT-MENU:collapse");
     return {
-      collapse: false,
+      collapse: collapse === 'true',
       metaMenus: Menu.metaMenus,
       cachedViews: [],
       showTagView: Conf.show,
@@ -63,6 +64,11 @@ export default {
   },
   created() {
     this.getData(restUrl.MENU_DATA)
+  },
+  watch: {
+    collapse(newV) {
+      localStorage.setItem("META-ELEMENT-MENU:collapse", newV)
+    }
   },
   computed: {
     menus() {
