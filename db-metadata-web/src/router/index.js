@@ -15,7 +15,7 @@ export const menus = [
     },
     {
         path: '/admin/route1',
-        title: '菜单1',
+        title: '可编程菜单1',
         icon: 'el-icon-menu',
         hidden: false,
         disable: false,
@@ -23,7 +23,7 @@ export const menus = [
         children: [
             {
                 path: '/admin/route1-1',
-                title: '菜单1-1',
+                title: '可编程菜单1-1',
                 icon: 'el-icon-menu',
                 hidden: false,
                 disable: true,
@@ -31,7 +31,7 @@ export const menus = [
             },
             {
                 path: '/admin/route1-2',
-                title: '菜单1-2',
+                title: '可编程菜单1-2',
                 icon: 'el-icon-menu',
                 hidden: false,
                 disable: false,
