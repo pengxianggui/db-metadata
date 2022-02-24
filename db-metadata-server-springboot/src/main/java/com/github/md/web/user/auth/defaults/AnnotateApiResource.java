@@ -8,27 +8,27 @@ import org.springframework.web.method.HandlerMethod;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * api接口资源。基于{@link Authorize}的资源描述
+ * 基于注解的api接口资源。基于{@link Authorize}的资源描述
  *
  * @author pengxg
  * @date 2022/2/21 2:34 下午
  */
-public class ApiResource implements MResource {
+public class AnnotateApiResource implements MResource {
     @Getter
     private Authorize authorize;
     @Getter
     private HttpServletRequest request;
     private boolean needPermit;
 
-    private ApiResource(Authorize authorize, HttpServletRequest request) {
+    protected AnnotateApiResource(Authorize authorize, HttpServletRequest request) {
         this.authorize = authorize;
         this.needPermit = !(authorize == null || authorize.whoever());
         this.request = request;
     }
 
-    public static ApiResource by(HttpServletRequest request, HandlerMethod handler) {
+    public static AnnotateApiResource by(HttpServletRequest request, HandlerMethod handler) {
         Authorize authorize = handler.getMethodAnnotation(Authorize.class);
-        return new ApiResource(authorize, request);
+        return new AnnotateApiResource(authorize, request);
     }
 
     @Override

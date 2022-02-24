@@ -2,8 +2,8 @@ package com.github.md.web.controller;
 
 import com.github.md.analysis.meta.*;
 import com.github.md.web.ui.*;
-import com.github.md.web.user.auth.meta.MetaAccess;
-import com.github.md.web.user.auth.meta.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;

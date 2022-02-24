@@ -1,7 +1,7 @@
 package com.github.md.web.query.dynamic;
 
 import com.github.md.web.user.User;
-import com.github.md.web.user.UserManager;
+import com.github.md.web.user.AuthenticationManager;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +26,7 @@ public class UserVariable implements VariableDefinition {
 
     @Override
     public Object init() {
-        User user = UserManager.me().getUser(request);
+        User user = AuthenticationManager.me().getUser(request);
         return user;
     }
 }

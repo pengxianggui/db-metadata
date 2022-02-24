@@ -19,24 +19,14 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
 
     private User user;
 
-    public DefaultUserWithRoles(User user, MRRole role) {
+    public DefaultUserWithRoles(User user, MRRole... roles) {
         this.user = user;
-        this.roles = new MRRole[]{role};
+        this.roles = (roles != null ? roles : new MRRole[0]);
     }
 
     @Override
     public MRRole[] roles() {
         return roles;
-    }
-
-    @Override
-    public boolean hasRole(String nameOrCode) {
-        for (MRRole role : roles) {
-            if (role.name().equalsIgnoreCase(nameOrCode.toLowerCase()) || role.code().equalsIgnoreCase(nameOrCode.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

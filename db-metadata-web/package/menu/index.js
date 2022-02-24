@@ -15,7 +15,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:meta-data']
             }
         },
         {
@@ -25,7 +25,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:feature']
             }
         },
         {
@@ -35,7 +35,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:component']
             }
         },
         {
@@ -45,7 +45,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:component-instance']
             }
         },
         {
@@ -55,7 +55,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:menu']
             }
         },
         {
@@ -65,7 +65,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:router']
             }
         },
         {
@@ -75,7 +75,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:form-builder']
             }
         },
         {
@@ -85,7 +85,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:meta-conf']
             }
         },
         {
@@ -95,7 +95,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:dict']
             }
         },
         {
@@ -105,7 +105,7 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:exception']
             }
         },
         {
@@ -115,7 +115,17 @@ const metaMenus = [{
             "hidden": false,
             "disable": false,
             "meta": {
-                "roles": [access.root]
+                "auths": ['menu:meta:auth']
+            }
+        },
+        {
+            "path": "/meta/api-resource",
+            "title": "接口资源",
+            "icon": "el-icon-warning",
+            "hidden": false,
+            "disable": false,
+            "meta": {
+                "auths": ['menu:meta:api-resource']
             }
         }
     ]

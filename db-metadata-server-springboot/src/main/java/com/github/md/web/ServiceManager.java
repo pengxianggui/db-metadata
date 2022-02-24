@@ -1,18 +1,16 @@
 package com.github.md.web;
 
 import com.github.md.analysis.AnalysisSpringUtil;
-import com.github.md.web.component.ComponentService;
 import com.github.md.analysis.db.MysqlService;
 import com.github.md.analysis.meta.BusinessService;
 import com.github.md.analysis.meta.DbMetaService;
+import com.github.md.web.component.ComponentService;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.ui.SqlAnalysis;
 import com.github.md.web.upload.UploadService;
-import com.github.md.web.user.auth.meta.MetaAuthService;
-import com.github.md.web.user.role.DefaultRoleService;
 
 /**
  * FIXME 这个类逐步过度 0908
@@ -49,14 +47,6 @@ public class ServiceManager {
 
     public static BusinessService businessService() {
         return AnalysisSpringUtil.getBean(BusinessService.class);
-    }
-
-    public static MetaAuthService authService() {
-        return AnalysisSpringUtil.getBean(MetaAuthService.class);
-    }
-
-    public static DefaultRoleService roleService() {
-        return AnalysisSpringUtil.getBean(DefaultRoleService.class);
     }
 
     public static QuickJudge quickJudge() {

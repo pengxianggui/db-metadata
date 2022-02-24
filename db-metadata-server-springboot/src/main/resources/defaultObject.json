@@ -2,6 +2,9 @@
   "meta_field": {
     "is_sys": true,
     "config": {
+      "objectCode": "meta_field",
+      "structure": "list",
+      "isNumberSequence": true,
       "bizInterceptor": "com.github.md.web.controller.itp.MetaFieldEditPointCut",
       "orderBy": "order_num asc"
     },
@@ -109,10 +112,13 @@
     }
   },
   "meta_object": {
+    "is_sys": true,
     "config": {
+      "structure": "list",
+      "objectCode": "meta_object",
+      "isNumberSequence": true,
       "orderBy": "created_time desc,updated_time desc"
     },
-    "is_sys": true,
     "_fields": {
       "id": {
         "config": {
@@ -139,7 +145,7 @@
         "config": {
           "addStatus": 30,
           "updateStatus": 30,
-          "isSearch": true
+          "isSearch": false
         }
       },
       "code": {
@@ -208,6 +214,15 @@
   "meta_dict": {
     "is_sys": true,
     "config": {
+      "objectCode": "meta_dict",
+      "isNumberSequence": true,
+      "structure": "tree",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "structureConfig": {
+        "idKey": "id",
+        "pidKey": "pid",
+        "label": "name"
+      },
       "orderBy": "order_num asc"
     },
     "_fields": {
@@ -218,32 +233,51 @@
       },
       "pid": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isFile": false,
+          "scopeSql": "select id, name as cn from meta_dict",
+          "addStatus": 100,
+          "defaultVal": "",
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "scopeRange": [],
+          "viewStatus": 30,
+          "scopeOptions": [],
+          "updateStatus": 100
         }
       },
       "dict_type": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isNullable": true,
+          "scopeOptions": [{
+            "key": "系统字典",
+            "value": "系统字典"
+          }]
         }
       },
-      "is_sys": {
+      "build_in": {
+        "cn": "系统内置",
         "config": {
-          "isSearch": false
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "name": {
         "config": {
-          "isSearch": true
+          "isSearch": true,
+          "isNullable": false
         }
       },
       "value": {
         "config": {
-          "isSearch": false
-        }
-      },
-      "live_flag": {
-        "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isNullable": false
         }
       },
       "order_num": {
@@ -299,6 +333,7 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_component",
+      "structure": "list",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
     },
@@ -310,13 +345,13 @@
       },
       "cn": {
         "config": {
-          "isSearch": true,
+          "isSearch": false,
           "updateStatus": 30
         }
       },
       "en": {
         "config": {
-          "isSearch": true,
+          "isSearch": false,
           "updateStatus": 30
         }
       },
@@ -468,6 +503,13 @@
   },
   "meta_feature": {
     "is_sys": true,
+    "config": {
+      "structure": "list",
+      "objectCode": "meta_feature",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "isNumberSequence": true,
+      "orderBy": "created_time desc"
+    },
     "_fields": {
       "id": {
         "config": {
@@ -529,17 +571,24 @@
           "viewStatus": 30
         }
       },
-      "remarks": {
+      "remark": {
         "config": {
           "isListShow": false,
           "isSearch": false
         }
       },
-      "build_in": {
-        "cn": "内建数据",
+      "name": {
         "config": {
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
@@ -551,7 +600,8 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_router",
-      "isUUIDPrimary": true,
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
       "structure": "tree",
       "structureConfig": {
         "idKey": "id",
@@ -589,7 +639,7 @@
       },
       "path": {
         "config": {
-          "isSearch": false
+          "isSearch": true
         }
       },
       "redirect": {
@@ -651,6 +701,18 @@
           "viewStatus": 30
         }
       },
+      "cn": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "name": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
       "remark": {
         "config": {
           "isListShow": false,
@@ -658,10 +720,11 @@
         }
       },
       "build_in": {
-        "cn": "内建数据",
+        "cn": "系统内置",
         "config": {
+          "defaultVal": false,
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
@@ -673,8 +736,9 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_menu",
-      "isUUIDPrimary": true,
+      "isNumberSequence": true,
       "structure": "tree",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
       "structureConfig": {
         "idKey": "id",
         "pidKey": "pid",
@@ -788,10 +852,11 @@
         }
       },
       "build_in": {
-        "cn": "内建数据",
+        "cn": "系统内置",
         "config": {
+          "defaultVal": false,
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
@@ -803,6 +868,7 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_exception",
+      "structure": "list",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
     },
@@ -821,7 +887,8 @@
       },
       "exp_chain": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "exp_msg": {
@@ -836,17 +903,19 @@
       },
       "req_data": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "res_data": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "created_by": {
         "config": {
-          "isSearch": true
+          "isSearch": false
         }
       },
       "created_time": {
@@ -878,6 +947,7 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_change_log",
+      "structure": "list",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
     },
@@ -996,6 +1066,7 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_config",
+      "structure": "list",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
     },
@@ -1092,11 +1163,13 @@
       }
     }
   },
-  "meta_auth": {
+  "meta_api_resource": {
     "is_sys": true,
     "config": {
-      "objectCode": "meta_auth",
+      "objectCode": "meta_api_resource",
+      "structure": "list",
       "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
       "orderBy": "created_time desc"
     },
     "_fields": {
@@ -1142,17 +1215,25 @@
           "viewStatus": 30
         }
       },
+      "name": {
+        "cn": "资源名称",
+        "config": {
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
       "type": {
-        "cn": "接口映射",
+        "cn": "资源类型",
         "config": {
           "isListShow": true,
           "isSearch": false,
+          "scopeRange": [],
           "scopeOptions": [
-            {"key": "默认(不映射资源:需自行关联)","value": "-1"},
-            {"key": "api接口(仅映射接口url)","value": "0"},
-            {"key": "api接口+元对象(映射接口url+元对象)","value": "1"},
-            {"key": "api接口+功能(映射接口url+功能)","value": "2"}
-          ]
+            {"key": "普通接口","value": "0"},
+            {"key": "接口+元对象","value": "1"},
+            {"key": "接口+功能","value": "2"}
+          ],
+          "defaultVal": "0"
         }
       },
       "meta_code": {
@@ -1163,10 +1244,161 @@
         }
       },
       "uri": {
-        "cn": "接口path",
+        "cn": "接口路径",
         "config": {
           "isListShow": true,
           "isSearch": false
+        }
+      },
+      "need_permit": {
+        "cn": "需要鉴权",
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "defaultVal": true
+        }
+      },
+      "just_sign": {
+        "cn": "登录放行",
+        "config": {
+          "isListShow": true,
+          "isSearch": true,
+          "defaultVal": false
+        }
+      },
+      "permit_by": {
+        "cn": "鉴权依据",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "scopeOptions": [
+            {"key": "按权限判定","value": "auth"},
+            {"key": "按角色判定","value": "role"}
+          ],
+          "defaultVal": "auth"
+        }
+      },
+      "need_auths": {
+        "cn": "需要的权限",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_auth",
+          "isMultiple": true
+        }
+      },
+      "auth_match_mode": {
+        "cn": "权限匹配模式",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeOptions": [{
+            "key": "全部匹配",
+            "value": "all"
+          }, {
+            "key": "任一匹配",
+            "value": "any"
+          }]
+        }
+      },
+      "need_roles": {
+        "cn": "需要的角色",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_role",
+          "isMultiple": true
+        }
+      },
+      "role_match_mode": {
+        "cn": "角色匹配模式",
+        "config": {
+          "isListShow": true,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeOptions": [{
+            "key": "全部匹配",
+            "value": "all"
+          }, {
+            "key": "任一匹配",
+            "value": "any"
+          }]
+        }
+      },
+      "remark": {
+        "cn": "备注",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      }
+    }
+  },
+  "meta_auth": {
+    "is_sys": true,
+    "config": {
+      "objectCode": "meta_auth",
+      "structure": "list",
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
         }
       },
       "name": {
@@ -1185,11 +1417,47 @@
           "isSearch": true
         }
       },
-      "build_in": {
-        "cn": "内建数据",
+      "group": {
         "config": {
+          "isSearch": false
+        }
+      },
+      "type": {
+        "cn": "权限类别",
+        "config": {
+          "isNullable": false,
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
+          "scopeOptions": [{
+            "key": "菜单权限",
+            "value": "菜单权限"
+          }, {
+            "key": "路由权限",
+            "value": "路由权限"
+          }, {
+            "key": "接口权限",
+            "value": "接口权限"
+          }, {
+            "key": "按钮权限",
+            "value": "按钮权限"
+          }, {
+            "key": "其他",
+            "value": "其他"
+          }]
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
@@ -1201,7 +1469,9 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_role",
+      "structure": "list",
       "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
       "orderBy": "created_time desc"
     },
     "_fields": {
@@ -1267,15 +1537,16 @@
         "cn": "备注",
         "config": {
           "isNullable": true,
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false
         }
       },
       "build_in": {
-        "cn": "内建数据",
+        "cn": "系统内置",
         "config": {
+          "defaultVal": false,
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
@@ -1287,8 +1558,9 @@
     "is_sys": true,
     "config": {
       "objectCode": "meta_user",
+      "structure": "list",
       "isNumberSequence": true,
-      "bizInterceptor": "com.github.md.web.user.UserAop",
+      "bizInterceptor": "com.github.md.web.user.UserAop,com.github.md.web.controller.itp.BuildInDataPointCut",
       "orderBy": "created_time desc"
     },
     "_fields": {
@@ -1362,23 +1634,20 @@
         }
       },
       "build_in": {
-        "cn": "内建数据",
+        "cn": "系统内置",
         "config": {
+          "defaultVal": false,
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
         }
       },
-      "roles": {
-        "cn": "角色",
+      "phone": {
+        "cn": "手机号",
         "config": {
-          "isListShow": true,
-          "isSearch": false,
-          "addStatus": 10,
-          "updateStatus": 10,
-          "viewStatus": 30
+          "isSearch": false
         }
       }
     }

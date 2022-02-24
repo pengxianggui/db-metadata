@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 智能装配工厂：从零构建
  * <p> @Date : 2019/11/4 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -65,7 +66,6 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
      *
      * @param fields
      * @param globalComponentAllConfig 所有组件的全局配置
-     *
      * @return
      */
     private List<MetaFieldViewAdapter> analysisFields(Collection<IMetaField> fields, Kv globalComponentAllConfig, ComponentType componentType) {
@@ -89,7 +89,6 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
      *
      * @param metaObject
      * @param componentType
-     *
      * @return
      */
     @Override
@@ -118,11 +117,11 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         Kv objectConfig = Kv.by(metaObject.code(), recommendObjectConfig(metaObject, componentType, globalComponentConfig));
 
         ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.Load(objectConfig,
-                                                                                       fieldsMap,
-                                                                                       metaObject.code(),
-                                                                                       instanceCode,
-                                                                                       "自动计算配置",
-                                                                                       containerComponent.componentType());
+                fieldsMap,
+                metaObject.code(),
+                instanceCode,
+                "自动计算配置",
+                containerComponent.componentType());
 
         return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }

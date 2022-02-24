@@ -2,7 +2,7 @@ package com.github.md.web.user.auth.defaults;
 
 import cn.com.asoco.annotation.Authorize;
 import com.github.md.web.user.User;
-import com.github.md.web.user.UserManager;
+import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.MRPermit;
 import com.github.md.web.user.role.MRRole;
@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
  * @date 2022/2/21 3:00 下午
  */
 @Slf4j
-public class AuthorizePermit implements MRPermit<User, ApiResource> {
+public class AuthorizePermit implements MRPermit<User, AnnotateApiResource> {
 
     @Override
-    public boolean permit(User user, ApiResource mResource) {
+    public boolean permit(User user, AnnotateApiResource mResource) {
         if (Objects.isNull(user)) {
             log.debug("无用户信息! 视为无权限访问.");
             return false;
@@ -56,7 +56,7 @@ public class AuthorizePermit implements MRPermit<User, ApiResource> {
         if (user instanceof UserWithRolesWrapper) { // 优先使用内存缓存
             ownRoles = Arrays.asList(((UserWithRolesWrapper) user).roles()).stream().map(MRRole::code).collect(Collectors.toList());
         } else {
-            List<MRRole> roles = UserManager.me().roleService().findByUser(user.userId());
+            List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
             ownRoles = roles.stream().map(MRRole::code).collect(Collectors.toList());
         }
 
@@ -72,7 +72,7 @@ public class AuthorizePermit implements MRPermit<User, ApiResource> {
         if (user instanceof UserWithRolesWrapper) { // 优先使用内存缓存
             ownAuths = Arrays.asList(((UserWithRolesWrapper) user).auths()).stream().map(IAuth::code).collect(Collectors.toList());
         } else {
-            List<IAuth> auths = UserManager.me().authService().findByUser(user.userId());
+            List<IAuth> auths = AuthenticationManager.me().authService().findByUser(user.userId());
             ownAuths = auths.stream().map(IAuth::code).collect(Collectors.toList());
         }
 

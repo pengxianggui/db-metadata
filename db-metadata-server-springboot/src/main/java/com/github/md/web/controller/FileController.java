@@ -2,8 +2,8 @@ package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.github.md.web.user.auth.meta.Type;
-import com.github.md.web.user.auth.meta.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.web.kit.UtilKit;

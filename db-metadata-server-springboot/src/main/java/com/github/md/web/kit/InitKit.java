@@ -3,6 +3,11 @@ package com.github.md.web.kit;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.ui.MetaFieldViewAdapter;
@@ -10,10 +15,6 @@ import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.github.md.analysis.component.ComponentType;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.kit.Kv;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -63,6 +64,37 @@ public class InitKit {
         log.info("Start the MetaObject configuration import.....");
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
         updateMetaObjects(lists);
+        return this;
+    }
+
+    /**
+     * 依据元对象配置更新其所有已有的容器实例配置。即通过元对象、原字段逻辑配置，推导一些实例配置，减轻defaultInstance.json工作量，防止重复
+     * 配置一些东西。
+     *
+     * @return
+     */
+    public InitKit updateInstanceConfigByMetaObject() {
+        log.info("Start to infer instance config through object config(field config)...");
+        for (String objectCode : jsonObjectConfig.keySet()) {
+            JSONObject self = jsonObjectConfig.getJSONObject(objectCode);
+            JSONObject fields = self.containsKey("_fields") ? self.getJSONObject("_fields") : new JSONObject();
+
+            IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
+
+            List<ComponentType> existTypes = ServiceManager.componentService().loadTypesByObjectCode(metaObject.code());
+            for (ComponentType type : existTypes) {
+                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, type);
+
+                for (String fieldCode : fields.keySet()) {
+                    MetaFieldViewAdapter metaFieldViewAdapter = metaObjectViewAdapter.getFieldAdapter(fieldCode);
+                    if (metaFieldViewAdapter == null) {
+                        log.debug(String.format("元字段[%s > %s]在容器[%s]下无UI配置，请确认", objectCode, fieldCode, type.getCode()));
+                        continue;
+                    }
+                    UIManager.update(metaFieldViewAdapter, metaObjectViewAdapter.getComponent().componentType());
+                }
+            }
+        }
         return this;
     }
 
@@ -218,7 +250,10 @@ public class InitKit {
 
             //TODO 因mysql jdbc 无法直接操作JSON类型,需要使用Kv 接收,用kv.toJson -> String 后存入  ||HACK 写法
             //WARN 仅支持配置config字段
-            Kv fieldConfig = UtilKit.getKv(fieldsConf.getString(metaField.fieldCode()));
+//            Kv fieldConfig = UtilKit.getKv(fieldsConf.getString(metaField.fieldCode()));
+
+            Kv fieldConfig = UtilKit.getKv(JSONObject.toJSONString(fieldsConf.getJSONObject(metaField.fieldCode()),
+                    SerializerFeature.WriteMapNullValue)); // 保留json中的空值键值对
             if (!fieldConfig.isEmpty()) {
                 MetaFieldViewAdapter fieldAdapter = metaObjectViewAdapter.getFieldAdapter(metaField.fieldCode());
                 if (fieldAdapter != null) {

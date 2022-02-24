@@ -4,7 +4,6 @@ import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.AuthService;
 import com.github.md.web.user.auth.defaults.DefaultAuthService;
-import com.github.md.web.user.auth.meta.MetaAuthService;
 import com.github.md.web.user.role.DefaultRoleService;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleService;
@@ -18,20 +17,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
+ * 认证管理
  * <p> @Date : 2019/12/13 </p>
  * <p> @Project : db-meta-serve</p>
  *
  * <p> @author konbluesky </p>
  */
-public class UserManager {
+public class AuthenticationManager {
 
-    private static final UserManager me = new UserManager();
+    private static final AuthenticationManager me = new AuthenticationManager();
 
     /**
      * 需要注意得是loginUsers得put动作 只能由loginService来做
      */
     @Getter
-    private final Cache<String, User> loginUsers = CacheBuilder.newBuilder().maximumSize(1000).build();
+    private final Cache<String, UserWithRolesWrapper> loginUsers = CacheBuilder.newBuilder().maximumSize(1000).build();
 
     @Deprecated
     @Getter
@@ -43,12 +43,9 @@ public class UserManager {
     private AuthService authService;
 
     @Getter
-    private final MetaAuthService metaAuthService = new MetaAuthService(); // 内置基于meta_auth的权限服务，dbMeta内置接口的鉴权必须使用此服务
-
-    @Getter
     private UserIntercept userIntercept;
 
-    public static UserManager me() {
+    public static AuthenticationManager me() {
         if (me.userService == null) {
             me.userService = new DefaultUserService();
         }
@@ -68,7 +65,7 @@ public class UserManager {
         return me;
     }
 
-    private UserManager() {
+    private AuthenticationManager() {
     }
 
     @Deprecated
@@ -92,37 +89,28 @@ public class UserManager {
         return this.authService;
     }
 
-    public UserManager config(UserService userService) {
+    public AuthenticationManager config(UserService userService) {
         this.userService = userService;
         return this;
     }
 
-    public UserManager config(LoginService loginService) {
+    public AuthenticationManager config(LoginService loginService) {
         this.loginService = loginService;
         return this;
     }
 
-    public UserManager config(RoleService roleService) {
+    public AuthenticationManager config(RoleService roleService) {
         this.roleService = roleService;
         return this;
     }
 
-    public UserManager config(AuthService authService) {
+    public AuthenticationManager config(AuthService authService) {
         this.authService = authService;
         return this;
     }
 
-    public User getUser(HttpServletRequest request) {
+    public UserWithRolesWrapper getUser(HttpServletRequest request) {
         return this.loginService.getUser(request);
-    }
-
-    /**
-     * 指定某用户为登录状态
-     *
-     * @param user
-     */
-    public void assignUserToLogged(User user) {
-        this.loginService.login(user);
     }
 
     @Deprecated
@@ -148,7 +136,7 @@ public class UserManager {
 
         @Override
         public String userId() {
-            return "游客";
+            return "SYSTEM";
         }
 
         @Override

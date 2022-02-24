@@ -14,13 +14,19 @@ import com.github.md.analysis.kit.Kv;
  */
 public interface MetaViewAdapterFactory {
 
+    /**
+     * 创建元对象的实例配置adapter
+     *
+     * @param metaObject
+     * @param componentType
+     * @return
+     */
     MetaObjectViewAdapter createMetaObjectViewAdapter(IMetaObject metaObject, ComponentType componentType);
 
     /**
      * 以实例code来构建对象;
      *
      * @param instanceCode
-     *
      * @return
      */
     MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode);

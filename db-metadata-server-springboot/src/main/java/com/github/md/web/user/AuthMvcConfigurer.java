@@ -24,7 +24,7 @@ public class AuthMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         if (metaProperties.getServer().getLogin().isEnable()) {
-            registry.addInterceptor(UserManager.me().getUserIntercept())
+            registry.addInterceptor(AuthenticationManager.me().getUserIntercept())
                     .addPathPatterns(metaProperties.getServer().getLogin().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getLogin().getExcludes());
         }

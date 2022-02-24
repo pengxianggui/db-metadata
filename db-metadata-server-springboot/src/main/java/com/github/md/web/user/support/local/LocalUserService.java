@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.AbstractUserService;
-import com.github.md.web.user.UserManager;
+import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleFactory;
 import com.github.md.analysis.kit.Kv;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class LocalUserService extends AbstractUserService<LocalUser> {
+public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> {
 
     private static final List<LocalUser> users = new ArrayList<>();
 
@@ -37,26 +37,6 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
 
     public LocalUserService(String fileName) {
         this.fileName = fileName;
-    }
-
-    @Override
-    public String tokenKey() {
-        return "uid";
-    }
-
-    @Override
-    public String loginKey() {
-        return "uid";
-    }
-
-    @Override
-    public String pwdKey() {
-        return "pwd";
-    }
-
-    @Override
-    public String cookieKey() {
-        return "db-meta-serve";
     }
 
     @Override
@@ -69,24 +49,9 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
         }
 
         if (user != null) {
-            UserManager.me().getLoginUsers().put(user.userId(), user);
+            AuthenticationManager.me().getLoginUsers().put(user.userId(), user);
         }
         return user;
-    }
-
-    @Override
-    public boolean logout(LocalUser user) {
-        return false;
-    }
-
-    @Override
-    public boolean logged(LocalUser user) {
-        return false;
-    }
-
-    @Override
-    public boolean isExpired(LocalUser user) {
-        return false;
     }
 
     @Override
@@ -113,15 +78,6 @@ public class LocalUserService extends AbstractUserService<LocalUser> {
 
     @Override
     public LocalUser findById(Object idValue) {
-        //        String userJson = UtilKit.loadConfigByFile(fileName);
-        //        JSONArray userObjs = JSON.parseObject(userJson).getJSONArray("users");
-        //        LocalUser user = null;
-        //        for (int i = 0; i < userObjs.size(); i++) {
-        //            JSONObject j = (JSONObject) userObjs.get(i);
-        //            if (j.getString("userId").equalsIgnoreCase(String.valueOf(idValue))) {
-        //                user = new LocalUser(j.getInnerMap());
-        //            }
-        //        }
         List<LocalUser> userList = findAll();
         return userList.stream().filter(u -> String.valueOf(idValue).equals(u.userId())).findFirst().orElse(null);
     }

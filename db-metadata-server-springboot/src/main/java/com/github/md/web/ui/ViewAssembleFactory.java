@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 可视装配工厂: 从已有实例配置中构建。可视体现在该实例配置已经可见了
  * <p> @Date : 2019/11/4 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -37,7 +38,6 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
      * @param fields
      * @param componentInstanceConfig  完整的实例配置,元对象级+字段级
      * @param globalComponentAllConfig 所有组件的全局配置
-     *
      * @return
      */
     private List<MetaFieldViewAdapter> fetchFieldsAdapter(Collection<IMetaField> fields, ComponentInstanceConfig componentInstanceConfig, Kv globalComponentAllConfig) {
@@ -63,7 +63,6 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
      *
      * @param metaObject
      * @param componentType
-     *
      * @return
      */
     @Override

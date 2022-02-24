@@ -1,7 +1,7 @@
 package com.github.md.web.feature.ms;
 
-import com.github.md.web.user.auth.meta.Type;
-import com.github.md.web.user.auth.meta.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ViewFactory;
 import com.google.common.base.Preconditions;

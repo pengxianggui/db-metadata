@@ -18,11 +18,10 @@ package com.github.md.web.user.auth;
 public interface MRPermit<U, R> {
 
     /**
-     * 资源判定动作
+     * 资源判定动作.
      *
-     * @param resourceHolder
+     * @param resourceHolder 资源持有对象
      * @param mResource
-     *
      * @return
      */
     boolean permit(U resourceHolder, R mResource);

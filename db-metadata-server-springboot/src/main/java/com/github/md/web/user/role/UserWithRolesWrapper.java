@@ -21,7 +21,18 @@ public interface UserWithRolesWrapper extends User {
 
     MRRole[] roles();
 
-    boolean hasRole(String nameOrCode);
+    /**
+     * @param nameOrCode
+     * @return
+     */
+    default boolean hasRole(String nameOrCode) {
+        for (MRRole role : roles()) {
+            if (role.name().equalsIgnoreCase(nameOrCode.toLowerCase()) || role.code().equalsIgnoreCase(nameOrCode.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     default IAuth[] auths() {
         MRRole[] roles = roles();

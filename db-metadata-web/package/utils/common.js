@@ -629,3 +629,48 @@ export function randomNum(length) {
     }
     return num;
 }
+
+/**
+ * 分组。例如: 传入:
+ *
+ * <pre>
+ *     arr:
+ *     [
+ *      {name: '张三', 'job': '开发'},
+ *      {name: '李四', 'job': '开发'},
+ *      {name: '王五', 'job': '测试'},
+ *      {name: '赵六', 'job': ''},
+ *      {name: '胜七'}
+ *     ]
+ *     key: job
+ *     defGroupName: '未知'
+ *
+ *     则返回的值为:
+ *     {
+ *         "开发": [{name: '张三', 'job': '开发'}, {name: '李四', 'job': '开发'}],
+ *         "测试": [{name: '王五', 'job': '测试'}],
+ *         "未知": [{name: '赵六', 'job': ''}, {name: '胜七'}]
+ *     }
+ * </pre>
+ *
+ * @param arr 对象数组，其中的对象需要含有key属性。若arr不是数组，或key为空，则返回空对象
+ * @param key
+ * @param defGroupName 若arr中的对象元素不含有key属性, 或其key属性的值为空, 那么建立一个默认组(组名为defGroupName), 并将其放入。此入参不传则为"默认"
+ * @return {} 返回分组后的对象。
+ */
+export function group(arr, key, defGroupName = '默认') {
+    if (!isArray(arr) || isEmpty(key)) {
+        return {}
+    }
+
+    let map = {}
+    arr.forEach(obj => {
+        let groupK = (isEmpty(obj[key]) ? defGroupName : obj[key])
+        if (map.hasOwnProperty(groupK)) {
+            map[groupK].push(obj)
+        } else {
+            map[groupK] = new Array(obj)
+        }
+    })
+    return map
+}

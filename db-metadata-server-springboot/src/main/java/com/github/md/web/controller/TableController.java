@@ -2,8 +2,8 @@ package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.md.analysis.meta.*;
-import com.github.md.web.user.auth.meta.MetaAccess;
-import com.github.md.web.user.auth.meta.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.github.md.analysis.meta.aop.AopInvocation;
@@ -199,7 +199,7 @@ public class TableController extends ControllerAdapter {
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
-                    invocation.getRet().setFail();
+                    invocation.getRet().setFail(e);
                     s = false;
                 }
                 return s;

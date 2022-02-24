@@ -27,7 +27,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
 
         if (user != null) {
             UserThreadLocal.setUser(user);
-            Cookie cookie = new Cookie(UserManager.me().loginService().cookieKey(), user.userId());
+            Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
             cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
             response.addCookie(cookie);
         }
@@ -40,14 +40,14 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
      * @return
      */
     public User ifNullUser() {
-        throw new UnLoginException("未认证");
+//        throw new UnLoginException("未认证");
+        return null;
     }
 
     public User getUser(HttpServletRequest request) {
         User user;
         try {
-            LoginService<User> loginService = UserManager.me().loginService();
-            user = loginService.getUser(request);
+            user = AuthenticationManager.me().getUser(request);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
@@ -58,6 +58,6 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
 
     @Override
     public User getDefaultVisitor(HttpServletRequest request) {
-        return UserManager.staticUser;
+        return AuthenticationManager.staticUser;
     }
 }

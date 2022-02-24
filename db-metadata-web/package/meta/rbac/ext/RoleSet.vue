@@ -56,12 +56,13 @@ export default {
   mounted() {
     this.$axios.safeGet(restUrl.ROLE_LIST).then(({data: roles}) => {
       this.options = roles
-    });
 
-    let url = utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId});
-    this.$axios.safeGet(url).then(({data: roles}) => {
-      this.value = roles.map(r => r.id)
-    })
+      let url = utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId});
+      this.$axios.safeGet(url).then(({data: roles}) => {
+        this.value = roles.map(r => r.id)
+        this.handleCheckedCitiesChange(this.value)
+      })
+    });
   },
   computed: {
     groups() {

@@ -1,8 +1,8 @@
 package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.web.user.auth.meta.Type;
-import com.github.md.web.user.auth.meta.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.analysis.meta.IMetaObject;

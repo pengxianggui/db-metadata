@@ -1,8 +1,8 @@
 package com.github.md.web.user;
 
+import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
-import com.github.md.web.ServiceManager;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.user.role.MRRole;
 import com.jfinal.kit.StrKit;
@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 @RequestMapping("user")
 public class UserController extends ControllerAdapter {
 
+    @Authorize(justSign = true)
     @GetMapping("{userId}/roles")
     public Ret getRoles(@PathVariable("userId") String userId) {
-        List<MRRole> roles = ServiceManager.roleService().findByUser(userId);
+        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(userId);
         return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
@@ -30,7 +31,7 @@ public class UserController extends ControllerAdapter {
         Kv kv = parameterHelper().getKv();
         String roleId = StrKit.defaultIfBlank(kv.getStr("roleId"), "");
 
-        boolean flag = UserManager.me().userService()
+        boolean flag = AuthenticationManager.me().userService()
                 .bindRolesForUser(userId, roleId.split(","));
         return flag ? Ret.ok() : Ret.fail();
     }

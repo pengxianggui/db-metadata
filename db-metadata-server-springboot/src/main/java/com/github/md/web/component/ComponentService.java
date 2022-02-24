@@ -140,6 +140,12 @@ public class ComponentService {
         return record;
     }
 
+    /**
+     * 加载元对象已经存在的容器实例配置对应的容器类型
+     *
+     * @param objectCode
+     * @return
+     */
     public List<ComponentType> loadTypesByObjectCode(String objectCode) {
         List<String> codes = SpringAnalysisManager.me().dbMain().query("select comp_code from " + META_COMPONENT_INSTANCE + " where type=? and dest_object=?",
                 INSTANCE.META_OBJECT.toString(),
@@ -253,9 +259,9 @@ public class ComponentService {
     /**
      * 创建新的实例配置
      *
-     * @param component
-     * @param object
-     * @param componentInstanceConfig
+     * @param component               容器组件
+     * @param object                  元对象
+     * @param componentInstanceConfig 组件实例配置
      * @return
      */
     public boolean newObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {

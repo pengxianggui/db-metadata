@@ -31,6 +31,7 @@ public class AppConst {
         SYS_TABLE.put("meta_change_log", CLEARABLE, false);
         SYS_TABLE.put("meta_exception", CLEARABLE, false);
         SYS_TABLE.put("meta_dict", CLEARABLE, false);
+        SYS_TABLE.put("meta_api_resource", CLEARABLE, false);
         SYS_TABLE.put("meta_auth", CLEARABLE, false);
         SYS_TABLE.put("meta_role", CLEARABLE, false);
         SYS_TABLE.put("meta_user", CLEARABLE, false);

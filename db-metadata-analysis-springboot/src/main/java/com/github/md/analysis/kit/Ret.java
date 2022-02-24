@@ -58,7 +58,7 @@ import java.util.Map;
  *
  * </pre>
  */
-@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class Ret extends HashMap {
 
     private static final String STATE = "state";
@@ -66,6 +66,8 @@ public class Ret extends HashMap {
     private static final String STATE_OK = "ok";
 
     private static final String STATE_FAIL = "fail";
+
+    private Exception ex;
 
     public Ret() {
     }
@@ -105,6 +107,13 @@ public class Ret extends HashMap {
 
     public Ret setFail() {
         super.put(STATE, STATE_FAIL);
+        return this;
+    }
+
+    public Ret setFail(Exception e) {
+        setFail();
+        this.ex = e;
+        this.set("msg", e.getMessage());
         return this;
     }
 

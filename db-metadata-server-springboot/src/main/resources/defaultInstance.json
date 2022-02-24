@@ -10,22 +10,9 @@
       "config": {
       },
       "_fields": {
-        "is_primary": {
-          "inline": false
-        },
-        "cn": {
-          "inline": true
-        },
-        "en": {
-          "inline": true
-        },
-        "order_num": {
-          "inline": false
-        },
         "remark": {
           "component_name": "TextAreaBox",
           "name": "remark",
-          "inline": false,
           "conf": {
             "size": "mini"
           }
@@ -99,6 +86,9 @@
             "multiple": false,
             "filterable": true
           }
+        },
+        "build_in": {
+          "default_value": null
         }
       }
     },
@@ -223,6 +213,11 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableTreeView": {
@@ -240,6 +235,11 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableTreeView": {},
@@ -265,18 +265,16 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableView": {},
     "FormView": {
       "_fields": {
-        "live_flag": {
-          "component_name": "BoolBox"
-        },
-        "is_sys": {
-          "component_name": "BoolBox",
-          "default_value": false
-        }
       }
     }
   },
@@ -294,7 +292,21 @@
         }
       }
     },
-    "TableView": {},
+    "TableView": {
+      "config": {
+        "operation-bar": {
+          "show": false
+        },
+        "buttons": {
+          "edit": {
+            "show": false
+          },
+          "delete": {
+            "show": false
+          }
+        }
+      }
+    },
     "FormView": {}
   },
   "meta_config": {
@@ -314,13 +326,25 @@
     "TableView": {},
     "FormView": {}
   },
-  "meta_auth": {
+  "meta_api_resource": {
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        },
+        "need_permit": {
+          "default_value": null
+        },
+        "just_sign": {
+          "default_value": null
+        }
       }
     },
     "TableView": {
+      "config": {}
     },
     "FormView": {
       "config": {
@@ -330,33 +354,55 @@
       },
       "_fields": {
         "type": {
-          "label": "接口映射",
-          "component_name": "DropDownBox",
-          "options": [
-            {
-              "key": "默认(不映射资源:需自行关联)",
-              "value": "-1"
-            },
-            {
-              "key": "api接口(仅映射接口url)",
-              "value": "0"
-            },
-            {
-              "key": "api接口+元对象(映射接口url+元对象)",
-              "value": "1"
-            },
-            {
-              "key": "api接口+功能(映射接口url+功能)",
-              "value": "2"
-            }
-          ],
-          "explain": "接口映射类型决定了此权限映射的接口资源的深度，系统会据此进行鉴权判定。"
+          "explain": "接口资源类型决定了此接口资源访问控制时如何进行鉴权判定"
+        },
+        "meta_code": {
+          "explain": "元对象编码或功能编码, 取决于【资源类型】"
         },
         "uri": {
           "explain": "以/开头, 结尾不带/"
         },
-        "meta_code": {
-          "explain": "元对象编码或功能编码, 取决于【接口映射】"
+        "need_permit": {
+          "explain": "若取消不勾选，则表示此资源无需保护(后面配置项无效)。优先级最高(0)"
+        },
+        "just_sign": {
+          "explain": "若勾选，则表示登录即可访问(后面配置项无效)。优先级高(1)"
+        },
+        "permit_by": {
+          "explain": "鉴权判定依据(按角色判定还是按权限判定), 分别对应后续配置项"
+        },
+        "need_auths": {
+          "explain": "选择访问此接口资源需要的权限(可多选)。当【鉴权依据】为【按权限判定】时才有效)"
+        },
+        "auth_match_mode": {
+          "explain": "当【需要的权限】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部权限才能访问; 任一匹配: 用户拥有其中一个权限即可访问"
+        },
+        "need_roles": {
+          "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
+        },
+        "role_match_mode": {
+          "explain": "当【需要的角色】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部角色才能访问; 任一匹配: 用户拥有其中一个角色即可访问"
+        }
+      }
+    }
+  },
+  "meta_auth": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
+      }
+    },
+    "TableView": {
+    },
+    "FormView": {
+      "config": {
+        "conf": {
+          "label-width": "120px"
         }
       }
     }
@@ -365,6 +411,11 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableView": {
@@ -382,6 +433,11 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableView": {

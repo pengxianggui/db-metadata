@@ -3,12 +3,16 @@ package com.github.md.web.user.support.defaults;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.AbstractUserService;
-import com.github.md.web.user.UserManager;
+import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.User;
+import com.github.md.web.user.role.DefaultUserWithRoles;
+import com.github.md.web.user.role.MRRole;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.stream.Collectors;
  * @author pengxg
  * @date 2022/2/18 10:40 上午
  */
-public class DefaultUserService extends AbstractUserService<DefaultUser> {
+public class DefaultUserService extends AbstractUserService<DefaultUser, DefaultUserWithRoles> {
 
     private DbPro db() {
         return SpringAnalysisManager.me().dbMain();
@@ -64,15 +68,17 @@ public class DefaultUserService extends AbstractUserService<DefaultUser> {
     }
 
     @Override
-    public DefaultUser login(String username, String password) {
+    public DefaultUserWithRoles login(String username, String password) {
         Record record = db().findFirst("select * from meta_user where username=? and password=?",
                 username, PassKit.encryptPass(password));
 
         if (record == null) {
             return null;
         }
-        DefaultUser user = new DefaultUser(record);
-        UserManager.me().getLoginUsers().put(user.userId(), user); // 设置登录状态
-        return user;
+
+        User user = new DefaultUser(record);
+        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+        MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
+        return new DefaultUserWithRoles(user, roleArr);
     }
 }

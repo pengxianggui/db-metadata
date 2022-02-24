@@ -1,6 +1,8 @@
 package com.github.md.web.user.role;
 
 import com.github.md.analysis.SpringAnalysisManager;
+import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.auth.IAuth;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
  * @author pengxg
  * @date 2022/2/15 5:04 下午
  */
-@Service
 public class DefaultRoleService implements RoleService {
     private DbPro db() {
         return SpringAnalysisManager.me().dbMain();
@@ -40,8 +41,11 @@ public class DefaultRoleService implements RoleService {
     public List<MRRole> findByUser(String userId) {
         List<MRRole> roles = Lists.newArrayList();
         List<Record> records = db().find("select r.* from meta_role r,  meta_user_role_rela rela where r.id = rela.role_id and rela.user_id=?", userId);
-        for (Record record : records) {
-            roles.add(new DefaultRole(record));
+        for (Record data : records) {
+            DefaultRole role = new DefaultRole(data);
+            List<IAuth> auths = AuthenticationManager.me().authService().findByRole(role.id());
+            role.setAuths(auths);
+            roles.add(role);
         }
         return roles;
     }

@@ -1,4 +1,4 @@
-package com.github.md.web.user.auth.meta;
+package com.github.md.web.user.auth.annotations;
 
 import java.lang.annotation.*;
 

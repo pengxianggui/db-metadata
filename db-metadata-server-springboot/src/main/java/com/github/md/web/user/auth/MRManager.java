@@ -2,18 +2,16 @@ package com.github.md.web.user.auth;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.user.User;
-import com.github.md.web.user.auth.defaults.ApiResource;
+import com.github.md.web.user.auth.defaults.MetaApiResource;
+import com.github.md.web.user.auth.defaults.AnnotateApiResource;
 import com.github.md.web.user.auth.defaults.AuthorizePermit;
-import com.github.md.web.user.auth.meta.MetaAuthPermit;
-import com.github.md.web.user.auth.meta.MetaAuthResource;
+import com.github.md.web.user.auth.defaults.ApiResourcePermit;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p> @Date : 2019/12/16 </p>
@@ -21,6 +19,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class MRManager {
 
     private static final MRManager me = new MRManager();
@@ -51,8 +50,8 @@ public class MRManager {
 
     private MRManager() {
         // 内置
-        configResourcePermitMapping(MetaAuthResource.class, new MetaAuthPermit());
-        configResourcePermitMapping(ApiResource.class, new AuthorizePermit());
+        configResourcePermitMapping(MetaApiResource.class, new ApiResourcePermit()); // 基于数据的接口资源判定
+        configResourcePermitMapping(AnnotateApiResource.class, new AuthorizePermit()); // 基于注解的接口资源判定
     }
 
     public static MRManager me() {
@@ -104,8 +103,13 @@ public class MRManager {
     }
 
     public boolean permit(User user, MResource mResource) {
-        if (!mResource.needPermit()) {
+        if (mResource == null || !mResource.needPermit()) {
             return true;
+        }
+
+        if (user == null) {
+            log.debug("无用户信息! 视为无权限访问.");
+            return false;
         }
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {

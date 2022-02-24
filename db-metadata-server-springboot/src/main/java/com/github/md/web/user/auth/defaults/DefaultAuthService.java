@@ -3,7 +3,6 @@ package com.github.md.web.user.auth.defaults;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.user.auth.AuthService;
 import com.github.md.web.user.auth.IAuth;
-import com.github.md.web.user.auth.meta.MetaAuthResource;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
@@ -24,7 +23,7 @@ public class DefaultAuthService implements AuthService {
     public List<IAuth> findAll() {
         List<IAuth> auths = Lists.newArrayList();
         for (Record record : db().findAll("meta_auth")) {
-            auths.add(new MetaAuthResource(record));
+            auths.add(new DefaultAuth(record));
         }
         return auths;
     }
@@ -34,7 +33,7 @@ public class DefaultAuthService implements AuthService {
         List<IAuth> auths = Lists.newArrayList();
         List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela r where a.id = r.auth_id and r.role_id=?", roleId);
         for (Record record : records) {
-            auths.add(new MetaAuthResource(record));
+            auths.add(new DefaultAuth(record));
         }
         return auths;
     }
@@ -44,7 +43,7 @@ public class DefaultAuthService implements AuthService {
         List<IAuth> auths = Lists.newArrayList();
         List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela ra, meta_user_role_rela ur, meta_user u where a.id = ra.auth_id and ra.role_id = ur.role_id and u.id=?", userId);
         for (Record record : records) {
-            auths.add(new MetaAuthResource(record));
+            auths.add(new DefaultAuth(record));
         }
         return auths;
     }
@@ -55,6 +54,6 @@ public class DefaultAuthService implements AuthService {
         if (record == null) {
             return null;
         }
-        return new MetaAuthResource(record);
+        return new DefaultAuth(record);
     }
 }

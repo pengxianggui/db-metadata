@@ -56,7 +56,7 @@ public class UserIntercept implements HandlerInterceptor {
 //                return;
 //            }
 //
-//            LoginService<User> loginService = UserManager.me().loginService();
+//            LoginService<User> loginService = AuthenticationManager.me().loginService();
 //            user = loginService.getUser(inv.getController().getRequest());
 //            //开发模式时 指定开发用户
 //            if (JFinal.me().getConstants().getDevMode()) {

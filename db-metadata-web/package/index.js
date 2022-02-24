@@ -1,4 +1,3 @@
-import ElementUI from 'element-ui'
 import utils from './utils'
 import * as Rest from './utils/rest'
 import filters from './register/filter'
@@ -145,8 +144,6 @@ const components = [
 
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
-
-    Vue.use(ElementUI, opts);
 
     // 自定义rest接口url覆盖: 优先级最高
     if (opts.restUrl) {

@@ -25,7 +25,6 @@ public class UIManager {
      * 获取计算后的FormView适配器
      *
      * @param metaObject
-     *
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedFrom(IMetaObject metaObject) {
@@ -36,7 +35,6 @@ public class UIManager {
      * 获取计算后的TableView配器
      *
      * @param metaObject
-     *
      * @return
      */
     public static MetaObjectViewAdapter getAutoComputedTable(IMetaObject metaObject) {
@@ -47,7 +45,6 @@ public class UIManager {
      * 获取指定元对象的From实例
      *
      * @param metaObject
-     *
      * @return
      */
     public static MetaObjectViewAdapter getForm(IMetaObject metaObject) {
@@ -58,7 +55,6 @@ public class UIManager {
      * 获取指定元对象的Table实例
      *
      * @param metaObject
-     *
      * @return
      */
     public static MetaObjectViewAdapter getTable(IMetaObject metaObject) {
@@ -67,17 +63,31 @@ public class UIManager {
 
     public static boolean createField(MetaFieldViewAdapter metaFieldViewAdapter, String instanceCode, String instanceName) {
         return ServiceManager.componentService().newFieldConfig(metaFieldViewAdapter.getContainer().getComponent(),
-                                                                metaFieldViewAdapter.getMetaField(),
-                                                                instanceCode,
-                                                                instanceName,
-                                                                metaFieldViewAdapter.getFieldInstanceConfig());
+                metaFieldViewAdapter.getMetaField(),
+                instanceCode,
+                instanceName,
+                metaFieldViewAdapter.getFieldInstanceConfig());
     }
 
+    /**
+     * 更新某个元字段在特定容器组件下的实例配置
+     *
+     * @param metaFieldViewAdapter 原字段adapter
+     * @param componentType        容器组件
+     * @return
+     */
     public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter, ComponentType componentType) {
         Kv toBeUpdatedFieldInstanceConfig = ComputeKit.recommendFieldConfig(metaFieldViewAdapter.getMetaField(), componentType);
         return update(metaFieldViewAdapter, toBeUpdatedFieldInstanceConfig);
     }
 
+    /**
+     * 更新某个元字段的实例配置
+     *
+     * @param metaFieldViewAdapter           原字段adapter
+     * @param toBeUpdatedFieldInstanceConfig 要覆盖的实例配置kv
+     * @return
+     */
     public static boolean update(MetaFieldViewAdapter metaFieldViewAdapter, Kv toBeUpdatedFieldInstanceConfig) {
         return ViewAssembleFactory.me().reCompute(metaFieldViewAdapter, toBeUpdatedFieldInstanceConfig);
     }

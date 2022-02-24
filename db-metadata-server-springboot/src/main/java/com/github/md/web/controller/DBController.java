@@ -1,7 +1,7 @@
 package com.github.md.web.controller;
 
-import com.github.md.web.user.auth.meta.Type;
-import com.github.md.web.user.auth.meta.MetaAccess;
+import com.github.md.web.user.auth.annotations.Type;
+import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.component.ComponentType;
@@ -66,29 +66,11 @@ public class DBController extends ControllerAdapter {
     }
 
     @MetaAccess(value = Type.API)
-    @GetMapping("truncate")
-    public Ret truncate() {
-        preConditionCheck();
-
-        StringBuilder sb = new StringBuilder();
-
-        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.CLEARABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
-
-        sb.append("即将清除的数据表:").append(tables);
-        log.warn("清空meta相关表{}", sb);
-        tables.forEach(key -> {
-            Db.delete("delete from " + key);
-        });
-
-        return Ret.ok("msg", sb.toString());
-    }
-
-    @MetaAccess(value = Type.API)
     @Transactional
     @GetMapping("init")
     public Ret init() {
         preConditionCheck();
+        truncate();
 
         Components.me().init(); // 初始化组件(包括组件配置)
 
@@ -106,13 +88,39 @@ public class DBController extends ControllerAdapter {
             // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+                // 初始化实例配置
                 componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
             }
         }
 
-        // 根据固定文件(defaultInstance.json和defaultObject.json)更新元数据、实例配置
-        InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
+        // 根据固定文件(defaultObject.json)更新元对象/元字段配置
+        InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
+                .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
+                .updateInstanceConfig();            // 最后，依据defaultInstance.json覆盖已入库的UI实例配置
+
         return Ret.ok();
+    }
+
+    /**
+     * 清空存储元数据的几张系统内置表。详见 {@link AppConst#SYS_TABLE}
+     *
+     * @return
+     */
+    private Ret truncate() {
+        preConditionCheck();
+
+        StringBuilder sb = new StringBuilder();
+
+        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.CLEARABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+
+        sb.append("即将清除的数据表:").append(tables);
+        log.warn("清空meta相关表{}", sb);
+        tables.forEach(key -> {
+            Db.delete("delete from " + key);
+        });
+
+        return Ret.ok("msg", sb.toString());
     }
 
     private void preConditionCheck() {

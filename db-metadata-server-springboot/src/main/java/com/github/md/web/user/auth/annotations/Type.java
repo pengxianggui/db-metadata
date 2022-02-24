@@ -1,9 +1,9 @@
-package com.github.md.web.user.auth.meta;
+package com.github.md.web.user.auth.annotations;
 
 import lombok.Getter;
 
 /**
- * 接口资源的鉴权标注类型。
+ * 接口资源类型。
  *
  * @author pengxg
  * @date 2021/10/16 7:40 上午

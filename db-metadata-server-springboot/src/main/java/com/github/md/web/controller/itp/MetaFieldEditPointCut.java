@@ -51,6 +51,7 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
                 MetaFieldViewAdapter metaFieldViewAdapter = metaObjectViewAdapter.getFieldAdapter(fieldCode);
                 if (metaFieldViewAdapter == null) {
                     log.debug(String.format("元字段[%s > %s]在容器[%s]下无UI配置，请确认", objectCode, fieldCode, type.getCode()));
+                    // TODO 无UI配置，则应当帮助其自动计算生成
 //                    throw new ComponentException("元字段[%s > %s]在容器[%s]下无UI配置，请确认", objectCode, fieldCode, type.getCode());
                     continue;
                 }

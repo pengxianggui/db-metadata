@@ -7,6 +7,7 @@ import InstanceConfEdit from "../meta/instance-component/InstanceConfEdit";
 import RouterManager from "../meta/route/RouterManager";
 import MenuManager from "../meta/menu/MenuManager";
 import AuthList from "../meta/rbac/AuthList";
+import ApiResourceList from "../meta/rbac/ApiResourceList";
 import MetaFeatureList from '../meta/feature';
 import MetaConfList from "../meta/meta-conf";
 import DictList from "../meta/dict"
@@ -174,6 +175,16 @@ const innerRoute = [
             roles: [access.root]
         },
         component: AuthList
+    }, {
+        path: '/meta/api-resource',
+        name: 'ApiResource',
+        meta: {
+            title: '接口资源',
+            icon: 'el-icon-warning',
+            noCache: false,
+            roles: [access.root]
+        },
+        component: ApiResourceList
     },
     ...jumpOut
 ]

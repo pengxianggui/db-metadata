@@ -11,11 +11,42 @@
  Target Server Version : 50730
  File Encoding         : 65001
 
- Date: 21/02/2022 11:23:02
+ Date: 23/02/2022 23:50:07
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for meta_api_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_api_resource`;
+CREATE TABLE `meta_api_resource` (
+  `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_time` timestamp NULL DEFAULT NULL,
+  `created_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `updated_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `id` varchar(32) CHARACTER SET utf8 NOT NULL,
+  `name` varchar(255) NOT NULL COMMENT '资源名称',
+  `type` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '0' COMMENT '资源类型(0-接口;1-接口加元对象;2-接口加功能)',
+  `uri` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '接口uri',
+  `meta_code` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '元编码(元对象编码或功能编码)',
+  `need_permit` bit(1) NOT NULL DEFAULT b'1' COMMENT '需要鉴权(关闭则后面配置无效)',
+  `just_sign` bit(1) NOT NULL DEFAULT b'0' COMMENT '登录即可访问',
+  `permit_by` varchar(10) NOT NULL DEFAULT 'auth' COMMENT '判定依据(auth-权限;role-角色)',
+  `need_auths` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT '需要的权限编码(逗号分隔)',
+  `auth_match_mode` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'any' COMMENT '权限匹配模式(any-任一匹配;all-所有匹配)',
+  `need_roles` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT '需要的角色编码(逗号分隔)',
+  `role_match_mode` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'any' COMMENT '角色匹配模式(any-任一匹配;all-所有匹配)',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_union` (`type`,`uri`,`meta_code`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内置资源表:接口资源';
+
+-- ----------------------------
+-- Records of meta_api_resource
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for meta_auth

@@ -18,14 +18,17 @@ public class DefaultRole implements MRRole {
     private Record data;
     private List<IAuth> auths;
 
-    public DefaultRole(Record record) {
+    public DefaultRole(Record record, IAuth... auths) {
         this.data = record;
         this.auths = Lists.newArrayList();
+        for (IAuth auth : auths) {
+            this.auths.add(auth);
+        }
     }
 
     @Override
     public String id() {
-        return null;
+        return data.getStr("id");
     }
 
     @Override
@@ -58,7 +61,8 @@ public class DefaultRole implements MRRole {
         return Kv.create().set(this.data.getColumns());
     }
 
-    public void addPermission(IAuth auth) {
-        this.auths.add(auth);
+    public void setAuths(List<IAuth> auths) {
+        this.auths.clear();
+        this.auths.addAll(auths);
     }
 }

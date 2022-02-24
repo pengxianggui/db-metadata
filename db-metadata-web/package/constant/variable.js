@@ -19,4 +19,5 @@ export const metaObjectCode = {
     AuthList: 'meta_auth', // 权限管理
     RoleList: 'meta_role', // 角色管理
     UserList: 'meta_user', // 用户管理
+    ApiResourceList: 'meta_api_resource', // 接口资源管理
 }

@@ -8,7 +8,7 @@ import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.WebException;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.user.User;
-import com.github.md.web.user.UserManager;
+import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.UserThreadLocal;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -102,7 +102,7 @@ public class UtilKit {
             data.put("created_by", user.userId());
             data.put("created_time", new Date());
         } else {
-            data.put("created_by", UserManager.staticUser.userId());
+            data.put("created_by", AuthenticationManager.staticUser.userId());
             data.put("created_time", new Date());
         }
     }
@@ -113,7 +113,7 @@ public class UtilKit {
             data.put("updated_by", user.userId());
             data.put("updated_time", new Date());
         } else {
-            data.put("created_by", UserManager.staticUser.userId());
+            data.put("created_by", AuthenticationManager.staticUser.userId());
             data.put("created_time", new Date());
         }
     }
@@ -237,15 +237,15 @@ public class UtilKit {
      * <pre>
      * 递归merge 两个json对象
      * 说明:
-     * 从source -> merge 到 mergeMap
-     * 如遇key重复, newValue指用source的内容,oldValue指用target的内容
+     * 从 newMap -> merge 到 mergeMap
      *
-     * 注意:
-     *  WARN ME merge时,如遇value为空值的化,使用有值的那一个
+     * 若key不重复，则newMap往mergeMap合并; 若key重复，则视第三个参数而定。
+     *
      * </pre>
      *
      * @param mergeMap
      * @param newMap
+     * @param overwrite 若为true, 当两个map都有某个属性时，则会以后者向前者覆盖。为false, 则不覆盖，保留前者
      * @return
      */
     public static Map deepMerge(Map mergeMap, Map newMap, boolean overwrite) {
@@ -262,6 +262,10 @@ public class UtilKit {
                     deepMerge((Map) mergeMap.get(key), valueJson, overwrite);
                 } else {
                     if (overwrite) {
+                        if (value == null) {
+                            mergeMap.put(key, null);
+                            continue;
+                        }
                         mergeMap.merge(key, value, (oldValue, newValue) -> {
                             //                            StrKit.defaultIfBlank(String.valueOf(newValue), String.valueOf(oldValue))
                             if (newValue != null && StrKit.notBlank(String.valueOf(newValue))) {
@@ -273,6 +277,9 @@ public class UtilKit {
                             return newValue;
                         });
                     } else {
+                        if (value == null) {
+                            continue;
+                        }
                         mergeMap.merge(key, value, (oldValue, newValue) -> oldValue);
                     }
                 }
