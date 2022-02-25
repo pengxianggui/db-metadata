@@ -17,7 +17,16 @@ export const relatedId = '_relate_id'
  * 系统配置
  * @type {{}}
  */
-export const appConfig = {}
+export const appConfig = {
+    name: 'DB-Metadata低代码开发工具————Data drive everything',
+    logo: null,
+    registerable: true,
+    addable: true,
+    enableLogin: true,
+    enableAuth: true,
+    devMode: false,
+    tokenKey: 'X-TOKEN'
+}
 
 export const configApp = function (Vue, opts = {}) {
     const {axios} = opts

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {user, MetaMain} from '@/../package/index'
+import {MetaMain} from '@/../package/index'
 
 Vue.use(Router);
 
@@ -45,7 +45,7 @@ export const routes = [
     {
         path: "/",
         component: () => import('@/layout'),
-        redirect: '/meta/meta-data',
+        redirect: '/index',
         children: [
             {
                 path: '/admin',
@@ -82,7 +82,10 @@ export const routes = [
             {
                 path: '/login',
                 name: 'Login',
-                component: () => import('@/view/Login')
+                component: () => import('@/view/Login'),
+                meta: {
+                    need_permit: false
+                }
             },
             {
                 name: 'About',
@@ -95,11 +98,6 @@ export const routes = [
         name: 'WorkSpace',
         path: '/workspace',
         component: () => import('@/components/demo/WorkSpace')
-    },
-    {
-        name: 'Page404',
-        path: '*',
-        component: () => import('@/view/404')
     }
 ];
 
@@ -108,12 +106,4 @@ const router = new Router({
     routes: routes
 });
 
-router.beforeEach(async (to, from, next) => {
-    user.setUser({
-        roles: ['ROOT']
-    }) // 异步获取角色并设置
-    next()
-})
-
-// console.log(router.getRoutes())
 export default router

@@ -1,5 +1,6 @@
 package com.github.md.web.user;
 
+import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.user.role.UserWithRolesWrapper;
@@ -30,8 +31,9 @@ public class LoginController extends ControllerAdapter {
         String uid = parameterHelper().getPara(AuthenticationManager.me().loginService().loginKey());
         String pwd = parameterHelper().getPara(AuthenticationManager.me().loginService().pwdKey());
 
-        User user = AuthenticationManager.me().loginService().login(uid, pwd);
+        UserWithRolesWrapper user = AuthenticationManager.me().loginService().login(uid, pwd);
         if (user != null) {
+            AuthenticationManager.me().loginService().setLogged(user);
             Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
             cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
             response.addCookie(cookie);
@@ -55,20 +57,7 @@ public class LoginController extends ControllerAdapter {
     @GetMapping("info")
     public Ret info() {
         User user = AuthenticationManager.me().getUser(getRequest());
-        return Ret.ok("data", user);
+        AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
+        return Ret.ok("data", user.toKv());
     }
-
-//    public void update() {
-//        String updateAttr = getPara("attrs");
-//        Kv attrs = UtilKit.getKv(updateAttr);
-//        User u = UserThreadLocal.getUser();
-//        u.attrs(attrs);
-//        UserService userService = AuthenticationManager.me().userService();
-//        renderJson(userService.updateById(u) ? Ret.ok() : Ret.fail());
-//    }
-//
-//    public void list() {
-//        UserService userService = AuthenticationManager.me().userService();
-//        renderJson(Ret.ok("data", userService.findAll()));
-//    }
 }

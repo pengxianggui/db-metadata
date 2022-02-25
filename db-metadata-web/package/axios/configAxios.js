@@ -3,8 +3,59 @@
  * @param axios
  */
 import {isEmpty} from "../utils/common";
+import {Message} from "element-ui";
+import {appConfig} from "../config";
+import {routeUrl} from "../constant/url";
+import {getToken} from "../access";
 
-export default function (axios) {
+/**
+ * 配置axios默认的拦截器
+ * @param axios
+ */
+const configInterceptor = function (router, axios) {
+    // 添加一个请求拦截器
+    axios.interceptors.request.use(config => {
+            let token = getToken()
+            if (!isEmpty(token)) {
+                config.headers[appConfig.tokenKey] = getToken()
+            }
+            return config
+        },
+        err => {
+            console.error("err:", err);
+            return Promise.reject(err)
+        });
+
+    // 响应拦截器
+    axios.interceptors.response.use(res => {
+        const {state, msg: message, code} = res.data
+        if (state !== 'ok') {
+            Message({
+                message: message,
+                type: "error"
+            })
+
+            if (code === 401) { // 未认证
+                router.push(routeUrl.R_LOGIN)
+            }
+            if (code === 403) { // 无权限
+                router.push({path: routeUrl.R_401, query: res.data})
+            }
+            return Promise.reject(res.data);
+        }
+
+        return Promise.resolve(res.data);
+    }, err => {
+        console.error("[ERROR] ", err);
+        Message({
+            message: err.message,
+            type: "error"
+        })
+        return Promise.reject(err)
+    });
+}
+
+export default function (router, axios) {
     if (isEmpty(axios)) {
         console.error('[MetaElement] 必须配置axios!请实例化axios并配置')
         return
@@ -47,5 +98,7 @@ export default function (axios) {
         let compileUrl = resolve(url, config);
         return axios.post(compileUrl, data, config);
     }
+
+    configInterceptor(router, axios)
     return axios
 }

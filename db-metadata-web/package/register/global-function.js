@@ -1,16 +1,22 @@
 import configAxios from "../axios/configAxios";
 import utils from "../utils";
-import user from "../access";
+import {hasAuth, hasRole, hasAllAuth, hasAllRole, hasAnyAuth, hasAnyRole, isRoot} from "../access";
 import {TagViewUtil} from "../index";
 
 export default function (Vue, opts) {
-    Vue.prototype.$axios = configAxios(opts.axios)
+    Vue.prototype.$axios = configAxios(opts.router, opts.axios)
+
     Vue.prototype.$merge = utils.merge
     Vue.prototype.$reverseMerge = utils.reverseMerge
     Vue.prototype.$compile = utils.compile
     Vue.prototype.$dialog = utils.dialog
-    Vue.prototype.$isRoot = user.isRoot
-    Vue.prototype.$hasRoles = user.hasRoles
+    Vue.prototype.$isRoot = isRoot
+    Vue.prototype.$hasAnyRole = hasAnyRole
+    Vue.prototype.$hasAllRole = hasAllRole
+    Vue.prototype.$hasAnyAuth = hasAnyAuth
+    Vue.prototype.$hasAllAuth = hasAllAuth
+    Vue.prototype.$hasAuth = hasAuth
+    Vue.prototype.$hasRole = hasRole
 
     /**
      * 封装了返回操作涉及的逻辑: 关闭当前TagView、关闭window

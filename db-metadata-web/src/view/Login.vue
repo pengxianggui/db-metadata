@@ -50,7 +50,8 @@ export default {
     login(model) {
       this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
         console.log(data)
-        sessionStorage.setItem("X-TOKEN", data.userId)
+        localStorage.setItem("X-TOKEN", data.userId)
+        // TODO 还需要刷新缓存中的用户信息 access.user，否则如果用户不刷新还是之前的用户
         this.$router.push('/')
       })
     }

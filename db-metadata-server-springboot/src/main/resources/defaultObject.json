@@ -784,29 +784,97 @@
         }
       },
       "disable": {
+        "cn": "禁用",
         "config": {
           "isSearch": false
         }
       },
       "icon": {
+        "cn": "图标",
         "config": {
           "isSearch": false
         }
       },
       "path": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "order_num": {
         "config": {
-          "isSearch": false
-        }
-      },
-      "config": {
-        "config": {
           "isSearch": false,
           "isListShow": false
+        }
+      },
+      "need_permit": {
+        "cn": "需要鉴权",
+        "config": {
+          "isListShow": false,
+          "isSearch": true,
+          "defaultVal": true
+        }
+      },
+      "permit_by": {
+        "cn": "鉴权依据",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeOptions": [
+            {"key": "按权限判定","value": "auth"},
+            {"key": "按角色判定","value": "role"}
+          ],
+          "defaultVal": "auth"
+        }
+      },
+      "auths": {
+        "cn": "需要的权限",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'menu'",
+          "isMultiple": true
+        }
+      },
+      "auth_match_mode": {
+        "cn": "权限匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeOptions": [{
+            "key": "全部匹配",
+            "value": "all"
+          }, {
+            "key": "任一匹配",
+            "value": "any"
+          }]
+        }
+      },
+      "roles": {
+        "cn": "需要的角色",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_role",
+          "isMultiple": true
+        }
+      },
+      "role_match_mode": {
+        "cn": "角色匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeOptions": [{
+            "key": "全部匹配",
+            "value": "all"
+          }, {
+            "key": "任一匹配",
+            "value": "any"
+          }]
         }
       },
       "created_by": {
@@ -1278,19 +1346,19 @@
           "defaultVal": "auth"
         }
       },
-      "need_auths": {
+      "auths": {
         "cn": "需要的权限",
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth",
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'api'",
           "isMultiple": true
         }
       },
       "auth_match_mode": {
         "cn": "权限匹配模式",
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
@@ -1303,7 +1371,7 @@
           }]
         }
       },
-      "need_roles": {
+      "roles": {
         "cn": "需要的角色",
         "config": {
           "isListShow": false,
@@ -1315,7 +1383,7 @@
       "role_match_mode": {
         "cn": "角色匹配模式",
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
@@ -1430,19 +1498,19 @@
           "isSearch": true,
           "scopeOptions": [{
             "key": "菜单权限",
-            "value": "菜单权限"
+            "value": "menu"
           }, {
             "key": "路由权限",
-            "value": "路由权限"
+            "value": "router"
           }, {
             "key": "接口权限",
-            "value": "接口权限"
+            "value": "api"
           }, {
             "key": "按钮权限",
-            "value": "按钮权限"
+            "value": "button"
           }, {
             "key": "其他",
-            "value": "其他"
+            "value": "other"
           }]
         }
       },

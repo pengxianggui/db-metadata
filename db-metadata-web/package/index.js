@@ -1,6 +1,7 @@
 import utils from './utils'
 import * as Rest from './utils/rest'
 import filters from './register/filter'
+import directives from "./register/directive";
 import registerGlobalFunction from './register/global-function'
 import './svg/index' // 内置svg注册
 // 布局组件
@@ -57,7 +58,7 @@ import TreeTableTmpl from './template/TreeTableTmpl'
 import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
 // meta 组件
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
-import {restUrl} from './constant/url'
+import {restUrl, routeUrl} from './constant/url'
 import {access} from "./access";
 import user from './access'
 // 内置业务组件
@@ -150,21 +151,26 @@ const install = function (Vue, opts = {}) {
         utils.reverseMerge(restUrl, opts.restUrl, false);
     }
 
+    // 系统配置: 最优先
+    configApp(Vue, opts)
+
     // 注册全局函数
     registerGlobalFunction(Vue, opts)
 
     // 注册全局过滤器
     Object.keys(filters).map(key => Vue.filter(key, filters[key]))
+    // 注册全局自定义指令
+    Object.keys(directives).map(key => Vue.directive(key, directives[key]))
 
     // 静态角色配置
     if (opts.access) {
         utils.reverseMerge(access, opts.access, false);
     }
 
-    // 注册路由
-    Route.registerRoute(Vue, opts)
+    // 注册菜单
     Menu.registerMenu(Vue, opts)
-    configApp(Vue, opts)
+    // 注册路由
+    Route.registerRouter(Vue, opts)
 
     components.map(component => {
         if (component.install) {
@@ -186,6 +192,7 @@ export default {
 export {
     utils,
     Rest,
+    routeUrl,
     restUrl,
     user,
     MetaMenu,

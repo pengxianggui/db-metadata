@@ -33,7 +33,7 @@ public class MetaProperties {
 
     @Data
     public static class AppProperties {
-        private String name = "DB-Metadata元数据管理系统";
+        private String name = "DB-Metadata低代码开发工具————Data drive everything";
         private String logo;
         private Boolean registerable = true;
         private Boolean addable = true;

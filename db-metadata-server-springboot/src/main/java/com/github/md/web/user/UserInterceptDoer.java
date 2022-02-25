@@ -11,13 +11,4 @@ public interface UserInterceptDoer {
 
     boolean preCertify(HttpServletRequest request, HttpServletResponse response, Object handler);
 
-    /**
-     * 游客。当用户不存在时，默认提供一个游客用户
-     *
-     * @param request
-     * @return
-     */
-    default User getDefaultVisitor(HttpServletRequest request) {
-        return null;
-    }
 }

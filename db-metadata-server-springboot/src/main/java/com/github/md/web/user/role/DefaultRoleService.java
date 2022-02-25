@@ -56,7 +56,7 @@ public class DefaultRoleService implements RoleService {
             db().delete("delete from meta_role_auth_rela where role_id=?", roleId);
 
             List<Record> inserts = Arrays.stream(authIds).filter(authId -> StrKit.notBlank(authId))
-                    .map(authId -> {
+                    .distinct().map(authId -> {
                         Record rela = new Record();
                         rela.set("role_id", roleId);
                         rela.set("auth_id", authId);

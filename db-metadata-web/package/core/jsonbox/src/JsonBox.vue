@@ -10,11 +10,12 @@
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import conver from './conver'
+    import reverse from "./reverse";
     import DefaultMeta from '../ui-conf'
     import utils from '@/../package/utils'
 
     export default {
-        mixins: [Meta(DefaultMeta), Val(conver)],
+        mixins: [Meta(DefaultMeta), Val(conver, reverse)],
         name: "JsonBox",
         label: "Json框",
         components: {

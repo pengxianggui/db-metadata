@@ -252,6 +252,25 @@ export function strToArray(value) {
 }
 
 /**
+ * 将字符串转换为数组。value就是数组，则直接返回，若是字符串，则尝试用指定分隔符(默认",")分隔为数组。
+ * 若value既不是数组，也不是字符串，则直接返回空数组。
+ * @param value
+ * @param separator
+ * @returns {*}
+ */
+export function strSplitToArray(value, separator = ',') {
+    if (isArray(value)) {
+        return value;
+    }
+
+    if (isString(value)) {
+        return value.split(separator);
+    }
+
+    return []
+}
+
+/**
  * 如果 value 不是字符串，将其转换为字符串。 null 和 undefined 将返回空字符串。
  * toString(null);
  * // => ''

@@ -21,4 +21,5 @@ public class AppPropVO {
     private boolean enableLogin;
     private boolean enableAuth;
     private boolean devMode;
+    private String tokenKey;
 }

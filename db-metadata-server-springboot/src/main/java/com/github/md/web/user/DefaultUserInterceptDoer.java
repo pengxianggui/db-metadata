@@ -40,11 +40,10 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
      * @return
      */
     public User ifNullUser() {
-//        throw new UnLoginException("未认证");
         return null;
     }
 
-    public User getUser(HttpServletRequest request) {
+    private User getUser(HttpServletRequest request) {
         User user;
         try {
             user = AuthenticationManager.me().getUser(request);
@@ -56,8 +55,4 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
         return user;
     }
 
-    @Override
-    public User getDefaultVisitor(HttpServletRequest request) {
-        return AuthenticationManager.staticUser;
-    }
 }

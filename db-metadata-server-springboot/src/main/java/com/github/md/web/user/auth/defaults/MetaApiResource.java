@@ -47,7 +47,7 @@ public class MetaApiResource implements MResource {
     }
 
     public List<String> needAuth() {
-        String authCodeStr = this.data.getStr("need_auths");
+        String authCodeStr = this.data.getStr("auths");
         if (StrKit.isBlank(authCodeStr)) {
             return Lists.newArrayList();
         }
@@ -64,7 +64,7 @@ public class MetaApiResource implements MResource {
     }
 
     public List<String> needRole() {
-        String roleCodeStr = this.data.getStr("need_roles");
+        String roleCodeStr = this.data.getStr("roles");
         if (StrKit.isBlank(roleCodeStr)) {
             return Lists.newArrayList();
         }

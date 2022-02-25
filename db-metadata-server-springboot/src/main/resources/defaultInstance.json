@@ -244,6 +244,11 @@
     },
     "TableTreeView": {},
     "FormView": {
+      "config": {
+        "conf": {
+          "label-width": "140px"
+        }
+      },
       "_fields": {
         "pid": {
           "component_name": "DropDownBox",
@@ -253,10 +258,36 @@
           "component_name": "IconBox"
         },
         "hidden": {
-          "component_name": "BoolBox"
+          "component_name": "BoolBox",
+          "explain": "菜单不可见(即使有权限)"
         },
         "disable": {
-          "component_name": "BoolBox"
+          "component_name": "BoolBox",
+          "explain": "菜单可见(如果有权限), 但不可点击"
+        },
+        "need_permit": {
+          "explain": "若取消勾选，则表示此资源无需保护(后面配置项无效)。优先级最高(0)"
+        },
+        "permit_by": {
+          "explain": "鉴权判定依据(按角色判定还是按权限判定), 分别对应后续配置项"
+        },
+        "auth_match_mode": {
+          "explain": "当【需要的权限】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部权限才能访问; 任一匹配: 用户拥有其中一个权限即可访问"
+        },
+        "auths": {
+          "conf": {
+            "filterable": true
+          },
+          "explain": "选择访问此接口资源需要的权限(可多选)。当【鉴权依据】为【按权限判定】时才有效)"
+        },
+        "role_match_mode": {
+          "explain": "当【需要的角色】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部角色才能访问; 任一匹配: 用户拥有其中一个角色即可访问"
+        },
+        "roles": {
+          "conf": {
+            "filterable": true
+          },
+          "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
         }
       }
     }
@@ -349,7 +380,7 @@
     "FormView": {
       "config": {
         "conf": {
-          "label-width": "120px"
+          "label-width": "140px"
         }
       },
       "_fields": {
@@ -371,13 +402,13 @@
         "permit_by": {
           "explain": "鉴权判定依据(按角色判定还是按权限判定), 分别对应后续配置项"
         },
-        "need_auths": {
+        "auths": {
           "explain": "选择访问此接口资源需要的权限(可多选)。当【鉴权依据】为【按权限判定】时才有效)"
         },
         "auth_match_mode": {
           "explain": "当【需要的权限】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部权限才能访问; 任一匹配: 用户拥有其中一个权限即可访问"
         },
-        "need_roles": {
+        "roles": {
           "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
         },
         "role_match_mode": {

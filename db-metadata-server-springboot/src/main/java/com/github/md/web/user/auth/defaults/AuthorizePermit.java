@@ -1,8 +1,8 @@
 package com.github.md.web.user.auth.defaults;
 
 import cn.com.asoco.annotation.Authorize;
-import com.github.md.web.user.User;
 import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.MRPermit;
 import com.github.md.web.user.role.MRRole;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -29,13 +28,8 @@ public class AuthorizePermit implements MRPermit<User, AnnotateApiResource> {
 
     @Override
     public boolean permit(User user, AnnotateApiResource mResource) {
-        if (Objects.isNull(user)) {
-            log.debug("无用户信息! 视为无权限访问.");
-            return false;
-        }
-
         Authorize authorize = mResource.getAuthorize();
-        if (authorize.justSign() && user != null) {
+        if (authorize.justSign()) {
             return true;
         }
 

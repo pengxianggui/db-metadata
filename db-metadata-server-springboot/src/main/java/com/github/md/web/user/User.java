@@ -30,8 +30,8 @@ public interface User {
      * @return
      */
     default Kv toKv() {
-        return Kv.create().set("userId", userId())
-                .set("userName", userName())
+        return Kv.create().set("id", userId())
+                .set("username", userName())
                 .set("attrs", attrs());
     }
 }

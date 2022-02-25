@@ -3,7 +3,12 @@ export const routeUrl = {
     R_GOBAL_CONF_ADD: '/global-conf',
     R_GOBAL_CONF_EDIT: '/global-conf',
     R_INSTANCE_CONF_NEW: '/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
-    R_INSTANCE_CONF_EDIT: '/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}&fieldCode={fieldCode}'    // 组件实例配置界面[编辑]
+    R_INSTANCE_CONF_EDIT: '/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}&fieldCode={fieldCode}',    // 组件实例配置界面[编辑]
+
+    R_LOGIN: '/login',
+    R_401: '/401',
+    R_403: '/403',
+    R_404: '/404'
 };
 
 export const restUrl = {
@@ -54,4 +59,5 @@ export const restUrl = {
     AUTH_SET_FOR_ROLE: '/role/{roleId}/auths', // 角色权限绑定
     AUTH_LIST_FOR_ROLE: '/role/{roleId}/auths', // 角色拥有的权限
     LOGIN_URL: '/user/login', // 登录接口地址
+    LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
 };

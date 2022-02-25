@@ -28,5 +28,61 @@
       "key": "字段配置",
       "value": "META_FIELD"
     }
+  ],
+  "authType": [
+    {
+      "key": "菜单权限",
+      "value": "menu"
+    },
+    {
+      "key": "路由权限",
+      "value": "router"
+    },
+    {
+      "key": "接口权限",
+      "value": "api"
+    },
+    {
+      "key": "按钮权限",
+      "value": "button"
+    },
+    {
+      "key": "其他",
+      "value": "other"
+    }
+  ],
+  "apiResourceType": [
+    {
+      "key": "普通接口",
+      "value": "0"
+    },
+    {
+      "key": "接口+元对象",
+      "value": "1"
+    },
+    {
+      "key": "接口+功能",
+      "value": "2"
+    }
+  ],
+  "authorizeBy": [
+    {
+      "key": "按权限判定",
+      "value": "auth"
+    },
+    {
+      "key": "按角色判定",
+      "value": "role"
+    }
+  ],
+  "authorizeMatchMode": [
+    {
+      "key": "全部匹配",
+      "value": "all"
+    },
+    {
+      "key": "任一匹配",
+      "value": "any"
+    }
   ]
 }

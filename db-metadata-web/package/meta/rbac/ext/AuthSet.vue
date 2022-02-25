@@ -13,7 +13,7 @@
             <h4 class="group-title">【{{ k }}】</h4>
             <div class="group-options">
               <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">
-                <span>{{ r.name }}</span>
+                <span>{{ r.name }}</span>&nbsp;
                 <el-tooltip :content="r.remark" placement="right" v-if="r.remark">
                   <i class="el-icon-question"></i>
                 </el-tooltip>
@@ -93,18 +93,23 @@ export default {
               value: []
             })
           })
-          resolve(map)
+
+          resolve({map, auths})
         }).catch(err => {
           reject(err)
         })
       });
     },
-    getAuthOfRole(roleId) {
+    getAuthOfRole(roleId, list = []) {
       this.$axios.safeGet(utils.compile(restUrl.AUTH_LIST_FOR_ROLE, {roleId: roleId}))
           .then(({data: auths = []}) => {
-            auths.forEach(a => {
-              this.model[a.type].value.push(a.id)
+            let hadAuthCodes = auths.map(a => a.id)
+            list.forEach(a => {
+              if (hadAuthCodes.indexOf(a.id) > -1) {
+                this.model[a.type].value.push(a.id)
+              }
             })
+
             Object.keys(this.model).forEach(type => {
               this.handleCheckedCitiesChange(this.model[type].value, type)
             })
@@ -112,9 +117,9 @@ export default {
     }
   },
   mounted() {
-    this.allAuth().then(data => {
-      this.authMap = data
-      this.getAuthOfRole(this.roleId)
+    this.allAuth().then(({map, auths: list}) => {
+      this.authMap = map
+      this.getAuthOfRole(this.roleId, list)
     });
   },
   computed: {
@@ -134,9 +139,9 @@ export default {
     //
     //   return map
     // },
-    groups() {
-      return utils.group(this.options, 'group')
-    }
+    // groups() {
+    //   return utils.group(this.options, 'group')
+    // }
   }
 }
 </script>

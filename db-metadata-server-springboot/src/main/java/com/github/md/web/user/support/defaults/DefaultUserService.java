@@ -57,7 +57,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
             db().delete("delete from meta_user_role_rela where user_id=?", userId);
 
             List<Record> inserts = Arrays.stream(roleIds).filter(roleId -> StrKit.notBlank(roleId))
-                    .map(roleId -> {
+                    .distinct().map(roleId -> {
                         Record rela = new Record();
                         rela.set("user_id", userId);
                         rela.set("role_id", roleId);

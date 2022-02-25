@@ -1,6 +1,5 @@
 <template>
-  <div v-if="!item.hidden &&  $hasRoles(needRoles)">
-
+  <div v-if="!item.hidden" v-menu-auth="item">
     <template v-if="hasOneShowingChild(item.children, item)
                         && (!onlyOneChild.children || onlyOneChild.children.length == 0 || onlyOneChild.noShowingChildren)">
       <!-- 只有一个需要展示的子节点，并且该子节点下再没有子节点了 -->
@@ -41,7 +40,8 @@
         <menu-item :key="subMenu.path + index"
                    :is-nest="true"
                    :item="subMenu"
-                   :base-path="resolvePath(subMenu.path)"></menu-item>
+                   :base-path="resolvePath(subMenu.path)">
+        </menu-item>
       </template>
     </el-submenu>
   </div>

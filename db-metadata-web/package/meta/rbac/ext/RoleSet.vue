@@ -9,7 +9,12 @@
       <div v-for="(v, k) in groups">
         <h4 class="group-title">【{{ k }}】</h4>
         <div class="group-options">
-          <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">{{ r.name }}</el-checkbox>
+          <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">
+            <span>{{ r.name }}</span>&nbsp;
+            <el-tooltip :content="r.remark" placement="right" v-if="r.remark">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </el-checkbox>
         </div>
       </div>
     </el-checkbox-group>

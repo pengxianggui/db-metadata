@@ -1,6 +1,8 @@
 package com.github.md.web.user.auth;
 
+import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.web.user.UnLoginException;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.defaults.MetaApiResource;
 import com.github.md.web.user.auth.defaults.AnnotateApiResource;
@@ -103,14 +105,12 @@ public class MRManager {
     }
 
     public boolean permit(User user, MResource mResource) {
-        if (mResource == null || !mResource.needPermit()) {
+        if (mResource == null || !mResource.needPermit()) { // 直接放行的资源无需鉴权
             return true;
         }
 
-        if (user == null) {
-            log.debug("无用户信息! 视为无权限访问.");
-            return false;
-        }
+        // 此资源需要鉴权，必定需要用户登录
+        AssertUtil.isTrue(user != null, new UnLoginException("未认证"));
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {
             if (entry.getKey().isInstance(mResource)) {

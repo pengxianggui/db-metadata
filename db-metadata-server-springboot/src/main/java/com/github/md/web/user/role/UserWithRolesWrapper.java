@@ -88,10 +88,10 @@ public interface UserWithRolesWrapper extends User {
 
     @Override
     default Kv toKv() {
-        return Kv.create().set("userId", userId())
-                .set("userName", userName())
-                .set("attrs", attrs())
-                .set("roles", roles())
-                .set("auths", auths());
+        return Kv.create().set("id", userId())
+                .set("username", userName())
+                .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
+                .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
+                .set("attrs", attrs());
     }
 }

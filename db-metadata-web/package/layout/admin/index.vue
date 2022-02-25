@@ -4,12 +4,16 @@
       <nav-menu :collapse.sync="collapse" :show-collapse-button="true">
         <!-- 非平台维护菜单 -->
         <template v-for="menu in menus">
-          <menu-item :item="menu" :base-path="menu.path" :key="menu.title + menu.path" v-if="!menu.hidden"></menu-item>
+          <menu-item :item="menu" :base-path="menu.path"
+                     :key="menu.title + menu.path"
+                     v-if="!menu.hidden"></menu-item>
         </template>
 
         <!-- 平台维护菜单 -->
-        <template v-for="menu in metaMenus" v-if="$isRoot()">
-          <menu-item :item="menu" :base-path="menu.path" :key="menu.title + menu.path" v-if="!menu.hidden"></menu-item>
+        <template v-for="menu in metaMenus">
+          <menu-item :item="menu" :base-path="menu.path"
+                     :key="menu.title + menu.path"
+                     v-if="!menu.hidden"></menu-item>
         </template>
       </nav-menu>
     </div>
@@ -60,7 +64,7 @@ export default {
         const {data: dynamicMenu} = resp
         this.dynamicMenus.push(...dynamicMenu)
       })
-    },
+    }
   },
   created() {
     this.getData(restUrl.MENU_DATA)
