@@ -8,9 +8,7 @@ import './svg/index' // 内置svg注册
 import NavMenu from "./core/navmenu";
 import TagView from "./core/tagview";
 import MetaLayout from "./layout/MetaLayout";
-import MetaHeader from "./layout/MetaHeader";
-import MetaMain from './layout/admin/index'
-// 基础组件
+import MetaHeader from "./layout/MetaHeader";// 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
@@ -124,7 +122,6 @@ const components = [
     // 布局组件layout
     MetaLayout,
     MetaHeader,
-    MetaMain,
     NavMenu,
     TagView,
 
@@ -199,6 +196,5 @@ export {
 
     TagViewUtil,
     MetaLayout,
-    MetaHeader,
-    MetaMain
+    MetaHeader
 }

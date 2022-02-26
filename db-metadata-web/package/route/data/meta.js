@@ -198,14 +198,7 @@ const routes = [
 
 export default function (Layout) {
     return [
-        {
-            path: '/meta',
-            component: Layout,
-            redirect: '/meta/manager',
-            children: [
-                ...routes
-            ]
-        },
+        ...routes,
         {
             path: '/__redirect',
             component: Layout,

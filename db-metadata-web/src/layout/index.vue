@@ -7,20 +7,20 @@
           <span style="font-family: cursive;">—— Data Drive Everything</span>
         </div>
 
-        <list class="nav">
-          <list-item>
-            <router-link to="/index">首页</router-link>
-          </list-item>
-          <list-item>
-            <router-link to="/about">关于我们</router-link>
-          </list-item>
-          <list-item>
-            <router-link to="/dashboard">后台</router-link>
-          </list-item>
-          <list-item>
-            <router-link to="/workspace">workspace</router-link>
-          </list-item>
-        </list>
+        <!--        <list class="nav">-->
+        <!--          <list-item>-->
+        <!--            <router-link to="/index">首页</router-link>-->
+        <!--          </list-item>-->
+        <!--          <list-item>-->
+        <!--            <router-link to="/about">关于我们</router-link>-->
+        <!--          </list-item>-->
+        <!--          <list-item>-->
+        <!--            <router-link to="/dashboard">后台</router-link>-->
+        <!--          </list-item>-->
+        <!--          <list-item>-->
+        <!--            <router-link to="/workspace">workspace</router-link>-->
+        <!--          </list-item>-->
+        <!--        </list>-->
 
         <span style="flex: 1"></span>
 
@@ -46,13 +46,17 @@ export default {
   },
   methods: {
     init: function () {
-      this.$prompt('初始化不会删除你业务表中的数据, 但是你创建的元对象、元字段, 及其实例配置将被清空, 且无法找回！ 若继续，请输入口令:', '确定要初始化?', {}).then(data => {
+      this.$prompt('初始化不会删除你业务表中的数据, 但是你创建的元对象、元字段, 及其实例配置将被清空, 且无法找回！ 若继续，请输入口令:',
+          '确定要初始化?',
+          {}).then(data => {
         this.$axios.get('/db/init?token=' + data.value).then(({msg = '初始化成功'}) => {
           this.$message.success(msg);
           this.$router.go(0);
         }).catch(({msg = '发生错误'}) => {
           console.error(msg)
         })
+      }).catch(() => {
+
       })
     }
   }

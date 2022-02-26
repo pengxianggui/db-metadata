@@ -1,5 +1,4 @@
 import MetaLayout from "../layout/MetaLayout";
-import MetaMain from '../layout/admin'
 import {access, detect, getToken, hasAuth, hasRole, setRoles} from "../access";
 
 import errorRoutes from './data/error'
@@ -22,11 +21,11 @@ function registerRouteData(Vue, opts) {
 
     router.onReady(() => {
         // 组装平台维护相关路由
-        const metaRoute = assembleMetaRoute(MetaMain)
+        const metaRoute = assembleMetaRoute(Layout)
         routesInLayout.children.push(...metaRoute)
 
         // 组装动态路由
-        assembleDynamicRoute(axios).then((dynamicRoutes) => {
+        assembleDynamicRoute(axios, Layout).then((dynamicRoutes) => {
             routesInLayout.children.push(...dynamicRoutes)
         }).catch(err => {
             console.error('动态路由装配发生错误: ' + err)

@@ -4,22 +4,33 @@
       <meta-header></meta-header>
     </slot>
     <div class="body">
-      <router-view></router-view>
+      <div class="menu">
+        <meta-menu></meta-menu>
+      </div>
+      <div class="main">
+        <meta-main></meta-main>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import MetaHeader from "./MetaHeader";
+import MetaMenu from "./MetaMenu";
+import MetaMain from "./MetaMain";
+
 export default {
   name: "MetaLayout",
   components: {
-    MetaHeader
+    MetaHeader,
+    MetaMenu,
+    MetaMain
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
+
 .layout {
   width: 100%;
   height: 100%;
@@ -48,6 +59,21 @@ export default {
     display: flex;
     flex-direction: row;
     overflow: hidden auto;
+
+    .menu {
+      height: 100%;
+      overflow: auto;
+      position: relative;
+    }
+
+    .main {
+      flex: 1;
+      overflow: auto;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>
