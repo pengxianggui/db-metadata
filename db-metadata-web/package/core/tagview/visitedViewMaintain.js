@@ -1,4 +1,36 @@
 import {tagData} from './data'
+import {isArray, isEmpty, strToArray} from "../../utils/common"
+import Cache from "../../constant/cacheKey"
+
+export function setToStorage(tag) {
+    let cacheTags = getFormStorage();
+    tag.meta.affix = true
+    cacheTags.push(tag)
+    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY, JSON.stringify(cacheTags))
+}
+
+export function removeFromStorage(tag) {
+    tag.meta.affix = false
+    let cacheTags = getFormStorage().filter(t => t.name != tag.name && t.path !== tag.path)
+    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY, JSON.stringify(cacheTags))
+}
+
+export function getFormStorage() {
+    let cacheTags = []
+    let cacheTagsStr = localStorage.getItem(Cache.keyInLocal.TAG_AFFIX_KEY)
+    if (!isEmpty(cacheTagsStr)) {
+        cacheTags = strToArray(cacheTagsStr)
+        if (!isArray(cacheTags)) cacheTags = []
+    }
+    return cacheTags
+}
+
+export function loadFromStorage() {
+    let cacheTags = getFormStorage()
+    cacheTags.forEach(tag => {
+        addView(tag)
+    })
+}
 
 /**
  * 可用于关闭当前视图: close(this.$route)
@@ -23,12 +55,23 @@ export function addView(view) {
 
 export function addVisitedView(view) {
     const {visitedViews} = tagData
+    const {fullPath, meta: {id, title, noCache, affix = false} = {}, name, params, path, query} = view
     if (!visitedViews.some(v => v.fullPath === view.fullPath)) {
-        visitedViews.push(
-            Object.assign({}, view, {
-                title: view.meta.title | 'no-name'
-            })
-        )
+        let tag = Object.assign({}, {
+            fullPath: fullPath,
+            meta: {
+                id: id,
+                title: title,
+                noCache: noCache,
+                affix: affix,
+                order: visitedViews.length
+            },
+            name: name,
+            params: params,
+            path: path,
+            query: query
+        })
+        visitedViews.push(tag)
     }
 }
 

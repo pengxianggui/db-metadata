@@ -7,10 +7,10 @@
                   @chose-change="handleMChoseChange" :page="{ size: 5 }">
 
         <template #prefix-btn="{conf}">
-          <el-button v-bind="conf" @click="featureAddVisible=true">创建功能</el-button>
+          <el-button v-bind="conf" @click="featureAddVisible=true" icon="el-icon-plus">创建功能</el-button>
         </template>
         <template #add-btn="{conf}">
-          <el-button v-bind="conf" @click="toAddMetaObject">创建元对象</el-button>
+          <el-button v-bind="conf" @click="toAddMetaObject" icon="el-icon-plus">创建元对象</el-button>
         </template>
         <template #batch-delete-btn="{conf}">
           <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
@@ -32,7 +32,7 @@
       <table-view :ref="field.objectCode" :meta="field.tvMeta" :filter-params="field.filterParams"
                   :page="{ size: 5 }">
         <template #add-btn="{conf}">
-          <el-button v-bind="conf" @click="syncIncrementHandler">同步增量字段</el-button>
+          <el-button v-bind="conf" @click="syncIncrementHandler" icon="el-icon-refresh">同步增量字段</el-button>
         </template>
       </table-view>
     </div>

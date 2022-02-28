@@ -26,6 +26,7 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @return
      */
+    @Deprecated
     String cookieKey();
 
     /**

@@ -3,7 +3,7 @@ import * as Rest from './utils/rest'
 import filters from './register/filter'
 import directives from "./register/directive";
 import registerGlobalFunction from './register/global-function'
-import './svg/index' // 内置svg注册
+import './asserts/svg/index' // 内置svg注册
 // 布局组件
 import NavMenu from "./core/navmenu";
 import TagView from "./core/tagview";

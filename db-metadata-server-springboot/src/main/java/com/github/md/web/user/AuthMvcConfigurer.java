@@ -1,7 +1,6 @@
 package com.github.md.web.user;
 
 import com.github.md.web.config.MetaProperties;
-import com.github.md.web.user.auth.MRManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,7 +28,7 @@ public class AuthMvcConfigurer implements WebMvcConfigurer {
                     .excludePathPatterns(metaProperties.getServer().getLogin().getExcludes());
         }
         if (metaProperties.getServer().getAuth().isEnable()) {
-            registry.addInterceptor(MRManager.me().getMrAuthIntercept())
+            registry.addInterceptor(AuthenticationManager.me().getAuthIntercept())
                     .addPathPatterns(metaProperties.getServer().getAuth().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getAuth().getExcludes());
         }

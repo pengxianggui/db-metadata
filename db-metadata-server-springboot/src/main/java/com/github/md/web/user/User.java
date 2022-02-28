@@ -31,7 +31,6 @@ public interface User {
      */
     default Kv toKv() {
         return Kv.create()
-                .set("token", userId())
                 .set("id", userId())
                 .set("username", userName())
                 .set("attrs", attrs());

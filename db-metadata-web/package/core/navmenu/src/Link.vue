@@ -15,10 +15,19 @@
             },
             query: {
                 type: Object
+            },
+            disabled: {
+                type: Boolean,
+                default: () => false
             }
         },
         methods: {
             linkProps(url, query) {
+                if (this.disabled) {
+                  return {
+                    is: 'div'
+                  }
+                }
                 if (isExternal(url)) {
                     return {
                         is: 'a',

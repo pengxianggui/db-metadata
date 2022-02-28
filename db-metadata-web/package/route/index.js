@@ -1,10 +1,31 @@
 import MetaLayout from "../layout/MetaLayout";
-import {access, detect, getToken, hasAuth, hasRole, setRoles} from "../access";
+import {detect, getToken, hasAuth, hasRole} from "../access";
 
-import errorRoutes from './data/error'
+import systemRoutes from './data/system'
 import assembleMetaRoute from './data/meta'
 import assembleDynamicRoute from './data/dynamic'
 import {routeUrl} from "../constant/url";
+import {isEmpty} from "../utils/common";
+
+/**
+ * 最终处理路由。并返回处理的结果
+ * @param routes
+ */
+function dealRoutes(routes) {
+    let routeList = []
+    routes.forEach(r => {
+        // 剔除所有disable的路由
+        const {meta: {disable = false} = {}} = r
+        if (disable !== true) {
+            routeList.push(r)
+
+            if (r.hasOwnProperty('children') && !isEmpty(r.children)) {
+                r.children = dealRoutes(r.children)
+            }
+        }
+    })
+    return routeList
+}
 
 // 路由数据注册
 function registerRouteData(Vue, opts) {
@@ -31,9 +52,9 @@ function registerRouteData(Vue, opts) {
             console.error('动态路由装配发生错误: ' + err)
         }).finally(() => {
             routes.push(routesInLayout) // 添加在Layout布局下的路由
-            routes.push(...errorRoutes) // 添加外层路由(不过Layout)
+            routes.push(...systemRoutes) // 添加外层路由(不过Layout)
 
-            router.addRoutes(routes)
+            router.addRoutes(dealRoutes(routes))
         })
     })
 }
@@ -45,6 +66,7 @@ function registerRouteData(Vue, opts) {
  */
 const permit = function (to, next) {
     const {
+        path,
         meta: {
             need_permit = true,
             permit_by = 'auth',
@@ -55,14 +77,18 @@ const permit = function (to, next) {
         } = {}
     } = to
 
-    if (!need_permit) { // 不需要鉴权
-        next()
+    if (path === routeUrl.R_LOGIN && !isEmpty(getToken())) { // 去登录页
+        next('/')
     } else {
-        if ((permit_by === 'role' && hasRole(roles, role_match_mode))
-            || (permit_by === 'auth' && hasAuth(auths, auth_match_mode))) { // 有权限
+        if (!need_permit) { // 不需要鉴权
             next()
-        } else { // 无权限
-            next(routeUrl.R_401)
+        } else {
+            if ((permit_by === 'role' && hasRole(roles, role_match_mode))
+                || (permit_by === 'auth' && hasAuth(auths, auth_match_mode))) { // 有权限
+                next()
+            } else { // 无权限
+                next(routeUrl.R_401)
+            }
         }
     }
 }
@@ -72,12 +98,10 @@ function registerInterceptor(Vue, opts) {
     const {router, routerInterceptor: {enable = true} = {}} = opts
     if (enable) {
         router.beforeEach(async (to, from, next) => {
-            const {meta: {need_permit = true} = {}} = to
-
-            if (need_permit) {
-                await detect(Vue) // 检测用户信息并设置
-            }
-            permit(to, next)
+            // 检测用户信息并设置; Promise完成后鉴权, 防止用户信息还没有拿到就鉴权, 肯定无权限了
+            detect(Vue).finally(() => {
+                permit(to, next)
+            })
         })
     }
 }

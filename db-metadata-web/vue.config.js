@@ -50,12 +50,12 @@ module.exports = {
         // set svg-sprite-loader
         config.module
             .rule('svg')
-            .exclude.add(path.join(__dirname, 'src/svg')).add(path.join(__dirname, 'package/svg/src'))
+            .exclude.add(path.join(__dirname, 'src/svg')).add(path.join(__dirname, 'package/asserts/svg/src'))
             .end()
         config.module
             .rule('icons')
             .test(/\.svg$/)
-            .include.add(path.join(__dirname, 'src/svg')).add(path.join(__dirname, 'package/svg/src'))
+            .include.add(path.join(__dirname, 'src/svg')).add(path.join(__dirname, 'package/asserts/svg/src'))
             .end()
             .use('svg-sprite-loader')
             .loader('svg-sprite-loader')

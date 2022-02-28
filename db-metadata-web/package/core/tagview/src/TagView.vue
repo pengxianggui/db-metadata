@@ -1,42 +1,52 @@
 <template>
-    <scroll-pane  id="tags-view-container" ref="scrollPane">
-      <template v-for="(tag, index) in visitedViews">
-        <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
-                  :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}">
-          <template #label>
-            <router-link
-                ref="tag"
-                :key="tag.fullPath"
-                :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-                tag="span"
-                class="router-link"
-                @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-            >
-              <span>{{ tag.meta.title }}</span>
-              <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
-            </router-link>
-          </template>
-          <list style="width: 80px;" direction="column">
-            <list-item style="height: 22px; line-height: 22px;"
-                       @click="refreshSelectedTag(selectedTag); closePopMenu('popMenu' + index)"
-                       v-if="isActive(tag)">刷新
-            </list-item>
-            <list-item style="height: 22px; line-height: 22px;" v-if="!isAffix(selectedTag)"
-                       @click="closeSelectedTag(selectedTag); closePopMenu('popMenu' + index)">关闭
-            </list-item>
-            <list-item style="height: 22px; line-height: 22px;"
-                       @click="closeOthersTags(selectedTag); closePopMenu('popMenu' + index)">关闭其他
-            </list-item>
-            <list-item style="height: 22px; line-height: 22px;"
-                       @click="closeAllTags(selectedTag); closePopMenu('popMenu' + index)">关闭所有
-            </list-item>
-            <list-item style="height: 22px; line-height: 22px;" @click="editRoute(selectedTag)"
-                       v-if="$isRoot() && currentRouteEditable">编辑路由
-            </list-item>
-          </list>
-        </pop-menu>
-      </template>
-    </scroll-pane>
+  <scroll-pane id="tags-view-container" ref="scrollPane">
+    <template v-for="(tag, index) in visitedViews">
+      <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
+                :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}">
+        <template #label>
+          <router-link
+              ref="tag"
+              :key="tag.fullPath"
+              :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+              tag="span"
+              class="router-link"
+              @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
+          >
+            <span>{{ tag.meta.title }}</span>
+            <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+          </router-link>
+        </template>
+        <list direction="column" class="tag-menu">
+          <list-item class="tag-menu-item"
+                     @click="refreshSelectedTag(selectedTag); closePopMenu('popMenu' + index)" v-if="isActive(tag)">
+            <svg-icon value="refresh"></svg-icon>
+            <span>刷新</span>
+          </list-item>
+          <list-item class="tag-menu-item" @click="peg(tag)">
+            <svg-icon :value="tag.meta.affix ? 'cancel_peg' : 'peg'"></svg-icon>
+            <span>{{ tag.meta.affix ? '取消固定' : '固定' }}</span>
+          </list-item>
+          <list-item class="tag-menu-item" v-if="!isAffix(selectedTag)"
+                     @click="closeSelectedTag(selectedTag); closePopMenu('popMenu' + index)">
+            <svg-icon value="close"></svg-icon>
+            <span>关闭</span>
+          </list-item>
+          <list-item class="tag-menu-item" @click="closeOthersTags(selectedTag); closePopMenu('popMenu' + index)">
+            <svg-icon value="close_other"></svg-icon>
+            <span>关闭其他</span>
+          </list-item>
+          <list-item class="tag-menu-item" @click="closeAllTags(selectedTag); closePopMenu('popMenu' + index)">
+            <svg-icon value="close_all"></svg-icon>
+            <span>关闭所有</span>
+          </list-item>
+          <list-item class="tag-menu-item" @click="editRoute(selectedTag)" v-if="$isRoot() && currentRouteEditable">
+            <svg-icon value="el-icon-edit"></svg-icon>
+            <span>编辑路由</span>
+          </list-item>
+        </list>
+      </pop-menu>
+    </template>
+  </scroll-pane>
 </template>
 
 <script>
@@ -107,6 +117,14 @@ export default {
         })
       })
     },
+    peg(tag) {
+      const {meta: {affix = false}} = tag
+      if (affix === false) {
+        this.setToStorage(tag)
+      } else {
+        this.removeFromStorage(tag)
+      }
+    },
     closePopMenu(refName) {
       const ref = this.$refs[refName]
       if (isEmpty(ref)) return;
@@ -145,6 +163,7 @@ export default {
       return tags
     },
     initTags() {
+      this.loadFromStorage()
       const affixTags = this.affixTags = this.filterAffixTags(this.routes)
       for (const tag of affixTags) {
         if (tag.name) { // 必须有路由名name
@@ -221,6 +240,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.tag-menu {
+  box-shadow: 8px 8px 36px rgba(0, 0, 0, .4);
+
+  .tag-menu-item {
+    height: 22px;
+    line-height: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 $tagBarHeight: 38px;

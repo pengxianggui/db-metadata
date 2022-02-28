@@ -21,7 +21,8 @@
                         :rules="getItemRules(item)" v-if="!item.hasOwnProperty('showable') || item.showable">
             <template #label>
               <span>{{getLabel(item)}}</span>:
-              <el-tooltip :content="item.explain" placement="right" v-if="item.explain">
+              <el-tooltip placement="right" v-if="item.explain">
+                <div slot="content" v-html="item.explain" style="white-space: pre-wrap;"></div>
                 <i class="el-icon-question"></i>
               </el-tooltip>
             </template>

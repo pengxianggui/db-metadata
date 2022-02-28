@@ -258,8 +258,9 @@ public class UtilKit {
             } else {
                 // existing value for "key" - recursively deep merge:
                 if (value instanceof JSONObject) {
-                    JSONObject valueJson = (JSONObject) value;
-                    deepMerge((Map) mergeMap.get(key), valueJson, overwrite);
+                    JSONObject newValueJson = (JSONObject) value;
+                    JSONObject oldValueJson = toJSONObject(mergeMap.get(key));
+                    deepMerge(oldValueJson, newValueJson, overwrite);
                 } else {
                     if (overwrite) {
                         if (value == null) {
@@ -286,6 +287,35 @@ public class UtilKit {
             }
         }
         return mergeMap;
+    }
+
+    /**
+     * 将一个对象转为JSONObject。
+     *
+     * <pre>
+     * 若已为JSONObject类型, 直接返回;
+     * 若为字符串类型, 为空则返回空JSONObject，否则尝试解析为JSONObject，失败可能抛出异常;
+     * 若为其他类型, 则尝试先转为JSON 格式的String, 再转为JSONObject，失败可能抛出异常
+     * </pre>
+     *
+     * 可能抛出类型转换异常。
+     *
+     * @param o
+     * @return
+     */
+    public static JSONObject toJSONObject(Object o) {
+        if (o instanceof JSONObject) {
+            return (JSONObject) o;
+        }
+
+        if (o instanceof String) {
+            if (StrKit.isBlank((String) o)) {
+                return new JSONObject();
+            }
+            return JSONObject.parseObject((String) o);
+        }
+
+        return JSONObject.parseObject(JSONObject.toJSONString(o));
     }
 
     public static void diffJson(JSONObject source, JSONObject target) {

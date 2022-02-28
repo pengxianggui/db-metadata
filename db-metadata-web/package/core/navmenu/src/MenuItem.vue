@@ -3,11 +3,11 @@
     <template v-if="hasOneShowingChild(item.children, item)
                         && (!onlyOneChild.children || onlyOneChild.children.length == 0 || onlyOneChild.noShowingChildren)">
       <!-- 只有一个需要展示的子节点，并且该子节点下再没有子节点了 -->
-      <app-link :to="resolvePath(onlyOneChild.path)"
+      <app-link :to="resolvePath(onlyOneChild.path)" :disabled="item.disable"
                 :query="resolveParams(onlyOneChild['params'])">
         <pop-menu trigger="right-click" :disabled="!metaEditable">
           <template #label>
-            <el-menu-item :index="resolvePath(onlyOneChild.path)"
+            <el-menu-item :index="resolvePath(onlyOneChild.path)" :disabled="item.disable"
                           :class="{'submenu-title-noDropdown':!isNest}">
               <svg-icon :value="onlyOneChild.icon" v-if="onlyOneChild.icon"></svg-icon>
               <span slot="title">{{ onlyOneChild.title }}</span>
@@ -21,7 +21,8 @@
     </template>
 
     <!-- 有1个以上要展示的子节点 -->
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)"
+                popper-append-to-body :disabled="item.disable">
       <template slot="title">
         <div>
           <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>

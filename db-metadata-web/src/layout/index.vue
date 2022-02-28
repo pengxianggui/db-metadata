@@ -35,13 +35,10 @@
 </template>
 
 <script>
-import {routes} from "@/router";
-
 export default {
   name: "MyLayout",
   data() {
     return {
-      routes: routes
     }
   },
   methods: {

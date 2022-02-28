@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1>首页</h1>
-    {{user}}
+    <el-card>
+      欢迎您, {{user.username}}
+    </el-card>
   </div>
 </template>
 

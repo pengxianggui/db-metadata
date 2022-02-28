@@ -21,6 +21,7 @@ import java.util.*;
  *
  * <p> @author konbluesky </p>
  */
+@Deprecated
 @Slf4j
 public class MRManager {
 
@@ -100,10 +101,12 @@ public class MRManager {
      * @param clazz  资源类的Class
      * @param permit 权限判定器
      */
+    @Deprecated
     public void configResourcePermitMapping(Class<? extends MResource> clazz, MRPermit permit) {
         this.resourcePermitMapping.put(clazz, permit);
     }
 
+    @Deprecated
     public boolean permit(User user, MResource mResource) {
         if (mResource == null || !mResource.needPermit()) { // 直接放行的资源无需鉴权
             return true;

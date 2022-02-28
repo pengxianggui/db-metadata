@@ -4,10 +4,7 @@ import com.github.md.web.ServiceManager;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.jfinal.kit.StrKit;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * 按优先级依次从cookie或请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。
@@ -24,12 +21,13 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
     public UR getUser(HttpServletRequest request) {
         //cookie load
         String uid = "";
-        if (request.getCookies() != null) {
-            Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equalsIgnoreCase(cookieKey())).findFirst();
-            if (cookie.isPresent()) {
-                uid = cookie.get().getValue();
-            }
-        }
+// TODO cookie和token是否需要都支持，然后配置应用？目前我们token用的居多，暂时不启用cookie
+//        if (request.getCookies() != null) {
+//            Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equalsIgnoreCase(cookieKey())).findFirst();
+//            if (cookie.isPresent()) {
+//                uid = cookie.get().getValue();
+//            }
+//        }
         //request load
         uid = StrKit.defaultIfBlank(uid, request.getHeader(tokenKey()));
         if (StrKit.notBlank(uid)) {
@@ -52,7 +50,7 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
 
     @Override
     public boolean logout(UR user) {
-        AuthenticationManager.me().getLoginUsers().invalidate(user);
+        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
         return !logged(user);
     }
 

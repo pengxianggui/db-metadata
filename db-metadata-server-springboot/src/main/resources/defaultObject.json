@@ -649,6 +649,7 @@
         }
       },
       "component": {
+        "cn": "组件",
         "config": {
           "isSearch": false
         }
@@ -656,7 +657,10 @@
       "components": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 10
         }
       },
       "meta": {

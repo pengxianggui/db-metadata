@@ -10,7 +10,7 @@ const metaMenus = [{
         {
             "path": "/meta/manager",
             "title": "元数据管理",
-            "icon": "el-icon-warning",
+            "icon": "meta_data",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:manager']
@@ -18,7 +18,7 @@ const metaMenus = [{
         {
             "path": "/meta/feature",
             "title": "功能维护",
-            "icon": "el-icon-warning-outline",
+            "icon": "feature",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:feature']
@@ -26,7 +26,7 @@ const metaMenus = [{
         {
             "path": "/meta/global-conf-list",
             "title": "组件全局配置",
-            "icon": "el-icon-star-off",
+            "icon": "component",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:component']
@@ -34,7 +34,7 @@ const metaMenus = [{
         {
             "path": "/meta/instance-conf-list",
             "title": "组件实例配置",
-            "icon": "el-icon-star-on",
+            "icon": "component_instance",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:component-instance']
@@ -42,7 +42,7 @@ const metaMenus = [{
         {
             "path": "/meta/menu",
             "title": "菜单维护",
-            "icon": "el-icon-star-on",
+            "icon": "menu",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:menu']
@@ -50,7 +50,7 @@ const metaMenus = [{
         {
             "path": "/meta/router",
             "title": "路由维护",
-            "icon": "el-icon-star-on",
+            "icon": "router",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:router']
@@ -58,7 +58,7 @@ const metaMenus = [{
         {
             "path": "/meta/form-builder",
             "title": "表单构建",
-            "icon": "el-icon-s-order",
+            "icon": "form",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:form-builder']
@@ -67,14 +67,14 @@ const metaMenus = [{
             "path": "/meta/meta-conf",
             "title": "MetaConf",
             "icon": "el-icon-s-tools",
-            "hidden": false,
+            "hidden": true,
             "disable": false,
             "auths": ['menu:meta:meta-conf']
         },
         {
             "path": "/meta/dict",
             "title": "字典",
-            "icon": "el-icon-collection",
+            "icon": "dict",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:dict']
@@ -90,7 +90,7 @@ const metaMenus = [{
         {
             "path": "/meta/auth",
             "title": "权限配置",
-            "icon": "el-icon-warning",
+            "icon": "auth",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:auth']
@@ -98,7 +98,7 @@ const metaMenus = [{
         {
             "path": "/meta/api-resource",
             "title": "接口资源",
-            "icon": "el-icon-warning",
+            "icon": "api",
             "hidden": false,
             "disable": false,
             "auths": ['menu:meta:api-resource']

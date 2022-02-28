@@ -693,3 +693,12 @@ export function group(arr, key, defGroupName = '默认') {
     })
     return map
 }
+
+/**
+ * 在范围内随机生成一个整数。范围为左右闭区间
+ * @param begin 整数
+ * @param end 整数
+ */
+export function randomInt(begin, end) {
+    return Math.floor(Math.random() * ((end + 1) - begin) + 1)
+}

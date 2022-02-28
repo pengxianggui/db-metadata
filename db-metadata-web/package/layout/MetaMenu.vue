@@ -19,11 +19,12 @@
 <script>
 import Menu from "../menu";
 import {restUrl} from "../constant/url";
+import Cache from "../constant/cacheKey";
 
 export default {
   name: "MetaMenu",
   data() {
-    let collapse = localStorage.getItem("META-ELEMENT-MENU:collapse");
+    let collapse = localStorage.getItem(Cache.keyInLocal.MENU_COLLAPSE_KEY);
     return {
       collapse: collapse === 'true',
       metaMenus: Menu.metaMenus,
@@ -43,7 +44,7 @@ export default {
   },
   watch: {
     collapse(newV) {
-      localStorage.setItem("META-ELEMENT-MENU:collapse", newV)
+      localStorage.setItem(Cache.keyInLocal.MENU_COLLAPSE_KEY, newV)
     }
   },
   computed: {

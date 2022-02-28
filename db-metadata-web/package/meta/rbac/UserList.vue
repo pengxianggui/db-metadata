@@ -2,7 +2,7 @@
   <div>
     <single-grid-tmpl :oc="oc" :table-meta="tableMeta">
       <template #inner-before-extend-btn="{scope}">
-        <el-button size="mini" icon="el-icon-s-custom" @click="toBindRole(scope)"></el-button>
+        <el-button size="mini" @click="toBindRole(scope)" class="el-icon-setting"></el-button>
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="800px"

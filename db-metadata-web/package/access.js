@@ -2,6 +2,7 @@ import utils from "./utils";
 import {isArray, isString, isEmpty} from "./utils/common";
 import {appConfig} from "./config";
 import {restUrl} from "./constant/url";
+import Cache from "./constant/cacheKey";
 
 /**
  * 访问控制
@@ -11,9 +12,12 @@ export const access = {
     root: 'ROOT', // ROOT角色编码。ROOT角色是特殊的角色，DbMeta内置的平台维护模块，只要拥有ROOT角色即可访问，无论ROOT是否绑定权限
     // 当前用户
     user: {
-        username: '',
+        id: null,
+        username: null,
+        phone: null,
         roles: [],
-        auths: []
+        auths: [],
+        attrs: {}
     }
 }
 
@@ -21,16 +25,24 @@ export const access = {
  * 检测缓存的用户信息，若不存在，则重新取之。若存在，则do nothing
  * @returns {Promise<void>}
  */
-export const detect = async function (Vue) {
-    if (!isEmpty(getToken()) && isEmpty(getRoles())) {
-        let headers = {}
-        headers[appConfig.tokenKey] = getToken()
-        Vue.prototype.$axios.safeGet(restUrl.LOGIN_INFO, {
-            headers: headers
-        }).then(({data}) => {
-            setUser(data)
-        })
-    }
+export const detect = function (Vue) {
+    return new Promise((resolve, reject) => {
+        if (!isEmpty(getToken()) && isEmpty(access.user.id)) { // id有值时表示缓存中存在用户信息，(如果是刷新浏览器，用户信息会丢失，就需要从token重新取用户信息了)
+            let headers = {}
+            headers[appConfig.tokenKey] = getToken()
+            Vue.prototype.$axios.safeGet(restUrl.LOGIN_INFO, {
+                headers: headers
+            }).then(({data}) => {
+                setUser(data)
+                resolve(data)
+            }).catch(err => {
+                clearUser()
+                reject(err)
+            });
+        } else {
+            resolve()
+        }
+    })
 }
 
 /**
@@ -236,8 +248,10 @@ export function setAuths(auths = []) {
     return access.user.auths;
 }
 
-export function setUser({username = '', roles = [], auths = []}) {
+export function setUser({id = '', username = '', phone, roles = [], auths = []}) {
+    access.user.id = id;
     access.user.username = username;
+    access.user.phone = phone;
     setRoles(roles)
     setAuths(auths)
 }
@@ -248,6 +262,12 @@ export function getRoles() {
 
 export function getAuths() {
     return access.user.auths
+}
+
+export function clearUser() {
+    setUser({username: '', phone: '', roles: [], auths: []})
+    localStorage.removeItem(appConfig.tokenKey)
+    Cache.clear()
 }
 
 export default {

@@ -68,14 +68,12 @@
         </template>
         <el-form-item>
           <slot name="action" v-bind:model="model">
-            <el-button type="primary" @click="emitSearch">
-              <slot name="search-label">搜索</slot>
-            </el-button>
-            <el-button @click="onReset">重置</el-button>
+            <el-button type="primary" @click="emitSearch" icon="el-icon-search">搜索</el-button>
+            <el-button @click="onReset" icon="el-icon-refresh-left">重置</el-button>
           </slot>
         </el-form-item>
       </el-form>
-      <div style="float: right; margin: -20px 5px 0px 0px">
+      <div style="float: right; margin: -20px 10px 0px 0px">
         <meta-easy-edit :object-code="innerMeta.objectCode" component-code="SearchView">
           <template #label><i class="el-icon-setting"></i></template>
         </meta-easy-edit>

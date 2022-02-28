@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {MetaLayout} from '@/../package/index'
 
 Vue.use(Router);
 
@@ -7,7 +8,7 @@ export const menus = [
     {
         path: '/dashboard',
         title: '首页',
-        icon: 'el-icon-menu',
+        icon: 'dashboard',
         hidden: false,
         disable: false,
         order: -99999
@@ -43,37 +44,30 @@ export const menus = [
 export const routes = [
     {
         path: "/",
-        component: () => import('@/layout'),
+        // component: () => import('@/layout'),
+        component: MetaLayout,
         redirect: '/dashboard',
         children: [
             {
                 name: 'Dashboard',
                 path: '/dashboard',
                 component: () => import('../view/Dashboard'),
-                meta: {title: '首页', icon: 'el-icon-menu', order: -99999}
+                meta: {title: '首页', order: -99999}
             },
             {
                 name: 'Route1-1',
                 path: 'route1-1',
                 component: () => import('@/../package/template/SingleGridTmpl'),
-                meta: {title: '路由1-1', icon: 'more', order: 1},
+                meta: {title: '路由1-1', order: 1},
                 props: {oc: 'meta_dict'}
             },
             {
                 name: 'Route1-2',
                 path: 'route1-2',
                 component: () => import('@/../package/template/SingleGridTmpl'),
-                meta: {title: '路由1-2', icon: 'more', order: 0},
+                meta: {title: '路由1-2', order: 0, disable: true}, // 对编程路由而言，disable是不生效的
                 props: {oc: 'meta_dict'}
             },
-            {
-                path: '/login',
-                name: 'Login',
-                component: () => import('@/view/Login'),
-                meta: {
-                    need_permit: false
-                }
-            }
         ]
     },
     {

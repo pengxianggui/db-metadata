@@ -111,7 +111,13 @@
         }
       }
     },
-    "TableView": {}
+    "TableView": {
+      "config": {
+        "operation-bar": {
+          "show": false
+        }
+      }
+    }
   },
   "meta_component": {
     "SearchView": {
@@ -227,6 +233,22 @@
         "pid": {
           "component_name": "DropDownBox",
           "data_url": "/component/options?objectCode=meta_router&f=pid"
+        },
+        "component": {
+          "explain": "请输入组件名称, 这个组件必须是一个Vue全局注册的组件(你可以使用内置模板组件, 它们已经被全局注册好了)"
+        },
+        "meta": {
+          "default_value": {
+            "title": "tagName",
+            "disable": false,
+            "need_permit": true,
+            "permit_by": "auth",
+            "auths": [],
+            "roles": [],
+            "auth_match_mode": "any",
+            "role_match_mode": "any"
+          },
+          "explain": "【配置项目如下】:\ntitle: tag快捷栏的显示名(如果不配置, 将显示no-name, 一般和对应的菜单名保持一致); \ndisable: 禁用(为true时,客户端不会装配此路由); \norder:排序(整数,装配越小优先级越高) \nneed_permit: 是否需要鉴权; \npermit_by: 依据什么鉴权(可选值:auth/role); \nauths: 需要的权限编码列表(字符串数组); \nroles: 需要的角色编码列表(字符串数组); \nauth_match_mode: 权限匹配模式(当permit_by为auth时有效,可选值:any/all); \nrole_match_mode: 角色匹配模式(当permit_by为role时有效,可选值:any/all);"
         }
       }
     }
@@ -238,6 +260,9 @@
       },
       "_fields": {
         "build_in": {
+          "default_value": null
+        },
+        "need_permit": {
           "default_value": null
         }
       }
@@ -256,6 +281,9 @@
         },
         "icon": {
           "component_name": "IconBox"
+        },
+        "path": {
+          "explain": "菜单点击后跳转的路由地址(可以携带参数，例如: ?fc=xxx)"
         },
         "hidden": {
           "component_name": "BoolBox",
@@ -434,6 +462,17 @@
       "config": {
         "conf": {
           "label-width": "120px"
+        }
+      },
+      "_fields": {
+        "code": {
+          "explain": "确保唯一"
+        },
+        "group": {
+          "explain": "分组仅用于绑定操作界面中的优化呈现"
+        },
+        "type": {
+          "explain": "权限类别很重要(例如, 【接口资源】模块中设置访问接口所需的权限时，只能选择接口权限; 其次，也用于绑定操作界面中的优化呈现)"
         }
       }
     }

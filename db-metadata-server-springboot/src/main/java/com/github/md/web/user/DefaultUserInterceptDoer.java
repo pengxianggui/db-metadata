@@ -25,12 +25,13 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
             user = ifNullUser(); // 补偿，有时希望无用户时默认提供给一个匿名用户
         }
 
-        if (user != null) {
-            UserThreadLocal.setUser(user);
-            Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
-            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
-            response.addCookie(cookie);
-        }
+        // 见 AbstractUserService#getUser(request)方法，暂时取消cookie支持
+//        if (user != null) {
+//            UserThreadLocal.setUser(user);
+//            Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
+//            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
+//            response.addCookie(cookie);
+//        }
         return true;
     }
 
