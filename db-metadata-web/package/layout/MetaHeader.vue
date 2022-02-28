@@ -32,6 +32,7 @@ $headerHeight: 60px;
   flex-direction: row;
   align-items: center;
   color: #409EFF;
+  background-color: #001529;
 
   div.dock {
     flex: 1;
