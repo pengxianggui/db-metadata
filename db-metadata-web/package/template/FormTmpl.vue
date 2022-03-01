@@ -19,6 +19,13 @@
 
     export default {
         name: "FormTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '表单模板',
+          icon: 'form',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             oc: String,
             type: {

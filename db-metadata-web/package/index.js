@@ -8,7 +8,8 @@ import './asserts/svg/index' // 内置svg注册
 import NavMenu from "./core/navmenu";
 import TagView from "./core/tagview";
 import MetaLayout from "./layout/MetaLayout";
-import MetaHeader from "./layout/MetaHeader";// 基础组件
+import MetaHeader from "./layout/MetaHeader";
+// 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
@@ -45,6 +46,7 @@ import TreeView from './core/treeview'
 import ZTogglePanel from './core/ztogglepanel'
 import SvgIcon from "./core/svgicon"
 import FullScreen from "./core/fullscreen/src/FullScreen"
+import PageSelector from "./core/pageselector/src/PageSelector";
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
@@ -118,6 +120,7 @@ const components = [
     ZTogglePanel,
     SvgIcon,
     FullScreen,
+    PageSelector,
 
     // 布局组件layout
     MetaLayout,
@@ -148,11 +151,11 @@ const install = function (Vue, opts = {}) {
         utils.reverseMerge(restUrl, opts.restUrl, false);
     }
 
-    // 系统配置: 最优先
-    configApp(Vue, opts)
-
-    // 注册全局函数
+    // 注册全局函数: 最优先。会配置axios，这是后面都可能需要的
     registerGlobalFunction(Vue, opts)
+
+    // 系统配置
+    configApp(Vue, opts)
 
     // 注册全局过滤器
     Object.keys(filters).map(key => Vue.filter(key, filters[key]))

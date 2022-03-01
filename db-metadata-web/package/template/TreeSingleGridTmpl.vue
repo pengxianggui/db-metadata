@@ -46,6 +46,13 @@
 
     export default {
         name: "TreeSingleGridTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '树表模板',
+          icon: 'treetable',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String
         },

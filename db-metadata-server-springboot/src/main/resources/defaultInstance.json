@@ -114,7 +114,7 @@
     "TableView": {
       "config": {
         "operation-bar": {
-          "show": false
+          "show": true
         }
       }
     }
@@ -235,7 +235,8 @@
           "data_url": "/component/options?objectCode=meta_router&f=pid"
         },
         "component": {
-          "explain": "请输入组件名称, 这个组件必须是一个Vue全局注册的组件(你可以使用内置模板组件, 它们已经被全局注册好了)"
+          "component_name": "PageSelector",
+          "explain": "请选择一个组件, 用以承担此路由的页面(可选的组件列表均来自Vue全局注册的页面/模板组件。\n请开发人员在全局注册的页面组件中提供meta: {isPage: true}配置项，标识其为页面组件)"
         },
         "meta": {
           "default_value": {

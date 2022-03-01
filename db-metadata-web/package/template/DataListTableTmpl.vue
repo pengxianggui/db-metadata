@@ -42,6 +42,13 @@
 
     export default {
         name: "DataListTableTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '左列-右表模板',
+          icon: 'list_table',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String
         },

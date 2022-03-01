@@ -3,6 +3,8 @@
     <el-card>
       欢迎您, {{user.username}}
     </el-card>
+
+    <page-selector v-model="value"></page-selector>
   </div>
 </template>
 
@@ -13,7 +15,8 @@ export default {
   name: "Dashboard",
   data() {
     return {
-      user: access.user
+      user: access.user,
+      value: null
     }
   }
 }

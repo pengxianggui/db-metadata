@@ -24,6 +24,13 @@
 
     export default {
         name: "TreeFormTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '左树-右表单模板',
+          icon: 'tree_form',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String,
             oc: String

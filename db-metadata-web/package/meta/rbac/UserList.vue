@@ -23,6 +23,12 @@ import {metaObjectCode} from "../../constant/variable";
 
 export default {
   name: "UserList",
+  meta: {
+    isTemplate: false,
+    isPage: true,
+    cn: '用户列表',
+    buildIn: true // 内建：DbMeta提供
+  },
   components: {
     RoleSet
   },

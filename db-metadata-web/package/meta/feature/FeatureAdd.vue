@@ -49,13 +49,6 @@
                       $refs[menu.objectCode].setItem('title', model[column.name]);"></text-box>
         </el-form-item>
       </template>
-      <template #form-item-component="{column, model}">
-        <el-form-item :name="column.name" :label="column.label">
-          <drop-down-box v-if="!customComponent" :options="tmplOptions" v-model="model[column.name]"></drop-down-box>
-          <text-box v-else v-model="model[column.name]"></text-box>&nbsp;
-          <bool-box v-model="customComponent">是否自定义组件</bool-box>
-        </el-form-item>
-      </template>
       <template #form-item-path="{column, model}">
         <el-form-item :name="column.name" :label="column.label">
           <text-box v-model="model[column.name]" @change="pathChange(model)"></text-box>
@@ -132,14 +125,7 @@ export default {
       menu: {
         objectCode: 'meta_menu',
         meta: {}
-      },
-      customComponent: false,
-      tmplOptions: [ // TODO 后端的功能编码应当与模板名保持一致，此处先静态配置options
-        {key: '主子表', value: 'MasterSlaveTableTmpl'},
-        {key: '单表', value: 'SingleGridTmpl'},
-        {key: '树形表', value: 'TreeSingleGridTmpl'},
-        {key: '树和表', value: 'TreeTableTmpl'},
-      ]
+      }
     }
   },
   methods: {

@@ -19,8 +19,15 @@
 <script>
 import {metaObjectCode} from "../../constant/variable";
 import AuthSet from "./ext/AuthSet";
+
 export default {
   name: "RoleList",
+  meta: {
+    isTemplate: false,
+    isPage: true,
+    cn: '角色列表',
+    buildIn: true // 内建：DbMeta提供
+  },
   components: {
     AuthSet
   },

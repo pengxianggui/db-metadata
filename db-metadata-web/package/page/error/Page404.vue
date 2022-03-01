@@ -20,7 +20,13 @@
 <script>
 
 export default {
-  name: 'Page404'
+  name: 'Page404',
+  meta: {
+    isTemplate: false,
+    isPage: true,
+    cn: '404页面',
+    buildIn: true // 内建：DbMeta提供
+  },
 }
 </script>
 

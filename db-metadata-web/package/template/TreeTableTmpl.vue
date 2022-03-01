@@ -62,6 +62,13 @@
 
     export default {
         name: "TreeTableTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '树-表模板',
+          icon: 'tree_table',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String
         },

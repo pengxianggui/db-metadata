@@ -10,7 +10,7 @@
             <slot name="options" v-bind:options="innerOptions">
                 <el-option v-for="item in innerOptions" :key="item.value" :label="item.key||item.value"
                            :value="item.value | stringify">
-                    <slot name="label" v-bind:option="item">
+                    <slot :name="item.value" v-bind:option="item">
                         {{item.key||item.value}}
                     </slot>
                 </el-option>
@@ -24,7 +24,7 @@
                 <slot name="options" v-bind:options="innerOptions">
                     <el-option v-for="item in group.options" :key="item.value" :label="item.key||item.value"
                                :value="(item.value ? item.value : item) | stringify">
-                        <slot name="label" v-bind:options="item">
+                        <slot :name="item.value" v-bind:options="item">
                             {{item.key||item.value}}
                         </slot>
                     </el-option>

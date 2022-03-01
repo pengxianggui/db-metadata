@@ -48,6 +48,13 @@
 
     export default {
         name: "SingleGridTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '单表模板',
+          icon: 'table',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String,
             oc: String,

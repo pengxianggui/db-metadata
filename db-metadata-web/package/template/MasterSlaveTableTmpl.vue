@@ -114,9 +114,15 @@
     import {getSearchViewMeta, getTableViewMeta, loadFeature} from "../utils/rest";
     import {restUrl} from "../constant/url";
 
-
     export default {
         name: "MasterSlaveTableTmpl",
+        meta: {
+          isTemplate: true,
+          isPage: false,
+          cn: '主子表模板',
+          icon: 'master_slaves',
+          buildIn: true // 内建：DbMeta提供
+        },
         props: {
             fc: String,
         },

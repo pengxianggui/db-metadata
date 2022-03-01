@@ -4,6 +4,7 @@
     <el-card>
       <h2 style="text-align: center">登录</h2>
       <form-view :meta="meta" :model="model" @submit="login" class="form"></form-view>
+      <!-- TODO 对appConfig.registerable的兑现 -->
     </el-card>
   </div>
 </template>
@@ -36,7 +37,8 @@ export default {
           rules: {
             "username": [{required: true, message: '账号必填', trigger: 'blur'}],
             "password": [{required: true, message: '密码必填', trigger: 'blur'}],
-          }
+          },
+          "label-width": '60px'
         },
         columns: [
           {
@@ -90,7 +92,7 @@ export default {
   }
 
   .el-card {
-    width: 40%;
+    width: 500px;
     margin: 0 auto;
 
     .form {
