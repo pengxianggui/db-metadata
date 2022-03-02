@@ -139,7 +139,6 @@ volumes:
     host:
       path: /tem/maven-repo
 
-# TODO 部署时需要打fatjar, 而发布私服时不需要。如何通过maven命令控制
 ---
 kind: pipeline
 type: docker
