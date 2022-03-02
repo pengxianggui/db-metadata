@@ -39,12 +39,12 @@
 ## 快速开始
 ### 工程结构
 ```bash
-├── db
-├── db-metadata-analysis-springboot
-├── db-metadata-parent
-├── db-metadata-server-springboot
-└── db-metadata-web
-└── db-metadata-server-demo
+├── db                                数据库文件
+├── db-metadata-analysis-springboot   数据库分析组件
+├── db-metadata-parent                父pom
+├── db-metadata-server-springboot     引入dbMeta后端唯一需要依赖的模块
+└── db-metadata-web                   dbMeta前端,即meta-element. 可直接运行, 也可以打包发布
+└── db-metadata-server-demo           dbMeta后端引入的一个demo工程
 ```
 ### 安装部署
 ### 依赖配置
