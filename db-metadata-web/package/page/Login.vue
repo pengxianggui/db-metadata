@@ -3,7 +3,7 @@
     <h2 class="title">{{ name }}</h2>
     <el-card>
       <h2 style="text-align: center">登录</h2>
-      <form-view :meta="meta" :model="model" @submit="login" class="form"></form-view>
+      <form-view :meta="meta" :model="model" @submit="login" class="form" @cancel="register"></form-view>
       <!-- TODO 对appConfig.registerable的兑现 -->
     </el-card>
   </div>
@@ -70,6 +70,9 @@ export default {
         localStorage.setItem(appConfig.tokenKey, data.token)
         location.reload()
       })
+    },
+    register(model) {
+      this.$message.warning("NOT FINISHED")
     }
   }
 }

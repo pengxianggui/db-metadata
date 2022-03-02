@@ -137,16 +137,16 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
             } catch (IOException e) {
                 throw e;
             } finally {
-                if (inputStream != null) {
+                if (bufferedReader != null) {
                     try {
-                        inputStream.close();
+                        bufferedReader.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                if (bufferedReader != null) {
+                if (inputStream != null) {
                     try {
-                        bufferedReader.close();
+                        inputStream.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

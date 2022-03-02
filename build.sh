@@ -6,7 +6,7 @@ version=$1
 prefix="registry.cn-hangzhou.aliyuncs.com/hthj_asoco/"
 
 # build server
-docker  build  -f db-metadata-server-springboot/Dockerfile  --rm=true  -t $prefix"db-metadata-server:"${version} ./db-metadata-server-springboot ;
+docker  build  -f db-metadata-server-demo/Dockerfile  --rm=true  -t $prefix"db-metadata-server:"${version} ./db-metadata-server-demo ;
 # build web
 docker  build -f db-metadata-web/Dockerfile --rm=true  -t $prefix"db-metadata-web:"${version} ./db-metadata-web ;
 #登录凭证

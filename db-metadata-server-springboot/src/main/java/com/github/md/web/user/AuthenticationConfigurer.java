@@ -6,6 +6,7 @@ import com.github.md.web.user.auth.defaults.ApiResourceFactory;
 import com.github.md.web.user.auth.defaults.DefaultAuthService;
 import com.github.md.web.user.role.DefaultRoleService;
 import com.github.md.web.user.role.RoleService;
+import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.defaults.DefaultUserService;
 import com.google.common.collect.Lists;
 import org.springframework.web.method.HandlerMethod;
@@ -47,7 +48,7 @@ public interface AuthenticationConfigurer {
                     ? ApiResourceFactory.createAnnotateApiResource(request, (HandlerMethod) handler)
                     : ApiResourceFactory.createMetaApiResource(request, (HandlerMethod) handler);
 
-            User user = AuthenticationManager.me().getUser(request);
+            UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
             return AuthenticationManager.me().permit(user, resource);
         };
         return Lists.newArrayList(doer);

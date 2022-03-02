@@ -1312,14 +1312,14 @@
         "cn": "元编码",
         "config": {
           "isListShow": true,
-          "isSearch": false
+          "isSearch": true
         }
       },
       "uri": {
         "cn": "接口路径",
         "config": {
           "isListShow": true,
-          "isSearch": false
+          "isSearch": true
         }
       },
       "need_permit": {
@@ -1342,7 +1342,7 @@
         "cn": "鉴权依据",
         "config": {
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "scopeOptions": [
             {"key": "按权限判定","value": "auth"},
             {"key": "按角色判定","value": "role"}
@@ -1695,6 +1695,54 @@
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 10
+        }
+      },
+      "nickname": {
+        "cn": "昵称",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "realname": {
+        "cn": "真实姓名",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "sex": {
+        "cn": "性别",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "age": {
+        "cn": "年龄",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "id_card": {
+        "cn": "身份证号",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "email": {
+        "cn": "邮箱",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
         }
       },
       "attrs": {

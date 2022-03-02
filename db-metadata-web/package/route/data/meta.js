@@ -15,44 +15,6 @@ import InstanceConfEdit from "../../meta/instance-component/InstanceConfEdit";
 import utils from "../../utils";
 import Redirect from "../redirect";
 
-
-/**
- * Meta 平台维护路由数据
- * @type {any}
- */
-const jumpOut = [
-    {
-        path: 'instance-conf-edit',
-        component: InstanceConfEdit,
-        name: 'InstanceConfEdit',
-        meta: {
-            title: '组件实例配置-编辑',
-            icon: 'edit',
-            noCache: false,
-            auths: ['route:meta:instance-conf-edit']
-        },
-        hidden: true,
-        props: (route) => ({
-            instanceCode: route.query.instanceCode,
-            objectCode: route.query.objectCode,
-            componentCode: route.query.componentCode,
-            fieldCode: utils.assertEmpty(route.query.fieldCode, '')
-        })
-    }
-];
-
-/**
- * 外层路由，用于全页面打开ui-conf编辑等
- * @type {*[]}
- */
-const outerRoute = jumpOut.map(route => {
-    let item = utils.deepClone(route);
-    item.path = '/' + route.path
-    item.name = 'G_' + route.name // 避免重名
-    item.meta.newTab = true // newTab表示用于新开窗口
-    return item;
-});
-
 const routes = [
     {
         path: '/meta/manager',
@@ -192,8 +154,24 @@ const routes = [
             auths: ['route:meta:api-resource']
         },
         component: ApiResourceList
-    },
-    ...jumpOut
+    }, {
+        path: '/meta/instance-conf-edit',
+        component: InstanceConfEdit,
+        name: 'InstanceConfEdit',
+        meta: {
+            title: '组件实例配置-编辑',
+            icon: 'edit',
+            noCache: false,
+            auths: ['route:meta:instance-conf-edit']
+        },
+        hidden: true,
+        props: (route) => ({
+            instanceCode: route.query.instanceCode,
+            objectCode: route.query.objectCode,
+            componentCode: route.query.componentCode,
+            fieldCode: utils.assertEmpty(route.query.fieldCode, '')
+        })
+    }
 ]
 
 export default function (Layout) {
@@ -209,7 +187,6 @@ export default function (Layout) {
                     component: Redirect
                 }
             ]
-        },
-        ...outerRoute
+        }
     ]
 }

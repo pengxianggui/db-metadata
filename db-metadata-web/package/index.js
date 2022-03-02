@@ -63,6 +63,8 @@ import {access} from "./access";
 import user from './access'
 // 内置业务组件
 import {UserList, RoleList} from '@/../package/meta/rbac'
+// 全局页面
+import GlobalPage from '@/../package/page'
 
 // 内置菜单: Meta维护菜单
 import MetaMenu from "./menu/MetaMenu";
@@ -140,7 +142,9 @@ const components = [
 
     // 内置业务组件
     UserList,
-    RoleList
+    RoleList,
+    // 全局页面
+    GlobalPage
 ];
 
 const install = function (Vue, opts = {}) {

@@ -6,7 +6,7 @@ import {isEmpty} from "../utils/common";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
 import {routeUrl} from "../constant/url";
-import {getToken} from "../access";
+import {clearUser, getToken} from "../access";
 
 /**
  * 配置axios默认的拦截器
@@ -36,6 +36,7 @@ const configInterceptor = function (router, axios) {
             })
 
             if (code === 401) { // 未认证
+                clearUser()
                 router.push(routeUrl.R_LOGIN)
             }
             if (code === 403) { // 无权限

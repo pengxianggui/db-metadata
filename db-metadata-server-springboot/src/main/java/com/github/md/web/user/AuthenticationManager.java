@@ -14,10 +14,14 @@ import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 认证管理
@@ -29,6 +33,7 @@ import java.util.Map;
 public class AuthenticationManager {
 
     private static final AuthenticationManager me = new AuthenticationManager();
+    public static final String ROOT = "ROOT";
 
     /**
      * 需要注意得是loginUsers得put动作 只能由loginService来做
@@ -109,6 +114,10 @@ public class AuthenticationManager {
         // 此资源需要鉴权，必定需要用户登录
         AssertUtil.isTrue(user != null, new UnLoginException("未认证"));
 
+        if (hasRoot(user)) {
+            return true; // ROOT权限一切放行
+        }
+
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {
             if (entry.getKey().isInstance(mResource)) {
                 return entry.getValue().permit(user, mResource);
@@ -116,6 +125,29 @@ public class AuthenticationManager {
         }
         throw new MRException("资源%s无法确定应该使用什么判定器进行判定, 请在%s中指定",
                 mResource.getClass().toString(), this.getClass().toString());
+    }
+
+    /**
+     * 拥有ROOT角色
+     *
+     * @param user
+     * @return
+     */
+    public boolean hasRoot(User user) {
+        List<String> hasRoles;
+        if (user instanceof UserWithRolesWrapper) {
+            if (((UserWithRolesWrapper) user).roles() == null) {
+                return false;
+            }
+            hasRoles = Arrays.stream(((UserWithRolesWrapper) user).roles()).map(MRRole::code).collect(Collectors.toList());
+        } else {
+            List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+            if (CollectionUtils.isEmpty(roles)) {
+                return false;
+            }
+            hasRoles = roles.stream().map(MRRole::code).collect(Collectors.toList());
+        }
+        return hasRoles.contains(ROOT);
     }
 
     public UserService userService() {

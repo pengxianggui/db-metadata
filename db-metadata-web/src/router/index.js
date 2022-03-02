@@ -6,14 +6,6 @@ Vue.use(Router);
 
 export const menus = [
     {
-        path: '/dashboard',
-        title: '首页',
-        icon: 'dashboard',
-        hidden: false,
-        disable: false,
-        order: -99999
-    },
-    {
         path: '/admin/route1',
         title: '可编程菜单1',
         icon: 'el-icon-menu',
@@ -44,16 +36,9 @@ export const menus = [
 export const routes = [
     {
         path: "/",
-        // component: () => import('@/layout'),
         component: MetaLayout,
         redirect: '/dashboard',
         children: [
-            {
-                name: 'Dashboard',
-                path: '/dashboard',
-                component: () => import('../view/Dashboard'),
-                meta: {title: '首页', order: -99999}
-            },
             {
                 name: 'Route1-1',
                 path: 'route1-1',

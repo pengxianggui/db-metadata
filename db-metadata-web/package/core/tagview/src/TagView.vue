@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     routes() {
-      return this.$router.options.routes // TODO 此值并不能获取到addRoutes动态添加进来的路由, 导致无法初始化并固定affix路由
+      return this.$router.options.routes // 获取所有路由数据
     },
     color() {
       return Conf.color
@@ -144,8 +144,8 @@ export default {
       let tags = []
       routes.forEach(route => {
         if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path)
-          const tagFullPath = path.resolve(basePath, route.fullPath)
+          const tagPath = path.resolve(basePath, route.path || '')
+          const tagFullPath = path.resolve(basePath, route.fullPath || '')
           tags.push({
             fullPath: tagFullPath,
             path: tagPath,
@@ -181,14 +181,16 @@ export default {
     moveToCurrentTag() {
       const tags = this.$refs.tag
       this.$nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to.fullPath === this.$route.fullPath) {
-            this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
-            // if (tag.to.fullPath !== this.$route.fullPath) {
-            //   this.updateVisitedView(this.$route)
-            // }
-            break
+        if (isArray(tags)) {
+          for (const tag of tags) {
+            if (tag.to.fullPath === this.$route.fullPath) {
+              this.$refs.scrollPane.moveToTarget(tag)
+              // when query is different then update
+              // if (tag.to.fullPath !== this.$route.fullPath) {
+              //   this.updateVisitedView(this.$route)
+              // }
+              break
+            }
           }
         }
       })

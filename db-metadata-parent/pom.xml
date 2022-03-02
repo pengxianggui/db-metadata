@@ -21,6 +21,7 @@
     <modules>
         <module>../db-metadata-server-springboot</module>
         <module>../db-metadata-analysis-springboot</module>
+        <module>../db-metadata-server-demo</module>
     </modules>
 
     <build>
