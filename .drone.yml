@@ -146,7 +146,7 @@ type: docker
 name: db-metadata 发布到maven 私服
 
 steps:
-    # 添加认证信息
+  # 添加认证信息
   - name: authenticate
     image: robertstettner/drone-mvn-auth
     pull: always
@@ -158,10 +158,15 @@ steps:
         - id: asoco-nexus-snapshot
           username: admin
           password: hthj.m2
+    when:
+      branch:
+        - spring-boot
 
   # 打包发布到nexus仓库中
   - name: deploy-to-nexus
     image: maven:3-alpine
     commands:
-      - cd db-metadata-parent
-      - mvn -DskipTests clean deploy # -gs settings.xml
+      - mvn -f db-metadata-parent/pom.xml -DskipTests clean deploy -gs settings.xml
+    when:
+      branch:
+        - spring-boot
