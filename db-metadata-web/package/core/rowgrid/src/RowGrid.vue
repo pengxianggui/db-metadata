@@ -1,6 +1,6 @@
 <template>
   <el-row class="row" style="width: 100%;">
-    <el-col class="col" v-for="(c, index) in colSpan" :span="c" :class="{'dotted-line': line}">
+    <el-col class="col" v-for="(c, index) in colSpan" :span="c" :class="{'dotted-line': line}" :key="index">
       <slot :name="index"></slot>
     </el-col>
   </el-row>

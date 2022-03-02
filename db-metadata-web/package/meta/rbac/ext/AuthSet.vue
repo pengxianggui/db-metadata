@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tabs v-model="activeTab">
-      <el-tab-pane v-for="(groupMap, type, index) in authMap" :label="type" :name="'' + index">
+      <el-tab-pane v-for="(groupMap, type, index) in authMap" :label="type" :name="'' + index" :key="type">
 
         <el-checkbox :indeterminate="model[type].isIndeterminate" v-model="model[type].checkAll"
                      @change="handleCheckAllChange($event, type)">全选

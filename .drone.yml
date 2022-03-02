@@ -123,7 +123,6 @@ steps:
 #      local: false
 
 
-# 限定只有dev、release-*、master分支才会触发drone ci/cd
 trigger:
   ref:
     - refs/heads/spring-boot
@@ -169,3 +168,7 @@ steps:
     when:
       branch:
         - spring-boot
+
+trigger:
+  ref:
+    - refs/heads/spring-boot

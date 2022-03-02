@@ -2,18 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
-import './svg'
 import MetaElement from '../package/index' // 如果将index省略, 则会发生下面Vue.use无法正常调用的异常情况
 import router from './router'
 import {menus} from "./router";
-import {mockXHR} from '../mock'
 import axios from './axios'
-import ArticleForm from "@/view/ArticleForm";
-Vue.component(ArticleForm.name, ArticleForm)
-
-if (process.env.NODE_ENV === 'development') {
-    mockXHR()
-}
 
 Vue.use(ElementUI, {
     size: 'small'

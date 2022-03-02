@@ -43,7 +43,8 @@
 ├── db-metadata-analysis-springboot
 ├── db-metadata-parent
 ├── db-metadata-server-springboot
-└── db-metadata-we
+└── db-metadata-web
+└── db-metadata-server-demo
 ```
 ### 安装部署
 ### 依赖配置

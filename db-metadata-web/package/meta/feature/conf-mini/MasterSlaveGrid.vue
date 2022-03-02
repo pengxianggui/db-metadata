@@ -27,7 +27,7 @@
             </drop-down-box>
         </el-form-item>
         <el-tabs v-model="activeTab" @tab-click="handleClick" @edit="handleTabEdit" editable>
-            <el-tab-pane v-for="(slave, index) in config.slaves" :label="'从表' + index" :name="index + ''">
+            <el-tab-pane v-for="(slave, index) in config.slaves" :label="'从表' + index" :name="index + ''" :key="slave.objectCode">
               <el-form-item label="元对象编码" :prop="'slaves.' + index + '.objectCode'" class="inline" required>
                 <drop-down-box v-model="slave.objectCode"
                                @change="slave.foreignFieldCode = null"

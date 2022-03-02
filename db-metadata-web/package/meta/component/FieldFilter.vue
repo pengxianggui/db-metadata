@@ -1,6 +1,6 @@
 <template>
   <el-checkbox-group v-model="nativeValue" size="mini">
-    <el-checkbox-button v-for="key in fields" :label="key"></el-checkbox-button>
+    <el-checkbox-button v-for="key in fields" :label="key" :key="key"></el-checkbox-button>
   </el-checkbox-group>
 </template>
 
