@@ -195,7 +195,7 @@ export function hasAllAuth(needAuths) {
     if (isEmpty(needAuths)) {
         return true
     }
-    debugger
+
     if (!Array.isArray(userAuths)) {
         return false
     }

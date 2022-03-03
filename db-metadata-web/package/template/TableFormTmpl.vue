@@ -86,12 +86,12 @@
 
                 const objectCode = this.tlMeta['objectCode'];
 
-                getUpdateFormMeta(objectCode, primaryValue).then(resp => {
+                getUpdateFormMeta(this.$axios, objectCode, primaryValue).then(resp => {
                   this.fmMeta = resp.data
                 })
             },
             initMeta(objectCode) {
-                getTableViewMeta(objectCode).then(resp => {
+                getTableViewMeta(this.$axios, objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(({msg = '获取TableView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
@@ -103,7 +103,7 @@
             let objectCode;
 
             if (!utils.isEmpty(featureCode)) {
-                loadFeature(featureCode).then(resp => {
+                loadFeature(this.$axios, featureCode).then(resp => {
                     objectCode = resp.data['objectCode'];
                     this.initMeta(objectCode);
                 })

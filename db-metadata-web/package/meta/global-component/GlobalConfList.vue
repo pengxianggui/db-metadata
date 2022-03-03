@@ -66,13 +66,13 @@
             }
         },
         created() {
-            getTableViewMeta(this.objectCode).then(resp => {
+            getTableViewMeta(this.$axios, this.objectCode).then(resp => {
                 this.tlMeta = resp.data;
             }).catch(({msg = '获取TableView Meta数据发生错误'}) => {
                 console.error('[ERROR] msg: %s', msg);
             });
 
-            getSearchViewMeta(this.objectCode).then(resp => {
+            getSearchViewMeta(this.$axios, this.objectCode).then(resp => {
                 this.spMeta = resp.data;
             }).catch(({msg = '获取SearchView meta数据发生错误'}) => {
                 console.error('[ERROR] msg: %s', msg);

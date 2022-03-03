@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import utils from './index';
 import DefaultDialogBoxMeta from '../core/dialogbox/ui-conf'
 
@@ -9,50 +8,52 @@ import DefaultDialogBoxMeta from '../core/dialogbox/ui-conf'
  * @param conf 弹框自身的配置
  * @returns {{}}
  */
-export function dialog(meta, data, conf) {
-    let promise = new Promise(function (resolve, reject) {
+export function createDialog (Vue) {
+    return function dialog(meta, data, conf) {
+        let promise = new Promise(function (resolve, reject) {
 
-        let DialogTmpl = Vue.extend({
-            template: `
-                <el-dialog :visible.sync="visible" v-bind="conf" center>
-                    <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
-                               @ok="ok" @cancel="cancel" style="width: 100%"></component>
-                    <slot name="footer" v-if="conf.showButtons">
-                        <div class="dialog-footer" style="margin-top: 10px; text-align: center">
-                            <el-button @click="visible = false">取 消</el-button>
-                            <el-button type="primary" @click="ok(ref.value)">确 定</el-button>
-                        </div>
-                    </slot>
-                </el-dialog>
-            `,
-            data() {
-                return {
-                    visible: true,
-                    innerMeta: meta,
-                    data: data,
-                    conf: utils.merge(conf, DefaultDialogBoxMeta['conf'])
-                }
-            },
-            methods: {
-                ok: function (params) {
-                    this.visible = false;
-                    resolve(params);
+            let DialogTmpl = Vue.extend({
+                template: `
+                  <el-dialog :visible.sync="visible" v-bind="conf" center>
+                  <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
+                             @ok="ok" @cancel="cancel" style="width: 100%"></component>
+                  <slot name="footer" v-if="conf.showButtons">
+                    <div class="dialog-footer" style="margin-top: 10px; text-align: center">
+                      <el-button @click="visible = false">取 消</el-button>
+                      <el-button type="primary" @click="ok(ref.value)">确 定</el-button>
+                    </div>
+                  </slot>
+                  </el-dialog>
+                `,
+                data() {
+                    return {
+                        visible: true,
+                        innerMeta: meta,
+                        data: data,
+                        conf: utils.merge(conf, DefaultDialogBoxMeta['conf'])
+                    }
                 },
-                cancel: function (params) {
-                    this.visible = false;
-                    reject(params);
+                methods: {
+                    ok: function (params) {
+                        this.visible = false;
+                        resolve(params);
+                    },
+                    cancel: function (params) {
+                        this.visible = false;
+                        reject(params);
+                    }
+                },
+                computed: {
+                    ref: function () {
+                        return this.$refs[this.innerMeta.name];
+                    }
                 }
-            },
-            computed: {
-                ref: function () {
-                    return this.$refs[this.innerMeta.name];
-                }
-            }
+            });
+
+            let dialog = new DialogTmpl().$mount();
+            document.getElementById('app').appendChild(dialog.$el);
+
         });
-
-        let dialog = new DialogTmpl().$mount();
-        document.getElementById('app').appendChild(dialog.$el);
-
-    });
-    return promise;
+        return promise;
+    }
 }

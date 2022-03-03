@@ -8,8 +8,13 @@ export default function (Vue, opts) {
 
     Vue.prototype.$merge = utils.merge
     Vue.prototype.$reverseMerge = utils.reverseMerge
+    // 通过prototype传递Vue(这两个方法中是需要有对Vue的引用的), 避免打包后Vue找不到
+    utils.merge.prototype.Vue = Vue
+    utils.reverseMerge.prototype.Vue = Vue
+
     Vue.prototype.$compile = utils.compile
-    Vue.prototype.$dialog = utils.dialog
+    Vue.prototype.$dialog = utils.createDialog(Vue) // 传递Vue
+
     Vue.prototype.$isRoot = isRoot
     Vue.prototype.$hasAnyRole = hasAnyRole
     Vue.prototype.$hasAllRole = hasAllRole

@@ -1,11 +1,12 @@
 import Page401 from "../../page/error/Page401";
 import Page404 from "../../page/error/Page404";
+import Login from "../../page/Login";
 
 const app = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import('../../page/Login'),
+        component: Login,
         meta: {
             need_permit: false
         }

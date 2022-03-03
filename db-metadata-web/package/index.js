@@ -171,11 +171,7 @@ const install = function (Vue, opts = {}) {
         utils.reverseMerge(access, opts.access, false);
     }
 
-    // 注册菜单
-    Menu.registerMenu(Vue, opts)
-    // 注册路由
-    Route.registerRouter(Vue, opts)
-
+    // 全局组件注册
     components.map(component => {
         if (component.install) {
             Vue.use(component, opts)
@@ -183,6 +179,12 @@ const install = function (Vue, opts = {}) {
             Vue.component(component.name, component)
         }
     })
+
+    // 注册菜单
+    Menu.registerMenu(Vue, opts)
+    // 注册路由： 必须在全局组件注册滞后，因为路由数据中的component需要转换为全局组件
+    Route.registerRouter(Vue, opts)
+
 };
 
 if (typeof window !== 'undefined' && window.Vue) {

@@ -71,7 +71,7 @@
                 });
             },
             initMeta(objectCode) {
-                getTreeMeta(objectCode).then(resp => {
+                getTreeMeta(this.$axios, objectCode).then(resp => {
                     this.treeMeta = resp.data;
                 }).catch(({msg = '获取Tree meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
@@ -81,7 +81,7 @@
         created() {
             const {featureCode, objectCode} = this;
             if (!utils.isEmpty(featureCode)) {
-                loadFeature(this.featureCode).then(resp => {
+                loadFeature(this.$axios, this.featureCode).then(resp => {
                     const feature = resp.data;
                     this.treeConf = feature['tree'];
                     this.formConf = feature['form'];

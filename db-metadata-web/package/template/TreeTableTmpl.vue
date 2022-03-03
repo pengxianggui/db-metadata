@@ -162,7 +162,7 @@
                 })
             },
             initMetaByFeatureCode(featureCode) {
-                getMetaFromFeature_TreeTableTmpl(featureCode).then(resp => {
+                getMetaFromFeature_TreeTableTmpl(this.$axios, featureCode).then(resp => {
                     const {tree: treeMeta, table: tvMeta, search: svMeta} = resp.data
                     this.treeMeta = treeMeta
                     this.adjustTreeMeta()
@@ -175,7 +175,7 @@
         created() {
             const {featureCode} = this;
 
-            loadFeature(featureCode).then(resp => {
+            loadFeature(this.$axios, featureCode).then(resp => {
                 this.featureConfig = resp.data;
                 this.initMetaByFeatureCode(featureCode)
             });

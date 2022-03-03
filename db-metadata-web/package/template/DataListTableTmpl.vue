@@ -89,19 +89,19 @@
                 });
             },
             initMeta(dlObjectCode, tlObjectCode) {
-                getDataListMeta(dlObjectCode).then(resp => {
+                getDataListMeta(this.$axios, dlObjectCode).then(resp => {
                     this.dlMeta = resp.data;
                 }).catch(({msg = '获取DataList meta发生错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
 
-                getSearchViewMeta(dlObjectCode).then(resp => {
+                getSearchViewMeta(this.$axios, dlObjectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(({msg = '加载SearchView meta数据发生错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
 
-                getTableViewMeta(tlObjectCode).then(resp => {
+                getTableViewMeta(this.$axios, tlObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     const {foreignFieldCode} = this.tlConf;
                     const data_url = tlMeta['data_url'] + '?' + foreignFieldCode + '={objectCode}'; // pxg_todo 关联方式
@@ -114,7 +114,7 @@
             }
         },
         created() {
-          loadFeature(this.featureCode).then(resp => {
+          loadFeature(this.$axios, this.featureCode).then(resp => {
                 const feature = resp.data;
                 this.dlConf = feature['list'];
                 this.tlConf = feature['table'];

@@ -79,13 +79,13 @@
                 })
             },
             initMeta(objectCode) {
-                getTableTreeViewMeta(objectCode).then(resp => {
+                getTableTreeViewMeta(this.$axios, objectCode).then(resp => {
                     this.tlMeta = resp.data;
                 }).catch(({msg = '获取TableTreeView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
 
-                getSearchViewMeta(objectCode).then(resp => {
+                getSearchViewMeta(this.$axios, objectCode).then(resp => {
                     this.spMeta = resp.data;
                 }).catch(({msg = '获取SearchView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
@@ -96,7 +96,7 @@
             const {featureCode, initMeta} = this
             assert(!isEmpty(featureCode), `featureCode无效: ${featureCode}`)
 
-            loadFeature(featureCode).then(resp => {
+            loadFeature(this.$axios, featureCode).then(resp => {
                 const config = resp.data['table'];
                 initMeta(config.objectCode);
             })

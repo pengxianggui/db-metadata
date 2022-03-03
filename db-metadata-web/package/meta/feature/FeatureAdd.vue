@@ -147,11 +147,11 @@ export default {
     },
     initAssociateMeta() {
       const {route: {objectCode: routeObjectCode}, menu: {objectCode: menuObjectCode}} = this
-      getAddFormMeta(routeObjectCode).then(resp => {
+      getAddFormMeta(this.$axios, routeObjectCode).then(resp => {
         const {data: meta} = resp
         this.route.meta = meta
       })
-      getAddFormMeta(menuObjectCode).then(resp => {
+      getAddFormMeta(this.$axios, menuObjectCode).then(resp => {
         const {data: meta} = resp
         this.menu.meta = meta
       })

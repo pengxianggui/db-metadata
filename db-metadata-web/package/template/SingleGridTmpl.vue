@@ -92,14 +92,14 @@
                 })
             },
             initMeta(objectCode) {
-                getTableViewMeta(objectCode).then(resp => {
+                getTableViewMeta(this.$axios, objectCode).then(resp => {
                     const {tableMeta} = this
                     this.tlMeta = utils.reverseMerge(resp.data, tableMeta);
                 }).catch(({msg = '获取TableView meta数据错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
 
-                getSearchViewMeta(objectCode).then(resp => {
+                getSearchViewMeta(this.$axios, objectCode).then(resp => {
                     const {searchMeta} = this
                     this.spMeta = utils.reverseMerge(resp.data, searchMeta);
                 }).catch(({msg = '获取SearchView meta数据错误'}) => {
@@ -111,7 +111,7 @@
             const {featureCode, objectCode} = this;
 
             if (!utils.isEmpty(featureCode)) {
-                loadFeature(featureCode).then(resp => {
+                loadFeature(this.$axios, featureCode).then(resp => {
                     const config = resp.data['singleGrid'];
                     this.initMeta(config.objectCode);
                 })

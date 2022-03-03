@@ -64,13 +64,13 @@
         },
         created() {
           const {objectCode} = this
-          getTableTreeViewMeta(objectCode).then(resp => {
+          getTableTreeViewMeta(this.$axios, objectCode).then(resp => {
             this.tlMeta = resp.data;
           }).catch(({msg = '加载TableTreeView meta发生错误'}) => {
             console.error('[ERROR] msg: %s', msg);
           });
 
-          getSearchViewMeta(objectCode).then(resp => {
+          getSearchViewMeta(this.$axios, objectCode).then(resp => {
             this.spMeta = resp.data;
           }).catch(({msg = '加载SearchView meta数据发生错误'}) => {
             console.error('[ERROR] msg: %s', msg);

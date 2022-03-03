@@ -111,7 +111,7 @@ export default {
     ...TagViewUtil,
     editRoute(route) {
       const {meta: {id}} = route
-      getUpdateFormMeta('meta_router', id).then(({data: meta}) => {
+      getUpdateFormMeta(this.$axios, 'meta_router', id).then(({data: meta}) => {
         this.$dialog(meta, null, {
           title: '编辑路由'
         })

@@ -1,5 +1,5 @@
 import * as common from './common'
-import Vue from 'vue'
+
 
 /**
  * @description merge 策略1: 将opt2 merge到opt1, 对于opt1已有的key-value, 保持不变, 对于opt2中新的key-value, 追加到opt1中。传入
@@ -26,7 +26,7 @@ export function merge(opt1, opt2, deep = true) {
         if (!common.isObject(obj1) || !common.isObject(obj2)) return;
         for (let key in obj2) {
             if (!(key in obj1)) {
-                set(self, obj1, key, common.deepClone(obj2[key]));
+                set(merge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
             } else {
                 if (!deep) return;
                 deepMerge(obj1[key], obj2[key])
@@ -66,10 +66,10 @@ export function reverseMerge(opt1, opt2, deep = true) {
                 if (common.isObject(obj1[key]) && common.isObject(obj2[key]) && deep) {
                     deepMerge(obj1[key], obj2[key])
                 } else {
-                    set(self, obj1, key, common.deepClone(obj2[key]));
+                    set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
                 }
             } else {
-                set(self, obj1, key, common.deepClone(obj2[key]));
+                set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
             }
         }
     };
@@ -85,8 +85,14 @@ export function reverseMerge(opt1, opt2, deep = true) {
  * @param key
  * @param value
  */
-function set(self, obj, key, value) {
-    if (self instanceof Vue) {
+function set(Vue, self, obj, key, value) {
+    let vueEnv = false
+    try {
+        vueEnv = !common.isEmpty(Vue) && self instanceof Vue;
+    } catch (err) {
+    }
+
+    if (vueEnv) {
         self.$set(obj, key, value);
     } else {
         obj[key] = value;

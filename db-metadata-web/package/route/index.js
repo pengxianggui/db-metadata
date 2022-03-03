@@ -48,14 +48,13 @@ function registerRouteData(Vue, opts) {
         routesInLayout.children.push(...metaRoute)
 
         // 组装动态路由
-        assembleDynamicRoute(axios, Layout).then((dynamicRoutes) => {
+        assembleDynamicRoute(Vue, axios, Layout).then((dynamicRoutes) => {
             routesInLayout.children.push(...dynamicRoutes)
         }).catch(err => {
             console.error('动态路由装配发生错误: ' + err)
         }).finally(() => {
             routes.push(routesInLayout) // 添加在Layout布局下的路由
             routes.push(...systemRoutes) // 添加外层路由(不过Layout)
-
             const finalRoutes = dealRoutes(routes);
             router.addRoutes(finalRoutes)
             // 参见 https://github.com/vuejs/vue-router/issues/1859 通过router.addRoutes添加的路由，router.options.routes中

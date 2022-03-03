@@ -53,9 +53,9 @@
             const {objectCode, type, pkvs} = this;
             let promise;
             if (type.toUpperCase() === 'ADD') {
-                promise = getAddFormMeta(objectCode)
+                promise = getAddFormMeta(this.$axios, objectCode)
             } else if (type.toUpperCase() === 'UPDATE') {
-                promise = getUpdateFormMeta(objectCode, pkvs)
+                promise = getUpdateFormMeta(this.$axios, objectCode, pkvs)
             }
 
             promise.then(resp => {

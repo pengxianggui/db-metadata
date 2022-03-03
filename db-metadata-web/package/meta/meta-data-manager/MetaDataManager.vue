@@ -246,16 +246,16 @@ export default {
     // 获取meta数据
     const {objectCode: metaObjectCode} = this.object;
     const {objectCode: metaFieldCode} = this.field;
-    getSearchViewMeta(metaObjectCode).then(resp => {
+    getSearchViewMeta(this.$axios, metaObjectCode).then(resp => {
       this.object.svMeta = resp.data;
     })
-    getTableViewMeta(metaObjectCode).then(({data = {}}) => {
+    getTableViewMeta(this.$axios, metaObjectCode).then(({data = {}}) => {
       this.object.tvMeta = data;
     })
-    getSearchViewMeta(metaFieldCode).then(({data = {}}) => {
+    getSearchViewMeta(this.$axios, metaFieldCode).then(({data = {}}) => {
       this.field.svMeta = data
     })
-    getTableViewMeta(metaFieldCode).then(({data = {}}) => {
+    getTableViewMeta(this.$axios, metaFieldCode).then(({data = {}}) => {
       const meta = data;
       this.field.urlTemplate = meta['data_url'] + '&object_code={objectCode}';
       meta.data_url = this.field.urlTemplate

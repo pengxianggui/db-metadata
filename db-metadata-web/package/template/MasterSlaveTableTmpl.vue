@@ -216,7 +216,7 @@
             }
         },
         created() {
-            loadFeature(this.featureCode).then(resp => {
+            loadFeature(this.$axios, this.featureCode).then(resp => {
                 const feature = resp.data;
                 this.master = feature['master'];
                 this.slaves = feature['slaves'];
@@ -224,14 +224,14 @@
                 const mObjectCode = this.master['objectCode'];
 
                 // 获取主表TableList 组件meta
-                getTableViewMeta(mObjectCode).then(resp => {
+                getTableViewMeta(this.$axios, mObjectCode).then(resp => {
                     let tlMeta = resp.data;
                     this.$set(this.master, 'tlMeta', tlMeta);
                 }).catch(({msg = '获取TableView meta 错误'}) => {
                     console.error('[ERROR] msg: %s', msg);
                 });
                 // 获取主表SearchPanel 组件meta
-                getSearchViewMeta(mObjectCode).then(resp => {
+                getSearchViewMeta(this.$axios, mObjectCode).then(resp => {
                     let spMeta = resp.data;
                     this.$set(this.master, 'spMeta', spMeta);
                 }).catch(({msg = '获取SearchView meta错误'}) => {
@@ -244,7 +244,7 @@
                     const sObjectCode = slave['objectCode'];
 
                     // 获取从表TableView 组件meta
-                    getTableViewMeta(sObjectCode).then(resp => {
+                    getTableViewMeta(this.$axios, sObjectCode).then(resp => {
                         let foreignFieldKey = slave['foreignFieldCode'];
                         let tlMeta = resp.data;
                         const data_url = tlMeta['data_url'] + '?' + foreignFieldKey + '={foreignFieldValue}';
@@ -257,7 +257,7 @@
                     });
 
                     // 获取从表SearchPanel 组件meta
-                    getSearchViewMeta(sObjectCode).then(resp => {
+                    getSearchViewMeta(this.$axios, sObjectCode).then(resp => {
                         let spMeta = resp.data;
                         this.$set(slave, 'spMeta', spMeta);
                     }).catch(({msg = '获取SearchView meta 数据错误'}) => {
