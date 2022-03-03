@@ -1,11 +1,12 @@
 <template>
   <div class="layout">
-    <slot name="header">
-      <meta-header></meta-header>
-    </slot>
+    <meta-header>
+      <meta-menu v-if="horizontal" v-bind="menuConf"></meta-menu>
+      <slot></slot>
+    </meta-header>
     <div class="body">
-      <div class="menu">
-        <meta-menu></meta-menu>
+      <div class="menu" v-if="!horizontal">
+        <meta-menu v-bind="menuConf"></meta-menu>
       </div>
       <div class="main">
         <meta-main></meta-main>
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+import Theme from '../theme'
 import MetaHeader from "./MetaHeader";
 import MetaMenu from "./MetaMenu";
 import MetaMain from "./MetaMain";
@@ -25,6 +27,16 @@ export default {
     MetaHeader,
     MetaMenu,
     MetaMain
+  },
+  computed: {
+    horizontal() {
+      const {mode} = this.menuConf
+      return mode == 'horizontal'
+    },
+    menuConf() {
+      const {menu: menuConf} = Theme.getTheme()
+      return menuConf
+    }
   }
 }
 </script>

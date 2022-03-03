@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!item.hidden" v-menu-auth="item">
+  <!-- 背景色设置主要是防止层级展开后，div没有背景色，而里面的li有背景色，但div由于宽度大于下一层的li，导致背景色有明显的断层 -->
+  <div v-if="!item.hidden" v-menu-auth="item" :style="{'background-color': bgColor}">
     <template v-if="hasOneShowingChild(item.children, item)
                         && (!onlyOneChild.children || onlyOneChild.children.length == 0 || onlyOneChild.noShowingChildren)">
       <!-- 只有一个需要展示的子节点，并且该子节点下再没有子节点了 -->
@@ -71,7 +72,8 @@ export default {
     basePath: {
       type: String,
       default: ''
-    }
+    },
+    bgColor: String
   },
   data() {
     return {

@@ -25,7 +25,8 @@ export const appConfig = {
     enableLogin: true,
     enableAuth: true,
     devMode: false,
-    tokenKey: 'X-TOKEN'
+    tokenKey: 'X-TOKEN',
+    showGreeting: true
 }
 
 export const configApp = function (Vue, opts = {}) {

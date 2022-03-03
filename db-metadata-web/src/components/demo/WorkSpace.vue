@@ -1,18 +1,14 @@
 <template>
   <div>
-    <auto-computed-one-key-config object-code="test1"></auto-computed-one-key-config>
+    <theme-set></theme-set>
   </div>
 </template>
 
 <script>
-
-import AutoComputedOneKeyConfig from "../../../package/meta/meta-data-manager/ext/AutoComputedOneKeyConfig";
-
+import ThemeSet from "../../../package/theme/ThemeSet";
 export default {
   name: "WorkSpace",
-  components: {
-    AutoComputedOneKeyConfig
-  },
+  components: {ThemeSet},
   data() {
     return {
       value: []

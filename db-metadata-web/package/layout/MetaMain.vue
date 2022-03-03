@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fixed-header" v-if="showTagView">
+    <div class="fixed-header">
       <tag-view @cacheViewChange="(value) => cachedViews = value"></tag-view>
     </div>
     <div class="stage">
@@ -15,14 +15,16 @@
 </template>
 
 <script>
-import Conf from "../core/tagview/conf";
+import TagView from "./tagview/src/TagView";
 
 export default {
   name: "MetaMain",
+  components: {
+    TagView
+  },
   data() {
     return {
-      cachedViews: [],
-      showTagView: Conf.show,
+      cachedViews: []
     }
   }
 }

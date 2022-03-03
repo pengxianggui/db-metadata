@@ -39,6 +39,7 @@ public class MetaProperties {
         private Boolean addable = true;
         private String defaultPass = "888888";
         private String passEncryptKey = "DB-Metadata is delicious";
+        private Boolean showGreeting = true; // 显示问候
     }
 
     @Data
@@ -95,6 +96,11 @@ public class MetaProperties {
             excludes.add("/user/login");
             return excludes;
         }
+
+        public List<String> getIncludes() {
+            includes.add("/**");
+            return includes;
+        }
     }
 
     @Data
@@ -102,6 +108,18 @@ public class MetaProperties {
         boolean enable = false;
         List<String> includes = new ArrayList<>();
         List<String> excludes = new ArrayList<>();
+
+        public List<String> getExcludes() {
+            excludes.add("/app/config");
+            excludes.add("/router");
+            excludes.add("/user/login");
+            return excludes;
+        }
+
+        public List<String> getIncludes() {
+            includes.add("/**");
+            return includes;
+        }
     }
 
     @Data

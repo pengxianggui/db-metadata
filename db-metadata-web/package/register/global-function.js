@@ -1,7 +1,7 @@
 import configAxios from "../axios/configAxios";
 import utils from "../utils";
 import {hasAuth, hasRole, hasAllAuth, hasAllRole, hasAnyAuth, hasAnyRole, isRoot} from "../access";
-import {TagViewUtil} from "../index";
+import * as TagViewUtil from "../layout/tagview/tag-method";
 
 export default function (Vue, opts) {
     Vue.prototype.$axios = configAxios(opts.router, opts.axios)

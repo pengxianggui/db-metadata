@@ -1,8 +1,8 @@
 <template>
-  <scroll-pane id="tags-view-container" ref="scrollPane">
+  <scroll-pane id="tags-view-container" ref="scrollPane" v-if="tagConf.show">
     <template v-for="(tag, index) in visitedViews">
       <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
-                :style="isActive(tag) ? {'background-color': bgColor, 'color': color, 'border-color': bgColor} : {}">
+                :style="isActive(tag) ? tagStyle : {}">
         <template #label>
           <router-link
               ref="tag"
@@ -52,9 +52,9 @@
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
-import * as TagViewUtil from '../visitedViewMaintain'
+import * as TagViewUtil from '../tag-method'
 import {tagData} from "../data";
-import Conf from '../conf'
+import Theme from '../../../theme'
 import {isArray, isEmpty} from "../../../utils/common";
 import {getUpdateFormMeta} from "../../../utils/rest";
 
@@ -80,11 +80,17 @@ export default {
     routes() {
       return this.$router.options.routes // 获取所有路由数据
     },
-    color() {
-      return Conf.color
+    tagConf() {
+      const {tag: tagConf} = Theme.getTheme()
+      return tagConf
     },
-    bgColor() {
-      return Conf.bgColor
+    tagStyle() {
+      const {tagConf: {textColor, backgroundColor}} = this
+      return {
+        'color': textColor,
+        'background-color': backgroundColor,
+        'border-color': backgroundColor
+      }
     },
     currentRouteEditable() {
       const {selectedTag: {meta: {id} = {}}} = this
@@ -233,7 +239,7 @@ export default {
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
-        this.$router.push(Conf.outPath)
+        this.$router.push(this.tagConf.outPath)
       }
     },
     openMenu(tag) {

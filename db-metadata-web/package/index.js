@@ -5,10 +5,8 @@ import directives from "./register/directive";
 import registerGlobalFunction from './register/global-function'
 import './asserts/svg/index' // 内置svg注册
 // 布局组件
-import NavMenu from "./core/navmenu";
-import TagView from "./core/tagview";
-import MetaLayout from "./layout/MetaLayout";
-import MetaHeader from "./layout/MetaHeader";
+import Layout from "./layout";
+import {MetaMenu, MetaHeader, MetaLayout, MetaMain} from './layout'
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -66,15 +64,9 @@ import {UserList, RoleList} from '@/../package/meta/rbac'
 // 全局页面
 import GlobalPage from '@/../package/page'
 
-// 内置菜单: Meta维护菜单
-import MetaMenu from "./menu/MetaMenu";
-
 import Route from "./route";
 import Menu from "./menu";
 import {configApp} from "./config";
-
-// 暴露tagView操作的接口
-import TagViewUtil from '@/../package/core/tagview/data'
 
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
@@ -125,10 +117,7 @@ const components = [
     PageSelector,
 
     // 布局组件layout
-    MetaLayout,
-    MetaHeader,
-    NavMenu,
-    TagView,
+    Layout,
 
     // template
     DataListTableTmpl,
@@ -201,9 +190,9 @@ export {
     routeUrl,
     restUrl,
     user,
-    MetaMenu,
 
-    TagViewUtil,
     MetaLayout,
-    MetaHeader
+    MetaHeader,
+    MetaMenu,
+    MetaMain
 }

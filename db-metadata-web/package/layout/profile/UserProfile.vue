@@ -1,7 +1,6 @@
 <template>
   <div class="user-profile">
     <div class="user-div">
-      <div>欢迎您: {{user.username}}</div>
       <el-dropdown>
         <img :src="user.avatar" class="avatar" v-if="false">
         <div class="avatar" v-else>
@@ -74,7 +73,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$width: 200px;
+$width: 60px;
 $headerHeight: 60px;
 .user-profile {
   $avatarSideLength: 40px;
@@ -84,7 +83,6 @@ $headerHeight: 60px;
     width: $width;
     display: flex;
     justify-content: space-around;
-    color: #777779;
 
     .avatar {
       width: $avatarSideLength;

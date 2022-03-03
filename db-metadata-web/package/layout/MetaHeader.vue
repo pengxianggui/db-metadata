@@ -1,23 +1,47 @@
 <template>
-  <div class="header">
-    <span class="h2" style="font-family: unset">{{ appConfig.name }}</span>
-
+  <div class="header" :style="headerStyle">
+    <span class="h2" style="font-family: unset">{{ appName }}</span>
+    <slot></slot>
     <div class="dock">
+      <div>欢迎您: {{user.username}}</div>
+      <theme-set></theme-set>
+      <div></div>
       <user-profile></user-profile>
     </div>
   </div>
 </template>
 
 <script>
+import {access} from "../access";
 import {appConfig} from "../config";
+import Theme from '../theme'
 import UserProfile from "./profile/UserProfile";
+import ThemeSet from "../theme/ThemeSet";
 
 export default {
   name: "MetaHeader",
-  components: {UserProfile},
+  components: {ThemeSet, UserProfile},
   data() {
     return {
-      appConfig: appConfig
+      user: access.user
+    }
+  },
+
+  computed: {
+    appName() {
+      const {name: appName} = appConfig
+      return appName
+    },
+    showGreeting() {
+      const {showGreeting = true} = appConfig
+      return showGreeting
+    },
+    headerStyle() {
+      const {header: {titleColor, backgroundColor} = {}} = Theme.getTheme()
+      return {
+        'color': titleColor,
+        'background-color': backgroundColor
+      }
     }
   }
 }
@@ -38,8 +62,11 @@ $headerHeight: 60px;
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    color: #777779;
 
     & > * {
+      display: inline-block;
       margin: 0 10px;
     }
     span.empty {

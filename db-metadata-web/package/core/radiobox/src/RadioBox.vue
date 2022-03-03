@@ -5,7 +5,7 @@
                   :label="item.value | stringify"
                   v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                   @change="handleChange">
-            <slot name="label" v-bind:option="item">
+            <slot :name="item.value | stringify" v-bind:option="item">
                 {{item.key}}
             </slot>
         </el-radio>

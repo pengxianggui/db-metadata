@@ -7,21 +7,18 @@
     </slot>
     <el-menu :default-active="activeMenu"
              :collapse="nativeCollapse"
-             v-bind="conf" id="__DEFAULT_MENU">
+             v-bind="$attrs" id="__DEFAULT_MENU">
       <slot></slot>
     </el-menu>
   </div>
 </template>
 
 <script>
-import Meta from "../../mixins/meta";
-import DefaultMeta from "../../navmenu/ui-conf";
 import {resolvePath} from '@/../package/utils/url'
 import utils from '@/../package/utils'
 
 export default {
   name: "NavMenu",
-  mixins: [Meta(DefaultMeta)],
   props: {
     collapse: {
       type: Boolean,
@@ -40,21 +37,17 @@ export default {
       return resolvePath(path, query)
     },
     showCollapseButton() {
-      const {$attrs: {'show-collapse-button': showCollapseButton}, innerMeta: {show_collapse_button}} = this
-      return utils.assertUndefined(showCollapseButton, show_collapse_button)
+      const {$attrs: {'show-collapse-button': showCollapseButton, mode = 'vertical'}} = this
+      return utils.assertUndefined(showCollapseButton) && mode === 'vertical'
     },
     nativeCollapse: {
       get: function () {
-        const {collapse: attrCollapse, innerMeta: {conf: {collapse: metaCollapse}}} = this
-        return utils.assertUndefined(attrCollapse, metaCollapse);
+        const {collapse: attrCollapse, $attrs: {mode = 'vertical'}} = this
+        return attrCollapse && mode == 'vertical'
       },
       set: function (val) {
         return this.$emit("update:collapse", val);
       }
-    },
-    conf() {
-      const {$reverseMerge, innerMeta: {conf}, $attrs} = this
-      return $reverseMerge(conf, $attrs)
     }
   }
 }

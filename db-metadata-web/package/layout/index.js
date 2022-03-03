@@ -1,7 +1,20 @@
-import Layout from "./Layout";
+import MetaLayout from "./MetaLayout";
+import MetaHeader from "./MetaHeader";
+import MetaMenu from "./MetaMenu";
+import MetaMain from "./MetaMain";
 
-Layout.install = function (Vue) {
-    Vue.component(Layout.name, Layout)
+export default {
+    install(Vue) {
+        Vue.component(MetaLayout.name, MetaLayout)
+        Vue.component(MetaHeader.name, MetaHeader)
+        Vue.component(MetaMenu.name, MetaMenu)
+        Vue.component(MetaMain.name, MetaMain)
+    }
 }
 
-export default Layout;
+export {
+    MetaLayout,
+    MetaHeader,
+    MetaMenu,
+    MetaMain
+}

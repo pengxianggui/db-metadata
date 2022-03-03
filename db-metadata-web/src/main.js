@@ -13,8 +13,8 @@ Vue.use(ElementUI, {
 
 Vue.use(MetaElement, {
     axios: axios, // axios实例(必须)
-    menus: menus,
-    router: router,
+    router: router, // 路由实例(必须)
+    menus: menus, // 编程菜单
     routerInterceptor: { // 路由守卫
         enable: true, // 开启内置的路由守卫。开启后，由MetaElement负责值守路由，并对路由鉴权。如果关闭，你需要自行维持路由鉴权，并维持用户状态。
     },
@@ -22,12 +22,7 @@ Vue.use(MetaElement, {
     restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置。参考【内置接口地址】
     routeUrl: {}, // 用于覆盖内置的路由地址。参考【内置路由列表】
     access: { // 访问权限配置
-        root: 'ROOT' // 默认为ROOT, 如果自定义覆盖, 对于MetaEasyEdit快捷编辑是有效的, 但是平台维护路由未生效
-    },
-    tagView: {
-        show: true,
-        bgColor: '#409EFF',
-        outPath: '/dashboard' // 兜底的路由
+        root: 'ROOT' // 默认为ROOT, ROOT角色是一个特殊的角色，只要拥有，即拥有一切权限，包括平台维护。
     }
 });
 

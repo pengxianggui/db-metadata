@@ -2,10 +2,8 @@ package com.github.md.web.user;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author pengxg
@@ -26,12 +24,12 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
         }
 
         // 见 AbstractUserService#getUser(request)方法，暂时取消cookie支持
-//        if (user != null) {
-//            UserThreadLocal.setUser(user);
+        if (user != null) {
+            UserThreadLocal.setUser(user);
 //            Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
 //            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
 //            response.addCookie(cookie);
-//        }
+        }
         return true;
     }
 
@@ -44,7 +42,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
         return null;
     }
 
-    private User getUser(HttpServletRequest request) {
+    protected User getUser(HttpServletRequest request) {
         User user;
         try {
             user = AuthenticationManager.me().getUser(request);

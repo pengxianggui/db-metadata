@@ -29,7 +29,8 @@ public class AppController extends ControllerAdapter {
                 metaProperties.getServer().getLogin().isEnable(),
                 metaProperties.getServer().getAuth().isEnable(),
                 metaProperties.isDevMode(),
-                metaProperties.getServer().getLogin().getTokenKey()
+                metaProperties.getServer().getLogin().getTokenKey(),
+                metaProperties.getApp().getShowGreeting()
         );
         return Ret.ok("data", vo);
     }
