@@ -13,7 +13,6 @@ import AuthList from "../../meta/rbac/AuthList";
 import ApiResourceList from "../../meta/rbac/ApiResourceList";
 import InstanceConfEdit from "../../meta/instance-component/InstanceConfEdit";
 import utils from "../../utils";
-import Redirect from "../redirect";
 
 const routes = [
     {
@@ -174,19 +173,6 @@ const routes = [
     }
 ]
 
-export default function (Layout) {
-    return [
-        ...routes,
-        {
-            path: '/__redirect',
-            component: Layout,
-            hidden: true,
-            children: [
-                {
-                    path: '/__redirect/:path(.*)',
-                    component: Redirect
-                }
-            ]
-        }
-    ]
+export default function () {
+    return routes
 }

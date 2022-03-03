@@ -44,7 +44,7 @@ function registerRouteData(Vue, opts) {
 
     router.onReady(() => {
         // 组装平台维护相关路由
-        const metaRoute = assembleMetaRoute(Layout)
+        const metaRoute = assembleMetaRoute()
         routesInLayout.children.push(...metaRoute)
 
         // 组装动态路由

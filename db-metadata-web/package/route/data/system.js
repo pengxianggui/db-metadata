@@ -1,6 +1,7 @@
 import Page401 from "../../page/error/Page401";
 import Page404 from "../../page/error/Page404";
 import Login from "../../page/Login";
+import Redirect from "../redirect";
 
 const app = [
     {
@@ -10,6 +11,14 @@ const app = [
         meta: {
             need_permit: false
         }
+    },
+    {
+        path: '/__redirect/:path(.*)',
+        hidden: true,
+        meta: {
+            need_permit: false
+        },
+        component: Redirect
     }
 ]
 const error = [
