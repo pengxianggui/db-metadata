@@ -29,7 +29,7 @@ export default {
   name: "MetaMenu",
   components: {NavMenu, MenuItem},
   data() {
-    let collapse = localStorage.getItem(Cache.keyInLocal.MENU_COLLAPSE_KEY);
+    let collapse = localStorage.getItem(Cache.keyInLocal.MENU_COLLAPSE_KEY.value);
     return {
       collapse: collapse === 'true',
       metaMenus: Menu.metaMenus,
@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     collapse(newV) {
-      localStorage.setItem(Cache.keyInLocal.MENU_COLLAPSE_KEY, newV)
+      localStorage.setItem(Cache.keyInLocal.MENU_COLLAPSE_KEY.value, newV)
     }
   },
   computed: {

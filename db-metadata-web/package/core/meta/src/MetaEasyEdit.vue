@@ -173,7 +173,7 @@
                 const finalRouteUrl = this.$router.resolve({
                     path: url
                 });
-                window.open(finalRouteUrl.href, '_blank');
+                window.open(finalRouteUrl.href, '_self');
             },
             editInstanceFieldConf(componentCode) {
                 this.editInstanceConf(componentCode); // just edit the ui conf of field named fieldCode. anchor point ———— filtered

@@ -67,14 +67,14 @@ export const buildColors = {
  * @param data
  */
 const setTheme = function (data) {
-    localStorage.setItem(cacheKey.keyInLocal.THEME_DATA_KEY, JSON.stringify(data))
+    localStorage.setItem(cacheKey.keyInLocal.THEME_DATA_KEY.value, JSON.stringify(data))
 }
 
 /**
  * 获取主题配置数据
  */
 const getTheme = function () {
-    const themeData = localStorage.getItem(cacheKey.keyInLocal.THEME_DATA_KEY)
+    const themeData = localStorage.getItem(cacheKey.keyInLocal.THEME_DATA_KEY.value)
     if (isEmpty(themeData)) {
         return defaultThemeData
     }

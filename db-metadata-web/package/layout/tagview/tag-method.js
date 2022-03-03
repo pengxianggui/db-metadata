@@ -6,18 +6,18 @@ export function setToStorage(tag) {
     let cacheTags = getFormStorage();
     tag.meta.affix = true
     cacheTags.push(tag)
-    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY, JSON.stringify(cacheTags))
+    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY.value, JSON.stringify(cacheTags))
 }
 
 export function removeFromStorage(tag) {
     tag.meta.affix = false
     let cacheTags = getFormStorage().filter(t => t.name != tag.name && t.path !== tag.path)
-    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY, JSON.stringify(cacheTags))
+    localStorage.setItem(Cache.keyInLocal.TAG_AFFIX_KEY.value, JSON.stringify(cacheTags))
 }
 
 export function getFormStorage() {
     let cacheTags = []
-    let cacheTagsStr = localStorage.getItem(Cache.keyInLocal.TAG_AFFIX_KEY)
+    let cacheTagsStr = localStorage.getItem(Cache.keyInLocal.TAG_AFFIX_KEY.value)
     if (!isEmpty(cacheTagsStr)) {
         cacheTags = strToArray(cacheTagsStr)
         if (!isArray(cacheTags)) cacheTags = []
