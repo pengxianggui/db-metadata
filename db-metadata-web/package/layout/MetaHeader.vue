@@ -1,6 +1,7 @@
 <template>
   <div class="header" :style="headerStyle">
-    <span class="h2" style="font-family: unset">{{ appName }}</span>
+    <svg-icon :value="logo" class="logo" v-if="logo"></svg-icon>
+    <h2 class="name">{{ appName }}</h2>
     <slot></slot>
     <div class="dock">
       <div>欢迎您: {{user.username}}</div>
@@ -28,6 +29,10 @@ export default {
   },
 
   computed: {
+    logo() {
+      const {logo} = appConfig
+      return logo
+    },
     appName() {
       const {name: appName} = appConfig
       return appName
@@ -57,6 +62,14 @@ $headerHeight: 60px;
   align-items: center;
   color: #409EFF;
   background-color: #001529;
+
+  .logo {
+    font-size: 50px;
+    margin-right: 10px;
+  }
+  .name {
+    margin: 0;
+  }
 
   div.dock {
     flex: 1;

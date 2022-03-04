@@ -40,6 +40,8 @@ public class MetaProperties {
         private String defaultPass = "888888";
         private String passEncryptKey = "DB-Metadata is delicious";
         private Boolean showGreeting = true; // 显示问候
+        private String loginBg; // 登录背景图
+        private String resetPass = "dbmeta";
     }
 
     @Data

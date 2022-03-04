@@ -90,6 +90,8 @@ export default {
       let url = this.$compile(action, {objectCode: objectCode});
       params['objectCode'] = objectCode;
 
+      utils.filterEmptyStrToNull(params)
+
       utils.joinArrInObj(params);
       this.$axios.post(url, params).then(({msg = '提交成功'}) => {
         this.$emit('ok', params); //  default callback

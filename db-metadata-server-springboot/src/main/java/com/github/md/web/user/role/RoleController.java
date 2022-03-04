@@ -1,6 +1,7 @@
 package com.github.md.web.user.role;
 
 import cn.com.asoco.annotation.Authorize;
+import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
@@ -10,6 +11,7 @@ import com.jfinal.kit.StrKit;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +32,8 @@ public class RoleController extends ControllerAdapter {
     @Authorize(value = "api:bind:auths-to-role")
     @PostMapping("{roleId}/auths")
     public Ret bindAuths(@PathVariable("roleId") String roleId) {
+        AssertUtil.isTrue(!Objects.equals(roleId, "0"), "ROOT角色无需绑定任何权限"); // id为0的角色为ROOT角色
+
         Kv kv = parameterHelper().getKv();
         String authId = StrKit.defaultIfBlank(kv.getStr("authId"), "");
         boolean flag = AuthenticationManager.me().roleService().bindAuthsForRole(roleId, authId.split(","));

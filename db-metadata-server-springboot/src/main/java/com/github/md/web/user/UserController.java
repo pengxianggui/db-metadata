@@ -1,6 +1,7 @@
 package com.github.md.web.user;
 
 import cn.com.asoco.annotation.Authorize;
+import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
@@ -9,6 +10,7 @@ import com.jfinal.kit.StrKit;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +31,8 @@ public class UserController extends ControllerAdapter {
     @Authorize(value = "api:bind:roles-to-user")
     @PostMapping("{userId}/roles")
     public Ret bindRoles(@PathVariable("userId") String userId) {
+        AssertUtil.isTrue(!Objects.equals(userId, "0"), "ROOT用户不允许更改角色绑定"); // id为0的用户为ROOT用户
+
         Kv kv = parameterHelper().getKv();
         String roleId = StrKit.defaultIfBlank(kv.getStr("roleId"), "");
 

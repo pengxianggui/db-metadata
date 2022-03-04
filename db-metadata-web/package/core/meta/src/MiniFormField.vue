@@ -3,6 +3,7 @@
              label-position="right" label-width="80px">
         <el-form-item label="默认值">
             <el-col :span="6">
+                <!--  TODO: 应当根据元字段的数据类型决定使用什么控件设置默认值  -->
                 <el-input v-model="nativeValue.defaultVal" size="mini"></el-input>
             </el-col>
         </el-form-item>

@@ -149,7 +149,7 @@ public class FormDataFactory {
                         if (StrKit.notBlank(metaField.configParser().defaultVal())) {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
-                            formData.set(metaField.fieldCode(), "");
+//                            formData.set(metaField.fieldCode(), ""); // 导致入库时本应该为null的值变成空字符串, 如果字段唯一约束, 则会抛出异常
                         }
                     }
                     continue;

@@ -47,6 +47,7 @@ export default {
           {
             type: 'warning',
             center: true,
+            inputType: 'password',
             inputValidator: function (val) {
               return !isEmpty(val) ? true : '请输入口令(存在于系统配置中)';
             }

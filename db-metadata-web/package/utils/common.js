@@ -336,6 +336,22 @@ export function joinArrInObj(val, separator = ',', deep = false) {
     return val;
 }
 
+/**
+ * 将对象params中value为空字符串(不含空格)的值改为null
+ * @param params
+ */
+export function filterEmptyStrToNull(params) {
+    if (isObject(params)) {
+        Object.keys(params).forEach(k => {
+            if (isString(params[k]) && isEmpty(params[k])) {
+                params[k] = null
+            } else if (isObject(params[k])) {
+                filterEmptyStrToNull(params[k])
+            }
+        })
+    }
+}
+
 export function isImageFile(file) {
     if (file instanceof File) {
         return file.type.startsWith('image/');
