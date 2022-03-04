@@ -1,5 +1,6 @@
 package com.github.md.web.user.role;
 
+import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
@@ -19,12 +20,14 @@ import java.util.stream.Collectors;
 @RequestMapping("role")
 public class RoleController extends ControllerAdapter {
 
+    @Authorize(value = "api:get:auths-of-role")
     @GetMapping("{roleId}/auths")
     public Ret getAuths(@PathVariable("roleId") String roleId) {
         List<IAuth> auths = AuthenticationManager.me().authService().findByRole(roleId);
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
+    @Authorize(value = "api:bind:auths-to-role")
     @PostMapping("{roleId}/auths")
     public Ret bindAuths(@PathVariable("roleId") String roleId) {
         Kv kv = parameterHelper().getKv();
