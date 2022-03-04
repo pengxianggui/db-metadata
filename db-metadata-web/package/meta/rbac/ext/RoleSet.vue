@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.safeGet(restUrl.ROLE_LIST).then(({data: roles}) => {
+    this.$axios.safeGet(restUrl.ROLE_LIST_FOR_CURRENT_USER).then(({data: roles}) => {
       this.options = roles
 
       let url = utils.compile(restUrl.ROLE_LIST_FOR_USER, {userId: this.userId});

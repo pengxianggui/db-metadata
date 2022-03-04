@@ -1,26 +1,27 @@
 <template>
   <div>
     <el-tabs v-model="activeTab">
-      <el-tab-pane v-for="(groupMap, type, index) in authMap" :label="type" :name="'' + index" :key="type">
+      <el-tab-pane v-for="(type, index) in authTypes" :label="type.key" :name="'' + index" :key="type.value">
+        <div v-if="model[type.value]">
+          <el-checkbox :indeterminate="model[type.value].isIndeterminate" v-model="model[type.value].checkAll"
+                       @change="handleCheckAllChange($event, type.value)">全选
+          </el-checkbox>
+          <div style="margin: 15px 0;"></div>
 
-        <el-checkbox :indeterminate="model[type].isIndeterminate" v-model="model[type].checkAll"
-                     @change="handleCheckAllChange($event, type)">全选
-        </el-checkbox>
-        <div style="margin: 15px 0;"></div>
-
-        <el-checkbox-group v-model="model[type].value" @change="handleCheckedCitiesChange($event, type)">
-          <div v-for="(v, k) in groupMap">
-            <h4 class="group-title">【{{ k }}】</h4>
-            <div class="group-options">
-              <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">
-                <span>{{ r.name }}</span>&nbsp;
-                <el-tooltip :content="r.remark" placement="right" v-if="r.remark">
-                  <i class="el-icon-question"></i>
-                </el-tooltip>
-              </el-checkbox>
+          <el-checkbox-group v-model="model[type.value].value" @change="handleCheckedCitiesChange($event, type.value)">
+            <div v-for="(v, k) in authMap[type.value]">
+              <h4 class="group-title">【{{ k }}】</h4>
+              <div class="group-options">
+                <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">
+                  <span>{{ r.name }}</span>&nbsp;
+                  <el-tooltip :content="r.remark" placement="right" v-if="r.remark">
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </el-checkbox>
+              </div>
             </div>
-          </div>
-        </el-checkbox-group>
+          </el-checkbox-group>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -31,6 +32,7 @@
 import {restUrl} from "../../../constant/url";
 import {utils} from "../../../index";
 
+// TODO 当前页面为了实现分组下的【全选】交互，实现的太复杂了。需要简化
 export default {
   name: "AuthSet",
   props: {
@@ -44,11 +46,13 @@ export default {
       activeTab: '0',
       options: [],
       model: {},
-      authMap: {}
+      authMap: {},
+      authTypes: []
     }
   },
   methods: {
     handleCheckAllChange(val, type) {
+      debugger
       let typeModel = this.authMap[type];
       if (val) {
         Object.keys(typeModel).forEach(group => {
@@ -79,7 +83,7 @@ export default {
     },
     allAuth() {
       return new Promise((resolve, reject) => {
-        this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: auths}) => {
+        this.$axios.safeGet(restUrl.AUTH_LIST_FOR_CURRENT_USER).then(({data: auths}) => {
           let map = utils.group(auths, 'type', '其它');
           for (let key in map) {
             map[key] = utils.group(map[key], 'group', '默认')
@@ -114,12 +118,21 @@ export default {
               this.handleCheckedCitiesChange(this.model[type].value, type)
             })
           })
+    },
+    getAuthTypeOptions() {
+      this.$axios.safeGet(utils.compile(restUrl.COMPONENT_OPTIONS, {
+        objectCode: 'meta_auth', // 固定元对象和原字段
+        fieldCode: 'type'
+      })).then(({data: authTypes}) => {
+        this.authTypes = authTypes
+      })
     }
   },
   mounted() {
     this.allAuth().then(({map, auths: list}) => {
       this.authMap = map
       this.getAuthOfRole(this.roleId, list)
+      this.getAuthTypeOptions()
     });
   },
   computed: {
