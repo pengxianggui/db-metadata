@@ -18,9 +18,11 @@ export default {
                 show = hasAuth(strSplitToArray(auths, ','), auth_match_mode)
             }
 
-            if (!show) {
-                el.parentNode.removeChild(el)
+            if (show) {
+                return
             }
+
+            el.parentNode.removeChild(el)
         }
     },
     'any-roles': {

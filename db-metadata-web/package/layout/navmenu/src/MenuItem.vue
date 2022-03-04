@@ -1,29 +1,27 @@
 <template>
   <!-- 背景色设置主要是防止层级展开后，div没有背景色，而里面的li有背景色，但div由于宽度大于下一层的li，导致背景色有明显的断层 -->
-  <div v-if="!item.hidden" v-menu-auth="item" :style="{'background-color': bgColor}">
-    <template v-if="hasOneShowingChild(item.children, item)
-                        && (!onlyOneChild.children || onlyOneChild.children.length == 0 || onlyOneChild.noShowingChildren)">
+  <div :style="{'background-color': bgColor}">
+    <template v-if="isLeaf">
       <!-- 只有一个需要展示的子节点，并且该子节点下再没有子节点了 -->
-      <app-link :to="resolvePath(onlyOneChild.path)" :disabled="item.disable"
-                :query="resolveParams(onlyOneChild['params'])">
+      <app-link :to="resolvePath(item.path)" :disabled="item.disable"
+                :query="resolveParams(item['params'])">
         <pop-menu trigger="right-click" :disabled="!metaEditable">
           <template #label>
-            <el-menu-item :index="resolvePath(onlyOneChild.path)" :disabled="item.disable"
+            <el-menu-item :index="resolvePath(item.path)" :disabled="item.disable"
                           :class="{'submenu-title-noDropdown':!isNest}">
-              <svg-icon :value="onlyOneChild.icon" v-if="onlyOneChild.icon"></svg-icon>
-              <span slot="title">{{ onlyOneChild.title }}</span>
+              <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
+              <span slot="title">{{ item.title }}</span>
             </el-menu-item>
           </template>
           <list>
-            <list-item @click="editMenuMeta(onlyOneChild)">编辑元菜单</list-item>
+            <list-item @click="editMenuMeta(item)">编辑元菜单</list-item>
           </list>
         </pop-menu>
       </app-link>
     </template>
 
     <!-- 有1个以上要展示的子节点 -->
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)"
-                popper-append-to-body :disabled="item.disable">
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body :disabled="item.disable">
       <template slot="title">
         <div>
           <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
@@ -38,11 +36,12 @@
           </pop-menu>
         </div>
       </template>
-      <template v-for="(subMenu, index) in childrenMenus">
-        <menu-item :key="subMenu.path + index"
+      <template v-for="(subMenu) in childrenMenus">
+        <menu-item :key="subMenu.loopKey"
                    :is-nest="true"
                    :item="subMenu"
-                   :base-path="resolvePath(subMenu.path)">
+                   :base-path="resolvePath(subMenu.path)"
+                   v-menu-auth="subMenu">
         </menu-item>
       </template>
     </el-submenu>
@@ -54,7 +53,7 @@ import path from 'path'
 import AppLink from './Link'
 import utils from '@/../package/utils'
 import {restUrl} from "../../../constant/url";
-import {isEmpty} from "../../../utils/common";
+import {isEmpty, isArray} from "../../../utils/common";
 
 export default {
   name: "MenuItem",
@@ -77,7 +76,11 @@ export default {
   },
   data() {
     return {
-      onlyOneChild: null
+    }
+  },
+  created() {
+    if (this.item.title == '可编程菜单1') {
+      debugger
     }
   },
   methods: {
@@ -95,22 +98,7 @@ export default {
         })
       });
     },
-    hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter(item => !item.hasOwnProperty('hidden') || item.hidden === false);
-
-      if (showingChildren.length === 1) {
-        this.onlyOneChild = {...showingChildren[0]};
-        return true
-      }
-
-      if (showingChildren.length === 0) {
-        this.onlyOneChild = {...parent, path: '', noShowingChildren: true}
-        return true
-      }
-
-      return false
-    },
-    resolvePath(routePath) {
+    resolvePath(routePath = '') {
       if (utils.isExternal(routePath)) {
         return routePath
       }
@@ -129,14 +117,12 @@ export default {
     }
   },
   computed: {
-    needRoles() {
-      let {item: {meta}} = this
-      meta = utils.strToObject(meta)
-      if (!meta) {
-        meta = {}
-      }
-      const {roles} = meta
-      return roles
+    isLeaf() { // 是否叶子节点
+      const {item} = this
+      // 菜单项没有children属性, 或 children数据非法(非数组), 或children中所有子菜单项都是隐藏的(hidden)，则视为叶子节点了
+      return !item.hasOwnProperty('children')
+          || !isArray(item.children)
+          || item.children.every(subM => subM.hasOwnProperty('hidden') && subM.hidden === true)
     },
     metaEditable() { // 是否可编辑菜单元数据
       const {item: {id}} = this

@@ -4,7 +4,7 @@ const metaMenus = [{
     "icon": "el-icon-s-tools",
     "hidden": false,
     "disable": false,
-    "orderNum": Number.MAX_VALUE, // 平台维护总是排最后
+    "order": 999999, // 平台维护总是排最后
     "auths": ['menu:meta:platform-ops'],
     "children": [
         {

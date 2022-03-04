@@ -118,8 +118,7 @@ export function hasAnyRole(needRoles) {
         return false
     }
 
-    const upperCaseNeedRoles = needRoles.map(r => r.toUpperCase()) // 大小写不敏感
-    return upperCaseNeedRoles.some(r => userRoles.includes(r.toUpperCase())) // route中定义的roles只要有一个符合即可
+    return needRoles.some(r => userRoles.includes(r)) // route中定义的roles只要有一个符合即可
 }
 
 /**
@@ -145,8 +144,7 @@ export function hasAnyAuth(needAuths) {
         return false
     }
 
-    const upperCaseNeedAuths = needAuths.map(r => r.toUpperCase()) // 大小写不敏感
-    return upperCaseNeedAuths.some(r => userAuths.includes(r.toUpperCase())) // route中定义的auths只要有一个符合即可
+    return needAuths.some(r => userAuths.includes(r)) // route中定义的auths只要有一个符合即可
 }
 
 /**
@@ -172,8 +170,7 @@ export function hasAllRole(needRoles) {
         return false
     }
 
-    const upperCaseNeedRoles = needRoles.map(r => r.toUpperCase()) // 大小写不敏感
-    return upperCaseNeedRoles.every(r => userRoles.includes(r.toUpperCase())) // route中定义的roles只要有一个符合即可
+    return needRoles.every(r => userRoles.includes(r)) // route中定义的roles只要有一个符合即可
 }
 
 /**
@@ -200,8 +197,7 @@ export function hasAllAuth(needAuths) {
         return false
     }
 
-    const upperCaseNeedAuths = needAuths.map(r => r.toUpperCase()) // 大小写不敏感
-    return upperCaseNeedAuths.every(r => userAuths.includes(r.toUpperCase())) // route中定义的auths只要有一个符合即可
+    return needAuths.every(r => userAuths.includes(r)) // route中定义的auths只要有一个符合即可
 }
 
 /**

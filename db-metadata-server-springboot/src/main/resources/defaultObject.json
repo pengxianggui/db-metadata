@@ -748,7 +748,7 @@
         "pidKey": "pid",
         "label": "name"
       },
-      "orderBy": "order_num asc"
+      "orderBy": "`order` asc"
     },
     "_fields": {
       "id": {
@@ -805,7 +805,7 @@
           "isListShow": false
         }
       },
-      "order_num": {
+      "order": {
         "config": {
           "isSearch": false,
           "isListShow": false
