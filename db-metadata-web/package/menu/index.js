@@ -108,7 +108,7 @@ const metaMenus = [{
 const programMenus = []
 
 function registerMenu(Vue, opts = {}) {
-    const {menus} = opts
+    const {menus = []} = opts
     programMenus.push(...menus)
 }
 

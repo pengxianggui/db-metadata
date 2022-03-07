@@ -1,4 +1,3 @@
-import utils from "./utils";
 import {isArray, isString, isEmpty} from "./utils/common";
 import {appConfig} from "./config";
 import {restUrl} from "./constant/url";
@@ -9,7 +8,7 @@ import Cache from "./constant/cacheKey";
  * @type {{root: string, roles: []}}
  */
 export const access = {
-    root: 'ROOT', // ROOT角色编码。ROOT角色是特殊的角色，DbMeta内置的平台维护模块，只要拥有ROOT角色即可访问，无论ROOT是否绑定权限
+    root: '0', // ROOT用户的用户id。为0表示是ROOT用户, 是DbMeta内置的用户，ROOT用户拥有所有权限, 即使没有绑定任何角色、权限。是DbMeta初始化时内置的用户
     // 当前用户
     user: {
         id: null,
@@ -60,24 +59,14 @@ export const setToken = function (token) {
 }
 
 /**
- * 判断当前登陆角色是否为ROOT角色, 大小写敏感.
+ * 判断当前登陆用户是否为ROOT用户, 大小写敏感.
  * 对内使用
  * @returns {boolean}
  */
-export function isRoot() { // 根据角色鉴权
-    const root = access.root;
-    let userRoles = utils.assertEmpty(access.user.roles, []); // 用户拥有的角色
-
-    if (utils.isArray(userRoles)) {
-        return userRoles.indexOf(root) > -1
-    }
-
-    if (utils.isString(userRoles)) {
-        return userRoles === root
-    }
-
-    console.error(`[MetaElement] 用户角色 ${userRoles} 非法, 必须为字符数组或字符串`)
-    return false;
+export function isRoot() {
+    const rootUserId = access.root;
+    const {user: {id}} = access
+    return rootUserId === id
 }
 
 export function hasRole(needRoles, mode = 'any') {
@@ -106,7 +95,7 @@ export function hasAnyRole(needRoles) {
     if (!enableAuth) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
-    if (isRoot()) { // 若拥有ROOT角色，则视为有权限
+    if (isRoot()) { // 若为ROOT用户
         return true;
     }
 
@@ -131,7 +120,7 @@ export function hasAnyAuth(needAuths) {
     if (!enableAuth) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
-    if (isRoot()) { // 若拥有ROOT角色，则视为有权限
+    if (isRoot()) { // 若为ROOT用户
         return true;
     }
 
@@ -157,7 +146,7 @@ export function hasAllRole(needRoles) {
     if (!enableAuth) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
-    if (isRoot()) { // 若拥有ROOT角色，则视为有权限
+    if (isRoot()) { // 若为ROOT用户
         return true;
     }
 
@@ -183,7 +172,7 @@ export function hasAllAuth(needAuths) {
     if (!enableAuth) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
-    if (isRoot()) { // 若拥有ROOT角色，则视为有权限
+    if (isRoot()) { // 若为ROOT用户
         return true;
     }
 

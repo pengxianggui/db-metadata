@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> @Date : 2021/9/6 </p>
@@ -42,6 +43,7 @@ public class MetaProperties {
         private Boolean showGreeting = true; // 显示问候
         private String loginBg; // 登录背景图
         private String resetPass = "dbmeta";
+        private Map<String, String> root; // ROOT账号配置
     }
 
     @Data

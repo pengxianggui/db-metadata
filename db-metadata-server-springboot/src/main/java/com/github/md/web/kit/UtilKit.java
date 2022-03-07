@@ -7,6 +7,7 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.WebException;
 import com.github.md.web.kit.tree.TreeNode;
+import com.github.md.web.user.Root;
 import com.github.md.web.user.User;
 import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.UserThreadLocal;
@@ -102,7 +103,7 @@ public class UtilKit {
             data.put("created_by", user.userId());
             data.put("created_time", new Date());
         } else {
-            data.put("created_by", AuthenticationManager.staticUser.userId());
+            data.put("created_by", Root.me().userId());
             data.put("created_time", new Date());
         }
     }
@@ -113,7 +114,7 @@ public class UtilKit {
             data.put("updated_by", user.userId());
             data.put("updated_time", new Date());
         } else {
-            data.put("created_by", AuthenticationManager.staticUser.userId());
+            data.put("created_by", Root.me().userId());
             data.put("created_time", new Date());
         }
     }

@@ -1,8 +1,11 @@
 package com.github.md.web.user;
 
 import cn.com.asoco.util.AssertUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
+import com.github.md.web.ServiceManager;
+import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.auth.defaults.AnnotateApiResource;
 import com.github.md.web.user.auth.defaults.ApiResourcePermit;
@@ -14,14 +17,10 @@ import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 认证管理
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 public class AuthenticationManager {
 
     private static final AuthenticationManager me = new AuthenticationManager();
-    public static final String ROOT = "ROOT";
+    public static final String ROOT_USER_ID = "0";
 
     /**
      * 需要注意得是loginUsers得put动作 只能由loginService来做
@@ -114,7 +113,7 @@ public class AuthenticationManager {
         // 此资源需要鉴权，必定需要用户登录
         AssertUtil.isTrue(user != null, new UnLoginException("未认证"));
 
-        if (hasRoot(user)) {
+        if (isRoot(user)) {
             return true; // ROOT权限一切放行
         }
 
@@ -128,26 +127,13 @@ public class AuthenticationManager {
     }
 
     /**
-     * 拥有ROOT角色
+     * 判断是否为ROOT用户
      *
      * @param user
      * @return
      */
-    public boolean hasRoot(User user) {
-        List<String> hasRoles;
-        if (user instanceof UserWithRolesWrapper) {
-            if (((UserWithRolesWrapper) user).roles() == null) {
-                return false;
-            }
-            hasRoles = Arrays.stream(((UserWithRolesWrapper) user).roles()).map(MRRole::code).collect(Collectors.toList());
-        } else {
-            List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
-            if (CollectionUtils.isEmpty(roles)) {
-                return false;
-            }
-            hasRoles = roles.stream().map(MRRole::code).collect(Collectors.toList());
-        }
-        return hasRoles.contains(ROOT);
+    public boolean isRoot(User user) {
+        return user.userId().equals(Root.me().userId());
     }
 
     public UserService userService() {
@@ -166,37 +152,24 @@ public class AuthenticationManager {
         return this.authService;
     }
 
+    /**
+     * 兼容ROOT登录
+     *
+     * @param uid
+     * @param pwd
+     * @return
+     */
+    public UserWithRolesWrapper login(String uid, String pwd) {
+        String loginKey = loginService.loginKey();
+        String pwdKey = loginService.pwdKey();
 
-    public static final User staticUser = new UserWithRolesWrapper() {
-
-        @Override
-        public MRRole[] roles() {
-            return new MRRole[0];
+        Kv rootKv = Root.me().attrs();
+        if (uid.equals(rootKv.get(loginKey)) && pwd.equals(rootKv.get(pwdKey))) { // 优先鉴定ROOT
+            return Root.me();
         }
 
-        @Override
-        public boolean hasRole(String nameOrCode) {
-            return false;
-        }
-
-        @Override
-        public String userId() {
-            return "SYSTEM";
-        }
-
-        @Override
-        public String userName() {
-            return null;
-        }
-
-        @Override
-        public Kv attrs() {
-            return null;
-        }
-
-        @Override
-        public Kv attrs(Map attrs) {
-            return null;
-        }
-    };
+        UserWithRolesWrapper userWithRolesWrapper = loginService.login(uid, pwd);
+        AssertUtil.isTrue(!userWithRolesWrapper.userId().equals(Root.me().userId()), "用户id不允许为'0'");
+        return userWithRolesWrapper;
+    }
 }

@@ -36,7 +36,7 @@ public class LoginController extends ControllerAdapter {
         String uid = parameterHelper().getPara(AuthenticationManager.me().loginService().loginKey());
         String pwd = parameterHelper().getPara(AuthenticationManager.me().loginService().pwdKey());
 
-        UserWithRolesWrapper user = AuthenticationManager.me().loginService().login(uid, pwd);
+        UserWithRolesWrapper user = AuthenticationManager.me().login(uid, pwd);
         if (user != null) {
             AuthenticationManager.me().loginService().setLogged(user);
             // 见AbstractUserService#getUser(request)，暂时取消cookie支持
@@ -89,7 +89,7 @@ public class LoginController extends ControllerAdapter {
     @GetMapping("roles")
     public Ret getRoles() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        List<MRRole> roles = AuthenticationManager.me().hasRoot(user)
+        List<MRRole> roles = AuthenticationManager.me().isRoot(user)
                 ? AuthenticationManager.me().roleService().findAll()
                 : AuthenticationManager.me().roleService().findByUser(user.userId());
 
@@ -101,7 +101,7 @@ public class LoginController extends ControllerAdapter {
     @GetMapping("auths")
     public Ret getAuths() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        List<IAuth> auths = AuthenticationManager.me().hasRoot(user)
+        List<IAuth> auths = AuthenticationManager.me().isRoot(user)
                 ? AuthenticationManager.me().authService().findAll()
                 : AuthenticationManager.me().authService().findByUser(user.userId());
 

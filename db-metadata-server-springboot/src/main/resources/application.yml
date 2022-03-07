@@ -30,6 +30,12 @@ md:
     pass-encrypt-key: DB-Metadata is delicious # 用户密码加密密钥。无论什么方式，入库的明文密码都需要使用此密钥进行加密。加密方式为AES对称加密
     login-bg: # 登录页背景色(如blue、#0000FF)或背景图(地址，会设置到url()中)
     reset-pass: dbmeta # 重置口令, 默认dbmeta
+    # ROOT账号配置。username, 和password是必须的属性，也可以添加其他属性。如果md.server.login.login-key不是username, 比如是phone， 则必须为root配置phone属性。以便确认登录的是ROOT用户。注意: ROOT用户的id固定是"0"
+    # 若登录时 md.server.login.login-key的值和此配置下同名key的值相等，那么优先进行ROOT认证, 密码匹配则视为ROOT, 返回此ROOT对象; 密码若不匹配再去用户数据库进行匹配。
+    root:
+      id: 0 # id为0是判断是用户是ROOT的唯一依据
+      username: ROOT
+      password: 888888
 
   server:
     login: # 认证配置
