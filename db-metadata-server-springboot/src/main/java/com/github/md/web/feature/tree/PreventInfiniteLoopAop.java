@@ -39,7 +39,7 @@ public class PreventInfiniteLoopAop implements UpdatePointCut {
 
             List<TreeNode<String, Record>> treeNodeList = ServiceManager.treeService().treeByHitRecordKeepBranch(metaObject, Lists.newArrayList(record), treeConfig);
             if (treeNodeList != null && !treeNodeList.isEmpty()) {
-                final boolean infiniteLoop = treeNodeList.get(0).all().stream().anyMatch(node -> pidVal.equals(node.getId()));
+                final boolean infiniteLoop = treeNodeList.get(0).all().stream().anyMatch(node -> node.getId().equals(pidVal));
                 if (infiniteLoop) {
                     final String cn = getFieldCn(metaObject, treeConfig);
                     final String msg = String.format("[%s]不允许设置为自身或子节点", cn);
