@@ -1,5 +1,5 @@
 <template>
-    <nav-menu :collapse.sync="collapse" :show-collapse-button="true" v-bind="$attrs">
+    <nav-menu :collapse.sync="collapse" :show-collapse-button="true" v-bind="$attrs" :bg-color="bgColor">
       <!-- 非平台维护菜单 -->
       <template v-for="menu in menus">
         <menu-item :item="menu" :base-path="menu.path"
