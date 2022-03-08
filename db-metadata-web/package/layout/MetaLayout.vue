@@ -1,42 +1,79 @@
 <template>
-  <div class="layout">
-    <meta-header>
-      <template #logo>
-        <slot name="logo"></slot>
-      </template>
-      <template #name>
-        <slot name="name">
-          <!-- 水平则隐藏系统名 -->
-          <span v-if="isHorizontal"></span>
+  <div class="layout" :style="layoutStyle">
+
+    <template v-if="isRow">
+      <meta-menu :menu-conf="this.theme.menu"></meta-menu>
+      <div class="body" :style="bodyStyle">
+        <slot name="header">
+          <meta-header>
+            <template #logo>
+              <slot name="logo"></slot>
+            </template>
+
+            <template #name>
+              <slot name="name"></slot>
+            </template>
+
+            <template #default>
+              <slot></slot>
+            </template>
+
+            <template #side>
+              <slot name="side"></slot>
+            </template>
+
+            <template #profile>
+              <slot name="profile"></slot>
+            </template>
+
+            <template #profile-menu>
+              <slot name="profile-menu"></slot>
+            </template>
+          </meta-header>
         </slot>
-      </template>
-
-      <template #default>
-        <slot></slot>
-        <meta-menu v-if="isHorizontal" :menu-conf="menuConf"></meta-menu>
-      </template>
-
-      <template #side>
-        <slot name="side"></slot>
-      </template>
-
-      <template #profile>
-        <slot name="profile"></slot>
-      </template>
-
-      <template #profile-menu>
-        <slot name="profile-menu"></slot>
-      </template>
-    </meta-header>
-
-    <div class="body">
-      <div class="menu" v-if="!isHorizontal">
-        <meta-menu :menu-conf="menuConf"></meta-menu>
+        <div class="main">
+          <meta-main></meta-main>
+        </div>
       </div>
-      <div class="main">
-        <meta-main></meta-main>
+    </template>
+
+    <template v-else>
+      <slot name="header">
+        <meta-header>
+          <template #logo>
+            <slot name="logo"></slot>
+          </template>
+
+          <template #name>
+            <slot name="name"></slot>
+          </template>
+
+          <template #default>
+            <slot></slot>
+          </template>
+
+          <template #side>
+            <slot name="side"></slot>
+          </template>
+
+          <template #profile>
+            <slot name="profile"></slot>
+          </template>
+
+          <template #profile-menu>
+            <slot name="profile-menu"></slot>
+          </template>
+        </meta-header>
+      </slot>
+
+      <div class="body" :style="bodyStyle">
+        <meta-menu :menu-conf="this.theme.menu"></meta-menu>
+        <div class="main">
+          <meta-main></meta-main>
+        </div>
       </div>
-    </div>
+    </template>
+
   </div>
 </template>
 
@@ -60,18 +97,25 @@ export default {
     MetaMain
   },
   computed: {
-    menuConf() {
-      const {menu: menuConf} = Theme.getTheme()
-      return menuConf
+    theme() {
+      return Theme.getTheme()
     },
-    isHorizontal() {
-      const {mode} = this.menuConf
-      return mode == 'horizontal'
+    isRow() {
+      return this.theme.layout == 'row'
     },
-    headerMenuSlotUsed() {
-      return this.$slots['default']
-          && Array.isArray(this.$slots['default'])
-          && this.$slots['default'].length > 0
+    layoutStyle() {
+      return this.isRow ? {
+        "flex-direction": 'row',
+      } : {
+        "flex-direction": 'column',
+      }
+    },
+    bodyStyle() {
+      return this.isRow ? {
+        "flex-direction": "column",
+      } : {
+        "flex-direction": "row",
+      }
     }
   }
 }
@@ -86,7 +130,6 @@ export default {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
 
   $headerHeight: 60px;
 
@@ -95,14 +138,7 @@ export default {
     padding: 0;
     flex: 1;
     display: flex;
-    flex-direction: row;
     overflow: hidden auto;
-
-    .menu {
-      height: 100%;
-      overflow: auto;
-      position: relative;
-    }
 
     .main {
       flex: 1;

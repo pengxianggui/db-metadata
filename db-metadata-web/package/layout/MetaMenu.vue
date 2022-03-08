@@ -1,13 +1,14 @@
 <template>
-    <nav-menu :collapse.sync="collapse" :show-collapse-button="true" v-bind="menuConf" :bg-color="bgColor">
-      <!-- 非平台维护菜单 -->
+  <div class="menu" :style='{"background-color": bgColor}'>
+    <nav-menu :collapse.sync="collapse"
+              :show-collapse-button="true"
+              v-bind="menuConf">
       <template v-for="menu in menus">
         <menu-item :item="menu" :base-path="menu.path"
-                   :key="menu.loopKey"
-                   :class="{'horizontal': isHorizontal}"
-                   :bg-color="bgColor"></menu-item>
+                   :key="menu.loopKey"></menu-item>
       </template>
     </nav-menu>
+  </div>
 </template>
 
 <script>
@@ -21,7 +22,14 @@ import {hasAuth, hasRole} from "../access";
 
 // 判断是否有指定菜单的权限
 const hasMenuAuth = function (menu) {
-  const { need_permit = true, permit_by = 'auth', auths = [], roles = [], auth_match_mode = 'any', role_match_mode = 'any' } = menu
+  const {
+    need_permit = true,
+    permit_by = 'auth',
+    auths = [],
+    roles = [],
+    auth_match_mode = 'any',
+    role_match_mode = 'any'
+  } = menu
   if (!need_permit) {
     return true
   }
@@ -89,10 +97,6 @@ export default {
     }
   },
   computed: {
-    isHorizontal() {
-      const {menuConf: {mode}} = this
-      return mode == 'horizontal'
-    },
     menus() {
       let menus = []
       const {dynamicMenus} = this
@@ -100,15 +104,16 @@ export default {
       return dealMenus(menus)
     },
     bgColor() {
-      const {$attrs: {backgroundColor}} = this
-      return backgroundColor
+      return this.menuConf.backgroundColor
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-  .horizontal {
-    display: inline-block; // 一级菜单设为此display目的是，防止当为水平菜单时的被迫换行
-  }
+.menu {
+  height: 100%;
+  overflow: hidden auto;
+  position: relative;
+}
 </style>

@@ -7,7 +7,8 @@
     </slot>
     <el-menu :default-active="activeMenu"
              :collapse="nativeCollapse"
-             v-bind="$attrs" id="__DEFAULT_MENU">
+             v-bind="$attrs"
+             id="__DEFAULT_MENU" style="width: 100%">
       <slot></slot>
     </el-menu>
   </div>

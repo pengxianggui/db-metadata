@@ -234,12 +234,10 @@ export default {
         this.toLastView(visitedViews, view)
       })
     },
-    toLastView(visitedViews, view) {
+    toLastView(visitedViews) {
       const latestView = visitedViews.slice(-1)[0]
       if (latestView) {
         this.$router.push(latestView.fullPath)
-      } else {
-        this.$router.push(this.tagConf.outPath)
       }
     },
     openMenu(tag) {

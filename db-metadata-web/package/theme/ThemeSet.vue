@@ -15,8 +15,13 @@
           <h4>整体风格</h4>
           <el-form-item label="布局" prop="layout">
             <radio-box v-model="easyData.layout" :options="layouts" class="hidden-radio">
-              <template #vertical="{option}"><svg-icon :value="option.icon[easyData.color]" :class="{'active': easyData.layout == 'vertical'}"></svg-icon></template>
-              <template #horizontal="{option}"><svg-icon :value="option.icon[easyData.color]" :class="{'active': easyData.layout == 'horizontal'}"></svg-icon></template>
+              <template #column="{option}">
+                <svg-icon :value="option.icon[easyData.color]"
+                          :class="{'active': easyData.layout == 'column'}"></svg-icon>
+              </template>
+              <template #row="{option}">
+                <svg-icon :value="option.icon[easyData.color]" :class="{'active': easyData.layout == 'row'}"></svg-icon>
+              </template>
             </radio-box>
           </el-form-item>
           <el-form-item label="主题" prop="color">
@@ -34,6 +39,7 @@
             <bool-box v-model="themeData.tag.show"></bool-box>
           </el-form-item>
         </el-form>
+        <!-- TODO 高级定制: 可自由定制header颜色、菜单颜色、主题色等 -->
       </div>
     </el-drawer>
   </div>
@@ -48,10 +54,10 @@ import {isEmpty} from "../utils/common";
 export default {
   name: "ThemeSet",
   data() {
-    let easyData = localStorage.getItem(cacheKey.keyInLocal.THEME_OVERVIEW)
+    let easyData = localStorage.getItem(cacheKey.keyInLocal.THEME_OVERVIEW.value)
     if (isEmpty((easyData))) {
       easyData = {
-        layout: 'vertical', // vertical/horizontal
+        layout: 'column', // row/column
         color: 'light' // light/dark
       }
     } else {
@@ -64,18 +70,18 @@ export default {
       layouts: [
         {
           key: '垂直',
-          value: 'vertical',
+          value: 'column',
           icon: {
-            'light': 'light-vertical',
-            'dark': 'dark-vertical'
+            'light': 'light-column-layout',
+            'dark': 'dark-column-layout'
           }
         },
         {
           key: '水平',
-          value: 'horizontal',
+          value: 'row',
           icon: {
-            'light': 'light-horizontal',
-            'dark': 'dark-horizontal'
+            'light': 'light-row-layout',
+            'dark': 'dark-row-layout'
           }
         }
       ],
@@ -97,10 +103,11 @@ export default {
     save() {
       const {themeData, easyData} = this
       const {layout, color} = easyData
-      this.$reverseMerge(themeData, buildInLayouts[layout])
+      this.$reverseMerge(themeData, {layout: layout})
       this.$reverseMerge(themeData, buildColors[color])
+
       Theme.setTheme(themeData)
-      localStorage.setItem(cacheKey.keyInLocal.THEME_OVERVIEW, JSON.stringify(easyData))
+      localStorage.setItem(cacheKey.keyInLocal.THEME_OVERVIEW.value, JSON.stringify(easyData))
 
       this.visible = false
       location.reload()
@@ -113,9 +120,11 @@ export default {
 /deep/ .el-drawer__body {
   background-color: #e0e0e0;
 }
+
 .padding-30 {
   padding: 0 30px;
 }
+
 .hidden-radio {
   /deep/ .el-radio__input {
     display: none;

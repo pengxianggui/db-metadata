@@ -3,6 +3,7 @@ import {isEmpty} from "../utils/common";
 
 // 默认主题数据
 const defaultThemeData = {
+    layout: 'row', // row/column
     header: {
         titleColor: '#409EFF',
         backgroundColor: '#ffffff'
@@ -11,14 +12,12 @@ const defaultThemeData = {
         textColor: '#303133',
         activeTextColor: '#409EFF',
         backgroundColor: '#ffffff',
-        uniqueOpened: false,
-        mode: 'vertical' // horizontal/vertical
+        uniqueOpened: false
     },
     tag: {
         show: true,
         textColor: '#ffffff',
-        backgroundColor: '#409EFF',
-        outPath: '/'
+        backgroundColor: '#409EFF'
     }
 }
 

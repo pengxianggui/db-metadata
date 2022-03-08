@@ -1,6 +1,6 @@
 {
   "name": "meta-element",
-  "version": "0.4.92",
+  "version": "0.4.94",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/meta-element.common.js",
   "keywords": [

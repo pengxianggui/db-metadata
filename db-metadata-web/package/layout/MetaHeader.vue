@@ -5,7 +5,7 @@
     </slot>
 
     <slot name="name">
-      <h2 class="name">{{ appName }}</h2>
+      <h2 class="name">{{ name }}</h2>
     </slot>
 
     <div class="nav">
@@ -13,9 +13,9 @@
     </div>
 
     <div class="dock">
-      <div v-if="showGreeting">欢迎您: {{user.username}}</div>
+      <div v-if="greeting">欢迎您: {{user.username}}</div>
 
-      <theme-set v-if="themeSetting"></theme-set>
+      <theme-set v-if="theme"></theme-set>
 
       <slot name="side"></slot>
 
@@ -42,7 +42,16 @@ import {assertEmpty} from '../utils/common'
 export default {
   name: "MetaHeader",
   props: {
-    title: String
+    appName: String,
+    appLogo: String,
+    showGreeting: {
+      type: Boolean,
+      default: () => true
+    },
+    showThemeSetting: {
+      type: Boolean,
+      default: () => true
+    }
   },
   components: {ThemeSet, UserProfile},
   data() {
@@ -53,21 +62,16 @@ export default {
 
   computed: {
     logo() {
-      const {logo} = appConfig
-      return logo
+      return assertEmpty(this.appLogo, appConfig.logo)
     },
-    appName() {
-      const {name: appName} = appConfig
-      const {title} = this
-      return assertEmpty(title, appName)
+    name() {
+      return assertEmpty(this.appName, appConfig.name)
     },
-    showGreeting() {
-      const {showGreeting = true} = appConfig
-      return showGreeting
+    greeting() {
+      return assertEmpty(this.showGreeting, appConfig.showGreeting)
     },
-    themeSetting() {
-      const {themeSetting = true} = appConfig
-      return themeSetting
+    theme() {
+      return assertEmpty(this.showGreeting, appConfig.showGreeting)
     },
     headerStyle() {
       const {header: {titleColor, backgroundColor} = {}} = Theme.getTheme()

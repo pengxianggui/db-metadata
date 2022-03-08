@@ -1,6 +1,6 @@
 <template>
   <!-- 背景色设置主要是防止层级展开后，div没有背景色，而里面的li有背景色，但div由于宽度大于下一层的li，导致背景色有明显的断层 -->
-  <div :style="{'background-color': bgColor}">
+  <div>
     <template v-if="isLeaf">
       <!-- 只有一个需要展示的子节点，并且该子节点下再没有子节点了 -->
       <app-link :to="resolvePath(item.path)" :disabled="item.disable"
@@ -70,8 +70,7 @@ export default {
     basePath: {
       type: String,
       default: ''
-    },
-    bgColor: String
+    }
   },
   data() {
     return {
