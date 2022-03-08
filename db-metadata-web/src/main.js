@@ -6,8 +6,6 @@ import MetaElement from '../package/index' // 如果将index省略, 则会发生
 import router from './router'
 import {menus} from "./router";
 import axios from './axios'
-import "@/layout";
-import Layout from "@/layout/Layout";
 
 Vue.use(ElementUI, {
     size: 'small'
@@ -17,7 +15,6 @@ Vue.use(MetaElement, {
     // 必要的配置
     axios: axios, // axios实例(必须)
     router: router, // 路由实例(必须)
-    layout: Layout,
     // 以下为非必要配置
     menus: menus, // 编程菜单
     routerInterceptor: { // 路由守卫
