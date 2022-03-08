@@ -48,15 +48,14 @@ function registerRouteData(Vue, opts) {
         routesInLayout.children.push(...metaRoute)
 
         // 组装动态路由
-        assembleDynamicRoute(Vue, axios, Layout).then((dynamicRoutes) => {
-            routesInLayout.children.push(...dynamicRoutes)
+        assembleDynamicRoute(Vue, axios).then((dynamicRoutes) => {
+            routes.push(...dynamicRoutes)
         }).catch(err => {
             console.error('动态路由装配发生错误: ' + err)
         }).finally(() => {
             routes.push(routesInLayout) // 添加在Layout布局下的路由
             routes.push(...systemRoutes) // 添加外层路由(不过Layout)
-            const finalRoutes = dealRoutes(routes);
-            router.addRoutes(finalRoutes)
+            router.addRoutes(dealRoutes(routes))
             // 参见 https://github.com/vuejs/vue-router/issues/1859 通过router.addRoutes添加的路由，router.options.routes中
             // 不会有，这导致了TagView中初始化的一些问题。因此这里的解决办法参考一哥们的: https://www.cnblogs.com/blueroses/p/7767285.html
             // 还存在一些问题，可能重复固定tag

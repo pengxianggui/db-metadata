@@ -3,8 +3,10 @@ package com.github.md.web.user.support.local;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.md.web.user.Root;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.AbstractUserService;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +55,15 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
             AuthenticationManager.me().getLoginUsers().put(user.userId(), user);
         }
         return user;
+    }
+
+    @Override
+    public LocalUser createRoot(Root me) {
+        Map<String, String> attrs = Maps.newHashMap();
+        attrs.put("userId", me.userId());
+        attrs.put("userName", me.userName());
+        attrs.put("password", me.getPassword());
+        return new LocalUser(me.attrs());
     }
 
     @Override

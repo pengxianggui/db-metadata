@@ -8,11 +8,12 @@
         </div>
         <!--快捷菜单-->
         <el-dropdown-menu slot="dropdown">
+          <slot></slot>
           <el-dropdown-item @click.native="init" v-any-auths="['api:app-init']">
             <svg-icon value="reset"></svg-icon>
             <span>系统重置</span>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="logout">
+          <el-dropdown-item @click.native="logout" v-if="enableLogin">
             <svg-icon value="logout"></svg-icon>
             <span>登出</span>
           </el-dropdown-item>
@@ -26,6 +27,7 @@
 import {access, clearUser} from "../../access";
 import {isEmpty, randomInt} from "../../utils/common";
 import {restUrl, routeUrl} from '../../constant/url'
+import {appConfig} from '../../config'
 
 export default {
   name: "UserProfile",
@@ -68,6 +70,9 @@ export default {
       if (isEmpty(sex) || isEmpty(age)) {
         return 'monster' + randomInt(1, 2)
       }
+    },
+    enableLogin() {
+      return appConfig.enableLogin
     }
   }
 }

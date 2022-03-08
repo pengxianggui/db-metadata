@@ -1,12 +1,37 @@
 <template>
   <div class="layout">
     <meta-header>
-      <meta-menu v-if="horizontal" v-bind="menuConf"></meta-menu>
-      <slot></slot>
+      <template #logo>
+        <slot name="logo"></slot>
+      </template>
+      <template #name>
+        <slot name="name">
+          <!-- 水平则隐藏系统名 -->
+          <span v-if="isHorizontal"></span>
+        </slot>
+      </template>
+
+      <template #default>
+        <slot></slot>
+        <meta-menu v-if="isHorizontal" :menu-conf="menuConf"></meta-menu>
+      </template>
+
+      <template #side>
+        <slot name="side"></slot>
+      </template>
+
+      <template #profile>
+        <slot name="profile"></slot>
+      </template>
+
+      <template #profile-menu>
+        <slot name="profile-menu"></slot>
+      </template>
     </meta-header>
+
     <div class="body">
-      <div class="menu" v-if="!horizontal">
-        <meta-menu v-bind="menuConf"></meta-menu>
+      <div class="menu" v-if="!isHorizontal">
+        <meta-menu :menu-conf="menuConf"></meta-menu>
       </div>
       <div class="main">
         <meta-main></meta-main>
@@ -23,19 +48,30 @@ import MetaMain from "./MetaMain";
 
 export default {
   name: "MetaLayout",
+  meta: {
+    isLayout: true,
+    cn: 'Admin布局',
+    icon: 'admin-layout',
+    buildIn: true // 内建：DbMeta提供
+  },
   components: {
     MetaHeader,
     MetaMenu,
     MetaMain
   },
   computed: {
-    horizontal() {
-      const {mode} = this.menuConf
-      return mode == 'horizontal'
-    },
     menuConf() {
       const {menu: menuConf} = Theme.getTheme()
       return menuConf
+    },
+    isHorizontal() {
+      const {mode} = this.menuConf
+      return mode == 'horizontal'
+    },
+    headerMenuSlotUsed() {
+      return this.$slots['default']
+          && Array.isArray(this.$slots['default'])
+          && this.$slots['default'].length > 0
     }
   }
 }
@@ -53,16 +89,6 @@ export default {
   flex-direction: column;
 
   $headerHeight: 60px;
-
-  .header {
-    height: $headerHeight;
-    line-height: $headerHeight;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: #409EFF;
-  }
 
   .body {
     margin: 0;

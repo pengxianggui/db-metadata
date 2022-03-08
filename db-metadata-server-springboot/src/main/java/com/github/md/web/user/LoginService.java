@@ -1,5 +1,6 @@
 package com.github.md.web.user;
 
+import com.github.md.web.ServiceManager;
 import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 
@@ -19,7 +20,9 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @return
      */
-    String tokenKey();
+    default String tokenKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getTokenKey();
+    }
 
     /**
      * 从cookie中获取用户标志时需要用到的key
@@ -27,7 +30,9 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @return
      */
     @Deprecated
-    String cookieKey();
+    default String cookieKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getCookieKey();
+    }
 
     /**
      * 登录时 获取用户名的key
@@ -35,14 +40,18 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @return
      */
-    String loginKey();
+    default String loginKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getLoginKey();
+    }
 
     /**
      * 登录时 获取密码的key
      *
      * @return
      */
-    String pwdKey();
+    default String pwdKey() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
+    }
 
     /**
      * 从请求中构建用户，只能获取已登录的用户。
@@ -69,7 +78,7 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @param attr
      */
     default boolean register(String username, String password, Map attr) {
-        throw new OprNotSupportException("不支持注册！");
+        throw new OprNotSupportException("请实现注册方法！");
     }
 
     /**
@@ -105,4 +114,12 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @return
      */
     boolean isExpired(U user);
+
+    /**
+     * 创建静态的ROOT用户
+     *
+     * @param me
+     * @return
+     */
+    U createRoot(Root me);
 }

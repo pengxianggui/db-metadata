@@ -1,6 +1,8 @@
 package com.github.md.web.user.support.defaults;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONValidator;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.User;
@@ -26,6 +28,7 @@ public class DefaultUser implements User {
         Map attrMap;
         try {
             attrMap = JSONObject.parseObject(JSONObject.toJSONString(attrs));
+            if (attrMap == null) attrMap = new HashMap();
         } catch (Exception e) {
             attrMap = new HashMap();
         }

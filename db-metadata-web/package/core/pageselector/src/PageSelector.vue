@@ -33,16 +33,16 @@ export default {
   created() {
     let components = Vue.options.components;
     this.options = Object.values(components).filter(c => {
-      const {extendOptions: {meta: {isPage = false, isTemplate = false} = {}}} = c
-      return isPage || isTemplate
+      const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
+      return isPage || isTemplate || isLayout
     }).map(c => {
-      const {extendOptions: {meta: {cn, isTemplate, buildIn, icon} = {}, name: value}} = c
+      const {extendOptions: {meta: {cn, isTemplate = false, isLayout = false, isPage = false, buildIn, icon} = {}, name: value}} = c
       return {
         key: cn,
         value: value,
         isTemplate: isTemplate,
         buildIn: buildIn,
-        group: isTemplate ? '模板' : '页面',
+        group: isTemplate ? '模板' : (isLayout ? '布局' : '页面'),
         icon: icon
       }
     });

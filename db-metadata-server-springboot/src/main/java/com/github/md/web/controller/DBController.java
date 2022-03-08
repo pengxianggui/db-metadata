@@ -74,24 +74,7 @@ public class DBController extends ControllerAdapter {
 
         Components.me().init(); // 初始化组件(包括组件配置)
 
-        String mainDB = quickJudge().mainDbStr();
-        List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge().mainDbStr())
-                // 过滤出系统表
-                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
-
-        for (Table t : sysTables) {
-            log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
-            IMetaObject metaObject = metaService().importFromTable(mainDB, t.getTableName());
-            metaService().saveMetaObject(metaObject, true);
-            metaObject = metaService().findByCode(t.getTableName());
-
-            // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
-            for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
-                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
-                // 初始化实例配置
-                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
-            }
-        }
+        InitKit.me().initSysMeta(); // 初始化系统元数据
 
         // 根据固定文件(defaultObject.json)更新元对象/元字段配置
         InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
@@ -106,7 +89,9 @@ public class DBController extends ControllerAdapter {
      *
      * @return
      */
-    private Ret truncate() {
+    @MetaAccess(value = Type.API)
+    @GetMapping("truncate")
+    public Ret truncate() {
         preConditionCheck();
 
         StringBuilder sb = new StringBuilder();

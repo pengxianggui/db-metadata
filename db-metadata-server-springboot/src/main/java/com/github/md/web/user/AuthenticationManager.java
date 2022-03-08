@@ -1,17 +1,13 @@
 package com.github.md.web.user;
 
 import cn.com.asoco.util.AssertUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.web.ServiceManager;
-import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.auth.defaults.AnnotateApiResource;
 import com.github.md.web.user.auth.defaults.ApiResourcePermit;
 import com.github.md.web.user.auth.defaults.AuthorizePermit;
 import com.github.md.web.user.auth.defaults.MetaApiResource;
-import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.cache.Cache;
@@ -32,7 +28,6 @@ import java.util.Map;
 public class AuthenticationManager {
 
     private static final AuthenticationManager me = new AuthenticationManager();
-    public static final String ROOT_USER_ID = "0";
 
     /**
      * 需要注意得是loginUsers得put动作 只能由loginService来做
@@ -164,12 +159,17 @@ public class AuthenticationManager {
         String pwdKey = loginService.pwdKey();
 
         Kv rootKv = Root.me().attrs();
+
+        UserWithRolesWrapper userWithRolesWrapper;
         if (uid.equals(rootKv.get(loginKey)) && pwd.equals(rootKv.get(pwdKey))) { // 优先鉴定ROOT
-            return Root.me();
+            userWithRolesWrapper = loginService.createRoot(Root.me());
+        } else {
+            userWithRolesWrapper = loginService.login(uid, pwd);
         }
 
-        UserWithRolesWrapper userWithRolesWrapper = loginService.login(uid, pwd);
-        AssertUtil.isTrue(!userWithRolesWrapper.userId().equals(Root.me().userId()), "用户id不允许为'0'");
+        if (userWithRolesWrapper == null) return null;
+
+        AssertUtil.isTrue(loginService.setLogged(userWithRolesWrapper), "登录失败, 无法保持登录状态");
         return userWithRolesWrapper;
     }
 }

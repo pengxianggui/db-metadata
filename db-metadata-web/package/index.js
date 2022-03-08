@@ -1,12 +1,13 @@
 import utils from './utils'
 import * as Rest from './utils/rest'
-import filters from './register/filter'
-import directives from "./register/directive";
+import configUrl from './constant/url'
+import configFilters from './register/filter'
+import configDirectives from './register/directive'
 import registerGlobalFunction from './register/global-function'
 import './asserts/svg/index' // 内置svg注册
 // 布局组件
 import Layout from "./layout";
-import {MetaMenu, MetaHeader, MetaLayout, MetaMain} from './layout'
+import {MetaHeader, MetaLayout} from './layout'
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -58,7 +59,7 @@ import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import {restUrl, routeUrl} from './constant/url'
 import {access} from "./access";
-import user from './access'
+import User from './access'
 // 内置业务组件
 import {UserList, RoleList} from '@/../package/meta/rbac'
 // 全局页面
@@ -139,10 +140,8 @@ const components = [
 const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
-    // 自定义rest接口url覆盖: 优先级最高
-    if (opts.restUrl) {
-        utils.reverseMerge(restUrl, opts.restUrl, false);
-    }
+    // 自定义url(接口url和路由url)覆盖: 优先级最高
+    configUrl(opts)
 
     // 注册全局函数: 最优先。会配置axios，这是后面都可能需要的
     registerGlobalFunction(Vue, opts)
@@ -151,9 +150,9 @@ const install = function (Vue, opts = {}) {
     configApp(Vue, opts)
 
     // 注册全局过滤器
-    Object.keys(filters).map(key => Vue.filter(key, filters[key]))
+    configFilters(Vue)
     // 注册全局自定义指令
-    Object.keys(directives).map(key => Vue.directive(key, directives[key]))
+    configDirectives(Vue)
 
     // 静态角色配置
     if (opts.access) {
@@ -189,10 +188,8 @@ export {
     Rest,
     routeUrl,
     restUrl,
-    user,
+    User,
 
-    MetaLayout,
     MetaHeader,
-    MetaMenu,
-    MetaMain
+    MetaLayout
 }

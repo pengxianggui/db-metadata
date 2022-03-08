@@ -1,3 +1,6 @@
+import utils from "../utils";
+import {isEmpty} from "../utils/common";
+
 export const routeUrl = {
     baseURL: '/meta',
     R_GOBAL_CONF_ADD: '/global-conf',
@@ -65,3 +68,14 @@ export const restUrl = {
     LOGOUT_URL: '/user/logout', // 登出接口地址
     LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
 };
+
+export default function (opts = {}) {
+    const {restUrl: url1, routeUrl: url2} = opts
+
+    if (!isEmpty(url1)) {
+        utils.reverseMerge(restUrl, url1, false);
+    }
+    if (!isEmpty(url2)) {
+        utils.reverseMerge(routeUrl, url2, false)
+    }
+}

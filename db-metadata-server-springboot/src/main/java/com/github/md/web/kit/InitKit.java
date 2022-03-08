@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.config.QuickJudge;
 import com.github.md.web.ui.MetaFieldViewAdapter;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
@@ -278,6 +281,31 @@ public class InitKit {
 
         return jsonInstanceConfig.getJSONObject(code).keySet().stream()
                 .map(type -> ComponentType.V(type)).collect(Collectors.toList());
+    }
+
+    /**
+     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultObject.json、defaultInstance.json
+     */
+    public void initSysMeta() {
+        QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);
+        String mainDB = quickJudge.mainDbStr();
+        List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge.mainDbStr())
+                // 过滤出系统表
+                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
+
+        for (Table t : sysTables) {
+            log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
+            IMetaObject metaObject = ServiceManager.metaService().importFromTable(mainDB, t.getTableName());
+            ServiceManager.metaService().saveMetaObject(metaObject, true);
+            metaObject = ServiceManager.metaService().findByCode(t.getTableName());
+
+            // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
+            for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
+                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+                // 初始化实例配置
+                ServiceManager.componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+            }
+        }
     }
 }
 

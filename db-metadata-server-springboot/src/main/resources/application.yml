@@ -32,6 +32,7 @@ md:
     reset-pass: dbmeta # 重置口令, 默认dbmeta
     # ROOT账号配置。username, 和password是必须的属性，也可以添加其他属性。如果md.server.login.login-key不是username, 比如是phone， 则必须为root配置phone属性。以便确认登录的是ROOT用户。注意: ROOT用户的id固定是"0"
     # 若登录时 md.server.login.login-key的值和此配置下同名key的值相等，那么优先进行ROOT认证, 密码匹配则视为ROOT, 返回此ROOT对象; 密码若不匹配再去用户数据库进行匹配。
+    
     root:
       id: 0 # id为0是判断是用户是ROOT的唯一依据
       username: ROOT
@@ -67,9 +68,9 @@ md:
       base-upload-path: /opt/www/db-meta-serve # 当mode为本地时，配置的本地上传根路径
     event-enabled: true
     component:
-      replace-from-json-file: false # 是否开启每次启动时从json文件(defaultInstance.json)中推导组件实例配置，并覆盖数据库
+      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultInstance.json)中推导组件实例配置，并覆盖数据库
     meta-object:
-      replace-from-json-file: false # 是否开启每次启动时从json文件(defaultObject.json)中推导元对象逻辑配置，并覆盖数据库
+      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultObject.json)中推导元对象逻辑配置，并覆盖数据库
 
   analysis:
     extension:

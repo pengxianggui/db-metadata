@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {MetaLayout} from '@/../package/index'
 
 Vue.use(Router);
 
@@ -38,7 +37,7 @@ export const menus = [
 export const routes = [
     {
         path: "/",
-        component: MetaLayout,
+        component: () => import('@/layout/Layout'),
         redirect: '/dashboard',
         children: [
             {

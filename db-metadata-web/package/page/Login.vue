@@ -16,6 +16,11 @@ import {isEmpty} from "../utils/common";
 
 export default {
   name: "Login",
+  meta: {
+    isPage: true,
+    cn: '登录页面',
+    buildIn: true // 内建：DbMeta提供
+  },
   data() {
     const {loginBg} = appConfig
     let style = {}

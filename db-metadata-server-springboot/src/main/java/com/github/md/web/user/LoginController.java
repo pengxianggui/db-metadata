@@ -5,6 +5,7 @@ import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.user.auth.IAuth;
+import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import io.swagger.annotations.ApiOperation;
@@ -38,12 +39,6 @@ public class LoginController extends ControllerAdapter {
 
         UserWithRolesWrapper user = AuthenticationManager.me().login(uid, pwd);
         if (user != null) {
-            AuthenticationManager.me().loginService().setLogged(user);
-            // 见AbstractUserService#getUser(request)，暂时取消cookie支持
-//            Cookie cookie = new Cookie(AuthenticationManager.me().loginService().cookieKey(), user.userId());
-//            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
-//            response.addCookie(cookie);
-
             LoginVO vo = new LoginVO(
                     user.userId(), // TODO token生成并塞入
                     user.userId(),
@@ -85,7 +80,7 @@ public class LoginController extends ControllerAdapter {
     }
 
     @ApiOperation("获取当前登录用户拥有的角色")
-    @Authorize(justSign = true)
+    @MetaAccess
     @GetMapping("roles")
     public Ret getRoles() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());

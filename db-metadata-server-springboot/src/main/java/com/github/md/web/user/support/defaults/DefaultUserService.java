@@ -4,6 +4,7 @@ import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.AbstractUserService;
 import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.Root;
 import com.github.md.web.user.User;
 import com.github.md.web.user.role.DefaultUserWithRoles;
 import com.github.md.web.user.role.MRRole;
@@ -80,5 +81,10 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
         List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
         MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
         return new DefaultUserWithRoles(user, roleArr);
+    }
+
+    @Override
+    public DefaultUserWithRoles createRoot(Root root) {
+        return new DefaultUserWithRoles(root);
     }
 }

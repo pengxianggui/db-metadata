@@ -4,7 +4,7 @@ import {hasAuth, hasRole, hasAllAuth, hasAllRole, hasAnyAuth, hasAnyRole, isRoot
 import * as TagViewUtil from "../layout/tagview/tag-method";
 
 export default function (Vue, opts) {
-    Vue.prototype.$axios = configAxios(opts.router, opts.axios)
+    Vue.prototype.$axios = configAxios(opts)
 
     Vue.prototype.$merge = utils.merge
     Vue.prototype.$reverseMerge = utils.reverseMerge

@@ -19,7 +19,8 @@ export default {
       if (direction == 'row') {
         return {
           'display': 'flex',
-          'flex-direction': 'row'
+          'flex-direction': 'row',
+          'align-items': 'center'
         }
       } else {
         return {
@@ -36,11 +37,9 @@ export default {
 ul#menu {
   list-style: none;
   margin: 0;
-  padding: 5px;
-  justify-content: space-evenly;
+  padding: 0px;
 
   li {
-    flex: 1;
     text-align: center;
   }
 }

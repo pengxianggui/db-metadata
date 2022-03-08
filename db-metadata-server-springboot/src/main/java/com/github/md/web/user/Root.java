@@ -7,6 +7,8 @@ import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
+import com.google.common.collect.Maps;
+import lombok.Getter;
 
 import java.util.Map;
 
@@ -19,18 +21,29 @@ import java.util.Map;
 public class Root implements UserWithRolesWrapper {
     private static Root instance;
 
-    private String id;
-    private String username;
-    private String password;
-    private Map<String, String> attrs;
+    private String id = "0";
+    private String username = "ROOT";
+    @Getter
+    private String password = "888888";
+    private Map<String, String> attrs = Maps.newHashMap();
 
     private Root() {
         MetaProperties metaProp = ServiceManager.getAppProperties();
         Map<String, String> root = metaProp.getApp().getRoot();
-        this.id = root.get("id");
-        this.username = root.get("username");
-        this.password = root.get("password");
-        this.attrs = root;
+        if (root != null) {
+            if (root.containsKey("id"))
+                this.id = root.get("id");
+            if (root.containsKey("username"))
+                this.username = root.get("username");
+            if (root.containsKey("password"))
+                this.password = root.get("password");
+
+            this.attrs = root;
+        }
+
+        this.attrs.put("id", id);
+        this.attrs.put("username", username);
+        this.attrs.put("password", password);
     }
 
     public static Root me() {

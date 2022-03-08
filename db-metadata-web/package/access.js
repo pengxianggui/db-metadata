@@ -241,6 +241,10 @@ export function setUser({id = '', username = '', phone, roles = [], auths = []})
     setAuths(auths)
 }
 
+export function getUser() {
+    return access.user
+}
+
 export function getRoles() {
     return access.user.roles
 }
@@ -264,7 +268,9 @@ export default {
     hasAllRole,
     hasAnyAuth,
     hasAllAuth,
-    getRoles,
-    getAuths,
-    setUser
+    setUser,
+    getUser,
+    clearUser,
+    setToken,
+    getToken
 }

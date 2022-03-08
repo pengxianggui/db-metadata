@@ -1,6 +1,5 @@
 package com.github.md.web;
-
-import cn.com.asoco.exception.UserInVisibleException;
+import cn.com.asoco.exception.UserVisibleException;
 import lombok.Getter;
 
 /**
@@ -14,7 +13,7 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 @Getter
-public class WebException extends UserInVisibleException {
+public class WebException extends UserVisibleException {
 
     public WebException(String message) {
         super(message, 500);

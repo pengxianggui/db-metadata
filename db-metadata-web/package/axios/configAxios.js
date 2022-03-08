@@ -2,7 +2,7 @@
  * 为axios扩展safeGet和safePost方法
  * @param axios
  */
-import {isEmpty} from "../utils/common";
+import {isEmpty, assertEmpty} from "../utils/common";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
 import {routeUrl} from "../constant/url";
@@ -28,10 +28,11 @@ const configInterceptor = function (router, axios) {
 
     // 响应拦截器
     axios.interceptors.response.use(res => {
-        const {state, msg: message, code} = res.data
-        if (state !== 'ok') {
+        const {state, msg, message, code} = res.data
+
+        if (state !== 'ok' && code != 0) {
             Message({
-                message: message,
+                message: assertEmpty(msg, message),
                 type: "error"
             })
 
@@ -48,15 +49,18 @@ const configInterceptor = function (router, axios) {
         return Promise.resolve(res.data);
     }, err => {
         console.error("[ERROR] ", err);
+        const {msg, message} = err
         Message({
-            message: err.message,
+            message: assertEmpty(msg, message),
             type: "error"
         })
         return Promise.reject(err)
     });
 }
 
-export default function (router, axios) {
+export default function (opts) {
+    const {router, axios, axiosInterceptor: {enable = true} = {}} = opts
+
     if (isEmpty(axios)) {
         console.error('[MetaElement] 必须配置axios!请实例化axios并配置')
         return
@@ -100,6 +104,8 @@ export default function (router, axios) {
         return axios.post(compileUrl, data, config);
     }
 
-    configInterceptor(router, axios)
+    if (enable) {
+        configInterceptor(router, axios)
+    }
     return axios
 }

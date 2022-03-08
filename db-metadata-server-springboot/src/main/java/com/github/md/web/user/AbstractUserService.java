@@ -1,6 +1,5 @@
 package com.github.md.web.user;
 
-import com.github.md.web.ServiceManager;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.jfinal.kit.StrKit;
 
@@ -57,25 +56,5 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
     @Override
     public boolean isExpired(UR user) {
         return !logged(user);
-    }
-
-    @Override
-    public String tokenKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getTokenKey();
-    }
-
-    @Override
-    public String cookieKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getCookieKey();
-    }
-
-    @Override
-    public String loginKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getLoginKey();
-    }
-
-    @Override
-    public String pwdKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
     }
 }

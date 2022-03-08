@@ -3,6 +3,7 @@ package com.github.md.web.config;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.aop.PointCutChain;
+import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
@@ -39,6 +40,7 @@ public class MetaBootstrap {
     private void startInit() {
         stepList.add(new StaticDictInitStep());
         stepList.add(new ComponentInitStep());
+        stepList.add(new MetaDataInit());
         stepList.add(new MetaObjectAndInstanceInitStep());
         stepList.add(new ExtensionInitStep());
         stepList.add(new EventInitStep());
@@ -106,7 +108,10 @@ public class MetaBootstrap {
         @Override
         public void init() {
             if (metaProperties.getServer().getMetaObject().isReplaceFromJsonFile()) {
-                InitKit.me().updateMetaObjectConfig().updateInstanceConfig();
+                InitKit.me().updateMetaObjectConfig().updateInstanceConfigByMetaObject();
+            }
+            if (metaProperties.getServer().getComponent().isReplaceFromJsonFile()) {
+                InitKit.me().updateInstanceConfig();
             }
         }
     }
@@ -116,6 +121,25 @@ public class MetaBootstrap {
         @Override
         public void init() {
             Dicts.me().init();
+        }
+    }
+
+    /**
+     * 元数据初始化
+     */
+    class MetaDataInit implements InitStep {
+
+        @Override
+        public void init() {
+            int size = ServiceManager.metaService().findAll().size();
+            if (size == 0) { // 尚未初始化
+                InitKit.me().initSysMeta(); // 初始化系统元数据
+
+                // 根据固定文件(defaultObject.json)更新元对象/元字段配置
+                InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
+                        .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
+                        .updateInstanceConfig();            // 最后，依据defaultInstance.json覆盖已入库的UI实例配置
+            }
         }
     }
 }

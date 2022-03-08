@@ -40,8 +40,7 @@
         <menu-item :key="subMenu.loopKey"
                    :is-nest="true"
                    :item="subMenu"
-                   :base-path="resolvePath(subMenu.path)"
-                   v-menu-auth="subMenu">
+                   :base-path="resolvePath(subMenu.path)">
         </menu-item>
       </template>
     </el-submenu>

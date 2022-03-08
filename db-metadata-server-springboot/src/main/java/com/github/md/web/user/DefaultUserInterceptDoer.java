@@ -1,5 +1,6 @@
 package com.github.md.web.user;
 
+import com.github.md.web.user.role.UserWithRolesWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
 
     @Override
     public boolean preCertify(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        User user = getUser(request);
+        UserWithRolesWrapper user = getUser(request);
 
         if (user == null) {
             user = ifNullUser(); // 补偿，有时希望无用户时默认提供给一个匿名用户
@@ -38,12 +39,12 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
      *
      * @return
      */
-    public User ifNullUser() {
+    public UserWithRolesWrapper ifNullUser() {
         return null;
     }
 
-    protected User getUser(HttpServletRequest request) {
-        User user;
+    protected UserWithRolesWrapper getUser(HttpServletRequest request) {
+        UserWithRolesWrapper user;
         try {
             user = AuthenticationManager.me().getUser(request);
         } catch (Exception e) {
