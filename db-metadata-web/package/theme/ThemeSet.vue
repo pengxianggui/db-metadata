@@ -83,6 +83,18 @@
               </el-form-item>
             </template>
           </row-grid>
+          <row-grid>
+            <template #0>
+              <el-form-item label="选中项文字色" prop="activeTextColor">
+                <el-color-picker v-model="themeData.tag.activeTextColor"></el-color-picker>
+              </el-form-item>
+            </template>
+            <template #1>
+              <el-form-item label="选中项背景色" prop="activeBackgroundColor">
+                <el-color-picker v-model="themeData.tag.activeBackgroundColor"></el-color-picker>
+              </el-form-item>
+            </template>
+          </row-grid>
         </el-form>
       </div>
 

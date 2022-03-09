@@ -9,7 +9,7 @@ const defaultThemeData = {
     themeColor: 'light',
     header: {
         textColor: '#409EFF',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
     },
     menu: {
         textColor: '#303133',
@@ -19,8 +19,10 @@ const defaultThemeData = {
     },
     tag: {
         show: true,
-        textColor: '#ffffff',
-        backgroundColor: '#409EFF'
+        textColor: '#818080',
+        backgroundColor: '#f8f8f8',
+        activeTextColor: '#ffffff',
+        activeBackgroundColor: '#409EFF'
     }
 }
 
@@ -38,17 +40,31 @@ const buildColors = {
             textColor: '#303133',
             activeTextColor: '#409EFF',
             backgroundColor: '#ffffff'
+        },
+        tag: {
+            show: true,
+            textColor: '#818080',
+            backgroundColor: '#f8f8f8',
+            activeTextColor: '#ffffff',
+            activeBackgroundColor: '#409EFF'
         }
     },
     dark: {
         header: {
             titleColor: '#409EFF',
-            backgroundColor: '#001528'
+            backgroundColor: '#2d3032'
         },
         menu: {
             textColor: '#ceced0',
             activeTextColor: '#409EFF',
-            backgroundColor: '#001528'
+            backgroundColor: '#2d3032'
+        },
+        tag: {
+            show: true,
+            textColor: '#818080',
+            backgroundColor: '#f8f8f8',
+            activeTextColor: '#ffffff',
+            activeBackgroundColor: '#409EFF'
         }
     }
 }
@@ -78,7 +94,7 @@ export const layoutOptions = [
  */
 const setTheme = function (data) {
     const {freeMode} = data
-    if (!freeMode) { // 则由themeColor推导的具体配置覆盖
+    if (!freeMode) { // 简单模式: 则由themeColor推导的具体配置覆盖
         reverseMerge(data, buildColors[data.themeColor])
     }
     localStorage.setItem(cacheKey.keyInLocal.THEME_DATA_KEY.value, JSON.stringify(data))

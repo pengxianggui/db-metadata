@@ -115,5 +115,6 @@ export default {
   height: 100%;
   overflow: hidden auto;
   position: relative;
+  border-right: 1px solid #ceced0;
 }
 </style>

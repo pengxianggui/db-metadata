@@ -37,6 +37,8 @@ export default {
     //         show: true,
     //         textColor: '#ffffff',
     //         backgroundColor: '#409EFF'
+    //         activeTextColor: '#ffffff',
+    //         activeBackgroundColor: '#409EFF'
     //     }
     // }
 }

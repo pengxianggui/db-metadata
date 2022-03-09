@@ -79,9 +79,11 @@ export default {
       return headerConf
     },
     headerStyle() { // FIXME: 随着主题设置, headerConf实时响应了, 但是headerStyle却并未跟着变动。有意思的是 TagView中是一样的却可以实现实时预览
+      const {themeConf: {textColor, backgroundColor} = {}} = this
+      const {headerConf: {textColorDef, backgroundColorDef}} = this
       return {
-        'color': this.headerConf.textColor,
-        'background-color': this.headerConf.backgroundColor
+        'color': assertEmpty(textColor, textColorDef),
+        'background-color': assertEmpty(backgroundColor, backgroundColorDef)
       }
     }
   }
@@ -98,6 +100,8 @@ $headerHeight: 60px;
   align-items: center;
   color: #409EFF;
   background-color: #001529;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
+  z-index: 999;
 
   .logo {
     font-size: 50px;

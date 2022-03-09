@@ -88,7 +88,16 @@ export default {
     }
 
     .el-scrollbar__wrap {
-      height: 80px;
+      // 隐藏横向滚动条
+      // IE10+
+      -ms-overflow-style: none;
+      // FireFox
+      overflow: -moz-scrollbars-none;
+      &::-webkit-scrollbar {
+        display: none;
+        //width: 0 !important;
+        //height: 0 !important;
+      }
     }
   }
 }

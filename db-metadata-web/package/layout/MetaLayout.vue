@@ -5,7 +5,7 @@
       <meta-menu :theme-conf="menuConf"></meta-menu>
       <div class="body" :style="bodyStyle">
         <slot name="header">
-          <meta-header>
+          <meta-header :theme-conf="headerConf">
             <template #logo>
               <slot name="logo"></slot>
             </template>
@@ -39,7 +39,7 @@
 
     <template v-else>
       <slot name="header">
-        <meta-header>
+        <meta-header :theme-conf="headerConf">
           <template #logo>
             <slot name="logo"></slot>
           </template>
@@ -102,6 +102,9 @@ export default {
     },
     isRow() {
       return this.theme.layout === 'row'
+    },
+    headerConf() {
+      return this.theme.header
     },
     menuConf() {
       return this.theme.menu

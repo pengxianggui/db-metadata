@@ -1,8 +1,8 @@
 <template>
-  <scroll-pane id="tags-view-container" ref="scrollPane" v-if="tagConf.show">
+  <scroll-pane id="tags-view-container" ref="scrollPane" :style="tagBarStyle" v-if="tagConf.show">
     <template v-for="(tag, index) in visitedViews">
       <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
-                :style="isActive(tag) ? tagStyle : {}">
+                :style="isActive(tag) ? activeTagStyle : {}">
         <template #label>
           <router-link
               ref="tag"
@@ -84,12 +84,18 @@ export default {
       const {tag: tagConf} = Theme.getTheme()
       return tagConf
     },
-    tagStyle() {
+    activeTagStyle() {
+      const {tagConf: {activeTextColor, activeBackgroundColor}} = this
+      return {
+        'color': activeTextColor,
+        'background-color': activeBackgroundColor
+      }
+    },
+    tagBarStyle() {
       const {tagConf: {textColor, backgroundColor}} = this
       return {
         'color': textColor,
-        'background-color': backgroundColor,
-        'border-color': backgroundColor
+        'background-color': backgroundColor
       }
     },
     currentRouteEditable() {
@@ -257,29 +263,50 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 13px 10px;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-$tagBarHeight: 38px;
+$tagBarHeight: 40px;
 #tags-view-container {
+  z-index: 99;
   height: $tagBarHeight;
+  box-sizing: border-box;
   width: 100%;
-  background: #ffffff;
-  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  background-color: #f8f8f8;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
+  border-bottom: 1px solid #d8dce5;
 
-  $tagHeight: $tagBarHeight - 8;
+  //white-space: nowrap;
+  //overflow-x: auto;
+  //overflow-y: hidden;
+  //
+  //// 隐藏横向滚动条
+  //// IE10+
+  //-ms-overflow-style: none;
+  //// FireFox
+  //overflow: -moz-scrollbars-none;
+  //&::-webkit-scrollbar {
+  //  display: none;
+  //  //width: 0 !important;
+  //  //height: 0 !important;
+  //}
+
+  $tagHeight: $tagBarHeight;
 
   .tags-view-item {
     display: inline-block;
     position: relative;
     cursor: pointer;
     height: $tagHeight;
+    box-sizing: border-box;
     line-height: $tagHeight;
-    border: 1px solid #d8dce5;
+    border-right: 1px solid #d8dce5;
     font-size: 12px;
-    margin: 4px 2px;
+    //margin: 4px 2px;
+    margin: 0px;
 
     .router-link {
       display: block;
@@ -287,11 +314,11 @@ $tagBarHeight: 38px;
     }
 
     &:first-of-type {
-      margin-left: 5px;
+      //margin-left: 5px;
     }
 
     &:last-of-type {
-      margin-right: 5px;
+      //margin-right: 5px;
     }
   }
 }
