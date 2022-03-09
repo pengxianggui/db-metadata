@@ -2,7 +2,7 @@
   <div class="menu" :style='{"background-color": bgColor}'>
     <nav-menu :collapse.sync="collapse"
               :show-collapse-button="true"
-              v-bind="menuConf">
+              v-bind="themeConf">
       <template v-for="menu in menus">
         <menu-item :item="menu" :base-path="menu.path"
                    :key="menu.loopKey"></menu-item>
@@ -71,7 +71,7 @@ export default {
   name: "MetaMenu",
   components: {NavMenu, MenuItem},
   props: {
-    menuConf: Object
+    themeConf: Object
   },
   data() {
     let collapse = localStorage.getItem(Cache.keyInLocal.MENU_COLLAPSE_KEY.value);
@@ -104,7 +104,7 @@ export default {
       return dealMenus(menus)
     },
     bgColor() {
-      return this.menuConf.backgroundColor
+      return this.themeConf.backgroundColor
     }
   }
 }

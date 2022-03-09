@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :style="headerStyle" v-bind="$attrs">
+  <div class="header" :style="headerStyle">
     <slot name="logo">
       <svg-icon :value="logo" class="logo" v-if="logo"></svg-icon>
     </slot>
@@ -13,9 +13,9 @@
     </div>
 
     <div class="dock">
-      <div v-if="greeting">欢迎您: {{user.username}}</div>
+      <div v-if="greeting">欢迎您: {{ user.username }}</div>
 
-      <theme-set v-if="theme"></theme-set>
+      <theme-set v-if="themeSetting"></theme-set>
 
       <slot name="side"></slot>
 
@@ -41,6 +41,7 @@ import {assertEmpty} from '../utils/common'
 
 export default {
   name: "MetaHeader",
+  mixins: [],
   props: {
     appName: String,
     appLogo: String,
@@ -51,7 +52,8 @@ export default {
     showThemeSetting: {
       type: Boolean,
       default: () => true
-    }
+    },
+    themeConf: Object
   },
   components: {ThemeSet, UserProfile},
   data() {
@@ -59,7 +61,6 @@ export default {
       user: access.user
     }
   },
-
   computed: {
     logo() {
       return assertEmpty(this.appLogo, appConfig.logo)
@@ -70,14 +71,17 @@ export default {
     greeting() {
       return assertEmpty(this.showGreeting, appConfig.showGreeting)
     },
-    theme() {
-      return assertEmpty(this.showGreeting, appConfig.showGreeting)
+    themeSetting() {
+      return assertEmpty(this.showThemeSetting, appConfig.showThemeSetting)
     },
-    headerStyle() {
-      const {header: {titleColor, backgroundColor} = {}} = Theme.getTheme()
+    headerConf() {
+      const {header: headerConf} = Theme.getTheme()
+      return headerConf
+    },
+    headerStyle() { // FIXME: 随着主题设置, headerConf实时响应了, 但是headerStyle却并未跟着变动。有意思的是 TagView中是一样的却可以实现实时预览
       return {
-        'color': titleColor,
-        'background-color': backgroundColor
+        'color': this.headerConf.textColor,
+        'background-color': this.headerConf.backgroundColor
       }
     }
   }
@@ -99,6 +103,7 @@ $headerHeight: 60px;
     font-size: 50px;
     margin-right: 10px;
   }
+
   .name {
     margin: 0;
   }
@@ -121,6 +126,7 @@ $headerHeight: 60px;
       display: inline-block;
       margin: 0 10px;
     }
+
     span.empty {
       flex: 1
     }

@@ -68,6 +68,7 @@ import GlobalPage from '@/../package/page'
 import Route from "./route";
 import Menu from "./menu";
 import {configApp} from "./config";
+import Theme from './theme'
 
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
@@ -146,8 +147,10 @@ const install = function (Vue, opts = {}) {
     // 注册全局函数: 最优先。会配置axios，这是后面都可能需要的
     registerGlobalFunction(Vue, opts)
 
-    // 系统配置
+    // 系统配置: 获取服务端关于系统设置的数据
     configApp(Vue, opts)
+    // 主题配置: 配置默认主题
+    Theme.configDefaultTheme(opts)
 
     // 注册全局过滤器
     configFilters(Vue)

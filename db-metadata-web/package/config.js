@@ -26,7 +26,9 @@ export const appConfig = {
     enableAuth: true,
     devMode: false,
     tokenKey: 'X-TOKEN',
-    showGreeting: true
+    showGreeting: true,
+    showThemeSetting: true,
+    allowCustomTheme: true, // 是否允许自由定义
 }
 
 export const configApp = function (Vue, opts = {}) {

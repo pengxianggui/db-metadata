@@ -2,7 +2,7 @@
   <div class="layout" :style="layoutStyle">
 
     <template v-if="isRow">
-      <meta-menu :menu-conf="this.theme.menu"></meta-menu>
+      <meta-menu :theme-conf="menuConf"></meta-menu>
       <div class="body" :style="bodyStyle">
         <slot name="header">
           <meta-header>
@@ -67,7 +67,7 @@
       </slot>
 
       <div class="body" :style="bodyStyle">
-        <meta-menu :menu-conf="this.theme.menu"></meta-menu>
+        <meta-menu :theme-conf="this.theme.menu"></meta-menu>
         <div class="main">
           <meta-main></meta-main>
         </div>
@@ -101,7 +101,10 @@ export default {
       return Theme.getTheme()
     },
     isRow() {
-      return this.theme.layout == 'row'
+      return this.theme.layout === 'row'
+    },
+    menuConf() {
+      return this.theme.menu
     },
     layoutStyle() {
       return this.isRow ? {
