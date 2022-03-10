@@ -1,130 +1,112 @@
 <template>
-  <el-container direction="vertical" class="el-card container-view" ref="container">
-    <el-row justify="end">
-      <el-col :span="24">
-        <!-- operation bar -->
-        <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
-              v-if="operationBarConf['show']">
-          <el-button-group>
-            <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-            <slot name="add-btn" v-bind:conf="operationBarConf">
-              <el-button @click="handleAdd" icon="el-icon-document-add"
-                         v-bind="operationBarConf">新增
-              </el-button>
-            </slot>
-            <slot name="batch-delete-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
-                  v-bind:batchDelete="handleBatchDelete">
-              <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                         v-bind="operationBarConf" v-if="multiSelect">删除
-              </el-button>
-            </slot>
-            <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-          </el-button-group>
+  <div class="container-view" ref="container">
+    <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData">
+      <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
+                 :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                 v-if="operationBarConf.show">
+        <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
+          <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
+                     v-if="operationBarConf.add.show">
+            {{operationBarConf.add.text}}
+          </el-button>
         </slot>
-      </el-col>
-    </el-row>
+        <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
+              v-bind:batchDelete="handleBatchDelete">
+          <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
+                     v-if="multiSelect && operationBarConf.delete.show">
+            {{operationBarConf.delete.text}}
+          </el-button>
+        </slot>
+        <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+      </component>
+    </slot>
 
-    <el-row>
-      <el-col :span="24">
-        <el-table
-            :id="innerMeta.name"
-            :ref="innerMeta.name"
-            :data="innerData"
-            v-bind="tableConf"
-            @row-click="handleRowClick"
-            @row-dblclick="handleRowDbClick"
-            @sort-change="sortChange"
-            @selection-change="handleSelectionChange">
+    <!-- TODO name作为id不保险，改为instanceCode -->
+    <el-table :id="innerMeta.name"
+              :ref="innerMeta.name"
+              v-bind="tableConf"
+              :data="innerData"
+              @row-click="handleRowClick"
+              @row-dblclick="handleRowDbClick"
+              @sort-change="sortChange"
+              @selection-change="handleSelectionChange">
 
-          <!-- multi select conf -->
-          <template v-if="multiSelect">
-            <el-table-column type="selection" width="55"></el-table-column>
+      <!-- multi select conf -->
+      <template v-if="multiSelect">
+        <el-table-column type="selection" width="55"></el-table-column>
+      </template>
+
+      <template v-for="item in columns">
+        <el-table-column v-if="item.showable"
+                         :key="item.code"
+                         v-bind="item.conf"
+                         :prop="item.name"
+                         :label="item.label || item.name"
+                         show-overflow-tooltip>
+          <template #header>
+            <meta-easy-edit :object-code="objectCode" :field-code="item.name"
+                            :label="item.label || item.name" :all="true" component-code="TableView">
+              <template #label>{{ item.label || item.name }}</template>
+            </meta-easy-edit>
           </template>
-
-          <template v-for="(item, index) in columns">
-            <el-table-column v-if="item.showable"
-                             v-bind="item.conf"
-                             :key="item.name"
-                             :prop="item.name"
-                             :label="item.label || item.name"
-                             show-overflow-tooltip>
-              <template #header>
-                <meta-easy-edit :object-code="objectCode" :field-code="item.name"
-                                :label="item.label || item.name" :all="true" component-code="TableView">
-                  <template #label>{{ item.label || item.name }}</template>
-                </meta-easy-edit>
-              </template>
-              <template #default="scope">
-                <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
-              </template>
-            </el-table-column>
+          <template #default="scope">
+            <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
           </template>
+        </el-table-column>
+      </template>
 
-          <slot name="operation-column" v-if="operationColumnConf['show']">
-            <el-table-column v-bind:width="operationColumnConf['width']"
-                             v-bind:fixed="operationColumnConf['fixed']">
-              <template #header>
-                <span>
-                    <span>操作</span>
-                    <el-popover placement="bottom-end" trigger="hover">
-                        <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
-                        <el-checkbox v-for="(item, index) in columns"
-                                     :key="item.name + '' + index"
-                                     :label="item.label || item.name"
-                                     v-model="item.showable"
-                                     @change="$forceUpdate(); getData()"
-                                     style="display: block;"></el-checkbox>
-                    </el-popover>
-                </span>
-              </template>
-              <template slot-scope="scope">
-                <slot name="buttons" v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['show'])">
-                  <el-button-group>
-                    <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
-                    <slot name="view-btn" v-bind:conf="buttonsConf['view']['conf']"
-                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['view']['show'])">
-                      <el-button v-bind="buttonsConf['view']['conf']"
-                                 @click="handleView($event, scope.row, scope.$index)">
-                      </el-button>
-                    </slot>
-                    <slot name="edit-btn" v-bind:conf="buttonsConf['edit']['conf']"
-                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['edit']['show'])">
-                      <el-button v-bind="buttonsConf['edit']['conf']"
-                                 @click="handleEdit($event, scope.row, scope.$index)">
-                      </el-button>
-                    </slot>
-                    <slot name="delete-btn" v-bind:conf="buttonsConf['delete']['conf']"
-                          v-bind:scope="scope" v-if="_showable(scope.row, buttonsConf['delete']['show'])">
-                      <el-button v-bind="buttonsConf['delete']['conf']"
-                                 @click="handleDelete($event, scope.row, scope.$index)">
-                      </el-button>
-                    </slot>
-                    <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
-                  </el-button-group>
+      <slot name="operation-column">
+        <el-table-column v-bind="operationColumnConf.conf" v-if="operationColumnConf.show">
+          <template #header>
+            <span>操作</span>
+            <el-popover placement="bottom-end" trigger="hover">
+              <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
+              <!-- TODO 2.5 字段控制的显隐应当缓存到sessionStorage中, 缓存key应当包含instanceCode+fieldCode确保唯一 -->
+              <el-checkbox v-for="item in columns"
+                           v-model="item.showable"
+                           :key="item.name"
+                           :label="item.label || item.name"
+                           @change="$forceUpdate(); getData()"
+                           style="display: block;"></el-checkbox>
+            </el-popover>
+          </template>
+          <template slot-scope="scope">
+            <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
+              <component :is="buttonsConf.group ? 'el-button-group' : 'div'"
+                         v-if="_showable(scope.row, buttonsConf.show)">
+                <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
+                <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
+                  <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
+                             v-if="_showable(scope.row, buttonsConf.view.show)">{{buttonsConf.view.text}}</el-button>
                 </slot>
-              </template>
-            </el-table-column>
-          </slot>
-        </el-table>
-      </el-col>
-    </el-row>
+                <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
+                  <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
+                             v-if="_showable(scope.row, buttonsConf.edit.show)">{{buttonsConf.edit.text}}</el-button>
+                </slot>
+                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
+                  <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
+                             v-if="_showable(scope.row, buttonsConf.delete.show)">{{buttonsConf.delete.text}}</el-button>
+                </slot>
+                <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
+              </component>
+            </slot>
+          </template>
+        </el-table-column>
+      </slot>
+    </el-table>
 
-    <el-row v-if="paginationConf['show']" style="margin-top: 5px;">
-      <el-col>
-        <!-- pagination bar -->
-        <slot name="pagination" v-bind:pageModel="pageModel">
-          <el-pagination background
-                         :page-sizes="pageSizes"
-                         :page-size.sync="pageModel.size"
-                         :current-page.sync="pageModel.index"
-                         :total="pageModel.total"
-                         :layout="pageLayout"
-                         @size-change="sizeChange"
-                         @current-change="getData"
-          ></el-pagination>
-        </slot>
-      </el-col>
-    </el-row>
+    <slot name="pagination" v-bind:pageModel="pageModel">
+      <div :style="paginationConf.style">
+        <el-pagination v-bind="paginationConf.conf"
+                       :page-size.sync="pageModel.size"
+                       :current-page.sync="pageModel.index"
+                       :total="pageModel.total"
+                       @size-change="sizeChange"
+                       @current-change="getData"
+                       v-if="paginationConf.show"></el-pagination>
+      </div>
+    </slot>
 
     <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
                 @ok="getData()" @cancel="dialogVisible=false">
@@ -135,7 +117,7 @@
     </dialog-box>
 
     <slot name="behavior" :on="on" :actions="actions"></slot>
-  </el-container>
+  </div>
 </template>
 
 <script>
@@ -146,7 +128,7 @@ import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import Meta from '../../mixins/meta'
 import assembleMeta from './assembleMeta'
 import TableCell from './tableCell'
-import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
+import DefaultMeta from '../ui-conf'
 import columnsValid from "./columnsValid";
 import showable from "../../mixins/showable";
 import {isEmpty} from "../../../utils/common";
@@ -204,6 +186,7 @@ export default {
 
       this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
     },
+    // TODO 表单容器应当与TableView解耦, 放到功能模板(如SingleGridTmpl)中, 按钮背后的逻辑应当在ui可配(路由跳转 或 弹窗。路由跳转的话就提供路由跳转地址, 弹窗的话就提供获取弹窗FormView的rest接口地址)
     doEdit(primaryValue) {
       const {objectCode, primaryKey} = this
       let url, title;
@@ -335,9 +318,9 @@ export default {
       }
     },
     activeRow(row) {
-      const {primaryKey, operLogic: {'chose_type': choseType} = {}} = this;
+      const {primaryKey} = this;
 
-      if (choseType === CHOSE_TYPE.toggle && utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
+      if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
         this.activeData = {};
         const refName = this.innerMeta['name'];
         this.$refs[refName].setCurrentRow();
@@ -461,35 +444,19 @@ export default {
       const {innerMeta: {conf}, $attrs, $reverseMerge} = this
       return $reverseMerge(conf, $attrs)
     },
-    operLogic() {
-      const {innerMeta: {'oper-logic': operLogic} = {}} = this
-      return operLogic
-    },
     operationColumnConf() {
-      const {
-        innerMeta: {'operation-column': operationColumn},
-        $attrs: {'operation-column': operationColumnConf}
-      } = this
-
-      return utils.mergeObject({}, operationColumn, operationColumnConf);
+      const {innerMeta: {'operation-column': operationColumn}} = this
+      return operationColumn;
     },
     paginationConf() {
       const {innerMeta: {pagination: paginationConf = {}}} = this
       return paginationConf
     },
-    pageSizes() {
-      const {paginationConf: {"page-sizes": pageSizes} = {}} = this
-      return pageSizes
-    },
-    pageLayout() {
-      const {paginationConf: {"layout": pageLayout} = {}} = this
-      return pageLayout
-    },
     buttonsConf() {
-      const {innerMeta: {buttons: buttonsConf = {}}} = this
+      const {buttons: buttonsConf = {}} = this.operationColumnConf
       return buttonsConf
     },
-    // 支持无渲染的行为插槽
+    // 支持无渲染的行为插槽 TODO 用法不明确, 移除
     actions() {
       const {doDelete} = this;
       return {doDelete};

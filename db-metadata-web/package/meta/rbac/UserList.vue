@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-container">
     <single-grid-tmpl :oc="oc" :table-meta="tableMeta">
       <template #inner-before-extend-btn="{scope}">
         <el-button size="mini" @click="toBindRole(scope)" class="el-icon-setting"></el-button>

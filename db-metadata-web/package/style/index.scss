@@ -8,6 +8,7 @@ html, body {
 
 .el-card {
   padding: 10px;
+  box-sizing: border-box;
 }
 
 form .inline {
@@ -38,7 +39,30 @@ form .inline {
   color: #e6a23c !important;
 }
 
-// 容器视图
-.container-view {
-  width: 100%;
+
+
+#_main {
+  // 页面容器
+.page-container {
+    height: 100%;
+    width: 100%;
+    color: #303133;
+    padding: 5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    // 嵌套只留外层的padding, 防止padding过多
+    & .page-container {
+      padding: 0;
+    }
+  }
+
+  // 容器视图
+  .container-view {
+    border: 1px solid #EBEEF5;
+    padding: 5px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: #FFFFFF;
+  }
 }

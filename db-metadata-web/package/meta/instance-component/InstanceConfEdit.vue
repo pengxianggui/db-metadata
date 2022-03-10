@@ -1,5 +1,5 @@
 <template>
-  <el-container direction="vertical" class="el-card" style="height: 100%;">
+  <div class="page-container">
     <el-form id="form-box" size="mini" ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px">
       <div id="opr-box">
         <div style="font-size: 13px;">
@@ -97,7 +97,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
-  </el-container>
+  </div>
 </template>
 
 <script>

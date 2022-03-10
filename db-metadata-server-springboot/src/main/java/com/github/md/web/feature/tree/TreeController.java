@@ -1,5 +1,7 @@
 package com.github.md.web.feature.tree;
 
+import com.alibaba.fastjson.JSON;
+import com.github.md.web.kit.tree.TreeKit;
 import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.analysis.meta.IMetaObject;
@@ -30,16 +32,18 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = { "f/t", "feature/tree" })
+@RequestMapping(value = {"f/t", "feature/tree"})
 public class TreeController extends ControllerAdapter {
 
     /**
+     * 获取树机构数据。依据功能编码&元对象编码
+     * <p>
      * test:
      * objectCode=js_sys_area
      * config -> getConfig()
      */
     @MetaAccess(value = Type.API_WITH_META_FEATURE)
-    @GetMapping("/")
+    @GetMapping()
     public Ret index() {
         QueryHelper queryHelper = queryHelper();
         String featureCode = queryHelper.getFeatureCode();
@@ -49,6 +53,6 @@ public class TreeController extends ControllerAdapter {
         TreeConfigGetter treeConfigGetter = featureService().loadFeatureConfig(featureCode);
 
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
-        return Ret.ok("data", tree);
+        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 }

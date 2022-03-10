@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="page-container">
     <single-grid-tmpl :oc="oc">
       <template #add-btn="{conf}">
-        <el-button v-bind="conf" @click="openAdd">新增</el-button>
+        <el-button v-bind="conf.conf" @click="openAdd">新增</el-button>
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="80%">

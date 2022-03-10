@@ -1,5 +1,5 @@
 <template>
-  <div class="container-view">
+  <div class="page-container">
     <row-grid :span="[6, 18]">
         <template #0>
             <div class="el-card">

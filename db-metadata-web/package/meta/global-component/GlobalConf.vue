@@ -1,5 +1,5 @@
 <template>
-  <div class="container el-card">
+  <div class="page-container">
     <el-form :model="confModel" label-width="80px" class="demo-form-inline" size="mini" style="height: 100%">
       <div class="opr-box">
         <div>

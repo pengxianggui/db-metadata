@@ -1,20 +1,19 @@
 <template>
-  <div class="container-view">
-    <div class="el-card">
-      <search-view :meta="object.svMeta" @search="mHandleSearch"></search-view>
-      <table-view :ref="object.objectCode" :meta="object.tvMeta" :filter-params="object.filterParams"
+  <div class="page-container">
+    <search-view :meta="object.svMeta" @search="mHandleSearch"></search-view>
+    <table-view :ref="object.objectCode" :meta="object.tvMeta" :filter-params="object.filterParams"
                   @active-change="handleMActiveChange"
                   @chose-change="handleMChoseChange" :page="{ size: 5 }">
 
         <template #prefix-btn="{conf}">
-          <el-button v-bind="conf" @click="featureAddVisible=true" icon="el-icon-plus">创建功能</el-button>
+          <el-button v-bind="conf.conf" @click="featureAddVisible=true" icon="el-icon-plus">创建功能</el-button>
         </template>
         <template #add-btn="{conf}">
-          <el-button v-bind="conf" @click="toAddMetaObject" icon="el-icon-plus">创建元对象</el-button>
+          <el-button v-bind="conf.conf" type="primary" @click="toAddMetaObject" icon="el-icon-plus">创建元对象</el-button>
         </template>
         <template #batch-delete-btn="{conf}">
           <el-button @click="handleDelete()" type="danger" icon="el-icon-delete-solid"
-                     v-bind="conf">删除
+                     v-bind="conf.conf">删除
           </el-button>
         </template>
 
@@ -23,19 +22,15 @@
           <el-button v-bind="conf" @click="handleDelete(scope.row)"></el-button>
         </template>
       </table-view>
-    </div>
-
     <el-divider></el-divider>
 
-    <div class="el-card">
-      <search-view :meta="field.svMeta" @search="sHandleSearch"></search-view>
-      <table-view :ref="field.objectCode" :meta="field.tvMeta" :filter-params="field.filterParams"
-                  :page="{ size: 5 }">
-        <template #add-btn="{conf}">
-          <el-button v-bind="conf" @click="syncIncrementHandler" icon="el-icon-refresh">同步增量字段</el-button>
-        </template>
-      </table-view>
-    </div>
+    <search-view :meta="field.svMeta" @search="sHandleSearch"></search-view>
+    <table-view :ref="field.objectCode" :meta="field.tvMeta" :filter-params="field.filterParams"
+                :page="{ size: 5 }">
+      <template #add-btn="{conf}">
+        <el-button v-bind="conf.conf" @click="syncIncrementHandler" icon="el-icon-refresh">同步增量字段</el-button>
+      </template>
+    </table-view>
 
     <dialog-box :visible.sync="metaImportFormVisible" title="创建元对象">
       <meta-import :meta="metaImportFormMeta" @cancel="metaImportFormVisible=false"

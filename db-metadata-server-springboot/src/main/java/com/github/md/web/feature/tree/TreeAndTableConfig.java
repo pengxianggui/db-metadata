@@ -3,6 +3,7 @@ package com.github.md.web.feature.tree;
 import com.alibaba.fastjson.JSON;
 import com.github.md.web.feature.FeatureConfig;
 import com.github.md.web.kit.tree.TreeConfig;
+import com.jfinal.kit.StrKit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,16 +35,21 @@ public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGette
     @Override
     public TreeAndTableIntercept getTreeFeatureIntercept() {
         if (intercept == null) {
+            intercept = new TreeAndTableIntercept() {
+            };
+
+            String bizInterceptor = getStr("bizInterceptor");
+            if (StrKit.isBlank(bizInterceptor)) {
+                log.warn("树+表功能业务拦截器(bizInterceptor)未配置: {}");
+                return intercept;
+            }
 
             try {
-                intercept = (TreeAndTableIntercept) Class.forName(getStr("bizInterceptor")).newInstance();
+                intercept = (TreeAndTableIntercept) Class.forName(bizInterceptor).newInstance();
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 log.error(e.getMessage(), e);
             } catch (NullPointerException e) {
                 log.error(e.getMessage(), e);
-                intercept = new TreeAndTableIntercept() {
-
-                };
             }
         }
         return intercept;

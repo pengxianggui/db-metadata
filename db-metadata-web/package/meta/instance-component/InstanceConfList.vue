@@ -1,13 +1,13 @@
 <template>
-    <div class="el-card">
+    <div class="page-container">
         <search-view :meta="spMeta" @search="handleSearch"></search-view>
         <table-view :ref="refName" :meta="tlMeta" :filter-params="filterParams">
             <template #add-btn="{conf}">
-                <el-button v-bind="conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
+                <el-button v-bind="conf.conf" @click="addConf" icon="el-icon-document-add">新增</el-button>
             </template>
-            <template #inner-before-extend-btn="{scope}">
+            <template #inner-before-extend-btn="{scope, conf}">
                 <el-tooltip content="配置" placement="left">
-                    <el-button icon="el-icon-s-tools" size="mini" type="info"
+                    <el-button icon="el-icon-s-tools" v-bind="conf.conf"
                                @click="handlerConf($event, scope.row, scope.$index)"></el-button>
                 </el-tooltip>
             </template>

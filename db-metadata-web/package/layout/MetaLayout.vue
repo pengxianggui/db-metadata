@@ -31,9 +31,8 @@
             </template>
           </meta-header>
         </slot>
-        <div class="main">
-          <meta-main></meta-main>
-        </div>
+
+        <meta-main></meta-main>
       </div>
     </template>
 
@@ -68,9 +67,7 @@
 
       <div class="body" :style="bodyStyle">
         <meta-menu :theme-conf="this.theme.menu"></meta-menu>
-        <div class="main">
-          <meta-main></meta-main>
-        </div>
+        <meta-main></meta-main>
       </div>
     </template>
 
@@ -145,15 +142,6 @@ export default {
     flex: 1;
     display: flex;
     overflow: hidden auto;
-
-    .main {
-      flex: 1;
-      overflow: auto;
-      height: 100%;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
   }
 }
 </style>

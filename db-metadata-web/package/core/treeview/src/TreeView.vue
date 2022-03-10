@@ -1,80 +1,84 @@
 <template>
-    <div class="container el-card">
-        <div class="header" v-if="operationBarConf.show">
-            <slot name="operation-bar"
-                  v-bind:conf="operationBarConf"
-                  v-bind:operations="{handleAdd, handleBatchDelete}">
-                <el-button-group>
-                    <slot name="prefix-btn" v-bind:conf="operationBarConf"></slot>
-                    <slot name="add-btn" v-bind:conf="operationBarConf" v-bind:add="handleAdd" v-if="editable">
-                        <el-button @click="handleAdd" icon="el-icon-document-add"
-                                   v-bind="operationBarConf">新增
-                        </el-button>
-                    </slot>
-                    <slot name="batch-delete-btn" v-bind:conf="operationBarConf"
-                          v-bind:batchDelete="handleBatchDelete" v-if="multiMode && editable">
-                        <el-button @click="handleBatchDelete($event)" type="danger" icon="el-icon-delete-solid"
-                                   v-bind="operationBarConf">删除
-                        </el-button>
-                    </slot>
+    <div class="container-view">
+      <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
+            v-bind:operations="{handleAdd, handleBatchDelete}">
+        <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
+                   :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                   class="opr-bar"
+                   v-if="operationBarConf.show">
+          <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+          <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
+            <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
+                       v-if="operationBarConf.add.show && editable">
+              {{operationBarConf.add.text}}
+            </el-button>
+          </slot>
+          <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
+                v-bind:batchDelete="handleBatchDelete">
+            <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
+                       v-if="operationBarConf.delete.show && editable">
+              {{operationBarConf.delete.text}}
+            </el-button>
+          </slot>
+          <el-dropdown @command="handleCommand">
+            <el-button v-bind="operationBarConf.conf">
+              <span>操作</span>
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleExpandAll">
+                  <i class="el-icon-caret-bottom"></i>
+                  <span>展开所有</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="handleShrinkAll">
+                  <i class="el-icon-caret-right"></i>
+                  <span>收起所有</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="handleChoseAll" v-if="multiSelect">
+                  <i class="el-icon-circle-check"></i>
+                  <span>全选</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="handleCleanChose" v-if="multiSelect">
+                  <i class="el-icon-circle-close"></i>
+                  <span>取消全选</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="handleReverseChose" v-if="multiSelect">
+                  <i class="el-icon-success"></i>
+                  <span>反选</span>
+              </el-dropdown-item>
+              <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </component>
+      </slot>
 
-                    <el-dropdown @command="handleCommand">
-                        <el-button type="primary" v-bind="operationBarConf">
-                            <span>节点操作</span>
-                            <i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="handleExpandAll">
-                                <i class="el-icon-caret-bottom"></i>
-                                <span>展开所有</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="handleShrinkAll">
-                                <i class="el-icon-caret-right"></i>
-                                <span>收起所有</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="handleChoseAll" v-if="multiMode">
-                                <i class="el-icon-circle-check"></i>
-                                <span>全选</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="handleCleanChose" v-if="multiMode">
-                                <i class="el-icon-circle-close"></i>
-                                <span>取消全选</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item command="handleReverseChose" v-if="multiMode">
-                                <i class="el-icon-success"></i>
-                                <span>反选</span>
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <slot name="suffix-btn" v-bind:conf="operationBarConf"></slot>
-                </el-button-group>
-            </slot>
-        </div>
-        <el-tree :ref="innerMeta['name']" :data="innerData"
-                 v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                 :props="props"
-                 @node-click="handleNodeClick"
-                 @node-contextmenu="$emit('node-contextmenu')"
-                 @check-change="$emit('check-change')"
-                 @check="handleNodeCheck"
-                 @current-change="$emit('current-change')"
-                 @node-expand="$emit('node-expand')"
-                 @node-collapse="$emit('node-collapse')">
-            <template slot-scope="{ node, data }">
-                <slot v-bind:node="node" v-bind:data="data">
-                    <span class="el-tree-node__label">{{data[innerMeta.conf['props']['label']]}}</span>
-                </slot>
-            </template>
-        </el-tree>
-        <dialog-box :visible="visible" title="节点编辑">
-            <form-tmpl :meta="formMeta"></form-tmpl>
-        </dialog-box>
+      <!-- name作为ref id不保险 -->
+      <el-tree :ref="innerMeta['name']" :data="innerData"
+               v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+               :props="props"
+               @node-click="handleNodeClick"
+               @node-contextmenu="$emit('node-contextmenu')"
+               @check-change="$emit('check-change')"
+               @check="handleNodeCheck"
+               @current-change="$emit('current-change')"
+               @node-expand="$emit('node-expand')"
+               @node-collapse="$emit('node-collapse')">
+          <template slot-scope="{ node, data }">
+              <slot v-bind:node="node" v-bind:data="data">
+                  <span class="el-tree-node__label">{{data[innerMeta.conf['props']['label']]}}</span>
+              </slot>
+          </template>
+      </el-tree>
 
-        <div style="float: right">
-          <meta-easy-edit :object-code="innerMeta.objectCode" component-code="TreeView">
-            <template #label><i class="el-icon-setting"></i></template>
-          </meta-easy-edit>
-        </div>
+      <dialog-box :visible="visible" title="节点编辑">
+          <form-tmpl :meta="formMeta"></form-tmpl>
+      </dialog-box>
+
+      <div style="float: right">
+        <meta-easy-edit :object-code="innerMeta.objectCode" component-code="TreeView">
+          <template #label><i class="el-icon-setting"></i></template>
+        </meta-easy-edit>
+      </div>
     </div>
 </template>
 
@@ -82,7 +86,7 @@
     import utils from '../../../utils'
     import {defaultPrimaryKey} from '../../../config'
     import Meta from '../../mixins/meta'
-    import DefaultMeta, {CHOSE_TYPE} from '../ui-conf'
+    import DefaultMeta from '../ui-conf'
     import MetaEasyEdit from "../../meta/src/MetaEasyEdit";
     import {assertEmpty} from "../../../utils/common";
 
@@ -135,30 +139,28 @@
                 let currentNode = this.ref.getCurrentNode();
                 if (currentNode) {
                     // pxg_todo 新增节点
-
+                  this.$message.warning("开发中")
                 } else {
                     this.$message.warning('请先选择一个节点');
                 }
-
             },
             handleBatchDelete() {
-
+              this.$message.warning("开发中")
             },
             handleNodeClick(row, node, event) {
-                const {primaryKey, operLogic: {'chose_type': choseType} = {}} = this;
+                const {primaryKey} = this;
 
                 if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
-                    if (choseType === CHOSE_TYPE.toggle) {
-                      this.activeData = {};
-                    }
+                    this.activeData = {};
+                    this.ref.setCurrentNode()
                 } else {
                     this.activeData = row;
                 }
                 this.$emit('active-change', this.activeData);
             },
             handleNodeCheck(row, {checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys}) {
-                const {multiMode} = this;
-                if (!multiMode) return;
+                const {multiSelect} = this;
+                if (!multiSelect) return;
                 this.choseData = checkedNodes;
                 this.halfChoseData = halfCheckedNodes;
                 this.$emit('chose-change', checkedNodes);
@@ -219,8 +221,8 @@
 
                 this.$axios.safeGet(url, {
                     params: params
-                }).then(resp => {
-                    this.innerData = resp.data;
+                }).then(({data}) => {
+                    this.innerData = data;
                     this.$emit("update:data", resp.data);
                 }).catch(({msg = '获取TreeView数据发生异常'}) => {
                     console.error(msg)
@@ -261,9 +263,9 @@
                 const {innerMeta: {name} = {}, $refs} = this
                 return $refs[name]
             },
-            multiMode() {
-                const {innerMeta: {conf: {'show-checkbox': multiMode} = {}} = {}} = this
-                return multiMode;
+            multiSelect() {
+                const {innerMeta: {conf: {'show-checkbox': multiSelect} = {}} = {}} = this
+                return multiSelect;
             },
             editable() {
                 const {innerMeta: {editable} = {}} = this
@@ -287,9 +289,12 @@
     }
 </script>
 
-<style scoped>
-  .container {
-      height: 100%;
-      box-sizing: border-box;
+<style scoped lang="scss">
+  .opr-bar {
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: #e2e2e2;
+    padding: 10px;
   }
 </style>

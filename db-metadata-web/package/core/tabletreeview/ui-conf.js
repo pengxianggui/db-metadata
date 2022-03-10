@@ -1,24 +1,19 @@
 import {elementVersion} from '../../config'
 
 export const ConfDesc = `
-    |配置项|说明|类型|可选值|默认值|
-    |-----|---|----|----|-----|
-    |component_name|渲染组件名|string|组件列表|-|
-    |name|name属性|string|-|-|
-    |label|该实例标签名,表现为表单域的label|string|-|-|
-    |data_url|数据接口url|string|-|/table/list?objectCode={objectCode}|
-    |delete_url|删除数据接口|string|-|暂未支持|
-    |multi_select|是否多选模式|boolean|true/false|false|
-    |editable|是否编辑模式(暂未支持)|boolean|true/false|false|
-    |operation-bar||object|-|{"show": true,"size": "mini","type": "primary"}|
-    |column|表格列的元数据信息, 配置见原子控件配置|array|-|[]|
-    |conf|ElementUI(` + elementVersion + `)中el-table的原生配置项|object|-|-|
+|配置项|说明|类型|可选值|默认值|
+|-----|---|----|----|-----|
+|component_name|渲染组件名|string|组件列表|-|
+|name|name属性|string|-|-|
+|label|该实例标签名,表现为表单域的label|string|-|-|
+|data_url|数据接口url|string|-|/table/list?objectCode={objectCode}|
+|delete_url|删除数据接口|string|-|暂未支持|
+|multi_select|是否多选模式|boolean|true/false|false|
+|conf|ElementUI(` + elementVersion + `)中el-table的原生配置项|object|-|-|
+|operation-bar||object|-||
+|column|表格列的元数据信息, 配置见原子控件配置|array|-|[]|
+|operation-column|操作列的配置项||
 `;
-
-export const CHOSE_TYPE = {
-    default: 'default',
-    toggle: 'toggle'
-}
 
 export default {
     "component_name": "TableTreeView",
@@ -28,7 +23,6 @@ export default {
     "delete_url": "/table/tree/delete?objectCode={objectCode}&ids={ids}",
     // "children_data_url": "/table/list/{objectCode}?parentPrimary={parentPrimary}",
     "multi_select": false,
-    "editable": false,
     "conf": {
         "row-key": "id",
         "tree-props": {
@@ -43,47 +37,88 @@ export default {
         "highlight-current-row": true,
         "size": "medium", // medium, small, mini
     },
-    "oper_logic": {
-        "chose_type": CHOSE_TYPE.default, // |chose-type|节点点选模式: 再次点选已选中节点时的行为。default表示无行为, toggle会取消已选节点|string|default/toggle|default|
-    },
-    "columns": [],
     "operation-bar": { // 针对操作栏中所有按钮的默认设置
         "show": true,
-        "size": "mini",
-        "type": "primary"
-    },
-    "operation-column": { // 针对操作列
-        "show": true,
-        "fixed": "right",
-        "width": "180"
-    },
-    "buttons": {
-        "show": true,
-        "view": {
-            "show": true,
-            "label": "详情",
-            "conf": {
-                "icon": "el-icon-view",
-                "size": "mini",
-                "type": "success"
-            }
+        "group": true,
+        "style": {},
+        "conf": {
+            "size": "mini"
         },
-        "edit": {
+        "add": {
             "show": true,
-            "label": "编辑",
+            "text": "新增",
             "conf": {
-                "icon": "el-icon-edit",
                 "size": "mini",
-                "type": "primary"
+                "type": "primary",
+                "icon": "el-icon-document-add",
             }
         },
         "delete": {
             "show": true,
-            "label": "删除",
+            "text": "删除",
             "conf": {
                 "size": "mini",
-                "icon": "el-icon-delete",
-                "type": "danger"
+                "type": "danger",
+                "icon": "el-icon-delete-solid",
+            }
+        },
+        "expand": {
+            "show": true,
+            "text": "展开",
+            "conf": {
+                "size": "mini",
+                "type": "info",
+                "icon": "el-icon-caret-bottom",
+            }
+        },
+        "shrink": {
+            "show": true,
+            "text": "收缩",
+            "conf": {
+                "size": "mini",
+                "type": "info",
+                "icon": "el-icon-caret-right",
+            }
+        }
+    },
+    "columns": [],
+    "operation-column": { // 针对操作列
+        "show": true,
+        "conf": {
+            "fixed": "right",
+            "width": "180"
+        },
+        "style": {},
+        "buttons": {
+            "show": true,
+            "group": true,
+            "style": {},
+            "view": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "success",
+                    "icon": "el-icon-view"
+                }
+            },
+            "edit": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "primary",
+                    "icon": "el-icon-edit"
+                }
+            },
+            "delete": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "danger",
+                    "icon": "el-icon-delete"
+                }
             }
         }
     }

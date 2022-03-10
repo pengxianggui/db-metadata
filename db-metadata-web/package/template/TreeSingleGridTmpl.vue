@@ -1,5 +1,5 @@
 <template>
-    <div class="el-card container-view">
+    <div class="page-container">
         <search-view :meta="spMeta" @search="handleSearch"></search-view>
         <table-tree-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
             <tempalte #operation-bar="{conf, choseData}">

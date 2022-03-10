@@ -11,13 +11,14 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-  <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']">
+  <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']"
+                  v-if="innerMeta.columns && innerMeta.columns.length > 0">
 <!--    {{ initModel }}-->
-    <div class="el-card" style="padding: 5px;">
+    <div class="container-view">
       <el-form :ref="innerMeta['name']" v-bind="formConf" :model="model" inline
-               @keyup.enter.native="emitSearch" v-if="innerMeta.columns && innerMeta.columns.length > 0">
+               @keyup.enter.native="emitSearch" class="search-form">
         <template v-for="(item) in innerMeta.columns">
-          <el-form-item :key="item.name" :label="item.label||item.name" :prop="item.name"
+          <el-form-item class="form-item" :key="item.name" :label="item.label||item.name" :prop="item.name"
                         v-if="model.hasOwnProperty(item.name)">
             <component v-model="model[item.name]['value']" v-bind="linkProps(model, item)"
                        @change="changeHandler(item.name)">
@@ -79,9 +80,10 @@
         </meta-easy-edit>
       </div>
     </div>
+
     <template #label>
       <slot name="label-bar">
-        <el-divider>
+        <el-divider class="divider">
           <i class="el-icon-search"></i>
         </el-divider>
       </slot>
@@ -236,8 +238,19 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-card {
-  margin-bottom: 10px;
+<style scoped lang="scss">
+.divider {
+  ::v-deep {
+    .el-divider__text {
+      background-color: #f7f7f7;
+    }
+  }
 }
+
+.search-form {
+  .el-form-item {
+    margin: 5px;
+  }
+}
+
 </style>

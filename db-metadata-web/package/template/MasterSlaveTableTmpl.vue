@@ -1,49 +1,47 @@
 <template>
-    <div class="container-view">
-        <div class="el-card">
-            <search-view :meta="master.spMeta" @search="mHandleSearch"></search-view>
-            <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
-                        @active-change="handleActiveChange"
-                        @chose-change="handleChoseChange" :page="{ size: 5 }">
-                <tempalte #operation-bar="{conf, choseData}">
-                  <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-                </tempalte>
+    <div class="page-container">
+        <search-view :meta="master.spMeta" @search="mHandleSearch"></search-view>
+        <table-view :ref="master['objectCode']" :meta="master.tlMeta" :filter-params="filterParams"
+                    @active-change="handleActiveChange"
+                    @chose-change="handleChoseChange" :page="{ size: 5 }">
+            <tempalte #operation-bar="{conf, choseData}">
+              <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+            </tempalte>
 
-                <!-- 主表操作栏扩展插槽 -->
-                <template #prefix-btn="{conf, choseData}">
-                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #add-btn="{conf}">
-                    <slot name="add-btn" v-bind:conf="conf"></slot>
-                </template>
-                <template #batch-delete-btn="{conf, choseData}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #suffix-btn="{conf, choseData}">
-                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-                </template>
+            <!-- 主表操作栏扩展插槽 -->
+            <template #prefix-btn="{conf, choseData}">
+                <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+            </template>
+            <template #add-btn="{conf}">
+                <slot name="add-btn" v-bind:conf="conf"></slot>
+            </template>
+            <template #batch-delete-btn="{conf, choseData}">
+                <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+            </template>
+            <template #suffix-btn="{conf, choseData}">
+                <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+            </template>
 
-                <template #buttons="{scope}">
-                  <slot name="buttons" v-bind:scope="scope"></slot>
-                </template>
+            <template #buttons="{scope}">
+              <slot name="buttons" v-bind:scope="scope"></slot>
+            </template>
 
-                <template #inner-before-extend-btn="{scope}">
-                    <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
-                </template>
-                <template #view-btn="{scope, conf}">
-                  <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-                </template>
-                <template #edit-btn="{scope, conf, edit}">
-                    <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-                </template>
-                <template #delete-btn="{scope, conf}">
-                    <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-                </template>
-                <template #inner-after-extend-btn="{scope}">
-                    <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
-                </template>
-            </table-view>
-        </div>
+            <template #inner-before-extend-btn="{scope}">
+                <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
+            </template>
+            <template #view-btn="{scope, conf}">
+              <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+            </template>
+            <template #edit-btn="{scope, conf, edit}">
+                <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+            </template>
+            <template #delete-btn="{scope, conf}">
+                <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+            </template>
+            <template #inner-after-extend-btn="{scope}">
+                <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
+            </template>
+        </table-view>
         <el-divider></el-divider>
         <!-- multi slave -->
         <div class="el-card" v-if="slaves.length > 1">

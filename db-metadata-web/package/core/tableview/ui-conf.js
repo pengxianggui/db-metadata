@@ -1,5 +1,3 @@
-import {elementVersion, pageNumArea} from '../../config'
-
 export const ConfDesc = `
 |配置项|说明|类型|可选值|默认值|
 |-----|---|----|----|-----|
@@ -9,21 +7,14 @@ export const ConfDesc = `
 |data_url|数据接口url|string|-|/table/list?objectCode={objectCode}|
 |delete_url|删除数据接口|string|-|/table/delete?{primaryKvExp}&objectCode={objectCode}|
 |multi_select|是否多选模式|boolean|true/false|true|
-|editable|是否编辑模式(暂未支持)|boolean|true/false|false|
-|operation-bar|操作条的配置项|object|-|{"show": true,"size": "mini","type": "primary"}|
-|operation-column|操作列的配置项|object|-|{"show": true,"fixed": true,"width": "180"}|
-|oper_logic|一些操作逻辑配置|object|chose_type可选值: default/toggle|{"chose_type": true}|
-||chose-type|节点点选模式: 再次点选已选中节点时的行为。default表示无行为, toggle会取消已选节点|string|default/toggle|default|
-|columns|表格列的元数据信息, 配置见原子控件配置。当表可编辑时会用到其中的控件配置。 **列元数据支持render配置选项,值为函数字符串, 参数为(h, value, row)**|array|-|[]|
-|pagination|分页配置对象|object|-|{'page-size': ` + pageNumArea[0] + `, 'page-sizes': ` + pageNumArea + `, 'current-size': 1, 'layout': 'total, prev, pager, next'}|
 |conf|ElementUI(` + elementVersion + `)中el-table的原生配置项|object|-|-|
+|operation-bar|操作条的配置项|object|-||
+|columns|表格列的元数据信息, 配置见原子控件配置。当表可编辑时会用到其中的控件配置。 **列元数据支持render配置选项,值为函数字符串, 参数为(h, value, row)**|array|-|[]|
+|operation-column|操作列的配置项|object|-||
+|pagination|分页配置对象|object|-|{'page-size': ` + pageNumArea[0] + `, 'page-sizes': ` + pageNumArea + `, 'current-size': 1, 'layout': 'total, prev, pager, next'}|
 `;
 
-
-export const CHOSE_TYPE = {
-    default: 'default',
-    toggle: 'toggle'
-}
+import {elementVersion, pageNumArea} from '../../config'
 
 export default {
     "component_name": "TableView",
@@ -32,62 +23,89 @@ export default {
     "data_url": "/table/list?objectCode={objectCode}", // required
     "delete_url": '/table/delete?objectCode={objectCode}&{primaryKvExp}',
     "multi_select": true, //多选
-    "editable": false,
-    "conf": {
+    "conf": { // el-table原生配置
         "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
         "highlight-current-row": true,
         "size": "medium", // medium, small, mini
-        // "max-height": 500,
-    },
-    "columns": [], // 字段元数据
-    "pagination": { // element ui配置
-        "show": true,
-        "page-size": pageNumArea[0],
-        "page-sizes": pageNumArea,
-        "current-page": 1,
-        "layout": "total, sizes, prev, pager, next, jumper"
     },
     "operation-bar": { // 针对操作栏中所有按钮的默认设置
         "show": true,
-        "size": "mini",
-        "type": "primary"
-    },
-    "operation-column": { // 针对操作列
-        "show": true,
-        "fixed": "right",
-        "width": "180"
-    },
-    "buttons": {
-        "show": true,
-        "view": {
-            "show": true,
-            "label": "详情",
-            "conf": {
-                "icon": "el-icon-view",
-                "size": "mini",
-                "type": "success"
-            }
+        "group": true,
+        "style": {},
+        "conf": {
+            "size": "mini"
         },
-        "edit": {
+        "add": {
             "show": true,
-            "label": "编辑",
+            "text": "新增",
             "conf": {
-                "icon": "el-icon-edit",
                 "size": "mini",
-                "type": "primary"
+                "type": "primary",
+                "icon": "el-icon-document-add",
             }
         },
         "delete": {
             "show": true,
-            "label": "删除",
+            "text": "删除",
             "conf": {
                 "size": "mini",
-                "icon": "el-icon-delete",
-                "type": "danger"
+                "type": "danger",
+                "icon": "el-icon-delete-solid",
             }
         }
     },
-    "oper_logic": {
-        "chose_type": CHOSE_TYPE.default, // |chose-type|节点点选模式: 再次点选已选中节点时的行为。default表示无行为, toggle会取消已选节点|string|default/toggle|default|
+    "columns": [], // 字段元数据
+    "operation-column": { // 针对操作列
+        "show": true,
+        "conf": {
+            "fixed": "right",
+            "width": "180",
+        },
+        "style": {},
+        "buttons": {
+            "show": true,
+            "group": true,
+            "style": {},
+            "view": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "success",
+                    "icon": "el-icon-view"
+                }
+            },
+            "edit": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "primary",
+                    "icon": "el-icon-edit"
+                }
+            },
+            "delete": {
+                "show": true, // Boolean/Function
+                "text": "",
+                "conf": {
+                    "size": "mini",
+                    "type": "danger",
+                    "icon": "el-icon-delete"
+                }
+            }
+        },
+    },
+    "pagination": { // element分页组件  ui配置
+        "show": true,
+        "style": {
+
+        },
+        "conf": {
+            "background": true,
+            "page-size": pageNumArea[0],
+            "page-sizes": pageNumArea,
+            "current-page": 1,
+            "layout": "total, sizes, prev, pager, next, jumper"
+        }
     },
 }

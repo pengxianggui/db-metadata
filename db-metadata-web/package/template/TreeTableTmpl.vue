@@ -1,51 +1,54 @@
 <template>
-  <div class="el-card container-view">
+  <div class="page-container">
     <row-grid :span="[6, 18]">
         <template #0>
-            <tree-view :ref="treeRefName" :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"
-            ></tree-view>
+            <tree-view :ref="treeRefName" :meta="treeMeta"
+                       @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree-view>
         </template>
         <template #1>
-<!--            SearchView的meta来源-->
+        <!-- SearchView的meta来源 -->
             <search-view :meta="svMeta" @search="handleSearch"></search-view>
             <table-view :ref="tlRefName" :meta="tvMeta" :filter-params="filterParams">
-                <template #prefix-btn="{conf, choseData}">
-                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #add-btn="{conf}">
-                  <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId">
-                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
-                  </slot>
-                </template>
-                <template #batch-delete-btn="{conf, choseData}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #suffix-btn="{conf, choseData}">
-                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
+              <tempalte #operation-bar="{conf, choseData}">
+                <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+              </tempalte>
+              <template #prefix-btn="{conf, choseData}">
+                  <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                        v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
+              </template>
+              <template #add-btn="{conf}">
+                <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId">
+                  <el-button v-bind="conf.conf" @click="handleAdd">新增</el-button>
+                </slot>
+              </template>
+              <template #batch-delete-btn="{conf, choseData}">
+                  <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                        v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
+              </template>
+              <template #suffix-btn="{conf, choseData}">
+                  <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
+                        v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
+              </template>
 
-                <template #buttons="{scope, conf}">
-                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
+              <template #buttons="{scope, conf}">
+                  <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
 
-                <template #inner-before-extend-btn="{scope}">
-                    <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #view-btn="{scope, conf}">
-                    <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #edit-btn="{scope, conf}">
-                    <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #delete-btn="{scope, conf}">
-                    <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #inner-after-extend-btn="{scope}">
-                    <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
+              <template #inner-before-extend-btn="{scope}">
+                  <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
+              <template #view-btn="{scope, conf}">
+                  <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
+              <template #edit-btn="{scope, conf}">
+                  <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
+              <template #delete-btn="{scope, conf}">
+                  <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
+              <template #inner-after-extend-btn="{scope}">
+                  <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
+              </template>
             </table-view>
         </template>
     </row-grid>

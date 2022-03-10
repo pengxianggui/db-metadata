@@ -11,15 +11,12 @@ export const ConfDesc = `
 |behavior|待完善|object|-|-|
 `;
 
-export const CHOSE_TYPE = {
-    default: 'default',
-    toggle: 'toggle'
-}
 export default {
     "component_name": "TreeView",
     "name": "Tree",
     "label": "树型列表",
     "data_url": "/tree/list/{objectCode}",
+    "editable": false,
     "conf": {
         "node-key": "id",
         "highlight-current": true,
@@ -38,27 +35,44 @@ export default {
             "children": "children"
         }
     },
-    "editable": false,
-    "oper_logic": {
-        "chose_type": CHOSE_TYPE.default, // |chose-type|节点点选模式: 再次点选已选中节点时的行为。default表示无行为, toggle会取消已选节点|string|default/toggle|default|
-    },
     "operation-bar": {
         "show": true,
-        "size": "mini",
-        "type": "primary"
+        "group": true,
+        "style": {},
+        "conf": {
+            "size": "mini",
+            "type": "primary"
+        },
+        "add": {
+            "show": true,
+            "text": "新增",
+            "conf": {
+                "size": "mini",
+                "type": "primary",
+                "icon": "el-icon-document-add",
+            }
+        },
+        "delete": {
+            "show": true,
+            "text": "删除",
+            "conf": {
+                "size": "mini",
+                "type": "danger",
+                "icon": "el-icon-delete-solid",
+            }
+        }
     },
-    "behavior": {
-        "allowDrag": function (node) {
-            return true
-        },
-        "allowDrop": function (draddingNode, dropNode, type) {
-            return true
-        },
-        "filterNodeMethod": function (value, data, node) {
-            if (!value) return true;
-            return data && data.label.indexOf(value) !== -1;
-        },
-        // "renderContent": function (h, {node, data, store}) {
-        // }
-    }
+    // TODO 下面尚未兑现
+    // "behavior": {
+    //     "allowDrag": function (node) {
+    //         return true
+    //     },
+    //     "allowDrop": function (draddingNode, dropNode, type) {
+    //         return true
+    //     },
+    //     "filterNodeMethod": function (value, data, node) {
+    //         if (!value) return true;
+    //         return data && data.label.indexOf(value) !== -1;
+    //     }
+    // }
 }

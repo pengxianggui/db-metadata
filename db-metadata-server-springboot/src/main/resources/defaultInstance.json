@@ -147,7 +147,10 @@
           "show": false
         },
         "operation-column": {
-          "width": "220"
+          "conf": {
+            "fixed": "right",
+            "width": "220"
+          }
         }
       }
     },
@@ -191,7 +194,10 @@
     "TableView": {
       "config": {
         "operation-column": {
-          "width": "220"
+          "conf": {
+            "fixed": "right",
+            "width": "220"
+          }
         }
       }
     },
@@ -502,8 +508,10 @@
       "config": {
         "operation-column": {
           "show": true,
-          "fixed": "right",
-          "width": "220"
+          "conf": {
+            "fixed": "right",
+            "width": "220"
+          }
         }
       }
     },
@@ -524,8 +532,10 @@
       "config": {
         "operation-column": {
           "show": true,
-          "fixed": "right",
-          "width": "220"
+          "conf": {
+            "fixed": "right",
+            "width": "220"
+          }
         }
       }
     },
