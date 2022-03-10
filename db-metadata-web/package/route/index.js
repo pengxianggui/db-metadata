@@ -6,6 +6,7 @@ import assembleMetaRoute from './data/meta'
 import assembleDynamicRoute from './data/dynamic'
 import {routeUrl} from "../constant/url";
 import {isBoolean, isEmpty} from "../utils/common";
+import {appConfig} from "../config";
 
 /**
  * 最终处理路由。并返回处理的结果。
@@ -121,7 +122,11 @@ function registerInterceptor(Vue, opts) {
 
 function registerRouter(Vue, ops) {
     registerRouteData(Vue, ops); // 注册路由数据
-    registerInterceptor(Vue, ops) // 注册路由守卫
+
+    // TODO appConfig.enableLogin 和enableAuth 应该分别对待
+    if (appConfig.enableLogin && appConfig.enableAuth) {
+        registerInterceptor(Vue, ops) // 注册路由守卫
+    }
 }
 
 export default {

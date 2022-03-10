@@ -146,21 +146,10 @@ const install = function (Vue, opts = {}) {
 
     // 注册全局函数: 最优先。会配置axios，这是后面都可能需要的
     registerGlobalFunction(Vue, opts)
-
-    // 系统配置: 获取服务端关于系统设置的数据
-    configApp(Vue, opts)
-    // 主题配置: 配置默认主题
-    Theme.configDefaultTheme(opts)
-
     // 注册全局过滤器
     configFilters(Vue)
     // 注册全局自定义指令
     configDirectives(Vue)
-
-    // 静态角色配置
-    if (opts.access) {
-        utils.reverseMerge(access, opts.access, false);
-    }
 
     // 全局组件注册
     components.map(component => {
@@ -171,11 +160,23 @@ const install = function (Vue, opts = {}) {
         }
     })
 
-    // 注册菜单
-    Menu.registerMenu(Vue, opts)
-    // 注册路由： 必须在全局组件注册滞后，因为路由数据中的component需要转换为全局组件
-    Route.registerRouter(Vue, opts)
+    // 系统配置: 获取服务端关于系统设置的数据
+    configApp(Vue, opts).then(() => {
+        // 主题配置: 配置默认主题
+        Theme.configDefaultTheme(opts)
 
+        // 静态角色配置
+        if (opts.access) {
+            utils.reverseMerge(access, opts.access, false);
+        }
+
+        // 注册菜单
+        Menu.registerMenu(Vue, opts)
+        // 注册路由： 必须在全局组件注册滞后，因为路由数据中的component需要转换为全局组件
+        Route.registerRouter(Vue, opts)
+    }).catch(err => {
+        console.error(err)
+    })
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
