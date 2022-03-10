@@ -32,13 +32,17 @@ export const appConfig = {
 }
 
 export const configApp = function (Vue, opts = {}) {
-    const {axios} = opts
-    if (!axios) {
-        console.error('[MetaElement]请配置axios')
-        return
-    }
-
-    axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
-        utils.reverseMerge(appConfig, data)
+    return new Promise((resolve, reject) => {
+        const {axios} = opts
+        if (!axios) {
+            reject('[MetaElement] axios必须配置')
+        } else {
+            axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
+                utils.reverseMerge(appConfig, data)
+                resolve()
+            }).catch(err => {
+                reject(err)
+            })
+        }
     })
 }
