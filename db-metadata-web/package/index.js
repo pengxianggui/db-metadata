@@ -36,7 +36,7 @@ import RegionBox from "./core/regionbox";
 import SearchView from './view/searchview'
 import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
-import TableView from './core/tableview'
+import TableView from './view/tableview'
 import TableTreeView from './core/tabletreeview'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'

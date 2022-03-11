@@ -134,8 +134,8 @@ import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
 import Meta from '../../mixins/meta'
 import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
-import TableCell from '../../tableview/src/tableCell'
-import columnsValid from "../../tableview/src/columnsValid"
+import TableCell from '@/../package/view/ext/table/tableCell'
+import columnsValid from "@/../package/view/ext/table/columnsValid"
 import showable from "../../mixins/showable"
 import {resolvePath} from '../../../utils/url'
 
