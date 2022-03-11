@@ -36,16 +36,17 @@ import RegionBox from "./core/regionbox";
 import SearchView from './view/searchview'
 import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
-import TableView from './view/tableview'
-import TableTreeView from './view/tabletreeview'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
-import TreeView from './core/treeview'
 import ZTogglePanel from './core/ztogglepanel'
 import SvgIcon from "./core/svgicon"
 import FullScreen from "./core/fullscreen/src/FullScreen"
 import PageSelector from "./core/pageselector/src/PageSelector";
+// 容器组件
+import TableView from './view/tableview'
+import TableTreeView from './view/tabletreeview'
+import TreeView from './view/treeview'
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
