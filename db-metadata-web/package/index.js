@@ -1,13 +1,10 @@
 import utils from './utils'
 import * as Rest from './utils/rest'
-import configUrl from './constant/url'
-import configFilters from './register/filter'
-import configDirectives from './register/directive'
-import registerGlobalFunction from './register/global-function'
-import './asserts/svg/index' // 内置svg注册
+
 // 布局组件
 import Layout from "./layout";
 import {MetaHeader, MetaLayout} from './layout'
+
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
@@ -41,12 +38,14 @@ import ZTogglePanel from './core/ztogglepanel'
 import SvgIcon from "./core/svgicon"
 import FullScreen from "./core/fullscreen/src/FullScreen"
 import PageSelector from "./core/pageselector/src/PageSelector";
+
 // 容器组件
 import TableView from './view/tableview'
 import TableTreeView from './view/tabletreeview'
 import TreeView from './view/treeview'
 import ListView from './view/listview'
 import FormView from './view/formview'
+
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
@@ -56,20 +55,29 @@ import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
+
 // meta 组件
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
-import {restUrl, routeUrl} from './constant/url'
-import {access} from "./access";
-import User from './access'
+
 // 内置业务组件
 import {UserList, RoleList} from '@/../package/meta/rbac'
 // 全局页面
 import GlobalPage from '@/../package/page'
 
+// 系统
+import './asserts/svg/index' // 内置svg注册
+import {restUrl, routeUrl} from './constant/url'
+import {access} from "./access";
+import User from './access'
 import Route from "./route";
 import Menu from "./menu";
 import {configApp} from "./config";
 import Theme from './theme'
+
+import configUrl from './constant/url'
+import configFilters from './register/filter'
+import configDirectives from './register/directive'
+import registerGlobalFunction from './register/global-function'
 
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
