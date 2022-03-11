@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import DefaultFormViewMeta from '@/../package/core/formview/ui-conf'
+    import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
 
     export default {
         name: "MetaImport",

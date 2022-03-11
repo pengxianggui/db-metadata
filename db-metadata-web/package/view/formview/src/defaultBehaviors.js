@@ -1,4 +1,4 @@
-import BehaviorMixin from '../../mixins/behaviorMixin'
+import BehaviorMixin from '@/../package/core/mixins/behaviorMixin'
 
 /**
  * 绑定FormView的默认cancel逻辑

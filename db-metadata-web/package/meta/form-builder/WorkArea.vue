@@ -23,7 +23,7 @@
 <script>
 import utils from '../../utils'
 import draggable from 'vuedraggable'
-import FormView from "../../core/formview/src/FormView";
+import FormView from "@/../package/view/formview/src/FormView";
 import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
 import {isLayoutComp} from './relate/componentData'
 import NestFormItemEditor from "./NestFormItemEditor"

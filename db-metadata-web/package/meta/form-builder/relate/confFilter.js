@@ -1,4 +1,4 @@
-import DefaultFormViewMeta from '../../../core/formview/ui-conf'
+import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
 import {isLayoutComp} from "./componentData";
 
 // inline 由 栅格布局支持后移除

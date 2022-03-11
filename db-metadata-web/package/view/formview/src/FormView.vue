@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
+import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
 import utils from '../../../utils'
 import DefaultBehaviors from './defaultBehaviors'
 import DefaultMeta from '../ui-conf'

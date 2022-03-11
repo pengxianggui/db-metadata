@@ -49,7 +49,7 @@ import {restUrl} from "../../constant/url"
 import ComponentList from './ComponentList'
 import WorkArea from './WorkArea'
 import ConfArea from './ConfArea'
-import DefaultFormViewMeta from '../../core/formview/ui-conf'
+import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
 import MetaObjectSelector from "../component/MetaObjectSelector"
 import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 import {isEmpty} from "../../utils/common";

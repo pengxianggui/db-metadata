@@ -38,7 +38,7 @@
     import utils from '../utils'
     import {defaultPrimaryKey} from '../config'
     import {getTableViewMeta, getUpdateFormMeta, loadFeature} from "../utils/rest";
-    import DefaultFormViewMeta from '../core/formview/ui-conf'
+    import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
 
     export default {
         name: "TableFormTmpl",

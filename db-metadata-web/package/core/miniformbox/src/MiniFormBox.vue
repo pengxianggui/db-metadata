@@ -22,7 +22,7 @@
     import Meta from '../../mixins/meta'
     import Val from '../../mixins/value'
     import assembleMeta from './assembleMeta'
-    import DefaultFormViewMeta from '../../formview/ui-conf'
+    import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
 
     export default {
         name: "MiniFormBox",

@@ -14,7 +14,7 @@
 
 <script>
     import utils from '../utils'
-    import FormView from "../core/formview/src/FormView";
+    import FormView from "@/../package/view/formview/src/FormView";
     import {getAddFormMeta, getUpdateFormMeta} from '../utils/rest'
 
     export default {
