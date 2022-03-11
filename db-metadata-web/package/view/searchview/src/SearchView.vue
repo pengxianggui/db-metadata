@@ -92,13 +92,13 @@
 </template>
 
 <script>
-import util from '../../../utils'
-import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
-import Meta from '../../mixins/meta'
+import util from '@/../package/utils'
+import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
+import Meta from '@/../package/core/mixins/meta'
 import symbols from '../ext/config'
 import DefaultMeta from '../ui-conf'
-import {defaultMeta} from '../../index'
-import {isEmpty} from "../../../utils/common";
+import {defaultMeta} from '@/../package/core/index'
+import {isEmpty} from "@/../package/utils/common";
 
 export default {
   name: "SearchView",
