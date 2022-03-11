@@ -14,7 +14,6 @@ import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
 import List from "./core/list";
 import ListItem from "./core/listitem";
-import ListView from './core/listview'
 import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
 import DialogBox from './core/dialogbox'
@@ -46,6 +45,7 @@ import PageSelector from "./core/pageselector/src/PageSelector";
 import TableView from './view/tableview'
 import TableTreeView from './view/tabletreeview'
 import TreeView from './view/treeview'
+import ListView from './view/listview'
 import FormView from './view/formview'
 // 模板组件
 import DataListTableTmpl from './template/DataListTableTmpl'
