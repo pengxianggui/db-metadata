@@ -14,7 +14,7 @@
   <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']"
                   v-if="innerMeta.columns && innerMeta.columns.length > 0">
 <!--    {{ initModel }}-->
-    <div class="container-view">
+    <div class="view-container">
       <el-form :ref="innerMeta['name']" v-bind="formConf" :model="model" inline
                @keyup.enter.native="emitSearch" class="search-form">
         <template v-for="(item) in innerMeta.columns">

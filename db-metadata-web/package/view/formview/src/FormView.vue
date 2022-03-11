@@ -1,6 +1,7 @@
 <template>
-  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)" :model="innerModel" :rules="rules"
-           :style="formStyle">
+  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+           :model="innerModel" :rules="rules"
+           class="view-container" :style="formStyle">
     <slot name="form-item" v-bind:columns="innerMeta.columns">
 
       <nest-form-item :columns="innerMeta.columns" :model="innerModel">

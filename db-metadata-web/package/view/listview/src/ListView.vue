@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="view-container">
     <list style="width: 100%">
       <list-item v-for="(item, index) in innerData" :key="index"
                  :class="{'active': index === activeIndex}"

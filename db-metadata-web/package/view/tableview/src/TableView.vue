@@ -1,5 +1,5 @@
 <template>
-  <div class="container-view" ref="container">
+  <div class="view-container" ref="container">
     <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData">
       <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
                  :style="operationBarConf.style" v-bind="operationBarConf.conf"
