@@ -130,13 +130,13 @@
 import {restUrl} from "../../../constant/url"
 import {defaultPrimaryKey} from "../../../config"
 import utils from '../../../utils'
-import MetaEasyEdit from '../../meta/src/MetaEasyEdit'
-import Meta from '../../mixins/meta'
+import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
+import Meta from '@/../package/core/mixins/meta'
 import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import columnsValid from "@/../package/view/ext/table/columnsValid"
-import showable from "../../mixins/showable"
+import showable from "@/../package/core/mixins/showable";
 import {resolvePath} from '../../../utils/url'
 
 export default {
