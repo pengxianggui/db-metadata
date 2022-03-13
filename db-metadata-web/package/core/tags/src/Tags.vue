@@ -49,12 +49,12 @@
         },
         computed: {
             primaryKey() {
-                const {props: {id: objectPrimaryKey}} = this.innerMeta;
+                const {props: {id: objectPrimaryKey}} = this.meta;
                 let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
                 return primaryKey.split(',');
             },
             labelKey() {
-                const {props: {label}} = this.innerMeta;
+                const {props: {label}} = this.meta;
                 return label;
             }
         }

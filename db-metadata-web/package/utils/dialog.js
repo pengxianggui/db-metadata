@@ -15,20 +15,14 @@ export function createDialog (Vue) {
             let DialogTmpl = Vue.extend({
                 template: `
                   <el-dialog :visible.sync="visible" v-bind="conf" center>
-                  <component :ref="innerMeta.name" :is="innerMeta.component_name" :meta="innerMeta" v-model="data"
-                             @ok="ok" @cancel="cancel" style="width: 100%"></component>
-                  <slot name="footer" v-if="conf.showButtons">
-                    <div class="dialog-footer" style="margin-top: 10px; text-align: center">
-                      <el-button @click="visible = false">取 消</el-button>
-                      <el-button type="primary" @click="ok(ref.value)">确 定</el-button>
-                    </div>
-                  </slot>
+                      <component :ref="meta.name" :is="meta.component_name" :meta="meta" v-model="data"
+                                 @ok="ok" @cancel="cancel" style="width: 100%"></component>
                   </el-dialog>
                 `,
                 data() {
                     return {
                         visible: true,
-                        innerMeta: meta,
+                        meta: meta,
                         data: data,
                         conf: utils.merge(conf, DefaultDialogBoxMeta['conf'])
                     }
@@ -45,7 +39,7 @@ export function createDialog (Vue) {
                 },
                 computed: {
                     ref: function () {
-                        return this.$refs[this.innerMeta.name];
+                        return this.$refs[this.meta.name];
                     }
                 }
             });

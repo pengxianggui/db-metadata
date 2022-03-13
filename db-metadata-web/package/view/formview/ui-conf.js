@@ -18,13 +18,23 @@ export const formTypes = {
     update: 'UPDATE',
     add: 'ADD'
 }
+export const getNameOfFormTypes = function (formType) {
+    switch (formType.toUpperCase()) {
+        case formTypes.view:
+            return '查看'
+        case formTypes.update:
+            return '编辑'
+        case formTypes.add:
+            return '新增'
+    }
+}
 
 export default {
     "component_name": "FormView",
     "name": "FormView",
     "label": "表单模板",
     // "action": "/form/doAdd/{objectCode}", // form action (url), pxg_todo 屏蔽, FormBuilder实例配置时,会导致此属性和值配入库中, 但是此值需要区分三种表单环境
-    "width": "60%", // 宽度
+    "width": "100%", // 宽度
     "form_type": formTypes.add, // 默认新增
     "conf": {
         "label-width": '100px',
@@ -43,6 +53,7 @@ export default {
     "buttons": {
         "show": true,
         "submit": {
+            "show": true,
             "label": "提交",
             "conf": {
                 // ... support conf of el-button
@@ -50,6 +61,7 @@ export default {
             }
         },
         "cancel": {
+            "show": true,
             "label": '取消',
             "conf": {
                 // ... support conf of el-button

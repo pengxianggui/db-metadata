@@ -26,3 +26,35 @@ export default {
     "directly_trigger": [], // 直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action
     "explain": "" // 字段解释
 }
+
+/**
+ * meta数据得到后的回调
+ * @param meta
+ */
+export const assembleMeta = function (meta) {
+    const {columns = []} = meta
+
+    columns.forEach(colMeta => {
+        const {component_name} = colMeta
+        this.$merge(colMeta, {
+            conf: {
+                clearable: true
+            }
+        });
+
+        switch (component_name) {
+            case 'DateBox':
+                this.$reverseMerge(colMeta, {"conf": {"is-range": true, "type": 'daterange'}})
+                break;
+            case 'TimeBox':
+                this.$reverseMerge(colMeta, {"conf": {"is-range": true, "type": "timerange"}})
+                break;
+            case 'DateTimeBox':
+                this.$reverseMerge(colMeta, {"conf": {"is-range": true, "type": 'datetimerange'}})
+                break;
+            case 'NumBox': // NumBox无法设置"比较操作符"插槽, 改为TextBox
+                colMeta.component_name = 'TextBox'
+                break;
+        }
+    })
+}

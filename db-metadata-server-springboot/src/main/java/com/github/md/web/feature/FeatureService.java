@@ -41,6 +41,19 @@ public class FeatureService {
         return db().save("meta_feature", "id", record);
     }
 
+    // insert or update
+    public boolean saveFeature(FeatureType type, String name, String code, MetaData config, boolean buildIn) {
+        Record old = loadExistsFeature(code);
+        if (old != null) {
+            old.set("build_in", buildIn);
+            return db().update("meta_feature", "code", old);
+        } else {
+            Record record = getRecord(type, name, code, config);
+            record.set("build_in", buildIn);
+            return db().save("meta_feature", record);
+        }
+    }
+
     private Record loadExistsFeature(String featureCode) {
         return db().findFirst("select * from meta_feature where code=?", featureCode);
     }
@@ -66,7 +79,7 @@ public class FeatureService {
     private Record getRecord(FeatureType type, String name, String code, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
-        record.set("type", type.toString());
+        record.set("type", type.getCode());
         record.set("name", name);
         record.set("code", code);
         record.set("config", config == null ? Kv.create().toJson() : config.toJson());

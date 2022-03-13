@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-input v-model="nativeValue"
-                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-                  :name="innerMeta.name"
+                  v-bind="$reverseMerge(meta.conf, $attrs)"
+                  :name="meta.name"
                   @blur="$emit('blur', $event)"
                   @focus="$emit('focus', $event)"
                   @change="$emit('change', $event)"
@@ -44,11 +44,11 @@
         methods: {
             handlerClick(ev) {
                 if (ev) ev.stopPropagation();
-                const {innerMeta} = this;
-                const {data_url: url} = innerMeta;
+                const {meta} = this;
+                const {data_url: url} = meta;
 
                 if (!url) {
-                    console.error('data_url is required property, and not nullable. meta: %o', innerMeta);
+                    console.error('data_url is required property, and not nullable. meta: %o', meta);
                     return;
                 }
                 this.$axios.get(url).then(resp => {

@@ -33,6 +33,7 @@ public class ComponentInstanceConfig extends Kv {
     @Getter
     String instanceName;
 
+    @Getter
     String objectCode;
 
     Kv self;

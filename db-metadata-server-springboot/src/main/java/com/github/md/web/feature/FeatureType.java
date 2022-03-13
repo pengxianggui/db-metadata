@@ -7,6 +7,7 @@ import com.github.md.web.feature.ms.MasterSlaveConfig;
 import com.github.md.web.feature.single.SingleGridConfig;
 import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
+import lombok.Getter;
 
 /**
  * 此类修改后,需前端FeatureAdd.vue 同步变更
@@ -15,11 +16,12 @@ import com.jfinal.kit.StrKit;
  *
  * <p> @author konbluesky </p>
  */
+@Getter
 public enum FeatureType {
     MasterSlaveGrid("主子表", "MasterSlaveGrid", "MasterSlaveTableTmpl", MasterSlaveConfig.class),
     SingleGrid("单表", "SingleGrid", "SingleGridTmpl", SingleGridConfig.class),
-    TreeInTable("树型表", "TreeInTable", "TreeSingleGridTmpl", TreeInTableConfig.class),
-    TreeAndTable("树和表", "TreeAndTable", "TreeTableTmpl", TreeAndTableConfig.class),
+    TreeSingleGrid("树型表", "TreeSingleGrid", "TreeSingleGridTmpl", TreeInTableConfig.class),
+    TreeTable("树和表", "TreeTable", "TreeTableTmpl", TreeAndTableConfig.class),
     UNKNOWN("未知的功能模板", "unknown", "unknown", Kv.class);
 
     String name;

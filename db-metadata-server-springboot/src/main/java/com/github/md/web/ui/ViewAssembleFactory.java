@@ -93,9 +93,20 @@ public class ViewAssembleFactory implements MetaViewAdapterFactory {
     }
 
     @Override
-    public MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode) {
-        //TODO
-        throw new WebException("This is not to be implemented!");
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(String ic) {
+        //全部全局配置
+        Kv globalComponentAllConfig = ServiceManager.componentService().loadComponentsFlatMap();
+        //完整的实例配置,元对象级+字段级
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(ic);
+        //某一组件全局配置
+        Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, componentInstanceConfig.getContainerType().getCode());
+        // 构造容器对象
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(componentInstanceConfig.getObjectCode());
+        Component containerComponent = ViewFactory.createViewComponent(metaObject, componentInstanceConfig.getContainerType(), componentInstanceConfig);
+        // 构造域配置Adapter
+        List<MetaFieldViewAdapter> fields = fetchFieldsAdapter(metaObject.fields(), componentInstanceConfig, globalComponentAllConfig);
+        // 构造容器Adapter
+        return new MetaObjectViewAdapter(metaObject, containerComponent, globalComponentConfig, componentInstanceConfig, fields);
     }
 
     @Override

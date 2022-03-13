@@ -1,5 +1,6 @@
 package com.github.md.web.controller;
 
+import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
@@ -40,6 +41,11 @@ import java.util.List;
 @RequestMapping("/component")
 public class ComponentController extends ControllerAdapter {
 
+    /**
+     * @return
+     * @deprecated 逐步使用 {@link #metaByIc()} 替代
+     */
+    @Deprecated
     @MetaAccess(value = Type.API_WITH_META_OBJECT)
     @GetMapping("meta")
     public Ret meta() {
@@ -53,8 +59,18 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
     }
 
+    @MetaAccess(Type.API_WITH_META_INSTANCE)
+    @GetMapping("meta/ic")
+    public Ret metaByIc() {
+        String ic = queryHelper().getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(ic), "实例编码(ic)未指定");
+
+        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(ic);
+        return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
+    }
+
     /**
-     * 返回某Component的关联元对象实例
+     * 获取指定元对象+容器下的实例配置列表
      */
     @MetaAccess(value = Type.API_WITH_META_OBJECT)
     @GetMapping("contact")
@@ -190,7 +206,7 @@ public class ComponentController extends ControllerAdapter {
                     component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
-            componentService().newDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
+            componentService().newIfNull(compCode, UtilKit.getKv(config.getStr(compCode)));
         }
         return true;
     }

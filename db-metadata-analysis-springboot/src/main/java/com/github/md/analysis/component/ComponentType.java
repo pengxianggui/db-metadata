@@ -20,10 +20,10 @@ public enum ComponentType {
     DATEBOX("datebox", "日期框", "DateBox"),
     DATETIMEBOX("datetimebox", "日期时间框", "DateTimeBox"),
     DROPDOWN("dropdown", "下拉框组件", "DropDownBox"),
-    FORMVIEW("formview", "表单组件", "FormView"),
+    FORMVIEW("formview", "表单组件", "FormView", true),
     NUMBERBOX("numberbox", "数值框", "NumBox"),
     RADIOBOX("radiobox", "单选框", "RadioBox"),
-    TABLEVIEW("tableview", "表格组件", "TableView"),
+    TABLEVIEW("tableview", "表格组件", "TableView", true),
     TEXTAREABOX("textareabox", "文本域", "TextAreaBox"),
     RICHTEXTBOX("richtextbox", "富文本", "RichTextBox"),
     TEXTBOX("textbox", "输入框组件", "TextBox"),
@@ -33,8 +33,8 @@ public enum ComponentType {
     JSONBOX("jsonbox", "Json框", "JsonBox"),
     MINIFORMBOX("miniformbox", "迷你表单框", "MiniFormBox"),
     FINDBOX("findbox", "查找框", "FindBox"),
-    SEARCHVIEW("searchview", "搜索面板", "SearchView"),
-    TABLETREEVIEW("tabletreeview", "树形表格组件", "TableTreeView"),
+    SEARCHVIEW("searchview", "搜索面板", "SearchView", true),
+    TABLETREEVIEW("tabletreeview", "树形表格组件", "TableTreeView", true),
     FILEBOX("filebox", "上传控件", "FileBox"),
     IMAGEBOX("imagebox", "图片控件", "ImgBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
@@ -48,10 +48,17 @@ public enum ComponentType {
     @Getter(AccessLevel.PUBLIC)
     String cn;
 
+    boolean isView;
+
     ComponentType(String name, String cn, String code) {
+        this(name, cn, code, false);
+    }
+
+    ComponentType(String name, String cn, String code, boolean isView) {
         this.name = name;
         this.cn = cn;
         this.code = code;
+        this.isView = isView;
     }
 
     public static ComponentType V(String s) {

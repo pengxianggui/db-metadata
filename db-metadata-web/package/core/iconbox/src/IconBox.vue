@@ -2,7 +2,7 @@
     <div>
         <el-input v-model="nativeValue"
                   v-bind="conf"
-                  :name="innerMeta.name"
+                  :name="meta.name"
                   @blur="$emit('blur', $event)"
                   @focus="$emit('focus', $event)"
                   @change="$emit('change', $event)"
@@ -59,7 +59,7 @@
         },
         computed: {
             conf() {
-                const {innerMeta: {conf}, $attrs, $reverseMerge} = this
+                const {meta: {conf}, $attrs, $reverseMerge} = this
                 return $reverseMerge(conf, $attrs)
             }
         }

@@ -1,109 +1,108 @@
 <template>
   <div class="page-container">
     <row-grid :span="[6, 18]">
-        <template #0>
-            <tree :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree>
-        </template>
-        <template #1>
-            <form-view :ref="formRefName" :meta="formMeta">
-                <template #action="{model, conf}">
-                    <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
-                </template>
-            </form-view>
-        </template>
+      <template #0>
+        <tree-view :ic="config.tree.instanceCodes.TreeView" :ref="config.tree.config.objectCode"
+              @active-change="handleActiveChange" @chose-change="handleChoseChange"></tree-view>
+      </template>
+      <template #1>
+        <form-view :meta-url="formMetaUrl" @ok="refreshTreeData" v-if="formShow">
+          <template #action="{model, conf}">
+            <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+          </template>
+        </form-view>
+      </template>
     </row-grid>
   </div>
 </template>
 
 <script>
-    import utils from '../utils'
-    import {restUrl} from '../constant/url'
-    import {defaultPrimaryKey} from "../config";
-    import {getTreeMeta, loadFeature} from '../utils/rest'
-    import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
+import utils from '../utils'
+import {restUrl} from '../constant/url'
+import {defaultPrimaryKey} from "../config";
+import {getTreeMeta, loadFeature} from '../utils/rest'
+import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
+import {TableAndFormConfig} from "../meta/feature/ext/featureType";
+import {isEmpty} from "../utils/common";
+import {TreeAndFormConfig} from "../meta/feature/ext/featureType";
 
-    export default {
-        name: "TreeFormTmpl",
-        meta: {
-          isTemplate: true,
-          isPage: false,
-          cn: '左树-右表单模板',
-          icon: 'tree_form',
-          buildIn: true // 内建：DbMeta提供
-        },
-        props: {
-            fc: String,
-            oc: String
-        },
-        data() {
-            const {fc: R_fc, oc: R_oc} = this.$route.query;
-            const featureCode = utils.assertUndefined(this.fc, R_fc);
-            const objectCode = utils.assertUndefined(this.oc, R_oc);
-
-            return {
-                treeConf: {},
-                formConf: {},
-                treeMeta: {},
-                formMeta: {},
-                featureCode: featureCode,
-                objectCode: objectCode
-            }
-        },
-        methods: {
-            handleChoseChange(rows) {
-                // pxg_todo 树多选的默认行为
-            },
-            handleActiveChange(row) {
-                if (utils.isEmpty(row)) {
-                    this.formMeta = this.$merge({}, DefaultFormViewMeta);
-                    return;
-                }
-                const primaryKey = this.primaryKey;
-                const primaryValue = utils.extractValue(row, primaryKey);
-                const objectCode = this.treeMeta['objectCode'];
-
-                let url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-                    objectCode: objectCode,
-                    primaryKv: primaryValue
-                });
-                this.$axios.get(url).then(resp => {
-                    this.formMeta = resp.data;
-                });
-            },
-            initMeta(objectCode) {
-                getTreeMeta(this.$axios, objectCode).then(resp => {
-                    this.treeMeta = resp.data;
-                }).catch(({msg = '获取Tree meta数据错误'}) => {
-                    console.error('[ERROR] msg: %s', msg);
-                });
-            }
-        },
-        created() {
-            const {featureCode, objectCode} = this;
-            if (!utils.isEmpty(featureCode)) {
-                loadFeature(this.$axios, this.featureCode).then(resp => {
-                    const feature = resp.data;
-                    this.treeConf = feature['tree'];
-                    this.formConf = feature['form'];
-
-                    const {objectCode: treeObjectCode} = this.treeConf;
-                    this.initMeta(treeObjectCode);
-                });
-            } else {
-                this.initMeta(objectCode);
-            }
-        },
-        computed: {
-            formRefName() {
-                return this.formMeta['name'];
-            },
-            primaryKey() {
-                let primaryKey = this.treeMeta.hasOwnProperty('objectPrimaryKey') ? this.treeMeta['objectPrimaryKey'] : defaultPrimaryKey;
-                return primaryKey.split(',');
-            }
-        }
-
+export default {
+  name: "TreeFormTmpl",
+  meta: {
+    isTemplate: true,
+    isPage: false,
+    cn: '左树-右表单模板',
+    icon: 'tree_form',
+    buildIn: true // 内建：DbMeta提供
+  },
+  props: {
+    fc: String,
+    config: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
+  },
+  data() {
+    const {fc: R_fc} = this.$route.query;
+    const featureCode = utils.assertUndefined(this.fc, R_fc);
+    return {
+      featureCode: featureCode,
+      activeTreeData: {},
+      formMetaUrl: null,
+      formShow: true // 重新渲染form。当树点选的数据发生变化时，表单的meta可能不一样, 需要重新渲染。通过此值配置v-if实现
+    }
+  },
+  methods: {
+    reRenderForm() {
+      this.formShow = false
+      this.$nextTick(() => {
+        this.formShow = true
+      })
+    },
+    refreshTreeData() {
+      const {config: {tree: {config: {objectCode: refName}}}} = this
+      this.$nextTick(() => {
+        this.$refs[refName].getData()
+      })
+    },
+    handleChoseChange(rows) {
+      const {tree: {config: {objectCode}}} = this
+      this.$emit('tree-chose-change', {
+        rows: rows,
+        objectCode: objectCode,
+        primaryKey: this.$refs[objectCode].primaryKey
+      })
+    },
+    handleActiveChange(row) {
+      const {config: {tree: {config: {objectCode}}}} = this
+      this.activeTreeData = row
+      this.$emit('tree-active-change', {
+        row: row,
+        objectCode: objectCode
+      })
+    },
+    openFormView({url, params = {}}) {
+      this.$merge(params, {
+        instanceCode: this.config.form.instanceCodes.FormView
+      })
+      this.formMetaUrl = this.$compile(url, params)
+      this.reRenderForm()
+    }
+  },
+  created() {
+    this.$merge(this.config, TreeAndFormConfig)
+
+    const {featureCode} = this
+    const promise = isEmpty(featureCode) ? new Promise(((resolve, reject) => reject())) : loadFeature(this.$axios, featureCode)
+    promise.then(resp => {
+      this.$merge(this.config, resp.data)
+    }).catch(() => {}).finally(() => {
+    })
+  }
+
+}
 </script>
 
 <style scoped>

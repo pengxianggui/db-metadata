@@ -1,7 +1,10 @@
 package com.github.md.web.controller;
 
+import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.*;
+import com.github.md.web.ServiceManager;
+import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.collect.Lists;
@@ -14,6 +17,7 @@ import com.github.md.web.query.QueryHelper;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Record;
@@ -49,11 +53,16 @@ public class FormController extends ControllerAdapter {
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
+        String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
 
+        String objectCode = componentInstanceConfig.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/form/doAdd?objectCode={objectCode}").addForm();
+        FormView formView = ViewFactory.formView(metaObject, componentInstanceConfig)
+                .action("/form/doAdd?objectCode=" + objectCode)
+                .addForm();
 
         //TODO 手工build,方便后面编程式操作表单内元子控件
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
@@ -69,7 +78,6 @@ public class FormController extends ControllerAdapter {
     @MetaAccess(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doAdd")
     public Ret doAdd() {
-
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
@@ -112,15 +120,20 @@ public class FormController extends ControllerAdapter {
     @MetaAccess(value = Type.API_WITH_META_OBJECT)
     @GetMapping("toUpdate")
     public Ret toUpdate() {
-
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
 
+        String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
+
+        String objectCode = componentInstanceConfig.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
         Object[] dataIds = queryHelper.getPks(metaObject);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate?objectCode={objectCode}").updateForm();
+        FormView formView = ViewFactory.formView(metaObject)
+                .action("/form/doUpdate?objectCode=" + objectCode)
+                .updateForm();
 
         Record d = metaService().findDataByIds(metaObject, dataIds);
 
@@ -172,8 +185,12 @@ public class FormController extends ControllerAdapter {
     @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
 
+        String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
+
+        String objectCode = componentInstanceConfig.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
         FormView formView = ViewFactory.formView(metaObject).viewForm();

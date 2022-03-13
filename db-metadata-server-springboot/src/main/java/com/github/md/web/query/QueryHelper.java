@@ -15,10 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * QueryHelper的目的是一个全局的统一获取系统核心参数的工具类
+ * 防止Controller中散落大量的参数名。
  * <p>
+ * TODO 2.2 对于一些核心入参的优先级需要清洗一遍, 原则: 完整名>简写
+ * <pre>
+ * objectCode > oc
+ * fieldCode > fc
+ * featureCode > fec
+ * instanceCode > ic
+ * </pre>
  *
- * @Describe: QueryHelper的目的是一个全局的统一获取系统核心参数的工具类
- * 防止Controller中散落大量的参数名
  * </p>
  * <p> @Date : 2019/10/15 </p>
  * <p> @Project : db-meta-serve</p>
@@ -47,7 +54,7 @@ public class QueryHelper {
     }
 
     public String getObjectCode() {
-        return getObjectCode("");
+        return getObjectCode(tp.getPara("oc"));
     }
 
     public String getObjectCode(String defaultCode) {
@@ -75,7 +82,7 @@ public class QueryHelper {
     }
 
     public String getComponentCode() {
-        return tp.getPara("compCode", tp.getPara("componentCode"));
+        return tp.getPara("compCode", tp.getPara("componentCode", tp.getPara("cc")));
     }
 
     public ComponentType getComponentType() {
@@ -99,7 +106,6 @@ public class QueryHelper {
      * 包装成KV返回
      *
      * @param metaObject
-     *
      * @return
      */
     public Kv hasMetaParams(IMetaObject metaObject) {
@@ -126,7 +132,6 @@ public class QueryHelper {
      * </pre>
      *
      * @param metaObject
-     *
      * @return 复合主键[[v1, v2], [v1, v2]]
      * 单主键[[v1],[v2]]
      */
@@ -150,7 +155,7 @@ public class QueryHelper {
             //result : [[v1,v2],[v1,v2]]
         } else {
             for (String vs : tp.getParaValues(metaObject.primaryKey())) {
-                pks.add(new Object[] { vs });
+                pks.add(new Object[]{vs});
             }
         }
         return pks.toArray();
@@ -160,7 +165,6 @@ public class QueryHelper {
      * 拆解一条复合主键
      *
      * @param value "id=pk1_v1,pk2_v2"
-     *
      * @return {pk1:v1,pk2:v2}
      */
     private Okv resolvePk(String value, String[] pkkeys) {

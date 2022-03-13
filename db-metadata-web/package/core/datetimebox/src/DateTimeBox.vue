@@ -2,7 +2,7 @@
     <el-date-picker
             v-model="nativeValue"
             :type="type"
-            v-bind="$reverseMerge(innerMeta.conf, $attrs)">
+            v-bind="$reverseMerge(meta.conf, $attrs)">
     </el-date-picker>
 </template>
 
@@ -23,7 +23,7 @@
         },
         computed: {
           type() {
-            const {innerMeta: {conf: {type:metaType} = {}} = {}, $attrs: {type: attrType}} = this
+            const {meta: {conf: {type:metaType} = {}} = {}, $attrs: {type: attrType}} = this
             return assertEmpty(assertEmpty(attrType, metaType), 'datetime')
           }
         }

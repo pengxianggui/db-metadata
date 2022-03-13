@@ -1,41 +1,43 @@
 <template>
-  <el-form :ref="innerMeta['name']" v-bind="$reverseMerge(innerMeta.conf, $attrs)"
-           :model="innerModel" :rules="rules"
-           class="view-container" :style="formStyle">
-    <slot name="form-item" v-bind:columns="innerMeta.columns">
+  <div class="view-container">
+    <el-form :ref="meta['name']" v-bind="$reverseMerge(meta.conf, $attrs)"
+             :model="model" :rules="rules"
+             :style="formStyle">
+      <slot name="form-item" v-bind:columns="meta.columns">
 
-      <nest-form-item :columns="innerMeta.columns" :model="innerModel">
-        <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
-          <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
-        </template>
-      </nest-form-item>
+        <nest-form-item :columns="meta.columns" :model="model">
+          <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
+            <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
+          </template>
+        </nest-form-item>
 
-    </slot>
-    <slot name="action" v-bind:model="innerModel" v-bind:conf="buttonsConf"
-          v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
-      <el-form-item>
-        <el-button :id="innerMeta.name + 'submit'" v-bind="buttonsConf['submit']['conf']"
-                   @click="onSubmit"
-                   v-text="buttonsConf['submit']['label']"></el-button>
-        <el-button :id="innerMeta.name + 'cancel'" v-bind="buttonsConf['cancel']['conf']"
-                   @click="onCancel"
-                   v-text="buttonsConf['cancel']['label']"></el-button>
-      </el-form-item>
-    </slot>
-    <div style="float: right">
-      <meta-easy-edit :object-code="innerMeta.objectCode" component-code="FormView">
-        <template #label><i class="el-icon-setting"></i></template>
-      </meta-easy-edit>
-    </div>
+      </slot>
+      <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
+            v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
+        <el-form-item>
+          <el-button :id="meta.name + 'submit'" v-bind="buttonsConf.submit.conf"
+                     @click="onSubmit" v-text="buttonsConf.submit.label"
+                     v-if="buttonsConf.submit.show"></el-button>
+          <el-button :id="meta.name + 'cancel'" v-bind="buttonsConf.cancel.conf"
+                     @click="onCancel" v-text="buttonsConf.cancel.label"
+                     v-if="buttonsConf.cancel.show"></el-button>
+        </el-form-item>
+      </slot>
+      <div style="float: right">
+        <meta-easy-edit :object-code="meta.objectCode" component-code="FormView">
+          <template #label><i class="el-icon-setting"></i></template>
+        </meta-easy-edit>
+      </div>
 
-    <!-- render-less behavior slot -->
-    <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
-    <!--            <cancel v-bind="{on, actions}"></cancel>-->
-    <!--        </slot>-->
-    <!--        <slot name="bhv-submit" :on="on" :actions="actions">-->
-    <!--            <submit v-bind="{on, actions}"></submit>-->
-    <!--        </slot>-->
-  </el-form>
+      <!-- render-less behavior slot -->
+      <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
+      <!--            <cancel v-bind="{on, actions}"></cancel>-->
+      <!--        </slot>-->
+      <!--        <slot name="bhv-submit" :on="on" :actions="actions">-->
+      <!--            <submit v-bind="{on, actions}"></submit>-->
+      <!--        </slot>-->
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -46,34 +48,28 @@ import DefaultMeta from '../ui-conf'
 import NestFormItem from "./NestFormItem";
 import {formTypes} from "../ui-conf";
 import {gridInfoStructured} from "../../../meta/form-builder/formViewMetaParser";
+import Meta from "../../../core/mixins/meta";
+import {ViewMixin} from "../../ext/mixins";
 
 export default {
   name: "FormView",
   components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
+  mixins: [Meta(DefaultMeta, gridInfoStructured), ViewMixin],
   provide() {
     return {
       isView: this.isView // 注入子field, 以便实现FormView的view形态
     }
   },
-  data() {
-    return {
-      innerModel: {},
-      isEdit: false,
-      formTypes: formTypes,
-    }
-  },
   props: {
-    meta: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
     model: { // 外部model的值拥有最高优先级, 但是key却是依据meta来确定
       type: Object,
       default: () => {
         return {}
       }
+    },
+    type: {
+      type: String,
+      default: () => formTypes.add
     }
   },
   methods: {
@@ -82,11 +78,11 @@ export default {
       return utils.isEmpty(rules) ? [] : rules;
     },
     setItem(name, value) {
-      this.$set(this.innerModel, name, value)
+      this.$set(this.model, name, value)
     },
     doSubmit(ev) {
-      let {innerMeta, innerModel: params} = this;
-      const {action, objectCode} = innerMeta;
+      let {meta, model: params} = this;
+      const {action, objectCode} = meta;
 
       let url = this.$compile(action, {objectCode: objectCode});
       params['objectCode'] = objectCode;
@@ -102,7 +98,7 @@ export default {
       })
     },
     onSubmit(ev) {
-      const {innerMeta: {name: refName}, isView} = this
+      const {meta: {name: refName}, isView} = this
       if (isView) {
         return
       }
@@ -111,7 +107,7 @@ export default {
       this.$refs[refName].validate((valid) => {
         if (valid) {
           if (this.$listeners.hasOwnProperty(fn)) {
-            this.$emit(fn, this.innerModel)
+            this.$emit(fn, this.model)
             return;
           }
           this.doSubmit(ev) // do submit
@@ -123,56 +119,53 @@ export default {
     onCancel: function (ev) {
       const fn = 'cancel';
       if (this.$listeners.hasOwnProperty(fn)) {
-        this.$emit(fn, this.innerModel);
+        this.$emit(fn, this.model);
       } else {
         console.log('FormView default onCancel behavior.');
       }
     },
     assemblyModel(meta) {
-      const {model: model} = this
-      this.innerModel = {};
-      let columns = utils.isArray(meta.columns) ? meta.columns : [];
+      const {model} = this
+      const {columns = [], form_type} = meta
 
-      // 编辑/新增 模式根据是否含有record字段 && record非空
-      this.isEdit = utils.hasProp(meta, 'record');
-
-      if (this.isEdit) {
-        let record = utils.isObject(meta['record']) ? meta['record'] : {};
-        columns.forEach(item => {
-          this.$set(this.innerModel, item.name, utils.assertUndefined(model[item.name], record[item.name]));
-        });
-      } else {
-        columns.forEach(item => {
-          this.$set(this.innerModel, item.name, utils.assertUndefined(model[item.name], item.default_value));
-        });
+      switch (form_type.toUpperCase()) {
+        case formTypes.add: // 新增表单：备选值取默认值
+          columns.forEach(item => {
+            this.$set(this.model, item.name, utils.assertUndefined(model[item.name], item.default_value));
+          });
+          break;
+        case formTypes.update: // 更新表单、查看表单: 备选址取record值
+        case formTypes.view:
+          const {record = {}} = meta
+          columns.forEach(item => {
+            this.$set(this.model, item.name, utils.assertUndefined(model[item.name], record[item.name]));
+          });
+          break;
       }
+    },
+    init() {
+      this.assemblyModel(this.meta);
     }
   },
   computed: {
     isView() {
-      const {innerMeta: {form_type: metaFormType}, $attrs: {formType: attrFormType}} = this
-      const formType = utils.assertUndefined(attrFormType, metaFormType)
-      return formTypes.view.toUpperCase() === formType.toUpperCase()
-    },
-    innerMeta() {
-      let newMeta = utils.deepClone(this.meta);
-      this.$merge(newMeta, DefaultMeta);
-      this.assemblyModel(newMeta);
-      return gridInfoStructured(newMeta);
+      const {meta: {form_type = formTypes.add}} = this
+      return formTypes.view.toUpperCase() === form_type.toUpperCase()
     },
     rules() {
-      const {innerMeta: {conf: {rules} = {}} = {}} = this
+      const {meta: {conf: {rules} = {}} = {}} = this
       return rules;
     },
     formStyle() {
-      const {$attrs: {width: attrWidth}, innerMeta: {width: metaWidth}} = this
+      const {$attrs: {width: attrWidth}, meta: {width: metaWidth}} = this
       return {
         margin: 'auto',
         width: utils.assertUndefined(attrWidth, metaWidth)
       }
     },
     buttonsConf() {
-      return this.innerMeta['buttons'];
+      const {buttons: buttonsConf = {}} = this.meta
+      return buttonsConf
     },
     fieldSlots() {
       return this.$scopedSlots

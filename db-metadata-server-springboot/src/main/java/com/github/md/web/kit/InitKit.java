@@ -1,6 +1,8 @@
 package com.github.md.web.kit;
 
+import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -10,14 +12,17 @@ import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.config.QuickJudge;
+import com.github.md.web.feature.FeatureType;
 import com.github.md.web.ui.MetaFieldViewAdapter;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -35,13 +40,17 @@ public class InitKit {
 
     private static final InitKit me = new InitKit();
 
-    private static final String OBJECT_CONFIG = "defaultObject.json";
+    private static final String OBJECT_CONFIG = "defaultObject.json"; // 系统内置的元数据
 
-    private static final String INSTANCE_JSON = "defaultInstance.json";
+    private static final String INSTANCE_JSON = "defaultInstance.json"; // 系统内置的实例配置数据
+
+    private static final String FEATURE_JSON = "defaultFeature.json"; // 系统内置的功能配置
 
     private static JSONObject jsonObjectConfig = new JSONObject();
 
     private static JSONObject jsonInstanceConfig = new JSONObject();
+
+    private static JSONArray jsonFeatureConfig = new JSONArray();
 
     static {
         loadConfig();
@@ -54,8 +63,10 @@ public class InitKit {
     private static void loadConfig() {
         String objectConfig = UtilKit.loadConfigByFile(OBJECT_CONFIG);
         String instanceConfig = UtilKit.loadConfigByFile(INSTANCE_JSON);
+        String featureConfig = UtilKit.loadConfigByFile(FEATURE_JSON);
         jsonObjectConfig = JSON.parseObject(objectConfig, Feature.OrderedField);
         jsonInstanceConfig = JSON.parseObject(instanceConfig, Feature.OrderedField);
+        jsonFeatureConfig = JSON.parseArray(featureConfig);
     }
 
     /**
@@ -116,6 +127,43 @@ public class InitKit {
             }
         }
         return this;
+    }
+
+    /**
+     * 更新功能配置(依据defaultFeature.json，文件中未定义的功能不会被更新)
+     *
+     * @return
+     */
+    public InitKit updateFeatureConfig() {
+        log.info("开始导入系统内置功能...");
+
+        for (Object item : jsonFeatureConfig) {
+            JSONObject jsonItem = (JSONObject) item;
+            String typeStr = jsonItem.getString("type");
+            FeatureType type = FeatureType.V(typeStr);
+            String name = jsonItem.getString("name");
+            String code = jsonItem.getString("code");
+            JSONObject configJson = jsonItem.getJSONObject("config");
+            MetaData config = JSON.parseObject(JSONObject.toJSONString(configJson), type.getConfigEntity());
+
+            boolean flag = ServiceManager.featureService().saveFeature(type, name, code, config, true);
+            AssertUtil.isTrue(flag, "导入系统内置功能时发生错误, 数据未导入库， 功能编码:" + code);
+        }
+        return this;
+    }
+
+    private Record toFeature(JSONObject item) {
+        String type = item.getString("type");
+        String name = item.getString("name");
+        String code = item.getString("code");
+        JSONObject config = item.getJSONObject("config");
+
+        Record record = new Record();
+        record.set("type", type);
+        record.set("name", name);
+        record.set("code", code);
+        record.set("config", config);
+        return record;
     }
 
     private void updateMetaObjects(List<IMetaObject> metaObjects) {

@@ -605,6 +605,18 @@ export function assert(condition, msg) {
     }
 }
 
+export function printErr(msg) {
+    console.error(`[meta-element]${msg}`)
+}
+
+export function printInfo(msg) {
+    console.info(`[meta-element]${msg}`)
+}
+
+export function printWarn(msg) {
+    console.warn(`[meta-element]${msg}`)
+}
+
 /**
  * 运行一个函数。返回运行结果。若不是函数，则返回其值
  * @param value

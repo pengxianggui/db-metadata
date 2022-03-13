@@ -34,20 +34,27 @@ export const restUrl = {
     COMP_INSTANCE_CONF_LOAD_NEW: '/component/load?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置加载[自动计算-新增时]
     COMP_INSTANCE_CONF_DELETE: '/component/delete/?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置删除
     COMPONENT_INSTANCE_META: '/component/meta?componentCode={componentCode}&objectCode={objectCode}', // 组件实例元数据
+
+
+    VIEW_INSTANCE_CONF: '/component/meta/ic?ic={instanceCode}', // 容器组件实例配置
+
+
     COMPONENT_OPTIONS: '/component/options?objectCode={objectCode}&f={fieldCode}',
     FEATURE_TREE_AND_TABLE_META: '/feature/treeAndTable/meta?featureCode={featureCode}',
     TREE_TABLE_TO_ADD_S: '/feature/treeAndTable/toAdd?featureCode={featureCode}&{foreignKeyName}={foreignKeyValue}',
-    RECORD_TO_ADD: "/form/toAdd/?objectCode={objectCode}",  // 新增记录(TO)
-    RECORD_TO_UPDATE: '/form/toUpdate/?id={primaryKv}&objectCode={objectCode}',    // 更新记录(TO)
+
+    RECORD_TO_ADD: "/form/toAdd?instanceCode={instanceCode}",  // 新增记录(TO)
+    RECORD_TO_UPDATE: '/form/toUpdate?id={primaryKv}&instanceCode={instanceCode}',    // 更新记录(TO)
+    RECORD_TO_VIEW: '/form/detail?id={primaryKv}&instanceCode={instanceCode}', // 详情
     RECORD_DO_UPDATE: '/form/doUpdate?objectCode={objectCode}', // 更新记录(DO)
-    RECORD_TO_VIEW: '/form/detail/?id={primaryKv}&objectCode={objectCode}', // 详情
+
     LOAD_COMP_BY_OBJECT: '/meta/contact/?kv={kv}&objectCode={objectCode}', // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
     LOAD_INSTANCE_CODE_BY_OBJECT_COMP: '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}', // 根据查询在objectCode+componentCode下的所有实例配置
     LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 根据查询在objectCode下的所有实例配置
     CHECK_SQL: '/check/sql?sql={sql}',
     FEATURE_ADD: '/feature/doAdd?ft={featureType}', // 添加功能类别
     FEATURE_LOAD: '/feature/load?fc={featureCode}', // 加载功能配置
-    MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&fc={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
+    MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&featureCode={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
     LIST_FEATURE_TYPE: '/feature/list', // 列出所有的功能类型code
     MENU_DATA: '/menu',
     ROUTE_DATA: '/router',

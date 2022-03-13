@@ -1,12 +1,12 @@
 <template>
   <div class="img-box">
-    <template v-if="innerMeta.hasOwnProperty('seats')">
+    <template v-if="meta.hasOwnProperty('seats')">
       <upload-item class="upload-item" v-for="(seat, index) in seats" :key="seat" :seat="seat"
-                   :meta="innerMeta" v-model="nativeValue[index]" :multiple="false"
+                   :meta="meta" v-model="nativeValue[index]" :multiple="false"
                    @input="changeHandler" :show-file-list="true" v-bind="conf"></upload-item>
     </template>
     <template v-else>
-      <!--            <upload-item :meta="innerMeta" v-model="value"></upload-item>-->
+      <!--            <upload-item :meta="meta" v-model="value"></upload-item>-->
     </template>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     seats() {
-      let {innerMeta: {seats = []}} = this
+      let {meta: {seats = []}} = this
       if (!Array.isArray(seats)) {
         console.error('[MetaElement] seats参数必须为数组')
         seats = []
@@ -44,7 +44,7 @@ export default {
       return seats
     },
     conf() {
-      const {innerMeta: {conf = {}}, $attrs, $reverseMerge} = this
+      const {meta: {conf = {}}, $attrs, $reverseMerge} = this
       return $reverseMerge(conf, $attrs)
     }
   }

@@ -54,7 +54,7 @@ export default {
             console.error("options or data_url in meta provide one at least!")
         },
         getOptions(url) {
-            url = utils.assertUndefined(url, this.innerMeta['data_url']);
+            url = utils.assertUndefined(url, this.meta['data_url']);
             if (url) {
                 this.$axios.safeGet(url).then(resp => {
                     // if provide format callback fn, execute callback fn
@@ -74,10 +74,10 @@ export default {
         'dataUrl': function () {
             this.initOptions();
         },
-        'innerMeta.options': function () {
+        'meta.options': function () {
             this.initOptions();
         },
-        'innerMeta.data_url': function () {
+        'meta.data_url': function () {
             this.initOptions();
         },
     },

@@ -1,112 +1,133 @@
 <template>
-    <div class="page-container">
-        <search-view :meta="spMeta" @search="handleSearch"></search-view>
-        <table-tree-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
-            <tempalte #operation-bar="{conf, choseData}">
-                <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </tempalte>
+  <div class="page-container">
+    <search-view :ic="config.instanceCodes.SearchView" @search="handleSearch"></search-view>
+    <table-tree-view :ref="tableRefName"
+                     :ic="config.instanceCodes.TableTreeView"
+                     :filter-params="filterParams"
+                     @open-form-view="openFormView">
+      <tempalte #operation-bar="{conf, choseData}">
+        <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+      </tempalte>
 
-            <template #prefix-btn="{conf, choseData}">
-                <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </template>
-            <template #add-btn="{conf}">
-                <slot name="add-btn" v-bind:conf="conf"></slot>
-            </template>
-            <template #suffix-btn="{conf, choseData}">
-                <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </template>
+      <template #prefix-btn="{conf, choseData}">
+        <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+      </template>
+      <template #add-btn="{conf}">
+        <slot name="add-btn" v-bind:conf="conf"></slot>
+      </template>
+      <template #suffix-btn="{conf, choseData}">
+        <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+      </template>
 
-            <template #buttons="{scope}">
-                <slot name="buttons" v-bind:scope="scope"></slot>
-            </template>
+      <template #buttons="{scope}">
+        <slot name="buttons" v-bind:scope="scope"></slot>
+      </template>
 
-            <template #inner-before-extend-btn="{scope}">
-                <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
-            </template>
-            <template #view-btn="{scope, conf}">
-                <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #edit-btn="{scope, conf}">
-                <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #delete-btn="{scope, conf}">
-                <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #inner-after-extend-btn="{scope}">
-                <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
-            </template>
-        </table-tree-view>
-    </div>
+      <template #inner-before-extend-btn="{scope}">
+        <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
+      </template>
+      <template #view-btn="{scope, conf}">
+        <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+      </template>
+      <template #edit-btn="{scope, conf}">
+        <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+      </template>
+      <template #delete-btn="{scope, conf}">
+        <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+      </template>
+      <template #inner-after-extend-btn="{scope}">
+        <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
+      </template>
+    </table-tree-view>
+  </div>
 </template>
 
 <script>
-    import utils from '../utils'
-    import {getSearchViewMeta, getTableTreeViewMeta, loadFeature} from "../utils/rest";
-    import {assert, isEmpty} from "../utils/common";
+import utils from '../utils'
+import {loadFeature} from "../utils/rest";
+import {getNameOfFormTypes} from "../view/formview/ui-conf";
+import {TreeSingleGridConfig} from "../meta/feature/ext/featureType";
 
-    export default {
-        name: "TreeSingleGridTmpl",
-        meta: {
-          isTemplate: true,
-          isPage: false,
-          cn: '树表模板',
-          icon: 'treetable',
-          buildIn: true // 内建：DbMeta提供
-        },
-        props: {
-            fc: String
-        },
-        data() {
-            const {fc: R_fc} = this.$route.query;
-            const featureCode = utils.assertUndefined(this.fc, R_fc);
-            return {
-                featureCode: featureCode,
-                tlMeta: {},
-                spMeta: {},
-                filterParams: {}
-            }
-        },
-        methods: {
-            refresh() {
-                const {$refs, tlRefName} = this;
-                $refs[tlRefName].getData();
-            },
-            handleSearch(params) {
-                const tlRefName = this.tlRefName;
-                this.filterParams = params;
-                this.$nextTick(() => {
-                    this.$refs[tlRefName].getData();
-                })
-            },
-            initMeta(objectCode) {
-                getTableTreeViewMeta(this.$axios, objectCode).then(resp => {
-                    this.tlMeta = resp.data;
-                }).catch(({msg = '获取TableTreeView meta数据错误'}) => {
-                    console.error('[ERROR] msg: %s', msg);
-                });
-
-                getSearchViewMeta(this.$axios, objectCode).then(resp => {
-                    this.spMeta = resp.data;
-                }).catch(({msg = '获取SearchView meta数据错误'}) => {
-                    console.error('[ERROR] msg: %s', msg);
-                });
-            }
-        },
-        created() {
-            const {featureCode, initMeta} = this
-            assert(!isEmpty(featureCode), `featureCode无效: ${featureCode}`)
-
-            loadFeature(this.$axios, featureCode).then(resp => {
-                const config = resp.data['table'];
-                initMeta(config.objectCode);
-            })
-        },
-        computed: {
-            tlRefName() {
-                return this.tlMeta['name'];
-            }
-        }
+export default {
+  name: "TreeSingleGridTmpl",
+  meta: {
+    isTemplate: true,
+    isPage: false,
+    cn: '树表模板',
+    icon: 'treetable',
+    buildIn: true // 内建：DbMeta提供
+  },
+  props: {
+    fc: String,
+    config: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
+  },
+  data() {
+    const {fc: R_fc} = this.$route.query;
+    const featureCode = utils.assertUndefined(this.fc, R_fc);
+    return {
+      featureCode: featureCode,
+      filterParams: {}
+    }
+  },
+  methods: {
+    refresh() {
+      const {tableRefName} = this;
+      this.$refs[tableRefName].getData();
+    },
+    handleSearch(params) {
+      const {tableRefName} = this
+      this.filterParams = params
+      this.$nextTick(() => {
+        this.$refs[tableRefName].getData();
+      })
+    },
+
+    openFormView({url, params}) {
+      // TODO 2.3 表单的打开方式可以配置到功能里: 1-弹窗(当前已实现) ;2-路由(系统预置FormTmpl模板以及内置的/form/:fc路由后，即可实现)
+      this.$merge(params, {
+        instanceCode: this.config.instanceCodes.FormView
+      })
+      const finalUrl = this.$compile(url, params)
+      this.$axios.get(finalUrl).then(resp => {
+        const {data: meta = {}} = resp
+        const {form_type} = meta
+        this.$dialog(meta, null, {
+          title: getNameOfFormTypes(form_type)
+        }).then(value => {
+          this.refresh()
+        }).catch(() => {
+          utils.printInfo('您取消了表单')
+        })
+      })
+    }
+  },
+  watch: {
+    'fc': {
+      handler: function (newV) {
+        if (!utils.isEmpty(newV)) {
+          loadFeature(this.$axios, newV).then(resp => {
+            this.$reverseMerge(this.config, resp.data)
+          })
+        }
+      },
+      immediate: true
+    }
+  },
+  created() {
+    this.$merge(this.config, TreeSingleGridConfig)
+  },
+  computed: {
+    tableRefName() {
+      const {config: {config: {objectCode}}} = this
+      return objectCode;
+    }
+  }
+}
 </script>
 
 <style scoped>

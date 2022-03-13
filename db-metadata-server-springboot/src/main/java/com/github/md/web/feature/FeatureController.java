@@ -73,6 +73,7 @@ public class FeatureController extends ControllerAdapter {
     /**
      * 获取树型的功能数据
      */
+    @Deprecated
     @GetMapping("menu")
     public Ret menu() {
         //1. 拼接功能菜单树
@@ -103,10 +104,10 @@ public class FeatureController extends ControllerAdapter {
             case SingleGrid:
                 prefix = "/table";
                 break;
-            case TreeInTable:
+            case TreeSingleGrid:
                 prefix = "/tree/in";
                 break;
-            case TreeAndTable:
+            case TreeTable:
                 prefix = "/tree/and";
                 break;
         }

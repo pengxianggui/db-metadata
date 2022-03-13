@@ -1,11 +1,15 @@
 package com.github.md.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.github.md.analysis.component.ComponentType;
 import com.github.md.web.feature.FeatureConfig;
 import com.github.md.web.feature.FeatureException;
 import com.github.md.web.feature.FeatureIntercept;
 import com.github.md.web.kit.tree.TreeConfig;
 import lombok.Data;
+
+import java.util.Map;
 
 /**
  * @author pengxg
@@ -14,16 +18,13 @@ import lombok.Data;
 @Data
 public class TreeInTableConfig extends FeatureConfig implements TreeConfigGetter {
 
-    private String objectCode;
-
-    private String instanceCode;
-
     private TreeConfig treeConfig;
+    private JSONObject instanceCodes;
 
     @Override
     public TreeConfig getTreeConfig() {
         if (treeConfig == null) {
-            treeConfig = JSON.parseObject(getStr("table"), TreeConfig.class);
+            treeConfig = JSON.parseObject(getStr("config"), TreeConfig.class);
         }
         return treeConfig;
     }
@@ -31,6 +32,13 @@ public class TreeInTableConfig extends FeatureConfig implements TreeConfigGetter
     @Override
     public FeatureIntercept getTreeFeatureIntercept() {
         throw new FeatureException("not finished!");
+    }
+
+    public String getInstanceCode(ComponentType componentType) {
+        if (instanceCodes == null) {
+            instanceCodes = JSON.parseObject(getStr("instanceCodes"));
+        }
+        return instanceCodes.getString(componentType.getCode());
     }
 
     public String getIdKey() {

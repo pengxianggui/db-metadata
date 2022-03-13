@@ -1,5 +1,6 @@
 <template>
   <div class="view-container" ref="container">
+    <!-- 操作条 -->
     <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData">
       <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
                  :style="operationBarConf.style" v-bind="operationBarConf.conf"
@@ -22,9 +23,10 @@
       </component>
     </slot>
 
+    <!-- 表格主体 -->
     <!-- TODO name作为id不保险，改为instanceCode -->
-    <el-table :id="innerMeta.name"
-              :ref="innerMeta.name"
+    <el-table :id="tableRefName"
+              :ref="tableRefName"
               v-bind="tableConf"
               :data="innerData"
               @row-click="handleRowClick"
@@ -74,19 +76,19 @@
           <template slot-scope="scope">
             <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
               <component :is="buttonsConf.group ? 'el-button-group' : 'div'"
-                         v-if="_showable(scope.row, buttonsConf.show)">
+                         v-if="ifShow(buttonsConf.show, scope.row)">
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.view.show)">{{buttonsConf.view.text}}</el-button>
+                             v-if="ifShow(buttonsConf.view.show, scope.row)">{{buttonsConf.view.text}}</el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.edit.show)">{{buttonsConf.edit.text}}</el-button>
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)">{{buttonsConf.edit.text}}</el-button>
                 </slot>
                 <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.delete.show)">{{buttonsConf.delete.text}}</el-button>
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)">{{buttonsConf.delete.text}}</el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
               </component>
@@ -96,6 +98,7 @@
       </slot>
     </el-table>
 
+    <!-- 底部分页 -->
     <slot name="pagination" v-bind:pageModel="pageModel">
       <div :style="paginationConf.style">
         <el-pagination v-bind="paginationConf.conf"
@@ -107,14 +110,6 @@
                        v-if="paginationConf.show"></el-pagination>
       </div>
     </slot>
-
-    <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
-                @ok="getData()" @cancel="dialogVisible=false">
-      <template #default>
-        <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>
-      </template>
-      <template #footer><span></span></template>  <!-- 表单自带button条 -->
-    </dialog-box>
 
     <slot name="behavior" :on="on" :actions="actions"></slot>
   </div>
@@ -130,12 +125,12 @@ import assembleMeta from './assembleMeta'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "@/../package/view/ext/table/columnsValid";
-import showable from "@/../package/core/mixins/showable";
 import {isEmpty} from "@/../package/utils/common";
+import {ViewMixin} from '../../ext/mixins'
 
 export default {
   name: "TableView",
-  mixins: [Meta(DefaultMeta, assembleMeta), showable],
+  mixins: [Meta(DefaultMeta, assembleMeta), ViewMixin],
   components: {MetaEasyEdit, TableCell},
   data() {
     return {
@@ -148,16 +143,11 @@ export default {
         size: 10,
         index: 1,
         total: 0
-      },
-      dialogComponentMea: {}, // 弹窗内包含的组件元对象
-      dialogMeta: {}, // 弹窗组件元对象
-      dialogVisible: false,   // 弹窗显隐
+      }
     }
   },
   props: {
-    data: Array,
-    page: Object,
-    filterParams: Object    // 搜索面板过滤参数
+    filterParams: Object, // 搜索面板过滤参数
   },
   methods: {
     handleSelectionChange(selection) {
@@ -170,14 +160,14 @@ export default {
     handleView(ev, row, index) {
       if (ev) ev.stopPropagation()
 
-      const {primaryKey, $compile, objectCode} = this
+      const {primaryKey} = this
       const primaryValue = utils.extractValue(row, primaryKey)
       let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-      const url = $compile(restUrl.RECORD_TO_VIEW, {
-        objectCode: objectCode,
+      const url = restUrl.RECORD_TO_VIEW
+      const params = {
         primaryKv: primaryKv
-      })
-      this.dialog(url, {title: '详情'});
+      }
+      this.openFormView(url, params);
     },
     handleEdit(ev, row, index) { // edit/add
       if (ev) ev.stopPropagation();
@@ -188,36 +178,20 @@ export default {
     },
     // TODO 表单容器应当与TableView解耦, 放到功能模板(如SingleGridTmpl)中, 按钮背后的逻辑应当在ui可配(路由跳转 或 弹窗。路由跳转的话就提供路由跳转地址, 弹窗的话就提供获取弹窗FormView的rest接口地址)
     doEdit(primaryValue) {
-      const {objectCode, primaryKey} = this
-      let url, title;
+      const {primaryKey} = this
+      let url, params;
 
-      if (!utils.isEmpty(primaryValue)) {
-        title = '编辑';
+      if (!utils.isEmpty(primaryValue)) { // 更新
         let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-        url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-          objectCode: objectCode,
-          primaryKv: primaryKv
-        });
-      } else {
-        title = '新增';
-        url = this.$compile(restUrl.RECORD_TO_ADD, {objectCode: objectCode});
+        url = restUrl.RECORD_TO_UPDATE
+        params = { primaryKv: primaryKv }
+      } else { // 新增
+        url = restUrl.RECORD_TO_ADD
       }
-      this.dialog(url, {title: title});
+      this.openFormView(url, params);
     },
-    dialog(url, conf = {title: ''}) {
-      this.$axios.get(url).then(resp => {
-        const {width} = this.dialogComponentMea = resp.data;
-        this.dialogMeta = {
-          component_name: "DialogBox",
-          conf: {
-            ...conf,
-            width: width
-          }
-        };
-        this.dialogVisible = true
-      }).catch(({msg = '发生错误'}) => {
-        console.error(msg)
-      });
+    openFormView(url, params = {}) {
+      this.$emit('open-form-view', { url: url, params: params })
     },
     // 删除单行
     handleDelete(ev, row, index) {
@@ -237,7 +211,7 @@ export default {
     handleBatchDelete(ev) {
       if (this.choseData.length <= 0) {
         this.$message.warning('请至少选择一项!');
-        return;
+        return
       }
 
       let {primaryKey} = this;
@@ -266,7 +240,7 @@ export default {
      */
     doDelete(primaryKvExp) {
       let title = '确定删除此条记录?';
-      const RECORD_SIZE = this.choseData.length;
+      const {choseData: {length: RECORD_SIZE}, meta: {delete_url}} = this;
 
       if (RECORD_SIZE > 1) {
         title = '确定删除选中的' + RECORD_SIZE + '条记录?';
@@ -277,7 +251,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const {delete_url} = this.innerMeta;
         let url;
         if (delete_url.indexOf("?") > 0) {
           url = delete_url + '&' + primaryKvExp;
@@ -285,8 +258,8 @@ export default {
           url = delete_url + '?' + primaryKvExp
         }
         this.$axios.delete(url).then(({msg = '删除成功'}) => {
-          this.getData();
           this.$message.success(msg);
+          this.getData();
         })
       });
     },
@@ -303,10 +276,9 @@ export default {
     },
     choseRow(row) {
       let selected = true;
-      const {primaryKey, multiSelect} = this;
+      const {primaryKey, multiSelect, tableRefName} = this;
 
       if (multiSelect) {
-        let tableRefName = this.innerMeta['name'];
         for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
           let choseItem = this.$refs[tableRefName]['selection'][i];
           if (utils.allEqualOnKeys(row, choseItem, primaryKey)) {
@@ -318,12 +290,11 @@ export default {
       }
     },
     activeRow(row) {
-      const {primaryKey} = this;
+      const {primaryKey, tableRefName} = this;
 
       if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
         this.activeData = {};
-        const refName = this.innerMeta['name'];
-        this.$refs[refName].setCurrentRow();
+        this.$refs[tableRefName].setCurrentRow();
       } else {
         this.activeData = row;
       }
@@ -353,10 +324,10 @@ export default {
     },
     // get business data
     getData() {
-      const {innerMeta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey} = this;
+      const {meta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey} = this;
 
       if (utils.isEmpty(data_url)) {
-        console.error('lack data_url attribute');
+        utils.printErr('缺少 data_url 属性配置')
         return;
       }
 
@@ -375,88 +346,70 @@ export default {
       this.$axios.safeGet(data_url, {
         params: params
       }).then(resp => {
-        const {data} = resp
-        this.innerData = data;
-        this.$emit("data-change", data);
+        const {data, page} = resp
+        this.innerData = data
+        this.$emit("data-change", data)
         if (utils.hasProp(resp, 'page')) {
-          this.setPageModel(resp['page']);
+          this.setPageModel(page);
         }
         if (index > 1 && (isEmpty(data) || data.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
       })
     },
-    initData() { // init business data
-      let {page, data} = this;
-      if (!utils.isUndefined(page)) {
-        this.setPageModel(page)
-      }
-      if (!utils.isUndefined(data)) {
-        this.innerData = data;
-        return;
-      }
-      if (this.innerMeta.hasOwnProperty('data_url')) {
-        this.getData();
-        return;
-      }
-      console.error("data or data_url in meta provide one at least!")
-    }
-  },
-  watch: {
-    'data': function (newVal, oldVal) {
-      this.initData();    // 为避免data数据过大, 不进行深度监听
+    // set business data to empty
+    emptyData() {
+      this.innerData = []
     },
-    'innerMeta.data_url': {
-      handler: function () {
-        this.initData();
-      },
-      immediate: false
+    init() { // init business data
+      this.getData()
     }
-  },
-  mounted() {
-    this.initData();
   },
   computed: {
+    tableRefName() {
+      const {meta: {name: tableRefName}} = this
+      return tableRefName
+    },
     primaryKey() {
-      const {objectPrimaryKey} = this.meta;
+      const {meta: {objectPrimaryKey} = {}} = this;
       let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
       return primaryKey.split(',');
     },
     objectCode() {
-      let {innerMeta: {objectCode}} = this
-      utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
+      let {meta: {objectCode}} = this
       return objectCode
     },
     columns() {
-      const {innerMeta: {columns}} = this
+      const {meta: {columns = []}} = this
       columnsValid(columns)
       return columns
     },
     multiSelect() {
-      const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
-      return utils.assertEmpty(multiSelect, multi_select)
+      const {meta: {multi_select = false}} = this;
+      return multi_select
     },
     operationBarConf() {
-      const {innerMeta: {"operation-bar": operationBarConf = {}}} = this
+      const {meta: {"operation-bar": operationBarConf = {}}} = this
       return operationBarConf;
     },
     tableConf() {
-      const {innerMeta: {conf}, $attrs, $reverseMerge} = this
+      const {meta: {conf}, $attrs, $reverseMerge} = this
       return $reverseMerge(conf, $attrs)
     },
     operationColumnConf() {
-      const {innerMeta: {'operation-column': operationColumn}} = this
-      return operationColumn;
+      const {meta: {'operation-column': operationColumn}} = this
+      const {'operation-column': defaultOperationColumn} = DefaultMeta
+      return utils.assertEmpty(operationColumn, defaultOperationColumn);
     },
     paginationConf() {
-      const {innerMeta: {pagination: paginationConf = {}}} = this
+      const {meta: {pagination: paginationConf = {}}} = this
       return paginationConf
     },
     buttonsConf() {
       const {buttons: buttonsConf = {}} = this.operationColumnConf
       return buttonsConf
     },
-    // 支持无渲染的行为插槽 TODO 用法不明确, 移除
+    // 支持无渲染的行为插槽 TODO 2.2 用法不明确, 移除
     actions() {
       const {doDelete} = this;
       return {doDelete};

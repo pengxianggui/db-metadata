@@ -11,16 +11,17 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-  <z-toggle-panel :label-position="innerMeta['label-position']" :default-open="innerMeta['expand']"
-                  v-if="innerMeta.columns && innerMeta.columns.length > 0">
-<!--    {{ initModel }}-->
+  <z-toggle-panel :label-position="meta['label-position']" :default-open="meta['expand']"
+                  v-if="meta.columns && meta.columns.length > 0">
     <div class="view-container">
-      <el-form :ref="innerMeta['name']" v-bind="formConf" :model="model" inline
+      <el-form :ref="meta['name']" v-bind="formConf" :model="model" inline
                @keyup.enter.native="emitSearch" class="search-form">
-        <template v-for="(item) in innerMeta.columns">
+        <template v-for="item in meta.columns">
           <el-form-item class="form-item" :key="item.name" :label="item.label||item.name" :prop="item.name"
                         v-if="model.hasOwnProperty(item.name)">
-            <component v-model="model[item.name]['value']" v-bind="linkProps(model, item)"
+            <component v-model="model[item.name]['value']"
+                       :is="item.component_name"
+                       :meta="item"
                        @change="changeHandler(item.name)">
               <template #prepend v-if="model[item.name]['symbol']['optional']">
                 <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">
@@ -75,7 +76,7 @@
         </el-form-item>
       </el-form>
       <div style="float: right; margin: -20px 10px 0px 0px">
-        <meta-easy-edit :object-code="innerMeta.objectCode" component-code="SearchView">
+        <meta-easy-edit :object-code="meta.objectCode" component-code="SearchView">
           <template #label><i class="el-icon-setting"></i></template>
         </meta-easy-edit>
       </div>
@@ -96,72 +97,22 @@ import util from '@/../package/utils'
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
 import Meta from '@/../package/core/mixins/meta'
 import symbols from '../ext/config'
+import {toParams} from "../ext/config";
 import DefaultMeta from '../ui-conf'
+import {assembleMeta} from '../ui-conf'
 import {defaultMeta} from '@/../package/core/index'
 import {isEmpty} from "@/../package/utils/common";
 
 export default {
   name: "SearchView",
-  mixins: [Meta(DefaultMeta)],
+  mixins: [Meta(DefaultMeta, assembleMeta)],
   components: {MetaEasyEdit},
   data() {
     return {
-      model: {},
-      hasInitValue: false // model是否有默认值
+      model: {}
     }
   },
   methods: {
-    linkProps(model, meta) {
-      const {$merge, $reverseMerge} = this
-      const {component_name, conf} = meta;
-      const props = {
-        is: component_name,
-        meta: meta,
-        clearable: true
-      }
-      $merge(props, conf);
-
-      switch (component_name) {
-        case 'DateBox':
-          $reverseMerge(props, {"is-range": true, "type": 'daterange'})
-          break;
-        case 'TimeBox':
-          $reverseMerge(props, {"is-range": true, "type": "timerange"})
-          break;
-        case 'DateTimeBox':
-          $reverseMerge(props, {"is-range": true, "type": 'datetimerange'})
-          break;
-        case 'NumBox': // NumBox无法设置"比较操作符"插槽, 改为TextBox
-          props.is = 'TextBox'
-          break;
-      }
-      return props
-    },
-    toParams(model = {}) {
-      let params = {};
-      for (let key in model) {
-        let item = model[key];
-        let name = key + "_";
-        let value = item.value;
-        let symbol = item.symbol;
-
-        if (value == null || value.length == 0) continue;
-
-        switch (symbol.value) {
-          case "in":
-            value = Array.isArray(value) ? value.join(',') : value;
-            params[name + 'in'] = value;
-            break;
-          case "range":
-            params[name + "gt"] = value[0];
-            params[name + "lt"] = value[1];
-            break;
-          default:
-            params[name + symbol.options[symbol.value]] = value;
-        }
-      }
-      return params
-    },
     changeHandler(name = '') {
       const {directlyTrigger = []} = this
       if (directlyTrigger.indexOf(name) > -1) {
@@ -169,14 +120,31 @@ export default {
       }
     },
     emitSearch() {
-      const {model, toParams} = this
-      this.$emit('search', toParams(model));
+      this.$emit('search', toParams(this.model));
     },
     onReset() {
-      const {initModel, model} = this
-      this.$reverseMerge(model, initModel)
+      this.assemblyModel(this.meta)
       this.emitSearch()
     },
+    assemblyModel(meta) {
+      const {columns = []} = meta
+      columns.forEach(item => {
+        const {component_name: componentName, default_value: defaultValue} = item
+        this.$merge(item, defaultMeta[componentName]); // merge column
+        let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
+        let value = null;
+        if (!isEmpty(defaultValue)) {
+          value = defaultValue
+        }
+        this.$set(this.model, item.name, {
+          value: value,
+          symbol: symbol
+        });
+      });
+    },
+    init() {
+      this.assemblyModel(this.meta);
+    }
   },
   filters: {
     decorate(meta, componentName) {
@@ -188,50 +156,13 @@ export default {
       return meta;
     }
   },
-  watch: {
-    initModel: function (newV) {
-      this.$merge(this.model, newV, true)
-      if (this.hasInitValue === true) {
-        this.emitSearch()
-      }
-    }
-  },
-  mounted() {
-    this.$merge(this.model, this.initModel)
-  },
   computed: {
-    innerMeta() {
-      let meta = this.$merge(this.meta, DefaultMeta);
-      return meta;
-    },
-    initModel() {
-      const {$merge, innerMeta: {columns}} = this
-      const model = {}
-
-      if (Array.isArray(columns)) {
-        columns.forEach(item => {
-          const {component_name: componentName, default_value: defaultValue} = item
-          $merge(item, defaultMeta[componentName]); // merge column
-          let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
-          let value = null;
-          if (!isEmpty(defaultValue)) {
-            value = defaultValue
-            this.hasInitValue = true
-          }
-          this.$set(model, item.name, {
-            value: value,
-            symbol: symbol
-          });
-        });
-      }
-      return model
-    },
     formConf() {
-      const {innerMeta: {conf}, $attrs} = this
+      const {meta: {conf}, $attrs} = this
       return this.$reverseMerge(conf, $attrs)
     },
     directlyTrigger() {
-      const {innerMeta: {directly_trigger: directlyTrigger}} = this
+      const {meta: {directly_trigger: directlyTrigger}} = this
       return directlyTrigger
     }
   }

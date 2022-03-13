@@ -85,7 +85,7 @@
                 let value = self.value;
 
                 if (typeof value === 'string') {
-                    value = JSON.parse(value);
+                    value = utils.strToObject(value)
                 }
 
                 Object.keys(self.config).forEach(key => {

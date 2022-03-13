@@ -14,7 +14,7 @@
                      :page-size.sync="pageModel.size"
                      :current-page.sync="pageModel.index"
                      :total="pageModel.total"
-                     v-bind="innerMeta.pagination"
+                     v-bind="meta.pagination"
                      @size-change="sizeChange"
                      @current-change="getData(pageModel)"
       ></el-pagination>
@@ -85,19 +85,19 @@ export default {
       if (!utils.isEmpty(size)) this.pageModel['size'] = parseInt(size);
     },
     getData(pageModel) {
-      let {innerMeta, dataFunction} = this;
+      let {meta, dataFunction} = this;
 
       if (dataFunction && utils.isFunction(dataFunction)) {
         dataFunction.call(this, pageModel)
         return
       }
 
-      if (!utils.hasProp(innerMeta, 'data_url')) {
+      if (!utils.hasProp(meta, 'data_url')) {
         console.error('lack data_url attribute');
         return;
       }
 
-      const {data_url: url} = innerMeta;
+      const {data_url: url} = meta;
       const {index, size} = pageModel;
 
       Object.assign(params, {
@@ -118,14 +118,14 @@ export default {
       });
     },
     initData() { // init business data
-      let {pageModel, data, innerMeta} = this;
+      let {pageModel, data, meta} = this;
 
       if (!utils.isUndefined(data)) {
         this.innerData = data;
         return;
       }
 
-      if (utils.hasProp(innerMeta, 'data_url')) {
+      if (utils.hasProp(meta, 'data_url')) {
         this.getData(pageModel);
         return;
       }
@@ -139,7 +139,7 @@ export default {
     'data': function (newVal, oldVal) {
       this.initData();    // 为避免data数据过大, 不进行深度监听
     },
-    'innerMeta.data_url': {
+    'meta.data_url': {
       handler: function () {
         this.initData();
       },
@@ -147,11 +147,11 @@ export default {
     }
   },
   computed: {
-    innerMeta() {
+    meta() {
       return this.$merge(this.meta, DefaultMeta);
     },
     innerLabelProps() {
-      return utils.assertUndefined(this.labelProps, this.innerMeta['conf']['label-props'])
+      return utils.assertUndefined(this.labelProps, this.meta['conf']['label-props'])
     },
     primaryKey() {
       const {objectPrimaryKey} = this.meta;

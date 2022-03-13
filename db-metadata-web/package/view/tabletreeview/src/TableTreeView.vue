@@ -37,8 +37,8 @@
       </component>
     </slot>
 
-    <el-table :id="innerMeta.name"
-              :ref="innerMeta.name"
+    <el-table :id="meta.name"
+              :ref="meta.name"
               :data="innerData"
               :load="handleLoad"
               v-bind="tableConf"
@@ -92,19 +92,19 @@
           <template slot-scope="scope">
             <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
               <component :is="buttonsConf.group ? 'el-button-group' : 'div'"
-                         v-if="_showable(scope.row, buttonsConf.show)">
+                         v-if="ifShow(buttonsConf.show, scope.row)">
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.view.show)">{{buttonsConf.view.text}}</el-button>
+                             v-if="ifShow(buttonsConf.view.show, scope.row)">{{buttonsConf.view.text}}</el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.edit.show)">{{buttonsConf.edit.text}}</el-button>
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)">{{buttonsConf.edit.text}}</el-button>
                 </slot>
                 <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="_showable(scope.row, buttonsConf.delete.show)">{{buttonsConf.delete.text}}</el-button>
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)">{{buttonsConf.delete.text}}</el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
               </component>
@@ -113,14 +113,6 @@
         </el-table-column>
       </slot>
     </el-table>
-
-    <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
-                @ok="getData()" @cancel="dialogVisible=false">
-      <template #default>
-        <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>
-      </template>
-      <template #footer><span></span></template>  <!-- 表单自带button条 -->
-    </dialog-box>
 
     <slot name="behavior" :on="on" :actions="actions"></slot>
   </el-container>
@@ -136,12 +128,12 @@ import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import columnsValid from "@/../package/view/ext/table/columnsValid"
-import showable from "@/../package/core/mixins/showable";
 import {resolvePath} from '../../../utils/url'
+import {ViewMixin} from '../../ext/mixins'
 
 export default {
   name: "TableTreeView",
-  mixins: [Meta(DefaultMeta, assembleMeta), showable],
+  mixins: [Meta(DefaultMeta, assembleMeta), ViewMixin],
   components: {MetaEasyEdit, TableCell},
   data() {
     return {
@@ -150,25 +142,11 @@ export default {
       innerData: [],
       choseData: [],
       activeData: {},
-      sortParams: {},
-      dialogComponentMea: {}, // 弹窗内包含的组件元对象
-      dialogMeta: {}, // 弹窗组件元对象
-      dialogVisible: false,   // 弹窗显隐
+      sortParams: {}
     }
   },
   props: {
-    data: Array,
     filterParams: Object,   // 搜索面板过滤参数
-    treeProps: {
-      type: Object,
-      default: function () {
-        return {hasChildren: 'hasChildren', children: 'children'}
-      },
-      validator: function (value) {
-        return value.hasOwnProperty('hasChildren') && value.hasOwnProperty('children');
-      }
-    },
-    loadChildrens: Function
   },
   methods: {
     tableReRender() {
@@ -178,7 +156,7 @@ export default {
       });
     },
     handleExpandAll() {
-      this.$reverseMerge(this.innerMeta, {
+      this.$reverseMerge(this.meta, {
         conf: {
           "default-expand-all": true
         }
@@ -186,7 +164,7 @@ export default {
       this.tableReRender();
     },
     handleShrinkAll() {
-      this.$reverseMerge(this.innerMeta, {
+      this.$reverseMerge(this.meta, {
         conf: {
           "default-expand-all": false
         }
@@ -194,11 +172,10 @@ export default {
       this.tableReRender();
     },
     handleLoad(tree, treeNode, resolve) {
-      const isLazy = this.innerMeta['conf']['lazy'];
+      const {meta: {conf: {lazy: isLazy}, children_data_url}} = this
       if (!isLazy) return;
 
       const fn = this.loadChildrens;
-      const children_data_url = this.innerMeta['children_data_url'];
       const parentPrimary = tree[this.primaryKey];
 
       if (!utils.isEmpty(fn)) {
@@ -212,10 +189,11 @@ export default {
       })
     },
     handleSelectionChange(selection) {
-      if (this.multiMode) {
+      if (this.multiSelect) {
         this.choseData = selection;
         this.$emit('chose-change', selection);
       }
+      this.$emit('selection-change', selection)
     },
     extractPrimaryValue(row) {
       const {primaryKey} = this;
@@ -224,14 +202,14 @@ export default {
     handleView(ev, row, index) {
       if (ev) ev.stopPropagation()
 
-      const {primaryKey, $compile, objectCode} = this
+      const {primaryKey} = this
       const primaryValue = utils.extractValue(row, primaryKey)
       let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-      const url = $compile(restUrl.RECORD_TO_VIEW, {
-        objectCode: objectCode,
+      const url = restUrl.RECORD_TO_VIEW
+      const params = {
         primaryKv: primaryKv
-      })
-      this.dialog(url, {title: '详情'});
+      }
+      this.openFormView(url, params)
     },
     handleEdit(ev, row, index) { // edit/add
       if (ev) ev.stopPropagation();
@@ -241,18 +219,14 @@ export default {
       this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
     },
     doEdit(primaryValue) {
-      let url, title;
-      const {activeData, primaryKey, objectCode, treeConf: {idKey, pidKey}} = this;
+      const {activeData, primaryKey, treeConf: {idKey, pidKey}} = this;
+      let url, params;
 
-      if (!utils.isEmpty(primaryValue)) {
-        title = '编辑';
+      if (!utils.isEmpty(primaryValue)) { // 更新
         let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-        url = this.$compile(restUrl.RECORD_TO_UPDATE, {
-          objectCode: objectCode,
-          primaryKv: primaryKv
-        });
-      } else {
-        title = '新增';
+        url = restUrl.RECORD_TO_UPDATE
+        params = { primaryKv: primaryKv }
+      } else { // 新增
         let fillParams = function (path) {
           if (!utils.isEmpty(activeData)) {
             let params = {}
@@ -261,20 +235,12 @@ export default {
           }
           return path
         }
-
-        url = this.$compile(fillParams(restUrl.RECORD_TO_ADD), {objectCode: objectCode});
+        url = fillParams(restUrl.RECORD_TO_ADD)
       }
-      this.dialog(url, {title: title});
+      this.openFormView(url, params);
     },
-    dialog(url, conf) {
-      this.$axios.get(url).then(resp => {
-        this.dialogComponentMea = resp.data;
-        this.dialogMeta = {
-          component_name: "DialogBox",
-          conf: utils.assertUndefined(conf, {title: '新增'})
-        };
-        this.dialogVisible = true
-      });
+    openFormView(url, params = {}) {
+      this.$emit('open-form-view', { url: url, params: params })
     },
     // 删除单行
     handleDelete(ev, row, index) {
@@ -292,18 +258,30 @@ export default {
     },
     // 批量删除
     handleBatchDelete(ev) {
-      let primaryKv = [];
-      let {primaryKey} = this;
-      this.choseData.forEach(row => {
-        let kv = utils.spliceKvs(primaryKey, this.extractPrimaryValue(row));
-        primaryKv.push(kv);
-      });
-
-      if (this.choseData.length > 0) {
-        this.doDelete(primaryKv, ev);
+      if (this.choseData.length <= 0) {
+        this.$message.warning('请至少选择一项!');
         return
       }
-      this.$message.warning('请至少选择一项!');
+
+      let {primaryKey} = this;
+      let primaryValue;
+      let primaryKvExp;
+
+      if (primaryKey.length > 1) {    // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4"
+        let primaryKvExpArr = [];
+        this.choseData.forEach(row => {
+          primaryValue = utils.extractValue(row, primaryKey);
+          primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
+        });
+        primaryKvExp = primaryKvExpArr.join('&');
+        this.doDelete(primaryKvExp, ev);
+      } else {    // 单主键 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
+        primaryValue = this.choseData.map(row => row[primaryKey[0]]);
+        let primaryKvExpArr = primaryValue.map(value => utils.spliceKv(primaryKey[0], value, "="));
+        primaryKvExp = primaryKvExpArr.join('&');
+
+        this.doDelete(primaryKvExp, ev);
+      }
     },
 
     /**
@@ -312,8 +290,8 @@ export default {
      */
     doDelete(primaryKvExp) {
       let title = '确定删除此条记录?';
+      const {choseData: {length: RECORD_SIZE}, meta: {delete_url}} = this;
 
-      const {choseData: {length: RECORD_SIZE}, innerMeta: {delete_url: deleteUrl}} = this;
       if (RECORD_SIZE > 1) {
         title = '确定删除选中的' + RECORD_SIZE + '条记录?';
       }
@@ -324,13 +302,12 @@ export default {
         type: 'warning'
       }).then(() => {
         let url;
-        if (deleteUrl.indexOf("?") > 0) {
-          url = deleteUrl + '&' + primaryKvExp;
+        if (delete_url.indexOf("?") > 0) {
+          url = delete_url + '&' + primaryKvExp;
         } else {
-          url = deleteUrl + '?' + primaryKvExp
+          url = delete_url + '?' + primaryKvExp
         }
-        this.$axios.delete(url).then(resp => {
-          const {msg = '删除成功'} = resp
+        this.$axios.delete(url).then(({msg = '删除成功'}) => {
           this.$message.success(msg);
           this.getData();
         })
@@ -341,31 +318,30 @@ export default {
       this.doEdit();
     },
     handleRowClick(row, col, event) {
+      this.$emit('row-click', {row, col, event})
       event.ctrlKey ? this.choseRow(row) : this.activeRow(row);
     },
     choseRow(row) {
       let selected = true;
-      const {primaryKey, multiMode} = this;
+      const {primaryKey, multiSelect, tableRefName} = this;
 
-      if (multiMode) {
-        let {tlRefName} = this;
-        for (let i = 0; i < this.$refs[tlRefName]['selection'].length; i++) { // cancel chose judge
-          let choseItem = this.$refs[tlRefName]['selection'][i];
+      if (multiSelect) {
+        for (let i = 0; i < this.$refs[tableRefName]['selection'].length; i++) { // cancel chose judge
+          let choseItem = this.$refs[tableRefName]['selection'][i];
           if (utils.allEqualOnKeys(row, choseItem, primaryKey)) {
             selected = false;
             break
           }
         }
-        this.$refs[tlRefName].toggleRowSelection(row, selected);
+        this.$refs[tableRefName].toggleRowSelection(row, selected);
       }
     },
     activeRow(row) {
-      const {primaryKey} = this;
+      const {primaryKey, tableRefName} = this;
 
       if (utils.allEqualOnKeys(row, this.activeData, primaryKey)) {  // cancel active row
         this.activeData = {};
-        const {tlRefName} = this;
-        this.$refs[tlRefName].setCurrentRow();
+        this.$refs[tableRefName].setCurrentRow();
       } else {
         this.activeData = row;
       }
@@ -382,106 +358,82 @@ export default {
     },
     // get business data
     getData() {
-      const {innerMeta, filterParams, sortParams} = this;
+      const {meta: {data_url, columns = []}, filterParams, sortParams, primaryKey} = this;
 
-      if (!utils.hasProp(innerMeta, 'data_url')) {
-        console.error('lack data_url attribute');
+      if (utils.isEmpty(data_url)) {
+        utils.printErr('缺少 data_url 属性配置')
         return;
       }
 
       let params = {};
-      const {data_url: url} = innerMeta;
-      const columnNames = (innerMeta['columns'] || [])
-          .filter(column => utils.hasProp(column, 'showable') && column['showable'])
+      const columnNames = columns.filter(column => utils.hasProp(column, 'showable') && column['showable'])
           .map(column => column['name']);
 
-      utils.mergeArray(columnNames, this.primaryKey); // 主键必请求,防止编辑/删除异常
+      utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
       utils.mergeObject(params, filterParams, sortParams, {
         'fs': columnNames.join(',')
       });
 
-      this.$axios.safeGet(url, {
+      this.$axios.safeGet(data_url, {
         params: params
-      }).then(resp => {
-        this.innerData = resp.data;
-        this.$emit("update:data", resp.data);
+      }).then((resp) => {
+        const {data} = resp
+        this.innerData = data
+        this.$emit('data-change', data)
       })
     },
-    initData() { // init business data
-      let {data} = this;
-      if (data !== undefined) {
-        this.innerData = data;
-        return;
-      }
-      if (this.innerMeta.hasOwnProperty('data_url')) {
-        this.getData();
-        return;
-      }
-      console.error("data or data_url in meta provide one at least!")
+    emptyData() {
+      this.innerData = []
     },
-  },
-  watch: {
-    'data': function (newVal, oldVal) {
-      this.initData();    // 为避免data数据过大, 不进行深度监听
+    init() { // init business data
+      this.getData()
     },
-    'innerMeta.data_url': {
-      handler: function () {
-        this.initData();
-      },
-      immediate: false
-    }
-  },
-  mounted() {
-    this.initData();
   },
   computed: {
+    tableRefName() {
+      const {meta: {name: tableRefName}} = this
+      return tableRefName
+    },
     primaryKey() {
       const {objectPrimaryKey} = this.meta;
       let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
       return primaryKey.split(',');
     },
     objectCode() {
-      const {innerMeta: {objectCode}} = this
-      utils.assert(!utils.isEmpty(objectCode), '[MetaElement] objectCode不能为空' + objectCode)
+      const {meta: {objectCode}} = this
       return objectCode
     },
     columns() {
-      const {innerMeta: {columns}} = this
+      const {meta: {columns}} = this
       columnsValid(columns)
       return columns
     },
     multiSelect() {
-      const {$attrs: {'multi-select': multiSelect}, innerMeta: {multi_select}} = this;
-      return utils.assertEmpty(multiSelect, multi_select) || false
+      const {meta: {multi_select = false}} = this;
+      return multi_select
     },
     operationBarConf() {
-      const {innerMeta: {"operation-bar": operationBarConf = {}}} = this
+      const {meta: {"operation-bar": operationBarConf = {}}} = this
       return operationBarConf;
     },
     tableConf() {
-      const {innerMeta: {conf}} = this
+      const {meta: {conf}} = this
       return conf
     },
     operationColumnConf() {
       const {
-        innerMeta: {'operation-column': operationColumn},
+        meta: {'operation-column': operationColumn},
         $attrs: {'operation-column': operationColumnConf}
       } = this
 
       return utils.mergeObject({}, operationColumn, operationColumnConf);
     },
     treeConf() {
-      const {innerMeta: {treeInTableConfig: treeConf}} = this;
+      const {meta: {treeInTableConfig: treeConf}} = this;
       return treeConf
     },
-    tlRefName() {
-      return this.innerMeta['name'];
-    },
-    multiMode() {
-      return this.innerMeta['multi_select'];
-    },
     buttonsConf() {
-      const {innerMeta: { "operation-column": {buttons: buttonsConf = {}} = {}} = {}} = this
+      const {meta: { "operation-column": {buttons: buttonsConf = {}} = {}} = {}} = this
       return buttonsConf
     },
     // 支持无渲染的行为插槽

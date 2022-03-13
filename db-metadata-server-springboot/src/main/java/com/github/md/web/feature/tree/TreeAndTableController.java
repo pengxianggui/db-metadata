@@ -91,7 +91,7 @@ public class TreeAndTableController extends ControllerAdapter {
         String featureCode = queryHelper.getFeatureCode();
         TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
 
-        String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignFieldCode();
+        String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignPrimaryKey();
         /** 优先通过ForeignFieldCodeKey取值 如无,再通过RELATE_ID_KEY  */
         String relateIdValue = parameterHelper.getPara(foreignFieldCodeKey, parameterHelper.getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
         Preconditions.checkArgument(StrKit.notBlank(relateIdValue), "树->表 关联ID[%s]丢失,请检查.", TreeAndTableConfig.RELATE_ID_KEY);

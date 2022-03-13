@@ -1,5 +1,5 @@
 <template>
-  <div class="view-container" :style="style">
+  <div class="container" :style="style">
     <h2 class="title">{{ name }}</h2>
     <el-card>
       <h2 style="text-align: center">登录</h2>
@@ -84,7 +84,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.view-container {
+.container {
   width: 100%;
   height: 100%;
   background-color: #2f4a75;

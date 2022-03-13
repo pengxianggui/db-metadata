@@ -32,6 +32,8 @@
       </template>
     </table-view>
 
+<!--    <master-slave-table-tmpl :></master-slave-table-tmpl>-->
+
     <dialog-box :visible.sync="metaImportFormVisible" title="创建元对象">
       <meta-import :meta="metaImportFormMeta" @cancel="metaImportFormVisible=false"
                    @submit="handlerMetaImport"></meta-import>

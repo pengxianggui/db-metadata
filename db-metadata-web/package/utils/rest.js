@@ -22,6 +22,12 @@ export function getUpdateFormMeta(axios, objectCode, primaryKv) {
     return axios.get(url)
 }
 
+/**
+ * 获取功能配置
+ * @param axios
+ * @param featureCode
+ * @returns {*}
+ */
 export function loadFeature(axios, featureCode) {
     let url = compile(restUrl.FEATURE_LOAD, {
         featureCode: featureCode
@@ -29,6 +35,12 @@ export function loadFeature(axios, featureCode) {
     return axios.safeGet(url);
 }
 
+/**
+ * 获取单表实例配置
+ * @param axios
+ * @param objectCode
+ * @returns {*}
+ */
 export function getTableViewMeta(axios, objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         objectCode: objectCode,
@@ -37,6 +49,12 @@ export function getTableViewMeta(axios, objectCode) {
     return axios.safeGet(url);
 }
 
+/**
+ * 获取树表实例配置
+ * @param axios
+ * @param objectCode
+ * @returns {*}
+ */
 export function getTableTreeViewMeta(axios, objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         objectCode: objectCode,
@@ -45,7 +63,12 @@ export function getTableTreeViewMeta(axios, objectCode) {
     return axios.safeGet(url)
 }
 
-
+/**
+ * 获取树实例配置
+ * @param axios
+ * @param objectCode
+ * @returns {*}
+ */
 export function getTreeMeta(axios, objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         objectCode: objectCode,
@@ -54,7 +77,12 @@ export function getTreeMeta(axios, objectCode) {
     return axios.safeGet(url);
 }
 
-
+/**
+ * 获取DataList实例配置
+ * @param axios
+ * @param objectCode
+ * @returns {*}
+ */
 export function getDataListMeta(axios, objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         objectCode: objectCode,
@@ -63,7 +91,12 @@ export function getDataListMeta(axios, objectCode) {
     return axios.safeGet(url);
 }
 
-
+/**
+ * 获取SearchView实例配置
+ * @param axios
+ * @param objectCode
+ * @returns {*}
+ */
 export function getSearchViewMeta(axios, objectCode) {
     let url = compile(restUrl.COMPONENT_INSTANCE_META, {
         componentCode: 'SearchView',
@@ -72,7 +105,12 @@ export function getSearchViewMeta(axios, objectCode) {
     return axios.safeGet(url);
 }
 
-// 从功能中直接获取meta
+/**
+ * 通过功能获取功能中包含的实例配置。注意区别于{@link loadFeature}。这个方法应当舍弃。
+ * @param axios
+ * @param featureCode
+ * @returns {*}
+ */
 export function getMetaFromFeature_TreeTableTmpl(axios, featureCode) {
     let url = compile(restUrl.FEATURE_TREE_AND_TABLE_META, {
         featureCode: featureCode

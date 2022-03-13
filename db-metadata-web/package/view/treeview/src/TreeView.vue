@@ -52,9 +52,9 @@
       </component>
     </slot>
 
-    <!-- name作为ref id不保险 -->
-    <el-tree :ref="innerMeta['name']" :data="innerData"
-             v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+    <!-- name作为ref不保险 -->
+    <el-tree :ref="treeRefName" :data="innerData"
+             v-bind="$reverseMerge(meta.conf, $attrs)"
              :props="props"
              @node-click="handleNodeClick"
              @node-contextmenu="$emit('node-contextmenu')"
@@ -65,17 +65,13 @@
              @node-collapse="$emit('node-collapse')">
       <template slot-scope="{ node, data }">
         <slot v-bind:node="node" v-bind:data="data">
-          <span class="el-tree-node__label">{{ data[innerMeta.conf['props']['label']] }}</span>
+          <span class="el-tree-node__label">{{ data[meta.conf['props']['label']] }}</span>
         </slot>
       </template>
     </el-tree>
 
-    <dialog-box :visible="visible" title="节点编辑">
-      <form-tmpl :meta="formMeta"></form-tmpl>
-    </dialog-box>
-
     <div style="float: right">
-      <meta-easy-edit :object-code="innerMeta.objectCode" component-code="TreeView">
+      <meta-easy-edit :object-code="meta.objectCode" component-code="TreeView">
         <template #label><i class="el-icon-setting"></i></template>
       </meta-easy-edit>
     </div>
@@ -94,25 +90,20 @@ export default {
   mixins: [Meta(DefaultMeta)],
   name: "TreeView",
   components: {MetaEasyEdit},
-  props: {
-    data: Array
-  },
   data() {
     return {
       innerData: [],
       activeData: {},
       choseData: [],
-      halfChoseData: [],
-      formMeta: {},
-      visible: false
+      halfChoseData: []
     }
   },
   methods: {
     getAllNodes() {
-      return this.ref.store._getAllNodes();
+      return this.treeRef.store._getAllNodes();
     },
     getCheckedNodes() {
-      return this.ref.getCheckedNodes();
+      return this.treeRef.getCheckedNodes();
     },
     handleCommand(fn) {
       if (this[fn]) this[fn]();
@@ -122,11 +113,11 @@ export default {
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleChoseAll() {
-      this.ref.setCheckedNodes(this.innerData);
+      this.treeRef.setCheckedNodes(this.innerData);
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleCleanChose() {
-      this.ref.setCheckedKeys([]);
+      this.treeRef.setCheckedKeys([]);
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleExpandAll() {
@@ -136,7 +127,7 @@ export default {
       this.getAllNodes().forEach(node => node.expanded = false);
     },
     handleAdd() {
-      let currentNode = this.ref.getCurrentNode();
+      let currentNode = this.treeRef.getCurrentNode();
       if (currentNode) {
         // pxg_todo 新增节点
         this.$message.warning("开发中")
@@ -152,7 +143,7 @@ export default {
 
       if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
         this.activeData = {};
-        this.ref.setCurrentNode()
+        this.treeRef.setCurrentNode()
       } else {
         this.activeData = row;
       }
@@ -168,56 +159,56 @@ export default {
     },
 
     filter(value) {
-      this.ref.filter(value);
+      this.treeRef.filter(value);
     },
     getChechedNodes() {
-      return this.ref.getCheckedNodes();
+      return this.treeRef.getCheckedNodes();
     },
     getCheckedKeys() {
-      return this.ref.getCheckedKeys();
+      return this.treeRef.getCheckedKeys();
     },
     setCheckedKeys(keys) {
-      this.ref.setCheckedKeys(keys);
+      this.treeRef.setCheckedKeys(keys);
     },
     getHalfCheckedNodes() {
-      return this.ref.getHalfCheckedNodes();
+      return this.treeRef.getHalfCheckedNodes();
     },
     getHalfCheckedKeys() {
-      return this.ref.getHalfCheckedKeys();
+      return this.treeRef.getHalfCheckedKeys();
     },
     setCurrentKey(key) {
-      return this.ref.setCurrentKey(key);
+      return this.treeRef.setCurrentKey(key);
     },
     getCurrentKey() {
-      return this.ref.getCurrentKey();
+      return this.treeRef.getCurrentKey();
     },
     getCurrentNode() {
-      return this.ref.getCurrentNode();
+      return this.treeRef.getCurrentNode();
     },
     getNode(key) {
-      return this.ref.getNode(key);
+      return this.treeRef.getNode(key);
     },
     remove(key) {
-      this.ref.remove(key);
+      this.treeRef.remove(key);
     },
     append(data, parentNode) {
-      this.ref.append(data, parentNode);
+      this.treeRef.append(data, parentNode);
     },
     insertBefore(data, refNode) {
-      this.ref.append(data, refNode);
+      this.treeRef.append(data, refNode);
     },
     insertAfter(data, refNode) {
-      this.ref.append(data, refNode);
+      this.treeRef.append(data, refNode);
     },
     getData(params) {
       if (!utils.isObject(params)) params = {};
 
-      if (!this.innerMeta.hasOwnProperty('data_url')) {
+      if (!this.meta.hasOwnProperty('data_url')) {
         console.error('lack data_url attribute');
         return;
       }
 
-      let url = this.innerMeta['data_url'];
+      let url = this.meta['data_url'];
 
       this.$axios.safeGet(url, {
         params: params
@@ -228,58 +219,41 @@ export default {
         console.error(err)
       });
     },
-    initData() { // init business data
+    init() { // init business data
       let {data} = this;
       if (data !== undefined) {
         this.innerData = data;
         return;
       }
-      if (this.innerMeta.hasOwnProperty('data_url')) {
+      if (this.meta.hasOwnProperty('data_url')) {
         this.getData();
         return;
       }
       console.error("data or data_url in meta provide one at least!")
     },
   },
-  watch: {
-    'data': function (newVal, oldVal) {
-      this.initData();    // 为避免data数据过大, 不进行深度监听
-    },
-    'innerMeta.data_url': {
-      handler: function () {
-        this.initData();
-      },
-      immediate: false
-    }
-  },
-  mounted() {
-    this.initData();
-  },
   computed: {
-    innerMeta() {
-      return this.$merge(this.meta, DefaultMeta);
+    treeRefName() {
+      const {meta: {name: treeRefName}} = this
+      return treeRefName
     },
-    ref() {
-      const {innerMeta: {name} = {}, $refs} = this
-      return $refs[name]
+    treeRef() {
+      return this.$refs[this.treeRefName]
     },
     multiSelect() {
-      const {innerMeta: {conf: {'show-checkbox': multiSelect} = {}} = {}} = this
+      const {meta: {conf: {'show-checkbox': multiSelect} = {}} = {}} = this
       return multiSelect;
     },
     editable() {
-      const {innerMeta: {editable} = {}} = this
+      const {meta: {editable} = {}} = this
       return editable
     },
-    operLogic() {
-      const {innerMeta: {'oper-logic': operLogic} = {}} = this
-      return operLogic
-    },
     props() {
-      return this.innerMeta['conf']['props'];
+      const {meta: {conf: {props}}} = this
+      return props
     },
     operationBarConf() {
-      return this.innerMeta['operation-bar'];
+      return this.meta['operation-bar'];
     },
     primaryKey() {
       const {objectPrimaryKey} = this.meta

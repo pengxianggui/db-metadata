@@ -1719,7 +1719,14 @@
         "config": {
           "isNullable": true,
           "isListShow": false,
-          "isSearch": false
+          "isSearch": false,
+          "scopeOptions": [{
+            "key": "男",
+            "value": "1"
+          }, {
+            "key": "女",
+            "value": "0"
+          }]
         }
       },
       "age": {

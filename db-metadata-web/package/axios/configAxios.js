@@ -2,11 +2,57 @@
  * 为axios扩展safeGet和safePost方法
  * @param axios
  */
-import {isEmpty, assertEmpty} from "../utils/common";
+import {isEmpty, assertEmpty, isObject, isString, printWarn} from "../utils/common";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
 import {routeUrl} from "../constant/url";
 import {clearUser, getToken} from "../access";
+
+
+/**
+ * 判断字符串是否未编译。比如下面这个未编译的字符串:
+ *
+ * "/table/list?objectCode={object_code}"
+ *
+ * 其中{object_code}就是未编译的部分。
+ *
+ * 字符串中同时含有"{"和"}"就视为未编译
+ *
+ * @param params
+ * @returns {boolean}
+ */
+const strNotCompile = function (value) {
+    if (!isString(value)) {
+        return false
+    }
+    return value.indexOf("{") > -1 && value.indexOf("}") > -1
+}
+/**
+ * 判断对象中的value是否含有未编译的值。比如下面这个未编译的对象:
+ * <pre>
+ *     {
+ *         "key1": "{key1}",
+ *         "key2": "value2"
+ *     }
+ * </pre>
+ * 其中key1的值就是未编译的。
+ *
+ * @param params
+ * @returns {boolean}
+ */
+const paramsNotCompile = function (params = {}) {
+    if (!isObject(params)) {
+        return false
+    }
+    for (let key in params) {
+        let value = params[key]
+        let valueNotCompile = (isObject(value) ? paramsNotCompile(value) : strNotCompile(value))
+        if (valueNotCompile) {
+            return true
+        }
+    }
+    return false
+}
 
 /**
  * 配置axios默认的拦截器
@@ -83,22 +129,24 @@ export default function (opts) {
     }
 
     axios.safeGet = function (url, config = {}) {
-        if (url.indexOf("{") > 0 || url.indexOf("}") > 0) { // 请求url中含有{或}表示有参数未填充, 取消请求
-            // return Promise.cancel('url: ' + url + ' 未编译 ...');
+        const {params = {}} = config
+
+        if (strNotCompile(url) || paramsNotCompile(params)) {
             console.warn('url: ' + url + ' 未编译 ...')
-            return new Promise(resolve => {
-            }, reject => {
-            })
+            const paramsStr = JSON.stringify(params)
+            printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
+            return new Promise(((resolve, reject) => {}))
         }
         let compileUrl = resolve(url, config);
         return axios.get(compileUrl, config);
     }
     axios.safePost = function (url, data, config = {}) {
-        if (url.indexOf("{") > 0 || url.indexOf("}") > 0) { // 请求url中含有{或}表示有参数未填充, 取消请求
+        const {params = {}} = config
+        if (strNotCompile(url) || paramsNotCompile(params)) {
             console.warn('url: ' + url + ' 未编译 ...')
-            return new Promise(resolve => {
-            }, reject => {
-            })
+            const paramsStr = JSON.stringify(params)
+            printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
+            return new Promise(((resolve, reject) => {}))
         }
         let compileUrl = resolve(url, config);
         return axios.post(compileUrl, data, config);

@@ -5,6 +5,7 @@ import com.github.md.web.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.attr.AttributeBuilder;
 import com.github.md.web.component.form.FormFieldFactory;
+import com.github.md.web.ex.OprNotSupportException;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.component.Component;
@@ -127,9 +128,8 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     }
 
     @Override
-    public MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode) {
-        //TODO
-        throw new WebException("This is not to be implemented!");
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(String ic) {
+        throw new OprNotSupportException("不支持通过容器实例编码智能计算实例配置"); // 因为计算的前提是要有元对象, ic如果可以推导出元对象, 说明数据库里已经有了这套实例配置, 那就无需自动计算了
     }
 
     @Override

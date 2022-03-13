@@ -47,7 +47,6 @@ import ListView from './view/listview'
 import FormView from './view/formview'
 
 // 模板组件
-import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
 import MasterSlaveTableTmpl from './template/MasterSlaveTableTmpl'
 import SingleGridTmpl from './template/SingleGridTmpl'
@@ -131,7 +130,6 @@ const components = [
     Layout,
 
     // template
-    DataListTableTmpl,
     FormTmpl,
     MasterSlaveTableTmpl,
     SingleGridTmpl,

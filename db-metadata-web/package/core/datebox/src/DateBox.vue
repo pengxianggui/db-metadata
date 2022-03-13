@@ -23,11 +23,11 @@
         },
         computed: {
             conf() {
-                const {innerMeta: {conf}, $attrs} = this
+                const {meta: {conf}, $attrs} = this
                 return this.$reverseMerge(conf, $attrs)
             },
             type() {
-              const {innerMeta: {conf: {type:metaType} = {}} = {}, $attrs: {type: attrType}} = this
+              const {meta: {conf: {type:metaType} = {}} = {}, $attrs: {type: attrType}} = this
               return assertEmpty(assertEmpty(attrType, metaType), 'date')
             }
         }
