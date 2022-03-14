@@ -2,12 +2,12 @@
     <div>
         <div class="operation-bar">
             <span style="flex: 1"></span>
-            <el-select v-model="mode" size="mini" v-if="meta['show-mode-chose']" @change="handleChange('mode')">
-                <el-option v-for="item in meta.modes" :key="item" :label="item" :value="item"></el-option>
+            <el-select v-model="mode" size="mini" v-if="innerMeta['show-mode-chose']" @change="handleChange('mode')">
+                <el-option v-for="item in innerMeta.modes" :key="item" :label="item" :value="item"></el-option>
             </el-select>
             &nbsp;
-            <el-select v-model="theme" size="mini" v-if="meta['show-theme-chose']" @change="handleChange('theme')">
-                <el-option v-for="item in meta.themes" :key="item" :label="item" :value="item"></el-option>
+            <el-select v-model="theme" size="mini" v-if="innerMeta['show-theme-chose']" @change="handleChange('theme')">
+                <el-option v-for="item in innerMeta.themes" :key="item" :label="item" :value="item"></el-option>
             </el-select>
         </div>
         <textarea ref="sqlEditor" type="textarea" :value="nativeValue"></textarea>
@@ -46,12 +46,12 @@
             }
         },
         created() {
-            let {conf: {mode, theme}} = this.meta;
+            let {conf: {mode, theme}} = this.innerMeta;
             this.mode = mode;
             this.theme = theme;
         },
         mounted() {
-            let {meta: {height, conf}} = this;
+            let {innerMeta: {height, conf}} = this;
             this.editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, conf);
             this.editor.on('change', (instance) => {
                 this.nativeValue = instance.getValue();

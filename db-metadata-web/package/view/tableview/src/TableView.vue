@@ -6,7 +6,7 @@
                  :style="operationBarConf.style" v-bind="operationBarConf.conf"
                  v-if="operationBarConf.show">
         <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
+        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:choseData="choseData" v-bind:add="handleAdd">
           <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                      v-if="operationBarConf.add.show">
             {{operationBarConf.add.text}}
@@ -86,7 +86,7 @@
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
                              v-if="ifShow(buttonsConf.edit.show, scope.row)">{{buttonsConf.edit.text}}</el-button>
                 </slot>
-                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
+                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:del="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
                              v-if="ifShow(buttonsConf.delete.show, scope.row)">{{buttonsConf.delete.text}}</el-button>
                 </slot>
@@ -120,17 +120,16 @@ import utils from '../../../utils'
 import {restUrl} from "../../../constant/url";
 import {defaultPrimaryKey} from "../../../config";
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
-import Meta from '@/../package/core/mixins/meta'
 import assembleMeta from './assembleMeta'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "@/../package/view/ext/table/columnsValid";
 import {isEmpty} from "@/../package/utils/common";
-import {ViewMixin} from '../../ext/mixins'
+import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
 
 export default {
   name: "TableView",
-  mixins: [Meta(DefaultMeta, assembleMeta), ViewMixin],
+  mixins: [ViewMetaBuilder(DefaultMeta, assembleMeta), ViewMixin],
   components: {MetaEasyEdit, TableCell},
   data() {
     return {

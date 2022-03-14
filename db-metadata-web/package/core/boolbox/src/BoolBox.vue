@@ -1,6 +1,6 @@
 <template>
     <el-checkbox v-model="nativeValue"
-                 v-bind="$reverseMerge(meta.conf, $attrs)"
+                 v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                  @change="$emit('change', $event)">
       <slot></slot>
     </el-checkbox>
@@ -23,7 +23,7 @@
                 type: [Boolean, Number, String],
                 validator: function (val) {
                     let result = expand.indexOf(val) >= 0;
-                    if (!result) console.error('BoolBox support a value as list: %o', expand);
+                    if (!result) console.warn('BoolBox support a value as list: %o. but get: %o', expand, val);
                     return result;
                 }
             }

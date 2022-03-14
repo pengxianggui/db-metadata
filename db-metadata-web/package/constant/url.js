@@ -3,8 +3,8 @@ import {isEmpty} from "../utils/common";
 
 export const routeUrl = {
     baseURL: '/meta',
-    R_GOBAL_CONF_ADD: '/global-conf',
-    R_GOBAL_CONF_EDIT: '/global-conf',
+    R_GOBAL_CONF_ADD: '/meta/global-conf',
+    R_GOBAL_CONF_EDIT: '/meta/global-conf',
     R_INSTANCE_CONF_NEW: '/meta/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
     R_INSTANCE_CONF_EDIT: '/meta/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}&fieldCode={fieldCode}',    // 组件实例配置界面[编辑]
 
@@ -22,6 +22,8 @@ export const restUrl = {
     META_FIELD_SYNC: '/meta/incrementImport?objectCode={objectCode}',   // 元
     META_FIELD_TO_EDIT: '/meta/editField?objectCode={objectCode}&fieldCode={fieldCode}',  // 元字段编辑(TO)
     OBJECT_CODE_LIST: '/table/list?objectCode=meta_object&fs=code&s=1000',  // 获取所有元对象code
+    OBJECT_CODE_LIST_AS_KV: '/table/list?objectCode=meta_object&fs=code,cn&code->key=&code->value=&cn->label=&s=1000',
+
     FIELD_CODE_LIST_BY_OBJECT: '/table/list?objectCode=meta_field&object_code={objectCode}&fs=field_code,en,cn&en->key=&field_code->value=&cn->label=&s=1000', // 查询某个元对象的元字段的field_code和cn，并以key,value返回
     FIELD_CODE_CONF: '/table/list?objectCode=meta_field&object_code={objectCode}&field_code={fieldCode}&fs=config,id', // 获取某个元字段的逻辑配置
     COMPONENT_CODE_LIST: '/component/list?scope={scope}', // 获取所有组件列表, 返回数据格式KV
@@ -51,6 +53,7 @@ export const restUrl = {
     LOAD_COMP_BY_OBJECT: '/meta/contact/?kv={kv}&objectCode={objectCode}', // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
     LOAD_INSTANCE_CODE_BY_OBJECT_COMP: '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}', // 根据查询在objectCode+componentCode下的所有实例配置
     LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 根据查询在objectCode下的所有实例配置
+
     CHECK_SQL: '/check/sql?sql={sql}',
     FEATURE_ADD: '/feature/doAdd?ft={featureType}', // 添加功能类别
     FEATURE_LOAD: '/feature/load?fc={featureCode}', // 加载功能配置

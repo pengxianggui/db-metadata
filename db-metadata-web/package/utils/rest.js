@@ -6,8 +6,8 @@ import {compile} from "./url";
  * @param objectCode
  * @returns {*}
  */
-export function getAddFormMeta(axios, objectCode) {
-    const url = compile(restUrl.RECORD_TO_ADD, {objectCode: objectCode})
+export function getAddFormMeta(axios, instanceCode) {
+    const url = compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode})
     return axios.get(url)
 }
 
@@ -17,8 +17,8 @@ export function getAddFormMeta(axios, objectCode) {
  * @param primaryKv 当为联合主键时, 此值为pk1_pv1,pk2_pv2,pk3_pv3； 若为单主键, 则primaryKv为 主键值 value
  * @returns {*}
  */
-export function getUpdateFormMeta(axios, objectCode, primaryKv) {
-    const url = compile(restUrl.RECORD_TO_UPDATE, {objectCode: objectCode, primaryKv: primaryKv})
+export function getUpdateFormMeta(axios, instanceCode, primaryKv) {
+    const url = compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: primaryKv})
     return axios.get(url)
 }
 

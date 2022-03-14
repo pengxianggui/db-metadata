@@ -1,7 +1,7 @@
 <template>
     <div class="el-card">
         <template v-if="formType">
-            <mini-form v-bind="$reverseMerge(meta.conf, $attrs)" :meta="meta"
+            <mini-form v-bind="$reverseMerge(innerMeta.conf, $attrs)" :meta="innerMeta"
                        v-model="nativeValue"></mini-form>
         </template>
         <template v-else>

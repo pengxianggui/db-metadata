@@ -1,6 +1,6 @@
 <template>
     <el-input v-model="nativeValue"
-              v-bind="$reverseMerge(meta.conf, $attrs)"
+              v-bind="$reverseMerge(innerMeta.conf, $attrs)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"
               @change="$emit('change', $event)"
@@ -33,11 +33,6 @@
         label: "文本框",
         props: {
             value: [String, Number],
-        },
-        data() {
-          return {
-
-          }
         }
     }
 </script>

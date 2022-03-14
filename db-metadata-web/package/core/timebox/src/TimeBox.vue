@@ -19,7 +19,7 @@
         },
         computed: {
             conf() {
-                const {meta: {conf}, $attrs} = this
+                const {innerMeta: {conf}, $attrs} = this
                 return this.$reverseMerge(conf, $attrs)
             }
         }

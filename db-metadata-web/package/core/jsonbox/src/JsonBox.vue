@@ -1,7 +1,7 @@
 <template>
     <vue-json-editor v-model="nativeValue"
                      :mode="innerMode"
-                     v-bind="$reverseMerge(meta.conf, $attrs)">
+                     v-bind="$reverseMerge(innerMeta.conf, $attrs)">
     </vue-json-editor>
 </template>
 
@@ -27,7 +27,7 @@
         },
         computed: {
           innerMode() {
-            const {$attrs: {mode: attrMode} = {}, meta: {conf: {mode: metaMode} = {}}} = this
+            const {$attrs: {mode: attrMode} = {}, innerMeta: {conf: {mode: metaMode} = {}}} = this
             return utils.assertEmpty(attrMode, metaMode);
           }
         }

@@ -83,11 +83,11 @@ import utils from '../../../utils'
 import {defaultPrimaryKey} from '../../../config'
 import DefaultMeta from '../ui-conf'
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
-import Meta from '@/../package/core/mixins/meta'
+import {ViewMetaBuilder} from "../../ext/mixins";
 import {assertEmpty} from "../../../utils/common";
 
 export default {
-  mixins: [Meta(DefaultMeta)],
+  mixins: [ViewMetaBuilder(DefaultMeta)],
   name: "TreeView",
   components: {MetaEasyEdit},
   data() {

@@ -84,12 +84,12 @@ export default {
   methods: {
     editMenuMeta(item) {
       if (!this.$isRoot()) {
-        this.$message.error("只有开发者账号可以执行此操作")
+        this.$message.error("只有ROOT账号可以执行此操作")
         return
       }
-      const objectCode = "meta_menu" // 系统元对象编码-固定
+      const instanceCode = "meta_menu.FormView" // 系统元对象编码-固定
       const {id, name} = item
-      let url = this.$compile(restUrl.RECORD_TO_UPDATE, {objectCode: objectCode, primaryKv: id});
+      let url = this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: id});
       this.$axios.get(url).then(({data}) => {
         this.$dialog(data, null, {
           title: `编辑菜单元数据:${name}`

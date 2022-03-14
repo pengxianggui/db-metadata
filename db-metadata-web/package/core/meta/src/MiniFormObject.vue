@@ -89,7 +89,7 @@
                 }
 
                 Object.keys(self.config).forEach(key => {
-                    if (value.hasOwnProperty(key)) {
+                    if (value && value.hasOwnProperty(key)) {
                         self.config[key] = value[key];
                     }
                 });

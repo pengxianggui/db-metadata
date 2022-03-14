@@ -95,17 +95,17 @@
 <script>
 import util from '@/../package/utils'
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
-import Meta from '@/../package/core/mixins/meta'
 import symbols from '../ext/config'
 import {toParams} from "../ext/config";
 import DefaultMeta from '../ui-conf'
 import {assembleMeta} from '../ui-conf'
 import {defaultMeta} from '@/../package/core/index'
+import {ViewMetaBuilder} from "../../ext/mixins";
 import {isEmpty} from "@/../package/utils/common";
 
 export default {
   name: "SearchView",
-  mixins: [Meta(DefaultMeta, assembleMeta)],
+  mixins: [ViewMetaBuilder(DefaultMeta, assembleMeta)],
   components: {MetaEasyEdit},
   data() {
     return {
@@ -144,6 +144,9 @@ export default {
     },
     init() {
       this.assemblyModel(this.meta);
+      if (Object.values(this.model).some(({value}) => !isEmpty(value))) {
+        this.emitSearch()
+      }
     }
   },
   filters: {

@@ -110,7 +110,7 @@ export default {
     },
     cachedViews: {
       handler: function (newV) {
-        this.$emit('cacheViewChange', newV)
+        this.$emit('cache-view-change', newV)
       },
       deep: true
     }
@@ -123,7 +123,7 @@ export default {
     ...TagViewUtil,
     editRoute(route) {
       const {meta: {id}} = route
-      getUpdateFormMeta(this.$axios, 'meta_router', id).then(({data: meta}) => {
+      getUpdateFormMeta(this.$axios, 'meta_router.FormView', id).then(({data: meta}) => {
         this.$dialog(meta, null, {
           title: '编辑路由'
         })

@@ -27,11 +27,11 @@ export default {
   },
   computed: {
     colSpan() {
-      const {span: attrSpan, meta: {conf: {span: metaSpan}}} = this
+      const {span: attrSpan, innerMeta: {conf: {span: metaSpan}}} = this
       return utils.assertEmpty(attrSpan, metaSpan)
     },
     line() {
-      const {showLine: attrLine, meta: {conf : { 'show-line': metaLine}}} = this
+      const {showLine: attrLine, innerMeta: {conf : { 'show-line': metaLine}}} = this
       return utils.assertEmpty(attrLine, metaLine)
     }
   }

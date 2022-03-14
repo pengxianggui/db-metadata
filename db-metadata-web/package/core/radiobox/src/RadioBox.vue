@@ -3,7 +3,7 @@
         <el-radio v-for="item in innerOptions"
                   :key="item.key"
                   :label="item.value | stringify"
-                  v-bind="$reverseMerge(meta.conf, $attrs)"
+                  v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                   @change="handleChange">
             <slot :name="item.value | stringify" v-bind:option="item">
                 {{item.key}}

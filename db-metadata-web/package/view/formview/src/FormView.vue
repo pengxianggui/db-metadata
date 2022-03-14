@@ -48,13 +48,14 @@ import DefaultMeta from '../ui-conf'
 import NestFormItem from "./NestFormItem";
 import {formTypes} from "../ui-conf";
 import {gridInfoStructured} from "../../../meta/form-builder/formViewMetaParser";
-import Meta from "../../../core/mixins/meta";
-import {ViewMixin} from "../../ext/mixins";
+import {ViewMixin, ViewMetaBuilder} from "../../ext/mixins";
+import {restUrl} from "../../../constant/url";
+import {isEmpty} from "../../../utils/common";
 
 export default {
   name: "FormView",
   components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
-  mixins: [Meta(DefaultMeta, gridInfoStructured), ViewMixin],
+  mixins: [ViewMetaBuilder(DefaultMeta, gridInfoStructured), ViewMixin],
   provide() {
     return {
       isView: this.isView // 注入子field, 以便实现FormView的view形态
@@ -67,12 +68,32 @@ export default {
         return {}
       }
     },
-    type: {
-      type: String,
-      default: () => formTypes.add
+    type: String
+  },
+  watch: {
+    'model': {
+      handler: function (newV) {
+        this.init()
+      }
     }
   },
   methods: {
+    getMetaUrl() {
+      const {type: formType} = this
+      if (isEmpty(formType)) {
+        return restUrl.VIEW_INSTANCE_CONF
+      }
+      switch (formType.toUpperCase()) {
+        case formTypes.add:
+          return restUrl.RECORD_TO_ADD
+        case formTypes.update:
+          return restUrl.RECORD_TO_UPDATE
+        case formTypes.view:
+          return restUrl.RECORD_TO_VIEW
+        default:
+          return restUrl.VIEW_INSTANCE_CONF
+      }
+    },
     getItemRules(item) {
       let rules = item.hasOwnProperty('conf') ? item.conf['rules'] : [];
       return utils.isEmpty(rules) ? [] : rules;

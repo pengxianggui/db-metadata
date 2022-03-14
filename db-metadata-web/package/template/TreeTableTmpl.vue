@@ -15,42 +15,42 @@
                     @open-form-view="openTableFormView"
                     :filter-params="filterParams">
 
-          <tempalte #operation-bar="{conf, choseData}">
-            <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <tempalte #operation-bar="scope">
+            <slot name="operation-bar" v-bind="scope"></slot>
           </tempalte>
-          <template #prefix-btn="{conf, choseData}">
-            <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <template #prefix-btn="scope">
+            <slot name="prefix-btn" v-bind="scope"></slot>
           </template>
-          <template #add-btn="{conf}">
-            <slot name="add-btn" v-bind:conf="conf">
-              <el-button v-bind="conf.conf" @click="handleAdd">新增</el-button>
+          <template #add-btn="scope">
+            <slot name="add-btn" v-bind="scope">
+              <el-button v-bind="scope.conf.conf" @click="handleAdd">新增</el-button>
             </slot>
           </template>
-          <template #batch-delete-btn="{conf, choseData}">
-            <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <template #batch-delete-btn="scope">
+            <slot name="batch-delete-btn" v-bind="scope"></slot>
           </template>
-          <template #suffix-btn="{conf, choseData}">
-            <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-          </template>
-
-          <template #buttons="{scope, conf}">
-            <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+          <template #suffix-btn="scope">
+            <slot name="suffix-btn" v-bind="scope"></slot>
           </template>
 
-          <template #inner-before-extend-btn="{scope}">
-            <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
+          <template #buttons="scope">
+            <slot name="buttons" v-bind="scope"></slot>
           </template>
-          <template #view-btn="{scope, conf}">
-            <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+
+          <template #inner-before-extend-btn="scope">
+            <slot name="inner-before-extend-btn" v-bind="scope"></slot>
           </template>
-          <template #edit-btn="{scope, conf}">
-            <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+          <template #view-btn="scope">
+            <slot name="view-btn" v-bind="scope"></slot>
           </template>
-          <template #delete-btn="{scope, conf}">
-            <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+          <template #edit-btn="scope">
+            <slot name="edit-btn" v-bind="scope"></slot>
           </template>
-          <template #inner-after-extend-btn="{scope}">
-            <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
+          <template #delete-btn="scope">
+            <slot name="delete-btn" v-bind="scope"></slot>
+          </template>
+          <template #inner-after-extend-btn="scope">
+            <slot name="inner-after-extend-btn" v-bind="scope"></slot>
           </template>
         </table-view>
       </template>

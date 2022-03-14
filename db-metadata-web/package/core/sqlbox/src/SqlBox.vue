@@ -72,8 +72,8 @@ export default {
     initEditor() {
       let self = this;
       const {lineNumber, check} = this
-      let mime = self.meta['mode'];
-      let theme = self.meta['theme'];
+      let mime = self.innerMeta['mode'];
+      let theme = self.innerMeta['theme'];
       self.editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, {
         mode: mime,
         indentWithTabs: true,
@@ -105,15 +105,15 @@ export default {
   },
   computed: {
     check() {
-      const {meta: {check: metaCheck}, $attrs: {check: attrCheck}} = this
+      const {innerMeta: {check: metaCheck}, $attrs: {check: attrCheck}} = this
       return assertUndefined(attrCheck, metaCheck)
     },
     checkUrl() {
-      const {meta: {check_url: metaCheckUrl}, $attrs: {check_url: attrCheckUrl}} = this
+      const {innerMeta: {check_url: metaCheckUrl}, $attrs: {check_url: attrCheckUrl}} = this
       return assertUndefined(assertUndefined(attrCheckUrl, metaCheckUrl), restUrl.CHECK_SQL)
     },
     lineNumber() {
-      const {meta: {line_number: metaLineNumber}, $attrs: {'line-number': attrLineNumber}} = this
+      const {innerMeta: {line_number: metaLineNumber}, $attrs: {'line-number': attrLineNumber}} = this
       return assertUndefined(attrLineNumber, metaLineNumber)
     }
   }

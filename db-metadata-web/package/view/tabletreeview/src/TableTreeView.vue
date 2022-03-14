@@ -123,17 +123,16 @@ import {restUrl} from "../../../constant/url"
 import {defaultPrimaryKey} from "../../../config"
 import utils from '../../../utils'
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
-import Meta from '@/../package/core/mixins/meta'
 import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import columnsValid from "@/../package/view/ext/table/columnsValid"
 import {resolvePath} from '../../../utils/url'
-import {ViewMixin} from '../../ext/mixins'
+import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
 
 export default {
   name: "TableTreeView",
-  mixins: [Meta(DefaultMeta, assembleMeta), ViewMixin],
+  mixins: [ViewMetaBuilder(DefaultMeta, assembleMeta), ViewMixin],
   components: {MetaEasyEdit, TableCell},
   data() {
     return {

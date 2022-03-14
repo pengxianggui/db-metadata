@@ -1,7 +1,7 @@
 <template>
     <el-input type="textarea"
               v-model="nativeValue"
-              v-bind="$reverseMerge(meta.conf, $attrs)"
+              v-bind="$reverseMerge(innerMeta.conf, $attrs)"
               @input="$emit('input', $event)"
               @blur="$emit('blur', $event)"
               @focus="$emit('focus', $event)"

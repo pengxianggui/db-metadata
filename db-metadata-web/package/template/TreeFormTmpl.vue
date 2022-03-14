@@ -7,8 +7,8 @@
       </template>
       <template #1>
         <form-view :meta-url="formMetaUrl" @ok="refreshTreeData" v-if="formShow">
-          <template #action="{model, conf}">
-            <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+          <template #action="scope">
+            <slot name="action" v-bind="scope"></slot>
           </template>
         </form-view>
       </template>

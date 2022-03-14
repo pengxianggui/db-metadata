@@ -17,7 +17,7 @@ import utils from "../../utils";
 const routes = [
     {
         path: '/meta/manager',
-        name: 'Metadata',
+        name: 'MetaDataManager',
         meta: {
             title: "元数据管理",
             icon: "el-icon-warning",
@@ -27,7 +27,7 @@ const routes = [
         component: MetaDataManager
     }, {
         path: '/meta/feature',
-        name: 'Feature',
+        name: 'MetaFeatureList',
         meta: {
             title: '功能维护',
             icon: 'el-icon-warning-outline',
@@ -37,7 +37,7 @@ const routes = [
         component: MetaFeatureList
     }, {
         path: '/meta/global-conf-list',
-        name: 'MetaComponent',
+        name: 'GlobalConfList',
         meta: {
             title: "组件全局配置",
             icon: "el-icon-star-off",
@@ -47,7 +47,7 @@ const routes = [
         component: GlobalConfList
     }, {
         path: '/meta/global-conf',
-        name: 'MetaComponentEdit',
+        name: 'GlobalConf',
         meta: {
             title: "组件全局配置-编辑",
             icon: "el-icon-star-off",
@@ -58,7 +58,7 @@ const routes = [
         component: GlobalConf
     }, {
         path: '/meta/instance-conf-list',
-        name: 'MetaComponentInstance',
+        name: 'InstanceConfList',
         meta: {
             title: "组件实例配置",
             icon: "el-icon-star-on",
@@ -68,7 +68,7 @@ const routes = [
         component: InstanceConfList
     }, {
         path: '/meta/router',
-        name: 'MetaRouter',
+        name: 'RouterManager',
         meta: {
             title: "路由维护",
             icon: "el-icon-star-off",
@@ -79,7 +79,7 @@ const routes = [
         component: RouterManager
     }, {
         path: '/meta/menu',
-        name: 'MetaMenu',
+        name: 'MenuManager',
         meta: {
             title: "菜单维护",
             icon: "el-icon-star-off",
@@ -105,7 +105,7 @@ const routes = [
         component: FormBuilder
     }, {
         path: '/meta/meta-conf',
-        name: 'MetaConf',
+        name: 'MetaConfList',
         meta: {
             title: 'MetaConf',
             icon: 'el-icon-s-tools',
@@ -115,7 +115,7 @@ const routes = [
         component: MetaConfList
     }, {
         path: '/meta/dict',
-        name: 'MetaDict',
+        name: 'DictList',
         meta: {
             title: '字典',
             icon: 'el-icon-collection',
@@ -125,7 +125,7 @@ const routes = [
         component: DictList
     }, {
         path: '/meta/exception',
-        name: 'MetaException',
+        name: 'ExceptionList',
         meta: {
             title: '异常',
             icon: 'el-icon-warning',
@@ -135,7 +135,7 @@ const routes = [
         component: ExceptionList
     }, {
         path: '/meta/auth',
-        name: 'MetaAuth',
+        name: 'AuthList',
         meta: {
             title: '权限配置',
             icon: 'el-icon-warning',
@@ -145,7 +145,7 @@ const routes = [
         component: AuthList
     }, {
         path: '/meta/api-resource',
-        name: 'ApiResource',
+        name: 'ApiResourceList',
         meta: {
             title: '接口资源',
             icon: 'el-icon-warning',

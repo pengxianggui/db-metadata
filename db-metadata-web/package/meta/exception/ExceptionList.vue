@@ -1,18 +1,16 @@
 <template>
-    <single-grid-tmpl :oc="oc"></single-grid-tmpl>
+  <single-grid-tmpl :fc="fc"></single-grid-tmpl>
 </template>
 
 <script>
-    import {metaObjectCode} from "../../constant/variable";
-
-    export default {
-        name: "ExceptionList",
-        data() {
-            return {
-                oc: metaObjectCode.exceptionList
-            }
-        }
+export default {
+  name: "ExceptionList",
+  data() {
+    return {
+      fc: 'meta_exception',
     }
+  }
+}
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <vue-tinymce-text v-model="nativeValue"
                     :toolbar="toolbar" :menubar="menubar"
-                    :width="width" :height="height" v-bind:config="meta['conf']"></vue-tinymce-text>
+                    :width="width" :height="height" v-bind:config="innerMeta['conf']"></vue-tinymce-text>
 </template>
 
 <script>

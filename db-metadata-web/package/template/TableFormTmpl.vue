@@ -6,29 +6,29 @@
                     :ic="config.table.instanceCodes.TableView"
                     @open-form-view="openFormView"
                     @active-change="handleActiveChange">
-          <template #prefix-btn="{conf, choseData}">
-            <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <template #prefix-btn="scope">
+            <slot name="prefix-btn" v-bind="scope"></slot>
           </template>
-          <template #add-btn="{conf}">
-            <slot name="add-btn" v-bind:conf="conf"></slot>
+          <template #add-btn="scope">
+            <slot name="add-btn" v-bind="scope"></slot>
           </template>
-          <template #batch-delete-btn="{conf, choseData}">
-            <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <template #batch-delete-btn="scope">
+            <slot name="batch-delete-btn" v-bind="scope"></slot>
           </template>
-          <template #suffix-btn="{conf, choseData}">
-            <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+          <template #suffix-btn="scope">
+            <slot name="suffix-btn" v-bind="scope"></slot>
           </template>
 
-          <template #buttons="{scope, conf}">
-            <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope"></slot>
+          <template #buttons="scope">
+            <slot name="buttons" v-bind="scope"></slot>
           </template>
         </table-view>
       </template>
       <template #1>
         <div class="el-card" style="margin-left: 5px">
           <form-view :meta-url="formMetaUrl" @ok="refreshTableData" v-if="formShow">
-            <template #action="{model, conf}">
-              <slot name="action" v-bind:model="model" v-bind:conf="conf"></slot>
+            <template #action="scope">
+              <slot name="action" v-bind="scope"></slot>
             </template>
           </form-view>
         </div>

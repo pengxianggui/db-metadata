@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <single-grid-tmpl :oc="oc">
+    <single-grid-tmpl :fc="fc">
       <template #inner-before-extend-btn="{scope}">
         <el-button size="mini" icon="el-icon-setting" @click="toBindRole(scope)"></el-button>
       </template>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import {metaObjectCode} from "../../constant/variable";
 import AuthSet from "./ext/AuthSet";
 
 export default {
@@ -33,7 +32,7 @@ export default {
   },
   data() {
     return {
-      oc: metaObjectCode.RoleList,
+      fc: 'meta_role',
       visible: false,
       activeRow: {}
     }

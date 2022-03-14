@@ -1,8 +1,12 @@
 <template>
   <div class="page-container">
-    <single-grid-tmpl :oc="oc" :table-meta="tableMeta">
+    <single-grid-tmpl :fc="fc">
       <template #inner-before-extend-btn="{scope}">
         <el-button size="mini" @click="toBindRole(scope)" class="el-icon-setting"></el-button>
+      </template>
+      <template #add-btn="{conf, add}">
+        <el-button v-bind="conf.conf" @click="add" v-if="addable">新增</el-button>
+        <span v-else></span>
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="800px"
@@ -19,7 +23,6 @@
 <script>
 import RoleSet from "./ext/RoleSet";
 import {appConfig} from "../../config";
-import {metaObjectCode} from "../../constant/variable";
 
 export default {
   name: "UserList",
@@ -34,7 +37,7 @@ export default {
   },
   data() {
     return {
-      oc: metaObjectCode.UserList,
+      fc: 'meta_user',
       addable: appConfig.addable,
       visible: false,
       activeRow: {}
@@ -49,16 +52,6 @@ export default {
       this.$refs['RoleSet'].doBind().then(() => {
         this.visible = false;
       })
-    }
-  },
-  computed: {
-    tableMeta() {
-      const {addable} = appConfig
-      return {
-        "operation-bar": {
-          "show": addable
-        }
-      }
     }
   }
 }

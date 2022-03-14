@@ -1,6 +1,10 @@
 <template>
   <div class="page-container">
-    <form-view :ic="config.instanceCodes.FormView" @ok="handleOk" @cancel="handleCancel"></form-view>
+    <form-view :ic="config.instanceCodes.FormView" @ok="handleOk" @cancel="handleCancel">
+      <template #action="scope">
+        <slot name="action" v-bind="scope"></slot>
+      </template>
+    </form-view>
   </div>
 </template>
 

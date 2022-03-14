@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     conf() {
-      const {meta: {conf}, $attrs: attrConf} = this
+      const {innerMeta: {conf}, $attrs: attrConf} = this
       return this.$reverseMerge(conf, attrConf)
     }
   }

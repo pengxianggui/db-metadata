@@ -12,39 +12,39 @@
       </tempalte>
 
       <!-- 主表操作栏扩展插槽 -->
-      <template #prefix-btn="{conf, choseData}">
-        <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+      <template #prefix-btn="scope">
+        <slot name="prefix-btn" v-bind="scope"></slot>
       </template>
-      <template #add-btn="{conf}">
-        <slot name="add-btn" v-bind:conf="conf"></slot>
+      <template #add-btn="scope">
+        <slot name="add-btn" v-bind="scope"></slot>
       </template>
-      <template #batch-delete-btn="{conf, choseData}">
-        <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+      <template #batch-delete-btn="scope">
+        <slot name="batch-delete-btn" v-bind="scope"></slot>
       </template>
-      <template #suffix-btn="{conf, choseData}">
-        <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-      </template>
-
-      <template #buttons="{scope}">
-        <slot name="buttons" v-bind:scope="scope"></slot>
+      <template #suffix-btn="scope">
+        <slot name="suffix-btn" v-bind="scope"></slot>
       </template>
 
-      <template #inner-before-extend-btn="{scope}">
-        <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
+      <template #buttons="scope">
+        <slot name="buttons" v-bind="scope"></slot>
       </template>
-      <template #view-btn="{scope, conf}">
-        <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+
+      <template #inner-before-extend-btn="scope">
+        <slot name="inner-before-extend-btn" v-bind="scope"></slot>
       </template>
-      <template #edit-btn="{scope, conf, edit}">
-        <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+      <template #view-btn="scope">
+        <slot name="view-btn" v-bind="scope"></slot>
       </template>
-      <template #delete-btn="{scope, conf}">
-        <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope">
+      <template #edit-btn="scope">
+        <slot name="edit-btn" v-bind="scope"></slot>
+      </template>
+      <template #delete-btn="scope">
+        <slot name="delete-btn" v-bind="scope">
           <!-- TODO 2.3 主子表的删除级联, 还有批量删除 -->
         </slot>
       </template>
-      <template #inner-after-extend-btn="{scope}">
-        <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
+      <template #inner-after-extend-btn="scope">
+        <slot name="inner-after-extend-btn" v-bind="scope"></slot>
       </template>
     </table-view>
 
@@ -56,9 +56,51 @@
         <el-tab-pane v-for="slave in config.slaves" :key="slave.config.objectCode" :label="slave.config.objectCode">
           <search-view :ic="slave.instanceCodes.SearchView" @search="sHandleSearch(slave, arguments)"></search-view>
           <table-view :ref="slave.config.objectCode" :filter-params="slave.filterParams" :page="{ size: 5 }">
-            <template #add-btn="{conf}">
-              <el-button v-bind="conf" @click="handleAdd(slave)">新增</el-button>
+            <tempalte #operation-bar="scope">
+              <slot :name="slave.config.objectCode + '_operation-bar'" v-bind="scope"></slot>
+            </tempalte>
+            <!-- 子表操作栏扩展插槽 -->
+            <template #prefix-btn="scope">
+              <slot :name="slave.config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
             </template>
+            <template #add-btn="{conf}">
+              <slot :name="slave.config.objectCode + '_add-btn'"
+                    v-bind:conf="conf" v-bind:add="handleAdd"
+                    v-bind:params="config.slaves[0]"
+                    v-bind:activeMData="activeMData">
+                <el-button v-bind="conf.conf" @click="handleAdd(config.slaves[0])">新增</el-button>
+              </slot>
+            </template>
+            <template #batch-delete-btn="scope">
+              <slot :name="slave.config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
+            </template>
+            <template #suffix-btn="scope">
+              <slot :name="slave.config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
+            </template>
+
+            <template #buttons="scope">
+              <slot :name="slave.config.objectCode + '_buttons'" v-bind="scope"></slot>
+            </template>
+
+            <!-- 子表单条纪录操作扩展插槽 -->
+            <template #inner-before-extend-btn="scope">
+              <slot :name="slave.config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
+            </template>
+            <template #view-btn="scope">
+              <slot :name="slave.config.objectCode + '_view-btn'" v-bind="scope"></slot>
+            </template>
+            <template #edit-btn="scope">
+              <slot :name="slave.config.objectCode + '_edit-btn'" v-bind="scope"></slot>
+            </template>
+            <template #delete-btn="scope">
+              <slot :name="slave.config.objectCode + '_delete-btn'" v-bind="scope"></slot>
+            </template>
+            <template #inner-after-extend-btn="scope">
+              <slot :name="slave.config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
+            </template>
+
+
+
           </table-view>
         </el-tab-pane>
       </el-tabs>
@@ -74,44 +116,47 @@
                   @open-form-view="openSlaveFormView($event, config.slaves[0])"
                   :page="{ size: 5 }">
 
-        <tempalte #operation-bar="{conf, choseData}">
-          <slot name="s-operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+        <tempalte #operation-bar="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_operation-bar'" v-bind="scope"></slot>
         </tempalte>
         <!-- 子表操作栏扩展插槽 -->
-        <template #prefix-btn="{conf, choseData}">
-          <slot name="s-prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+        <template #prefix-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
         </template>
         <template #add-btn="{conf}">
-          <slot name="s-add-btn" v-bind:conf="conf">
-            <el-button v-bind="conf" @click="handleAdd(config.slaves[0])">新增</el-button>
+          <slot :name="config.slaves[0].config.objectCode + '_add-btn'"
+                v-bind:conf="conf" v-bind:add="handleAdd"
+                v-bind:params="config.slaves[0]"
+                v-bind:activeMData="activeMData">
+            <el-button v-bind="conf.conf" @click="handleAdd(config.slaves[0])">新增</el-button>
           </slot>
         </template>
-        <template #batch-delete-btn="{conf, choseData}">
-          <slot name="s-batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+        <template #batch-delete-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
         </template>
-        <template #suffix-btn="{conf, choseData}">
-          <slot name="s-suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
+        <template #suffix-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
         </template>
 
-        <template #buttons="{scope}">
-          <slot name="s-buttons" v-bind:scope="scope"></slot>
+        <template #buttons="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_buttons'" v-bind="scope"></slot>
         </template>
 
         <!-- 子表单条纪录操作扩展插槽 -->
-        <template #inner-before-extend-btn="{scope}">
-          <slot name="s-inner-before-extend-btn" v-bind:scope="scope"></slot>
+        <template #inner-before-extend-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
         </template>
-        <template #view-btn="{scope, conf}">
-          <slot name="s-view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+        <template #view-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_view-btn'" v-bind="scope"></slot>
         </template>
-        <template #edit-btn="{scope, conf}">
-          <slot name="s-edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+        <template #edit-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_edit-btn'" v-bind="scope"></slot>
         </template>
-        <template #delete-btn="{scope, conf}">
-          <slot name="s-delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
+        <template #delete-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_delete-btn'" v-bind="scope"></slot>
         </template>
-        <template #inner-after-extend-btn="{scope}">
-          <slot name="s-inner-after-extend-btn" v-bind:scope="scope"></slot>
+        <template #inner-after-extend-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
         </template>
       </table-view>
     </div>

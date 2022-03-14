@@ -1,51 +1,16 @@
 <template>
   <div class="page-container">
-    <search-view :meta="spMeta" @search="handleSearch"></search-view>
-    <table-tree-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams"></table-tree-view>
+    <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
   </div>
 </template>
 
 <script>
 
-import {getSearchViewMeta, getTableTreeViewMeta} from "../../utils/rest";
-
 export default {
   name: "RouterManager",
   data() {
     return {
-      objectCode: 'meta_router',
-      tlMeta: {},
-      spMeta: {},
-      filterParams: {}
-      // fc: 'meta_router'
-    }
-  },
-  methods: {
-    handleSearch(params) {
-      const tlRefName = this.tlRefName;
-      this.filterParams = params;
-      this.$nextTick(() => {
-        this.$refs[tlRefName].getData();
-      })
-    },
-  },
-  created() {
-    const {objectCode} = this
-    getTableTreeViewMeta(this.$axios, objectCode).then(resp => {
-      this.tlMeta = resp.data;
-    }).catch(({msg = '加载TableTreeView meta发生错误'}) => {
-      console.error('[ERROR] msg: %s', msg);
-    });
-
-    getSearchViewMeta(this.$axios, objectCode).then(resp => {
-      this.spMeta = resp.data;
-    }).catch(({msg = '加载SearchView meta数据发生错误'}) => {
-      console.error('[ERROR] msg: %s', msg);
-    });
-  },
-  computed: {
-    tlRefName() {
-      return this.tlMeta['name'];
+      fc: 'meta_router'
     }
   }
 }

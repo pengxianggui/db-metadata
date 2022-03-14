@@ -4,8 +4,8 @@
 <!--    <master-slave-table-tmpl :config="masterSlaveGridConfig"></master-slave-table-tmpl>-->
     <!--    <tree-single-grid-tmpl :config="treeSingleGridConfig"></tree-single-grid-tmpl>-->
 
-        <single-grid-tmpl fc="meta_auth"></single-grid-tmpl>
-<!--    <master-slave-table-tmpl fc="meta_data"></master-slave-table-tmpl>-->
+<!--        <single-grid-tmpl fc="meta_auth"></single-grid-tmpl>-->
+    <master-slave-table-tmpl fc="meta_data"></master-slave-table-tmpl>
 <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
   </div>
 </template>

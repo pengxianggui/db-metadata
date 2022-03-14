@@ -1,14 +1,13 @@
 <template>
-  <single-grid-tmpl :oc="oc"></single-grid-tmpl>
+  <single-grid-tmpl :fc="fc"></single-grid-tmpl>
 </template>
 
 <script>
-import {metaObjectCode} from "../../constant/variable";
 export default {
   name: "AuthList",
   data() {
     return {
-      oc: metaObjectCode.AuthList
+      fc: 'meta_auth'
     }
   }
 }

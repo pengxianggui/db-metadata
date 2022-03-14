@@ -35,7 +35,7 @@ public class FeatureService {
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
         Record old = loadExistsFeature(code);
         if (old != null) {
-            throw new FeatureException("已经有一个名[%s]的[%s]模板使用了该[%s]Code", old.getStr("name"), old.getStr("type"), old.getStr("code"));
+            throw new FeatureException("已经有一个名[%s]的[%s]模板使用了该Code:[%s]", old.getStr("name"), old.getStr("type"), old.getStr("code"));
         }
         Record record = getRecord(type, name, code, config);
         return db().save("meta_feature", "id", record);

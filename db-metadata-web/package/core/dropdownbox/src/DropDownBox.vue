@@ -1,12 +1,12 @@
 <template>
     <el-select v-model="nativeValue"
-               v-bind="$reverseMerge(meta.conf, $attrs)"
+               v-bind="$reverseMerge(innerMeta.conf, $attrs)"
                @change="handleChange"
                @remove-tag="$emit('remove-tag', $event)"
                @clear="$emit('clear', $event)"
                @blur="$emit('blur', $event)"
                @focus="$emit('focus', $event)">
-        <template v-if="!meta.group">
+        <template v-if="!innerMeta.group">
             <slot name="options" v-bind:options="innerOptions">
                 <el-option v-for="item in innerOptions" :key="item.value" :label="item.key||item.value"
                            :value="item.value | stringify">
@@ -90,7 +90,7 @@
         },
         computed: {
             multiple() {    // is multiple value
-                let {meta: {conf: metaConf}, $attrs} = this;
+                let {innerMeta: {conf: metaConf}, $attrs} = this;
                 return ($attrs.hasOwnProperty('multiple') && $attrs['multiple'] !== false)
                     || (metaConf.hasOwnProperty('multiple') && metaConf['multiple'] !== false)
             }

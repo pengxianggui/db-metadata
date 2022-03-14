@@ -59,13 +59,16 @@ export default {
         "show": true,
         "conf": {
             "fixed": "right",
-            "width": "180",
+            "width": "180"
         },
         "style": {},
         "buttons": {
             "show": true,
             "group": true,
             "style": {},
+            "conf": {
+                "size": "mini"
+            },
             "view": {
                 "show": true, // Boolean/Function
                 "text": "",

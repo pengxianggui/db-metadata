@@ -1,7 +1,7 @@
 <template>
   <div id="_main">
     <div class="fixed-header">
-      <tag-view @cacheViewChange="(value) => cachedViews = value"></tag-view>
+      <tag-view @cache-view-change="(value) => cachedViews = value"></tag-view>
     </div>
     <div class="stage">
       <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->

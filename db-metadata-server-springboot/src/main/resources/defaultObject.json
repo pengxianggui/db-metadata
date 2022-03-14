@@ -1298,7 +1298,7 @@
         "cn": "资源类型",
         "config": {
           "isListShow": true,
-          "isSearch": false,
+          "isSearch": true,
           "scopeRange": [],
           "scopeOptions": [
             {"key": "普通接口","value": "0"},

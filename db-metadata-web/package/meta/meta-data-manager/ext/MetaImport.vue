@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :ref="meta.name" v-bind="meta.conf" :model="model">
+        <el-form :ref="innerMeta.name" v-bind="innerMeta.conf" :model="model">
             <el-form-item :label="schemaMeta.label" :prop="schemaMeta.name">
                 <drop-down-box :ref="schemaMeta['name']" :meta="schemaMeta" v-model="model[schemaMeta.name]"
                                @change="refreshTables" filterable></drop-down-box>
@@ -16,12 +16,12 @@
                 <text-box :ref="codeMeta['name']" :meta="codeMeta" v-model="model[codeMeta.name]"></text-box>
             </el-form-item>
             <el-form-item>
-                <el-button :id="meta.name + 'submit'" v-bind="meta.buttons['submit']['conf']"
+                <el-button :id="innerMeta.name + 'submit'" v-bind="innerMeta.buttons['submit']['conf']"
                            @click="onSubmit"
-                           v-text="meta.buttons['submit']['label']"></el-button>
-                <el-button :id="meta.name + 'cancel'" v-bind="meta.buttons['cancel']['conf']"
+                           v-text="innerMeta.buttons['submit']['label']"></el-button>
+                <el-button :id="innerMeta.name + 'cancel'" v-bind="innerMeta.buttons['cancel']['conf']"
                            @click="onCancel"
-                           v-text="meta.buttons['cancel']['label']"></el-button>
+                           v-text="innerMeta.buttons['cancel']['label']"></el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -46,7 +46,7 @@
         },
         methods: {
             assemblyModel() {
-                this.meta['columns'].forEach(item => {
+                this.innerMeta['columns'].forEach(item => {
                     this.$set(this.model, item.name, item.value || null)
                 })
             },
@@ -67,7 +67,7 @@
                 if (this.$listeners.submit) {
                     this.$emit('submit', params)
                 } else {
-                    const url = this.meta.action;
+                    const url = this.innerMeta.action;
                     this.$axios.post(url, params).then(({msg = '提交成功'}) => {
                         this.$message.success(msg);
                     }).catch(({msg = '提交失败'}) => {
@@ -76,7 +76,7 @@
                 }
             },
             onSubmit(event) {
-                const name = this.meta['name'];
+                const name = this.innerMeta['name'];
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.doSubmit(event) // submit
@@ -100,20 +100,20 @@
             // request business data
         },
         computed: {
-            meta() {
+            innerMeta() {
                 return this.$merge(this.meta, DefaultFormViewMeta);
             },
             schemaMeta: function () {
-                return this.meta['columns'][0]
+                return this.innerMeta['columns'][0]
             },
             tableMeta: function () {
-                return this.meta['columns'][1]
+                return this.innerMeta['columns'][1]
             },
             objectMeta: function () {
-                return this.meta['columns'][2]
+                return this.innerMeta['columns'][2]
             },
             codeMeta: function () {
-                return this.meta['columns'][3]
+                return this.innerMeta['columns'][3]
             },
         }
     }

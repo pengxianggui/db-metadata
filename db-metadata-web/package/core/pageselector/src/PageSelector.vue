@@ -31,7 +31,11 @@ export default {
     }
   },
   created() {
+    // TODO 2.2 当此组件在 dialog中打开时, this
     let components = Vue.options.components;
+    console.log(this.$getAllComponents())
+    console.log(Object.values(this.$getAllComponents()))
+
     this.options = Object.values(components).filter(c => {
       const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
       return isPage || isTemplate || isLayout
