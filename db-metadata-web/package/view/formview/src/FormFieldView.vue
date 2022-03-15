@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import {isArray, isEmpty, strToArray} from "../../../utils/common";
+import {isArray, isEmpty, convertToArray} from "../../../utils/common";
 
 // TODO 在Form Field组件中进行判断显示效果会更准确，不过显得很侵入, 需要有更合适的语法糖将Form Field component在两种模式(view,edit)下的display
 // 给合理的结合起来
 const mapping = {
   ImgBox: function (value, meta) {
-    let v = strToArray(value)
+    let v = convertToArray(value)
     if (!isArray(v) || v.length <= 0) {
       return [{
         component_name: 'div',
@@ -35,7 +35,7 @@ const mapping = {
     })
   },
   FileBox: function (value, meta) {
-    let v = strToArray(value)
+    let v = convertToArray(value)
     if (!isArray(v) || v.length <= 0) {
       return [{
         component_name: 'div',
@@ -52,7 +52,7 @@ const mapping = {
     }, meta)]
   },
   RegionBox: function (value) {
-    value = strToArray(value)
+    value = convertToArray(value)
     let v = isArray(value) ? value.map(i => i.name).join('/') : value
     return [{
       component_name: 'div',

@@ -345,7 +345,6 @@ public class InitKit {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
             IMetaObject metaObject = ServiceManager.metaService().importFromTable(mainDB, t.getTableName());
             ServiceManager.metaService().saveMetaObject(metaObject, true);
-            metaObject = ServiceManager.metaService().findByCode(t.getTableName());
 
             // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {

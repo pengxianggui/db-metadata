@@ -7,7 +7,7 @@
     </el-steps>
 
     <!-- 功能配置 -->
-    <form-view ref="featureForm" ic="meta_feature.FormView" type="add" :model="feature"
+    <form-view ref="featureForm" ic="meta_feature.FormView" form-type="add" :model="feature"
                @submit="submitFeatureForm('featureForm')" @cancel="cancel" v-show="step == 0">
       <template #form-item-type="{column, model}">
         <el-form-item :label="column.label">
@@ -37,7 +37,7 @@
     </form-view>
 
     <!-- 路由配置 -->
-    <form-view ic="meta_router.FormView" type="add" @ok="next" @cancel="cancel" v-show="step == 1">
+    <form-view ic="meta_router.FormView" form-type="add" @ok="next" @cancel="cancel" v-show="step == 1">
       <template #action="{submit, cancel}">
         <el-form-item>
           <el-button type="primary" @click="submit">提交</el-button>
@@ -49,7 +49,7 @@
     </form-view>
 
     <!-- 菜单配置 -->
-    <form-view ic="meta_menu.FormView" type="add" @ok="finish" @cancel="cancel" v-show="step == 2">
+    <form-view ic="meta_menu.FormView" form-type="add" @ok="finish" @cancel="cancel" v-show="step == 2">
       <template #action="{submit, cancel}">
         <el-form-item>
           <el-button @click="submit">提交</el-button>

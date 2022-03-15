@@ -1,4 +1,4 @@
-import {isArray, isEmpty, isString, strToArray} from "../../../utils/common";
+import {isArray, isEmpty, isString, convertToArray} from "../../../utils/common";
 
 /**
  * 入参转义, 空值将被转义为空数组
@@ -7,7 +7,7 @@ import {isArray, isEmpty, isString, strToArray} from "../../../utils/common";
  */
 export default function (value) {
     if (isString(value)) {
-        value = strToArray(value)
+        value = convertToArray(value)
     }
 
     if (isArray(value)) {

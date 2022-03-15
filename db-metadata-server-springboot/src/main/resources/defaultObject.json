@@ -117,7 +117,8 @@
       "structure": "list",
       "objectCode": "meta_object",
       "isNumberSequence": true,
-      "orderBy": "created_time desc,updated_time desc"
+      "orderBy": "created_time desc,updated_time desc",
+      "bizInterceptor": "com.github.md.web.aop.MetaObjectAop"
     },
     "_fields": {
       "id": {
@@ -532,7 +533,10 @@
       "op_config": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 10
         }
       },
       "created_by": {

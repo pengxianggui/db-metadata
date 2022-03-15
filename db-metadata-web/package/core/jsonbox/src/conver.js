@@ -1,9 +1,9 @@
-import {isArray, isString, isObject, strToArray, strToObject} from "../../../utils/common";
+import {isArray, isString, isObject, convertToArray, convertToObject} from "../../../utils/common";
 
 export default function (value) {
     if (isString(value)) {
-        value = strToObject(value)
-        value = strToArray(value)
+        value = convertToObject(value)
+        value = convertToArray(value)
     }
 
     if (isArray(value) || isObject(value)) {

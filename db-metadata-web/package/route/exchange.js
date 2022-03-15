@@ -1,4 +1,4 @@
-import {isEmpty, strToObject, isObject} from "../utils/common";
+import {isEmpty, convertToObject, isObject} from "../utils/common";
 
 const getComponent404 = function (Vue, componentName) {
     return Vue.component("Component404", {
@@ -35,7 +35,7 @@ const exchangeRouteKey = function (route, r, k) {
     let value;
     switch (k) {
         case 'meta':
-            value = strToObject(r[k])
+            value = convertToObject(r[k])
             break;
         default:
             value = r[k]

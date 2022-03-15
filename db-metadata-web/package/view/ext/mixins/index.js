@@ -84,6 +84,7 @@ export const ViewMetaBuilder = function (defaultMeta, callback) {
         },
         created() {
             this.$merge(this.meta, defaultMeta)
+            this._refreshMeta(this.meta)
         }
     }
 }

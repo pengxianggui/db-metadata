@@ -47,7 +47,7 @@ export default function (configMap, key, mergeDefault = true) {
         console.error("The string can't be parsed by JSON: o%", configStr);
         console.error(e);
     }
-    config['conf'] = utils.strToObject(config['conf']);
+    config['conf'] = utils.convertToObject(config['conf']);
     if (mergeDefault) {
         this.$merge(config['conf'], EleProps(config['component_name']));
     }

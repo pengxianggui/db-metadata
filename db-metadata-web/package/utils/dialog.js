@@ -43,7 +43,7 @@ export function createDialog(Vue) {
             }
 
             metaPromise.then(({data: meta}) => {
-                let DialogTmpl = Vue.extend({
+                let DialogTmpl = Vue.component('DialogTmpl', {
                     template: `
                       <el-dialog :visible.sync="visible" v-bind="conf" center>
                       <component :ref="meta.name" :is="meta.component_name" :meta="meta" v-model="data" v-bind="props"

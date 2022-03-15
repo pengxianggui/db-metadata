@@ -3,7 +3,7 @@
     <el-form :ref="meta['name']" v-bind="$reverseMerge(meta.conf, $attrs)"
              :model="model" :rules="rules"
              :style="formStyle"
-              :disabled="isView">
+             :disabled="isView">
       <slot name="form-item" v-bind:columns="meta.columns">
 
         <nest-form-item :columns="meta.columns" :model="model">

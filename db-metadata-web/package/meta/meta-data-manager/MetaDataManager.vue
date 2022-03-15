@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <master-slave-table-tmpl :fc="fc">
+    <master-slave-table-tmpl :fc="fc" :ref="fc">
       <template #add-btn="{conf}">
         <el-button v-bind="conf.conf" type="primary" @click="toAddMetaObject" icon="el-icon-plus">创建元对象</el-button>
       </template>
@@ -88,12 +88,12 @@ export default {
       });
     },
     handlerMetaImport(formModel) {
-      const {$refs, $axios, metaImportFormMeta, object: {objectCode}} = this;
-      $axios.post(metaImportFormMeta.action, formModel).then(({msg = '元对象导入成功'}) => {
+      const {metaImportFormMeta, fc} = this;
+      this.$axios.post(metaImportFormMeta.action, formModel).then(({msg = '元对象导入成功'}) => {
         this.$message.success(msg);
         this.metaImportFormVisible = false;
         // refresh master
-        $refs[objectCode].getData();
+        this.$refs[fc].refresh()
       }).catch(({msg = '元对象导入失败'}) => {
         console.error(msg)
       })
