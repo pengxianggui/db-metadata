@@ -36,16 +36,18 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
          * 1. 根据请求头预判json
          * 2. 分解json,写入parameterMap
          */
-        WritableHttpServletRequestWrapper httpServletRequestWrapper = new WritableHttpServletRequestWrapper(request);
         if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString().toLowerCase())
                 && !Objects.isNull(request.getContentType()) && request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
+            WritableHttpServletRequestWrapper httpServletRequestWrapper = new WritableHttpServletRequestWrapper(request);
             Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(request), new TypeReference<Map<String, String>>() {
 
             });
             if (!CollectionUtils.isEmpty(jsonParams)) {
                 httpServletRequestWrapper.init(jsonParams);
             }
+            RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequestWrapper));
         }
+
         /*
          * TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
          * 方法并不优雅,非RequestContextHolder方式取到的request会出现问题;
@@ -58,7 +60,6 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
          *  这些地方有可能取到RequestFacade对象,而Facade包装的并没有被改写,要多处干预来达到目的;
          */
 
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequestWrapper));
         return true;
     }
 
