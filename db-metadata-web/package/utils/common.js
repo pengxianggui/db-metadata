@@ -392,6 +392,11 @@ export function assertObject(value, defaultValue) {
     return value;
 }
 
+export function assertArray(value, defaultValue) {
+    if (!isArray(value)) return defaultValue
+    return value
+}
+
 /**
  * 提取数组中不重复的元素(重复规则看keyName), 只保留重复中的第一个. 返回提取后的新数组。例如:
  * 指定:
@@ -600,21 +605,30 @@ export function isExternal(path) {
  */
 export function assert(condition, msg) {
     if (!condition) {
-        // throw new Error(`${msg}`)
-        console.error(msg)
+        let args = Array.prototype.slice.call(arguments);
+        args.shift()
+        args.shift()
+
+        console.error(msg, ...args)
     }
 }
 
 export function printErr(msg) {
-    console.error(`[meta-element]${msg}`)
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.error(`[meta-element]${msg}`, ...args)
 }
 
 export function printInfo(msg) {
-    console.info(`[meta-element]${msg}`)
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.info(`[meta-element]${msg}`, ...args)
 }
 
 export function printWarn(msg) {
-    console.warn(`[meta-element]${msg}`)
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.warn(`[meta-element]${msg}`, ...args)
 }
 
 /**

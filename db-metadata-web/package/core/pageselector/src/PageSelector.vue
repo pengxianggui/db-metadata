@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Vue from "vue";
 import Val from "../../mixins/value";
+import {assertArray} from "../../../utils/common";
 
 export default {
   name: "PageSelector",
@@ -31,16 +31,17 @@ export default {
     }
   },
   created() {
-    // TODO 2.2 当此组件在 dialog中打开时, this
-    let components = Vue.options.components;
-    console.log(this.$getAllComponents())
-    console.log(Object.values(this.$getAllComponents()))
-
-    this.options = Object.values(components).filter(c => {
+    let components = assertArray(Object.values(this.$getGlobalComponents()), [])
+    this.options = components.filter(c => {
       const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
       return isPage || isTemplate || isLayout
     }).map(c => {
-      const {extendOptions: {meta: {cn, isTemplate = false, isLayout = false, isPage = false, buildIn, icon} = {}, name: value}} = c
+      const {
+        extendOptions: {
+          meta: {cn, isTemplate = false, isLayout = false, isPage = false, buildIn, icon} = {},
+          name: value
+        }
+      } = c
       return {
         key: cn,
         value: value,
@@ -55,9 +56,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .option-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

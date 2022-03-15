@@ -5,5 +5,6 @@ export default [
     "0", "1",
     "f", "t",
     null, true,
-    undefined, true
+    undefined, true,
+    '否', '是'
 ]; // odd: false, even: true

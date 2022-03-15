@@ -14,7 +14,7 @@ export default function (Vue, opts) {
 
     Vue.prototype.$compile = utils.compile
     Vue.prototype.$dialog = utils.createDialog(Vue) // 传递Vue
-    Vue.prototype.$getAllComponents = () => {
+    Vue.prototype.$getGlobalComponents = () => { // 获取所有全局注册的组件
         return Vue.options.components;
     }
 
