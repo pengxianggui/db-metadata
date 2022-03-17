@@ -1,6 +1,7 @@
 package com.github.md.analysis.meta;
 
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.db.MetaDataTypeConvert;
 import com.github.md.analysis.kit.Kv;
 import lombok.Getter;
 
@@ -38,7 +39,7 @@ public class MetaConfigFactory {
     public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
-        config.set("defaultVal", defaultValue == null ? "" : defaultValue);
+        config.set("defaultVal", MetaDataTypeConvert.convert(metaField, defaultValue));
         config.set("objectCode", metaField.objectCode());
         config.set("fieldCode", metaField.fieldCode());
         config.set("isMultiple", false);
@@ -54,7 +55,7 @@ public class MetaConfigFactory {
 
         config.set("viewStatus", MetaFieldConfigParse.READONLY);
         config.set("isListShow", true);
-        config.set("isSearch", true);
+        config.set("isSearch", false); // 默认都不加入搜索
 
         if (fieldExtensions != null) {
             for (ConfigExtension extension : fieldExtensions) {

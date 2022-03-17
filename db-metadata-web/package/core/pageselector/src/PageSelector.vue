@@ -31,7 +31,7 @@ export default {
     }
   },
   created() {
-    let components = assertArray(Object.values(this.$getGlobalComponents()), [])
+    let components = assertArray(Object.values(this.$getGlobalComponents()), []) // TODO 2.2 并不总是可以拿到! 改为注册meta-element时将组件传入
     this.options = components.filter(c => {
       const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
       return isPage || isTemplate || isLayout

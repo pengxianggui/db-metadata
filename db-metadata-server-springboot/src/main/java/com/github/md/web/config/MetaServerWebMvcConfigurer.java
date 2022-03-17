@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.github.md.analysis.db.DateTime;
 import com.github.md.web.config.json.FastJsonRecordSerializer;
 import com.github.md.web.config.json.JsonParameterToMapHandler;
 import com.github.md.web.config.register.DynamicRegisterControllerHandlerMapping;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +43,7 @@ import java.util.List;
 public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistrations {
 
     /**
-     * 配置 body 可重复读取过滤器. 避免 {@link JsonParameterToMapHandler} 拦截器处理完request后，业务控制器无法再次读取的问题
+     * 配置 body 可重复读取过滤器. 避免 {@link JsonParameterToMapHandler} 拦截器处理完request后，业务控制器无法再次读取的问题。 TODO 2.2 FIXME 全局过滤导致一些问题：常见的 Stream closed，图片上传失败！
      *
      * @return {@link FilterRegistrationBean}
      */
@@ -120,7 +123,11 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
         converter.setSupportedMediaTypes(mediaTypeList);
         // 支持序列化 ActiveRecord 的 Record 类型
         SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
+
+        // TODO 2.3 序列化对全局生效, 如何避免对业务系统的强制影响, 仅仅只作用于Record中的日期类型
         SerializeConfig.getGlobalInstance().put(Timestamp.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Timestamp) o)));
+        SerializeConfig.getGlobalInstance().put(DateTime.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((DateTime) o)));
+        SerializeConfig.getGlobalInstance().put(LocalDateTime.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format((LocalDateTime) o)));
         converters.add(converter);
     }
 

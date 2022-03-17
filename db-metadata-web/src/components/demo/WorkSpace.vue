@@ -16,6 +16,19 @@
     <!--        <single-grid-tmpl fc="meta_auth"></single-grid-tmpl>-->
     <!--    <master-slave-table-tmpl fc="meta_data"></master-slave-table-tmpl>-->
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
+
+    <form-view ic="meta_feature.FormView" form-type="update" primaryKv="701500755500208128"></form-view>
+
+    <!--    <el-form ref="form" :model="model">-->
+    <!--      <el-form-item prop="config" label="配置" required>-->
+    <!--        <json-box v-model="model.config"></json-box>-->
+    <!--      </el-form-item>-->
+    <!--      <el-form-item>-->
+    <!--        <el-button @click="valid">验证</el-button>-->
+    <!--      </el-form-item>-->
+    <!--    </el-form>-->
+
+<!--    <form-view :meta="formMeta" :model="formModel" @submit="submit"></form-view>-->
   </div>
 </template>
 
@@ -77,7 +90,12 @@ export default {
           "TableTreeView": "meta_menu.TableTreeView",
           "FormView": "meta_menu.FormView"
         }
-      }
+      },
+
+      formModel: {
+        config: {}
+      },
+      formMeta: {}
     }
   },
   computed: {},
@@ -99,9 +117,27 @@ export default {
     },
     openDialogHtml() {
       this.visible = true
+    },
+    submit(model) {
+      this.$message.info('验证通过了' + JSON.stringify(model))
     }
   },
   created() {
+    // setTimeout(() => {
+      this.formMeta = {
+        component_name: 'FormView',
+        columns: [
+          {
+            component_name: 'JsonBox',
+            name: 'config',
+            label: '配置',
+            conf: {
+              "rules": [{required: true, message: "必填字段", trigger: "blur"}]
+            }
+          }
+        ]
+      }
+    // }, 0)
   }
 }
 </script>

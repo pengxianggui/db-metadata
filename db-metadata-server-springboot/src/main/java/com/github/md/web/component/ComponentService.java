@@ -275,6 +275,18 @@ public class ComponentService {
     }
 
     /**
+     * 获取指定实例编码下的指定类型记录
+     *
+     * @param ic
+     * @param type
+     * @return
+     */
+    public Record getRecord(String ic, INSTANCE type) {
+        String sql = "select * from " + META_COMPONENT_INSTANCE + " where code=? and type =?";
+        return SpringAnalysisManager.me().dbMain().findFirst(sql, ic, type.toString());
+    }
+
+    /**
      * <pre>
      *  加载某元对象与控件实例的配置信息
      * </pre>
@@ -355,7 +367,7 @@ public class ComponentService {
      */
     public boolean updateObjectConfig(Component component, IMetaObject object, ComponentInstanceConfig componentInstanceConfig) {
 
-        deleteObjectConfig(component.code(), object.code(), false);
+        deleteObjectConfig(componentInstanceConfig.getInstanceCode());
 
         Record record = getRecord(component,
                 object.code(),
@@ -459,6 +471,16 @@ public class ComponentService {
         return true;
     }
 
+    /**
+     * 删除整套UI实例配置
+     * @param instanceCode
+     * @return
+     */
+    public boolean deleteObjectConfig(String instanceCode) {
+        return SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) > 0;
+    }
+
+    @Deprecated
     public boolean deleteObjectConfig(String componentCode, String objectCode, boolean isSingle) {
 
         SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
@@ -489,6 +511,12 @@ public class ComponentService {
                 objectCode) >= 1;
     }
 
+    /**
+     * 判断指定实例编码是否已经存在
+     *
+     * @param instanceCode
+     * @return
+     */
     public boolean hasObjectConfig(String instanceCode) {
         return SpringAnalysisManager.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where code = ?", instanceCode) >= 1;
     }
@@ -510,7 +538,12 @@ public class ComponentService {
         return record;
     }
 
-    enum INSTANCE {
+    public Record getComponentInstanceBrief(String instanceCode) {
+        return SpringAnalysisManager.me().dbMain().findFirst("select code, name, comp_code, dest_object as object_code from " + META_COMPONENT_INSTANCE + " where code =? and type=?",
+                instanceCode, INSTANCE.META_OBJECT.toString());
+    }
+
+    public enum INSTANCE {
         META_OBJECT,
         META_FIELD,
         SPECIFIC,

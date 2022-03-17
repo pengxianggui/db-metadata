@@ -71,7 +71,7 @@
     </el-tree>
 
     <div style="float: right">
-      <meta-easy-edit :object-code="meta.objectCode" component-code="TreeView">
+      <meta-easy-edit :object-code="meta.objectCode">
         <template #label><i class="el-icon-setting"></i></template>
       </meta-easy-edit>
     </div>

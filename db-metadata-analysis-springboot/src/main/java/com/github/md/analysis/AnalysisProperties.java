@@ -2,6 +2,7 @@ package com.github.md.analysis;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,6 +21,10 @@ import static com.github.md.analysis.AnalysisConstant.BIZ_DATA_SOURCE_PROPERTIES
 @Configuration
 @ConfigurationProperties("md.analysis")
 public class AnalysisProperties {
+
+    @Setter
+    @Getter
+    private boolean showSql = false;
 
     @Getter
     final Map<String, DataSourceProperties> sourceConfig;

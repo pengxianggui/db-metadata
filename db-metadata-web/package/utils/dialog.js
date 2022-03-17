@@ -15,6 +15,8 @@ import {getFormInstanceUrl} from "../view/formview";
 export function createDialog(Vue) {
 
     return function dialog(metaOrProps, data, conf) {
+        const parentComponent = this
+
         let dialogPromise = new Promise(function (resolve, reject) {
             const {ic} = metaOrProps
 
@@ -43,13 +45,16 @@ export function createDialog(Vue) {
             }
 
             metaPromise.then(({data: meta}) => {
-                let DialogTmpl = Vue.component('DialogTmpl', {
+                let DialogTmpl = Vue.extend(
+                    // 'DialogTmpl',
+                    {
                     template: `
-                      <el-dialog :visible.sync="visible" v-bind="conf" center>
+                      <el-dialog :visible.sync="visible" v-bind="conf" center  :width="width">
                       <component :ref="meta.name" :is="meta.component_name" :meta="meta" v-model="data" v-bind="props"
-                                 @ok="ok" @cancel="cancel" style="width: 100%"></component>
+                                 @ok="ok" @cancel="cancel"></component>
                       </el-dialog>
                     `,
+                    name: "DialogTmpl",
                     data() {
                         return {
                             visible: true,
@@ -69,17 +74,24 @@ export function createDialog(Vue) {
                         }
                     },
                     computed: {
-                        ref: function () {
+                        ref() {
                             return this.$refs[this.meta.name];
                         },
-                        props: function () {
+                        props() {
                             return this.meta.conf
+                        },
+                        width() {
+                            const {meta: {style: {width = '50%'} = {}} = {}} = this
+                            return width
                         }
                     }
                 });
 
                 let dialog = new DialogTmpl().$mount();
+
+                // doubt 貌似两种方式都不能保证vue devTool检测到弹窗内的组件
                 document.getElementById('app').appendChild(dialog.$el);
+                // parentComponent.$el.appendChild(dialog.$el);
             })
         });
         return dialogPromise;

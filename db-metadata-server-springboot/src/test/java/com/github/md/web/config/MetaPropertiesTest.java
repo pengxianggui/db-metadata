@@ -1,10 +1,8 @@
 package com.github.md.web.config;
 
-import com.github.md.web.kit.Dicts;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -23,13 +21,5 @@ class MetaPropertiesTest {
     @Test
     void isDevMode() {
         log.info("{}", metaProperties.isDevMode());
-    }
-
-    @Test
-    void getAnalysisProperties() {
-        ApplicationHome applicationHome = new ApplicationHome();
-        log.info(applicationHome.toString());
-        Dicts.me().init();
-        log.info(Dicts.me().dict().toJson());
     }
 }

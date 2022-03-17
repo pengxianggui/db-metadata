@@ -56,37 +56,6 @@ export default {
         })
       })
     },
-    jumpToConf(objectCode) {
-      // TODO 2.2 改为去创建功能
-
-      let title = '创建成功，是否前往配置界面对' + objectCode + '进行UI配置?';
-
-      let url = this.$compile(routeUrl.R_INSTANCE_CONF_EDIT, {
-        componentCode: 'TableView',
-        objectCode: objectCode
-      });
-      this.$confirm(title, '提示', {
-        confirmButtonText: '去配置',
-        cancelButtonText: '下次再说',
-        type: 'success',
-      }).then(() => {
-        this.$router.push(url);
-      }).catch(() => {
-        const h = this.$createElement;
-
-        this.$notify.info({
-          title: '消息',
-          message: h('span', {}, [
-            h('span', {}, '如不进行UI配置, 此元对象相关视图可能出现异常.'),
-            h('a', {
-              attrs: {
-                href: '#' + url
-              }
-            }, '去配置')
-          ])
-        });
-      });
-    },
     handlerMetaImport(formModel) {
       const {metaImportFormMeta, fc} = this;
       this.$axios.post(metaImportFormMeta.action, formModel).then(({msg = '元对象导入成功'}) => {

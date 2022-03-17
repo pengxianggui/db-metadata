@@ -41,17 +41,13 @@ public class FeatureService {
         return db().save("meta_feature", "id", record);
     }
 
-    // insert or update
+    // insert or update(先删后加)
     public boolean saveFeature(FeatureType type, String name, String code, MetaData config, boolean buildIn) {
-        Record old = loadExistsFeature(code);
-        if (old != null) {
-            old.set("build_in", buildIn);
-            return db().update("meta_feature", "code", old);
-        } else {
-            Record record = getRecord(type, name, code, config);
-            record.set("build_in", buildIn);
-            return db().save("meta_feature", record);
-        }
+        db().delete("delete from meta_feature where code = ?", code);
+
+        Record record = getRecord(type, name, code, config);
+        record.set("build_in", buildIn);
+        return db().save("meta_feature", record);
     }
 
     private Record loadExistsFeature(String featureCode) {

@@ -75,11 +75,6 @@
           </slot>
         </el-form-item>
       </el-form>
-      <div style="float: right; margin: -20px 10px 0px 0px">
-        <meta-easy-edit :object-code="meta.objectCode" component-code="SearchView">
-          <template #label><i class="el-icon-setting"></i></template>
-        </meta-easy-edit>
-      </div>
     </div>
 
     <template #label>

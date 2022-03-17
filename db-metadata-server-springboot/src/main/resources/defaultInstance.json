@@ -34,7 +34,8 @@
       "config": {
         "expand": true,
         "directly_trigger": [
-          "schema_name"
+          "schema_name",
+          "is_sys"
         ]
       },
       "_fields": {
@@ -42,11 +43,20 @@
           "component_name": "DropDownBox",
           "data_url": "/db/index",
           "filterable": true
+        },
+        "is_sys": {
+          "component_name": "DropDownBox",
+          "default_value": false
         }
       }
     },
     "TableView": {},
     "FormView": {
+      "config": {
+        "style": {
+          "width": "70%"
+        }
+      },
       "_fields": {
         "config": {
           "conf": {
@@ -175,16 +185,6 @@
         },
         "type": {
           "component_name": "DropDownBox",
-          "options": [
-            {
-              "key": "元对象",
-              "value": "META_OBJECT"
-            },
-            {
-              "key": "元字段",
-              "value": "META_FIELD"
-            }
-          ],
           "default_value": "META_OBJECT",
           "name": "type",
           "label": "类型"
@@ -204,13 +204,6 @@
     },
     "FormView": {
       "_fields": {
-        "type": {
-          "component_name": "DropDownBox",
-          "data_url": "/dict?key=metaType",
-          "conf": {
-            "multiple": false
-          }
-        },
         "comp_code": {
           "component_name": "DropDownBox",
           "data_url": "/component/list",
@@ -237,10 +230,6 @@
     },
     "FormView": {
       "_fields": {
-        "pid": {
-          "component_name": "DropDownBox",
-          "data_url": "/component/options?objectCode=meta_router&f=pid"
-        },
         "component": {
           "component_name": "PageSelector",
           "explain": "请选择一个组件, 用以承担此路由的页面(可选的组件列表均来自Vue全局注册的页面/模板组件。\n请开发人员在全局注册的页面组件中提供meta: {isPage: true}配置项，标识其为页面组件)"
@@ -286,10 +275,6 @@
         }
       },
       "_fields": {
-        "pid": {
-          "component_name": "DropDownBox",
-          "data_url": "/component/options?objectCode=meta_menu&f=pid"
-        },
         "icon": {
           "component_name": "IconBox"
         },
@@ -345,9 +330,12 @@
         }
       }
     },
-    "TableView": {},
+    "TableTreeView": {},
     "FormView": {
       "_fields": {
+        "key": {
+          "explain": "【字典名】是唯一的, 程序根据此值确定可选的键值对"
+        }
       }
     }
   },

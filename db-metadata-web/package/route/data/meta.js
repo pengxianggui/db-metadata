@@ -11,8 +11,7 @@ import DictList from "../../meta/dict";
 import ExceptionList from "../../meta/exception";
 import AuthList from "../../meta/rbac/AuthList";
 import ApiResourceList from "../../meta/rbac/ApiResourceList";
-import InstanceConfEdit from "../../meta/instance-component/InstanceConfEdit";
-import utils from "../../utils";
+import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 
 const routes = [
     {
@@ -155,8 +154,8 @@ const routes = [
         component: ApiResourceList
     }, {
         path: '/meta/instance-conf-edit',
-        component: InstanceConfEdit,
-        name: 'InstanceConfEdit',
+        component: InstanceConfEditor,
+        name: 'InstanceConfEditor',
         meta: {
             title: '组件实例配置-编辑',
             icon: 'edit',
@@ -165,10 +164,8 @@ const routes = [
         },
         hidden: true,
         props: (route) => ({
-            instanceCode: route.query.instanceCode,
-            objectCode: route.query.objectCode,
-            componentCode: route.query.componentCode,
-            fieldCode: utils.assertEmpty(route.query.fieldCode, '')
+            ic: route.query.instanceCode,
+            fc: route.query.fieldCode
         })
     }
 ]

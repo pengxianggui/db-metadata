@@ -29,7 +29,6 @@ import RadioBox from './core/radiobox'
 import RichTextBox from "./core/richtextbox";
 import RegionBox from "./core/regionbox";
 import SearchView from './view/searchview'
-import SqlBox from './core/sqlbox'
 import Tags from './core/tags'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'
@@ -113,7 +112,6 @@ const components = [
     RichTextBox,
     RegionBox,
     SearchView,
-    SqlBox,
     Tags,
     TableView,
     TreeView,

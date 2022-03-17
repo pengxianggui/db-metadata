@@ -4,6 +4,7 @@ import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
 import com.github.md.web.WebException;
+import com.github.md.web.kit.Dicts;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.ui.OptionsKit;
@@ -42,9 +43,16 @@ public class OptionsController extends ControllerAdapter {
         if (!metaFieldConfigParse.hasTranslation()) {
             throw new WebException("[%s]元对象的[%s]元字段未配置转义逻辑", objectCode, fieldCode);
         }
+        // 优先静态数组
         if (metaFieldConfigParse.isOptions()) {
             return Ret.ok("data", metaFieldConfigParse.options());
         }
+        // 再字典
+        if (metaFieldConfigParse.isDict()) {
+            List<Kv> options = Dicts.me().getKvs(metaFieldConfigParse.getDictName());
+            return Ret.ok("data", options);
+        }
+        // 最后sql
         if (metaFieldConfigParse.isSql()) {
             IMetaObject metaObject = metaField.getParent();
             String dbConfig = StrKit.defaultIfBlank(metaFieldConfigParse.dbConfig(), metaObject.schemaName());

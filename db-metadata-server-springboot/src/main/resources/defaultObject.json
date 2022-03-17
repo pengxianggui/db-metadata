@@ -17,22 +17,27 @@
       },
       "is_primary": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "scopeDict": "yn",
+          "updateStatus": 30
         }
       },
       "object_code": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "updateStatus": 30
         }
       },
       "field_code": {
         "config": {
-          "isSearch": true
+          "isSearch": true,
+          "updateStatus": 30
         }
       },
       "en": {
         "config": {
-          "isSearch": true
+          "isSearch": true,
+          "updateStatus": 30
         }
       },
       "cn": {
@@ -47,18 +52,21 @@
       },
       "db_type": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "updateStatus": 30
         }
       },
       "db_type_length": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "updateStatus": 30
         }
       },
       "java_type": {
         "config": {
           "isSearch": false,
-          "isListShow": false
+          "isListShow": false,
+          "updateStatus": 30
         }
       },
       "config": {
@@ -128,12 +136,15 @@
       },
       "primarys": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "updateStatus": 30
         }
       },
       "is_sys": {
         "config": {
-          "isSearch": false
+          "isSearch": true,
+          "scopeDict": "yn",
+          "updateStatus": 30
         }
       },
       "config": {
@@ -144,8 +155,6 @@
       },
       "name": {
         "config": {
-          "addStatus": 30,
-          "updateStatus": 30,
           "isSearch": false
         }
       },
@@ -219,10 +228,11 @@
       "isNumberSequence": true,
       "structure": "tree",
       "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "structure": "tree",
       "structureConfig": {
-        "idKey": "id",
-        "pidKey": "pid",
-        "label": "name"
+        "idKey": "value",
+        "pidKey": "p_value",
+        "label": "key"
       },
       "orderBy": "order_num asc"
     },
@@ -232,50 +242,32 @@
           "isSearch": false
         }
       },
-      "pid": {
+      "p_value": {
+        "cn": "字典名",
+        "config": {
+          "isSearch": true,
+          "scopeSql": "select `key` as cn, value as id from meta_dict where p_value is null"
+        }
+      },
+      "type": {
+        "cn": "字典类别",
+        "config": {
+          "isSearch": true,
+          "isNullable": true,
+          "scopeDict": "dictType"
+        }
+      },
+      "key": {
+        "cn": "键",
         "config": {
           "isSearch": false,
-          "isFile": false,
-          "scopeSql": "select id, name as cn from meta_dict",
-          "addStatus": 100,
-          "defaultVal": "",
-          "isListShow": true,
-          "isMultiple": false,
-          "isNullable": true,
-          "scopeRange": [],
+          "isNullable": false,
           "viewStatus": 30,
-          "scopeOptions": [],
           "updateStatus": 100
         }
       },
-      "dict_type": {
-        "config": {
-          "isSearch": false,
-          "isNullable": true,
-          "scopeOptions": [{
-            "key": "系统字典",
-            "value": "系统字典"
-          }]
-        }
-      },
-      "build_in": {
-        "cn": "系统内置",
-        "config": {
-          "defaultVal": false,
-          "isListShow": true,
-          "isSearch": true,
-          "addStatus": 10,
-          "updateStatus": 10,
-          "viewStatus": 30
-        }
-      },
-      "name": {
-        "config": {
-          "isSearch": true,
-          "isNullable": false
-        }
-      },
       "value": {
+        "cn": "值",
         "config": {
           "isSearch": false,
           "isNullable": false
@@ -326,6 +318,18 @@
         "config": {
           "isListShow": false,
           "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -497,7 +501,8 @@
       "type": {
         "config": {
           "isSearch": true,
-          "updateStatus": 30
+          "updateStatus": 30,
+          "scopeDict": "metaType"
         }
       }
     }
@@ -595,7 +600,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -629,9 +635,7 @@
           "isListShow": true,
           "isMultiple": false,
           "isNullable": true,
-          "scopeRange": [],
           "viewStatus": 30,
-          "scopeOptions": [],
           "updateStatus": 100
         }
       },
@@ -735,7 +739,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -770,9 +775,7 @@
           "isListShow": true,
           "isMultiple": false,
           "isNullable": true,
-          "scopeRange": [],
           "viewStatus": 30,
-          "scopeOptions": [],
           "updateStatus": 100
         }
       },
@@ -828,10 +831,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeOptions": [
-            {"key": "按权限判定","value": "auth"},
-            {"key": "按角色判定","value": "role"}
-          ],
+          "scopeDict": "authorizeBy",
           "defaultVal": "auth"
         }
       },
@@ -851,13 +851,7 @@
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
-          "scopeOptions": [{
-            "key": "全部匹配",
-            "value": "all"
-          }, {
-            "key": "任一匹配",
-            "value": "any"
-          }]
+          "scopeDict": "authorizeMatchMode"
         }
       },
       "roles": {
@@ -876,13 +870,7 @@
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
-          "scopeOptions": [{
-            "key": "全部匹配",
-            "value": "all"
-          }, {
-            "key": "任一匹配",
-            "value": "any"
-          }]
+          "scopeDict": "authorizeMatchMode"
         }
       },
       "created_by": {
@@ -935,7 +923,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -1304,11 +1293,7 @@
           "isListShow": true,
           "isSearch": true,
           "scopeRange": [],
-          "scopeOptions": [
-            {"key": "普通接口","value": "0"},
-            {"key": "接口+元对象","value": "1"},
-            {"key": "接口+功能","value": "2"}
-          ],
+          "scopeDict": "apiResourceType",
           "defaultVal": "0"
         }
       },
@@ -1347,10 +1332,7 @@
         "config": {
           "isListShow": true,
           "isSearch": true,
-          "scopeOptions": [
-            {"key": "按权限判定","value": "auth"},
-            {"key": "按角色判定","value": "role"}
-          ],
+          "scopeDict": "authorizeBy",
           "defaultVal": "auth"
         }
       },
@@ -1370,13 +1352,7 @@
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
-          "scopeOptions": [{
-            "key": "全部匹配",
-            "value": "all"
-          }, {
-            "key": "任一匹配",
-            "value": "any"
-          }]
+          "scopeDict": "authorizeMatchMode"
         }
       },
       "roles": {
@@ -1395,13 +1371,7 @@
           "isSearch": false,
           "isMultiple": false,
           "scopeRange": [],
-          "scopeOptions": [{
-            "key": "全部匹配",
-            "value": "all"
-          }, {
-            "key": "任一匹配",
-            "value": "any"
-          }]
+          "scopeDict": "authorizeMatchMode"
         }
       },
       "remark": {
@@ -1420,7 +1390,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -1504,22 +1475,7 @@
           "isNullable": false,
           "isListShow": true,
           "isSearch": true,
-          "scopeOptions": [{
-            "key": "菜单权限",
-            "value": "menu"
-          }, {
-            "key": "路由权限",
-            "value": "router"
-          }, {
-            "key": "接口权限",
-            "value": "api"
-          }, {
-            "key": "按钮权限",
-            "value": "button"
-          }, {
-            "key": "其他",
-            "value": "other"
-          }]
+          "scopeDict": "authType"
         }
       },
       "remark": {
@@ -1536,7 +1492,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -1625,7 +1582,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       }
     }
@@ -1724,13 +1682,7 @@
           "isNullable": true,
           "isListShow": false,
           "isSearch": false,
-          "scopeOptions": [{
-            "key": "男",
-            "value": "1"
-          }, {
-            "key": "女",
-            "value": "0"
-          }]
+          "scopeDict": "sex"
         }
       },
       "age": {
@@ -1773,7 +1725,8 @@
           "isSearch": true,
           "addStatus": 10,
           "updateStatus": 10,
-          "viewStatus": 30
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       },
       "phone": {

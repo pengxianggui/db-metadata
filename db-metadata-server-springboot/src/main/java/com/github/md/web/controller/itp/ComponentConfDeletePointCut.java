@@ -1,15 +1,17 @@
 package com.github.md.web.controller.itp;
 
+import com.github.md.web.component.ComponentService;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.query.QueryHelper;
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,27 +35,26 @@ public class ComponentConfDeletePointCut implements DeletePointCut {
         Preconditions.checkArgument("meta_component_instance".equalsIgnoreCase(metaObject.code()), "该拦截器仅对meta_component_instance元对象启用");
 
         Object[] ids = queryHelper.getPks(metaObject);
-        List<Record> objectInstances = new ArrayList<Record>();
+        List<String> instanceCodes = Lists.newArrayList();
         for (Object id : ids) {
             Preconditions.checkArgument(id instanceof Object[] && ((Object[]) id).length == 1, "组件配置删除动作,不支持联合主键");
             Record record = ServiceManager.metaService().findDataByIds(metaObject, id);
-            String compType = record.getStr("comp_code");
 
-            if ("META_OBJECT".equalsIgnoreCase(record.getStr("type"))) {
-                log.info("Pre delete [{}] instance config , ComponentType is [{}] ", record.getStr("dest_object"), compType);
-                objectInstances.add(record);
+            if (ComponentService.INSTANCE.META_OBJECT.toString().equalsIgnoreCase(record.getStr("type"))) {
+                instanceCodes.add(record.getStr("code"));
             }
         }
-        invocation.getRet().set("objectInstances", objectInstances);
+        log.debug("the instanceCodes will be deleted: {}", Joiner.on(",").join(instanceCodes));
+        invocation.getRet().set("instanceCodes", instanceCodes);
         return true;
     }
 
     @Override
     public boolean deleteAfter(AopInvocation invocation) {
-        List<Record> objectInstances = (List<Record>) invocation.getRet().get("objectInstances");
+        List<String> instanceCodes = (List<String>) invocation.getRet().get("instanceCodes");
 
-        for (Record record : objectInstances) {
-            ServiceManager.componentService().deleteObjectConfig(record.getStr("comp_code"), record.getStr("dest_object"), false);
+        for (String instanceCode : instanceCodes) {
+            ServiceManager.componentService().deleteObjectConfig(instanceCode);
         }
 
         return true;

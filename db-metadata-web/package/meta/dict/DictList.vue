@@ -1,5 +1,5 @@
 <template>
-  <single-grid-tmpl :fc="fc"></single-grid-tmpl>
+  <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
 </template>
 
 <script>

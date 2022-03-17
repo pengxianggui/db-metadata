@@ -186,6 +186,7 @@ public class InitKit {
     private void updateMetaObject(IMetaObject metaObject) {
         if (!jsonObjectConfig.containsKey(metaObject.code()))
             return;
+
         log.info("found the object configuration of {}", metaObject.code());
         JSONObject self = jsonObjectConfig.getJSONObject(metaObject.code());
         JSONObject fields = self.containsKey("_fields") ? self.getJSONObject("_fields") : new JSONObject();
@@ -332,7 +333,10 @@ public class InitKit {
     }
 
     /**
-     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultObject.json、defaultInstance.json
+     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultInstance.json.
+     * <p>
+     * 注意：方法内不会依据这两个json文件生成逻辑配置和UI实例配置，只是依据 {@link AppConst#SYS_TABLE} 确定要为哪些表初始化元对象和元字段，
+     * 然后再依据defaultInstance.json含有容器组件声明，确定要为这些元对象生成哪些容器下的实例配置, 其实例配置为自动计算生成，而不会使用defaultInstance.json内容进行覆盖。
      */
     public void initSysMeta() {
         QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);

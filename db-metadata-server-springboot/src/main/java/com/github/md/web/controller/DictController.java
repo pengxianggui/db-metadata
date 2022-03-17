@@ -1,15 +1,16 @@
 package com.github.md.web.controller;
 
-import com.google.common.base.Preconditions;
-import com.github.md.web.kit.Dicts;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.web.kit.Dicts;
+import com.google.common.collect.Lists;
+import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,19 +24,32 @@ import java.util.List;
 @RequestMapping("dict")
 public class DictController extends ControllerAdapter {
 
+    /**
+     * 入参key必须是根字典的value
+     *
+     * @return
+     */
     @GetMapping
     public Ret index() {
         ParameterHelper parameterHelper = parameterHelper();
-        String key = parameterHelper.getPara("key");
+        String pValue = parameterHelper.getPara("name");
 
-        Preconditions.checkNotNull(key, "参数:key必须填写,参考 dict.json");
-
-        List<Kv> result = Dicts.me().getKvs(key);
-
-        if (result != null && !result.isEmpty()) {
-            return Ret.ok("data", result);
+        if (StrKit.isBlank(pValue)) {
+            return Ret.ok("data", Lists.newArrayList());
         }
-        log.info("已有key:{}", Arrays.toString(Dicts.me().keys()));
-        return Ret.fail().set("msg", "dict.json中不存在key为" + key + "的数据");
+
+        List<Kv> result = Dicts.me().getKvs(pValue);
+
+        if (CollectionUtils.isEmpty(result)) {
+            String msg = String.format("指定字典不存在: %s, 请检查是否有此字典项", pValue);
+            log.info(msg);
+            return Ret.fail().set("msg", msg);
+        }
+        return Ret.ok("data", result);
+    }
+
+    @GetMapping("names")
+    public Ret names() {
+        return Ret.ok("data", Dicts.me().names());
     }
 }

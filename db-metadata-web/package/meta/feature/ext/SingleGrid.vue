@@ -8,7 +8,7 @@
 
     <el-divider content-position="right">
       <span>选择实例编码</span>
-      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="value.config.objectCode"></auto-computed-button>)</span>
+      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="value.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)</span>
     </el-divider>
     <el-form-item label="搜索面板" prop="instanceCodes.SearchView" required error="必填">
       <drop-down-box v-model="value.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value,'SearchView')"></drop-down-box>
@@ -63,6 +63,9 @@ export default {
     },
     validate(callback) {
       return this.$refs['featureConfigForm'].validate(valid => callback(valid))
+    },
+    autoComputedOk() {
+      this.$forceUpdate()
     }
   },
   beforeDestroy() {

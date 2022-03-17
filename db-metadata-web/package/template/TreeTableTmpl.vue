@@ -190,12 +190,12 @@ export default {
   },
   created() {
     this.$merge(this.config, TreeAndTableConfig)
-    const {featureCode} = this;
-    const promise = isEmpty(featureCode) ? new Promise(((resolve, reject) => reject())) : loadFeature(this.$axios, featureCode)
-    promise.then(resp => {
-      this.$merge(this.config, resp.data)
-    }).catch(() => {}).finally(() => {
-    })
+
+    if (!isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      })
+    }
   }
 }
 </script>

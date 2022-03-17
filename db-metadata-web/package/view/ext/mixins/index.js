@@ -22,6 +22,8 @@ export const ViewMixin = {
 
 
 /**
+ * TODO 2.3优化，这里的代码时前端的一个核心。但是这里比较复杂，考虑到meta数据的响应式、异步、和默认的meta合并、组装业务数据model。meta也可能是静态传入。这里需要优化。
+ *
  * 具备元数据配置的组件混入。此混入只适用于容器组件。容器组件的元数据是依据instanceCode，即ic来确定的。 而域组件是通过传入meta(参见{@link ../../../core/mixins/meta.js})
  *
  * <b>注意: 元数据装配好后会调用 组件的init方法，组件可以自定义init方法进行元数据就绪后的操作</b>
@@ -52,9 +54,9 @@ export const ViewMetaBuilder = function (defaultMeta, callback) {
                         this.$axios.safeGet(compile(metaUrl, {instanceCode: newV}))
                             .then(({data}) => {
                                 this._refreshMeta(data)
-                            }).catch(() => {
-                            this._refreshMeta(defaultMeta) // 异常，则重新使用默认覆盖
-                        })
+                            }).catch((err) => {
+                                // this._refreshMeta(defaultMeta) // 异常，则重新使用默认覆盖
+                            })
                     }
                 },
                 immediate: true
@@ -74,6 +76,7 @@ export const ViewMetaBuilder = function (defaultMeta, callback) {
             },
             _refreshMeta(meta) {
                 this.$reverseMerge(this.meta, meta)
+                this.$merge(this.meta, defaultMeta)
                 if (utils.isFunction(callback)) {
                     callback.call(this, this.meta);
                 }

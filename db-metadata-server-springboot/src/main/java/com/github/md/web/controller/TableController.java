@@ -237,6 +237,14 @@ public class TableController extends ControllerAdapter {
                                                          MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
                                                          sqlPara.getPara());
 
+        // TODO 2.2 添加转义规则后，构建树的关联字段值被转义了，导致树构建失败
+//        /*
+//         * escape field value;
+//         * 1. 是否需要转义的规则;
+//         */
+//        if (!queryHelper.list().raw()) {
+//            OptionsKit.trans(filteredFields, result);
+//        }
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 

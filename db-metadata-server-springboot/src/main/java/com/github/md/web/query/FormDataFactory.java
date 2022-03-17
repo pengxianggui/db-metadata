@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p> @Date : 2019/10/31 </p>
@@ -45,7 +46,6 @@ public class FormDataFactory {
      * @param httpParams
      * @param metaObject
      * @param isInsert
-     *
      * @return
      */
     public static MetaData buildFormData(Map<String, String[]> httpParams, IMetaObject metaObject, boolean isInsert) {
@@ -55,7 +55,7 @@ public class FormDataFactory {
         for (IMetaField metaField : metaObject.fields()) {
 
             //转值  : ""| null | 真实值
-            Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
+            final Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
                 //主键处理
@@ -84,7 +84,7 @@ public class FormDataFactory {
                 }
 
                 /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断 新增[只读,隐藏,禁用],更新[只读,隐藏,禁用],*/
-                if (isInsert) {
+                if (isInsert) { // TODO 2.2 对隐藏的处理
                     if (metaField.configParser().addStatus() == MetaFieldConfigParse.READONLY || metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
                         continue;
                     }
@@ -113,6 +113,7 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+
                 //日期类型处理
                 if (metaField.dbType().isDate()) {
                     if (StrKit.notNull(castedValue)) {
@@ -122,15 +123,16 @@ public class FormDataFactory {
                     }
                     continue;
                 }
-                //数值类型 value->defaultVal->0
+
+                //数值类型 value->defaultVal->null
                 if (metaField.dbType().isNumber()) {
                     if (StrKit.notNull(castedValue)) {
                         formData.set(metaField.fieldCode(), castedValue);
                     } else {
-                        if (StrKit.notBlank(metaField.configParser().defaultVal())) {
+                        if (Objects.nonNull(metaField.configParser().defaultVal())) {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
-                            formData.set(metaField.fieldCode(), 0);
+                            formData.set(metaField.fieldCode(), null);
                         }
                     }
                     continue;
@@ -150,10 +152,12 @@ public class FormDataFactory {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
 //                            formData.set(metaField.fieldCode(), ""); // 导致入库时本应该为null的值变成空字符串, 如果字段唯一约束, 则会抛出异常
+                            formData.set(metaField.fieldCode(), null);
                         }
                     }
                     continue;
                 }
+
                 // set 该metafile 转换后的value
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
@@ -191,6 +195,7 @@ public class FormDataFactory {
                 }
                 record.set(metaField.fieldCode(), value);
             }
+
         }
     }
 }

@@ -5,7 +5,7 @@
 
     <p>完全自由的页面! 完全自由的菜单！完全自由的路由！</p>
     <p>虽然完全自由，但是你却可以享受dbmeta带来的快捷，比如下面这个表格, 只需要一行代码: </p>
-    <sql-box value='<single-grid-tmpl fc="meta_dict"></single-grid-tmpl>'></sql-box>
+    <code-box value='<single-grid-tmpl fc="meta_dict"></single-grid-tmpl>'></code-box>
 
     <single-grid-tmpl fc="meta_dict"></single-grid-tmpl>
 

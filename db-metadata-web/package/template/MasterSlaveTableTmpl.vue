@@ -317,40 +317,34 @@ export default {
       })
     }
   },
-  watch: {
-    'fc': {
-      handler: function (newV) {
-        if (!isEmpty(newV)) {
-          loadFeature(this.$axios, newV).then(resp => {
-            this.$reverseMerge(this.config, resp.data)
-          }).catch(() => {
-          }).finally(() => {
-            const {master, slaves = []} = this.config
-
-            // 初始化主表外部过滤参数
-            this.$merge(master, {
-              filterParams: {}
-            })
-
-            // 初始化子表外部过滤参数
-            slaves.forEach(slave => {
-              const {config: {foreignPrimaryKey}} = slave
-              const filterParams = {}
-              // 通过向子表的数据请求参数中植入未编译的参数项，达到——主表未选择时，子表不出数据的目的
-              filterParams[foreignPrimaryKey + "_eq"] = `{${foreignPrimaryKey}}`
-              this.$merge(slave, {
-                filterParams: filterParams
-              })
-            })
-          })
-        }
-      },
-      immediate: true
-    }
-  },
   created() {
     this.$merge(this.config, MasterSlaveGridConfig)
-  },
+
+    if (!isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      }).catch(() => {
+      }).finally(() => {
+        const {master, slaves = []} = this.config
+
+        // 初始化主表外部过滤参数
+        this.$merge(master, {
+          filterParams: {}
+        })
+
+        // 初始化子表外部过滤参数
+        slaves.forEach(slave => {
+          const {config: {foreignPrimaryKey}} = slave
+          const filterParams = {}
+          // 通过向子表的数据请求参数中植入未编译的参数项，达到——主表未选择时，子表不出数据的目的
+          filterParams[foreignPrimaryKey + "_eq"] = `{${foreignPrimaryKey}}`
+          this.$merge(slave, {
+            filterParams: filterParams
+          })
+        })
+      })
+    }
+  }
 }
 </script>
 

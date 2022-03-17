@@ -24,8 +24,11 @@ public class ValidatorController extends ControllerAdapter {
     @GetMapping("sql")
     public Ret sql() {
         String exeSql = parameterHelper().getPara("sql", "");
+
         Preconditions.checkArgument(SqlAnalysis.check(exeSql), "无效SQL [%s]", exeSql);
-        // TODO 由于sql中可能含有变量 #(), 而标量语法的"#" 恰好被CodeMirror当做了注释, 导致服务端获取的sql始终是有问题的。这里先放开校验， 解决这个问题后再打开
+        Preconditions.checkArgument(SqlAnalysis.checkIdCn(exeSql), "SQL必须以id和cn作为返回的结果集 [%s]", exeSql);
+
+        // TODO 2.3 由于sql中可能含有变量 #(), 而变量语法的"#" 恰好被CodeMirror当做了注释, 导致服务端获取的sql始终是有问题的， 需要解决
         return Ret.ok();
     }
 

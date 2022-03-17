@@ -15,7 +15,6 @@ import ImgBox from "../../../core/imgbox/src/ImgBox";
 // 高级组件
 import FindBox from "../../../core/findbox/src/FindBox";
 import JsonBox from "../../../core/jsonbox/src/JsonBox";
-import SqlBox from "../../../core/sqlbox/src/SqlBox";
 import IconBox from "../../../core/iconbox/src/IconBox";
 import RegionBox from "../../../core/regionbox/src/RegionBox";
 import RichTextBox from "../../../core/richtextbox/src/RichTextBox";
@@ -84,10 +83,6 @@ const compLib = {
         {
             icon: '',
             comp: JsonBox
-        },
-        {
-            icon: '',
-            comp: SqlBox
         },
         {
             icon: '',

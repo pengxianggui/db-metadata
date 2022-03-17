@@ -45,22 +45,6 @@ public class MetaBootstrap {
         stepList.add(new ExtensionInitStep());
         stepList.add(new EventInitStep());
         stepList.forEach(s -> s.init());
-
-
-        /**
-         * 待迁移代码
-         */
-
-        //        MRManager mrManager = MRManager.me();
-        //        mrManager.addLoader(new JFinalResourceLoader());
-        //        mrManager.setPermit(new JsonUserPermit("userMRmap.json"));
-        //        mrManager.load();
-
-        //        me.add(new UserRouter());
-        //        me.add(new UserIntercept());
-        //        me.add(new MRAuthIntercept());
-
-
     }
 
     interface InitStep {
@@ -82,7 +66,6 @@ public class MetaBootstrap {
 
         @Override
         public void init() {
-
             SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());

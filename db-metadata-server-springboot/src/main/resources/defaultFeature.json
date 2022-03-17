@@ -115,16 +115,21 @@
     }
   },
   {
-    "type": "SingleGrid",
+    "type": "TreeSingleGrid",
     "name": "字典管理",
     "code": "meta_dict",
     "config": {
       "config": {
-        "objectCode": "meta_dict"
+        "objectCode": "meta_dict",
+        "idKey": "value",
+        "pidKey": "p_value",
+        "label": "key",
+        "rootIdentify": "",
+        "isSync": false
       },
       "instanceCodes": {
         "SearchView": "meta_dict.SearchView",
-        "TableView": "meta_dict.TableView",
+        "TableView": "meta_dict.TableTreeView",
         "FormView": "meta_dict.FormView"
       }
     }

@@ -2,21 +2,31 @@
   "sex": [
     {
       "key": "男",
-      "value": 1
+      "value": "1"
     },
     {
       "key": "女",
-      "value": 2
+      "value": "0"
     }
   ],
   "yn": [
     {
       "key": "是",
-      "value": 1
+      "value": true
     },
     {
       "key": "否",
-      "value": 0
+      "value": false
+    }
+  ],
+  "ynStr": [
+    {
+      "key": "是",
+      "value": "1"
+    },
+    {
+      "key": "否",
+      "value": "0"
     }
   ],
   "metaType": [
@@ -83,6 +93,12 @@
     {
       "key": "任一匹配",
       "value": "any"
+    }
+  ],
+  "dictType": [
+    {
+      "key": "系统字典",
+      "value": "0"
     }
   ]
 }

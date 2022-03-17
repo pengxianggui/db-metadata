@@ -1,6 +1,7 @@
 package com.github.md.web.controller.itp;
 
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.aop.AopInvocation;
@@ -36,9 +37,10 @@ public class MetaFieldEditPointCut implements UpdatePointCut {
         if (invocation.isPreOperateStatus()) {
             log.info("MetaFieldEditPointCut.updateAfter run");
             MetaData formData = invocation.getFormData();
+            Kv httpParams = invocation.getHttpParams();
             //获取表单数据中的
-            String objectCode = formData.getStr("object_code");
-            String fieldCode = formData.getStr("field_code");
+            String objectCode = httpParams.getStr("object_code");
+            String fieldCode = httpParams.getStr("field_code");
 
             IMetaObject metaObject = ServiceManager.metaService().findByCode(objectCode);
 

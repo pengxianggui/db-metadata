@@ -6,13 +6,14 @@ import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.web.ServiceManager;
+import com.github.md.web.WebException;
 import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.component.AbstractComponent;
 import com.github.md.web.component.ComponentException;
 import com.github.md.web.component.ViewFactory;
-import com.github.md.web.kit.UtilKit;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
@@ -86,6 +87,21 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok("data", result);
     }
 
+    /**
+     * 获取指定实例编码的简短信息。元对象和容器组件编码
+     *
+     * @return
+     */
+    @GetMapping(value = "instance/brief")
+    public Ret componentInstanceBrief() {
+        QueryHelper queryHelper = queryHelper();
+        String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+
+        Record record = componentService().getComponentInstanceBrief(instanceCode);
+        return Ret.ok("data", record);
+    }
+
     @GetMapping("list")
     public Ret list() {
         List<Record> components = componentService().loadComponents();
@@ -107,31 +123,21 @@ public class ComponentController extends ControllerAdapter {
     @GetMapping("load")
     public Ret load() {
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
+//        String objectCode = queryHelper.getObjectCode();
+//        String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定UI实例编码"));
 
-        // instanceCode 获取
-        if (StrKit.notBlank(instanceCode)) {
-            if (componentService().hasObjectConfig(instanceCode)) {
-                return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
-            } else {
-                IMetaObject metaObject = metaService().findByCode(objectCode);
-                MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-                return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
-            }
-        }
-
-        // objectCode + componentCode
-        if (StrKit.notBlank(compCode, objectCode)) {
-            IMetaObject metaObject = metaService().findByCode(objectCode);
-            //            //自动计算的配置
-            MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-            return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
-            //            }
+        // 有instanceCode 则获取UI实例配置
+        if (componentService().hasObjectConfig(instanceCode)) {
+            return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
         } else {
-            return Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config")));
+            return Ret.fail("msg", "请先为此实例编码生成UI配置!");
+//            IMetaObject metaObject = metaService().findByCode(objectCode);
+//            MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
+//            return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
         }
+
 
         /**t
          * {
@@ -168,9 +174,9 @@ public class ComponentController extends ControllerAdapter {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCode = queryHelper.getComponentCode();
-
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
+
         Kv config = parameterHelper().getKv();
         addInstanceConf(objectCode, compCode, instanceCode, instanceName, config);
         return Ret.ok();
@@ -193,10 +199,10 @@ public class ComponentController extends ControllerAdapter {
                 throw new RuntimeException(String.format("%s配置信息已存在,请重新输入唯一编码", instanceCode));
             }
 
-            // TODO 需要整体统一更改为instanceCode唯一, compCode + objectCode 可多套
-            if (componentService().hasObjectConfig(compCode, objectCode)) {
-                throw new RuntimeException(String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode));
-            }
+//            // 需要整体统一更改为instanceCode唯一, compCode + objectCode 可多套 ———— done
+//            if (componentService().hasObjectConfig(compCode, objectCode)) {
+//                throw new RuntimeException(String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode));
+//            }
 
             IMetaObject metaObject = metaService().findByCode(objectCode);
             ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
@@ -206,7 +212,7 @@ public class ComponentController extends ControllerAdapter {
                     component.componentType());
             componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
         } else {
-            componentService().newIfNull(compCode, UtilKit.getKv(config.getStr(compCode)));
+//            componentService().newIfNull(compCode, UtilKit.getKv(config.getStr(compCode))); // doubt what?
         }
         return true;
     }
@@ -220,10 +226,17 @@ public class ComponentController extends ControllerAdapter {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCodes = parameterHelper().getPara("componentCodes");
+        String instanceCodes = parameterHelper().getPara("instanceCodes");
+
+        String[] compCodeArr = compCodes.split(",");
+        String[] instanceCodeArr = instanceCodes.split(",");
+        AssertUtil.isTrue(compCodeArr.length == instanceCodeArr.length, "组件和实例编码长度不匹配");
 
         Db.tx(() -> {
-            for (String compCode : compCodes.split(",")) {
-                final String instanceCode = objectCode + "." + compCode;
+            for (int i = 0; i < instanceCodeArr.length; i++) {
+                String instanceCode = instanceCodeArr[i];
+                String compCode = compCodeArr[i];
+
                 if (componentService().hasObjectConfig(instanceCode)) {
                     throw new ComponentException("默认的instanceCode:%s已经存在!", instanceCode);
                 }
@@ -239,6 +252,7 @@ public class ComponentController extends ControllerAdapter {
                     return false;
                 }
             }
+
             return true;
         });
 
@@ -253,24 +267,30 @@ public class ComponentController extends ControllerAdapter {
          * component Type
          */
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
         String instanceName = queryHelper.getInstanceName();
         Kv config = parameterHelper().getKv();
 
-        Component component = AbstractComponent.newInstance(compCode);
-        if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
-            IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                    metaObject.code(),
-                    instanceCode,
-                    instanceName,
-                    component.componentType());
-            componentService().updateObjectConfig(component, metaObject, componentInstanceConfig);
-        } else {
-            componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
-        }
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+
+        // TODO 2.2 全面拥抱instanceCode，那么组件实例的更新只需要入参instanceCode即可！同样，InstanceConfEdit也需要调整
+//        if (StrKit.notBlank(instanceCode)) {
+        ComponentInstanceConfig oldComponentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
+        IMetaObject metaObject = metaService().findByCode(oldComponentInstanceConfig.getObjectCode());
+        Component component = AbstractComponent.newInstance(oldComponentInstanceConfig.getContainerType().getCode());
+
+        ComponentInstanceConfig newComponentInstanceConfig = ComponentInstanceConfig.New(config,
+                metaObject.code(),
+                instanceCode,
+                instanceName,
+                component.componentType());
+        componentService().updateObjectConfig(component, metaObject, newComponentInstanceConfig);
+//        } else {
+//            String objectCode = queryHelper.getObjectCode();
+//            String compCode = queryHelper.getComponentCode();
+//            Component component = AbstractComponent.newInstance(compCode);
+//            componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
+//        }
         return Ret.ok();
     }
 
@@ -278,15 +298,9 @@ public class ComponentController extends ControllerAdapter {
     @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
-
-        if (StrKit.notBlank(objectCode, compCode)) {
-            componentService().deleteObjectConfig(compCode, objectCode, false);
-            return Ret.ok();
-        } else {
-            componentService().deleteDefault(compCode);
-            return Ret.ok();
-        }
+        String instanceCode = queryHelper.getInstanceCode();
+        AssertUtil.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定要删除的实例编码"));
+        componentService().deleteObjectConfig(instanceCode);
+        return Ret.ok("msg", "UI实例删除成功, 实例编码:" + instanceCode);
     }
 }

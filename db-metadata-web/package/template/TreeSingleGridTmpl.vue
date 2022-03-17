@@ -106,20 +106,14 @@ export default {
       })
     }
   },
-  watch: {
-    'fc': {
-      handler: function (newV) {
-        if (!utils.isEmpty(newV)) {
-          loadFeature(this.$axios, newV).then(resp => {
-            this.$reverseMerge(this.config, resp.data)
-          })
-        }
-      },
-      immediate: true
-    }
-  },
   created() {
     this.$merge(this.config, TreeSingleGridConfig)
+
+    if (!utils.isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      })
+    }
   },
   computed: {
     tableRefName() {

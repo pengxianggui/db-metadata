@@ -20,7 +20,7 @@ export default {
     "label": "多选框",
     'sort': 0,
     "inline": true,
-    "data_url": "/dict?key=yn",
+    "data_url": "/dict?name=",
     "options": [
         // {"key":"value"}
     ],

@@ -31,6 +31,13 @@ export default {
       }
     }
   },
+  data() {
+    const {fc: R_fc} = this.$route.query
+    const featureCode = utils.assertUndefined(this.fc, R_fc);
+    return {
+      featureCode: featureCode
+    }
+  },
   methods: {
     handleOk(params) {
       this.$goBack()
@@ -39,20 +46,12 @@ export default {
       this.$goBack()
     }
   },
-  data() {
-    const {fc: R_fc} = this.$route.query
-    const featureCode = utils.assertUndefined(this.fc, R_fc);
-    return {
-      featureCode: featureCode
-    }
-  },
   created() {
     this.$merge(this.config, FormConfig)
 
-    const {featureCode} = this
-    if (!utils.isEmpty(featureCode)) {
-      loadFeature(this.$axios, featureCode).then(resp => {
-        this.$merge(this.config, resp.data)
+    if (!utils.isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
       })
     }
   }

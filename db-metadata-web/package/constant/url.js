@@ -6,7 +6,7 @@ export const routeUrl = {
     R_GOBAL_CONF_ADD: '/meta/global-conf',
     R_GOBAL_CONF_EDIT: '/meta/global-conf',
     R_INSTANCE_CONF_NEW: '/meta/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
-    R_INSTANCE_CONF_EDIT: '/meta/instance-conf-edit?instanceCode={instanceCode}&componentCode={componentCode}&objectCode={objectCode}&fieldCode={fieldCode}',    // 组件实例配置界面[编辑]
+    R_INSTANCE_CONF_EDIT: '/meta/instance-conf-edit?instanceCode={instanceCode}&fieldCode={fieldCode}',    // 组件实例配置界面[编辑]
 
     R_LOGIN: '/login',
     R_401: '/401',
@@ -32,13 +32,15 @@ export const restUrl = {
     COMP_CONF_ADD: '/component/doAdd',   // 组件(默认|实例)配置新增
     COMP_GOBAL_CONF_LOAD: '/component/load?componentCode={componentCode}',    // 组件默认配置加载
     COMP_GOBAL_CONF_DELETE: '/component/delete?componentCode={componentCode}',    // 组件默认配置删除
-    COMP_INSTANCE_CONF_LOAD_EDIT: '/component/load?componentCode={componentCode}&objectCode={objectCode}&instanceCode={instanceCode}', // 组件实例配置加载
+    COMP_INSTANCE_CONF_LOAD_EDIT: '/component/load?instanceCode={instanceCode}', // 组件实例配置加载
     COMP_INSTANCE_CONF_LOAD_NEW: '/component/load?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置加载[自动计算-新增时]
     COMP_INSTANCE_CONF_DELETE: '/component/delete/?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置删除
     COMPONENT_INSTANCE_META: '/component/meta?componentCode={componentCode}&objectCode={objectCode}', // 组件实例元数据
 
 
     VIEW_INSTANCE_CONF: '/component/meta/ic?ic={instanceCode}', // 容器组件实例配置
+    COMPONENT_INSTANCE_AUTO_CAL: '/component/import-auto-computed', // 容器实例自动计算
+    COMPONENT_INSTANCE_INFO: '/component/instance/brief?instanceCode={instanceCode}', //获取实例配置的基础信息(元对象、容器组件、实例名)
 
 
     COMPONENT_OPTIONS: '/component/options?objectCode={objectCode}&f={fieldCode}',
@@ -52,7 +54,7 @@ export const restUrl = {
 
     LOAD_COMP_BY_OBJECT: '/meta/contact/?kv={kv}&objectCode={objectCode}', // 传入objectCode, 获取该元对象对应的组件实例code, 即componentCode. (kv为true, 返回kv格式)
     LOAD_INSTANCE_CODE_BY_OBJECT_COMP: '/component/contact?objectCode={objectCode}&componentCode={componentCode}&kv={kv}', // 根据查询在objectCode+componentCode下的所有实例配置
-    LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 根据查询在objectCode下的所有实例配置
+    LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 查询在objectCode下的所有容器实例配置编码
 
     CHECK_SQL: '/check/sql?sql={sql}',
     FEATURE_ADD: '/feature/doAdd?ft={featureType}', // 添加功能类别

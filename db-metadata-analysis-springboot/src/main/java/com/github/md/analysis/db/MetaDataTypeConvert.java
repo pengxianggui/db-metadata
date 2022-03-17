@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,8 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 @Slf4j
 public class MetaDataTypeConvert {
+
+    private static String[] BOOL_DEFAULT_VAL = {"0", "1", "false", "true", "b'0'", "b'1'"}; // 奇数位 为代表false, 偶数位代表true
 
     /**
      * 参考：http://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html INT UNSIGNED 这里强制指定为 Integer 因为大部分人不知道应该为Long
@@ -123,21 +126,8 @@ public class MetaDataTypeConvert {
                 return Double.parseDouble(s);
             }
             if (c == Boolean.class) {
-                boolean f = false;
-                try {
-                    Integer.parseInt(s);
-                    f = true;
-                } catch (Exception e) {
-                    f = false;
-                }
-                if (f) {
-                    if (s.equals("1")) {
-                        s = "true";
-                    } else {
-                        s = "false";
-                    }
-                }
-                return Boolean.parseBoolean(s);
+                int position = Arrays.asList(BOOL_DEFAULT_VAL).indexOf(s);
+                return (position + 1) % 2 == 0;
             }
             if (c == BigInteger.class) {
                 return BigInteger.valueOf(Long.parseLong(s));

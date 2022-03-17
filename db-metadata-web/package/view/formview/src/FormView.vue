@@ -1,6 +1,6 @@
 <template>
-  <div class="view-container">
-    <el-form :ref="meta['name']" v-bind="$reverseMerge(meta.conf, $attrs)"
+<!--  <div class="view-container">-->
+    <el-form :ref="formRefName" v-bind="$reverseMerge(meta.conf, $attrs)"
              :model="model" :rules="rules"
              :style="formStyle"
              :disabled="isView">
@@ -24,12 +24,6 @@
                      v-if="buttonsConf.cancel.show"></el-button>
         </el-form-item>
       </slot>
-      <div style="float: right">
-        <meta-easy-edit :object-code="meta.objectCode" component-code="FormView">
-          <template #label><i class="el-icon-setting"></i></template>
-        </meta-easy-edit>
-      </div>
-
       <!-- render-less behavior slot -->
       <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
       <!--            <cancel v-bind="{on, actions}"></cancel>-->
@@ -38,7 +32,7 @@
       <!--            <submit v-bind="{on, actions}"></submit>-->
       <!--        </slot>-->
     </el-form>
-  </div>
+<!--  </div>-->
 </template>
 
 <script>
@@ -51,11 +45,12 @@ import {formTypes} from "../ui-conf";
 import {gridInfoStructured} from "../../../meta/form-builder/formViewMetaParser";
 import {ViewMixin, ViewMetaBuilder} from "../../ext/mixins";
 import {getFormInstanceUrl} from "../index";
+import {printErr} from "../../../utils/common";
 
 export default {
   name: "FormView",
   components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
-  mixins: [ViewMetaBuilder(DefaultMeta, gridInfoStructured), ViewMixin],
+  mixins: [ViewMetaBuilder(DefaultMeta), ViewMixin],
   props: {
     model: { // 外部model的值拥有最高优先级, 但是key却是依据meta来确定
       type: Object,
@@ -104,6 +99,7 @@ export default {
     onSubmit(ev) {
       const {meta: {name: refName}, isView} = this
       if (isView) {
+        printErr('查看模式下，禁止表单提交')
         return
       }
 
@@ -131,7 +127,6 @@ export default {
     assemblyModel(meta) {
       const {model} = this
       const {columns = [], form_type} = meta
-
       switch (form_type.toUpperCase()) {
         case formTypes.add: // 新增表单：备选值取默认值
           columns.forEach(item => {
@@ -149,6 +144,8 @@ export default {
     },
     init() {
       this.assemblyModel(this.meta);
+      // 拍扁的布局结构化展开必须在model组装之后, 因为model组装是依据meta.columns来的，其内部并未对columns做递归兼容. TODO 2.3 model组装基于最终meta，gridInfoStructured扔到ViewMetaBuilder的第二个入参中
+      gridInfoStructured(this.meta)
     }
   },
   computed: {
@@ -161,11 +158,13 @@ export default {
       return rules;
     },
     formStyle() {
-      const {$attrs: {width: attrWidth}, meta: {width: metaWidth}} = this
-      return {
-        margin: 'auto',
-        width: utils.assertUndefined(attrWidth, metaWidth)
+      const {meta: {style = {}}, $root: {$options: {name}}} = this
+      const newStyle = {}
+      this.$merge(newStyle, style)
+      if (name === 'DialogTmpl') { // 若表单是由DialogTmpl打开的(见dialog.js)，则width属性由DialogTmpl集成, 当前FormView设定百分百
+        newStyle.width = '100%'
       }
+      return newStyle
     },
     buttonsConf() {
       const {buttons: buttonsConf = {}} = this.meta
@@ -173,6 +172,10 @@ export default {
     },
     fieldSlots() {
       return this.$scopedSlots
+    },
+    formRefName() {
+      const {meta: {name = 'FormView'}} = this
+      return name
     }
     // 支持无渲染的行为插槽
     // actions() {

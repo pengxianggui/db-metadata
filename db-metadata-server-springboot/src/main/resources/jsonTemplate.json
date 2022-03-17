@@ -184,7 +184,6 @@
     "name": "NumBox",
     "label": "数字框",
     "inline": true,
-    "default_value": 0,
     "conf": {
       "controls": true,
       "controls-position": "right",

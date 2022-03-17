@@ -2,56 +2,32 @@
   <div class="page-container">
     <el-form id="form-box" size="mini" ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px">
       <div id="opr-box">
-        <div style="font-size: 13px;">
-          <el-button size="mini" type="primary" plain @click="$goBack()">
-            <i class="el-icon-back"></i><span>返回</span>
-          </el-button>
-          &nbsp;
-          <template v-if="EDIT_MODE">
-            <span><span>实例编码:</span><el-tag size="mini" align="center">{{ confModel.instanceCode }}</el-tag></span>&nbsp;
-            <span><span>元对象:</span><el-tag size="mini" align="center">{{ confModel.objectCode }}</el-tag></span>&nbsp;
-            <span><span>模板:</span><el-tag size="mini" align="center">{{ confModel.componentCode }}</el-tag></span>&nbsp;
-
-            <el-badge value="hot" type="danger" v-if="confModel.componentCode === 'FormView'">
-              <el-tag type="danger" size="mini" style="cursor: pointer"
-                      @click="toFormBuilder(confModel.instanceCode, confModel.objectCode, confModel.componentCode)">
-                表单设计!
-              </el-tag>
-            </el-badge>
-          </template>
-          <template v-else>
-            <el-form-item label="元对象" prop="objectCode" class="inline" style="margin: 0">
-              <meta-object-selector v-model="confModel.objectCode" :disabled="EDIT_MODE"></meta-object-selector>
-            </el-form-item>
-            <el-form-item label="组件" prop="componentCode" class="inline" style="margin: 0">
-              <component-selector v-model="confModel.componentCode" scope="view"
-                                  :disabled="EDIT_MODE"></component-selector>
-            </el-form-item>
-            <span v-if="isAutoComputed" style="color: red;font-size: 12px;margin-left: 10px">后台自动计算</span>
-            <el-form-item class="inline" style="margin: 0">
-              <el-button type="primary" @click="autoComputedLoad" icon="el-icon-download">导入自动计算</el-button>
-            </el-form-item>
-          </template>
+        <el-button size="mini" type="primary" plain @click="$goBack()">
+          <i class="el-icon-back"></i><span>返回</span>
+        </el-button>
+        &nbsp;
+        <span><span>实例编码:</span><el-tag size="mini" align="center">{{ confModel.instanceCode }}</el-tag></span>&nbsp;
+        <span><span>元对象:</span><el-tag size="mini" align="center">{{ confModel.objectCode }}</el-tag></span>&nbsp;
+        <span><span>模板:</span><el-tag size="mini" align="center">{{ confModel.componentCode }}</el-tag></span>&nbsp;
+        <div style="display: flex; align-items: center;">
+          <span style="white-space: nowrap">实例名:</span>
+          <text-box v-model="confModel.instanceName" size="mini"></text-box>
         </div>
+
+        <span style="flex: 1"></span>
         <el-button-group>
-          <ui-config-help></ui-config-help>
-          <el-button size="mini" type="primary" @click="preview">
-            <i class="el-icon-view"></i>
-            <span>预览</span>
-          </el-button>
+          <!--          <ui-config-help></ui-config-help>-->
+          <el-button size="mini" icon="el-icon-view" type="primary" @click="preview"></el-button>
+          <el-button size="mini" icon="el-icon-view" type="warning" @click="jsonView"></el-button>
           <!-- TODO 判断是否有未提交内容, 进行保存提示 -->
           <el-badge :is-dot="false">
             <el-dropdown size="mini" type="success" split-button @click="submit" trigger="click">
               <i class="el-icon-upload"></i>
               <span>保存</span>
               <el-dropdown-menu slot="dropdown" trigger="click">
-                <el-dropdown-item size="mini" @click.native="rollback" class="hover-warning-plain" v-if="EDIT_MODE">
+                <el-dropdown-item size="mini" @click.native="rollback" class="hover-warning-plain">
                   <i class="el-icon-refresh"></i>
                   <span>配置回滚</span>
-                </el-dropdown-item>
-                <el-dropdown-item size="mini" @click.native="deleteConf" class="hover-danger-plain" v-if="EDIT_MODE">
-                  <i class="el-icon-delete-solid"></i>
-                  <span>删除配置</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -62,9 +38,6 @@
       <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue"
                :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="元对象配置" name="0">
-          <el-form-item label="实例描述">
-            <text-area-box v-model="confModel.instanceName"></text-area-box>
-          </el-form-item>
           <el-form-item label="元对象配置">
             <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :show-change-type="true"
                            @json-change="() => buildObjectConfMeta(confModel.conf)">
@@ -87,7 +60,7 @@
                     <h1 :name="key">{{ index + 1 }}.{{ key }}</h1>
                     <el-card shadow>
                       <ui-conf-editor v-model="confModel.fConf[key]"
-                                      :object-code="objectCode" :field-code="key"></ui-conf-editor>
+                                      :object-code="confModel.objectCode" :field-code="key"></ui-conf-editor>
                     </el-card>
                   </el-form-item>
                 </div>
@@ -111,9 +84,11 @@ import MetaObjectSelector from "../component/MetaObjectSelector";
 import ComponentSelector from "../component/ComponentSelector";
 import MetaFieldConfigButton from "../component/MetaFieldConfigButton";
 import UiConfEditor from "../component/UiConfEditor";
+import {isEmpty} from "../../utils/common";
+import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 
 export default {
-  name: "InstanceConfEdit",
+  name: "CommonInstanceEditor",
   components: {
     UiConfTip,
     FieldFilter,
@@ -123,26 +98,23 @@ export default {
     UiConfEditor
   },
   props: {
-    instanceCode: String,
-    objectCode: String,
-    componentCode: String,
-    fieldCode: String
+    ic: String,
+    fc: String
   },
   data() {
-    const {instanceCode, componentCode, objectCode} = this;
+    const {ic: instanceCode} = this;
 
     return {
       elTabValue: '0',
-      EDIT_MODE: true,
       filterFields: [],
-      isAutoComputed: false,
       objConfMeta: {}, // 构建元对象配置迷你表单的元数据
       fieldsConfMeta: {}, // 构建元字段配置迷你表单的元数据
+
       confModel: {
         instanceCode: instanceCode,
         instanceName: null,
-        componentCode: componentCode,
-        objectCode: objectCode,
+        componentCode: null,
+        objectCode: null,
         conf: {}, // 元对象的配置数据
         fConf: {} // 元字段的配置数据
       },
@@ -154,21 +126,10 @@ export default {
     }
   },
   created() {
-    const {instanceCode, objectCode, componentCode, fieldCode} = this;
-    if (utils.isEmpty(instanceCode)) {
-      this.EDIT_MODE = false
-    } else {
-      this.EDIT_MODE = true
-      let url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_EDIT, {
-        instanceCode: instanceCode,
-        objectCode: objectCode,
-        componentCode: componentCode
-      });
-      this.loadConf(url)
-    }
+    this.loadConf(this.ic)
 
-    if (fieldCode) {
-      this.filterFields.push(fieldCode)
+    if (!isEmpty(this.fc)) {
+      this.filterFields.push(this.fc)
       this.elTabValue = '1'
     }
   },
@@ -181,102 +142,79 @@ export default {
       // TODO 配置回滚
       this.$message.warning("TODO 待完成")
     },
-    handleOcChange(objectCode) {
-      this.confModel['objectCode'] = objectCode;
-    },
-    autoComputedLoad() {
-      this.$refs['InstanceConf'].validate((valid) => {
-        if (valid) {
-          const {confModel: {objectCode, componentCode}} = this
-          const url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_NEW, {
-            objectCode: objectCode,
-            componentCode: componentCode
-          });
-          this.loadConf(url)
-        } else {
-          this.$message.warning('请填写必填项')
-        }
-      })
-    },
-    loadConf(url) {
-      this.resetConf();
-      const {$axios, confModel: {objectCode}} = this;
 
-      $axios.safeGet(url).then(resp => {
+    loadConf(instanceCode) {
+      this.resetConf();
+
+      let url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_EDIT, {
+        instanceCode: instanceCode
+      });
+
+      this.$axios.safeGet(url).then(resp => {
         let {data} = resp;
-        let {isAutoComputed = false, instanceCode, instanceName, fieldsMap} = data;
-        this.isAutoComputed = isAutoComputed;
-        this.confModel['instanceCode'] = instanceCode;
-        this.confModel['instanceName'] = instanceName;
+        let {instanceName, objectCode, componentCode, fieldsMap} = data;
+        this.confModel.instanceName = instanceName;
+        this.confModel.objectCode = objectCode;
+        this.confModel.componentCode = componentCode;
+
         // extract object config
-        this.confModel['conf'] = extractConfig.call(this, data, objectCode);
+        this.confModel.conf = extractConfig.call(this, data, objectCode);
 
         // extract field config
         Object.keys(fieldsMap).forEach(key =>
-            this.$set(this.confModel['fConf'], key, extractConfig.call(this, fieldsMap, key)));
+            this.$set(this.confModel.fConf, key, extractConfig.call(this, fieldsMap, key)));
+
         // build object conf meta
-        this.buildObjectConfMeta(this.confModel['conf']);
+        this.buildObjectConfMeta(this.confModel.conf);
+
         // build fields conf meta
-        Object.keys(this.confModel['fConf']).forEach(key => {
-          this.buildFieldConfMeta(this.confModel['fConf'][key], key);
+        Object.keys(this.confModel.fConf).forEach(key => {
+          this.buildFieldConfMeta(this.confModel.fConf[key], key);
         });
-      }).catch(({msg = '配置加载成功'}) => {
+      }).catch(({msg}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
       })
     },
-    deleteConf: function () {
-      this.$confirm('确定删除当前配置? 此操作无法撤销!', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        let url = this.$compile(restUrl.COMP_INSTANCE_CONF_DELETE, this.confModel);
-        this.$axios.delete(url).then(({msg = '配置删除成功'}) => {
-          this.$message.success(msg);
-        }).catch(({msg = '配置删除失败'}) => {
-          console.error(msg)
-        })
-      })
-    },
-    submit() {
-      this.$refs['InstanceConf'].validate((valid) => {
-        if (valid) {
-          const {
-            confModel: {
-              instanceCode,
-              instanceName,
-              componentCode,
-              objectCode,
-              conf: objectConf,
-              fConf: fieldsConf
-            }, EDIT_MODE
-          } = this
-          let $confirm = EDIT_MODE ?
-              this.$confirm('确认提交?')
-              : this.$prompt(`请为这套配置设定一个唯一编码(instanceCode), 如不输入, 则默认为:${instanceCode}`, {})
 
-          $confirm.then(({value}) => {
+    submit() {
+      this.$confirm('确认提交?').then(() => {
+        this.$refs['InstanceConf'].validate((valid) => {
+          if (valid) {
+            const {instanceCode, instanceName, objectCode, conf: objectConf, fConf: fieldsConf} = this.confModel
+
             let params = {
-              instanceCode: utils.assertEmpty(value, instanceCode),
+              instanceCode: instanceCode,
               instanceName: instanceName,
-              componentCode: componentCode,
-              objectCode: objectCode,
               fieldsMap: fieldsConf
             };
             params[objectCode] = objectConf;
 
             this.$axios({
               method: 'POST',
-              url: EDIT_MODE ? restUrl.COMP_CONF_UPDATE : restUrl.COMP_CONF_ADD,
+              url: restUrl.COMP_CONF_UPDATE,
               data: params
             }).then(({msg = '配置保存成功'}) => {
               this.$message.success(msg);
             }).catch(({msg = '配置保存失败'}) => {
               console.error(msg)
             })
-          })
-        }
-      });
+          }
+        });
+      })
+    },
+
+    jsonView() {
+      const {confModel: {conf, fConf}} = this;
+      let meta = utils.deepClone(conf);
+      meta.columns = [];
+      for (let key in fConf) {
+        let item = fConf[key];
+        meta.columns.push(item);
+      }
+
+      this.$dialog(DefaultJsonBoxMeta, meta, {
+        title: "Json预览"
+      })
     },
     preview: function () {
       const {confModel: {conf, fConf}} = this;
@@ -288,14 +226,12 @@ export default {
       }
       this.$dialog(meta, null, {title: '预览', width: meta.width})
     },
+
     buildObjectConfMeta(value) {
       this.objConfMeta = buildMeta(value);
     },
     buildFieldConfMeta(value, key) {
       this.fieldsConfMeta[key] = buildMeta(value, key);
-    },
-    toFormBuilder(instanceCode, objectCode, componentCode) {
-      this.$router.push({path: '/meta/form-builder', query: {ic: instanceCode, oc: objectCode, cc: componentCode}})
     }
   },
   computed: {
@@ -336,7 +272,6 @@ export default {
     display: flex;
     margin-bottom: 5px;
     align-items: center;
-    justify-content: space-between;
   }
 
   #tab-box-instance-conf-edit {

@@ -1,69 +1,4 @@
 /**
- * 各个功能模板的初始config配置
- * @type {{MasterSlaveGrid: {getInitConf: (function(*=, *=): {slaves: [{objectCode: null, foreignFieldCode: null, order: number}], master: {objectCode: *, primaryKey: *}})}, TreeAndTable: {getInitConf: (function(*=, *=): {tree: {pidKey: null, idKey: *, objectCode: null, label: null, rootIdentify: null, isSync: boolean}, table: {objectCode: *, foreignFieldCode: null, primaryKey: null}})}, TreeInTable: {getInitConf: (function(*=): {table: {pidKey: null, idKey: null, objectCode: *, label: null, rootIdentify: null, isSync: boolean}})}, SingleGrid: {getInitConf: (function(*=): {singleGrid: {objectCode: *}})}}}
- */
-export const FEATURE_TYPE_MAPPING = {
-    'MasterSlaveGrid': {
-        getInitConf: function (objectCode, primaryKey) {
-            return {
-                master: {
-                    objectCode: objectCode,
-                    primaryKey: primaryKey
-                },
-                slaves: [{
-                    objectCode: null,
-                    foreignFieldCode: null,
-                    order: 0
-                }]
-            }
-        }
-    },
-    'SingleGrid': {
-        getInitConf: function (objectCode) {
-            return {
-                singleGrid: {
-                    objectCode: objectCode
-                }
-            }
-        }
-    },
-    'TreeInTable': {
-        getInitConf: function (objectCode) {
-            return {
-                table: {
-                    objectCode: objectCode,
-                    idKey: null,
-                    pidKey: null,
-                    rootIdentify: null,
-                    label: null,
-                    isSync: false
-                }
-            }
-        }
-    },
-    'TreeAndTable': {
-        getInitConf: function (objectCode, primaryKey) {
-            return {
-                tree: {
-                    objectCode: null,
-                    idKey: primaryKey,
-                    pidKey: null,
-                    rootIdentify: null,
-                    label: null,
-                    isSync: false,
-                    // primaryKey: primaryKey
-                },
-                table: {
-                    objectCode: objectCode,
-                    primaryKey: null,
-                    foreignFieldCode: null
-                }
-            }
-        }
-    }
-};
-
-/**
  * 各类型功能的配置初始结构和对应MiniForm的meta数据。
  *
  * 注意: meta数据虽然好的避免了不同功能的迷你表单的差异开发，但是由于目标表单还做不到级联配置化。所以功能配置上迷你表单中的组件无法联动，难以接受。
@@ -83,7 +18,7 @@ export const FEATURE_TYPE = {
                 "FormView": null
             }
         },
-        meta: {
+        meta: { // TODO 2.4 可以通过提供 默认配置和 功能新增表单的实例配置 来前端扩展。这样的话，不同功能，就不必单独开发功能新增的配置界面了。
             component_name: 'MiniForm',
             conf: {
                 "label-position": 'top'
@@ -493,4 +428,15 @@ export const TableAndFormConfig = {
     }
 }
 
-// TODO 3.0 可以通过提供 默认配置和 功能新增表单的实例配置 来前端扩展。这样的话，不同功能，就不必单独开发功能新增的配置界面了。
+// TODO 2.3 功能配置组件提取
+export const featureConfigMixins = {
+    props: {
+        oc: String
+    },
+    data() {
+        return {
+        }
+    },
+    methods: {
+    }
+}

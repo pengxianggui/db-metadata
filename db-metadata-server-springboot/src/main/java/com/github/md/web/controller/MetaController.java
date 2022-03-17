@@ -125,13 +125,17 @@ public class MetaController extends ControllerAdapter {
         String tableName = parameterHelper.getPara("tableName");
         String objectName = parameterHelper.getPara("objectName");
         String objectCode = parameterHelper.getPara("objectCode");
+
         DbMetaService dbMetaService = metaService();
         Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
         IMetaObject metaObject = dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
+
         UtilKit.setCreateUser(metaObject.dataMap());  //set createBy,createTime
+
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
+
         return status ? Ret.ok() : Ret.fail();
     }
 

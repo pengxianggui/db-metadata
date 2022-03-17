@@ -47,8 +47,7 @@
                          :label="item.label || item.name"
                          show-overflow-tooltip>
           <template #header>
-            <meta-easy-edit :object-code="objectCode" :field-code="item.name"
-                            :label="item.label || item.name" :all="true" component-code="TableView">
+            <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label || item.name">
               <template #label>{{ item.label || item.name }}</template>
             </meta-easy-edit>
           </template>

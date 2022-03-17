@@ -8,9 +8,12 @@
     </el-form-item>
     <el-form-item label="主键生成策略">
       <div class="el-checkbox-group">
-        <el-checkbox v-model="nativeValue.isUUIDPrimary" label="UUID主键" border></el-checkbox>
-        <el-checkbox v-model="nativeValue.isNumberSequence" label="数字序列" border></el-checkbox>
-        <el-checkbox v-model="nativeValue.isAutoIncrement" label="自动生成" border></el-checkbox>
+        <el-checkbox v-model="nativeValue.isUUIDPrimary" label="UUID主键" border
+                     @change="primaryStrategyChange('isNumberSequence', 'isAutoIncrement')"></el-checkbox>
+        <el-checkbox v-model="nativeValue.isNumberSequence" label="数字序列" border
+                     @change="primaryStrategyChange('isUUIDPrimary', 'isAutoIncrement')"></el-checkbox>
+        <el-checkbox v-model="nativeValue.isAutoIncrement" label="自动生成" border
+                     @change="primaryStrategyChange('isUUIDPrimary', 'isNumberSequence')"></el-checkbox>
       </div>
     </el-form-item>
     <el-form-item label="数据结构">
@@ -46,7 +49,6 @@
 
 <script>
 import utils from '../../../utils'
-import {isString} from "../../../utils/common";
 
 export default {
   name: "MiniFormObject",
@@ -80,6 +82,14 @@ export default {
   },
   mounted() {
   },
+  methods: {
+    primaryStrategyChange() {
+      for (let i = 0; i < arguments.length; i++) {
+        let key = arguments[i]
+        this.config[key] = false
+      }
+    }
+  },
   computed: {
     nativeValue() {
       let value = utils.convertToObject(this.value)
@@ -91,16 +101,6 @@ export default {
       });
       // this.$emit("input", this.config);  // immediate emit
       return this.config;
-    },
-    hasTranslation() {
-      let {value = {}} = this
-      if (isString(value)) {
-        value = utils.convertToObject(value)
-      }
-      const {scopeSql = '', scopeOptions = []} = value
-      return (utils.isString(scopeSql) && scopeSql.trim() !== '')
-          || (utils.isArray(scopeOptions) && scopeOptions.length > 0)
-
     }
   }
 }

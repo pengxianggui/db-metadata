@@ -24,10 +24,9 @@ export default function Val(conver, reverse) {
                 },
                 set: function (val) {
                     if (utils.isFunction(reverse)) {
-                        const newVal = reverse.call(this, val);
-                        this.$emit('input', newVal);
-                        return;
+                        val = reverse.call(this, val);
                     }
+
                     if (val === '') val = null;
                     return this.$emit("input", val); // 通过 input 事件更新 model
                 }

@@ -82,16 +82,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         log.debug("analysis metafield config");
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
         if (metaFieldConfigParse.hasTranslation()) {
-            if (metaFieldConfigParse.isRange()) {
-                builder.options(OptionsKit.transKeyValue(metaFieldConfigParse.range()));
-            }
-            if (metaFieldConfigParse.isSql()) {
-                log.info("metaFieldConfigParse sql:{}", metaFieldConfigParse.scopeSql());
-                builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
-            }
-            if (metaFieldConfigParse.isOptions()) {
-                builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
-            }
+            builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             builder.componentName(ComponentType.DROPDOWN);
         }
     };
@@ -101,7 +92,10 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         if (metaFieldConfigParse.isMultiple()) {
             builder.multiple(true);
         }
-        builder.defaultVal(metaFieldConfigParse.defaultVal());
+        
+        if (containerType == ComponentType.FORMVIEW) {
+            builder.defaultVal(metaFieldConfigParse.defaultVal());
+        }
     };
 
     private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {

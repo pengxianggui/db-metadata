@@ -69,12 +69,21 @@ export function validParamsCompiled(params) {
 
     for (let key in params) {
         let value = params[key]
-        let valueNotCompile = (isObject(value) ? validParamsCompiled(value) : validUrlCompiled(value))
-        if (valueNotCompile) {
-            return true
+        let valueCompiled
+        if (isObject(value)) {
+            valueCompiled = validParamsCompiled(value)
+        } else if (isString(value)) {
+            valueCompiled = validUrlCompiled(value)
+        } else {
+            valueCompiled = true
+        }
+
+        if (!valueCompiled) {
+            return false
         }
     }
-    return false
+
+    return true
 }
 
 /**
