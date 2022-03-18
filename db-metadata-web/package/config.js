@@ -1,5 +1,6 @@
 import {restUrl} from "./constant/url";
 import utils from "./utils";
+import {clearUser} from "./access";
 
 export const elementVersion = '2.12.0';
 
@@ -38,6 +39,10 @@ export const configApp = function (Vue, opts = {}) {
             reject('[MetaElement] axios必须配置')
         } else {
             axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
+                const {enableLogin} = data
+                if (enableLogin === false) {
+                    clearUser() // 防止后端禁用登录后，前端仍有缓存
+                }
                 utils.reverseMerge(appConfig, data)
                 resolve()
             }).catch(err => {

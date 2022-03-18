@@ -132,7 +132,6 @@ export default {
     },
 
     handleClick(tab, event) {
-      // todo
     },
     handleTabEdit(targetName, action) {
       const {slaves} = FEATURE_TYPE.MasterSlaveGrid.value
@@ -155,6 +154,11 @@ export default {
     validate(callback) {
       return this.$refs['featureConfigForm'].validate(valid => callback(valid))
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs['featureConfigForm'].clearValidate()
+    })
   },
   beforeDestroy() {
     this.$refs['featureConfigForm'].clearValidate()

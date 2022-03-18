@@ -16,7 +16,7 @@ export default {
     "component_name": "SearchView",
     "name": "SearchView",
     "label": "搜索面板",
-    "expand": false,
+    "expand": true,
     "label-position": "top-center",
     "conf": {
         "label-width": '80px',

@@ -48,7 +48,7 @@ export default {
 
   .stage {
     flex: 1;
-    overflow: hidden auto;
+    overflow: auto;
     position: relative;
     background-color: #f7f7f7;
   }

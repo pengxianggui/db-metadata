@@ -69,8 +69,7 @@ import {TreeAndTableConfig} from "../meta/feature/ext/featureType";
 export default {
   name: "TreeTableTmpl",
   meta: {
-    isTemplate: true,
-    isPage: false,
+    type: 'template',
     cn: '树-表模板',
     icon: 'tree_table',
     buildIn: true // 内建：DbMeta提供

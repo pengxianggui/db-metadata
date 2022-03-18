@@ -46,8 +46,7 @@ import {isEmpty} from "../utils/common";
 export default {
   name: "TableFormTmpl",
   meta: {
-    isTemplate: true,
-    isPage: false,
+    type: 'template',
     cn: '左表-右表单模板',
     icon: 'table_form',
     buildIn: true // 内建：DbMeta提供

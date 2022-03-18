@@ -66,7 +66,7 @@ public class GlobalMetaException {
         try {
             Record se = new Record();
             se.set("id", SnowFlake.me().nextId());
-            se.set("exp_title", Arrays.toString(msg));
+            se.set("exp_title", e.getMessage());
             se.set("exp_chain", allMsgString);
             se.set("exp_msg", Arrays.toString(msg));
             se.set("ext_url", request.getRequestURI());

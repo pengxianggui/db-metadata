@@ -1,4 +1,32 @@
-import {isEmpty, convertToObject, isObject} from "../utils/common";
+import {isEmpty, convertToObject, isObject, isArray} from "../utils/common";
+import Pages from '../page/index'
+import Tmpls from '../template/index'
+import MetaLayout from "../layout/MetaLayout";
+import {merge} from "../utils/merge";
+
+/**
+ * 需要被PageSelector选中的组件都装配到这里
+ * @type {*[]}
+ */
+export const components = [
+    ...Pages,
+    ...Tmpls,
+    MetaLayout
+]
+
+/**
+ * 将动态路由需要转换的组件过滤缓存下来
+ * @param Vue
+ * @param opts
+ */
+const retainComponents = function (Vue, opts) {
+    const {components: componentsInOpts = []} = opts
+    if (!isArray(componentsInOpts)) {
+        throw new Error('[meta-element] components配置项必须是组件数组！')
+    }
+
+    components.push(...componentsInOpts)
+}
 
 const getComponent404 = function (Vue, componentName) {
     return Vue.component("Component404", {
@@ -16,16 +44,13 @@ const getComponent404 = function (Vue, componentName) {
  * @param componentName
  */
 export const exchangeComponent = function (Vue, componentName) {
-    // if (componentName === Layout.name) { // 布局组件支持直接传入, 避免约束应用必须全局注册(但是仍然需要路由数据中布局组件名和Layout.name保持一致)
-    //     return Layout
-    // }
-
-    let components = Vue.options.components
-    for (let componentsKey in components) {
-        if (componentsKey === componentName) {
-            return components[componentsKey]
+    for (let i = 0; i < components.length; i++) {
+        let c = components[i]
+        if (c.name === componentName) {
+            return c
         }
     }
+
     return getComponent404(Vue, componentName)
 }
 
@@ -35,7 +60,32 @@ const exchangeRouteKey = function (route, r, k) {
     let value;
     switch (k) {
         case 'meta':
-            value = convertToObject(r[k])
+            const {
+                cn: title = 'No-Name',
+                disable = false,
+                order = 0,
+                need_permit,
+                noCache = false,
+                permit_by = 'auth',
+                auths = [],
+                roles = [],
+                auth_match_mode = 'any',
+                role_match_mode = 'any'
+            } = r // 解构出来的这些字段是直接存储在表字段里的，而不是meta, 为了更好的表单交互体验。但是路由数据扩展的字段，需要挪到meta里，所以这里提取下，放到meta字段中
+
+            value = {
+                title: title,
+                disable: disable,
+                order: order,
+                need_permit: need_permit,
+                noCache: noCache,
+                permit_by: permit_by,
+                auths: auths,
+                roles: roles,
+                auth_match_mode: auth_match_mode,
+                role_match_mode: role_match_mode
+            }
+            merge(value, convertToObject(r[k]))
             break;
         default:
             value = r[k]
@@ -52,12 +102,13 @@ const storageRouteId = function (route, id) {
     }
 }
 
-const exchangeAll = function (Vue, routes) {
+const exchange = function (Vue, routes) {
     return routes.map(r => {
         if (r.hasOwnProperty("children")) {
-            r.children = exchangeAll(Vue, r.children)
+            r.children = exchange(Vue, r.children)
         }
         const route = {}
+
         Object.keys(r).filter(k => includes.indexOf(k) > -1).filter(k => {
             return !isEmpty(r[k]) && r[k] !== 'null' // TODO 路由数据中redirect值可能非返回"null"字符串
         }).forEach(k => {
@@ -78,6 +129,9 @@ const exchangeAll = function (Vue, routes) {
  * @param routes
  * @returns {*}
  */
-export default function (Vue, routes) {
-    return exchangeAll(Vue, routes)
+export default function (Vue, opts, routes) {
+    retainComponents(Vue, opts)
+
+    routes = exchange(Vue, routes)
+    return routes // 返回完整装配后的路由
 }

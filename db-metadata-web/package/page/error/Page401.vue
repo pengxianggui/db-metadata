@@ -35,8 +35,7 @@ import {clearUser} from "../../access";
 export default {
   name: 'Page401',
   meta: {
-    isTemplate: false,
-    isPage: true,
+    type: 'page',
     cn: '401页面',
     buildIn: true // 内建：DbMeta提供
   },

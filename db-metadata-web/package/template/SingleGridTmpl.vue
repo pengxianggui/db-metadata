@@ -58,8 +58,7 @@ import {SingleGridConfig} from "../meta/feature/ext/featureType";
 export default {
   name: "SingleGridTmpl",
   meta: {
-    isTemplate: true,
-    isPage: false,
+    type: 'template',
     cn: '单表模板',
     icon: 'table',
     buildIn: true // 内建：DbMeta提供

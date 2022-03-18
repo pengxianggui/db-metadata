@@ -4,10 +4,15 @@
 
 <script>
 export default {
-  name: "AuthList",
+  name: "ExceptionList",
+  meta: {
+    type: 'page',
+    cn: '异常列表',
+    buildIn: true
+  },
   data() {
     return {
-      fc: 'meta_auth'
+      fc: 'meta_exception',
     }
   }
 }

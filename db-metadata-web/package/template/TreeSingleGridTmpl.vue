@@ -51,8 +51,7 @@ import {TreeSingleGridConfig} from "../meta/feature/ext/featureType";
 export default {
   name: "TreeSingleGridTmpl",
   meta: {
-    isTemplate: true,
-    isPage: false,
+    type: 'template',
     cn: '树表模板',
     icon: 'treetable',
     buildIn: true // 内建：DbMeta提供

@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     handleCheckAllChange(val, type) {
-      debugger
       let typeModel = this.authMap[type];
       if (val) {
         Object.keys(typeModel).forEach(group => {

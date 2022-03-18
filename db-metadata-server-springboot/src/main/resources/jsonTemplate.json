@@ -2,11 +2,10 @@
   "TableView": {
     "component_name": "TableView",
     "name": "TableView",
-    "label": "表格模板",
+    "label": "表格",
     "data_url": "/table/list?objectCode={objectCode}",
     "delete_url": "/table/delete?objectCode={objectCode}&{primaryKvExp}",
     "multi_select": true,
-    "editable": false,
     "conf": {
       "default-sort": {
         "prop": "id",
@@ -15,40 +14,93 @@
       "highlight-current-row": true,
       "size": "medium"
     },
-    "columns": [],
-    "pagination": {
-      "page-size": 10,
-      "page-sizes": [
-        5,
-        10,
-        20,
-        50,
-        100,
-        200
-      ],
-      "current-page": 1,
-      "layout": "total, sizes, prev, pager, next, jumper"
-    },
     "operation-bar": {
-      "size": "mini",
-      "type": "primary"
-    },
-    "buttons": {
-      "edit": {
-        "label": "编辑",
+      "show": true,
+      "group": true,
+      "style": {},
+      "conf": {
+        "size": "mini"
+      },
+      "add": {
+        "show": true,
+        "text": "新增",
         "conf": {
-          "icon": "el-icon-edit",
           "size": "mini",
-          "type": "primary"
+          "type": "primary",
+          "icon": "el-icon-document-add"
         }
       },
       "delete": {
-        "label": "删除",
+        "show": true,
+        "text": "删除",
         "conf": {
           "size": "mini",
-          "icon": "el-icon-delete",
-          "type": "danger"
+          "type": "danger",
+          "icon": "el-icon-delete-solid"
         }
+      }
+    },
+    "columns": [],
+    "operation-column": {
+      "show": true,
+      "conf": {
+        "fixed": "right",
+        "width": "180"
+      },
+      "style": {},
+      "buttons": {
+        "show": true,
+        "group": true,
+        "style": {},
+        "conf": {
+          "size": "mini"
+        },
+        "view": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "success",
+            "icon": "el-icon-view"
+          }
+        },
+        "edit": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "primary",
+            "icon": "el-icon-edit"
+          }
+        },
+        "delete": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "danger",
+            "icon": "el-icon-delete"
+          }
+        }
+      }
+    },
+    "pagination": {
+      "show": true,
+      "style": {
+      },
+      "conf": {
+        "background": true,
+        "page-size": 10,
+        "page-sizes": [
+          5,
+          10,
+          20,
+          50,
+          100,
+          200
+        ],
+        "current-page": 1,
+        "layout": "total, sizes, prev, pager, next, jumper"
       }
     }
   },

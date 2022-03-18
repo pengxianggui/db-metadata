@@ -134,6 +134,11 @@ export default {
       return this.$refs['featureConfigForm'].validate(valid => callback(valid))
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs['featureConfigForm'].clearValidate()
+    })
+  },
   beforeDestroy() {
     this.$refs['featureConfigForm'].clearValidate()
   }

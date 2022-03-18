@@ -4,10 +4,15 @@
 
 <script>
 export default {
-  name: "ExceptionList",
+  name: "AuthList",
+  meta: {
+    type: 'page',
+    cn: '权限列表',
+    buildIn: true // 内建：DbMeta提供
+  },
   data() {
     return {
-      fc: 'meta_exception',
+      fc: 'meta_auth'
     }
   }
 }

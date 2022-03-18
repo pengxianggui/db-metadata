@@ -121,7 +121,8 @@ public class MetaBootstrap {
                 // 根据固定文件(defaultObject.json)更新元对象/元字段配置
                 InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
                         .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
-                        .updateInstanceConfig();            // 最后，依据defaultInstance.json覆盖已入库的UI实例配置
+                        .updateInstanceConfig()            // 依据defaultInstance.json覆盖已入库的UI实例配置
+                        .updateFeatureConfig(); // 更新内置功能
             }
         }
     }

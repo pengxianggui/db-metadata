@@ -10,8 +10,6 @@ import com.github.md.web.config.json.JsonParameterToMapHandler;
 import com.github.md.web.config.register.DynamicRegisterControllerHandlerMapping;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,9 +19,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -41,31 +36,6 @@ import java.util.List;
  */
 @Configuration
 public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistrations {
-
-    /**
-     * 配置 body 可重复读取过滤器. 避免 {@link JsonParameterToMapHandler} 拦截器处理完request后，业务控制器无法再次读取的问题。 TODO 2.2 FIXME 全局过滤导致一些问题：常见的 Stream closed，图片上传失败！
-     *
-     * @return {@link FilterRegistrationBean}
-     */
-    @Bean
-    public FilterRegistrationBean<Filter> bodyRepeatFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setName("bodyRepeatFilter");
-        filterRegistrationBean.setFilter((servletRequest, servletResponse, filterChain) -> {
-            ServletRequest requestWrapper = null;
-            if (servletRequest instanceof HttpServletRequest) {
-                requestWrapper = new JsonParameterToMapHandler.WritableHttpServletRequestWrapper((HttpServletRequest) servletRequest);
-            }
-            if (requestWrapper == null) {
-                filterChain.doFilter(servletRequest, servletResponse);
-            } else {
-                filterChain.doFilter(requestWrapper, servletResponse);
-            }
-        });
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setOrder(-1);
-        return filterRegistrationBean;
-    }
 
     /**
      * 可定制MetaServer系统URl的前缀

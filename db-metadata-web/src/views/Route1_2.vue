@@ -5,9 +5,9 @@
 
     <p>完全自由的页面! 完全自由的菜单！完全自由的路由！</p>
     <p>虽然完全自由，但是你却可以享受dbmeta带来的快捷，比如下面这个表格, 只需要一行代码: </p>
-    <code-box value='<single-grid-tmpl fc="meta_dict"></single-grid-tmpl>'></code-box>
+    <code-box value='<tree-single-grid-tmpl fc="meta_dict"></single-grid-tmpl>'></code-box>
 
-    <single-grid-tmpl fc="meta_dict"></single-grid-tmpl>
+    <tree-single-grid-tmpl fc="meta_dict"></tree-single-grid-tmpl>
 
     <p>也就是说，你可以借助dbmeta生成的内容随意往你自己编写的页面中按需嵌套进去，当然，你也可以不这么做。完全取决于你自己。</p>
 

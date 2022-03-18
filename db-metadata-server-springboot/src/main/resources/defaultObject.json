@@ -444,6 +444,11 @@
           "isSearch": false
         }
       },
+      "code": {
+        "config": {
+          "isSearch": true
+        }
+      },
       "comp_code": {
         "config": {
           "isSearch": true,
@@ -521,6 +526,11 @@
         "config": {
           "isSearch": false,
           "isListShow": true
+        }
+      },
+      "code": {
+        "config": {
+          "isSearch": true
         }
       },
       "config": {
@@ -629,7 +639,7 @@
         "config": {
           "isSearch": false,
           "isFile": false,
-          "scopeSql": "select id, path as cn from meta_router",
+          "scopeSql": "select id, name as cn from meta_router where layout = true",
           "addStatus": 100,
           "defaultVal": "",
           "isListShow": true,
@@ -669,6 +679,13 @@
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 10
+        }
+      },
+      "layout": {
+        "cn": "布局路由",
+        "config": {
+          "isSearch": false,
+          "isListShow": false
         }
       },
       "meta": {
@@ -713,16 +730,67 @@
           "viewStatus": 30
         }
       },
-      "cn": {
+      "name": {
+        "cn": "路由名",
         "config": {
           "isListShow": true,
           "isSearch": false
         }
       },
-      "name": {
+      "need_permit": {
+        "cn": "需要鉴权",
         "config": {
-          "isListShow": true,
-          "isSearch": false
+          "isListShow": false,
+          "isSearch": true,
+          "defaultVal": true,
+          "scopeDict": "yn"
+        }
+      },
+      "permit_by": {
+        "cn": "鉴权依据",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeDict": "authorizeBy",
+          "defaultVal": "auth"
+        }
+      },
+      "auths": {
+        "cn": "需要的权限",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'router'",
+          "isMultiple": true
+        }
+      },
+      "auth_match_mode": {
+        "cn": "权限匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeDict": "authorizeMatchMode"
+        }
+      },
+      "roles": {
+        "cn": "需要的角色",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_role",
+          "isMultiple": true
+        }
+      },
+      "role_match_mode": {
+        "cn": "角色匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeDict": "authorizeMatchMode"
         }
       },
       "remark": {
@@ -823,7 +891,8 @@
         "config": {
           "isListShow": false,
           "isSearch": true,
-          "defaultVal": true
+          "defaultVal": true,
+          "scopeDict": "yn"
         }
       },
       "permit_by": {
@@ -946,7 +1015,7 @@
       },
       "exp_title": {
         "config": {
-          "isListShow": false,
+          "isListShow": true,
           "isSearch": false
         }
       },
@@ -958,6 +1027,7 @@
       },
       "exp_msg": {
         "config": {
+          "isListShow": false,
           "isSearch": true
         }
       },
@@ -985,7 +1055,7 @@
       },
       "created_time": {
         "config": {
-          "isSearch": false
+          "isSearch": true
         }
       },
       "updated_by": {

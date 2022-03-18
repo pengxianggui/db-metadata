@@ -11,7 +11,7 @@
 
 <script>
 import Val from "../../mixins/value";
-import {assertArray} from "../../../utils/common";
+import {components} from "../../../route/exchange";
 
 export default {
   name: "PageSelector",
@@ -31,26 +31,29 @@ export default {
     }
   },
   created() {
-    let components = assertArray(Object.values(this.$getGlobalComponents()), []) // TODO 2.2 并不总是可以拿到! 改为注册meta-element时将组件传入
+    const types = {
+      page: '页面',
+      template: '模板',
+      layout: '布局'
+    }
+
     this.options = components.filter(c => {
-      const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
-      return isPage || isTemplate || isLayout
+      const {meta: {type = 'page'} = {}} = c
+      return Object.keys(types).indexOf(type) > -1
     }).map(c => {
       const {
-        extendOptions: {
-          meta: {cn, isTemplate = false, isLayout = false, isPage = false, buildIn, icon} = {},
-          name: value
-        }
+        meta: {cn, type = 'page', buildIn, icon} = {},
+        name: value = '无名'
       } = c
+
       return {
         key: cn,
         value: value,
-        isTemplate: isTemplate,
         buildIn: buildIn,
-        group: isTemplate ? '模板' : (isLayout ? '布局' : '页面'),
+        group: types[type],
         icon: icon
       }
-    });
+    })
   }
 }
 </script>

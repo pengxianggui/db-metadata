@@ -15,6 +15,7 @@ import conver from './conver'
 import reverse from "./reverse";
 import DefaultMeta from '../ui-conf'
 import utils from '@/../package/utils'
+import {modes} from '../ui-conf'
 
 export default {
   mixins: [Meta(DefaultMeta), Val(conver, reverse)],
@@ -25,7 +26,12 @@ export default {
   },
   props: {
     value: [Object, String, Array],
-    mode: String
+    mode: {
+      type: String,
+      validator: (val) => {
+        return modes.indexOf(val) > -1
+      }
+    }
   },
   computed: {
     innerMode() {

@@ -129,7 +129,7 @@
       },
       "instanceCodes": {
         "SearchView": "meta_dict.SearchView",
-        "TableView": "meta_dict.TableTreeView",
+        "TableTreeView": "meta_dict.TableTreeView",
         "FormView": "meta_dict.FormView"
       }
     }

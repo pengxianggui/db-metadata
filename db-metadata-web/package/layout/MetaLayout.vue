@@ -83,7 +83,7 @@ import MetaMain from "./MetaMain";
 export default {
   name: "MetaLayout",
   meta: {
-    isLayout: true,
+    type: 'layout',
     cn: 'Admin布局',
     icon: 'admin-layout',
     buildIn: true // 内建：DbMeta提供

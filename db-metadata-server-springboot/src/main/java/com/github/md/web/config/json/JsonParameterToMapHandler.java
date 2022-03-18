@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.ReadListener;
@@ -32,19 +33,32 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
+
+        HandlerMethod handlerMethod = ((HandlerMethod) handler);
+        if (!isBuildInHandler(handlerMethod)) { // 如果不是内建接口，则直接返回
+            return true;
+        }
+
         /*
          * 1. 根据请求头预判json
          * 2. 分解json,写入parameterMap
          */
-        WritableHttpServletRequestWrapper httpServletRequestWrapper = new WritableHttpServletRequestWrapper(request);
         if (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString().toLowerCase())
-                && !Objects.isNull(request.getContentType()) && request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
-            Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(request), new TypeReference<Map<String, String>>() {
+                && !Objects.isNull(request.getContentType())
+                && request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
+
+            WritableHttpServletRequestWrapper httpServletRequestWrapper = new WritableHttpServletRequestWrapper(request);
+            Map<String, String> jsonParams = JSON.parseObject(HttpKit.readData(httpServletRequestWrapper), new TypeReference<Map<String, String>>() {
 
             });
+
             if (!CollectionUtils.isEmpty(jsonParams)) {
                 httpServletRequestWrapper.init(jsonParams);
             }
+            RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequestWrapper));
         }
         /*
          * TODO 由于ControllerAdapter中使用RequestContextHolder 来获取的Request,利用此处的时机改写request;
@@ -58,9 +72,20 @@ public class JsonParameterToMapHandler implements HandlerInterceptor {
          *  这些地方有可能取到RequestFacade对象,而Facade包装的并没有被改写,要多处干预来达到目的;
          */
 
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequestWrapper));
         return true;
     }
+
+    /**
+     * 拦截
+     *
+     * @param handlerMethod
+     * @return
+     */
+    private boolean isBuildInHandler(HandlerMethod handlerMethod) {
+        String classAbsolutePath = handlerMethod.getMethod().getDeclaringClass().getName();
+        return classAbsolutePath.startsWith("com.github.md");
+    }
+
 
     public static class WritableHttpServletRequestWrapper extends HttpServletRequestWrapper {
         private final String body; // 实现body可重读

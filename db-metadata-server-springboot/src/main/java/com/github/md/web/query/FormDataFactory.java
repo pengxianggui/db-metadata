@@ -181,21 +181,30 @@ public class FormDataFactory {
 
     public static void buildUpdateFormData(IMetaObject metaObject, Record record) {
         for (IMetaField metaField : metaObject.fields()) {
-            // 确保回传给前端的文件字段 必须是有效的[]
-            if (metaField.configParser().isFile()) {
-                String filepath = record.getStr(metaField.fieldCode());
-                if (StrKit.isBlank(filepath)) {
-                    filepath = "[]";
+            try {
+                // 确保回传给前端的文件字段 必须是有效的[]
+                if (metaField.configParser().isFile()) {
+                    String filepath = record.getStr(metaField.fieldCode());
+                    if (StrKit.isBlank(filepath)) {
+                        filepath = "[]";
+                    }
+                    JSONArray value = new JSONArray();
+                    try {
+                        value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
+                    } catch (JSONException e) {
+                        log.error(e.getMessage());
+                    }
+                    record.set(metaField.fieldCode(), value);
+                    continue;
                 }
-                JSONArray value = new JSONArray();
-                try {
-                    value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
-                } catch (JSONException e) {
-                    log.error(e.getMessage());
-                }
-                record.set(metaField.fieldCode(), value);
-            }
 
+                if (metaField.dbType().isJson()) {
+                    record.set(metaField.fieldCode(), JSON.parse(record.get(metaField.fieldCode())));
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                continue;
+            }
         }
     }
 }

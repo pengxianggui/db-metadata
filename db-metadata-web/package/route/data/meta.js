@@ -7,10 +7,10 @@ import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
 import FormBuilder from "../../meta/form-builder";
 import MetaConfList from "../../meta/meta-conf";
-import DictList from "../../meta/dict";
-import ExceptionList from "../../meta/exception";
-import AuthList from "../../meta/rbac/AuthList";
-import ApiResourceList from "../../meta/rbac/ApiResourceList";
+import DictList from "../../page/dict/DictList";
+import ExceptionList from "../../page/ex/ExceptionList";
+import AuthList from "../../page/auth/AuthList";
+import ApiResourceList from "../../page/api-resource/ApiResourceList";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 
 const routes = [
@@ -113,46 +113,46 @@ const routes = [
         },
         component: MetaConfList
     }, {
-        path: '/meta/dict',
-        name: 'DictList',
-        meta: {
-            title: '字典',
-            icon: 'el-icon-collection',
-            noCache: false,
-            auths: ['route:meta:dict']
-        },
-        component: DictList
-    }, {
-        path: '/meta/exception',
-        name: 'ExceptionList',
-        meta: {
-            title: '异常',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:exception']
-        },
-        component: ExceptionList
-    }, {
-        path: '/meta/auth',
-        name: 'AuthList',
-        meta: {
-            title: '权限配置',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:auth']
-        },
-        component: AuthList
-    }, {
-        path: '/meta/api-resource',
-        name: 'ApiResourceList',
-        meta: {
-            title: '接口资源',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:api-resource']
-        },
-        component: ApiResourceList
-    }, {
+    //     path: '/meta/dict',
+    //     name: 'DictList',
+    //     meta: {
+    //         title: '字典',
+    //         icon: 'el-icon-collection',
+    //         noCache: false,
+    //         auths: ['route:meta:dict']
+    //     },
+    //     component: DictList
+    // }, {
+    //     path: '/meta/exception',
+    //     name: 'ExceptionList',
+    //     meta: {
+    //         title: '异常',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:exception']
+    //     },
+    //     component: ExceptionList
+    // }, {
+    //     path: '/meta/auth',
+    //     name: 'AuthList',
+    //     meta: {
+    //         title: '权限配置',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:auth']
+    //     },
+    //     component: AuthList
+    // }, {
+    //     path: '/meta/api-resource',
+    //     name: 'ApiResourceList',
+    //     meta: {
+    //         title: '接口资源',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:api-resource']
+    //     },
+    //     component: ApiResourceList
+    // }, {
         path: '/meta/instance-conf-edit',
         component: InstanceConfEditor,
         name: 'InstanceConfEditor',

@@ -11,13 +11,12 @@
 
 <script>
 import {restUrl} from "@/../package/constant/url";
-import {appConfig} from "../config";
-import {isEmpty} from "../utils/common";
+import {appConfig} from "../../config";
+import {isEmpty} from "../../utils/common";
 
 export default {
   name: "Login",
   meta: {
-    isPage: true,
     cn: '登录页面',
     buildIn: true // 内建：DbMeta提供
   },

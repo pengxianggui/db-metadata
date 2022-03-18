@@ -57,11 +57,6 @@ import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
 // meta 组件
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 
-// 内置业务组件
-import {UserList, RoleList} from '@/../package/meta/rbac'
-// 全局页面
-import GlobalPage from '@/../package/page'
-
 // 系统
 import './asserts/svg/index' // 内置svg注册
 import {restUrl, routeUrl} from './constant/url'
@@ -134,13 +129,7 @@ const components = [
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
-    TreeSingleGridTmpl,
-
-    // 内置业务组件
-    UserList,
-    RoleList,
-    // 全局页面
-    GlobalPage
+    TreeSingleGridTmpl
 ];
 
 const install = function (Vue, opts = {}) {

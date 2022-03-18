@@ -2,12 +2,16 @@
   <div class="page-container">
     <single-grid-tmpl :fc="fc">
       <template #inner-before-extend-btn="{scope}">
-        <el-button size="mini" icon="el-icon-setting" @click="toBindRole(scope)"></el-button>
+        <el-button size="mini" @click="toBindRole(scope)" class="el-icon-setting"></el-button>
+      </template>
+      <template #add-btn="{conf, add}">
+        <el-button v-bind="conf.conf" @click="add" v-if="addable">新增</el-button>
+        <span v-else></span>
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="800px"
-               :title="'为角色' + activeRow.name + '配置权限:'">
-      <auth-set ref="AuthSet" :role-id="activeRow.id" v-if="visible"></auth-set>
+               :title="'为用户' + activeRow.username + '设置角色:'">
+      <role-set ref="RoleSet" :user-id="activeRow.id" v-if="visible"></role-set>
       <template #footer>
         <el-button size="mini" @click="visible = false">取消</el-button>
         <el-button type="primary" size="mini" @click="doBind">保存</el-button>
@@ -17,22 +21,23 @@
 </template>
 
 <script>
-import AuthSet from "./ext/AuthSet";
+import RoleSet from "./ext/RoleSet";
+import {appConfig} from "../../config";
 
 export default {
-  name: "RoleList",
+  name: "UserList",
   meta: {
-    isTemplate: false,
-    isPage: true,
-    cn: '角色列表',
+    type: 'page',
+    cn: '用户列表',
     buildIn: true // 内建：DbMeta提供
   },
   components: {
-    AuthSet
+    RoleSet
   },
   data() {
     return {
-      fc: 'meta_role',
+      fc: 'meta_user',
+      addable: appConfig.addable,
       visible: false,
       activeRow: {}
     }
@@ -43,7 +48,7 @@ export default {
       this.visible = true
     },
     doBind() {
-      this.$refs['AuthSet'].doBind().then(() => {
+      this.$refs['RoleSet'].doBind().then(() => {
         this.visible = false;
       })
     }

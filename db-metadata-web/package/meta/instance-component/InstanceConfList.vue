@@ -9,11 +9,8 @@
         </auto-computed-button>
       </template>
 
-      <template #inner-before-extend-btn="{scope, conf}">
-        <el-tooltip content="配置" placement="left">
-          <el-button icon="el-icon-s-tools" v-bind="conf.conf"
-                     @click="handlerConf($event, scope.row, scope.$index)"></el-button>
-        </el-tooltip>
+      <template #edit-btn="{scope, conf}">
+        <el-button v-bind="conf" @click="handlerConf($event, scope.row, scope.$index)"></el-button>
       </template>
     </single-grid-tmpl>
   </div>
@@ -35,10 +32,17 @@ export default {
   methods: {
     handlerConf(ev, row, index) {
       if (ev) ev.stopPropagation();
-      let instanceCode = utils.convertToString(row['code']);
+
+      let fieldCode
+      const {code, dest_object} = row
+      let instanceCode = utils.convertToString(code);
+      if (dest_object.indexOf('.') > -1) {
+        fieldCode = dest_object.split('.')[1]
+      }
+
       const url = utils.compile(routeUrl.R_INSTANCE_CONF_EDIT, {
         instanceCode: instanceCode,
-        fieldCode: null
+        fieldCode: fieldCode
       });
       this.$router.push(url);
     }

@@ -49,7 +49,7 @@ function registerRouteData(Vue, opts) {
         routesInLayout.children.push(...metaRoute)
 
         // 组装动态路由
-        assembleDynamicRoute(Vue, axios).then((dynamicRoutes) => {
+        assembleDynamicRoute(Vue, axios, opts).then((dynamicRoutes) => {
             routes.push(...dynamicRoutes)
         }).catch(err => {
             console.error('动态路由装配发生错误: ' + err)

@@ -68,6 +68,11 @@ export default {
       this.$forceUpdate()
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs['featureConfigForm'].clearValidate()
+    })
+  },
   beforeDestroy() {
     this.$refs['featureConfigForm'].clearValidate()
   }

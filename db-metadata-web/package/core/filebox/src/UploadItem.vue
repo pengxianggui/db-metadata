@@ -3,6 +3,7 @@
         <el-upload
                 :limit="1"
                 v-bind="conf"
+                :headers="headers"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :on-success="handleOnSuccess"
@@ -23,6 +24,8 @@
     import utils from "../../../utils";
     import Meta from "../../mixins/meta";
     import Val from "../../mixins/value";
+    import {appConfig} from "../../../config";
+    import {getToken} from "../../../access";
 
     export default {
         name: "UploadItem",
@@ -47,10 +50,13 @@
             }
         },
         data() {
+          const header = {}
+          header[appConfig.tokenKey] = getToken()
             return {
                 fileList: [],
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+                headers: header
             };
         },
         methods: {

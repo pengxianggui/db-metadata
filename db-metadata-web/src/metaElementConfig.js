@@ -1,5 +1,6 @@
 import axios from "@/axios";
 import router, {menus} from "@/router";
+import Route1_2 from "@/views/Route1_2";
 
 export default {
     // 必要的配置
@@ -15,6 +16,7 @@ export default {
     //     enable: true
     // },
     // layout: MyLayout, // 布局组件(可选，空则默认。若为默认，则编程路由需要自行使用MetaElement中导出的MetaLayout)
+    components: [Route1_2], // 如果你的组件需要能够被动态路由配置时选中，那么需要传入此component中
     // restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置。参考【内置接口地址】
     // routeUrl: {}, // 用于覆盖内置的路由地址。参考【内置路由列表】
     // access: { // 访问权限配置

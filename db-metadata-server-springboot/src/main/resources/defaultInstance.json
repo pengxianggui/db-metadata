@@ -223,6 +223,9 @@
       "_fields": {
         "build_in": {
           "default_value": null
+        },
+        "need_permit": {
+          "default_value": null
         }
       }
     },
@@ -234,18 +237,44 @@
           "component_name": "PageSelector",
           "explain": "请选择一个组件, 用以承担此路由的页面(可选的组件列表均来自Vue全局注册的页面/模板组件。\n请开发人员在全局注册的页面组件中提供meta: {isPage: true}配置项，标识其为页面组件)"
         },
-        "meta": {
-          "default_value": {
-            "title": "tagName",
-            "disable": false,
-            "need_permit": true,
-            "permit_by": "auth",
-            "auths": [],
-            "roles": [],
-            "auth_match_mode": "any",
-            "role_match_mode": "any"
+        "layout": {
+          "component_name": "BoolBox",
+          "explain": "是否是布局路由",
+          "default_value": false
+        },
+        "disable": {
+          "component_name": "BoolBox",
+          "explain": "禁用路由, 不会装配到VueRouter上",
+          "default_value": false
+        },
+        "need_permit": {
+          "explain": "若取消勾选，则表示此资源无需保护(后面配置项无效)。优先级最高(0)",
+          "default_value": true
+        },
+        "permit_by": {
+          "explain": "鉴权判定依据(按角色判定还是按权限判定), 分别对应后续配置项"
+        },
+        "auth_match_mode": {
+          "explain": "当【需要的权限】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部权限才能访问; 任一匹配: 用户拥有其中一个权限即可访问"
+        },
+        "auths": {
+          "conf": {
+            "filterable": true
           },
-          "explain": "【配置项目如下】:\ntitle: tag快捷栏的显示名(如果不配置, 将显示no-name, 一般和对应的菜单名保持一致); \ndisable: 禁用(为true时,客户端不会装配此路由); \norder:排序(整数,装配越小优先级越高) \nneed_permit: 是否需要鉴权; \nnoCache: 布尔值, 默认是false,即会缓存, 前提是路由名和组件名一致时才会生效; \npermit_by: 依据什么鉴权(可选值:auth/role); \nauths: 需要的权限编码列表(字符串数组); \nroles: 需要的角色编码列表(字符串数组); \nauth_match_mode: 权限匹配模式(当permit_by为auth时有效,可选值:any/all); \nrole_match_mode: 角色匹配模式(当permit_by为role时有效,可选值:any/all);"
+          "explain": "选择访问此接口资源需要的权限(可多选)。当【鉴权依据】为【按权限判定】时才有效)"
+        },
+        "role_match_mode": {
+          "explain": "当【需要的角色】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部角色才能访问; 任一匹配: 用户拥有其中一个角色即可访问"
+        },
+        "roles": {
+          "conf": {
+            "filterable": true
+          },
+          "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
+        },
+        "meta": {
+          "default_value": {},
+          "explain": "【配置项目如下】:\nnoCache: 布尔值, 默认是false,即会缓存, 前提是路由名和组件名一致时才会生效;"
         },
         "name": {
           "explain": "路由名只有和关联的组件名一致时, 【配置信息】中默认的noCache:false 才会生效"

@@ -22,8 +22,7 @@
 export default {
   name: 'Page404',
   meta: {
-    isTemplate: false,
-    isPage: true,
+    type: 'page',
     cn: '404页面',
     buildIn: true // 内建：DbMeta提供
   },

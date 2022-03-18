@@ -7,13 +7,12 @@
 </template>
 
 <script>
-import {access} from "../../package/access";
+import {access} from "../../access";
 
 export default {
   name: "Dashboard",
   meta: {
-    isTemplate: false,
-    isPage: true,
+    type: 'page',
     cn: '首页',
     icon: 'dashboard',
     buildIn: true // 内建：DbMeta提供

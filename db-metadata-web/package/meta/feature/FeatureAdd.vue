@@ -7,7 +7,7 @@
     </el-steps>
 
     <!-- 功能配置 -->
-    <form-view ref="featureForm" ic="meta_feature.FormView" form-type="add" :model="feature"
+    <form-view ref="featureForm" ic="meta_feature.FormView" form-type="add" :model="feature" style="width: 100%"
                @submit="submitFeatureForm('featureForm')" @cancel="cancel" v-show="step == 0">
       <template #form-item-type="{column, model}">
         <el-form-item :label="column.label">
@@ -37,7 +37,7 @@
     </form-view>
 
     <!-- 路由配置 -->
-    <form-view ic="meta_router.FormView" form-type="add" @ok="next" @cancel="cancel" v-show="step == 1">
+    <form-view ic="meta_router.FormView" form-type="add" @ok="next" @cancel="cancel" v-show="step == 1" style="width: 100%">
       <template #action="{submit, cancel}">
         <el-form-item>
           <el-button type="primary" @click="submit">提交</el-button>
@@ -49,7 +49,7 @@
     </form-view>
 
     <!-- 菜单配置 -->
-    <form-view ic="meta_menu.FormView" form-type="add" @ok="finish" @cancel="cancel" v-show="step == 2">
+    <form-view ic="meta_menu.FormView" form-type="add" @ok="finish" @cancel="cancel" v-show="step == 2" style="width: 100%">
       <template #action="{submit, cancel}">
         <el-form-item>
           <el-button @click="submit">提交</el-button>
@@ -149,9 +149,9 @@ export default {
       if (this.step++ > 2) this.step = 0;
     },
     finish() {
-      this.$emit('ok', this.params);
+      this.$emit('ok');
     },
-    cancel: function (event) {
+    cancel(event) {
       this.$emit('cancel', event);
     }
   }

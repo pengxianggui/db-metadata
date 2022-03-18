@@ -174,8 +174,7 @@ import {isEmpty} from "../utils/common";
 export default {
   name: "MasterSlaveTableTmpl",
   meta: {
-    isTemplate: true,
-    isPage: false,
+    type: 'template',
     cn: '主子表模板',
     icon: 'master_slaves',
     buildIn: true // 内建：DbMeta提供

@@ -76,11 +76,6 @@ export default {
     return {
     }
   },
-  created() {
-    if (this.item.title == '可编程菜单1') {
-      debugger
-    }
-  },
   methods: {
     editMenuMeta(item) {
       if (!this.$isRoot()) {

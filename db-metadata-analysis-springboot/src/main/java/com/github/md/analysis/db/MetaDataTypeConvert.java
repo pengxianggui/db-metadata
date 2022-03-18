@@ -97,9 +97,9 @@ public class MetaDataTypeConvert {
         //            clazz = Boolean.class;
         //        }
         o = cast(String.valueOf(o), clazz);
-        if (String.valueOf(o).equalsIgnoreCase("null")) {
-            return null;
-        }
+//        if (String.valueOf(o).equalsIgnoreCase("null")) {
+//            return null;
+//        }
         return o;
     }
 
@@ -144,11 +144,11 @@ public class MetaDataTypeConvert {
         }
 
         try {
-            if (c == Timestamp.class) {
+            if (c == Timestamp.class && !s.equalsIgnoreCase("CURRENT_TIMESTAMP")) { // 特殊的默认值
                 long time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s).getTime();
                 return new Timestamp(time);
             }
-            if (c == DateTime.class) {
+            if (c == DateTime.class && !s.equalsIgnoreCase("CURRENT_TIMESTAMP")) {
                 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s);
             }
             if (c == Date.class) {

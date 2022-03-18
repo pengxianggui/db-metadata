@@ -4,6 +4,7 @@ import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.MetaDataTypeConvert;
 import com.github.md.analysis.kit.Kv;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class MetaConfigFactory {
 
     @Getter
@@ -39,7 +41,7 @@ public class MetaConfigFactory {
     public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
-        config.set("defaultVal", MetaDataTypeConvert.convert(metaField, defaultValue));
+        config.set("defaultVal", convert(metaField, defaultValue));
         config.set("objectCode", metaField.objectCode());
         config.set("fieldCode", metaField.fieldCode());
         config.set("isMultiple", false);
@@ -63,6 +65,15 @@ public class MetaConfigFactory {
             }
         }
         return new MetaFieldConfigParse(config);
+    }
+
+    private static Object convert(IMetaField metaField, String defaultValue) {
+        try {
+            return MetaDataTypeConvert.convert(metaField, defaultValue);
+        } catch (Exception e) {
+            log.error("默认值转换失败, 将采用null作为默认值, objectCode: {}, fieldCode: {}, err: {}", metaField.objectCode(), metaField.fieldCode(), e.getMessage());
+            return null;
+        }
     }
 
     public static void addFieldExtension(ConfigExtension extension) {
