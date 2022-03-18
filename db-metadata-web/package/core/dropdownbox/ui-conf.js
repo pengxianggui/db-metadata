@@ -17,16 +17,12 @@ export default {
     "component_name": "DropDownBox",
     "name": "DropDownBox",
     "label": "下拉框",
-    'sort': 0,
-    "inline": true,
     "group": false,
     "data_url": "/dict?name=",
-    "options": [
-        //     {"key":"value"}
-    ],
+    "options": [],
     "conf": {
         "clearable": true,
         "multiple": false
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

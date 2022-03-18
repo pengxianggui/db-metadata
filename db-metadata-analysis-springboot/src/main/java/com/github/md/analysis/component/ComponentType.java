@@ -15,7 +15,6 @@ import lombok.Getter;
  */
 public enum ComponentType {
     BOOLBOX("boolbox", "布尔框", "BoolBox"),
-    BUTTON("button", "按钮组件", "Button"),
     CHECKBOX("checkbox", "复选框", "CheckBox"),
     DATEBOX("datebox", "日期框", "DateBox"),
     DATETIMEBOX("datetimebox", "日期时间框", "DateTimeBox"),

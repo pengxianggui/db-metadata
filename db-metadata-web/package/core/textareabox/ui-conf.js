@@ -14,10 +14,8 @@ export default {
     "component_name": "TextAreaBox",
     "name": "TextAreaBox",
     "label": "文本域",
-    'sort': 0,
-    "inline": false,
     "conf": {
         "placeholder": "请输入文本内容.."
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

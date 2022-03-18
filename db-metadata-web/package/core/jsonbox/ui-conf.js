@@ -20,12 +20,10 @@ export default {
     "component_name": "JsonBox",
     "name": "JsonBox",
     "label": "Json框",
-    'sort': 0,
-    "inline": false,
     "default_value": {},
     "conf": {
         "mode": "code",
         "modes": modes
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

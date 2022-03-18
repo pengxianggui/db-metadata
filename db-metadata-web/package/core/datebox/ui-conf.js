@@ -14,11 +14,9 @@ export default {
     "component_name": "DateBox",
     "name": "DateBox",
     "label": "日期框",
-    'sort': 0,
-    "inline": true,
     "conf": {
         "value-format": "yyyy-MM-dd",
         "clearable": true
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

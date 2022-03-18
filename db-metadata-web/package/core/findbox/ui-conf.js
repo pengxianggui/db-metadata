@@ -16,41 +16,17 @@ export const panelMeta = {
     "name": "FindPanel",
     "label": "查找面板",
     "data_url": "/table/list?objectCode={objectCode}",
-    'sort': 0,
-    "columns": [// {
-        //     component_name: 'TextBox',
-        //     name: 'id',
-        //     label: 'ID',
-        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // },
-        // {
-        //     component_name: 'TextBox',
-        //     name: 'name',
-        //     label: '姓名',
-        //     searchable: true,    // 搜索面板支持该字段搜索, 若为true, 则会在FindPanel的搜索面板中生成搜索控件
-        //     conf: {
-        //         width: '',
-        //         sortable: true,  // 表格中可否根据此列进行排序
-        //         //...
-        //     }
-        // }
-    ]
+    "columns": []
 };
 
 export default {
     "component_name": "FindBox",
     "name": "FindBox",
     "label": "查找框",
-    "data_url": "/find/meta?objectCode={objectCode}&fieldCode={fieldCode}", // 这个data_url响应的是FindPanel的meta, 也可以是TableList的meta
-    "inline": false,
+    "data_url": "/find/meta?objectCode={objectCode}&fieldCode={fieldCode}",
     "conf": {
         "clearable": true,
         "placeholder": "戳我展开搜索面板.."
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

@@ -14,11 +14,9 @@ export default {
     "component_name": "PassBox",
     "name": "PassBox",
     "label": "密码框",
-    'sort': 0,
-    "inline": false,
     "conf": {
         "placeholder": "请输入密码..",
         "clearable": true
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

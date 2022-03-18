@@ -8,14 +8,12 @@ export const ConfDesc = `
 `;
 
 export default {
-    'component_name': 'RegionBox',
-    'name': 'RegionBox',
-    'label': '地区/省市框',
-    'sort': 0,
-    'inline': true,
-    'conf': {
-        'type': 'default',
-        'level': 2
+    "component_name": "RegionBox",
+    "name": "RegionBox",
+    "label": "地区/省市框",
+    "conf": {
+        "type": "default",
+        "level": 2
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

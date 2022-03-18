@@ -111,7 +111,6 @@
     "data_url": "/table/tree?objectCode={objectCode}",
     "delete_url": "/table/tree/delete?objectCode={objectCode}&ids={ids}",
     "multi_select": false,
-    "editable": false,
     "conf": {
       "row-key": "id",
       "tree-props": {
@@ -129,26 +128,88 @@
       "highlight-current-row": true,
       "size": "medium"
     },
-    "columns": [],
     "operation-bar": {
-      "size": "mini",
-      "type": "primary"
-    },
-    "buttons": {
-      "edit": {
-        "label": "编辑",
+      "show": true,
+      "group": true,
+      "style": {},
+      "conf": {
+        "size": "mini"
+      },
+      "add": {
+        "show": true,
+        "text": "新增",
         "conf": {
-          "icon": "el-icon-edit",
           "size": "mini",
-          "type": "primary"
+          "type": "primary",
+          "icon": "el-icon-document-add"
         }
       },
       "delete": {
-        "label": "删除",
+        "show": true,
+        "text": "删除",
         "conf": {
           "size": "mini",
-          "icon": "el-icon-delete",
-          "type": "danger"
+          "type": "danger",
+          "icon": "el-icon-delete-solid"
+        }
+      },
+      "expand": {
+        "show": true,
+        "text": "展开",
+        "conf": {
+          "size": "mini",
+          "type": "info",
+          "icon": "el-icon-caret-bottom"
+        }
+      },
+      "shrink": {
+        "show": true,
+        "text": "收缩",
+        "conf": {
+          "size": "mini",
+          "type": "info",
+          "icon": "el-icon-caret-right"
+        }
+      }
+    },
+    "columns": [],
+    "operation-column": {
+      "show": true,
+      "conf": {
+        "fixed": "right",
+        "width": "180"
+      },
+      "style": {},
+      "buttons": {
+        "show": true,
+        "group": true,
+        "style": {},
+        "view": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "success",
+            "icon": "el-icon-view"
+          }
+        },
+        "edit": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "primary",
+            "icon": "el-icon-edit"
+          }
+        },
+        "delete": {
+          "show": true,
+          "text": "",
+          "conf": {
+            "size": "mini",
+            "type": "danger",
+            "icon": "el-icon-delete"
+          }
         }
       }
     }
@@ -158,109 +219,114 @@
     "name": "BoolBox",
     "label": "布尔框",
     "default_value": false,
-    "inline": true,
-    "conf": {}
+    "conf": {},
+    "explain": ""
   },
   "TextBox": {
     "component_name": "TextBox",
     "name": "TextBox",
     "label": "文本框",
-    "inline": false,
     "conf": {
       "placeholder": "请输入内容..",
       "clearable": true
-    }
+    },
+    "explain": ""
   },
   "PassBox": {
     "component_name": "PassBox",
     "name": "PassBox",
     "label": "密码框",
-    "inline": false,
     "conf": {
       "placeholder": "请输入密码..",
       "clearable": true
-    }
+    },
+    "explain": ""
   },
   "TextAreaBox": {
     "component_name": "TextAreaBox",
     "name": "TextAreaBox",
     "label": "文本域",
-    "inline": false,
     "conf": {
       "placeholder": "请输入文本内容.."
-    }
+    },
+    "explain": ""
   },
   "DropDownBox": {
     "component_name": "DropDownBox",
     "name": "DropDownBox",
     "label": "下拉框",
-    "inline": true,
     "group": false,
+    "data_url": "/dict?name=",
+    "options": [],
     "conf": {
       "clearable": true,
       "multiple": false
-    }
+    },
+    "explain": ""
   },
   "TimeBox": {
     "component_name": "TimeBox",
     "name": "TimeBox",
     "label": "时间框",
-    "inline": true,
     "conf": {
       "value-format": "HH:mm:ss",
       "clearable": true
-    }
+    },
+    "explain": ""
   },
   "DateBox": {
     "component_name": "DateBox",
     "name": "DateBox",
     "label": "日期框",
-    "inline": true,
     "conf": {
       "value-format": "yyyy-MM-dd",
       "clearable": true
-    }
+    },
+    "explain": ""
   },
   "DateTimeBox": {
     "component_name": "DateTimeBox",
     "name": "DateTimeBox",
     "label": "日期时间框",
-    "inline": true,
     "conf": {
       "value-format": "yyyy-MM-dd HH:mm:ss",
       "clearable": true
-    }
+    },
+    "explain": ""
   },
   "NumBox": {
     "component_name": "NumBox",
     "name": "NumBox",
     "label": "数字框",
-    "inline": true,
+    "default_value": null,
     "conf": {
       "controls": true,
-      "controls-position": "right",
       "placeholder": "请输入数值.."
-    }
+    },
+    "explain": ""
   },
   "RadioBox": {
     "component_name": "RadioBox",
     "name": "RadioBox",
     "label": "单选框",
-    "inline": true,
-    "conf": {}
+    "data_url": "/dict?name=",
+    "options": [],
+    "conf": {},
+    "explain": ""
   },
   "CheckBox": {
     "component_name": "CheckBox",
     "name": "CheckBox",
     "label": "多选框",
-    "inline": true,
-    "conf": {}
+    "data_url": "/dict?name=",
+    "options": [],
+    "conf": {},
+    "explain": ""
   },
   "JsonBox": {
     "component_name": "JsonBox",
     "name": "JsonBox",
     "label": "Json框",
-    "inline": false,
     "default_value": {},
     "conf": {
       "mode": "code",
@@ -271,56 +337,66 @@
         "view",
         "form"
       ]
-    }
+    },
+    "explain": ""
   },
   "RegionBox": {
     "component_name": "RegionBox",
     "name": "RegionBox",
     "label": "地区/省市框",
-    "inline": true,
     "conf": {
       "type": "default",
       "level": 2
-    }
+    },
+    "explain": ""
   },
   "ImgBox": {
     "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
-    "inline": false,
+    "seats": [
+      ""
+    ],
     "conf": {
       "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
       "drag": false,
       "list-type": "picture-card",
       "auto-upload": true,
+      "show-file-list": true,
       "limit": 1,
       "multiple": false
-    }
+    },
+    "explain": ""
   },
   "FileBox": {
     "component_name": "FileBox",
     "name": "FileBox",
     "label": "文件上传框",
-    "inline": false,
+    "seats": [
+      ""
+    ],
     "conf": {
       "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
+      "drag": false,
       "tip": "上传文件限制不超过2M",
       "auto-upload": true,
+      "show-file-list": true,
       "limit": 1,
       "multiple": false
-    }
+    },
+    "explain": ""
   },
   "MiniFormBox": {
     "component_name": "MiniFormBox",
     "name": "MiniFormBox",
     "label": "迷你表单框",
-    "inline": false,
     "conf": {
       "label-width": "80px",
       "size": "mini",
       "disabled": false,
       "inline": false
-    }
+    },
+    "explain": ""
   },
   "DialogBox": {
     "component_name": "DialogBox",
@@ -341,18 +417,24 @@
     "component_name": "SearchView",
     "name": "SearchView",
     "label": "搜索面板",
-    "expand": false,
+    "expand": true,
     "label-position": "top-center",
     "conf": {
       "label-width": "80px",
       "size": "mini"
     },
-    "columns": []
+    "columns": [],
+    "directly_trigger": [],
+    "explain": ""
   },
   "FormView": {
     "component_name": "FormView",
     "name": "FormView",
     "label": "表单模板",
+    "style": {
+      "width": "60%"
+    },
+    "form_type": "ADD",
     "conf": {
       "label-width": "100px",
       "size": "medium",
@@ -362,16 +444,20 @@
     },
     "columns": [],
     "layout": [],
-    "btns": {
+    "buttons": {
+      "show": true,
       "submit": {
+        "show": true,
         "label": "提交",
         "conf": {
           "type": "primary"
         }
       },
       "cancel": {
+        "show": true,
         "label": "取消",
-        "conf": {}
+        "conf": {
+        }
       }
     }
   },
@@ -379,11 +465,12 @@
     "component_name": "FindBox",
     "name": "FindBox",
     "label": "查找框",
-    "data_url": "/meta/fields?objectCode={objectCode}",
+    "data_url": "/find/meta?objectCode={objectCode}&fieldCode={fieldCode}",
     "conf": {
       "clearable": true,
       "placeholder": "戳我展开搜索面板.."
-    }
+    },
+    "explain": ""
   },
   "FindPanel": {
     "component_name": "FindPanel",
@@ -392,26 +479,18 @@
     "data_url": "/table/list?objectCode={objectCode}",
     "columns": []
   },
-  "SqlBox": {
-    "component_name": "SqlBox",
-    "name": "SqlBox",
-    "label": "SQL输入框",
-    "check": true,
-    "check_url": "/check/sql?sql={sql}",
-    "theme": "default",
-    "lineNumbers": true,
-    "mode": "text/x-mysql",
-    "conf": {}
-  },
   "TreeView": {
     "component_name": "TreeView",
-    "name": "TreeView",
+    "name": "Tree",
     "label": "树型列表",
+    "data_url": "/tree/list/{objectCode}",
+    "editable": false,
     "conf": {
       "node-key": "id",
       "highlight-current": true,
       "default-expand-all": false,
       "check-on-click-node": false,
+      "expand-on-click-node": false,
       "show-checkbox": false,
       "default-expanded-keys": [],
       "default-checked-keys": [],
@@ -424,21 +503,32 @@
         "children": "children"
       }
     },
-    "behavior": {
-      "allowDrag": "function (node) { return true }",
-      "allowDrop": "function (draddingNode, dropNode, type) { return true }",
-      "filterNodeMethod": "function (value, data, node) {if (!value) return true;return data.label.indexOf(value) !== -1;}",
-      "renderContent": "function (h, {node, data, store}) {}"
-    }
-  },
-  "RegionBox": {
-    "component_name": "RegionBox",
-    "name": "RegionBox",
-    "label": "地区/省市框",
-    "inline": true,
-    "conf": {
-      "type": "default",
-      "level": "2"
+    "operation-bar": {
+      "show": true,
+      "group": true,
+      "style": {},
+      "conf": {
+        "size": "mini",
+        "type": "primary"
+      },
+      "add": {
+        "show": true,
+        "text": "新增",
+        "conf": {
+          "size": "mini",
+          "type": "primary",
+          "icon": "el-icon-document-add"
+        }
+      },
+      "delete": {
+        "show": true,
+        "text": "删除",
+        "conf": {
+          "size": "mini",
+          "type": "danger",
+          "icon": "el-icon-delete-solid"
+        }
+      }
     }
   },
   "RichTextBox": {
@@ -447,11 +537,13 @@
     "label": "富文本",
     "conf": {
       "images_upload_url": "/file/upload/richText"
-    }
+    },
+    "explain": ""
   },
   "IconBox": {
     "component_name": "IconBox",
     "name": "IconBox",
-    "label": "图标框"
+    "label": "图标框",
+    "explain": ""
   }
 }

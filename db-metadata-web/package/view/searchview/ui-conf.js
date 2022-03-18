@@ -20,7 +20,7 @@ export default {
     "label-position": "top-center",
     "conf": {
         "label-width": '80px',
-        "size": 'mini', // medium|small|mini
+        "size": "mini"
     },
     "columns": [],
     "directly_trigger": [], // 直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action

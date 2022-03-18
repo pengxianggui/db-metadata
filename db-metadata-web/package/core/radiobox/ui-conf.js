@@ -16,12 +16,8 @@ export default {
     "component_name": "RadioBox",
     "name": "RadioBox",
     "label": "单选框",
-    'sort': 0,
-    "inline": true,
     "data_url": "/dict?name=",
-    "options": [
-        //     {"key":"value"}
-    ],
+    "options": [],
     "conf": {},
     "explain": "" // 字段解释
 }

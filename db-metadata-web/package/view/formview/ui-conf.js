@@ -35,38 +35,31 @@ export default {
     "label": "表单模板",
     // "action": "/form/doAdd/{objectCode}", // form action (url), pxg_todo 屏蔽, FormBuilder实例配置时,会导致此属性和值配入库中, 但是此值需要区分三种表单环境
     "style": { // 表单上的样式
-        "width": "60%", // 宽度
+        "width": "60%"
     },
-    "form_type": formTypes.add, // 默认新增
+    "form_type": formTypes.add,
     "conf": {
-        "label-width": '100px',
-        "size": 'medium', // medium|small|mini
+        "label-width": "100px",
+        "size": "medium",
         "disabled": false,
         "inline": false,
-        "rules": {
-            // eg:
-            // "id": [{required: true, message: "必填字段", trigger: "blur"}],
-            // ...
-        },
-        // ...
+        "rules": {}
     },
     "columns": [],
-    "layout": [], // 布局, 记录栅格嵌套信息
+    "layout": [],
     "buttons": {
         "show": true,
         "submit": {
             "show": true,
             "label": "提交",
             "conf": {
-                // ... support conf of el-button
                 "type": "primary"
             }
         },
         "cancel": {
             "show": true,
-            "label": '取消',
+            "label": "取消",
             "conf": {
-                // ... support conf of el-button
             }
         }
     }
