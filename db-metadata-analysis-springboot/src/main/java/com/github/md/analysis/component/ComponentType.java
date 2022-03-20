@@ -48,6 +48,7 @@ public enum ComponentType {
     @Getter(AccessLevel.PUBLIC)
     String cn;
 
+    @Getter
     boolean isView;
 
     ComponentType(String name, String cn, String code) {

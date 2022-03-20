@@ -15,6 +15,8 @@ Vue.use(MetaElement, metaElementConfig);
 Vue.config.productionTip = false;
 Vue.prototype.$NODE_ENV = process.env.NODE_ENV;
 
+debugger
+
 new Vue({
     router,
     render: h => h(App)

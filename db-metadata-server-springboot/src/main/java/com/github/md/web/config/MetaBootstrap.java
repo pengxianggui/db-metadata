@@ -34,7 +34,14 @@ public class MetaBootstrap {
 
     MetaBootstrap(MetaProperties metaProperties) {
         this.metaProperties = metaProperties;
+        preCheck();
         startInit();
+    }
+
+    private void preCheck() {
+        if (!metaProperties.isDevMode() && !metaProperties.getServer().isEnableCertification()) {
+            throw new IllegalArgumentException("非开发模式, 不允许禁用认证。请开启认证(md.server.enable-certification设为true)，或启用开发模式(md.dev-mode:true)");
+        }
     }
 
     private void startInit() {
@@ -81,7 +88,8 @@ public class MetaBootstrap {
             if (metaProperties.getServer().getComponent().isReplaceFromJsonFile()) {
                 Components.me().init();
                 Components.me().addAutoInitComponents(ComponentType.SEARCHVIEW).addAutoInitComponents(ComponentType.TABLEVIEW)
-                        .addAutoInitComponents(ComponentType.TABLETREEVIEW).addAutoInitComponents(ComponentType.FORMVIEW);
+                        .addAutoInitComponents(ComponentType.TABLETREEVIEW).addAutoInitComponents(ComponentType.FORMVIEW)
+                        .addAutoInitComponents(ComponentType.TREEVIEW);
             }
         }
     }

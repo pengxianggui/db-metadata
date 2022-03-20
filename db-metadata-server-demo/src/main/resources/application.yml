@@ -29,8 +29,8 @@ md:
       password: 888888
 
   server:
+    enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。
     login: # 认证配置
-      enable: true # 是否启用内置认证
       cookie-key: DB-Metadata # 登录后自动存放到cookie中的token的key
       token-key: X-TOKEN # 登录后存放在header里的token的 key
       login-key: username # 登录表单账号的key
@@ -47,7 +47,6 @@ md:
         logout-path: /user/logout # 内置登出接口
         info-path: /user/info # 内置用户信息接口
     auth: # 鉴权配置
-      enable: true # 是否启用内置鉴权
       includes: # 需要鉴权的接口
         - /**
       excludes: # 无需鉴权的接口url

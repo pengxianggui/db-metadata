@@ -33,11 +33,11 @@ export default {
     const {scope} = this
     this.$merge(meta, DefaultDropDownBoxMeta)
     if (scope === 'view') {
-      meta.options = ['FormView', 'TableView', 'SearchView', 'TableTreeView'] // TODO 动态获取
+      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: true})
     } else if (scope === 'field') {
-      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {scope: scope})
+      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: false})
     } else {
-      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST)
+      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: null})
     }
 
     return {

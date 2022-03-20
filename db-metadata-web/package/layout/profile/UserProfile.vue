@@ -13,7 +13,7 @@
             <svg-icon value="reset"></svg-icon>
             <span>系统重置</span>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="logout" v-if="enableLogin">
+          <el-dropdown-item @click.native="logout" v-if="enableCertification">
             <svg-icon value="logout"></svg-icon>
             <span>登出</span>
           </el-dropdown-item>
@@ -71,8 +71,8 @@ export default {
         return 'monster' + randomInt(1, 2)
       }
     },
-    enableLogin() {
-      return appConfig.enableLogin
+    enableCertification() {
+      return appConfig.enableCertification
     }
   }
 }

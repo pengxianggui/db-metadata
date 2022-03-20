@@ -91,8 +91,8 @@ export function hasAuth(needAuths, mode = 'any') {
  * @param route
  */
 export function hasAnyRole(needRoles) {
-    const {enableAuth} = appConfig
-    if (!enableAuth) {
+    const {enableCertification} = appConfig
+    if (!enableCertification) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
     if (isRoot()) { // 若为ROOT用户
@@ -116,8 +116,8 @@ export function hasAnyRole(needRoles) {
  * @param route
  */
 export function hasAnyAuth(needAuths) {
-    const {enableAuth} = appConfig
-    if (!enableAuth) {
+    const {enableCertification} = appConfig
+    if (!enableCertification) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
     if (isRoot()) { // 若为ROOT用户
@@ -142,8 +142,8 @@ export function hasAnyAuth(needAuths) {
  * @param route
  */
 export function hasAllRole(needRoles) {
-    const {enableAuth} = appConfig
-    if (!enableAuth) {
+    const {enableCertification} = appConfig
+    if (!enableCertification) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
     if (isRoot()) { // 若为ROOT用户
@@ -168,8 +168,8 @@ export function hasAllRole(needRoles) {
  * @param route
  */
 export function hasAllAuth(needAuths) {
-    const {enableAuth} = appConfig
-    if (!enableAuth) {
+    const {enableCertification} = appConfig
+    if (!enableCertification) {
         return true; // 若未开启权限控制, 则一律视为有权限
     }
     if (isRoot()) { // 若为ROOT用户

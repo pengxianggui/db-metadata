@@ -32,8 +32,8 @@ function dealRoutes(routes) {
 
 // 路由数据注册
 function registerRouteData(Vue, opts) {
+    // return new Promise((resolve, reject) => {
     const {axios, router, layout: Layout = MetaLayout} = opts
-
     const routes = [] // 最终的路由数据
     const routesInLayout = {
         path: '/',
@@ -61,8 +61,11 @@ function registerRouteData(Vue, opts) {
             // 不会有，这导致了TagView中初始化的一些问题。因此这里的解决办法参考一哥们的: https://www.cnblogs.com/blueroses/p/7767285.html
             // 还存在一些问题，可能重复固定tag
             // router.options.routes = finalRoutes
+            // resolve()
+            // debugger
         })
     })
+    // })
 }
 
 /**
@@ -114,21 +117,23 @@ function registerInterceptor(Vue, opts) {
         router.beforeEach(async (to, from, next) => {
             // 检测用户信息并设置; Promise完成后鉴权, 防止用户信息还没有拿到就鉴权, 肯定无权限了
             detect(Vue).finally(() => {
-                permit(to, next)
+                // 启用认证, 此判断只能放到这里，如果放到registerInterceptor, 会导致appConfig异步请求和路由钩子执行时机的问题，导致编程路由刷新不会触发此钩子
+                if (appConfig.enableCertification) {
+                    permit(to, next)
+                } else { // 未启用，直接放行
+                    clearUser()
+                    if (to.path === routeUrl.R_LOGIN) {
+                        next('/')
+                    } else {
+                        next()
+                    }
+                }
             })
         })
     }
 }
 
-function registerRouter(Vue, ops) {
-    registerRouteData(Vue, ops); // 注册路由数据
-
-    // TODO appConfig.enableLogin 和enableAuth 应该分别对待
-    if (appConfig.enableLogin && appConfig.enableAuth) {
-        registerInterceptor(Vue, ops) // 注册路由守卫
-    }
-}
-
 export default {
-    registerRouter
+    registerRouteData,
+    registerInterceptor
 }

@@ -22,15 +22,15 @@ public class AuthMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (metaProperties.getServer().getLogin().isEnable()) {
+        if (metaProperties.getServer().isEnableCertification()) {
             registry.addInterceptor(AuthenticationManager.me().getUserIntercept())
                     .addPathPatterns(metaProperties.getServer().getLogin().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getLogin().getExcludes());
-        }
-        if (metaProperties.getServer().getAuth().isEnable()) {
+
             registry.addInterceptor(AuthenticationManager.me().getAuthIntercept())
                     .addPathPatterns(metaProperties.getServer().getAuth().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getAuth().getExcludes());
+
         }
     }
 }

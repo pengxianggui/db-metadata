@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;">
-    <svg-icon value="el-icon-setting" @click.native="visible = true" style="cursor: pointer"></svg-icon>
+    <svg-icon value="theme" @click.native="visible = true" style="cursor: pointer; font-size: 25px;"></svg-icon>
 
     <el-drawer title="主题设置" :visible.sync="visible" direction="rtl" size="30%" :show-close="false">
       <template #title>

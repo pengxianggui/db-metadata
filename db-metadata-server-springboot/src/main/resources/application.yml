@@ -32,15 +32,14 @@ md:
     reset-pass: dbmeta # 重置口令, 默认dbmeta
     # ROOT账号配置。username, 和password是必须的属性，也可以添加其他属性。如果md.server.login.login-key不是username, 比如是phone， 则必须为root配置phone属性。以便确认登录的是ROOT用户。注意: ROOT用户的id固定是"0"
     # 若登录时 md.server.login.login-key的值和此配置下同名key的值相等，那么优先进行ROOT认证, 密码匹配则视为ROOT, 返回此ROOT对象; 密码若不匹配再去用户数据库进行匹配。
-
     root:
       id: 0 # id为0是判断是用户是ROOT的唯一依据
       username: ROOT
       password: 888888
 
   server:
+    enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。
     login: # 认证配置
-      enable: false # 是否启用内置认证
       token-key: X-TOKEN # 登录后存放在header里的token的 key
       login-key: username # 登录表单账号的key
       pwd-key: password # 登录表单密码的key
@@ -56,7 +55,6 @@ md:
         logout-path: /user/logout # 内置登出接口
         info-path: /user/info # 内置用户信息接口
     auth: # 鉴权配置
-      enable: false # 是否启用内置鉴权
       includes: # 需要鉴权的接口， 以下无需配置，默认就会有
 #        - /**
       excludes: # 无需鉴权的接口url, 以下无需配置，默认就会有

@@ -104,9 +104,18 @@ public class ComponentController extends ControllerAdapter {
 
     @GetMapping("list")
     public Ret list() {
+        Boolean view = parameterHelper().getBoolean("view");
         List<Record> components = componentService().loadComponents();
         List<Kv> results = Lists.newArrayList();
-        components.forEach(r -> {
+
+        components.stream().filter(c -> {
+            String code = c.getStr("code");
+            if (view == null) {
+                return true;
+            } else {
+                return view == ComponentType.V(code).isView();
+            }
+        }).forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
         });
         return Ret.ok("data", results);

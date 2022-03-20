@@ -1,6 +1,7 @@
 import {restUrl} from "./constant/url";
 import utils from "./utils";
 import {clearUser} from "./access";
+import {printErr} from "./utils/common";
 
 export const elementVersion = '2.12.0';
 
@@ -23,8 +24,7 @@ export const appConfig = {
     logo: null,
     registerable: true,
     addable: true,
-    enableLogin: true,
-    enableAuth: true,
+    enableCertification: true,
     devMode: false,
     tokenKey: 'X-TOKEN',
     showGreeting: true,
@@ -33,21 +33,18 @@ export const appConfig = {
 }
 
 export const configApp = function (Vue, opts = {}) {
-    return new Promise((resolve, reject) => {
-        const {axios} = opts
-        if (!axios) {
-            reject('[MetaElement] axios必须配置')
-        } else {
-            axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
-                const {enableLogin} = data
-                if (enableLogin === false) {
-                    clearUser() // 防止后端禁用登录后，前端仍有缓存
-                }
-                utils.reverseMerge(appConfig, data)
-                resolve()
-            }).catch(err => {
-                reject(err)
-            })
-        }
-    })
+    const {axios} = opts
+    if (!axios) {
+        printErr('axios必须配置')
+    } else {
+        axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
+            const {enableLogin} = data
+            if (enableLogin === false) {
+                clearUser() // 防止后端禁用登录后，前端仍有缓存
+            }
+            utils.reverseMerge(appConfig, data)
+        }).catch(err => {
+            printErr(err)
+        })
+    }
 }
