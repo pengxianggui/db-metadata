@@ -4,6 +4,7 @@
       <template #0>
         <tree-view :ref="config.tree.config.objectCode"
                    :ic="config.tree.instanceCodes.TreeView"
+                   @open-form-view="openTreeFormView"
                    @active-change="handleActiveChange"
                    @chose-change="handleChoseChange"></tree-view>
       </template>
@@ -123,7 +124,7 @@ export default {
     },
     handleChoseChange(rows) {
       // pxg_todo 多选树节点时, table的默认行为(待定)
-      const {tree: {config: {objectCode}}} = this
+      const {config: {tree: {config: {objectCode}}}} = this
       this.$emit('tree-chose-change', {
         rows: rows,
         objectCode: objectCode,
@@ -181,6 +182,25 @@ export default {
           title: getNameOfFormTypes(form_type)
         }).then(value => {
           this.refreshTableData()
+        }).catch(() => {
+          utils.printInfo('您取消了表单')
+        })
+      })
+    },
+    openTreeFormView({url, params = {}}) {
+      const {config: {tree: {instanceCodes}}} = this
+      this.$merge(params, {
+        instanceCode: instanceCodes.TreeView
+      })
+
+      const finalUrl = this.$compile(url, params)
+      this.$axios.get(finalUrl).then(resp => {
+        const {data: meta = {}} = resp
+        const {form_type} = meta
+        this.$dialog(meta, null, {
+          title: getNameOfFormTypes(form_type)
+        }).then(value => {
+          this.refreshTreeData()
         }).catch(() => {
           utils.printInfo('您取消了表单')
         })

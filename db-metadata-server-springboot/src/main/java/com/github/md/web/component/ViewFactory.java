@@ -8,6 +8,7 @@ import com.github.md.web.ServiceManager;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.component.render.MetaViewRender;
 import com.github.md.web.component.render.TreeInTableViewRender;
+import com.github.md.web.component.render.TreeViewRender;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,7 +76,7 @@ public class ViewFactory {
 
     public static TreeView treeView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
         TreeView treeView = new TreeView(metaObject.code() + ComponentType.TREEVIEW.getCode(), metaObject.name());
-        ComponentRender<TreeView> componentRender = new MetaViewRender<>(metaObject, treeView, instanceFlatConfig);
+        ComponentRender<TreeView> componentRender = new TreeViewRender(metaObject, treeView, instanceFlatConfig);
         treeView.setRender(componentRender);
         return treeView;
     }

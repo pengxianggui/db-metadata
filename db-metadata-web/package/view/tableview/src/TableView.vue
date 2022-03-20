@@ -9,14 +9,14 @@
         <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:choseData="choseData" v-bind:add="handleAdd">
           <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                      v-if="operationBarConf.add.show">
-            {{operationBarConf.add.text}}
+            {{ operationBarConf.add.text }}
           </el-button>
         </slot>
         <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
               v-bind:batchDelete="handleBatchDelete">
           <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
                      v-if="multiSelect && operationBarConf.delete.show">
-            {{operationBarConf.delete.text}}
+            {{ operationBarConf.delete.text }}
           </el-button>
         </slot>
         <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
@@ -79,15 +79,19 @@
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.view.show, scope.row)">{{buttonsConf.view.text}}</el-button>
+                             v-if="ifShow(buttonsConf.view.show, scope.row)">{{ buttonsConf.view.text }}
+                  </el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.edit.show, scope.row)">{{buttonsConf.edit.text}}</el-button>
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)">{{ buttonsConf.edit.text }}
+                  </el-button>
                 </slot>
-                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:del="handleDelete">
+                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope"
+                      v-bind:del="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.delete.show, scope.row)">{{buttonsConf.delete.text}}</el-button>
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)">{{ buttonsConf.delete.text }}
+                  </el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
               </component>
@@ -172,9 +176,8 @@ export default {
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);
 
-      this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
+      this.doEdit(primaryValue); // params ev,row,index is for convenient to override
     },
-    // TODO 表单容器应当与TableView解耦, 放到功能模板(如SingleGridTmpl)中, 按钮背后的逻辑应当在ui可配(路由跳转 或 弹窗。路由跳转的话就提供路由跳转地址, 弹窗的话就提供获取弹窗FormView的rest接口地址)
     doEdit(primaryValue) {
       const {primaryKey} = this
       let url, params;
@@ -182,14 +185,14 @@ export default {
       if (!utils.isEmpty(primaryValue)) { // 更新
         let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
         url = restUrl.RECORD_TO_UPDATE
-        params = { primaryKv: primaryKv }
+        params = {primaryKv: primaryKv}
       } else { // 新增
         url = restUrl.RECORD_TO_ADD
       }
       this.openFormView(url, params);
     },
     openFormView(url, params = {}) {
-      this.$emit('open-form-view', { url: url, params: params })
+      this.$emit('open-form-view', {url: url, params: params})
     },
     // 删除单行
     handleDelete(ev, row, index) {
@@ -391,8 +394,11 @@ export default {
       return operationBarConf;
     },
     tableConf() {
-      const {meta: {conf}, $attrs, $reverseMerge} = this
-      return $reverseMerge(conf, $attrs)
+      const {meta: {conf}, $attrs} = this
+      const tableConf = {}
+      this.$reverseMerge(tableConf, conf)
+      this.$reverseMerge(tableConf, $attrs)
+      return tableConf
     },
     operationColumnConf() {
       const {meta: {'operation-column': operationColumn}} = this

@@ -52,7 +52,7 @@ import path from 'path'
 import AppLink from './Link'
 import utils from '@/../package/utils'
 import {restUrl} from "../../../constant/url";
-import {isEmpty, isArray} from "../../../utils/common";
+import {isEmpty, isArray, assertEmpty} from "../../../utils/common";
 
 export default {
   name: "MenuItem",
@@ -92,13 +92,17 @@ export default {
       });
     },
     resolvePath(routePath = '') {
+      const basePath = assertEmpty(this.basePath, '');
+      if (isEmpty(routePath)) {
+        routePath = ''
+      }
       if (utils.isExternal(routePath)) {
         return routePath
       }
-      if (utils.isExternal(this.basePath)) {
-        return this.basePath
+      if (utils.isExternal(basePath)) {
+        return basePath
       }
-      return path.resolve(this.basePath, routePath)
+      return path.resolve(basePath, routePath)
     },
     resolveParams(pathParams) {
       let params = {};

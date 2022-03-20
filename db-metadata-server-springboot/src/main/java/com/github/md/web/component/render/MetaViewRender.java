@@ -90,6 +90,9 @@ public class MetaViewRender<C extends ViewContainer> implements ComponentRender<
                     component.getFields().add(formField);
                 }
             }
+            if (component.componentType() == ComponentType.TREEVIEW) {
+                
+            }
         }
         return component.getMeta();
     }

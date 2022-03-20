@@ -1,5 +1,5 @@
 import utils from '../utils'
-import {Checkbox, DatePicker, Form, Input, InputNumber, Radio, Select, Table, Upload,} from 'element-ui'
+import {Checkbox, DatePicker, Form, Input, InputNumber, Radio, Select, Table, Tree, Upload,} from 'element-ui'
 
 let mapping = {
     "BoolBox": {
@@ -62,6 +62,12 @@ let mapping = {
         "ele": Table,
         "includes": []
     },
+    // custom...
+    "JsonBox": {
+        "ele": null,
+        "includes": []
+    },
+
     "FormView": {
         "ele": Form,
         "includes": []
@@ -74,10 +80,8 @@ let mapping = {
         "ele": Table,
         "includes": []
     },
-
-    // custom...
-    "JsonBox": {
-        "ele": null,
+    "TreeView": {
+        "ele": Tree,
         "includes": []
     },
     "TableTreeView": {

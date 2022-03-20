@@ -1,6 +1,6 @@
 <template>
   <!--  <div class="view-container">-->
-  <el-form :ref="formRefName" v-bind="$reverseMerge(meta.conf, $attrs)"
+  <el-form :ref="formRefName" v-bind="formConf"
            :model="model" :rules="rules"
            class="form-view"
            :style="formStyle"
@@ -166,6 +166,13 @@ export default {
         newStyle.width = '100%'
       }
       return newStyle
+    },
+    formConf() {
+      const {meta: {conf}, $attrs} = this
+      const formConf = {}
+      this.$reverseMerge(formConf, conf)
+      this.$reverseMerge(formConf, $attrs)
+      return formConf
     },
     buttonsConf() {
       const {buttons: buttonsConf = {}} = this.meta

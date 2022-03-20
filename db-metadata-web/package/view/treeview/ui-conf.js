@@ -15,7 +15,7 @@ export default {
     "component_name": "TreeView",
     "name": "Tree",
     "label": "树型列表",
-    "data_url": "/tree/list/{objectCode}",
+    "data_url": "/table/tree/{objectCode}",
     "editable": false,
     "conf": {
         "node-key": "id",
@@ -45,16 +45,25 @@ export default {
         },
         "add": {
             "show": true,
-            "text": "新增",
+            "text": "",
             "conf": {
                 "size": "mini",
                 "type": "primary",
                 "icon": "el-icon-document-add",
             }
         },
+        "edit": {
+            "show": true,
+            "text": "",
+            "conf": {
+                "size": "mini",
+                "type": "primary",
+                "icon": "el-icon-edit"
+            }
+        },
         "delete": {
             "show": true,
-            "text": "删除",
+            "text": "",
             "conf": {
                 "size": "mini",
                 "type": "danger",

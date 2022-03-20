@@ -6,16 +6,23 @@
                  :style="operationBarConf.style" v-bind="operationBarConf.conf"
                  class="opr-bar"
                  v-if="operationBarConf.show">
-        <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+        <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
         <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
           <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                      v-if="operationBarConf.add.show && editable">
             {{ operationBarConf.add.text }}
           </el-button>
         </slot>
-        <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
-              v-bind:batchDelete="handleBatchDelete">
-          <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
+        <slot name="edit-btn" v-bind:choseData="choseData" v-bind:activeData="activeData"
+              v-bind:conf="operationBarConf" v-bind:edit="handleEdit">
+          <el-button @click="handleEdit" v-bind="operationBarConf.edit.conf"
+                     v-if="operationBarConf.edit.show && editable">
+            {{ operationBarConf.edit.text }}
+          </el-button>
+        </slot>
+        <slot name="batch-delete-btn" v-bind:choseData="choseData" v-bind:activeData="activeData"
+              v-bind:conf="operationBarConf.delete" v-bind:batchDelete="handleBatchDelete">
+          <el-button @click="handleDelete" v-bind="operationBarConf.delete.conf"
                      v-if="operationBarConf.delete.show && editable">
             {{ operationBarConf.delete.text }}
           </el-button>
@@ -40,7 +47,7 @@
             </el-dropdown-item>
             <el-dropdown-item command="handleCleanChose" v-if="multiSelect">
               <i class="el-icon-circle-close"></i>
-              <span>取消全选</span>
+              <span>取消勾选</span>
             </el-dropdown-item>
             <el-dropdown-item command="handleReverseChose" v-if="multiSelect">
               <i class="el-icon-success"></i>
@@ -54,7 +61,7 @@
 
     <!-- name作为ref不保险 -->
     <el-tree :ref="treeRefName" :data="innerData"
-             v-bind="$reverseMerge(meta.conf, $attrs)"
+             v-bind="treeConf"
              :props="props"
              @node-click="handleNodeClick"
              @node-contextmenu="$emit('node-contextmenu')"
@@ -84,7 +91,8 @@ import {defaultPrimaryKey} from '../../../config'
 import DefaultMeta from '../ui-conf'
 import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
 import {ViewMetaBuilder} from "../../ext/mixins";
-import {assertEmpty} from "../../../utils/common";
+import {assertEmpty, isEmpty} from "../../../utils/common";
+import {restUrl} from "../../../constant/url";
 
 export default {
   mixins: [ViewMetaBuilder(DefaultMeta)],
@@ -110,14 +118,17 @@ export default {
     },
     handleReverseChose() {
       this.getAllNodes().forEach(node => node.checked = !node.checked);
+      this.choseData = this.getCheckedNodes()
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleChoseAll() {
       this.treeRef.setCheckedNodes(this.innerData);
+      this.choseData = this.getCheckedNodes()
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleCleanChose() {
       this.treeRef.setCheckedKeys([]);
+      this.choseData = this.getCheckedNodes()
       this.$emit('chose-change', this.getCheckedNodes())
     },
     handleExpandAll() {
@@ -127,23 +138,117 @@ export default {
       this.getAllNodes().forEach(node => node.expanded = false);
     },
     handleAdd() {
-      let currentNode = this.treeRef.getCurrentNode();
-      if (currentNode) {
-        // pxg_todo 新增节点
-        this.$message.warning("开发中")
-      } else {
-        this.$message.warning('请先选择一个节点');
+      this.doEdit();
+    },
+    handleEdit() {
+      const {activeData, primaryKey} = this
+      if (isEmpty(activeData)) {
+        this.$message.warning('请先点选一个节点！')
+        return
+      }
+
+      const primaryValue = utils.extractValue(activeData, primaryKey)
+      this.doEdit(primaryValue) // params ev,row,index is for convenient to override
+    },
+    doEdit(primaryValue) {
+      const {primaryKey} = this
+      let url, params
+
+      if (!utils.isEmpty(primaryValue)) { // 更新
+        let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
+
+        url = restUrl.RECORD_TO_UPDATE
+        params = {primaryKv: primaryKv}
+      } else { // 新增
+        url = restUrl.RECORD_TO_ADD
+      }
+      this.openFormView(url, params);
+    },
+    // 删除单行
+    handleDelete() {
+      const {activeData, choseData} = this
+      if (!isEmpty(choseData)) {
+        this.handleBatchDelete(choseData)
+        return
+      }
+      if (!isEmpty(activeData)) {
+        this.handleBatchDelete([activeData])
+        return
+      }
+      this.$message.warning('请点击或勾选要删除的节点')
+      // const primaryValue = utils.extractValue(activeData, primaryKey);
+      // let primaryKvExp;
+      // if (primaryKey.length > 1 && primaryValue.length > 1) { // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2"
+      //   primaryKvExp = 'id=' + utils.spliceKvs(primaryKey, primaryValue);
+      // } else {    // 单主键, 目标: primaryKvExp="pk=v"
+      //   primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue[0], '=');
+      // }
+      // this.doDelete([activeData], primaryKvExp);
+    },
+    // 批量删除
+    handleBatchDelete(dataArr) {
+      if (dataArr.length <= 0) {
+        this.$message.warning('请至少选择一项!');
+        return
+      }
+
+      let {primaryKey} = this;
+      let primaryValue;
+      let primaryKvExp;
+
+      if (primaryKey.length > 1) {    // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4"
+        let primaryKvExpArr = [];
+        dataArr.forEach(row => {
+          primaryValue = utils.extractValue(row, primaryKey);
+          primaryKvExpArr.push('id=' + utils.spliceKvs(primaryKey, primaryValue));
+        });
+        primaryKvExp = primaryKvExpArr.join('&');
+        this.doDelete(dataArr, primaryKvExp);
+      } else {    // 单主键 目标: primaryKvExp="pk=v1&pk=v2&pk=v3"
+        primaryValue = dataArr.map(row => row[primaryKey[0]]);
+        let primaryKvExpArr = primaryValue.map(value => utils.spliceKv(primaryKey[0], value, "="));
+        primaryKvExp = primaryKvExpArr.join('&');
+
+        this.doDelete(dataArr, primaryKvExp);
       }
     },
-    handleBatchDelete() {
-      this.$message.warning("开发中")
+    /**
+     * default remove the assembly logic is based on primaryKey get on
+     * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
+     */
+    doDelete(data, primaryKvExp) {
+      const {meta: {delete_url, conf: { props: {label} = {}}}} = this;
+
+      const labels = data.map(d => d[label])
+      const deleteDataLabels = labels.join(',')
+      let title = `确定删除此条记录: ${deleteDataLabels}。若存在子节点,会一并删除`;
+
+      this.$confirm(title, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let url;
+        if (delete_url.indexOf("?") > 0) {
+          url = delete_url + '&' + primaryKvExp;
+        } else {
+          url = delete_url + '?' + primaryKvExp
+        }
+        this.$axios.delete(url).then(({msg = '删除成功'}) => {
+          this.$message.success(msg);
+          this.getData();
+        })
+      });
+    },
+    openFormView(url, params = {}) {
+      this.$emit('open-form-view', {url: url, params: params})
     },
     handleNodeClick(row, node, event) {
       const {primaryKey} = this;
 
       if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
         this.activeData = {};
-        this.treeRef.setCurrentNode()
+        // this.treeRef.setCurrentNode()
       } else {
         this.activeData = row;
       }
@@ -240,6 +345,13 @@ export default {
     treeRef() {
       return this.$refs[this.treeRefName]
     },
+    treeConf() {
+      const {meta: {conf}, $attrs} = this
+      const treeConf = {}
+      this.$reverseMerge(treeConf, conf)
+      this.$reverseMerge(treeConf, $attrs)
+      return treeConf
+    },
     multiSelect() {
       const {meta: {conf: {'show-checkbox': multiSelect} = {}} = {}} = this
       return multiSelect;
@@ -256,8 +368,9 @@ export default {
       return this.meta['operation-bar'];
     },
     primaryKey() {
-      const {objectPrimaryKey} = this.meta
-      return assertEmpty(objectPrimaryKey, defaultPrimaryKey)
+      const {meta: {objectPrimaryKey} = {}} = this;
+      let primaryKey = utils.assertUndefined(objectPrimaryKey, defaultPrimaryKey);
+      return primaryKey.split(',');
     }
   }
 }

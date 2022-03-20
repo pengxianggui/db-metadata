@@ -1,5 +1,7 @@
 package com.github.md.web.ui;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.github.md.web.component.ViewFactory;
@@ -52,6 +54,12 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
             case TABLETREEVIEW:
                 builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
                 builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
+                break;
+            case TREEVIEW:
+                builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
+                builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
+                JSONObject jsonObject = JSON.parseObject(metaObject.configParser().treeConfig());
+                builder.props(jsonObject.getString("label"), "children");
                 break;
         }
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());

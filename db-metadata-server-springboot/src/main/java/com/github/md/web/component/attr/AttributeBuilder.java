@@ -95,6 +95,10 @@ public class AttributeBuilder {
         TreeTableAttr highlightCurrentRow(boolean isHighlight);
     }
 
+    interface TreeAttr {
+        TreeAttr props(String label, String children);
+    }
+
     interface FileUploadAttr {
 
         FileUploadAttr autoUpload(boolean v);
@@ -109,7 +113,7 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr {
+    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr, TreeAttr {
 
         private Kv config = Kv.create();
 
@@ -293,6 +297,13 @@ public class AttributeBuilder {
         @Override
         public FileUploadAttr seats(String[] seats) {
             set("seats", seats);
+            return this;
+        }
+
+
+        @Override
+        public TreeAttr props(String label, String children) {
+            setConf("props", Kv.create().set("label", label).set("children", children));
             return this;
         }
     }
