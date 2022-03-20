@@ -169,7 +169,7 @@ public class FormDataFactory {
         }
 
         //此处设置updateby和time字段,系统相关的表都有ccuu四个字段
-        if (metaObject.isSystem()) {
+        if (metaObject.buildIn()) {
             if (isInsert) {
                 UtilKit.setCreateUser(formData);
             } else {

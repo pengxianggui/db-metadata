@@ -82,6 +82,7 @@ public class DBController extends ControllerAdapter {
                 .updateInstanceConfig()            //  依据defaultInstance.json覆盖已入库的UI实例配置
                 .updateFeatureConfig();             // 依据defaultFeature.json覆盖系统内置的功能配置
 
+        log.info("重置完毕！");
         return Ret.ok();
     }
 
@@ -103,7 +104,7 @@ public class DBController extends ControllerAdapter {
         sb.append("即将清除的数据表:").append(tables);
         log.warn("清空meta相关表{}", sb);
         tables.forEach(key -> {
-            Db.delete("delete from " + key);
+            Db.delete("delete from " + key + " where build_in=?", true);
         });
 
         return Ret.ok("msg", sb.toString());

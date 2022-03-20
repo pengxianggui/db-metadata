@@ -1,38 +1,39 @@
 <template>
-<!--  <div class="view-container">-->
-    <el-form :ref="formRefName" v-bind="$reverseMerge(meta.conf, $attrs)"
-             :model="model" :rules="rules"
-             :style="formStyle"
-             :disabled="isView">
-      <slot name="form-item" v-bind:columns="meta.columns">
+  <!--  <div class="view-container">-->
+  <el-form :ref="formRefName" v-bind="$reverseMerge(meta.conf, $attrs)"
+           :model="model" :rules="rules"
+           class="form-view"
+           :style="formStyle"
+           :disabled="isView">
+    <slot name="form-item" v-bind:columns="meta.columns">
 
-        <nest-form-item :columns="meta.columns" :model="model">
-          <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
-            <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
-          </template>
-        </nest-form-item>
+      <nest-form-item :columns="meta.columns" :model="model">
+        <template v-for="(v, k) in fieldSlots" v-slot:[k]="props">
+          <slot :name="k" v-bind:model="props.model" v-bind:column="props.column"></slot>
+        </template>
+      </nest-form-item>
 
-      </slot>
-      <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
-            v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
-        <el-form-item>
-          <el-button :id="meta.name + 'submit'" v-bind="buttonsConf.submit.conf"
-                     @click="onSubmit" v-text="buttonsConf.submit.label"
-                     v-if="buttonsConf.submit.show"></el-button>
-          <el-button :id="meta.name + 'cancel'" v-bind="buttonsConf.cancel.conf"
-                     @click="onCancel" v-text="buttonsConf.cancel.label"
-                     v-if="buttonsConf.cancel.show"></el-button>
-        </el-form-item>
-      </slot>
-      <!-- render-less behavior slot -->
-      <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
-      <!--            <cancel v-bind="{on, actions}"></cancel>-->
-      <!--        </slot>-->
-      <!--        <slot name="bhv-submit" :on="on" :actions="actions">-->
-      <!--            <submit v-bind="{on, actions}"></submit>-->
-      <!--        </slot>-->
-    </el-form>
-<!--  </div>-->
+    </slot>
+    <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf"
+          v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
+      <el-form-item class="form-item-button">
+        <el-button :id="meta.name + 'submit'" v-bind="buttonsConf.submit.conf"
+                   @click="onSubmit" v-text="buttonsConf.submit.label"
+                   v-if="buttonsConf.submit.show"></el-button>
+        <el-button :id="meta.name + 'cancel'" v-bind="buttonsConf.cancel.conf"
+                   @click="onCancel" v-text="buttonsConf.cancel.label"
+                   v-if="buttonsConf.cancel.show"></el-button>
+      </el-form-item>
+    </slot>
+    <!-- render-less behavior slot -->
+    <!--        <slot name="bhv-cancel" :on="on" :actions="actions">-->
+    <!--            <cancel v-bind="{on, actions}"></cancel>-->
+    <!--        </slot>-->
+    <!--        <slot name="bhv-submit" :on="on" :actions="actions">-->
+    <!--            <submit v-bind="{on, actions}"></submit>-->
+    <!--        </slot>-->
+  </el-form>
+  <!--  </div>-->
 </template>
 
 <script>
@@ -189,5 +190,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+// 保持el-form-item下的表单控件撑开到100%, 这样可以对齐，提升表单显示效果
+.form-view {
+  & :not(.form-item-button) {
+    /deep/ .el-form-item__content {
+      & > *:not(.el-button) {
+        width: 100%;
+      }
+    }
+  }
+
+  .form-item-button {
+    /deep/ .el-form-item__content {
+      margin-left: 0 !important;
+      text-align: center;
+    }
+  }
+}
 </style>

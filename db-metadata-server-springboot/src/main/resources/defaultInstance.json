@@ -3,6 +3,11 @@
     "SearchView": {
       "config": {
         "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        }
       }
     },
     "TableView": {},
@@ -35,7 +40,7 @@
         "expand": true,
         "directly_trigger": [
           "schema_name",
-          "is_sys"
+          "build_in"
         ]
       },
       "_fields": {
@@ -44,9 +49,8 @@
           "data_url": "/db/index",
           "filterable": true
         },
-        "is_sys": {
-          "component_name": "DropDownBox",
-          "default_value": false
+        "build_in": {
+          "default_value": null
         }
       }
     },
@@ -147,6 +151,9 @@
             "multiple": false,
             "filterable": true
           }
+        },
+        "build_in": {
+          "default_value": null
         }
       }
     },
@@ -188,6 +195,9 @@
           "default_value": "META_OBJECT",
           "name": "type",
           "label": "类型"
+        },
+        "build_in": {
+          "default_value": null
         }
       }
     },

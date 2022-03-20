@@ -68,6 +68,18 @@ public class ViewFactory {
         return tableTreeView;
     }
 
+    public static TreeView treeView(IMetaObject metaObject) {
+        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TREEVIEW.getCode(), metaObject.code());
+        return treeView(metaObject, instanceFlatConfig);
+    }
+
+    public static TreeView treeView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
+        TreeView treeView = new TreeView(metaObject.code() + ComponentType.TREEVIEW.getCode(), metaObject.name());
+        ComponentRender<TreeView> componentRender = new MetaViewRender<>(metaObject, treeView, instanceFlatConfig);
+        treeView.setRender(componentRender);
+        return treeView;
+    }
+
     public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType) {
         Component component = null;
         switch (componentType) {
@@ -82,6 +94,9 @@ public class ViewFactory {
                 break;
             case TABLETREEVIEW:
                 component = tableTreeView(metaObject);
+                break;
+            case TREEVIEW:
+                component = treeView(metaObject);
                 break;
             default:
         }
@@ -103,6 +118,9 @@ public class ViewFactory {
             case TABLETREEVIEW:
                 component = tableTreeView(metaObject, instanceFlatConfig);
                 break;
+            case TREEVIEW:
+                component = treeView(metaObject, instanceFlatConfig);
+                break;
             default:
         }
         return component;
@@ -112,7 +130,6 @@ public class ViewFactory {
      * 构建view容器
      *
      * @param typeString
-     *
      * @return
      */
     public static Component createEmptyViewComponent(String typeString) {
@@ -131,6 +148,9 @@ public class ViewFactory {
                 break;
             case TABLETREEVIEW:
                 component = new TableTreeView(type.getCn(), type.getCode());
+                break;
+            case TREEVIEW:
+                component = new TreeView(type.getCn(), type.getCode());
                 break;
             default:
                 throw new ComponentException("此操作不支持创建非容器控件 [%s]", typeString);

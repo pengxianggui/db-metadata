@@ -348,13 +348,17 @@ public class InitKit {
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
             IMetaObject metaObject = ServiceManager.metaService().importFromTable(mainDB, t.getTableName());
+            metaObject.dataMap().put("build_in", true);
             ServiceManager.metaService().saveMetaObject(metaObject, true);
 
             // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
                 // 初始化实例配置
-                ServiceManager.componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+                ServiceManager.componentService().newObjectConfig(
+                        metaObjectIViewAdapter.getComponent(),
+                        metaObject,
+                        metaObjectIViewAdapter.getInstanceConfig());
             }
         }
     }

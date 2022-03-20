@@ -80,5 +80,7 @@ public interface IMetaField {
     void config(String config);
 
     IMetaObject getParent();
+
+    boolean buildIn();
 }
 

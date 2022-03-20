@@ -1,11 +1,11 @@
 {
   "meta_field": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_field",
       "structure": "list",
       "isNumberSequence": true,
-      "bizInterceptor": "com.github.md.web.controller.itp.MetaFieldEditPointCut",
+      "bizInterceptor": "com.github.md.web.controller.itp.MetaFieldEditPointCut,com.github.md.web.controller.itp.BuildInDataPointCut",
       "orderBy": "order_num asc"
     },
     "_fields": {
@@ -75,6 +75,18 @@
           "isSearch": false
         }
       },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
       "created_by": {
         "config": {
           "isListShow": false,
@@ -120,13 +132,13 @@
     }
   },
   "meta_object": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "structure": "list",
       "objectCode": "meta_object",
       "isNumberSequence": true,
       "orderBy": "created_time desc,updated_time desc",
-      "bizInterceptor": "com.github.md.web.aop.MetaObjectAop"
+      "bizInterceptor": "com.github.md.web.aop.MetaObjectAop,com.github.md.web.controller.itp.BuildInDataPointCut"
     },
     "_fields": {
       "id": {
@@ -140,11 +152,16 @@
           "updateStatus": 30
         }
       },
-      "is_sys": {
+      "build_in": {
+        "cn": "系统内置",
         "config": {
+          "defaultVal": false,
+          "isListShow": true,
           "isSearch": true,
-          "scopeDict": "yn",
-          "updateStatus": 30
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       },
       "config": {
@@ -174,7 +191,8 @@
       "schema_name": {
         "config": {
           "addStatus": 30,
-          "updateStatus": 30
+          "updateStatus": 30,
+          "isSearch": true
         }
       },
       "created_by": {
@@ -222,7 +240,7 @@
     }
   },
   "meta_dict": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_dict",
       "isNumberSequence": true,
@@ -335,12 +353,13 @@
     }
   },
   "meta_component": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_component",
       "structure": "list",
       "isNumberSequence": true,
-      "orderBy": "created_time desc"
+      "orderBy": "created_time desc",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut"
     },
     "_fields": {
       "id": {
@@ -385,6 +404,18 @@
           "isListShow": false
         }
       },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
       "created_by": {
         "config": {
           "isSearch": false,
@@ -424,12 +455,12 @@
     }
   },
   "meta_component_instance": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_component_instance",
       "isNumberSequence": true,
       "orderBy": "created_time desc",
-      "bizInterceptor": "com.github.md.web.controller.itp.ComponentConfDeletePointCut"
+      "bizInterceptor": "com.github.md.web.controller.itp.ComponentConfDeletePointCut,com.github.md.web.controller.itp.BuildInDataPointCut"
     },
     "_fields": {
       "config": {
@@ -459,6 +490,18 @@
         "config": {
           "isSearch": false,
           "isListShow": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       },
       "created_by": {
@@ -513,7 +556,7 @@
     }
   },
   "meta_feature": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "structure": "list",
       "objectCode": "meta_feature",
@@ -617,7 +660,7 @@
     }
   },
   "meta_router": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_router",
       "isNumberSequence": true,
@@ -814,7 +857,7 @@
     }
   },
   "meta_menu": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_menu",
       "isNumberSequence": true,
@@ -999,7 +1042,7 @@
     }
   },
   "meta_exception": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_exception",
       "structure": "list",
@@ -1079,7 +1122,7 @@
     }
   },
   "meta_change_log": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_change_log",
       "structure": "list",
@@ -1198,7 +1241,7 @@
     }
   },
   "meta_config": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_config",
       "structure": "list",
@@ -1299,7 +1342,7 @@
     }
   },
   "meta_api_resource": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_api_resource",
       "structure": "list",
@@ -1467,7 +1510,7 @@
     }
   },
   "meta_auth": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_auth",
       "structure": "list",
@@ -1569,7 +1612,7 @@
     }
   },
   "meta_role": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_role",
       "structure": "list",
@@ -1659,7 +1702,7 @@
     }
   },
   "meta_user": {
-    "is_sys": true,
+    "build_in": true,
     "config": {
       "objectCode": "meta_user",
       "structure": "list",

@@ -142,6 +142,7 @@ public class DbMetaService {
                 re.dataMap().put("id", SnowFlake.me().nextId());
                 //TODO independent setting
                 re.objectCode(metaObject.code());
+                re.dataMap().put("build_in", metaObject.buildIn());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = SpringAnalysisManager.me().dbMain().batchSave("meta_field", updateRecords, 50);

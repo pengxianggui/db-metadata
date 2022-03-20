@@ -47,7 +47,7 @@ public class MetaObjectAop implements DeletePointCut {
             IMetaObject metaObjectOfData = dbMetaService.findById(String.valueOf(id));
 
             AssertUtil.isTrue(metaObjectOfData != null, new WebException("元对象不存在, id: %s", String.valueOf(id)));
-            AssertUtil.isTrue(!metaObjectOfData.isSystem(), new WebException("元对象(%s)为系统内置, 不允许删除", metaObjectOfData.code()));
+            AssertUtil.isTrue(!metaObjectOfData.buildIn(), new WebException("元对象(%s)为系统内置, 不允许删除", metaObjectOfData.code()));
 
             // 删除元字段
             log.info("删除元对象{}数据", metaObjectOfData.code());

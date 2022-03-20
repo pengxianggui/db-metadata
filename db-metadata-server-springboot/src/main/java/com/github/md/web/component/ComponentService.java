@@ -88,10 +88,11 @@ public class ComponentService {
      * @param config        后备配置
      * @return 若创建成功，则返回true；未创建或创建失败则返回false
      */
-    public boolean newIfNull(String componentCode, Kv config) {
+    public boolean newIfNull(String componentCode, Kv config, boolean buildId) {
         Record defaultRecord = loadLatestComponentRecord(componentCode);
         if (defaultRecord == null) {
             Record record = getNewComponentRecord(ComponentType.V(componentCode), config);
+            record.set("build_in", buildId);
             return SpringAnalysisManager.me().dbMain().save(META_COMPONENT, record);
         }
         return false;
@@ -338,18 +339,21 @@ public class ComponentService {
                 componentInstanceConfig.getInstanceName(),
                 INSTANCE.META_OBJECT,
                 componentInstanceConfig.getObjectConfig());
+        record.set("build_in", object.buildIn());
         SpringAnalysisManager.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         List<Record> fieldRecords = Lists.newArrayList();
         Okv fieldsMap = componentInstanceConfig.getFieldsMap();
         object.fields().forEach(f -> {
             Kv fkv = UtilKit.getKv(fieldsMap, f.fieldCode());
-            fieldRecords.add(getFieldConfigRecord(component,
+            Record fieldConfigRecord = getFieldConfigRecord(component,
                     object.code(),
                     f.fieldCode(),
                     componentInstanceConfig.getInstanceCode(),
                     componentInstanceConfig.getInstanceName(),
-                    fkv));
+                    fkv);
+            fieldConfigRecord.set("build_in", f.buildIn());
+            fieldRecords.add(fieldConfigRecord);
         });
 
         SpringAnalysisManager.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);

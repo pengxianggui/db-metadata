@@ -70,7 +70,7 @@ final public class Components {
         Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
-            if (!ServiceManager.componentService().newIfNull(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()))) {
+            if (!ServiceManager.componentService().newIfNull(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()), true)) {
                 if (ServiceManager.quickJudge().isDevMode()) {
                     ServiceManager.componentService().updateDefault(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()));
                 }
