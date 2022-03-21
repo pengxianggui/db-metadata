@@ -19,19 +19,36 @@
     <el-form-item label="数据结构">
       <el-radio-group v-model="nativeValue.structure">
         <el-radio-button label="list">列表</el-radio-button>
-        <el-radio-button label="tree">树型表</el-radio-button>
+        <el-radio-button label="tree">树结构</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="树型表配置" v-if="nativeValue.structure=='tree'">
-      <el-col :span="4">
-        <el-input v-model="nativeValue.structureConfig.idKey" placeholder="id 列名"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model="nativeValue.structureConfig.pidKey" placeholder="pid 列名"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input v-model="nativeValue.structureConfig.label" placeholder="label"></el-input>
-      </el-col>
+    <el-form-item label="树形结构配置" v-if="nativeValue.structure=='tree'">
+      <row-grid :span="[6, 6, 6, 6]">
+        <template #0>
+          <drop-down-box v-model="nativeValue.structureConfig.idKey" :data-url="getFieldCodeUrl(nativeValue.objectCode)"
+                         placeholder="选择id"></drop-down-box>
+        </template>
+        <template #1>
+          <drop-down-box v-model="nativeValue.structureConfig.pidKey" :data-url="getFieldCodeUrl(nativeValue.objectCode)"
+                         placeholder="选择pid"></drop-down-box>
+        </template>
+        <template #2>
+          <drop-down-box v-model="nativeValue.structureConfig.label" :data-url="getFieldCodeUrl(nativeValue.objectCode)"
+                         placeholder="选择展示字段"></drop-down-box>
+        </template>
+        <template #3>
+          <text-box v-model="nativeValue.structureConfig.rootIdentify" placeholder="根节点标识"></text-box>
+        </template>
+      </row-grid>
+      <!--      <el-col :span="4">-->
+      <!--        <el-input v-model="nativeValue.structureConfig.idKey" placeholder="id 列名"></el-input>-->
+      <!--      </el-col>-->
+      <!--      <el-col :span="4">-->
+      <!--        <el-input v-model="nativeValue.structureConfig.pidKey" placeholder="pid 列名"></el-input>-->
+      <!--      </el-col>-->
+      <!--      <el-col :span="4">-->
+      <!--        <el-input v-model="nativeValue.structureConfig.label" placeholder="label"></el-input>-->
+      <!--      </el-col>-->
     </el-form-item>
 
     <el-form-item label="排序规则(SQL)">
@@ -49,6 +66,8 @@
 
 <script>
 import utils from '../../../utils'
+import {isEmpty} from "../../../utils/common";
+import {restUrl} from "../../../constant/url";
 
 export default {
   name: "MiniFormObject",
@@ -67,7 +86,12 @@ export default {
       config: {
         objectCode: null,
         structure: "list",
-        structureConfig: {},
+        structureConfig: {
+          idKey: null,
+          pidKey: null,
+          label: null,
+          rootIdentify: null
+        },
         isUUIDPrimary: false,
         isNumberSequence: false,
         isAutoIncrement: false,
@@ -88,6 +112,15 @@ export default {
         let key = arguments[i]
         this.config[key] = false
       }
+    },
+    getFieldCodeUrl(objectCode) {
+      if (isEmpty(objectCode)) {
+        return restUrl.FIELD_CODE_LIST_BY_OBJECT
+      }
+
+      return this.$compile(restUrl.FIELD_CODE_LIST_BY_OBJECT, {
+        objectCode: objectCode
+      })
     }
   },
   computed: {

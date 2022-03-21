@@ -39,7 +39,7 @@
 
 <script>
 import utils from '../utils'
-import {TableAndFormConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 import {loadFeature} from "../utils/rest";
 import {isEmpty} from "../utils/common";
 
@@ -112,7 +112,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, TableAndFormConfig)
+    this.$merge(this.config, FEATURE_TYPE.TableForm.value)
 
     if (!isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

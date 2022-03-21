@@ -1,7 +1,8 @@
 import utils from '../utils'
 import {Checkbox, DatePicker, Form, Input, InputNumber, Radio, Select, Table, Tree, Upload,} from 'element-ui'
+import {printWarn} from "../utils/common";
 
-let mapping = {
+const mapping = {
     "BoolBox": {
         "ele": Checkbox,
         "includes": []
@@ -107,9 +108,10 @@ let mapping = {
 export default function EleProps(componentName) {
     if (!utils.isString(componentName)) return {};
     if (!utils.hasProp(mapping, componentName)) {
-        console.error("组件类型不正确, 不存在此组件类型. componentName: %s", componentName);
+        printWarn(`组件类型不正确, 不存在此组件类型. componentName: ${componentName}`)
         return {};
     }
+
     let element = mapping[componentName];
     let {ele: elComponent} = element;
     if (utils.isEmpty(elComponent)) { // custom component

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="max-width: 800px; max-height: 600px; overflow: auto">
     <h2>{{ componentName }}</h2>
     <vue-markdown :source="getSourceCode(componentName)"></vue-markdown>
 

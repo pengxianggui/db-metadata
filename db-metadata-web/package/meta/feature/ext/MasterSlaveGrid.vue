@@ -14,7 +14,7 @@
     <el-divider content-position="right">
       <span>选择实例编码</span>
       <span style="color: #acacac">&nbsp;(还没有实例配置? 点击
-        <auto-computed-button :oc="value.master.config.objectCode"></auto-computed-button>)
+        <auto-computed-button :oc="value.master.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)
       </span>
     </el-divider>
 
@@ -47,7 +47,7 @@
 
         <el-divider content-position="right">
           <span>选择实例编码</span>
-          <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="slave.config.objectCode"></auto-computed-button>)</span>
+          <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="slave.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)</span>
         </el-divider>
 
         <el-form-item label="搜索面板" :prop="'slaves.' + index + '.instanceCodes.SearchView'" required error="必填">
@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       activeTab: '0',
+      refresh: true
     }
   },
   methods: {
@@ -92,6 +93,12 @@ export default {
           "TableView": null,
           "FormView": null
         }
+      })
+    },
+    autoComputedOk() {
+      this.refresh = false
+      this.$nextTick(() => {
+        this.refresh = true
       })
     },
     getObjectCodeUrl(item) {

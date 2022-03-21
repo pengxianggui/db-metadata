@@ -585,7 +585,7 @@
       "type": {
         "config": {
           "isSearch": true,
-          "isListShow": false
+          "isListShow": true
         }
       },
       "op_config": {

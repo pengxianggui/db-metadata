@@ -18,13 +18,9 @@
 
 <script>
 import utils from '../utils'
-import {restUrl} from '../constant/url'
-import {defaultPrimaryKey} from "../config";
-import {getTreeMeta, loadFeature} from '../utils/rest'
-import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
-import {TableAndFormConfig} from "../meta/feature/ext/featureType";
+import {loadFeature} from '../utils/rest'
 import {isEmpty} from "../utils/common";
-import {TreeAndFormConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
 export default {
   name: "TreeFormTmpl",
@@ -91,7 +87,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, TreeAndFormConfig)
+    this.$merge(this.config, FEATURE_TYPE.TreeForm.value)
 
     if (!isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

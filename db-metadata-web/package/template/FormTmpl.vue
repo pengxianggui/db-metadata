@@ -11,7 +11,7 @@
 <script>
 import utils from '../utils'
 import {loadFeature} from "../utils/rest";
-import {FormConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
 export default {
   name: "FormTmpl",
@@ -46,7 +46,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, FormConfig)
+    this.$merge(this.config, FEATURE_TYPE.Form.value)
 
     if (!utils.isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

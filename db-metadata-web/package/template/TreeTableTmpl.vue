@@ -65,7 +65,7 @@ import {loadFeature} from "../utils/rest";
 import {restUrl} from "../constant/url";
 import {isEmpty} from "../utils/common";
 import {getNameOfFormTypes} from "../view/formview/ui-conf";
-import {TreeAndTableConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
 export default {
   name: "TreeTableTmpl",
@@ -208,7 +208,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, TreeAndTableConfig)
+    this.$merge(this.config, FEATURE_TYPE.TreeTable.value)
 
     if (!isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

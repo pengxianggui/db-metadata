@@ -23,8 +23,8 @@
       <el-tooltip content="只有一个插槽时可不填,多个插槽时插槽名称指定后,生成多个上传组件后会标识每个上传组件传到哪一个插槽" placement="right">
         <i class="el-icon-question"></i>
       </el-tooltip>
-      <template v-for="index in nativeValue.seats.length">
-        <el-col :span="6">
+      <div class="upload-seats">
+        <template v-for="index in nativeValue.seats.length">
           <el-input v-model="nativeValue.seats[index-1]" :placeholder="'第'+index+'个位置插槽名称'" size="mini">
             <template slot="append">
               <el-button type="primary" icon="el-icon-plus" size="mini"
@@ -33,13 +33,13 @@
                          @click="nativeValue.seats.splice(index-1,1)"></el-button>
             </template>
           </el-input>
-        </el-col>
-      </template>
+        </template>
+      </div>
     </el-form-item>
     <el-form-item label="新增状态">
       <el-radio-group v-model="nativeValue.addStatus">
         <el-radio-button label="100">显示</el-radio-button>
-        <el-radio-button label="50">隐藏</el-radio-button>
+<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
@@ -47,7 +47,7 @@
     <el-form-item label="更新状态">
       <el-radio-group v-model="nativeValue.updateStatus">
         <el-radio-button label="100">显示</el-radio-button>
-        <el-radio-button label="50">隐藏</el-radio-button>
+<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
@@ -55,7 +55,7 @@
     <el-form-item label="查看状态">
       <el-radio-group v-model="nativeValue.viewStatus">
         <el-radio-button label="100">显示</el-radio-button>
-        <el-radio-button label="50">隐藏</el-radio-button>
+<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
@@ -194,6 +194,11 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   padding: 15px 0px 5px 5px;
 
+}
+
+.upload-seats {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
 }
 
 .form-item-options {

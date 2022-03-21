@@ -71,8 +71,8 @@ export default {
   },
   computed: {
     hiddenNonLayoutComponent() {
-      const {editModel, formMeta: {objectCode}} = this
-      return editModel || !isEmpty(objectCode)
+      const {editMode, formMeta: {objectCode}} = this
+      return editMode || !isEmpty(objectCode)
     }
   }
 }

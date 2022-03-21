@@ -3,7 +3,6 @@ import {isEmpty} from "../utils/common";
 
 export const routeUrl = {
     baseURL: '/meta',
-    R_GOBAL_CONF_ADD: '/meta/global-conf',
     R_GOBAL_CONF_EDIT: '/meta/global-conf',
     R_INSTANCE_CONF_NEW: '/meta/instance-conf-new?objectCode={objectCode}&&componentCode={componentCode}',   // 组件实例配置界面[新增]
     R_INSTANCE_CONF_EDIT: '/meta/instance-conf-edit?instanceCode={instanceCode}&fieldCode={fieldCode}',    // 组件实例配置界面[编辑]

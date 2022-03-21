@@ -53,7 +53,7 @@
 import utils from '../utils'
 import {loadFeature} from "../utils/rest";
 import {getNameOfFormTypes} from "../view/formview/ui-conf";
-import {SingleGridConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
 export default {
   name: "SingleGridTmpl",
@@ -112,7 +112,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, SingleGridConfig)
+    this.$merge(this.config, FEATURE_TYPE.SingleGrid.value)
 
     if (!utils.isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

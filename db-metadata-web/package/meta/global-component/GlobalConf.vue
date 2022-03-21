@@ -2,15 +2,14 @@
   <div class="page-container">
     <el-form :model="confModel" label-width="80px" class="demo-form-inline" size="mini" style="height: 100%">
       <div class="opr-box">
-        <div>
-          <el-button size="mini" type="primary" plain @click="$goBack()">
-            <i class="el-icon-back"></i><span>返回</span>
-          </el-button>
-          <el-form-item label="组件" class="inline">
-            <component-selector v-model="confModel.componentCode" @change="loadConf"></component-selector>
-          </el-form-item>
-        </div>
-        <el-form-item>
+        <el-button size="mini" type="primary" plain @click="$goBack()">
+          <i class="el-icon-back"></i><span>返回</span>
+        </el-button>
+        <el-form-item label="组件" class="inline">
+          <component-selector v-model="confModel.componentCode" @change="loadConf"></component-selector>
+        </el-form-item>
+        <span style="flex: 1"></span>
+        <el-form-item class="inline">
           <el-button-group>
             <el-button type="primary" @click="preview">
               <i class="el-icon-view"></i>
@@ -28,14 +27,13 @@
           <el-col>
             <h2 align="center">{{ confModel.componentCode }}</h2>
             <el-form-item>
-              <mini-form-box v-model="confModel.conf" class="shadow"
+              <mini-form-box v-model="confModel.conf" class="shadow" :disable="true"
                              :meta="confMeta" :show-change-type="true"
-                             @json-change="() => buildObjectConfMeta(confModel.conf)">
+                             @json-change="buildObjectConfMeta(confModel.conf)">
                 <template #button-expand="{value}">
                   <el-popover placement="right" trigger="click"
                               popper-class="ui-conf-tip-popper">
-                    <ui-conf-tip
-                        :component-name="confModel.conf['component_name']"></ui-conf-tip>
+                    <ui-conf-tip :component-name="confModel.conf['component_name']"></ui-conf-tip>
                     <el-button slot="reference" size="mini" icon="el-icon-question"
                                circle></el-button>
                   </el-popover>
@@ -57,10 +55,10 @@ import utils from '../../utils'
 import {restUrl} from "../../constant/url";
 import EleProps from '../../constant/element-props'
 import DefaultJsonBoxMeta from '../../core/jsonbox/ui-conf'
-import {TagViewUtil} from "../../index";
 import buildMeta from "../buildMeta";
 import UiConfTip from "../component/UiConfTip";
 import ComponentSelector from "../component/ComponentSelector";
+import {assertEmpty} from "../../utils/common";
 
 export default {
   name: "GlobalConf",
@@ -103,13 +101,15 @@ export default {
         for (let key in data) {
           let confVal = data[key].replace(/\\/g, "");
           let confValJson = JSON.parse(confVal);
-          confValJson['conf'] = confValJson['conf'] || {};
+          confValJson['conf'] = assertEmpty(confValJson['conf'], {});
           this.$merge(confValJson['conf'], EleProps(confValJson['component_name']));
           this.confModel['conf'] = confValJson;
           break;
         }
       }).catch(({msg = '配置加载失败'}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
+      }).finally(() => {
+        this.buildObjectConfMeta(this.confModel.conf)
       })
     },
     submit: function () {
@@ -152,14 +152,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.container {
+.page-container {
   $oprBarHeight: 50px;
 
   .opr-box {
     height: $oprBarHeight;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     font-size: 13px;
   }

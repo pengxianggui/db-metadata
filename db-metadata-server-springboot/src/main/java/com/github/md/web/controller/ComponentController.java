@@ -8,6 +8,7 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
+import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.analysis.meta.IMetaObject;
@@ -23,6 +24,7 @@ import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,16 +106,22 @@ public class ComponentController extends ControllerAdapter {
 
     @GetMapping("list")
     public Ret list() {
-        Boolean view = parameterHelper().getBoolean("view");
+        Boolean view;
+        try {
+            view = parameterHelper().getBoolean("view");
+        } catch (Exception e) {
+            view = null;
+        }
         List<Record> components = componentService().loadComponents();
         List<Kv> results = Lists.newArrayList();
 
+        Boolean finalView = view;
         components.stream().filter(c -> {
             String code = c.getStr("code");
-            if (view == null) {
+            if (finalView == null) {
                 return true;
             } else {
-                return view == ComponentType.V(code).isView();
+                return finalView == ComponentType.V(code).isView();
             }
         }).forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
@@ -132,19 +140,19 @@ public class ComponentController extends ControllerAdapter {
     @GetMapping("load")
     public Ret load() {
         QueryHelper queryHelper = queryHelper();
-//        String objectCode = queryHelper.getObjectCode();
-//        String compCode = queryHelper.getComponentCode();
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定UI实例编码"));
+        String compCode = queryHelper.getComponentCode();
 
-        // 有instanceCode 则获取UI实例配置
-        if (componentService().hasObjectConfig(instanceCode)) {
-            return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
+        if (StrKit.notBlank(instanceCode)) { // 有instanceCode 则获取UI实例配置
+            if (componentService().hasObjectConfig(instanceCode)) {
+                return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
+            } else {
+                return Ret.fail("msg", "请先为此实例编码生成UI配置!");
+            }
+        } else if (StrKit.notBlank(compCode)) { // 加载组件全局配置
+            return Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config")));
         } else {
-            return Ret.fail("msg", "请先为此实例编码生成UI配置!");
-//            IMetaObject metaObject = metaService().findByCode(objectCode);
-//            MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getSmartAutoView(metaObject, ComponentType.V(compCode));
-//            return Ret.ok("data", metaObjectViewAdapter.getInstanceConfig().set("isAutoComputed", true));
+            return Ret.fail("msg", "请指定实例编码或组件编码");
         }
 
 
@@ -280,27 +288,27 @@ public class ComponentController extends ControllerAdapter {
         String instanceName = queryHelper.getInstanceName();
         Kv config = parameterHelper().getKv();
 
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        String compCode = queryHelper.getComponentCode();
 
         // TODO 2.2 全面拥抱instanceCode，那么组件实例的更新只需要入参instanceCode即可！同样，InstanceConfEdit也需要调整
-//        if (StrKit.notBlank(instanceCode)) {
-        ComponentInstanceConfig oldComponentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
-        IMetaObject metaObject = metaService().findByCode(oldComponentInstanceConfig.getObjectCode());
-        Component component = AbstractComponent.newInstance(oldComponentInstanceConfig.getContainerType().getCode());
+        if (StrKit.notBlank(instanceCode)) {
+            ComponentInstanceConfig oldComponentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
+            IMetaObject metaObject = metaService().findByCode(oldComponentInstanceConfig.getObjectCode());
+            Component component = AbstractComponent.newInstance(oldComponentInstanceConfig.getContainerType().getCode());
 
-        ComponentInstanceConfig newComponentInstanceConfig = ComponentInstanceConfig.New(config,
-                metaObject.code(),
-                instanceCode,
-                instanceName,
-                component.componentType());
-        componentService().updateObjectConfig(component, metaObject, newComponentInstanceConfig);
-//        } else {
-//            String objectCode = queryHelper.getObjectCode();
-//            String compCode = queryHelper.getComponentCode();
-//            Component component = AbstractComponent.newInstance(compCode);
-//            componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
-//        }
-        return Ret.ok();
+            ComponentInstanceConfig newComponentInstanceConfig = ComponentInstanceConfig.New(config,
+                    metaObject.code(),
+                    instanceCode,
+                    instanceName,
+                    component.componentType());
+            componentService().updateObjectConfig(component, metaObject, newComponentInstanceConfig);
+            return Ret.ok();
+        } else if (StrKit.notBlank(compCode)) {
+            componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
+            return Ret.ok();
+        } else {
+            return Ret.fail("msg", "参数不正确");
+        }
     }
 
     @MetaAccess(value = Type.API_WITH_META_OBJECT)

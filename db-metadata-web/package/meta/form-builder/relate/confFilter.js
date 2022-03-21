@@ -3,11 +3,11 @@ import {isLayoutComp} from "./componentData";
 
 // inline 由 栅格布局支持后移除
 const FORM_EXCLUDES = [
-    'columns', 'buttons', 'name',
+    'columns', 'name',
     'group', 'objectCode', 'objectPrimaryKey',
     'component_name', 'layout', 'inline', 'form_type']; // 表单隐藏的配置项
 
-const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey', 'sort', 'inline']; // 字段隐藏的配置项
+const FIELD_EXCLUDES = ['group', 'objectCode', 'objectPrimaryKey', 'sort']; // 字段隐藏的配置项
 
 const LAYOUT_EXCLUDES = ['columns'] // 布局组件隐藏的配置项
 

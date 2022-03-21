@@ -167,7 +167,7 @@
 import utils from '../utils'
 import {loadFeature} from "../utils/rest";
 import {restUrl} from "../constant/url";
-import {MasterSlaveGridConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 import {getNameOfFormTypes} from "../view/formview/ui-conf";
 import {isEmpty} from "../utils/common";
 
@@ -317,7 +317,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, MasterSlaveGridConfig)
+    this.$merge(this.config, FEATURE_TYPE.MasterSlaveGrid.value)
 
     if (!isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

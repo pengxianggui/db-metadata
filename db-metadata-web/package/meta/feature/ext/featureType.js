@@ -90,11 +90,11 @@ export const FEATURE_TYPE = {
         value: {
             "config": {
                 "objectCode": null,
-                "idKey": null,
-                "pidKey": null,
-                "rootIdentify": null,
-                "label": null,
-                "isSync": false,
+                // "idKey": null,
+                // "pidKey": null,
+                // "rootIdentify": null,
+                // "label": null,
+                // "isSync": false,
             },
             "instanceCodes": {
                 "SearchView": null,
@@ -139,12 +139,12 @@ export const FEATURE_TYPE = {
             "tree": {
                 "config": {
                     "objectCode": null,
-                    "idKey": null,
-                    "pidKey": null,
-                    "rootIdentify": null,
-                    "label": null,
-                    "isSync": false,
-                    "primaryKey": null
+                    // "idKey": null,
+                    // "pidKey": null,
+                    // "rootIdentify": null,
+                    // "label": null,
+                    // "isSync": false,
+                    // "primaryKey": null
                 },
                 "instanceCodes": {
                     "TreeView": null
@@ -164,7 +164,7 @@ export const FEATURE_TYPE = {
         },
         meta: {}
     },
-    FormConfig: {
+    Form: {
         value: {
             "config": {
                 "objectCode": null
@@ -175,17 +175,17 @@ export const FEATURE_TYPE = {
         },
         meta: {}
     },
-    TreeAndForm: {
+    TreeForm: {
         value: {
             "tree": {
                 "config": {
                     "objectCode": null,
-                    "idKey": null,
-                    "pidKey": null,
-                    "rootIdentify": null,
-                    "label": null,
-                    "isSync": false,
-                    "primaryKey": null
+                    // "idKey": null,
+                    // "pidKey": null,
+                    // "rootIdentify": null,
+                    // "label": null,
+                    // "isSync": false,
+                    // "primaryKey": null
                 },
                 "instanceCodes": {
                     "TreeView": null
@@ -202,7 +202,7 @@ export const FEATURE_TYPE = {
         },
         meta: {}
     },
-    TableAndForm: {
+    TableForm: {
         value: {
             "table": {
                 "config": {
@@ -225,206 +225,6 @@ export const FEATURE_TYPE = {
             }
         },
         meta: {}
-    }
-}
-
-// 单表功能的默认配置
-export const SingleGridConfig = {
-    "config": {
-        "objectCode": null,
-    },
-    "instanceCodes": {
-        "SearchView": null,
-        "TableView": null,
-        "FormView": null
-    }
-}
-// 单表功能配置的FormView配置
-export const SingleGridConfigFormMeta = {
-    component_name: 'MiniForm',
-    conf: {
-        "label-position": 'top'
-    },
-    columns: [
-        {
-            component_name: 'MiniForm',
-            name: 'config',
-            label: '配置',
-            conf: {
-                "label-position": 'top',
-                'label-width': '120px'
-            },
-            columns: [
-                {
-                    component_name: 'DropDownBox',
-                    name: 'objectCode',
-                    label: '元对象编码',
-                    data_url: '/table/list?objectCode=meta_object&fs=code,cn&code->key=&code->value=&cn->label=&s=1000'
-                }
-            ]
-        },
-        {
-            component_name: 'MiniForm',
-            name: 'instanceCodes',
-            label: '选择容器UI实例',
-            conf: {
-                'label-width': '120px'
-            },
-            columns: [
-                {
-                    component_name: 'DropDownBox',
-                    name: 'SearchView',
-                    label: '搜索面板',
-                    data_url: '/table/list?objectCode=meta_component_instance&fs=code,name&code->key=&code->value=&name->label=&s=1000&type=META_OBJECT'
-                },
-                {
-                    component_name: 'DropDownBox',
-                    name: 'TableView',
-                    label: '表格',
-                    data_url: '/table/list?objectCode=meta_component_instance&fs=code,name&code->key=&code->value=&name->label=&s=1000&type=META_OBJECT'
-                },
-                {
-                    component_name: 'DropDownBox',
-                    name: 'FormView',
-                    label: '表单',
-                    data_url: '/table/list?objectCode=meta_component_instance&fs=code,name&code->key=&code->value=&name->label=&s=1000&type=META_OBJECT'
-                }
-            ]
-        }
-    ]
-}
-
-// 树表功能的默认配置
-export const TreeSingleGridConfig = {
-    "config": {
-        "objectCode": null,
-        "idKey": null,
-        "pidKey": null,
-        "rootIdentify": null,
-        "label": null,
-        "isSync": false,
-    },
-    "instanceCodes": {
-        "SearchView": null,
-        "TableTreeView": null,
-        "FormView": null
-    }
-}
-
-// 主子表功能的默认配置
-export const MasterSlaveGridConfig = {
-    "master": {
-        "config": {
-            "objectCode": null,
-            "primaryKey": null,
-        },
-        "instanceCodes": {
-            "SearchView": null,
-            "TableView": null,
-            "FormView": null
-        }
-    },
-    "slaves": [
-        {
-            "config": {
-                "objectCode": null,
-                "foreignPrimaryKey": null,
-                "order": 0
-            },
-            "instanceCodes": {
-                "SearchView": null,
-                "TableView": null,
-                "FormView": null
-            }
-        }
-    ]
-}
-
-// 树+表功能的默认配置
-export const TreeAndTableConfig = {
-    "tree": {
-        "config": {
-            "objectCode": null,
-            "idKey": null,
-            "pidKey": null,
-            "rootIdentify": null,
-            "label": null,
-            "isSync": false,
-            "primaryKey": null
-        },
-        "instanceCodes": {
-            "TreeView": null
-        }
-    },
-    "table": {
-        "config": {
-            "objectCode": null,
-            "foreignPrimaryKey": null
-        },
-        "instanceCodes": {
-            "SearchView": null,
-            "TableView": null,
-            "FormView": null
-        }
-    }
-}
-
-// 表单功能的默认配置
-export const FormConfig = {
-    "config": {
-        "objectCode": null
-    },
-    "instanceCodes": {
-        "FormView": null
-    }
-}
-
-// 树+表单功能的默认配置
-export const TreeAndFormConfig = {
-    "tree": {
-        "config": {
-            "objectCode": null,
-            "idKey": null,
-            "pidKey": null,
-            "rootIdentify": null,
-            "label": null,
-            "isSync": false,
-            "primaryKey": null
-        },
-        "instanceCodes": {
-            "TreeView": null
-        }
-    },
-    "form": {
-        "config": {
-            "objectCode": null
-        },
-        "instanceCodes": {
-            "FormView": null
-        }
-    }
-}
-
-// 表+表单功能的默认配置
-export const TableAndFormConfig = {
-    "table": {
-        "config": {
-            "objectCode": null,
-            "primaryKey": null
-        },
-        "instanceCodes": {
-            "SearchView": null,
-            "TableView": null,
-            "FormView": null
-        }
-    },
-    "form": {
-        "config": {
-            "objectCode": null
-        },
-        "instanceCodes": {
-            "FormView": null
-        }
     }
 }
 

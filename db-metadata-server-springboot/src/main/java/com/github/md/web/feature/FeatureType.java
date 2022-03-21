@@ -18,9 +18,9 @@ import lombok.Getter;
  */
 @Getter
 public enum FeatureType {
-    MasterSlaveGrid("主子表", "MasterSlaveGrid", "MasterSlaveTableTmpl", MasterSlaveConfig.class),
     SingleGrid("单表", "SingleGrid", "SingleGridTmpl", SingleGridConfig.class),
     TreeSingleGrid("树型表", "TreeSingleGrid", "TreeSingleGridTmpl", TreeInTableConfig.class),
+    MasterSlaveGrid("主子表", "MasterSlaveGrid", "MasterSlaveTableTmpl", MasterSlaveConfig.class),
     TreeTable("树和表", "TreeTable", "TreeTableTmpl", TreeAndTableConfig.class),
     UNKNOWN("未知的功能模板", "unknown", "unknown", Kv.class);
 

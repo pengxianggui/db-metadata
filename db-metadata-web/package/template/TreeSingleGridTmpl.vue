@@ -46,7 +46,7 @@
 import utils from '../utils'
 import {loadFeature} from "../utils/rest";
 import {getNameOfFormTypes} from "../view/formview/ui-conf";
-import {TreeSingleGridConfig} from "../meta/feature/ext/featureType";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
 export default {
   name: "TreeSingleGridTmpl",
@@ -106,7 +106,7 @@ export default {
     }
   },
   created() {
-    this.$merge(this.config, TreeSingleGridConfig)
+    this.$merge(this.config, FEATURE_TYPE.TreeSingleGrid.value)
 
     if (!utils.isEmpty(this.featureCode)) {
       loadFeature(this.$axios, this.featureCode).then(resp => {

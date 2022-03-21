@@ -1,11 +1,13 @@
 <template>
-  <drop-down-box v-model="nativeValue" :meta="meta" v-bind="$attrs" @change="$emit('change')" @clear="$emit('clear')"></drop-down-box>
+  <drop-down-box v-model="nativeValue" :meta="meta" :options="components" v-bind="$attrs"
+                 @change="$emit('change')" @clear="$emit('clear')"></drop-down-box>
 </template>
 
 <script>
 import Val from "../../core/mixins/value";
 import {restUrl} from "../../constant/url";
 import DefaultDropDownBoxMeta from "../../core/dropdownbox/ui-conf";
+import {isUndefined} from "../../utils/common";
 
 export default {
   name: "ComponentSelector",
@@ -18,7 +20,8 @@ export default {
       type: String,
       default: () => 'default',
       validator: (value) => ['default', 'field', 'view'].indexOf(value) > -1
-    }
+    },
+    components: Array
   },
   data() {
     let meta = {
@@ -30,20 +33,21 @@ export default {
       }
     }
 
-    const {scope} = this
-    this.$merge(meta, DefaultDropDownBoxMeta)
-    if (scope === 'view') {
-      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: true})
-    } else if (scope === 'field') {
-      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: false})
-    } else {
-      meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: null})
+    if (isUndefined(this.components)) {
+      const {scope} = this
+      this.$merge(meta, DefaultDropDownBoxMeta)
+      if (scope === 'view') {
+        meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: true})
+      } else if (scope === 'field') {
+        meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: false})
+      } else {
+        meta.data_url = this.$compile(restUrl.COMPONENT_CODE_LIST, {view: null})
+      }
     }
 
     return {
       meta: meta
     }
-
   },
   computed: {
     attrs() {
