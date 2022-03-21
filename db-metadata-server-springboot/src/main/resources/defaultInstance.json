@@ -314,6 +314,11 @@
         }
       },
       "_fields": {
+        "pid": {
+          "conf": {
+            "filterable": true
+          }
+        },
         "icon": {
           "component_name": "IconBox"
         },
