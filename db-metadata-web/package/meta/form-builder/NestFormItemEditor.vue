@@ -94,6 +94,15 @@ export default {
     handleEnd(e) {
       this.$emit('end', e)
     }
+  },
+  computed: {
+    // sortedColumns() {
+    //   return this.columns.sort((c1, c2) => {
+    //     const {sort: sort1 = 99999} = c1
+    //     const {sort: sort2 = 99999} = c2
+    //     return sort1 - sort2
+    //   })
+    // }
   }
 }
 </script>

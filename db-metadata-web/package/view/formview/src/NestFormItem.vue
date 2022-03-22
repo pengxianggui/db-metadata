@@ -38,7 +38,6 @@
 <script>
 import {isLayoutComp} from "../../../meta/form-builder/relate/componentData";
 import {isArray} from "../../../utils/common";
-import {formTypes} from "../ui-conf";
 import FormFieldView from "./FormFieldView";
 
 export default {

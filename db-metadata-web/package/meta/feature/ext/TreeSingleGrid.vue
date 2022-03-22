@@ -58,19 +58,20 @@
 
     <el-divider content-position="right">
       <span>选择实例编码</span>
-      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button
-          :oc="value.config.objectCode"></auto-computed-button>)</span>
+      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="value.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)</span>
     </el-divider>
-    <el-form-item label="搜索面板" prop="instanceCodes.SearchView" required error="必填">
-      <drop-down-box v-model="value.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value, 'SearchView')"></drop-down-box>
-    </el-form-item>
-    <el-form-item label="树形表格" prop="instanceCodes.TableTreeView" required error="必填">
-      <drop-down-box v-model="value.instanceCodes.TableTreeView"
-                     :data-url="getInstanceCodeOptionsUrl(value, 'TableTreeView')"></drop-down-box>
-    </el-form-item>
-    <el-form-item label="表单" prop="instanceCodes.FormView" required error="必填">
-      <drop-down-box v-model="value.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(value, 'FormView')"></drop-down-box>
-    </el-form-item>
+    <div v-if="refresh">
+      <el-form-item label="搜索面板" prop="instanceCodes.SearchView" required error="必填">
+        <drop-down-box v-model="value.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value, 'SearchView')"></drop-down-box>
+      </el-form-item>
+      <el-form-item label="树形表格" prop="instanceCodes.TableTreeView" required error="必填">
+        <drop-down-box v-model="value.instanceCodes.TableTreeView"
+                       :data-url="getInstanceCodeOptionsUrl(value, 'TableTreeView')"></drop-down-box>
+      </el-form-item>
+      <el-form-item label="表单" prop="instanceCodes.FormView" required error="必填">
+        <drop-down-box v-model="value.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(value, 'FormView')"></drop-down-box>
+      </el-form-item>
+    </div>
   </el-form>
 </template>
 
@@ -87,6 +88,7 @@ export default {
   },
   data() {
     return {
+      refresh: true
     }
   },
   methods: {
@@ -132,6 +134,12 @@ export default {
     },
     validate(callback) {
       return this.$refs['featureConfigForm'].validate(valid => callback(valid))
+    },
+    autoComputedOk() {
+      this.refresh = false
+      this.$nextTick(() => {
+        this.refresh = true
+      })
     }
   },
   mounted() {

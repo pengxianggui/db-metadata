@@ -379,6 +379,7 @@ public class ComponentService {
                 componentInstanceConfig.getInstanceName(),
                 INSTANCE.META_OBJECT,
                 componentInstanceConfig.getObjectConfig());
+        record.set("build_in", object.buildIn());
         SpringAnalysisManager.me().dbMain().save(META_COMPONENT_INSTANCE, record);
 
         Collection<IMetaField> fields = object.fields();
@@ -386,12 +387,14 @@ public class ComponentService {
         List<Record> fieldRecords = Lists.newArrayList();
         fields.forEach(f -> {
             Kv fkv = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), f.fieldCode());
-            fieldRecords.add(getFieldConfigRecord(component,
+            Record fieldConfigRecord = getFieldConfigRecord(component,
                     object.code(),
                     f.fieldCode(),
                     componentInstanceConfig.getInstanceCode(),
                     componentInstanceConfig.getInstanceName(),
-                    fkv));
+                    fkv);
+            fieldConfigRecord.set("build_in", f.buildIn());
+            fieldRecords.add(fieldConfigRecord);
         });
 
         SpringAnalysisManager.me().dbMain().batchSave(META_COMPONENT_INSTANCE, fieldRecords, 50);
@@ -451,6 +454,7 @@ public class ComponentService {
      */
     public boolean newFieldConfig(Component component, IMetaField metaField, String instanceCode, String instanceName, Kv config) {
         Record fieldInstance = getFieldConfigRecord(component, metaField.objectCode(), metaField.fieldCode(), instanceCode, instanceName, config);
+        fieldInstance.set("build_in", metaField.buildIn());
         return SpringAnalysisManager.me().dbMain().save(META_COMPONENT_INSTANCE, fieldInstance);
     }
 
@@ -477,6 +481,7 @@ public class ComponentService {
 
     /**
      * 删除整套UI实例配置
+     *
      * @param instanceCode
      * @return
      */

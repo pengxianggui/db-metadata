@@ -87,7 +87,6 @@ export default {
       this.setInitState();
       let url = this.$compile(restUrl.COMP_INSTANCE_CONF_LOAD_EDIT, {instanceCode: instanceCode})
 
-      console.log(instanceCode)
       this.$axios.safeGet(url).then(resp => {
         let {data} = resp;
         let {instanceName, fieldsMap, objectCode, componentCode} = data;

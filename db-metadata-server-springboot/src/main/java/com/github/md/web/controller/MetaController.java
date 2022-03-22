@@ -226,7 +226,7 @@ public class MetaController extends ControllerAdapter {
     }
 
     /**
-     * 重新导入元对象
+     * 重新导入元对象 TODO 未验证，未使用
      */
     @MetaAccess(value = Type.API)
     @Transactional

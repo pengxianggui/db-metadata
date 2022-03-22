@@ -70,14 +70,15 @@
 
     <el-divider content-position="right">
       <span>选择实例编码</span>
-      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击
-        <auto-computed-button :oc="value.tree.config.objectCode"></auto-computed-button>)
+      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击 <auto-computed-button :oc="value.tree.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)
       </span>
     </el-divider>
-    <el-form-item label="树" prop="tree.instanceCodes.TreeView" required error="必填">
-      <drop-down-box v-model="value.tree.instanceCodes.TreeView"
-                     :data-url="getInstanceCodeOptionsUrl(value.tree, 'TreeView')"></drop-down-box>
-    </el-form-item>
+    <div v-if="refresh">
+      <el-form-item label="树" prop="tree.instanceCodes.TreeView" required error="必填">
+        <drop-down-box v-model="value.tree.instanceCodes.TreeView"
+                       :data-url="getInstanceCodeOptionsUrl(value.tree, 'TreeView')"></drop-down-box>
+      </el-form-item>
+    </div>
 
     <el-divider content-position="left">表格</el-divider>
     <el-divider content-position="right">配置</el-divider>
@@ -99,18 +100,20 @@
 
     <el-divider content-position="right">
       <span>选择实例编码</span>
-      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="value.table.config.objectCode"></auto-computed-button>)</span>
+      <span style="color: #acacac">&nbsp;(还没有实例配置? 点击<auto-computed-button :oc="value.table.config.objectCode" @ok="autoComputedOk"></auto-computed-button>)</span>
     </el-divider>
 
-    <el-form-item label="搜索面板" prop="table.instanceCodes.SearchView" required error="必填">
-      <drop-down-box v-model="value.table.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value.table, 'SearchView')"></drop-down-box>
-    </el-form-item>
-    <el-form-item label="表格" prop="table.instanceCodes.TableView" required error="必填">
-      <drop-down-box v-model="value.table.instanceCodes.TableView" :data-url="getInstanceCodeOptionsUrl(value.table, 'TableView')"></drop-down-box>
-    </el-form-item>
-    <el-form-item label="表单" prop="table.instanceCodes.FormView" required error="必填">
-      <drop-down-box v-model="value.table.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(value.table, 'FormView')"></drop-down-box>
-    </el-form-item>
+    <div v-if="refresh">
+      <el-form-item label="搜索面板" prop="table.instanceCodes.SearchView" required error="必填">
+        <drop-down-box v-model="value.table.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value.table, 'SearchView')"></drop-down-box>
+      </el-form-item>
+      <el-form-item label="表格" prop="table.instanceCodes.TableView" required error="必填">
+        <drop-down-box v-model="value.table.instanceCodes.TableView" :data-url="getInstanceCodeOptionsUrl(value.table, 'TableView')"></drop-down-box>
+      </el-form-item>
+      <el-form-item label="表单" prop="table.instanceCodes.FormView" required error="必填">
+        <drop-down-box v-model="value.table.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(value.table, 'FormView')"></drop-down-box>
+      </el-form-item>
+    </div>
   </el-form>
 </template>
 
@@ -123,6 +126,11 @@ export default {
   components: {AutoComputedButton},
   props: {
     value: Object
+  },
+  data() {
+    return {
+      refresh: true
+    }
   },
   methods: {
     resetTreeRelate(item) {
@@ -177,6 +185,12 @@ export default {
     },
     validate(callback) {
       return this.$refs['featureConfigForm'].validate(valid => callback(valid))
+    },
+    autoComputedOk() {
+      this.refresh = false
+      this.$nextTick(() => {
+        this.refresh = true
+      })
     }
   },
   mounted() {

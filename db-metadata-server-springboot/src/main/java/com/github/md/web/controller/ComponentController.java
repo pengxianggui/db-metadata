@@ -181,59 +181,6 @@ public class ComponentController extends ControllerAdapter {
          */
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
-    @PostMapping("doAdd")
-    public Ret doAdd() {
-        /**
-         * object Code
-         * component Type
-         */
-        QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
-        String instanceCode = queryHelper.getInstanceCode();
-        String instanceName = queryHelper.getInstanceName();
-
-        Kv config = parameterHelper().getKv();
-        addInstanceConf(objectCode, compCode, instanceCode, instanceName, config);
-        return Ret.ok();
-    }
-
-    /**
-     * 添加实例配置
-     *
-     * @param objectCode
-     * @param compCode
-     * @param instanceCode
-     * @param instanceName
-     * @return
-     */
-    private boolean addInstanceConf(String objectCode, String compCode, String instanceCode, String instanceName, Kv config) {
-        Component component = ViewFactory.createEmptyViewComponent(compCode);
-
-        if (StrKit.notBlank(compCode, objectCode, instanceCode)) {
-            if (componentService().hasObjectConfig(instanceCode)) {
-                throw new RuntimeException(String.format("%s配置信息已存在,请重新输入唯一编码", instanceCode));
-            }
-
-//            // 需要整体统一更改为instanceCode唯一, compCode + objectCode 可多套 ———— done
-//            if (componentService().hasObjectConfig(compCode, objectCode)) {
-//                throw new RuntimeException(String.format("%s+%s的配置已经存在, 目前暂未全面支持多套objectCode + componentCode配置。敬请期待!", objectCode, compCode));
-//            }
-
-            IMetaObject metaObject = metaService().findByCode(objectCode);
-            ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
-                    metaObject.code(),
-                    instanceCode,
-                    instanceName,
-                    component.componentType());
-            componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
-        } else {
-//            componentService().newIfNull(compCode, UtilKit.getKv(config.getStr(compCode))); // doubt what?
-        }
-        return true;
-    }
-
     /**
      * 一键自动计算
      */
@@ -254,6 +201,7 @@ public class ComponentController extends ControllerAdapter {
                 String instanceCode = instanceCodeArr[i];
                 String compCode = compCodeArr[i];
 
+                AssertUtil.isTrue(StrKit.notBlank(objectCode, compCode, instanceCode), "参数错误");
                 if (componentService().hasObjectConfig(instanceCode)) {
                     throw new ComponentException("默认的instanceCode:%s已经存在!", instanceCode);
                 }
@@ -264,10 +212,15 @@ public class ComponentController extends ControllerAdapter {
                 config.set(objectCode, JSONObject.toJSONString(config.get(objectCode)));
                 config.set("fieldsMap", JSONObject.toJSONString(config.get("fieldsMap")));
 
-                boolean r = addInstanceConf(objectCode, compCode, instanceCode, "系统自动计算", config);
-                if (!r) {
-                    return false;
-                }
+                // 保存配置
+                Component component = ViewFactory.createEmptyViewComponent(compCode);
+
+                ComponentInstanceConfig componentInstanceConfig = ComponentInstanceConfig.New(config,
+                        metaObject.code(),
+                        instanceCode,
+                        "系统智能计算",
+                        component.componentType());
+                componentService().newObjectConfig(component, metaObject, componentInstanceConfig);
             }
 
             return true;
@@ -290,7 +243,7 @@ public class ComponentController extends ControllerAdapter {
 
         String compCode = queryHelper.getComponentCode();
 
-        // TODO 2.2 全面拥抱instanceCode，那么组件实例的更新只需要入参instanceCode即可！同样，InstanceConfEdit也需要调整
+        // 全面拥抱instanceCode，那么组件实例的更新只需要入参instanceCode即可！同样，InstanceConfEdit也需要调整
         if (StrKit.notBlank(instanceCode)) {
             ComponentInstanceConfig oldComponentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
             IMetaObject metaObject = metaService().findByCode(oldComponentInstanceConfig.getObjectCode());

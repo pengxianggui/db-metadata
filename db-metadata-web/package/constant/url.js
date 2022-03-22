@@ -28,7 +28,7 @@ export const restUrl = {
     COMPONENT_CODE_LIST: '/component/list?view={view}', // 获取所有组件列表, 返回数据格式KV
     INSTANCE_CODE_LIST: '/table/list?objectCode=meta_component_instance&fs=code&code->value=&s=1000', // instanceCode
     COMP_CONF_UPDATE: '/component/doUpdate', // 组件(默认|实例)配置更新
-    COMP_CONF_ADD: '/component/doAdd',   // 组件(默认|实例)配置新增
+
     COMP_GOBAL_CONF_LOAD: '/component/load?componentCode={componentCode}',    // 组件默认配置加载
     COMP_GOBAL_CONF_DELETE: '/component/delete?componentCode={componentCode}',    // 组件默认配置删除
     COMP_INSTANCE_CONF_LOAD_EDIT: '/component/load?instanceCode={instanceCode}', // 组件实例配置加载

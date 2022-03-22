@@ -1,13 +1,13 @@
 <template>
   <div style="padding: 50px">
 
-    <el-button @click="openDialogJs">编程式弹窗(传meta)</el-button>
-    <el-button @click="openDialogJs1">编程式弹窗(传ic)</el-button>
-    <el-button @click="openDialogHtml">标签式弹窗</el-button>
+<!--    <el-button @click="openDialogJs">编程式弹窗(传meta)</el-button>-->
+<!--    <el-button @click="openDialogJs1">编程式弹窗(传ic)</el-button>-->
+<!--    <el-button @click="openDialogHtml">标签式弹窗</el-button>-->
 
-    <el-dialog :visible.sync="visible">
-      <form-view ic="meta_router.FormView" type="add"></form-view>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="visible">-->
+<!--      <form-view ic="meta_router.FormView" type="add"></form-view>-->
+<!--    </el-dialog>-->
 
     <!--    <single-grid-tmpl :config="singleGridConfig"></single-grid-tmpl>-->
     <!--    <master-slave-table-tmpl :config="masterSlaveGridConfig"></master-slave-table-tmpl>-->
@@ -17,7 +17,7 @@
     <!--    <master-slave-table-tmpl fc="meta_data"></master-slave-table-tmpl>-->
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
-    <form-view ic="meta_feature.FormView" form-type="update" primaryKv="701500755500208128"></form-view>
+    <form-view ic="meta_user.FormView" form-type="add"></form-view>
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->

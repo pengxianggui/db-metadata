@@ -13,14 +13,125 @@
     "TableView": {},
     "FormView": {
       "config": {
+        "layout": [
+          {
+            "name": "RowGrid49827",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "object_code"
+              ],
+              "1": [
+                "field_code"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid26249",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "is_primary"
+              ],
+              "1": [
+                "order_num"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid57448",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "en"
+              ],
+              "1": [
+                "cn"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid93762",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 4,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "db_type"
+              ],
+              "1": [
+                "db_type_length"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid78974",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 5,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "java_type"
+              ],
+              "1": [
+                "build_in"
+              ]
+            }
+          }
+        ]
       },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "remark": {
           "component_name": "TextAreaBox",
           "name": "remark",
           "conf": {
             "size": "mini"
-          }
+          },
+          "sort": 6
         },
         "config": {
           "conf": {
@@ -29,7 +140,8 @@
           "name": "config",
           "label": "配置",
           "inline": false,
-          "component_name": "MiniFormField"
+          "component_name": "MiniFormField",
+          "sort": 7
         }
       }
     }
@@ -59,9 +171,77 @@
       "config": {
         "style": {
           "width": "70%"
-        }
+        },
+        "layout": [
+          {
+            "name": "RowGrid71636",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "code"
+              ],
+              "1": [
+                "name"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid95222",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "schema_name"
+              ],
+              "1": [
+                "table_name"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid96876",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "primarys"
+              ],
+              "1": [
+                "build_in"
+              ]
+            }
+          }
+        ]
       },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "config": {
           "conf": {
             "size": "mini"
@@ -69,7 +249,8 @@
           "name": "config",
           "label": "配置",
           "inline": false,
-          "component_name": "MiniFormObject"
+          "component_name": "MiniFormObject",
+          "sort": 4
         },
         "remark": {
           "component_name": "TextAreaBox",
@@ -77,7 +258,8 @@
           "inline": false,
           "conf": {
             "size": "mini"
-          }
+          },
+          "sort": 5
         }
       }
     }
@@ -107,7 +289,35 @@
       }
     },
     "FormView": {
+      "config": {
+        "layout": [
+          {
+            "name": "RowGrid71636",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "code"
+              ],
+              "1": [
+                "name"
+              ]
+            }
+          }
+        ]
+      },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "type": {
           "name": "type",
           "label": "类型",
@@ -116,12 +326,17 @@
           "conf": {
             "multiple": false,
             "filterable": true
-          }
+          },
+          "sort": 2
+        },
+        "config": {
+          "sort": 3
         },
         "remark": {
           "name": "remark",
           "label": "备注",
-          "component_name": "TextAreaBox"
+          "component_name": "TextAreaBox",
+          "sort": 4
         }
       }
     },
@@ -242,7 +457,167 @@
     "TableTreeView": {
     },
     "FormView": {
+      "config": {
+        "layout": [
+          {
+            "name": "RowGrid84008",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "name"
+              ],
+              "1": [
+                "cn"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid99625",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "path"
+              ],
+              "1": [
+                "redirect"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid33778",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 4,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "component"
+              ],
+              "1": [
+                "order"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid30814",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 6,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "disable"
+              ],
+              "1": [
+                "layout"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid08463",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 8,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "need_permit"
+              ],
+              "1": [
+                "permit_by"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid29337",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 9,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "auths"
+              ],
+              "1": [
+                "auth_match_mode"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid90536",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 10,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "roles"
+              ],
+              "1": [
+                "role_match_mode"
+              ]
+            }
+          }
+        ]
+      },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
+        "pid": {
+          "sort": 1
+        },
+        "name": {
+          "explain": "路由名只有和关联的组件名一致时, 【配置信息】中默认的noCache:false 才会生效"
+        },
         "component": {
           "component_name": "PageSelector",
           "explain": "请选择一个组件, 用以承担此路由的页面(可选的组件列表均来自Vue全局注册的页面/模板组件。\n请开发人员在全局注册的页面组件中提供meta: {isPage: true}配置项，标识其为页面组件)"
@@ -284,10 +659,11 @@
         },
         "meta": {
           "default_value": {},
-          "explain": "【配置项目如下】:\nnoCache: 布尔值, 默认是false,即会缓存, 前提是路由名和组件名一致时才会生效;"
+          "explain": "【配置项目如下】:\nnoCache: 布尔值, 默认是false,即会缓存, 前提是路由名和组件名一致时才会生效;",
+          "sort": 99
         },
-        "name": {
-          "explain": "路由名只有和关联的组件名一致时, 【配置信息】中默认的noCache:false 才会生效"
+        "remark": {
+          "sort": 100
         }
       }
     }
@@ -311,13 +687,145 @@
       "config": {
         "conf": {
           "label-width": "140px"
-        }
+        },
+        "layout": [
+          {
+            "name": "RowGrid69537",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "title"
+              ],
+              "1": [
+                "icon"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid75393",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "path"
+              ],
+              "1": [
+                "order"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid55990",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 4,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "hidden"
+              ],
+              "1": [
+                "disable"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid78458",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 5,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "need_permit"
+              ],
+              "1": [
+                "permit_by"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid13692",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 6,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "auths"
+              ],
+              "1": [
+                "auth_match_mode"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid47425",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 7,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "roles"
+              ],
+              "1": [
+                "role_match_mode"
+              ]
+            }
+          }
+        ]
       },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "pid": {
           "conf": {
             "filterable": true
-          }
+          },
+          "sort": 1
         },
         "icon": {
           "component_name": "IconBox"
@@ -359,6 +867,9 @@
             "filterable": true
           },
           "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
+        },
+        "remark": {
+          "sort": 99
         }
       }
     }
@@ -376,9 +887,61 @@
     },
     "TableTreeView": {},
     "FormView": {
+      "config": {
+        "layout": [
+          {
+            "name": "RowGrid86230",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "p_value"
+              ],
+              "1": [
+                "type"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid58377",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "key"
+              ],
+              "1": [
+                "value"
+              ]
+            }
+          }
+        ]
+      },
       "_fields": {
-        "key": {
-          "explain": "【字典名】是唯一的, 程序根据此值确定可选的键值对"
+        "id": {
+          "sort": 0
+        },
+        "order_num": {
+          "sort": 3
+        },
+        "remark": {
+          "sort": 99
         }
       }
     }
@@ -458,9 +1021,122 @@
       "config": {
         "conf": {
           "label-width": "140px"
-        }
+        },
+        "layout": [
+          {
+            "name": "RowGrid67229",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 5,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "name"
+              ],
+              "1": [
+                "type"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid82059",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 6,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "uri"
+              ],
+              "1": [
+                "meta_code"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid06214",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 7,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "need_permit"
+              ],
+              "1": [
+                "just_sign"
+              ],
+              "2": [
+                "permit_by"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid82530",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 8,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "auths"
+              ],
+              "1": [
+                "auth_match_mode"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid36387",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 9,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "roles"
+              ],
+              "1": [
+                "role_match_mode"
+              ]
+            }
+          }
+        ]
       },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "type": {
           "explain": "接口资源类型决定了此接口资源访问控制时如何进行鉴权判定"
         },
@@ -496,6 +1172,9 @@
         },
         "role_match_mode": {
           "explain": "当【需要的角色】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部角色才能访问; 任一匹配: 用户拥有其中一个角色即可访问"
+        },
+        "remark": {
+          "sort": 99
         }
       }
     }
@@ -517,9 +1196,56 @@
       "config": {
         "conf": {
           "label-width": "120px"
-        }
+        },
+        "layout": [
+          {
+            "name": "RowGrid03697",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "code"
+              ],
+              "1": [
+                "name"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid54221",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "group"
+              ],
+              "1": [
+                "type"
+              ]
+            }
+          }
+        ]
       },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
         "code": {
           "explain": "确保唯一"
         },
@@ -528,6 +1254,9 @@
         },
         "type": {
           "explain": "权限类别很重要(例如, 【接口资源】模块中设置访问接口所需的权限时，只能选择接口权限; 其次，也用于绑定操作界面中的优化呈现)"
+        },
+        "remark": {
+          "sort": 99
         }
       }
     }
@@ -554,7 +1283,44 @@
         }
       }
     },
-    "FormView": {}
+    "FormView": {
+      "config": {
+        "layout": [
+          {
+            "name": "RowGrid00259",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "code"
+              ],
+              "1": [
+                "name"
+              ]
+            }
+          }
+        ]
+      },
+      "_fields": {
+        "id": {
+          "sort": 0
+        },
+        "group": {
+          "sort": 2
+        },
+        "remark": {
+          "sort": 99
+        }
+      }
+    }
   },
   "meta_user": {
     "SearchView": {
@@ -579,9 +1345,104 @@
       }
     },
     "FormView": {
+      "config": {
+        "layout": [
+          {
+            "name": "RowGrid19107",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 1,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "username"
+              ],
+              "1": [
+                "password"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid23940",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "nickname"
+              ],
+              "1": [
+                "realname"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid27375",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "sex"
+              ],
+              "1": [
+                "age"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid26448",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 4,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "id_card"
+              ],
+              "1": [
+                "phone"
+              ]
+            }
+          }
+        ]
+      },
       "_fields": {
+        "id": {
+          "sort": 0
+        },
+        "email": {
+          "sort": 5
+        },
         "attrs": {
-          "explain": "您可以在此处扩展任意属性, 数据将保存到数据表json字段中。"
+          "explain": "您可以在此处扩展任意属性, 数据将保存到数据表json字段中。",
+          "sort": 6
         }
       }
     }

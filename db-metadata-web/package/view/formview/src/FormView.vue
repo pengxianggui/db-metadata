@@ -1,5 +1,4 @@
 <template>
-  <!--  <div class="view-container">-->
   <el-form :ref="formRefName" v-bind="formConf"
            :model="model" :rules="rules"
            class="form-view"
@@ -33,7 +32,6 @@
     <!--            <submit v-bind="{on, actions}"></submit>-->
     <!--        </slot>-->
   </el-form>
-  <!--  </div>-->
 </template>
 
 <script>
