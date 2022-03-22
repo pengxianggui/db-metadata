@@ -83,14 +83,13 @@ public class FormDataFactory {
                     continue;
                 }
 
-                /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断 新增[只读,隐藏,禁用],更新[只读,隐藏,禁用],*/
-                if (isInsert) { // TODO 2.2 对隐藏的处理
-                    if (metaField.configParser().addStatus() == MetaFieldConfigParse.READONLY || metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
+                /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断. 除了禁用, 其他该咋咋地*/
+                if (isInsert) {
+                    if (metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
                         continue;
                     }
                 } else {
-                    if (metaField.configParser().updateStatus() == MetaFieldConfigParse.READONLY
-                            || metaField.configParser().updateStatus() == MetaFieldConfigParse.DISABLE) {
+                    if (metaField.configParser().updateStatus() == MetaFieldConfigParse.DISABLE) {
                         continue;
                     }
                 }

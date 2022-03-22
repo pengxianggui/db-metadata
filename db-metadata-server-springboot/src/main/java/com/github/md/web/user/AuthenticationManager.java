@@ -106,7 +106,7 @@ public class AuthenticationManager {
         }
 
         // 此资源需要鉴权，必定需要用户登录
-        AssertUtil.isTrue(user != null, new UnLoginException("未认证，请重新登录"));
+        AssertUtil.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
 
         if (isRoot(user)) {
             return true; // ROOT权限一切放行

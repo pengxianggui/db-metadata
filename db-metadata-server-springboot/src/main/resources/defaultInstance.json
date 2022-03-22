@@ -975,7 +975,19 @@
         }
       }
     },
-    "FormView": {}
+    "FormView": {
+      "_fields": {
+        "exp_chain": {
+          "component_name": "CodeBox"
+        },
+        "req_data": {
+          "component_name": "JsonBox"
+        },
+        "res_data": {
+          "component_name": "JsonBox"
+        }
+      }
+    }
   },
   "meta_config": {
     "SearchView": {

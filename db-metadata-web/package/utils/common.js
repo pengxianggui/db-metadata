@@ -372,6 +372,13 @@ export function assertEmpty(value, defaultValue) {
     return value;
 }
 
+export function assertBoolean(value, defaultValue) {
+    if (isBoolean(value)) {
+        return value
+    }
+    return defaultValue
+}
+
 /**
  * 若传入的value不为Object类型, 则返回defaultValue, 否则返回value
  * @param value

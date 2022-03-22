@@ -29,7 +29,7 @@
             </list-item>
           </list>
         </pop-menu>
-        <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea"
+        <dialog-box :visible.sync="dialogVisible" :meta="dialogMeta" :component-meta="dialogComponentMea" width="70%"
                     @ok="dialogVisible=false" @cancel="dialogVisible=false">
           <template #default>
             <slot name="dialog-body" v-bind:meta="dialogComponentMea"></slot>

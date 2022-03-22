@@ -40,6 +40,10 @@ public class AttributeBuilder {
         AttrCustomMeta deleteUrl(String url);
 
         AttrCustomMeta inline(boolean v);
+
+        AttrCustomMeta hidden(boolean hidden);
+
+        AttrCustomMeta sort(int sort);
     }
 
     interface AttrAbility {
@@ -263,6 +267,17 @@ public class AttributeBuilder {
         @Override
         public AttrCustomMeta inline(boolean v) {
             return set("inline", v);
+        }
+
+        @Override
+        public AttrCustomMeta hidden(boolean hidden) {
+            set("hidden", hidden);
+            return this;
+        }
+
+        @Override
+        public AttrCustomMeta sort(int sort) {
+            return set("sort", sort);
         }
 
         @Override

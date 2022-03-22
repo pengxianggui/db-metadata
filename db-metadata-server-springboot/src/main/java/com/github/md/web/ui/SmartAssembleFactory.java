@@ -65,13 +65,10 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());
     }
 
-    private Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
-        return ComputeKit.recommendFieldConfig(metaField, componentType);
-    }
-
     /**
      * 1. 推测控件(metafield)
      * 2. 推测样式配置(metafield,ComponentType)
+     * 3. 采用元字段的排序
      *
      * @param fields
      * @param globalComponentAllConfig 所有组件的全局配置
@@ -84,7 +81,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         // 读取globalConfig中的配置
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
-            Kv recommendConfig = recommendFieldConfig(field, componentType);
+            Kv recommendConfig = ComputeKit.recommendFieldConfig(field, componentType);
             Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
             Kv fieldInstanceConfig = UtilKit.mergeUseNew(globalComponentConfig, recommendConfig);
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);

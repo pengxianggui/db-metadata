@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  * 替换ExceptionIntercept
- *
+ * <p>
  * RestControllerAdvice + ExceptionHandler 不足:
  * 1. TODO 无法处理Controller调用链外的异常;
  *
@@ -36,13 +36,19 @@ import java.util.regex.Pattern;
 @Slf4j
 public class GlobalMetaException {
 
-    @ExceptionHandler(value = { Exception.class })
+    @ExceptionHandler(value = {Exception.class})
     public Ret arithmeticExceptionHandle(Exception e) {
-        HttpServletRequest request= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         MetaServerManager metaServerManager = AnalysisSpringUtil.getBean(MetaServerManager.class);
         Ret ret = Ret.fail();
+
         log.error("url: {}", request.getRequestURI());
-        log.error(e.getMessage(), e);
+        if (e instanceof WebException) {
+            log.error(e.getMessage());
+        } else {
+            log.error(e.getMessage(), e);
+        }
+
         if (metaServerManager.getMetaServerProperties().isDevMode()) {
             ret.set("request_uri", request.getRequestURI());
             //                ret.set("ex_msg", Throwables.getStackTraceAsString(e));
@@ -60,7 +66,7 @@ public class GlobalMetaException {
         String[] msg = UtilKit.getMatcherValue("\"(.*?Exception.*)(?=at)", allMsgString, Pattern.CASE_INSENSITIVE);
         //内容1，2匹配失败后 手工指定
         if (StrKit.notBlank(msg)) {
-            msg = new String[] { e.getMessage() };
+            msg = new String[]{e.getMessage()};
         }
         //save to db
         try {

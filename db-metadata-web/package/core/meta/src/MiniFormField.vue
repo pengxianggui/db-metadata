@@ -39,7 +39,7 @@
     <el-form-item label="新增状态">
       <el-radio-group v-model="nativeValue.addStatus">
         <el-radio-button label="100">显示</el-radio-button>
-<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
+        <el-radio-button label="50">隐藏</el-radio-button>
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
@@ -47,7 +47,7 @@
     <el-form-item label="更新状态">
       <el-radio-group v-model="nativeValue.updateStatus">
         <el-radio-button label="100">显示</el-radio-button>
-<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
+        <el-radio-button label="50">隐藏</el-radio-button>
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
@@ -55,7 +55,7 @@
     <el-form-item label="查看状态">
       <el-radio-group v-model="nativeValue.viewStatus">
         <el-radio-button label="100">显示</el-radio-button>
-<!--        <el-radio-button label="50">隐藏</el-radio-button>-->
+        <el-radio-button label="50">隐藏</el-radio-button>
         <el-radio-button label="30">只读</el-radio-button>
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>

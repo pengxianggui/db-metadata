@@ -105,6 +105,7 @@ public class FormController extends ControllerAdapter {
                     log.error(e.getMessage(), e);
                     invocation.getRet().setFail();
                     s = false;
+                    throw e;
                 }
                 return s;
             }

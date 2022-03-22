@@ -17,8 +17,7 @@
       <!-- 表单组件-->
       <template v-else>
         <slot :name="'form-item-' + item.name" v-bind:column="item" v-bind:model="model">
-          <el-form-item :prop="item.name" :key="item.name"
-                        :rules="getItemRules(item)" v-if="!item.hasOwnProperty('showable') || item.showable">
+          <el-form-item :prop="item.name" :key="item.name" :rules="getItemRules(item)" v-if="!item.hidden">
             <template #label>
               <span>{{item.label || item.name}}</span>
               <el-tooltip placement="right" v-if="item.explain">

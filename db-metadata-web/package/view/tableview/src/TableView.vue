@@ -127,7 +127,7 @@ import assembleMeta from './assembleMeta'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "@/../package/view/ext/table/columnsValid";
-import {isEmpty} from "@/../package/utils/common";
+import {assertBoolean, isEmpty} from "@/../package/utils/common";
 import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
 
 export default {
@@ -334,8 +334,10 @@ export default {
 
       let params = {};
       const {index, size} = pageModel;
-      const columnNames = columns.filter(column => utils.hasProp(column, 'showable') && column['showable'])
-          .map(column => column['name']);
+      const columnNames = columns.filter(column => {
+        const {hidden = false} = column
+        return !assertBoolean(hidden, false)
+      }).map(column => column['name']);
 
       utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
       utils.mergeObject(params, filterParams, sortParams, {
