@@ -7,11 +7,8 @@ import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
 import FormBuilder from "../../meta/form-builder";
 import MetaConfList from "../../meta/meta-conf";
-import DictList from "../../page/dict/DictList";
-import ExceptionList from "../../page/ex/ExceptionList";
-import AuthList from "../../page/auth/AuthList";
-import ApiResourceList from "../../page/api-resource/ApiResourceList";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
+import ApiResourceList from "../../page/api-resource/ApiResourceList";
 
 const routes = [
     {
@@ -87,6 +84,17 @@ const routes = [
         },
         hidden: false,
         component: MenuManager
+    }, {
+        path: '/meta/api-resource',
+        name: 'ApiResourceList',
+        meta: {
+            title: "接口资源",
+            icon: "api",
+            noCache: false,
+            auths: ['route:meta:api-resource']
+        },
+        hidden: false,
+        component: ApiResourceList
     }, {
         path: '/meta/form-builder',
         name: 'FormBuilder',

@@ -56,6 +56,14 @@ const metaMenus = [{
             "auths": ['menu:meta:router']
         },
         {
+            "path": "/meta/api-resource",
+            "title": "接口资源",
+            "icon": "api",
+            "hidden": false,
+            "disable": false,
+            "auths": ['menu:meta:api-resource']
+        },
+        {
             "path": "/meta/meta-conf",
             "title": "MetaConf",
             "icon": "el-icon-s-tools",
