@@ -34,10 +34,9 @@ export const restUrl = {
     COMP_INSTANCE_CONF_LOAD_EDIT: '/component/load?instanceCode={instanceCode}', // 组件实例配置加载
     COMP_INSTANCE_CONF_LOAD_NEW: '/component/load?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置加载[自动计算-新增时]
     COMP_INSTANCE_CONF_DELETE: '/component/delete/?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置删除
-    COMPONENT_INSTANCE_META: '/component/meta?componentCode={componentCode}&objectCode={objectCode}', // 组件实例元数据
 
 
-    VIEW_INSTANCE_CONF: '/component/meta/ic?ic={instanceCode}', // 容器组件实例配置
+    VIEW_INSTANCE_CONF: '/component/meta?ic={instanceCode}', // 容器组件实例配置
     COMPONENT_INSTANCE_AUTO_CAL: '/component/import-auto-computed', // 容器实例自动计算
     COMPONENT_INSTANCE_INFO: '/component/instance/brief?instanceCode={instanceCode}', //获取实例配置的基础信息(元对象、容器组件、实例名)
 

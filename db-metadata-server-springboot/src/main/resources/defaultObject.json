@@ -670,7 +670,8 @@
         "idKey": "id",
         "pidKey": "pid",
         "label": "name"
-      }
+      },
+      "orderBy": "`order` asc"
     },
     "_fields": {
       "id": {

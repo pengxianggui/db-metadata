@@ -44,26 +44,8 @@ import java.util.List;
 @RequestMapping("/component")
 public class ComponentController extends ControllerAdapter {
 
-    /**
-     * @return
-     * @deprecated 逐步使用 {@link #metaByIc()} 替代
-     */
-    @Deprecated
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
-    @GetMapping("meta")
-    public Ret meta() {
-        QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String compCode = queryHelper.getComponentCode();
-
-        IMetaObject metaObject = metaService().findByCode(objectCode);
-        MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(metaObject, ComponentType.V(compCode));
-
-        return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
-    }
-
     @MetaAccess(Type.API_WITH_META_INSTANCE)
-    @GetMapping("meta/ic")
+    @GetMapping("meta")
     public Ret metaByIc() {
         String ic = queryHelper().getInstanceCode();
         AssertUtil.isTrue(StrKit.notBlank(ic), "实例编码(ic)未指定");
@@ -130,11 +112,7 @@ public class ComponentController extends ControllerAdapter {
     }
 
     /**
-     * TODO 自动计算入口。应当可以支持 根据元字段 + 字段组件类型 来自动计算。实例配置界面切换字段组件类型时，触发该自动的重新自动计算。另外应当支持ui实例配置界面，先为每个字段
-     * 选定组件，然后一键自动计算。这样得到的自动计算配置会更精确。而且，就无需前端去和组件的默认配置做一个 $merge 了!
-     * 获取实例配置,2种方式
-     * 1. objectCode + componentCode
-     * 2. instanceCode
+     * 加载组件配置。包括组件全局配置 和 组件实例配置
      */
     @MetaAccess(value = Type.API_WITH_META_OBJECT)
     @GetMapping("load")
@@ -264,7 +242,7 @@ public class ComponentController extends ControllerAdapter {
         }
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @MetaAccess(value = Type.API)
     @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();

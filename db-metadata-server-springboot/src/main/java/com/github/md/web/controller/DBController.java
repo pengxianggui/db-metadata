@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping("db")
 public class DBController extends ControllerAdapter {
 
-    @GetMapping(value = {"list", "index"})
+    @GetMapping(value = {"index"})
     public Ret list() {
         List<String> schemas = ServiceManager.mysqlService().showSchema();
         return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));

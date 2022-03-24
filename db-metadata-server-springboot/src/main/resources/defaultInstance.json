@@ -1084,8 +1084,9 @@
             "sort": 7,
             "conf": {
               "span": [
-                12,
-                12
+                8,
+                8,
+                8
               ],
               "show-line": false
             },

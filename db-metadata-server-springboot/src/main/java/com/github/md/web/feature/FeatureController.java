@@ -30,7 +30,7 @@ import java.util.List;
  * @author konbluesky
  */
 @RestController
-@RequestMapping(value = { "feature", "f" })
+@RequestMapping(value = { "feature" })
 public class FeatureController extends ControllerAdapter {
 
     @MetaAccess(value = Type.API)
@@ -69,28 +69,28 @@ public class FeatureController extends ControllerAdapter {
         FeatureConfig feature = featureService().loadFeatureConfig(featureCode);
         return Ret.ok("data", feature);
     }
-
-    /**
-     * 获取树型的功能数据
-     */
-    @Deprecated
-    @GetMapping("menu")
-    public Ret menu() {
-        //1. 拼接功能菜单树
-        FeatureNode root = new FeatureNode("business", "", "业务模块", null);
-        TreeBuilder<FeatureNode> treeBuilder = new TreeBuilder<>();
-        Collection<FeatureNode> featureNodes = new ArrayList<>();
-        featureService().findAll().forEach(record -> {
-            FeatureType featureType = FeatureType.V(record.getStr("type"));
-            String code = record.getStr("code");
-            FeatureConfig featureConfig = featureService().loadFeatureConfig(code);
-            featureNodes.add(new FeatureNode(url(featureType, code, featureConfig), root.getId(), record.getStr("name"), record));
-        });
-        JSONArray jsonRoot = new JSONArray();
-        treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
-        jsonRoot.set(0, root);
-        return Ret.ok("data", jsonRoot);
-    }
+//
+//    /**
+//     * 获取树型的功能数据
+//     */
+//    @Deprecated
+//    @GetMapping("menu")
+//    public Ret menu() {
+//        //1. 拼接功能菜单树
+//        FeatureNode root = new FeatureNode("business", "", "业务模块", null);
+//        TreeBuilder<FeatureNode> treeBuilder = new TreeBuilder<>();
+//        Collection<FeatureNode> featureNodes = new ArrayList<>();
+//        featureService().findAll().forEach(record -> {
+//            FeatureType featureType = FeatureType.V(record.getStr("type"));
+//            String code = record.getStr("code");
+//            FeatureConfig featureConfig = featureService().loadFeatureConfig(code);
+//            featureNodes.add(new FeatureNode(url(featureType, code, featureConfig), root.getId(), record.getStr("name"), record));
+//        });
+//        JSONArray jsonRoot = new JSONArray();
+//        treeBuilder.level1Tree(root, featureNodes.toArray(new FeatureNode[0]));
+//        jsonRoot.set(0, root);
+//        return Ret.ok("data", jsonRoot);
+//    }
 
     private String url(FeatureType featureType, String featureCode, FeatureConfig config) {
         String prefix = "";

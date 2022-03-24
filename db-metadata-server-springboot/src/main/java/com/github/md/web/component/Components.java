@@ -36,6 +36,7 @@ final public class Components {
 
     private final Map<ComponentType, Class<? extends Component>> registry = new HashMap<>();
 
+    @Deprecated
     private final List<ComponentType> autoInitComponents = new ArrayList<>();
 
     public static Components me() {
@@ -52,10 +53,12 @@ final public class Components {
         return registry;
     }
 
+    @Deprecated
     public List<ComponentType> getAutoInitComponents() {
         return autoInitComponents;
     }
 
+    @Deprecated
     public Components addAutoInitComponents(ComponentType type) {
         autoInitComponents.add(type);
         return this;
@@ -71,9 +74,7 @@ final public class Components {
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {
             ComponentType type = componentTypeClassEntry.getKey();
             if (!ServiceManager.componentService().newIfNull(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()), true)) {
-                if (ServiceManager.quickJudge().isDevMode()) {
-                    ServiceManager.componentService().updateDefault(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()));
-                }
+                ServiceManager.componentService().updateDefault(type.getCode(), UtilKit.getKv(staticGlobalConfig, type.getCode()));
             }
         }
     }

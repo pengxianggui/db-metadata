@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = {"f/t", "feature/tree"})
+@RequestMapping(value = {"feature/tree"})
 public class TreeController extends ControllerAdapter {
 
     /**

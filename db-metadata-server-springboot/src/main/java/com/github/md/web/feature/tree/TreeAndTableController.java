@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = { "f/tat", "feature/treeAndTable" })
+@RequestMapping(value = {"feature/treeAndTable" })
 public class TreeAndTableController extends ControllerAdapter {
 
     /**
@@ -111,7 +111,7 @@ public class TreeAndTableController extends ControllerAdapter {
         QueryUrlBuilder queryUrlBuilder = queryHelper.queryBuilder();
         queryUrlBuilder.param("featureCode", featureCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/f/tat/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
+        FormView formView = ViewFactory.formView(metaObject).action("/feature/treeAndTable/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
 
