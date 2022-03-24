@@ -30,23 +30,23 @@ module.exports = {
                         'quickStart'
                     ]
                 },
-                {
-                    title: '后端集成',
-                    children: [
-                        'server/',
-                        'server/config',
-                        'server/extension'
-                    ],
-                    initialOpenGroupIndex: -1 // 可选的, 默认值是 0
-                },
-                {
-                    title: '前端集成',
-                    children: [
-                        'web/',
-                        'web/config'
-                    ],
-                    initialOpenGroupIndex: -1 // 可选的, 默认值是 0
-                },
+                // {
+                //     title: '后端集成',
+                //     children: [
+                //         'server/',
+                //         'server/config',
+                //         'server/extension'
+                //     ],
+                //     initialOpenGroupIndex: -1 // 可选的, 默认值是 0
+                // },
+                // {
+                //     title: '前端集成',
+                //     children: [
+                //         'web/',
+                //         'web/config'
+                //     ],
+                //     initialOpenGroupIndex: -1 // 可选的, 默认值是 0
+                // },
             ],
             '/component/': [
                 {

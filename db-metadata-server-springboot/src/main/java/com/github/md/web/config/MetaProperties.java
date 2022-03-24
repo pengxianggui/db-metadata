@@ -22,7 +22,7 @@ public class MetaProperties {
 
     private AnalysisProperties analysis;
 
-    private boolean devMode;
+    private boolean devMode = false;
 
     /**
      * !!! Very important !!!
