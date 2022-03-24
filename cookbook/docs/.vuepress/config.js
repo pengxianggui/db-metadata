@@ -2,7 +2,7 @@
 
 
 module.exports = {
-    title: 'Db-Metadata指南',
+    title: 'Db-Metadata 教程',
     description: '手册将介绍Db-Metadata研发初衷、设计思路、核心概念、使用指南和扩展方法',
     head: [
         ['link', {rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png'}],
