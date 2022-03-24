@@ -14,6 +14,7 @@ export const access = {
         id: null,
         username: null,
         phone: null,
+        avatar: null,
         roles: [],
         auths: [],
         attrs: {}
@@ -233,10 +234,11 @@ export function setAuths(auths = []) {
     return access.user.auths;
 }
 
-export function setUser({id = '', username = '', phone, roles = [], auths = []}) {
+export function setUser({id = '', username = '', phone, avatar, roles = [], auths = []}) {
     access.user.id = id;
     access.user.username = username;
     access.user.phone = phone;
+    access.user.avatar = avatar;
     setRoles(roles)
     setAuths(auths)
 }

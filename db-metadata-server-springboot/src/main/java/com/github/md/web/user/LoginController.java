@@ -43,6 +43,7 @@ public class LoginController extends ControllerAdapter {
                     user.userId(), // TODO token生成并塞入
                     user.userId(),
                     user.userName(),
+                    user.avatar(),
                     Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()),
                     Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()),
                     user.attrs()
@@ -72,6 +73,7 @@ public class LoginController extends ControllerAdapter {
                 user.userId(), // TODO token生成并塞入
                 user.userId(),
                 user.userName(),
+                user.avatar(),
                 Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()),
                 Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()),
                 user.attrs()

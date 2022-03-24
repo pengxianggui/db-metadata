@@ -33,7 +33,7 @@ export const appConfig = {
 }
 
 export const configApp = function (Vue, opts = {}) {
-    const {axios} = opts
+    const axios = Vue.prototype.$axios
     if (!axios) {
         printErr('axios必须配置')
     } else {

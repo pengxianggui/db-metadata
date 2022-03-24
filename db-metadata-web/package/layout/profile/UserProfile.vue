@@ -2,7 +2,7 @@
   <div class="user-profile">
     <div class="user-div">
       <el-dropdown>
-        <img :src="user.avatar" class="avatar" v-if="false">
+        <img :src="user.avatar" class="avatar" v-if="user.avatar">
         <div class="avatar" v-else>
           <svg-icon :value="avatarSrc" class="svg-icon"></svg-icon>
         </div>
@@ -66,7 +66,11 @@ export default {
   },
   computed: {
     avatarSrc() {
-      const {user: {age, sex}} = this
+      const {user: {age, sex, avatar}} = this
+      if (!isEmpty(avatar)) {
+        return avatar
+      }
+
       if (isEmpty(sex) || isEmpty(age)) {
         return 'monster' + randomInt(1, 2)
       }
@@ -93,6 +97,7 @@ $headerHeight: 60px;
     .avatar {
       width: $avatarSideLength;
       height: $avatarSideLength;
+      border-radius: $avatarSideLength / 2;
       vertical-align: middle;
       cursor: pointer;
     }

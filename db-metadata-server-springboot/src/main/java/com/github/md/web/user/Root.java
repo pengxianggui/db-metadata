@@ -7,9 +7,10 @@ import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.google.common.collect.Maps;
-import lombok.Getter;
+import com.github.md.web.user.support.defaults.DefaultUser;
+import com.jfinal.plugin.activerecord.Record;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,58 +19,49 @@ import java.util.Map;
  * @author pengxg
  * @date 2022/3/7 8:55 上午
  */
-public class Root implements UserWithRolesWrapper {
+public class Root extends DefaultUser implements UserWithRolesWrapper {
     private static Root instance;
 
-    private String id = "0";
-    private String username = "ROOT";
-    @Getter
-    private String password = "888888";
-    private Map<String, String> attrs = Maps.newHashMap();
-
-    private Root() {
-        MetaProperties metaProp = ServiceManager.getAppProperties();
-        Map<String, String> root = metaProp.getApp().getRoot();
-        if (root != null) {
-            if (root.containsKey("id"))
-                this.id = root.get("id");
-            if (root.containsKey("username"))
-                this.username = root.get("username");
-            if (root.containsKey("password"))
-                this.password = root.get("password");
-
-            this.attrs = root;
-        }
-
-        this.attrs.put("id", id);
-        this.attrs.put("username", username);
-        this.attrs.put("password", password);
+    private Root(Record record) {
+        super(record);
     }
 
     public static Root me() {
         if (instance == null) {
             synchronized (Root.class) {
                 if (instance == null) {
-                    instance = new Root();
+                    Map<String, Object> attrs = new HashMap<>();
+                    attrs.put("id", "0");
+                    attrs.put("username", "ROOT");
+                    attrs.put("password", "888888");
+
+
+                    MetaProperties metaProp = ServiceManager.getAppProperties();
+                    Map<String, String> root = metaProp.getApp().getRoot();
+
+                    if (root != null) {
+                        if (root.containsKey("id")) {
+                            attrs.put("id", root.get("id"));
+                        }
+                        if (root.containsKey("username")) {
+                            attrs.put("username", root.get("username"));
+                        }
+                        if (root.containsKey("password")) {
+                            attrs.put("password", root.get("password"));
+                        }
+                        if (root.containsKey("avatar")) {
+                            attrs.put("avatar", root.get("avatar"));
+                        }
+                    }
+
+                    Record record = new Record();
+                    record.setColumns(attrs);
+                    record.set("attrs", attrs);
+                    instance = new Root(record);
                 }
             }
         }
         return instance;
-    }
-
-    @Override
-    public String userId() {
-        return id;
-    }
-
-    @Override
-    public String userName() {
-        return username;
-    }
-
-    @Override
-    public Kv attrs() {
-        return Kv.create().set(attrs);
     }
 
     @Override

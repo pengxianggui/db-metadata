@@ -1355,6 +1355,11 @@
             "width": "220"
           }
         }
+      },
+      "_fields": {
+        "avatar": {
+          "render": " function(h, value) {\n  const v = JSON.parse(value)\n  if (v.length > 0) {\n  const picUrl = v[0]['url']\n  return h('el-image', {\n    attrs: {\n      src: picUrl,\n      \"preview-src-list\":[picUrl]\n    },\n      style: {\n      width: '30px',\n      height: '30px'\n      }\n  }, null)\n  }\n  return h('span', null, null)\n}"
+        }
       }
     },
     "FormView": {
@@ -1385,7 +1390,7 @@
             "name": "RowGrid23940",
             "label": "栅格布局",
             "component_name": "RowGrid",
-            "sort": 2,
+            "sort": 3,
             "conf": {
               "span": [
                 12,
@@ -1406,7 +1411,7 @@
             "name": "RowGrid27375",
             "label": "栅格布局",
             "component_name": "RowGrid",
-            "sort": 3,
+            "sort": 4,
             "conf": {
               "span": [
                 12,
@@ -1427,7 +1432,7 @@
             "name": "RowGrid26448",
             "label": "栅格布局",
             "component_name": "RowGrid",
-            "sort": 4,
+            "sort": 5,
             "conf": {
               "span": [
                 12,
@@ -1450,12 +1455,20 @@
         "id": {
           "sort": 0
         },
+        "avatar": {
+          "component_name": "ImgBox",
+          "seats": [""],
+          "sort": 2,
+          "conf": {
+            "action": "/file/upload?objectCode=meta_user&fieldCode=avatar"
+          }
+        },
         "email": {
-          "sort": 5
+          "sort": 6
         },
         "attrs": {
           "explain": "您可以在此处扩展任意属性, 数据将保存到数据表json字段中。",
-          "sort": 6
+          "sort": 7
         }
       }
     }

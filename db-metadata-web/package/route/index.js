@@ -32,8 +32,9 @@ function dealRoutes(routes) {
 
 // 路由数据注册
 function registerRouteData(Vue, opts) {
-    // return new Promise((resolve, reject) => {
-    const {axios, router, layout: Layout = MetaLayout} = opts
+    const {router, layout: Layout = MetaLayout} = opts
+    const axios = Vue.prototype.$axios
+
     const routes = [] // 最终的路由数据
     const routesInLayout = {
         path: '/',
@@ -60,12 +61,8 @@ function registerRouteData(Vue, opts) {
             // 参见 https://github.com/vuejs/vue-router/issues/1859 通过router.addRoutes添加的路由，router.options.routes中
             // 不会有，这导致了TagView中初始化的一些问题。因此这里的解决办法参考一哥们的: https://www.cnblogs.com/blueroses/p/7767285.html
             // 还存在一些问题，可能重复固定tag
-            // router.options.routes = finalRoutes
-            // resolve()
-            // debugger
         })
     })
-    // })
 }
 
 /**

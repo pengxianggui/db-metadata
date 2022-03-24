@@ -60,6 +60,11 @@ public class LocalUser implements User, UserWithRolesWrapper {
     }
 
     @Override
+    public String avatar() {
+        return null;
+    }
+
+    @Override
     public MRRole[] roles() {
         return roles;
     }

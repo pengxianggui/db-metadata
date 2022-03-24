@@ -2,6 +2,7 @@
  * 为axios扩展safeGet和safePost方法
  * @param axios
  */
+import Axios from 'axios'
 import {isEmpty, assertEmpty, printWarn} from "../utils/common";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
@@ -60,7 +61,9 @@ const configInterceptor = function (router, axios) {
 }
 
 export default function (opts) {
-    const {router, axios, axiosInterceptor: {enable = true} = {}} = opts
+    const {router, axios: axiosConfig} = opts
+
+    const axios = Axios.create(axiosConfig)
 
     if (isEmpty(axios)) {
         console.error('[MetaElement] 必须配置axios!请实例化axios并配置')
@@ -90,7 +93,8 @@ export default function (opts) {
             console.warn('url: ' + url + ' 未编译 ...')
             const paramsStr = JSON.stringify(params)
             printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
-            return new Promise(((resolve, reject) => {}))
+            return new Promise(((resolve, reject) => {
+            }))
         }
         let compileUrl = resolve(url, config);
         return axios.get(compileUrl, config);
@@ -101,14 +105,15 @@ export default function (opts) {
             console.warn('url: ' + url + ' 未编译 ...')
             const paramsStr = JSON.stringify(params)
             printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
-            return new Promise(((resolve, reject) => {}))
+            return new Promise(((resolve, reject) => {
+            }))
         }
         let compileUrl = resolve(url, config);
         return axios.post(compileUrl, data, config);
     }
 
-    if (enable) {
-        configInterceptor(router, axios)
-    }
+    // 配置拦截器
+    configInterceptor(router, axios)
+
     return axios
 }

@@ -1,14 +1,15 @@
-import axios from "@/axios";
 import router, {menus} from "@/router";
 import Route1_2 from "@/views/Route1_2";
 
 export default {
     // 必要的配置
-    axios: axios, // axios实例(必须)
     router: router, // 路由实例(必须)
 
     // 以下为非必要配置
     menus: menus, // 编程菜单
+    axios: {  // axios配置
+        baseURL: '/meta'
+    },
     // routerInterceptor: { // 路由守卫
     //     enable: true, // 开启内置的路由守卫。开启后，由MetaElement负责值守路由，并对路由鉴权。如果关闭，你需要自行维持路由鉴权，并维持用户状态。
     // },

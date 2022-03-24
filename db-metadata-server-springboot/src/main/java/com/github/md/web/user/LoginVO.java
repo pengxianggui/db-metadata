@@ -23,6 +23,7 @@ public class LoginVO {
     private String token;
     private String id;
     private String username;
+    private String avatar;
     private Set<String> roles;
     private Set<String> auths;
     private Kv attrs;
