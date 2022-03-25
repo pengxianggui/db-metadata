@@ -8,11 +8,12 @@ module.exports = {
         ['link', {rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png'}],
         // ['meta', {rel: 'keywords', href: 'dbmeta'}]
     ],
+    plugins: ['demo-container'], // 配置插件
     themeConfig: {
         logo: '/logo.svg',
         nav: [
             {text: '教程', link: '/guide/introduce'},
-            {text: '组件库', link: '/component/'},
+            {text: '组件库介绍', link: '/component/'},
             {text: '关于我', link: '/about'}
         ],
         // displayAllHeaders: true,
@@ -27,54 +28,68 @@ module.exports = {
                         'purpose',
                         'design',
                         'coreConcept',
-                        'quickStart'
+                        'quickStart',
+                        'createObject',
+                        'createFeature',
+                        'adjustConfig',
+                        "use",
+                        "toBeContinue"
                     ]
-                },
-                // {
-                //     title: '后端集成',
-                //     children: [
-                //         'server/',
-                //         'server/config',
-                //         'server/extension'
-                //     ],
-                //     initialOpenGroupIndex: -1 // 可选的, 默认值是 0
-                // },
-                // {
-                //     title: '前端集成',
-                //     children: [
-                //         'web/',
-                //         'web/config'
-                //     ],
-                //     initialOpenGroupIndex: -1 // 可选的, 默认值是 0
-                // },
+                }
             ],
             '/component/': [
+                '',
                 {
                     title: '域组件',   // 必要的
+                    path: '/component/field/',
                     // collapsable: true, // 可选的, 默认值是 true,
                     sidebarDepth: 1,    // 可选的, 默认值是 1
                     children: [
-                        'field/',
                         'field/textbox',
                         'field/textareabox',
+                        'field/numbox',
+                        'field/passbox',
+                        'field/boolbox',
+                        'field/radiobox',
+                        'field/checkbox',
+                        'field/dropdownbox',
+                        'field/timebox',
+                        'field/datebox',
+                        'field/datetimebox',
+                        'field/filebox',
+                        'field/imgbox',
+                        'field/jsonbox',
+                        'field/miniformbox',
+                        'field/findbox',
+                        'field/regionbox',
+                        'field/richtextbox'
                     ]
                 },
                 {
                     title: '容器组件',   // 必要的
+                    path: '/component/view/',
                     // collapsable: true, // 可选的, 默认值是 true,
                     sidebarDepth: 1,    // 可选的, 默认值是 1
                     children: [
-                        'view/'
+                        'view/formview',
+                        'view/searchview',
+                        'view/tableview',
+                        'view/tabletreeview',
+                        'view/treeview',
                     ]
                 },
                 {
                     title: '模板组件',   // 必要的
+                    path: '/component/template/',
                     // collapsable: true, // 可选的, 默认值是 true,
                     sidebarDepth: 1,    // 可选的, 默认值是 1
                     children: [
-                        'template/'
+                        'template/SingleGridTmpl',
+                        'template/TreeSingleGridTmpl',
+                        'template/MasterSlaveTableTmpl',
+                        'template/TreeTableTmpl'
                     ]
-                },
+                }
             ]
         }
     }

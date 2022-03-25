@@ -31,7 +31,7 @@
 ### explain
 说明。
 
-容器组件为表单时(FormView)，表示表单项目中文显示旁的问号说明。
+容器组件为表单时(FormView)，表示表单项目中文显示旁的补充说明。
 
 ### conf
 此项配置为ElementUI `el-input`原生配置。

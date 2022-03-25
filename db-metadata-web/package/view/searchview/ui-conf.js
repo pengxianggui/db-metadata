@@ -24,7 +24,6 @@ export default {
     },
     "columns": [],
     "directly_trigger": [], // 直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action
-    "explain": "" // 字段解释
 }
 
 /**

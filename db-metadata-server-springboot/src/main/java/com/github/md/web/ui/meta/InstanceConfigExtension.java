@@ -23,14 +23,19 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
 
     private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
         if (metaField.dbType().isText()) {
-            if (metaField.dbType().is1Text(metaField.dbTypeLength().intValue())) { // 一个字符长度的text类型，视为下拉
-                builder.componentName(ComponentType.DROPDOWN);
+            if (metaField.dbType().isLongText()) {
+                builder.componentName(ComponentType.RICHTEXTBOX);
+            } else {
+                if (metaField.dbType().is1Text(metaField.dbTypeLength().intValue())) { // 一个字符长度的text类型，视为下拉
+                    builder.componentName(ComponentType.DROPDOWN);
+                }
+                if (metaField.dbTypeLength() > 255L) {
+                    builder.componentName(ComponentType.TEXTAREABOX);
+                    builder.resizeable("none");
+                    builder.showOverflowTooltip(true);
+                }
             }
-            if (metaField.dbTypeLength() > 255L) {
-                builder.componentName(ComponentType.TEXTAREABOX);
-                builder.resizeable("none");
-                builder.showOverflowTooltip(true);
-            }
+
             builder.maxlength(metaField.dbTypeLength().intValue());
         }
     };
@@ -43,6 +48,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
                     break;
                 case SEARCHVIEW:
                     builder.componentName(ComponentType.DROPDOWN);
+                    builder.dataUrl("/dict?name=yn");
                     break;
             }
         }
@@ -55,7 +61,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
                 builder.componentName(ComponentType.DATETIMEBOX);
             }
             if (metaField.dbType().isTime()) {
-                builder.componentName(ComponentType.TIMEBOX);
+                builder.componentName(ComponentType.DATETIMEBOX);
             }
             if (metaField.dbType().isDateOnly()) {
                 builder.componentName(ComponentType.DATEBOX);
@@ -92,7 +98,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         if (metaFieldConfigParse.isMultiple()) {
             builder.multiple(true);
         }
-        
+
         if (containerType == ComponentType.FORMVIEW) {
             builder.defaultVal(metaFieldConfigParse.defaultVal());
         }
@@ -103,6 +109,14 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         //上传框
         if (metaField.fieldCode().contains("file") || metaField.configParser().isFile()) {
             builder.componentName(ComponentType.FILEBOX);
+            builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
+            builder.autoUpload(true);
+        }
+        if (metaField.fieldCode().contains("image")
+                || metaField.fieldCode().contains("avatar")
+                || metaField.fieldCode().contains("picture")
+                || metaField.configParser().isFile()) {
+            builder.componentName(ComponentType.IMAGEBOX);
             builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
             builder.autoUpload(true);
         }

@@ -28,7 +28,7 @@
             <h2 align="center">{{ confModel.componentCode }}</h2>
             <el-form-item>
               <mini-form-box v-model="confModel.conf" class="shadow" :disable="true"
-                             :meta="confMeta" :show-change-type="true"
+                             :meta="confMeta" :controls="true"
                              @json-change="buildObjectConfMeta(confModel.conf)">
                 <template #button-expand="{value}">
                   <el-popover placement="right" trigger="click"

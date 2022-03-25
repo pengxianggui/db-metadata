@@ -181,3 +181,67 @@ ROOT用户账密默认为: ROOT/888888
 
 
 至此，dbmeta集成结束。
+
+## 接下来
+接下来, 借助两张表, 基于在上述Demo工程，图文并茂的形式来创建三个功能模块，分别是:
+- 员工单表管理模块
+- 部门树型表管理模块
+- 部门员工树+表管理模块
+
+两张表的表结构如下:
+```sql
+-- ----------------------------
+-- Table structure for t_department
+-- ----------------------------
+DROP TABLE IF EXISTS `t_department`;
+CREATE TABLE `t_department` (
+  `id` varchar(32) COLLATE utf8_bin NOT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '部门名',
+  `pid` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '父部门',
+  `order` int(3) DEFAULT NULL COMMENT '排序',
+  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '职责说明',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='部门';
+
+-- ----------------------------
+-- Table structure for t_employee
+-- ----------------------------
+DROP TABLE IF EXISTS `t_employee`;
+CREATE TABLE `t_employee` (
+  `id` varchar(32) COLLATE utf8_bin NOT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '姓名',
+  `age` int(3) DEFAULT NULL COMMENT '年龄',
+  `sex` varchar(1) COLLATE utf8_bin DEFAULT NULL COMMENT '性别',
+  `birth` date DEFAULT NULL COMMENT '出生日期',
+  `photo` text COLLATE utf8_bin COMMENT '个人照片',
+  `entry_time` datetime NOT NULL COMMENT '入职时间',
+  `dep_id` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '所属部门',
+  `jobs` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '岗位',
+  `address` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '家庭住址',
+  `enable` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否启用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='员工';
+```
+
+:::warning
+注意: 数据库表的DDL是DbMeta的起点, 把DDL写的合理一些, 可以让DbMeta更"懂"你。比如, 以下几点约定：
+1. 表名将默认作为元对象编码;
+1. 字段的注释将默认作为元字段的中文名, 也会默认成为表单域的label、表格header上的中文显示;
+1. 字段的顺序也将成为元字段的顺序, 也会成为表格中列的顺序、表单中表单域的顺序;
+1. 默认值很重要, 通常会作为表单新增时的默认值;
+1. 字段名称含有file时, 会自动将域组件设为FileBox;
+1. 字段名称含有image、avatar或picture时, 会自动将域组件设为ImgBox;
+1. 字段如果设为必填, 则表单域会自动添加必填的校验规则;
+1. 合理的字段类型非常重要, 有利于DbMeta顺利推导实例配置。参考下述表格
+
+|字段类型|控件|说明|
+|---|---|---|
+|bit(1)|BoolBox/DropDownBox|长度为1的bit会被视为布尔值, 在表单中使用BoolBox，在搜索面板中使用DropDownBox|
+|varchar(1)|DropDownBox|一个字符长度, 将被视为下拉|
+|varchar(255+)|TextAreaBox|varchar字段类型长度255时, 将被视为多行文本域|
+|json|JsonBox|-|
+|datetime、timestamp|DateTimeBox|-|
+|date|DateBox|-|
+|int、tinyint、bigint、decimal|NumBox|-|
+|longtext|RichTextBox|大文本字段类型, 使用富文本|
+:::

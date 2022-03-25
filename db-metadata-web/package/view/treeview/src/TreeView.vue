@@ -7,7 +7,8 @@
                  class="opr-bar"
                  v-if="operationBarConf.show">
         <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
-        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
+        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd"
+              v-bind:activeData="activeData" v-bind:choseData="choseData">
           <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                      v-if="operationBarConf.add.show && editable">
             {{ operationBarConf.add.text }}
@@ -53,7 +54,8 @@
               <i class="el-icon-success"></i>
               <span>反选</span>
             </el-dropdown-item>
-            <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
+            <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
+                v-bind:activeData="activeData"></slot>
           </el-dropdown-menu>
         </el-dropdown>
       </component>

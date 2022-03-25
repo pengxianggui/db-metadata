@@ -22,9 +22,11 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -97,6 +99,8 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
         // TODO 2.3 序列化对全局生效, 如何避免对业务系统的强制影响, 仅仅只作用于Record中的日期类型
         SerializeConfig.getGlobalInstance().put(Timestamp.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Timestamp) o)));
         SerializeConfig.getGlobalInstance().put(DateTime.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((DateTime) o)));
+        SerializeConfig.getGlobalInstance().put(Date.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date) o)));
+        SerializeConfig.getGlobalInstance().put(LocalDate.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(DateTimeFormatter.ofPattern("yyyy-MM-dd").format((LocalDate) o)));
         SerializeConfig.getGlobalInstance().put(LocalDateTime.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format((LocalDateTime) o)));
         converters.add(converter);
     }

@@ -6,7 +6,7 @@
     <template v-else>
       <json-box v-model="nativeValue" mode="code" @input="$emit('json-change')" v-bind="conf"></json-box>
     </template>
-    <div style="display: flex;" v-if="showChangeType">
+    <div style="display: flex;" v-if="showControls">
       <span>
           <el-button size="mini" icon="el-icon-refresh" circle @click="changeType"></el-button>
       </span>
@@ -22,6 +22,7 @@ import Meta from '../../mixins/meta'
 import Val from '../../mixins/value'
 import assembleMeta from './assembleMeta'
 import DefaultFormViewMeta from '@/../package/view/formview/ui-conf'
+import {assertEmpty} from "../../../utils/common";
 
 export default {
   name: "MiniFormBox",
@@ -32,7 +33,7 @@ export default {
       default: () => {
       }
     },
-    showChangeType: {
+    controls: {
       type: Boolean,
       default: () => false
     }
@@ -59,6 +60,10 @@ export default {
       this.$reverseMerge(finalConf, conf)
       this.$reverseMerge(finalConf, $attrs)
       return finalConf
+    },
+    showControls() {
+      const {meta: {controls: controlsInMeta = true}, controls: controlsInProp} = this
+      return assertEmpty(controlsInProp, controlsInMeta);
     }
   }
 

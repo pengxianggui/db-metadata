@@ -11,5 +11,12 @@
   },
   "devDependencies": {
     "vuepress": "^1.9.7"
+  },
+  "dependencies": {
+    "db-metadata": "^2.1.2",
+    "element-ui": "^2.15.6",
+    "vuepress-plugin-demo-container": "^0.2.0",
+    "core-js": "^3.6.5",
+    "axios": "^0.19.0"
   }
 }

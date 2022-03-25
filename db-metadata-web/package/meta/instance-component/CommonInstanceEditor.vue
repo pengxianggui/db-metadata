@@ -39,7 +39,7 @@
                :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="元对象配置" name="0">
           <el-form-item label="元对象配置">
-            <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :show-change-type="true"
+            <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :controls="true"
                            @json-change="() => buildObjectConfMeta(confModel.conf)">
               <template #button-expand="{value}">
                 <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
