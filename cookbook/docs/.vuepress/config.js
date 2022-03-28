@@ -2,7 +2,7 @@
 
 
 module.exports = {
-    title: 'Db-Metadata 教程',
+    title: 'Db-Metadata 教程 (v2.1)',
     description: '手册将介绍Db-Metadata研发初衷、设计思路、核心概念、使用指南和扩展方法',
     head: [
         ['link', {rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png'}],
@@ -10,10 +10,12 @@ module.exports = {
     ],
     plugins: ['demo-container'], // 配置插件
     themeConfig: {
+        lastUpdated: 'Last Updated', // string | boolean
         logo: '/logo.svg',
         nav: [
             {text: '教程', link: '/guide/introduce'},
             {text: '组件库介绍', link: '/component/'},
+            {text: '演示环境', link: 'http://dev-dbmeta.asoco.com.cn'},
             {text: '关于我', link: '/about'}
         ],
         // displayAllHeaders: true,
@@ -34,6 +36,15 @@ module.exports = {
                         'adjustConfig',
                         "use",
                         "toBeContinue"
+                    ]
+                },
+                {
+                    title: 'Dev-Todo',
+                    collapsable: false, // 可选的, 默认值是 true,
+                    sidebarDepth: 1,    // 可选的, 默认值是 1
+                    path: '/guide/dev-todo',
+                    children: [
+
                     ]
                 }
             ],
