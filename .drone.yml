@@ -31,6 +31,16 @@ steps:
     when:
       local: false
 
+  - name: build-cookbook
+    image: node:12.16
+    commands:
+      - cd cookbook
+      - npm cache clean --force
+      - npm install
+      - npm run docs:build
+    when:
+      local: false
+
   - name: build-server
     image: maven:3-alpine
     commands:
