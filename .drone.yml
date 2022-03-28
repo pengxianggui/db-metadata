@@ -68,7 +68,7 @@ steps:
       - name: docker
         path: /var/run/docker.sock
     commands:
-      - sh build.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+      - sh build.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER} $${DRONE_COMMIT_MESSAGE##*;}
     when:
       local: false
 

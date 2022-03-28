@@ -1,6 +1,5 @@
 // <img :src="$withBase('/foo.png')" alt="foo"
 
-
 module.exports = {
     title: 'Db-Metadata 教程 (v2.1)',
     description: '手册将介绍Db-Metadata研发初衷、设计思路、核心概念、使用指南和扩展方法',
@@ -8,6 +7,7 @@ module.exports = {
         ['link', {rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png'}],
         // ['meta', {rel: 'keywords', href: 'dbmeta'}]
     ],
+    repo: 'https://gitlab.asoco.com.cn/hthjAssets/db-metadata',  //仓库地址
     plugins: ['demo-container'], // 配置插件
     themeConfig: {
         lastUpdated: 'Last Updated', // string | boolean
