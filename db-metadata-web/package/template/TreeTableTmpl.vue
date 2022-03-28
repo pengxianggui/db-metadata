@@ -1,214 +1,222 @@
 <template>
-  <div class="el-card container-view">
+  <div class="page-container">
     <row-grid :span="[6, 18]">
-        <template #0>
-            <tree-view :ref="treeRefName" :meta="treeMeta" @active-change="handleActiveChange" @chose-change="handleChoseChange"
-            ></tree-view>
-        </template>
-        <template #1>
-<!--            SearchView的meta来源-->
-            <search-view :meta="svMeta" @search="handleSearch"></search-view>
-            <table-view :ref="tlRefName" :meta="tvMeta" :filter-params="filterParams">
-                <template #prefix-btn="{conf, choseData}">
-                    <slot name="prefix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #add-btn="{conf}">
-                  <slot name="add-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig" v-bind:relateId="relateId">
-                    <el-button v-bind="conf" @click="handleAdd">新增</el-button>
-                  </slot>
-                </template>
-                <template #batch-delete-btn="{conf, choseData}">
-                    <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
-                <template #suffix-btn="{conf, choseData}">
-                    <slot name="suffix-btn" v-bind:conf="conf" v-bind:featureConf="featureConfig"
-                          v-bind:relateId="relateId" v-bind:choseData="choseData"></slot>
-                </template>
+      <template #0>
+        <tree-view :ref="config.tree.config.objectCode"
+                   :ic="config.tree.instanceCodes.TreeView"
+                   @open-form-view="openTreeFormView"
+                   @active-change="handleActiveChange"
+                   @chose-change="handleChoseChange"></tree-view>
+      </template>
+      <template #1>
+        <!-- SearchView的meta来源 -->
+        <search-view :ic="config.table.instanceCodes.SearchView" @search="handleSearch"></search-view>
+        <table-view :ref="config.table.config.objectCode"
+                    :ic="config.table.instanceCodes.TableView"
+                    @open-form-view="openTableFormView"
+                    :filter-params="filterParams">
 
-                <template #buttons="{scope, conf}">
-                    <slot name="buttons" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
+          <tempalte #operation-bar="scope">
+            <slot name="operation-bar" v-bind="scope"></slot>
+          </tempalte>
+          <template #prefix-btn="scope">
+            <slot name="prefix-btn" v-bind="scope"></slot>
+          </template>
+          <template #add-btn="scope">
+            <slot name="add-btn" v-bind="scope">
+              <el-button v-bind="scope.conf.conf" @click="handleAdd">新增</el-button>
+            </slot>
+          </template>
+          <template #batch-delete-btn="scope">
+            <slot name="batch-delete-btn" v-bind="scope"></slot>
+          </template>
+          <template #suffix-btn="scope">
+            <slot name="suffix-btn" v-bind="scope"></slot>
+          </template>
 
-                <template #inner-before-extend-btn="{scope}">
-                    <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #view-btn="{scope, conf}">
-                    <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #edit-btn="{scope, conf}">
-                    <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #delete-btn="{scope, conf}">
-                    <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-                <template #inner-after-extend-btn="{scope}">
-                    <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:featureConf="featureConfig" v-bind:relateId="relateId"></slot>
-                </template>
-            </table-view>
-        </template>
+          <template #buttons="scope">
+            <slot name="buttons" v-bind="scope"></slot>
+          </template>
+
+          <template #inner-before-extend-btn="scope">
+            <slot name="inner-before-extend-btn" v-bind="scope"></slot>
+          </template>
+          <template #view-btn="scope">
+            <slot name="view-btn" v-bind="scope"></slot>
+          </template>
+          <template #edit-btn="scope">
+            <slot name="edit-btn" v-bind="scope"></slot>
+          </template>
+          <template #delete-btn="scope">
+            <slot name="delete-btn" v-bind="scope"></slot>
+          </template>
+          <template #inner-after-extend-btn="scope">
+            <slot name="inner-after-extend-btn" v-bind="scope"></slot>
+          </template>
+        </table-view>
+      </template>
     </row-grid>
   </div>
 </template>
 
 <script>
-    import utils from '../utils'
-    import {getMetaFromFeature_TreeTableTmpl, loadFeature} from "../utils/rest";
-    import {restUrl} from "../constant/url";
-    import {assertEmpty, isEmpty} from "../utils/common";
-    import {resolvePath} from "../utils/url";
-    import {relatedId, defaultPrimaryKey} from '../config'
+import utils from '../utils'
+import {loadFeature} from "../utils/rest";
+import {restUrl} from "../constant/url";
+import {isEmpty} from "../utils/common";
+import {getNameOfFormTypes} from "../view/formview/ui-conf";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
-    export default {
-        name: "TreeTableTmpl",
-        meta: {
-          isTemplate: true,
-          isPage: false,
-          cn: '树-表模板',
-          icon: 'tree_table',
-          buildIn: true // 内建：DbMeta提供
-        },
-        props: {
-            fc: String
-        },
-        data() {
-            const {fc: R_fc} = this.$route.query;
-            const featureCode = utils.assertUndefined(this.fc, R_fc);
-
-            return {
-                featureCode: featureCode,
-                featureConfig: {},
-                // treeConf: {},
-                activeTreeData: {},
-                // tableConf: {},
-                tvMeta: {},
-                treeMeta: {},
-                svMeta: {},
-                initTableDataUrl: '', // 不带关联参数的Table数据初始url
-                tableDataUrl: '', // 待编译的Table数据初始url
-                filterParams: {}
-            }
-        },
-        methods: {
-            refresh() {
-                this.refreshTreeData()
-                this.refreshTableData()
-            },
-            handleChoseChange(rows) {
-                // pxg_todo 多选树节点时, table的默认行为(待定)
-            },
-            refreshTreeData() {
-                const {treeRefName, $refs} = this
-                $refs[treeRefName].getData()
-            },
-            handleSearch(params) {
-              // const tlRefName = this.tlRefName;
-              this.filterParams = params;
-              this.$nextTick(() => {
-                // this.$refs[tlRefName].getData();
-                this.refreshTableData()
-              })
-            },
-            refreshTableData() {
-                const {treePrimaryKey, activeTreeData, tableDataUrl, initTableDataUrl, tvMeta, tlRefName} = this
-
-                let data_url = isEmpty(activeTreeData) ? initTableDataUrl : tableDataUrl
-                const foreignFieldValue = activeTreeData[treePrimaryKey];
-                let url = this.$compile(data_url, {foreignFieldValue: foreignFieldValue});
-                if (tvMeta['data_url'] === url) {
-                  this.$refs[tlRefName].getData()
-                } else {
-                  this.tvMeta['data_url'] = url;
-                }
-            },
-            handleActiveChange(row) {
-                this.activeTreeData = row
-                this.refreshTableData()
-            },
-            handleAdd() {
-              const {$refs, tlRefName, featureCode, activeTreeData, treePrimaryKey} = this
-
-              if (utils.isEmpty(activeTreeData)) {
-                this.$message.warning('请先选择树节点');
-                return;
-              }
-
-              let {foreignKeyName} = this // Tree、Table关联字段名
-              let pathParams = {
-                  featureCode: featureCode,
-                  foreignKeyName: foreignKeyName,
-                  foreignKeyValue: activeTreeData[treePrimaryKey]
-              }
-              const url = this.$compile(restUrl.TREE_TABLE_TO_ADD_S, pathParams);
-              $refs[tlRefName].dialog(url);
-            },
-            adjustTvMeta() {
-                const {tvMeta: {data_url: initDataUrl}, foreignKeyName} = this
-                const pathParams = {}
-                pathParams[foreignKeyName] = "{foreignFieldValue}"
-                this.initTableDataUrl = initDataUrl
-                const data_url = resolvePath(initDataUrl, pathParams)
-                this.tableDataUrl = data_url
-            },
-            adjustTreeMeta() {
-                const {treeConf: {label}} = this
-                this.$merge(this.treeMeta, {
-                  conf: {
-                    props: {
-                      label: label
-                    }
-                  }
-                })
-            },
-            initMetaByFeatureCode(featureCode) {
-                getMetaFromFeature_TreeTableTmpl(this.$axios, featureCode).then(resp => {
-                    const {tree: treeMeta, table: tvMeta, search: svMeta} = resp.data
-                    this.treeMeta = treeMeta
-                    this.adjustTreeMeta()
-                    this.tvMeta = tvMeta
-                    this.adjustTvMeta()
-                    this.svMeta = svMeta
-                })
-            }
-        },
-        created() {
-            const {featureCode} = this;
-
-            loadFeature(this.$axios, featureCode).then(resp => {
-                this.featureConfig = resp.data;
-                this.initMetaByFeatureCode(featureCode)
-            });
-        },
-        computed: {
-            tlRefName() {
-                const {tableConf: {objectCode: tlRefName} = {}} = this
-                return tlRefName
-            },
-            treeRefName() {
-                const {treeConf: {objectCode: treeRefName} = {}} = this
-                return treeRefName
-            },
-            foreignKeyName() { // Table 关联树的外键字段, 若为中间表关联, tableConf.foreignFieldCode为空, 则取_related_id为关联key, 由Feature AOP去寻找关联关系
-                const {tableConf: {foreignFieldCode} = {}} = this
-                return assertEmpty(foreignFieldCode, relatedId)
-            },
-            treePrimaryKey() { // Tree的主键： 它为构建树时的主键，也为Table关联的主键
-                const {treeConf: {idKey} = {}} = this
-                return assertEmpty(idKey, defaultPrimaryKey)
-            },
-            treeConf() {
-                return this.featureConfig['tree']
-            },
-            tableConf() {
-                return this.featureConfig['table']
-            },
-            relateId() {
-                const {activeTreeData, treePrimaryKey} = this
-                return activeTreeData[treePrimaryKey]
-            }
-        }
+export default {
+  name: "TreeTableTmpl",
+  meta: {
+    type: 'template',
+    cn: '树-表模板',
+    icon: 'tree_table',
+    buildIn: true // 内建：DbMeta提供
+  },
+  props: {
+    fc: String,
+    config: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
+  },
+  data() {
+    const {fc: R_fc} = this.$route.query;
+    const featureCode = utils.assertUndefined(this.fc, R_fc);
+
+    return {
+      featureCode: featureCode,
+      activeTreeData: {},
+      filterParams: {}
+    }
+  },
+  methods: {
+    refresh() {
+      this.refreshTreeData()
+      this.refreshTableData()
+    },
+    refreshTreeData() {
+      const {config: {tree: {config: {objectCode: refName}}}} = this
+      this.$nextTick(() => {
+        this.$refs[refName].getData()
+      })
+    },
+    refreshTableData() {
+      const {
+        config: {
+          tree: {config: {primaryKey}},
+          table: {config: {objectCode: refName, foreignPrimaryKey}}
+        }, activeTreeData
+      } = this
+      const foreignPrimaryValue = activeTreeData[primaryKey]
+
+      if (!utils.isEmpty(foreignPrimaryValue)) { // 树有点选，做筛选
+        this.filterParams[foreignPrimaryKey + "_eq"] = foreignPrimaryValue
+      }
+
+      this.$nextTick(() => {
+        this.$refs[refName].getData()
+      })
+    },
+    handleChoseChange(rows) {
+      // pxg_todo 多选树节点时, table的默认行为(待定)
+      const {config: {tree: {config: {objectCode}}}} = this
+      this.$emit('tree-chose-change', {
+        rows: rows,
+        objectCode: objectCode,
+        primaryKey: this.$refs[objectCode].primaryKey
+      })
+    },
+    handleActiveChange(row) {
+      const {config: {tree: {config: {objectCode, primaryKey}}}} = this
+      this.activeTreeData = row
+      this.refreshTableData()
+      this.$emit('tree-active-change', {
+        row: row, // 树选中的单条记录
+        treeObjectCode: objectCode, // 树的元对象编码
+        tablePrimaryKey: primaryKey // 树的关联主键
+      })
+    },
+    handleSearch(params) {
+      this.filterParams = params;
+      this.refreshTableData()
+    },
+    handleAdd() {
+      if (utils.isEmpty(this.activeTreeData)) {
+        this.$message.warning('请先选择树节点', '提示');
+        return;
+      }
+
+      const {
+        featureCode,
+        activeTreeData,
+        config: {
+          tree: {config: {primaryKey}},
+          table: {config: {foreignPrimaryKey}}
+        }
+      } = this
+      const foreignPrimaryValue = activeTreeData[primaryKey]
+      const url = restUrl.TREE_TABLE_TO_ADD_S
+      const params = {
+        featureCode: featureCode,
+        foreignKeyName: foreignPrimaryKey,
+        foreignKeyValue: foreignPrimaryValue
+      }
+      this.openTableFormView({url: url, params: params})
+    },
+    openTableFormView({url, params = {}}) {
+      const {config: {table: {instanceCodes}}} = this
+      this.$merge(params, {
+        instanceCode: instanceCodes.FormView
+      })
+
+      const finalUrl = this.$compile(url, params)
+      this.$axios.get(finalUrl).then(resp => {
+        const {data: meta = {}} = resp
+        const {form_type} = meta
+        this.$dialog(meta, null, {
+          title: getNameOfFormTypes(form_type)
+        }).then(value => {
+          this.refreshTableData()
+        }).catch(() => {
+          utils.printInfo('您取消了表单')
+        })
+      })
+    },
+    openTreeFormView({url, params = {}}) {
+      const {config: {tree: {instanceCodes}}} = this
+      this.$merge(params, {
+        instanceCode: instanceCodes.TreeView
+      })
+
+      const finalUrl = this.$compile(url, params)
+      this.$axios.get(finalUrl).then(resp => {
+        const {data: meta = {}} = resp
+        const {form_type} = meta
+        this.$dialog(meta, null, {
+          title: getNameOfFormTypes(form_type)
+        }).then(value => {
+          this.refreshTreeData()
+        }).catch(() => {
+          utils.printInfo('您取消了表单')
+        })
+      })
+    }
+  },
+  created() {
+    this.$merge(this.config, FEATURE_TYPE.TreeTable.value)
+
+    if (!isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

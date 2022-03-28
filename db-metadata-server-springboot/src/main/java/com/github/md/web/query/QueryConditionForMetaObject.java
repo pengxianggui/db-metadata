@@ -84,7 +84,8 @@ public class QueryConditionForMetaObject implements IQueryCondition {
                 try {
                     //TODO 待优化,每个请求解析参数时,会创建大量的Extract实例,性能差
                     MetaSQLExtract metaSQLBuilder = mClass.newInstance();
-                    metaSQLBuilder.init(field, params);
+                    metaSQLBuilder.init(field, params); // 解析，提取变量，组装为待用的sql片段
+                    metaSQLBuilder.typeChange(field); // 类型转换, 依据元字段的字典将值转为相应类型
                     if (metaSQLBuilder.isMutiple()) {
                         mutipleValueMap.set(metaSQLBuilder.result());
                     } else {
@@ -136,7 +137,7 @@ public class QueryConditionForMetaObject implements IQueryCondition {
             //IN NIN 逻辑时 value 为string[],需要将数组元素按顺序解析出来
             if (key.contains("in(")) {
                 //这时的getAs取出来的是String[]数据;
-                String[] vals = kv.getAs(key);
+                Object[] vals = kv.getAs(key);
                 sqlExceptSelect.append(" and ").append(key).append(" ");
                 for (int i = 0; i < vals.length; i++) {
                     sqlParaExt.addPara(vals[i]);

@@ -40,6 +40,10 @@ public class AttributeBuilder {
         AttrCustomMeta deleteUrl(String url);
 
         AttrCustomMeta inline(boolean v);
+
+        AttrCustomMeta hidden(boolean hidden);
+
+        AttrCustomMeta sort(int sort);
     }
 
     interface AttrAbility {
@@ -95,6 +99,10 @@ public class AttributeBuilder {
         TreeTableAttr highlightCurrentRow(boolean isHighlight);
     }
 
+    interface TreeAttr {
+        TreeAttr props(String label, String children);
+    }
+
     interface FileUploadAttr {
 
         FileUploadAttr autoUpload(boolean v);
@@ -109,7 +117,7 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr {
+    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr, TreeAttr {
 
         private Kv config = Kv.create();
 
@@ -262,6 +270,17 @@ public class AttributeBuilder {
         }
 
         @Override
+        public AttrCustomMeta hidden(boolean hidden) {
+            set("hidden", hidden);
+            return this;
+        }
+
+        @Override
+        public AttrCustomMeta sort(int sort) {
+            return set("sort", sort);
+        }
+
+        @Override
         public TableAttr showOverflowTooltip(boolean flag) {
             return setConf("show-overflow-tooltip", flag);
         }
@@ -293,6 +312,13 @@ public class AttributeBuilder {
         @Override
         public FileUploadAttr seats(String[] seats) {
             set("seats", seats);
+            return this;
+        }
+
+
+        @Override
+        public TreeAttr props(String label, String children) {
+            setConf("props", Kv.create().set("label", label).set("children", children));
             return this;
         }
     }

@@ -26,10 +26,10 @@ public interface MetaViewAdapterFactory {
     /**
      * 以实例code来构建对象;
      *
-     * @param instanceCode
+     * @param ic
      * @return
      */
-    MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode);
+    MetaObjectViewAdapter createMetaObjectViewAdapter(String ic);
 
     /**
      * <pre>

@@ -1,8 +1,8 @@
 {
-  "name": "meta-element",
-  "version": "0.4.96",
+  "name": "db-metadata",
+  "version": "2.2.3",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
-  "main": "lib/meta-element.common.js",
+  "main": "lib/db-metadata.common.js",
   "keywords": [
     "metadata",
     "component",
@@ -15,7 +15,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib --name meta-element --dest lib package/index.js",
+    "lib": "vue-cli-service build --target lib --name db-metadata --dest lib package/index.js",
     "pub": "npm publish --registry https://registry.npmjs.org/",
     "release": "npm run lib && npm run pub"
   },

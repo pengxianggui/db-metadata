@@ -52,7 +52,7 @@ import path from 'path'
 import AppLink from './Link'
 import utils from '@/../package/utils'
 import {restUrl} from "../../../constant/url";
-import {isEmpty, isArray} from "../../../utils/common";
+import {isEmpty, isArray, assertEmpty} from "../../../utils/common";
 
 export default {
   name: "MenuItem",
@@ -76,20 +76,15 @@ export default {
     return {
     }
   },
-  created() {
-    if (this.item.title == '可编程菜单1') {
-      debugger
-    }
-  },
   methods: {
     editMenuMeta(item) {
       if (!this.$isRoot()) {
-        this.$message.error("只有开发者账号可以执行此操作")
+        this.$message.error("只有ROOT账号可以执行此操作")
         return
       }
-      const objectCode = "meta_menu" // 系统元对象编码-固定
+      const instanceCode = "meta_menu.FormView" // 系统元对象编码-固定
       const {id, name} = item
-      let url = this.$compile(restUrl.RECORD_TO_UPDATE, {objectCode: objectCode, primaryKv: id});
+      let url = this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: id});
       this.$axios.get(url).then(({data}) => {
         this.$dialog(data, null, {
           title: `编辑菜单元数据:${name}`
@@ -97,13 +92,17 @@ export default {
       });
     },
     resolvePath(routePath = '') {
+      const basePath = assertEmpty(this.basePath, '');
+      if (isEmpty(routePath)) {
+        routePath = ''
+      }
       if (utils.isExternal(routePath)) {
         return routePath
       }
-      if (utils.isExternal(this.basePath)) {
-        return this.basePath
+      if (utils.isExternal(basePath)) {
+        return basePath
       }
-      return path.resolve(this.basePath, routePath)
+      return path.resolve(basePath, routePath)
     },
     resolveParams(pathParams) {
       let params = {};

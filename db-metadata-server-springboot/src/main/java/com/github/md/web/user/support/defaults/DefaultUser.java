@@ -1,8 +1,6 @@
 package com.github.md.web.user.support.defaults;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONValidator;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.User;
@@ -45,6 +43,11 @@ public class DefaultUser implements User {
     @Override
     public String userName() {
         return data.getStr("username");
+    }
+
+    @Override
+    public String avatar() {
+        return data.getStr("avatar");
     }
 
     @Override

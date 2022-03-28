@@ -19,7 +19,7 @@ export const menus = [
                 title: '禁用的编程菜单',
                 icon: 'el-icon-menu',
                 hidden: false,
-                // disable: true,
+                disable: true,
                 order: 0,
                 need_permit: false // 默认false。当直接指定auths时，就可以无需指定need_permit,会视作true。但如果指定了auths又声明了need_permit为false, 则不会鉴权
             },

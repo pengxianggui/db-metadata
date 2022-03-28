@@ -14,9 +14,7 @@ export default {
     "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
-    'sort': 0,
-    "inline": false,
-    "seats": [''],
+    "seats": [""],
     "conf": {
         "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
         "drag": false,
@@ -26,5 +24,5 @@ export default {
         "limit": 1,
         "multiple": false,  // 暂时单选
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

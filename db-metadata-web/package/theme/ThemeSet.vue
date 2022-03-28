@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;">
-    <svg-icon value="el-icon-setting" @click.native="visible = true" style="cursor: pointer"></svg-icon>
+    <svg-icon value="theme" @click.native="visible = true" style="cursor: pointer; font-size: 20px;"></svg-icon>
 
     <el-drawer title="主题设置" :visible.sync="visible" direction="rtl" size="30%" :show-close="false">
       <template #title>
@@ -103,19 +103,27 @@
         <el-form :model="themeData">
           <h4>整体风格</h4>
           <el-form-item label="布局" prop="layout">
-            <radio-box v-model="themeData.layout" :options="layouts" class="hidden-radio">
+            <radio-box v-model="themeData.layout" :options="layouts" class="layout-radio hidden-radio">
               <template #column="{option}">
-                <svg-icon :value="option.icon[themeData.themeColor]"
-                          :class="{'active': themeData.layout == 'column'}"></svg-icon>
+                <div :class="{'active': themeData.layout == 'column'}">
+                  <svg-icon value="light-column-layout"></svg-icon>
+                </div>
               </template>
               <template #row="{option}">
-                <svg-icon :value="option.icon[themeData.themeColor]" :class="{'active': themeData.layout == 'row'}"></svg-icon>
+                <svg-icon value="light-row-layout" :class="{'active': themeData.layout == 'row'}"></svg-icon>
               </template>
             </radio-box>
           </el-form-item>
           <el-form-item label="主题" prop="color">
-            <radio-box v-model="themeData.themeColor" :options="colors"></radio-box>
+            <el-radio-group v-model="themeData.themeColor" class="theme-radio hidden-radio">
+              <el-radio v-for="t in buildInThemesOptions" :key="t.value" :label="t.value">
+                <div class="color-block" :style="{'background-color': t.color}"
+                     :class="{'active': themeData.themeColor == t.value}"></div>
+              </el-radio>
+            </el-radio-group>
+<!--            <radio-box v-model="themeData.themeColor" :options="buildInThemesOptions"></radio-box>-->
           </el-form-item>
+
           <h4>菜单</h4>
           <el-form-item label="单开">
             <bool-box v-model="themeData.menu.uniqueOpened"></bool-box>
@@ -130,9 +138,10 @@
 
       <div class="footer">
         <el-link type="info" @click="reset">重置</el-link>
-        <el-link type="info" @click="themeData.freeMode = !themeData.freeMode" v-if="allowCustomTheme">
-          {{ themeData.freeMode ? '简单配置' : '高级配置' }}
-        </el-link>
+<!--        隐藏高级配置功能-->
+<!--        <el-link type="info" @click="themeData.freeMode = !themeData.freeMode" v-if="allowCustomTheme">-->
+<!--          {{ themeData.freeMode ? '简单配置' : '高级配置' }}-->
+<!--        </el-link>-->
       </div>
     </el-drawer>
   </div>
@@ -142,6 +151,7 @@
 import Theme from './'
 import {layoutOptions} from './'
 import {appConfig} from "../config";
+import {buildInThemesOptions} from "./";
 
 export default {
   name: "ThemeSet",
@@ -150,16 +160,7 @@ export default {
       visible: false,
 
       layouts: layoutOptions,
-      colors: [
-        {
-          key: '默认',
-          value: 'light'
-        },
-        {
-          key: '深色',
-          value: 'dark'
-        }
-      ],
+      buildInThemesOptions: buildInThemesOptions,
 
       themeData: Theme.getTheme(),
     }
@@ -206,6 +207,51 @@ $footerHeight: 40px;
 .body {
   padding: 0 30px;
   margin-bottom: $footerHeight;
+
+  .hidden-radio {
+    /deep/ .el-radio__label {
+      padding: 0;
+    }
+    /deep/ .el-radio__input {
+      display: none;
+    }
+  }
+
+  .layout-radio {
+    svg {
+      font-size: 50px;
+    }
+
+    .active {
+      border: 1px solid #c1bcbc;
+    }
+
+  }
+
+  .theme-radio {
+    /deep/ .el-radio {
+      width: 30px;
+      height: 30px;
+    }
+
+    .color-block {
+      width: 30px;
+      height: 30px;
+    }
+
+    .active {
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background-size: cover;
+        background-image: url('../asserts/check.png');
+      }
+    }
+  }
 }
 
 .footer {
@@ -220,20 +266,6 @@ $footerHeight: 40px;
 
   & > * {
     margin: 0 10px;
-  }
-}
-
-.hidden-radio {
-  /deep/ .el-radio__input {
-    display: none;
-  }
-
-  svg {
-    font-size: 50px;
-  }
-
-  svg.active {
-    border: 1px solid #c1bcbc;
   }
 }
 </style>

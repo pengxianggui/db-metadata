@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Vue from "vue";
 import Val from "../../mixins/value";
+import {components} from "../../../route/exchange";
 
 export default {
   name: "PageSelector",
@@ -31,29 +31,37 @@ export default {
     }
   },
   created() {
-    let components = Vue.options.components;
-    this.options = Object.values(components).filter(c => {
-      const {extendOptions: {meta: {isPage = false, isTemplate = false, isLayout} = {}}} = c
-      return isPage || isTemplate || isLayout
+    const types = {
+      page: '页面',
+      template: '模板',
+      layout: '布局'
+    }
+
+    this.options = components.filter(c => {
+      const {meta: {type = 'page'} = {}} = c
+      return Object.keys(types).indexOf(type) > -1
     }).map(c => {
-      const {extendOptions: {meta: {cn, isTemplate = false, isLayout = false, isPage = false, buildIn, icon} = {}, name: value}} = c
+      const {
+        meta: {cn, type = 'page', buildIn, icon} = {},
+        name: value = '无名'
+      } = c
+
       return {
         key: cn,
         value: value,
-        isTemplate: isTemplate,
         buildIn: buildIn,
-        group: isTemplate ? '模板' : (isLayout ? '布局' : '页面'),
+        group: types[type],
         icon: icon
       }
-    });
+    })
   }
 }
 </script>
 
 <style scoped lang="scss">
-  .option-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

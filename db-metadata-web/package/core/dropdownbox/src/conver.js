@@ -5,7 +5,6 @@ export default function (value) {
     let tempValue;
     if (multiple) {
         let nativeVal = []
-        console.log(utils.typeOf(value))
         switch (utils.typeOf(value)) {
             case "[object String]":
                 nativeVal = (value.trim() === '' ? [] : value.split(','));

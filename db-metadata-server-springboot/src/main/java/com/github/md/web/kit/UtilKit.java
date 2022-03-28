@@ -148,7 +148,7 @@ public class UtilKit {
      * @return
      */
     public static Kv mergeUseNew(Kv mergeMap, Kv newMap) {
-        newMap.forEach((k, v) -> mergeMap.merge(k, v, (oldValue, newValue) -> newValue));
+        deepMerge(mergeMap, newMap, true);
         return mergeMap;
     }
 
@@ -258,8 +258,8 @@ public class UtilKit {
                 mergeMap.put(key, value);
             } else {
                 // existing value for "key" - recursively deep merge:
-                if (value instanceof JSONObject) {
-                    JSONObject newValueJson = (JSONObject) value;
+                if (value instanceof Map) {
+                    Map newValueJson = (Map) value;
                     JSONObject oldValueJson = toJSONObject(mergeMap.get(key));
                     deepMerge(oldValueJson, newValueJson, overwrite);
                 } else {
@@ -298,7 +298,7 @@ public class UtilKit {
      * 若为字符串类型, 为空则返回空JSONObject，否则尝试解析为JSONObject，失败可能抛出异常;
      * 若为其他类型, 则尝试先转为JSON 格式的String, 再转为JSONObject，失败可能抛出异常
      * </pre>
-     *
+     * <p>
      * 可能抛出类型转换异常。
      *
      * @param o

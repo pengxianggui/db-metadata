@@ -32,8 +32,8 @@
 </template>
 
 <script>
-    import DefaultTableListMeta from '../../tableview/ui-conf';
-    import DefaultSearchPanelMeta from '../../searchview/ui-conf';
+    import DefaultTableListMeta from '@/../package/view/tableview/ui-conf';
+    import DefaultSearchPanelMeta from '@/../package/view/searchview/ui-conf';
 
     export default {
         name: "FindPanel",

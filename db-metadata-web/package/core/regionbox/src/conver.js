@@ -1,8 +1,8 @@
-import {isArray, isEmpty, isString, strToArray} from "../../../utils/common";
+import {isArray, isEmpty, isString, convertToArray} from "../../../utils/common";
 
 export default function (value) {
     if (isString(value)) {
-        value = strToArray(value)
+        value = convertToArray(value)
     }
 
     if (isArray(value)) {

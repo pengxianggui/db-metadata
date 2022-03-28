@@ -79,14 +79,14 @@ Vue.use(metaElement, config)
 
 (3). 使用
 
-使用参见[组件库]()
+使用参见[组件库介绍]()
 
 ## 配置说明
 - axios : axios配置对象,　由于meta-element内部会进行axios请求, api接口的根路径需要通过此进行配置,　以及一些其他关于axios的配置。
 - authorities: meta-element内置了Vue全局方法$hasAuth,　并且内部部分组件需要进行权限控制, 此属性是内部鉴权的角色依据.
 - 其他...
 
-## 组件库
+## 组件库介绍
 查看[《组件库说明》](./document/组件库说明.md)
 
 ## 资料

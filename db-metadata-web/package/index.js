@@ -1,27 +1,22 @@
 import utils from './utils'
 import * as Rest from './utils/rest'
-import configUrl from './constant/url'
-import configFilters from './register/filter'
-import configDirectives from './register/directive'
-import registerGlobalFunction from './register/global-function'
-import './asserts/svg/index' // 内置svg注册
+
 // 布局组件
 import Layout from "./layout";
 import {MetaHeader, MetaLayout} from './layout'
+
 // 基础组件
 import BoolBox from './core/boolbox'
 import CheckBox from './core/checkbox'
 import CodeBox from './core/codebox'
 import List from "./core/list";
 import ListItem from "./core/listitem";
-import ListView from './core/listview'
 import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
 import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
 import FileBox from './core/filebox'
 import FindBox from './core/findbox'
-import FormView from './core/formview'
 import RowGrid from './core/rowgrid'
 import IconBox from './core/iconbox'
 import ImgBox from './core/imgbox'
@@ -33,21 +28,24 @@ import PopMenu from './core/popmenu'
 import RadioBox from './core/radiobox'
 import RichTextBox from "./core/richtextbox";
 import RegionBox from "./core/regionbox";
-import SearchView from './core/searchview'
-import SqlBox from './core/sqlbox'
+import SearchView from './view/searchview'
 import Tags from './core/tags'
-import TableView from './core/tableview'
-import TableTreeView from './core/tabletreeview'
 import TextAreaBox from './core/textareabox'
 import TextBox from './core/textbox'
 import TimeBox from './core/timebox'
-import TreeView from './core/treeview'
 import ZTogglePanel from './core/ztogglepanel'
 import SvgIcon from "./core/svgicon"
 import FullScreen from "./core/fullscreen/src/FullScreen"
 import PageSelector from "./core/pageselector/src/PageSelector";
+
+// 容器组件
+import TableView from './view/tableview'
+import TableTreeView from './view/tabletreeview'
+import TreeView from './view/treeview'
+import ListView from './view/listview'
+import FormView from './view/formview'
+
 // 模板组件
-import DataListTableTmpl from './template/DataListTableTmpl'
 import FormTmpl from './template/FormTmpl'
 import MasterSlaveTableTmpl from './template/MasterSlaveTableTmpl'
 import SingleGridTmpl from './template/SingleGridTmpl'
@@ -55,20 +53,24 @@ import TableFormTmpl from './template/TableFormTmpl'
 import TreeFormTmpl from './template/TreeFormTmpl'
 import TreeTableTmpl from './template/TreeTableTmpl'
 import TreeSingleGridTmpl from './template/TreeSingleGridTmpl'
+
 // meta 组件
 import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
+
+// 系统
+import './asserts/svg/index' // 内置svg注册
 import {restUrl, routeUrl} from './constant/url'
 import {access} from "./access";
 import User from './access'
-// 内置业务组件
-import {UserList, RoleList} from '@/../package/meta/rbac'
-// 全局页面
-import GlobalPage from '@/../package/page'
-
 import Route from "./route";
 import Menu from "./menu";
-import {configApp} from "./config";
+import {appConfig, configApp} from "./config";
 import Theme from './theme'
+
+import configUrl from './constant/url'
+import configFilters from './register/filter'
+import configDirectives from './register/directive'
+import registerGlobalFunction from './register/global-function'
 
 // style
 import 'element-ui/lib/theme-chalk/index.css' // element
@@ -105,7 +107,6 @@ const components = [
     RichTextBox,
     RegionBox,
     SearchView,
-    SqlBox,
     Tags,
     TableView,
     TreeView,
@@ -122,20 +123,13 @@ const components = [
     Layout,
 
     // template
-    DataListTableTmpl,
     FormTmpl,
     MasterSlaveTableTmpl,
     SingleGridTmpl,
     TableFormTmpl,
     TreeFormTmpl,
     TreeTableTmpl,
-    TreeSingleGridTmpl,
-
-    // 内置业务组件
-    UserList,
-    RoleList,
-    // 全局页面
-    GlobalPage
+    TreeSingleGridTmpl
 ];
 
 const install = function (Vue, opts = {}) {
@@ -161,22 +155,19 @@ const install = function (Vue, opts = {}) {
     })
 
     // 系统配置: 获取服务端关于系统设置的数据
-    configApp(Vue, opts).then(() => {
-        // 主题配置: 配置默认主题
-        Theme.configDefaultTheme(opts)
+    configApp(Vue, opts)
 
-        // 静态角色配置
-        if (opts.access) {
-            utils.reverseMerge(access, opts.access, false);
-        }
+    // 主题配置: 配置默认主题
+    Theme.configDefaultTheme(opts)
 
-        // 注册菜单
-        Menu.registerMenu(Vue, opts)
-        // 注册路由： 必须在全局组件注册滞后，因为路由数据中的component需要转换为全局组件
-        Route.registerRouter(Vue, opts)
-    }).catch(err => {
-        console.error(err)
-    })
+    // 静态角色配置
+    if (opts.access) {
+        utils.reverseMerge(access, opts.access, false);
+    }
+
+    Menu.registerMenu(Vue, opts) // 注册菜单
+    Route.registerRouteData(Vue, opts) // 注册路由
+    Route.registerInterceptor(Vue, opts) // 路由拦截器
 };
 
 if (typeof window !== 'undefined' && window.Vue) {

@@ -189,7 +189,11 @@ export function gridInfoStructured(formMeta) {
             columns.push(rowGrid)
         }
 
-        columns.sort((c1, c2) => c1.sort - c2.sort)
+        columns.sort((c1, c2) => {
+            const {sort: sort1 = 9999} = c1
+            const {sort: sort2 = 9999} = c2
+            return sort1 - sort2
+        })
         formMeta['layout'] = [] // 防止提交时重复归并到layout
     } catch (err) {
         console.error(err)

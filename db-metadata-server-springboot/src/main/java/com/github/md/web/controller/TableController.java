@@ -161,20 +161,24 @@ public class TableController extends ControllerAdapter {
         Object[] ids;
 
         if (metaObject.configParser().isTreeStructure()) {
-            String id = parameterHelper.getPara("id", "").trim();
+            Object[] idInParams = queryHelper.getPks(metaObject);
             boolean containsRoot = parameterHelper.getParaToBoolean("self", true);
             List<Object> idss = new ArrayList<>();
 
-            TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
-            Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
-            treeConfig.setRootIdentify(id);
+            // 指定删除节点的子节点，也需要删除
+            for (Object idInParam : idInParams) {
+                TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
+                Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
+                treeConfig.setRootIdentify(String.valueOf(idInParam));
 
-            List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
-            if (containsRoot) {
-                idss.add(id);
+                List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
+                if (containsRoot) {
+                    idss.add(idInParam);
+                }
+
+                TreeKit.getChildIds(tree, idss);
             }
 
-            TreeKit.getChildIds(tree, idss);
             ids = idss.toArray();
         } else {
             ids = queryHelper.getPks(metaObject);
@@ -237,6 +241,14 @@ public class TableController extends ControllerAdapter {
                                                          MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
                                                          sqlPara.getPara());
 
+        // TODO 2.2 添加转义规则后，构建树的关联字段值被转义了，导致树构建失败
+//        /*
+//         * escape field value;
+//         * 1. 是否需要转义的规则;
+//         */
+//        if (!queryHelper.list().raw()) {
+//            OptionsKit.trans(filteredFields, result);
+//        }
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 

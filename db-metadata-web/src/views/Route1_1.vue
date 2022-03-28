@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 1500px">
     禁用的编程菜单: 自己开发的页面
   </div>
 </template>

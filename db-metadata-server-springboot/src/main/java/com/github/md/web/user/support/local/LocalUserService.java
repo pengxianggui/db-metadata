@@ -59,11 +59,7 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
 
     @Override
     public LocalUser createRoot(Root me) {
-        Map<String, String> attrs = Maps.newHashMap();
-        attrs.put("userId", me.userId());
-        attrs.put("userName", me.userName());
-        attrs.put("password", me.getPassword());
-        return new LocalUser(me.attrs());
+        return new LocalUser(me.getData().getColumns());
     }
 
     @Override

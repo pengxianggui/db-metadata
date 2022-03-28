@@ -14,6 +14,7 @@ import com.github.md.analysis.meta.MetaData;
  */
 public abstract class FeatureConfig extends MetaData {
 
+    @Deprecated
     protected String icon() {
         return getStr("icon");
     }
@@ -24,10 +25,12 @@ public abstract class FeatureConfig extends MetaData {
      *
      * @return
      */
+    @Deprecated
     public boolean hasRouter() {
         return getBoolean("hasRouter") != null && getBoolean("hasRouter");
     }
 
+    @Deprecated
     public String componentName() {
         return getStr("componentName");
     }

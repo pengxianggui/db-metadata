@@ -18,8 +18,7 @@ public class AppPropVO {
     private String logo; // 系统logo
     private boolean registerable; // 用户是否可注册
     private boolean addable; // 用户是否可添加
-    private boolean enableLogin; // 启用登录
-    private boolean enableAuth; // 启用鉴权
+    private boolean enableCertification; // 启用登录
     private boolean devMode; // 开发模式
     private String tokenKey; // 前后端token存储于header中key
     private boolean showGreeting = true; // 显示问候

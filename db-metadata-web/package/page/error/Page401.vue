@@ -1,42 +1,34 @@
 <template>
-  <div class="errPage-container">
-    <el-button icon="el-icon-arrow-left" class="pan-back-btn" @click="back">
-      返回
-    </el-button>
-    <el-row>
-      <el-col :span="12">
-        <div v-if="msg">
-          <p class="text-jumbo">{{ msg }}</p>
-          <p v-if="request_uri">资源地址: {{ request_uri }}</p>
-        </div>
-        <h class="text-jumbo" v-else>无权限</h>
-        <p>或者你可以去:</p>
-        <ul class="list-unstyled">
-          <li class="link-type">
-            <router-link to="/">
-              回首页
-            </router-link>
-          </li>
-          <li><a href="#" @click="logout">换个账号登录</a></li>
-        </ul>
-      </el-col>
-      <el-col :span="12">
-        <img :src="errGif" width="313" height="428" alt="Girl has dropped her ice cream.">
-      </el-col>
-    </el-row>
+  <div class="err-page-container">
+    <div>
+      <el-button icon="el-icon-arrow-left" class="pan-back-btn" @click="back">返回</el-button>
+      <div v-if="msg">
+        <p class="text-jumbo">{{ msg }}</p>
+        <p v-if="request_uri">资源地址: {{ request_uri }}</p>
+      </div>
+      <h1 class="text-jumbo" v-else>无权限</h1>
+      <p>或者你可以去:</p>
+      <ul class="list-unstyled">
+        <li class="link-type">
+          <router-link to="/">回首页</router-link>
+        </li>
+        <li><a href="#" @click="logout">换个账号登录</a></li>
+      </ul>
+    </div>
+    <div>
+      <svg-icon value="401" style="font-size: 450px;"></svg-icon>
+    </div>
   </div>
 </template>
 
 <script>
-import errGif from '../../asserts/401.gif'
 import {restUrl, routeUrl} from "../../constant/url";
 import {clearUser} from "../../access";
 
 export default {
   name: 'Page401',
   meta: {
-    isTemplate: false,
-    isPage: true,
+    type: 'page',
     cn: '401页面',
     buildIn: true // 内建：DbMeta提供
   },
@@ -44,8 +36,7 @@ export default {
     const {query: {msg = '', request_uri}} = this.$route
     return {
       msg: msg,
-      request_uri: request_uri,
-      errGif: errGif + '?' + +new Date()
+      request_uri: request_uri
     }
   },
   methods: {
@@ -67,26 +58,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.errPage-container {
-  width: 800px;
+.err-page-container {
+  width: 1000px;
   max-width: 100%;
-  margin: 100px auto;
+  margin: auto;
+  top: 100px;
+  position: relative;
+  display: flex;
+  justify-content: center;
 
   .pan-back-btn {
     background: #008489;
     color: #fff;
     border: none !important;
-  }
-
-  .pan-gif {
-    margin: 0 auto;
-    display: block;
-  }
-
-  .pan-img {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
   }
 
   .text-jumbo {

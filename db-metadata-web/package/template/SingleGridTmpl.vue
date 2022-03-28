@@ -1,130 +1,132 @@
 <template>
-    <div class="el-card container-view">
-        <search-view :meta="spMeta" @search="handleSearch"></search-view>
-        <table-view :ref="tlRefName" :meta="tlMeta" :filter-params="filterParams">
-            <tempalte #operation-bar="{conf, choseData}">
-                <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </tempalte>
+  <div class="page-container">
+    <search-view :ic="config.instanceCodes.SearchView"
+                 @search="handleSearch"></search-view>
 
-            <template #prefix-btn="{conf, choseData}">
-                <slot name="prefix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </template>
-            <template #add-btn="{conf}">
-                <slot name="add-btn" v-bind:conf="conf"></slot>
-            </template>
-            <template #batch-delete-btn="{conf, choseData}">
-                <slot name="batch-delete-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </template>
-            <template #suffix-btn="{conf, choseData}">
-                <slot name="suffix-btn" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
-            </template>
+    <table-view :ref="tableRefName"
+                :ic="config.instanceCodes.TableView"
+                :filter-params="filterParams"
+                @open-form-view="openFormView">
 
-            <template #buttons="{scope}">
-                <slot name="buttons" v-bind:scope="scope"></slot>
-            </template>
+      <tempalte #operation-bar="scope">
+        <slot name="operation-bar" v-bind="scope"></slot>
+      </tempalte>
 
-            <template #inner-before-extend-btn="{scope}">
-                <slot name="inner-before-extend-btn" v-bind:scope="scope"></slot>
-            </template>
-            <template #view-btn="{scope, conf}">
-                <slot name="view-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #edit-btn="{scope, conf}">
-                <slot name="edit-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #delete-btn="{scope, conf}">
-                <slot name="delete-btn" v-bind:conf="conf" v-bind:scope="scope"></slot>
-            </template>
-            <template #inner-after-extend-btn="{scope}">
-                <slot name="inner-after-extend-btn" v-bind:scope="scope"></slot>
-            </template>
-        </table-view>
-    </div>
+      <template #prefix-btn="scope">
+        <slot name="prefix-btn" v-bind="scope"></slot>
+      </template>
+      <template #add-btn="scope">
+        <slot name="add-btn" v-bind="scope"></slot>
+      </template>
+      <template #batch-delete-btn="scope">
+        <slot name="batch-delete-btn" v-bind="scope"></slot>
+      </template>
+      <template #suffix-btn="scope">
+        <slot name="suffix-btn" v-bind="scope"></slot>
+      </template>
+
+      <template #buttons="scope">
+        <slot name="buttons" v-bind="scope"></slot>
+      </template>
+
+      <template #inner-before-extend-btn="scope">
+        <slot name="inner-before-extend-btn" v-bind="scope"></slot>
+      </template>
+      <template #view-btn="scope">
+        <slot name="view-btn" v-bind="scope"></slot>
+      </template>
+      <template #edit-btn="scope">
+        <slot name="edit-btn" v-bind="scope"></slot>
+      </template>
+      <template #delete-btn="scope">
+        <slot name="delete-btn" v-bind="scope"></slot>
+      </template>
+      <template #inner-after-extend-btn="scope">
+        <slot name="inner-after-extend-btn" v-bind="scope"></slot>
+      </template>
+
+    </table-view>
+  </div>
 </template>
 
 <script>
-    import utils from '../utils'
-    import {getSearchViewMeta, getTableViewMeta, loadFeature} from "../utils/rest";
+import utils from '../utils'
+import {loadFeature} from "../utils/rest";
+import {getNameOfFormTypes} from "../view/formview/ui-conf";
+import {FEATURE_TYPE} from "../meta/feature/ext/featureType";
 
-    export default {
-        name: "SingleGridTmpl",
-        meta: {
-          isTemplate: true,
-          isPage: false,
-          cn: '单表模板',
-          icon: 'table',
-          buildIn: true // 内建：DbMeta提供
-        },
-        props: {
-            fc: String,
-            oc: String,
-            searchMeta: {
-              type: Object,
-              default: () => {}
-            },
-            tableMeta: {
-              type: Object,
-              default: () => {}
-            }
-        },
-        data() {
-            const {fc: R_fc, oc: R_oc} = this.$route.query;
-            const featureCode = utils.assertUndefined(this.fc, R_fc);
-            const objectCode = utils.assertUndefined(this.oc, R_oc);
-            return {
-                featureCode: featureCode,
-                objectCode: objectCode,
-                tlMeta: {},
-                spMeta: {},
-                filterParams: {}
-            }
-        },
-        methods: {
-            refresh() {
-                const {$refs, tlRefName} = this;
-                $refs[tlRefName].getData();
-            },
-            handleSearch(params) {
-                const tlRefName = this.tlRefName;
-                this.filterParams = params;
-                this.$nextTick(() => {
-                    this.$refs[tlRefName].getData();
-                })
-            },
-            initMeta(objectCode) {
-                getTableViewMeta(this.$axios, objectCode).then(resp => {
-                    const {tableMeta} = this
-                    this.tlMeta = utils.reverseMerge(resp.data, tableMeta);
-                }).catch(({msg = '获取TableView meta数据错误'}) => {
-                    console.error('[ERROR] msg: %s', msg);
-                });
-
-                getSearchViewMeta(this.$axios, objectCode).then(resp => {
-                    const {searchMeta} = this
-                    this.spMeta = utils.reverseMerge(resp.data, searchMeta);
-                }).catch(({msg = '获取SearchView meta数据错误'}) => {
-                    console.error('[ERROR] msg: %s', msg);
-                });
-            }
-        },
-        created() {
-            const {featureCode, objectCode} = this;
-
-            if (!utils.isEmpty(featureCode)) {
-                loadFeature(this.$axios, featureCode).then(resp => {
-                    const config = resp.data['singleGrid'];
-                    this.initMeta(config.objectCode);
-                })
-            } else {
-                this.initMeta(objectCode);
-            }
-        },
-        computed: {
-            tlRefName() {
-                return this.tlMeta['name'];
-            }
-        }
+export default {
+  name: "SingleGridTmpl",
+  meta: {
+    type: 'template',
+    cn: '单表模板',
+    icon: 'table',
+    buildIn: true // 内建：DbMeta提供
+  },
+  props: {
+    fc: String,
+    config: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
+  },
+  data() {
+    const {fc: R_fc} = this.$route.query;
+    const featureCode = utils.assertUndefined(this.fc, R_fc);
+    return {
+      featureCode: featureCode,
+      filterParams: {}
+    }
+  },
+  methods: {
+    refresh() {
+      const {tableRefName} = this;
+      this.$refs[tableRefName].getData();
+    },
+    handleSearch(params) {
+      const {tableRefName} = this
+      this.filterParams = params
+      this.$nextTick(() => {
+        this.$refs[tableRefName].getData();
+      })
+    },
+    openFormView({url, params}) {
+      // TODO 2.3 表单的打开方式可以配置到功能里: 1-弹窗(当前已实现) ;2-路由(系统预置FormTmpl模板以及内置的/form/:fc路由后，即可实现)
+      this.$merge(params, {
+        instanceCode: this.config.instanceCodes.FormView
+      })
+      const finalUrl = this.$compile(url, params)
+      this.$axios.get(finalUrl).then(resp => {
+        const {data: meta = {}} = resp
+        const {form_type} = meta
+        this.$dialog(meta, null, {
+          title: getNameOfFormTypes(form_type)
+        }).then(value => {
+          this.refresh()
+        }).catch(() => {
+          utils.printInfo('您取消了表单')
+        })
+      })
+    }
+  },
+  created() {
+    this.$merge(this.config, FEATURE_TYPE.SingleGrid.value)
+
+    if (!utils.isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      })
+    }
+  },
+  computed: {
+    tableRefName() {
+      const {config: {config: {objectCode}}} = this
+      return objectCode;
+    }
+  }
+}
 </script>
 
 <style scoped>

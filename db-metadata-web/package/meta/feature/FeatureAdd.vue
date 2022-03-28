@@ -5,66 +5,58 @@
       <el-step title="创建路由"></el-step>
       <el-step title="关联菜单"></el-step>
     </el-steps>
-    <el-form ref="featureForm" :model="feature" label-width="120px" v-show="step == 0">
-      <el-form-item label="功能类别" prop="type" required>
-        <radio-box :data-url="featureTypeUrl" v-model="feature.type" @active-option="initFeatureConfMeta"
-                   @change="initFeatureConfMeta"></radio-box>
-      </el-form-item>
-      <el-form-item label="功能名" class="inline" prop="name" required>
-        <text-box v-model="feature.name"></text-box>
-      </el-form-item>
-      <el-form-item label="功能代码" class="inline" prop="code" required>
-        <text-box v-model="feature.code"></text-box>
-      </el-form-item>
-      <!--        TODO 配置的instanceCode暂未应用，先屏蔽-->
-      <!--        <el-form-item label="instanceCode" class="inline" prop="instanceCode" required>-->
-      <!--          <drop-down-box v-model="feature.instanceCode" :data-url="instanceCodeUrl" filterable></drop-down-box>-->
-      <!--        </el-form-item>-->
-      <el-form-item label="业务拦截器">
-        <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.github.md.web.controller.itp.MetaFieldEditPointCut"
-                  v-model="feature.config.bizInterceptor"></el-input>
-      </el-form-item>
 
-      <!--扩展配置-->
-      <component ref="extendConf" :is="feature.type" :config.sync="feature.config"></component>
-
-      <el-form-item>
-        <el-button size="small" type="success" @click="submitFeatureForm('featureForm')">提交</el-button>
-        <!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
-        <el-button size="small" type="danger" @click="close">关闭</el-button>
-      </el-form-item>
-    </el-form>
-
-    <form-view :ref="route.objectCode" :meta="route.meta" @ok="next" v-show="step == 1">
-      <template #form-item-pid="{column, model}">
-        <el-form-item :name="column.name" :label="column.label">
-          <drop-down-box :data-url="column.data_url" v-model="model[column.name]"
-                         @change="baseRoutePathChange"></drop-down-box>
+    <!-- 功能配置 -->
+    <form-view ref="featureForm" ic="meta_feature.FormView" form-type="add" :model="feature" style="width: 100%"
+               @submit="submitFeatureForm('featureForm')" @cancel="cancel" v-show="step == 0">
+      <template #form-item-type="{column, model}">
+        <el-form-item :label="column.label">
+          <drop-down-box v-model="model.type" :meta="column" @change="featureTypeChange(model.type)"></drop-down-box>
         </el-form-item>
       </template>
-      <template #form-item-cn="{column, model}">
-        <el-form-item :name="column.name" :label="column.label">
-          <text-box v-model="model[column.name]"
-                    @change="$refs[route.objectCode].setItem('meta', {'title': model[column.name]});
-                      $refs[menu.objectCode].setItem('title', model[column.name]);"></text-box>
+
+      <template #form-item-config="{column, model}">
+        <el-form-item :label="column.label">
+          <div>
+            <el-card v-if="model.type">
+              <component ref="extendConf" :is="model.type" v-model="model.config"></component>
+            </el-card>
+            <span v-else style="color: #E6A23C">请先选择功能类型!</span>
+          </div>
         </el-form-item>
       </template>
-      <template #form-item-path="{column, model}">
-        <el-form-item :name="column.name" :label="column.label">
-          <text-box v-model="model[column.name]" @change="pathChange(model)"></text-box>
+
+      <template #action="{submit, cancel}">
+        <el-form-item>
+          <el-button @click="submit" type="primary">提交</el-button>
+          <el-button @click="cancel">取消</el-button>
+          &nbsp;
+          <el-checkbox v-model="keepGo">保存后继续下一步</el-checkbox>
         </el-form-item>
-      </template>
-      <template #action="{submit}">
-        <el-button size="small" type="success" @click="submit">提交</el-button>
-        <!--        <el-button size="small" type="primary" @click="next">下一步</el-button>-->
-        <el-button size="small" type="danger" @click="close">关闭</el-button>
       </template>
     </form-view>
 
-    <form-view :ref="menu.objectCode" :meta="menu.meta" @ok="close" v-show="step == 2">
-      <template #action="{submit}">
-        <el-button size="small" type="success" @click="submit">提交</el-button>
-        <el-button size="small" type="danger" @click="close">关闭</el-button>
+    <!-- 路由配置 -->
+    <form-view ic="meta_router.FormView" form-type="add" @ok="next" @cancel="cancel" v-show="step == 1" style="width: 100%">
+      <template #action="{submit, cancel}">
+        <el-form-item>
+          <el-button type="primary" @click="submit">提交</el-button>
+          <el-button @click="finish">关闭</el-button>
+          &nbsp;
+          <el-checkbox v-model="keepGo">保存后继续下一步</el-checkbox>
+        </el-form-item>
+      </template>
+    </form-view>
+
+    <!-- 菜单配置 -->
+    <form-view ic="meta_menu.FormView" form-type="add" @ok="finish" @cancel="cancel" v-show="step == 2" style="width: 100%">
+      <template #action="{submit, cancel}">
+        <el-form-item>
+          <el-button @click="submit">提交</el-button>
+          <el-button @click="finish">关闭</el-button>
+          &nbsp;
+          <el-checkbox v-model="keepGo">保存后继续下一步</el-checkbox>
+        </el-form-item>
       </template>
     </form-view>
   </div>
@@ -72,70 +64,51 @@
 
 <script>
 import {restUrl} from "../../constant/url";
-import MasterSlaveGrid from './conf-mini/MasterSlaveGrid'
-import SingleGrid from './conf-mini/SingleGrid'
-import TreeSingleGrid from './conf-mini/TreeSingleGrid'
-import TreeAndSingleGrid from './conf-mini/TreeAndSingleGrid'
 import utils from '../../utils'
-import {getAddFormMeta} from '../../utils/rest'
+import {FEATURE_TYPE} from "./ext/featureType";
 import {isEmpty} from "../../utils/common";
-import {FEATURE_TYPE_MAPPING} from './ext/featureType'
+import AutoComputedButton from "./ext/AutoComputedButton";
+
+import SingleGrid from './ext/SingleGrid'
+import TreeSingleGrid from "./ext/TreeSingleGrid";
+import MasterSlaveGrid from "./ext/MasterSlaveGrid";
+import TreeTable from "./ext/TreeTable";
 
 export default {
   name: "FeatureAdd",
   components: {
-    'MasterSlaveGrid': MasterSlaveGrid,
-    'SingleGrid': SingleGrid,
-    'TreeInTable': TreeSingleGrid,
-    'TreeAndTable': TreeAndSingleGrid
-  },
-  props: {
-    params: {
-      type: Object
-    },
-    meta: {
-      type: Object,
-      default: () => {
-      }
-    }
+    AutoComputedButton,
+    SingleGrid,
+    TreeSingleGrid,
+    MasterSlaveGrid,
+    TreeTable
   },
   data() {
-    const {params: {objectCode = null, primaryKey = null} = {}} = this
     return {
-      baseRoutePath: '',
-      step: 0,
-      objectCode: objectCode,
-      primaryKey: primaryKey,
-      featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
-      instanceCodeUrl: utils.resolvePath(restUrl.INSTANCE_CODE_LIST, {
-        type: 'META_OBJECT'
-      }),
       feature: {
-        type: 'SingleGrid',
-        name: objectCode,
-        code: objectCode,
-        instanceCode: null,
+        type: null,
+        name: null,
+        code: null,
         bizInterceptor: '',
         config: {},
       },
-      route: {
-        objectCode: 'meta_router',
-        meta: {}
-      },
-      menu: {
-        objectCode: 'meta_menu',
-        meta: {}
-      }
+      keepGo: true,
+
+      baseRoutePath: '',
+      step: 0,
+
+      featureTypeUrl: restUrl.LIST_FEATURE_TYPE,
+
+      instanceCodeUrl: utils.resolvePath(restUrl.INSTANCE_CODE_LIST, {
+        type: 'META_OBJECT'
+      }),
+
     }
   },
   methods: {
-    initFeatureConfMeta() {
-      const {feature: {type: featureType}, objectCode, primaryKey} = this
-      this.feature.config = utils.deepClone(FEATURE_TYPE_MAPPING[featureType].getInitConf(objectCode, primaryKey))
-    },
-    baseRoutePathChange({activeOption}) {
-      const {key} = activeOption
-      this.baseRoutePath = key
+    featureTypeChange(featureType) {
+      const {value} = FEATURE_TYPE[featureType]
+      this.$refs['featureForm'].setItem("config", this.$merge({}, value))
     },
     pathChange(model) {
       const {menu: {objectCode}, feature: {code: fc}, baseRoutePath} = this
@@ -145,51 +118,42 @@ export default {
       }
       this.$refs[objectCode].setItem('path', value + '?fc=' + fc)
     },
-    initAssociateMeta() {
-      const {route: {objectCode: routeObjectCode}, menu: {objectCode: menuObjectCode}} = this
-      getAddFormMeta(this.$axios, routeObjectCode).then(resp => {
-        const {data: meta} = resp
-        this.route.meta = meta
-      })
-      getAddFormMeta(this.$axios, menuObjectCode).then(resp => {
-        const {data: meta} = resp
-        this.menu.meta = meta
-      })
-    },
-    close() {
-      this.$emit('ok', this.params);
-    },
     submitFeatureForm(formName) {
       const {feature: {type: featureType}, feature} = this
       const _this = this
-      _this.$refs[formName].validate((valid) => {
-        _this.$refs['extendConf'].validate(subValid => {
-          if (valid && subValid) {
-            let url = _this.$compile(restUrl.FEATURE_ADD, {
-              featureType: featureType
-            });
-            _this.$axios.post(url, feature).then(({msg = '操作成功'}) => {
-              _this.$message.success(msg);
-              _this.next()
-            }).catch(({msg = '操作失败'}) => {
-              console.error(msg)
-            })
-          } else {
-            return false
-          }
-        })
-      });
+      if (!_this.$refs.hasOwnProperty('extendConf')) {
+        _this.$message.error('请选择功能类型并配置')
+        return
+      }
+      _this.$refs['extendConf'].validate(valid => {
+        if (valid) {
+          let url = _this.$compile(restUrl.FEATURE_ADD, {
+            featureType: featureType
+          });
+          _this.$axios.post(url, feature).then(({msg = '操作成功'}) => {
+            _this.$message.success(msg);
+            _this.next()
+          }).catch(({msg = '操作失败'}) => {
+            console.error(msg)
+          })
+        } else {
+          return false
+        }
+      })
     },
     next() {
+      if(!this.keepGo) {
+        this.finish()
+        return;
+      }
       if (this.step++ > 2) this.step = 0;
     },
-    onCancel: function (event) {
+    finish() {
+      this.$emit('ok');
+    },
+    cancel(event) {
       this.$emit('cancel', event);
     }
-  },
-  created() {
-    this.initAssociateMeta()
-    this.initFeatureConfMeta()
   }
 }
 </script>

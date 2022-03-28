@@ -29,11 +29,19 @@ const defaultThemeData = {
 // 缓存中的主题数据：为了实现实时预览
 const themeData = {}
 
+export const buildInThemesOptions = [
+    {key: '默认', value: 'light', color: '#ffffff'},
+    {key: '深色', value: 'dark', color: '#1f1f1f'},
+    {key: '紫色', value: 'purple', color: '#605ca8'},
+    {key: '蓝色', value: 'blue', color: '#008ec0'},
+    {key: '红色', value: 'red', color: '#dd4b39'},
+    {key: '绿色', value: 'green', color: '#4dca8f'},
+]
 // 内建主题色
-const buildColors = {
+const buildInThemes = {
     light: {
         header: {
-            titleColor: '#409EFF',
+            textColor: '#409EFF',
             backgroundColor: '#ffffff'
         },
         menu: {
@@ -42,7 +50,6 @@ const buildColors = {
             backgroundColor: '#ffffff'
         },
         tag: {
-            show: true,
             textColor: '#818080',
             backgroundColor: '#f8f8f8',
             activeTextColor: '#ffffff',
@@ -51,20 +58,87 @@ const buildColors = {
     },
     dark: {
         header: {
-            titleColor: '#409EFF',
-            backgroundColor: '#2d3032'
+            textColor: '#409EFF',
+            backgroundColor: '#1f1f1f'
         },
         menu: {
             textColor: '#ceced0',
             activeTextColor: '#409EFF',
-            backgroundColor: '#2d3032'
+            backgroundColor: '#1f1f1f'
         },
         tag: {
-            show: true,
+            textColor: '#818080',
+            backgroundColor: '#dddddd',
+            activeTextColor: '#ffffff',
+            activeBackgroundColor: '#828689'
+        }
+    },
+    purple: {
+        header: {
+            textColor: '#ffffff',
+            backgroundColor: '#605ca8'
+        },
+        menu: {
+            textColor: '#ceced0',
+            activeTextColor: '#605ca8',
+            backgroundColor: '#2a4051'
+        },
+        tag: {
+            textColor: '#818080',
+            backgroundColor: '#dddddd',
+            activeTextColor: '#ffffff',
+            activeBackgroundColor: '#afaed0'
+        }
+    },
+    blue: {
+        header: {
+            textColor: '#ffffff',
+            backgroundColor: '#008ec0'
+        },
+        menu: {
+            textColor: '#4b4d4e',
+            activeTextColor: '#008ec0',
+            backgroundColor: '#f9fafc'
+        },
+        tag: {
             textColor: '#818080',
             backgroundColor: '#f8f8f8',
             activeTextColor: '#ffffff',
-            activeBackgroundColor: '#409EFF'
+            activeBackgroundColor: '#8fcfe5'
+        }
+    },
+    red: {
+        header: {
+            textColor: '#ffffff',
+            backgroundColor: '#dd4b39'
+        },
+        menu: {
+            textColor: '#c1c1c1',
+            activeTextColor: '#dd4b39',
+            backgroundColor: '#2a4051'
+        },
+        tag: {
+            textColor: '#969696',
+            backgroundColor: '#f8f8f8',
+            activeTextColor: '#5a5a5a',
+            activeBackgroundColor: '#ffd9d0'
+        }
+    },
+    green: {
+        header: {
+            textColor: '#ffffff',
+            backgroundColor: '#4dca8f'
+        },
+        menu: {
+            textColor: '#4b4d4e',
+            activeTextColor: '#4dca8f',
+            backgroundColor: '#f9fafc'
+        },
+        tag: {
+            textColor: '#a7a7a7',
+            backgroundColor: '#f8f8f8',
+            activeTextColor: '#6e6e6e',
+            activeBackgroundColor: '#c8ffe2'
         }
     }
 }
@@ -95,7 +169,7 @@ export const layoutOptions = [
 const setTheme = function (data) {
     const {freeMode} = data
     if (!freeMode) { // 简单模式: 则由themeColor推导的具体配置覆盖
-        reverseMerge(data, buildColors[data.themeColor])
+        reverseMerge(data, buildInThemes[data.themeColor])
     }
     localStorage.setItem(cacheKey.keyInLocal.THEME_DATA_KEY.value, JSON.stringify(data))
 }

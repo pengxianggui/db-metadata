@@ -13,12 +13,10 @@ export const ConfDesc = `
 `;
 
 export default {
-    'component_name': 'BoolBox',
-    'name': 'BoolBox',
-    'label': '布尔框',
-    'default_value': false,
-    'sort': 0,
-    'inline': true,
-    'conf': {},
+    "component_name": "BoolBox",
+    "name": "BoolBox",
+    "label": "布尔框",
+    "default_value": false,
+    "conf": {},
     "explain": "" // 字段解释
 }

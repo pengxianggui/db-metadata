@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p> @Date : 2019/10/31 </p>
@@ -45,7 +46,6 @@ public class FormDataFactory {
      * @param httpParams
      * @param metaObject
      * @param isInsert
-     *
      * @return
      */
     public static MetaData buildFormData(Map<String, String[]> httpParams, IMetaObject metaObject, boolean isInsert) {
@@ -55,7 +55,7 @@ public class FormDataFactory {
         for (IMetaField metaField : metaObject.fields()) {
 
             //转值  : ""| null | 真实值
-            Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
+            final Object castedValue = MetaDataTypeConvert.convert(metaField, params.getStr(metaField.fieldCode()));
 
             try {
                 //主键处理
@@ -83,14 +83,13 @@ public class FormDataFactory {
                     continue;
                 }
 
-                /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断 新增[只读,隐藏,禁用],更新[只读,隐藏,禁用],*/
+                /*处理完主键后,对于后续的字段上除了处理类型的转换,还需要对字段配置状态进行判断. 除了禁用, 其他该咋咋地*/
                 if (isInsert) {
-                    if (metaField.configParser().addStatus() == MetaFieldConfigParse.READONLY || metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
+                    if (metaField.configParser().addStatus() == MetaFieldConfigParse.DISABLE) {
                         continue;
                     }
                 } else {
-                    if (metaField.configParser().updateStatus() == MetaFieldConfigParse.READONLY
-                            || metaField.configParser().updateStatus() == MetaFieldConfigParse.DISABLE) {
+                    if (metaField.configParser().updateStatus() == MetaFieldConfigParse.DISABLE) {
                         continue;
                     }
                 }
@@ -113,6 +112,7 @@ public class FormDataFactory {
                     }
                     continue;
                 }
+
                 //日期类型处理
                 if (metaField.dbType().isDate()) {
                     if (StrKit.notNull(castedValue)) {
@@ -122,15 +122,16 @@ public class FormDataFactory {
                     }
                     continue;
                 }
-                //数值类型 value->defaultVal->0
+
+                //数值类型 value->defaultVal->null
                 if (metaField.dbType().isNumber()) {
                     if (StrKit.notNull(castedValue)) {
                         formData.set(metaField.fieldCode(), castedValue);
                     } else {
-                        if (StrKit.notBlank(metaField.configParser().defaultVal())) {
+                        if (Objects.nonNull(metaField.configParser().defaultVal())) {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
-                            formData.set(metaField.fieldCode(), 0);
+                            formData.set(metaField.fieldCode(), null);
                         }
                     }
                     continue;
@@ -150,10 +151,12 @@ public class FormDataFactory {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
 //                            formData.set(metaField.fieldCode(), ""); // 导致入库时本应该为null的值变成空字符串, 如果字段唯一约束, 则会抛出异常
+                            formData.set(metaField.fieldCode(), null);
                         }
                     }
                     continue;
                 }
+
                 // set 该metafile 转换后的value
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
@@ -165,7 +168,7 @@ public class FormDataFactory {
         }
 
         //此处设置updateby和time字段,系统相关的表都有ccuu四个字段
-        if (metaObject.isSystem()) {
+        if (metaObject.buildIn()) {
             if (isInsert) {
                 UtilKit.setCreateUser(formData);
             } else {
@@ -177,19 +180,29 @@ public class FormDataFactory {
 
     public static void buildUpdateFormData(IMetaObject metaObject, Record record) {
         for (IMetaField metaField : metaObject.fields()) {
-            // 确保回传给前端的文件字段 必须是有效的[]
-            if (metaField.configParser().isFile()) {
-                String filepath = record.getStr(metaField.fieldCode());
-                if (StrKit.isBlank(filepath)) {
-                    filepath = "[]";
+            try {
+                // 确保回传给前端的文件字段 必须是有效的[]
+                if (metaField.configParser().isFile()) {
+                    String filepath = record.getStr(metaField.fieldCode());
+                    if (StrKit.isBlank(filepath)) {
+                        filepath = "[]";
+                    }
+                    JSONArray value = new JSONArray();
+                    try {
+                        value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
+                    } catch (JSONException e) {
+                        log.error(e.getMessage());
+                    }
+                    record.set(metaField.fieldCode(), value);
+                    continue;
                 }
-                JSONArray value = new JSONArray();
-                try {
-                    value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
-                } catch (JSONException e) {
-                    log.error(e.getMessage());
+
+                if (metaField.dbType().isJson()) {
+                    record.set(metaField.fieldCode(), JSON.parse(record.get(metaField.fieldCode())));
                 }
-                record.set(metaField.fieldCode(), value);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                continue;
             }
         }
     }

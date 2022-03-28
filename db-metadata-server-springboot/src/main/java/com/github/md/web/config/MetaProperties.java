@@ -22,7 +22,7 @@ public class MetaProperties {
 
     private AnalysisProperties analysis;
 
-    private boolean devMode;
+    private boolean devMode = false;
 
     /**
      * !!! Very important !!!
@@ -55,6 +55,8 @@ public class MetaProperties {
 
         private ComponentProperties component = new ComponentProperties();
 
+        private boolean enableCertification = true;
+
         private Login login = new Login();
 
         private Auth auth = new Auth();
@@ -84,7 +86,6 @@ public class MetaProperties {
 
     @Data
     public static class Login {
-        boolean enable = false;
         private String tokenKey = "X-TOKEN";
         private String cookieKey = "DB-Metadata";
         private String loginKey = "username";

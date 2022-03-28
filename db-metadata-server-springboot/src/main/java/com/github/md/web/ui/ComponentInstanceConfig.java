@@ -33,6 +33,7 @@ public class ComponentInstanceConfig extends Kv {
     @Getter
     String instanceName;
 
+    @Getter
     String objectCode;
 
     Kv self;
@@ -50,7 +51,11 @@ public class ComponentInstanceConfig extends Kv {
         this.instanceCode = instanceCode;
         this.instanceName = instanceName;
         this.containerType = containerType;
-        this.set(self).set("fieldsMap", fieldsMap).set("instanceCode", instanceCode).set("instanceName", instanceName);
+        this.set(self).set("fieldsMap", fieldsMap)
+                .set("instanceCode", instanceCode)
+                .set("instanceName", instanceName)
+                .set("objectCode", objectCode)
+                .set("componentCode", containerType.getCode());
     }
 
     private ComponentInstanceConfig(Kv objectConfig, Okv fieldsMap, String objectCode, String instanceCode, String instanceName, ComponentType containerType) {
@@ -60,7 +65,11 @@ public class ComponentInstanceConfig extends Kv {
         this.instanceCode = instanceCode;
         this.instanceName = instanceName;
         this.containerType = containerType;
-        this.set(self).set("fieldsMap", fieldsMap).set("instanceCode", instanceCode).set("instanceName", instanceName);
+        this.set(self).set("fieldsMap", fieldsMap)
+                .set("instanceCode", instanceCode)
+                .set("instanceName", instanceName)
+                .set("objectCode", objectCode)
+                .set("componentCode", containerType.getCode());
     }
 
     public static ComponentInstanceConfig New(Kv config, String objectCode, String instanceCode, String instanceName, ComponentType containerType) {

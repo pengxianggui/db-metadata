@@ -113,7 +113,7 @@ public class MRManager {
         }
 
         // 此资源需要鉴权，必定需要用户登录
-        AssertUtil.isTrue(user != null, new UnLoginException("未认证"));
+        AssertUtil.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {
             if (entry.getKey().isInstance(mResource)) {

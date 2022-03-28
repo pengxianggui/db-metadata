@@ -155,4 +155,9 @@ class MetaField implements IMetaField {
     public IMetaObject getParent() {
         return parent;
     }
+
+    @Override
+    public boolean buildIn() {
+        return record.getBoolean("build_in");
+    }
 }

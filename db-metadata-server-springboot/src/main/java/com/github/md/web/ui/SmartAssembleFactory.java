@@ -1,10 +1,13 @@
 package com.github.md.web.ui;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.attr.AttributeBuilder;
 import com.github.md.web.component.form.FormFieldFactory;
+import com.github.md.web.ex.OprNotSupportException;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.component.Component;
@@ -52,17 +55,20 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
                 builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
                 builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
                 break;
+            case TREEVIEW:
+                builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
+                builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
+                JSONObject jsonObject = JSON.parseObject(metaObject.configParser().treeConfig());
+                builder.props(jsonObject.getString("label"), "children");
+                break;
         }
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());
-    }
-
-    private Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
-        return ComputeKit.recommendFieldConfig(metaField, componentType);
     }
 
     /**
      * 1. 推测控件(metafield)
      * 2. 推测样式配置(metafield,ComponentType)
+     * 3. 采用元字段的排序
      *
      * @param fields
      * @param globalComponentAllConfig 所有组件的全局配置
@@ -75,7 +81,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         // 读取globalConfig中的配置
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
-            Kv recommendConfig = recommendFieldConfig(field, componentType);
+            Kv recommendConfig = ComputeKit.recommendFieldConfig(field, componentType);
             Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
             Kv fieldInstanceConfig = UtilKit.mergeUseNew(globalComponentConfig, recommendConfig);
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
@@ -127,9 +133,8 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
     }
 
     @Override
-    public MetaObjectViewAdapter createMetaObjectViewAdapter(String instanceCode) {
-        //TODO
-        throw new WebException("This is not to be implemented!");
+    public MetaObjectViewAdapter createMetaObjectViewAdapter(String ic) {
+        throw new OprNotSupportException("不支持通过容器实例编码智能计算实例配置"); // 因为计算的前提是要有元对象, ic如果可以推导出元对象, 说明数据库里已经有了这套实例配置, 那就无需自动计算了
     }
 
     @Override

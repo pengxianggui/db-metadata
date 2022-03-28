@@ -16,7 +16,7 @@ public class DbTypeJudge {
     }
 
     public boolean isText() {
-        return isSmallText() || isBigText() || isJson();
+        return isSmallText() || isBigText() || isJson() || isLongText();
     }
 
     public boolean isSmallText() {
@@ -25,6 +25,10 @@ public class DbTypeJudge {
 
     public boolean isBigText() {
         return value.equalsIgnoreCase("text") || value.equalsIgnoreCase("mediumtext");
+    }
+
+    public boolean isLongText() {
+        return value.equalsIgnoreCase("longtext");
     }
 
     public boolean isNumber() {

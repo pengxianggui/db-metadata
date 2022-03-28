@@ -104,8 +104,9 @@ public class MetaObject implements IMetaObject {
     }
 
     @Override
-    public boolean isSystem() {
-        return "1".equals(record.getStr("is_sys"));
+    public boolean buildIn() {
+        Boolean buildIn = record.getBoolean("build_in");
+        return buildIn == null ? false : buildIn;
     }
 
     @Override

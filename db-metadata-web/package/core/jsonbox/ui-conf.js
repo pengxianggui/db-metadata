@@ -9,22 +9,21 @@ export const ConfDesc = `
 |conf|Json框的配置:{'mode':'code', 'modes': ['code','tree','text','view','form']}|object|-|-|
 `;
 
+export const modes = [
+    "code",
+    "tree",
+    "text",
+    "view",
+    "form"
+]
 export default {
     "component_name": "JsonBox",
     "name": "JsonBox",
     "label": "Json框",
-    'sort': 0,
-    "inline": false,
     "default_value": {},
     "conf": {
         "mode": "code",
-        "modes": [
-            "code",
-            "tree",
-            "text",
-            "view",
-            "form"
-        ]
+        "modes": modes
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

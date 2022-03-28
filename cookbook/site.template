@@ -1,0 +1,13 @@
+server {
+    client_max_body_size 10M;
+    listen 80;
+    location /status {
+        stub_status on;
+        access_log off;
+    }
+    location / {
+        root /usr/share/nginx/html/;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}

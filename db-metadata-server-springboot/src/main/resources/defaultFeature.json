@@ -1,0 +1,212 @@
+[
+  {
+    "type": "MasterSlaveGrid",
+    "name": "元数据管理",
+    "code": "meta_data",
+    "config": {
+      "master": {
+        "config": {
+          "objectCode": "meta_object",
+          "primaryKey": "code"
+        },
+        "instanceCodes": {
+          "SearchView": "meta_object.SearchView",
+          "TableView": "meta_object.TableView",
+          "FormView": "meta_object.FormView"
+        }
+      },
+      "slaves": [{
+        "config": {
+          "objectCode": "meta_field",
+          "foreignPrimaryKey": "object_code",
+          "order": 0
+        },
+        "instanceCodes": {
+          "SearchView": "meta_field.SearchView",
+          "TableView": "meta_field.TableView",
+          "FormView": "meta_field.FormView"
+        }
+      }]
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "功能维护",
+    "code": "meta_feature",
+    "config": {
+      "config": {
+        "objectCode": "meta_feature"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_feature.SearchView",
+        "TableView": "meta_feature.TableView",
+        "FormView": "meta_feature.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "组件默认配置管理",
+    "code": "meta_component",
+    "config": {
+      "config": {
+        "objectCode": "meta_component"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_component.SearchView",
+        "TableView": "meta_component.TableView",
+        "FormView": "meta_component.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "组件实例配置管理",
+    "code": "meta_component_instance",
+    "config": {
+      "config": {
+        "objectCode": "meta_component_instance"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_component_instance.SearchView",
+        "TableView": "meta_component_instance.TableView",
+        "FormView": "meta_component_instance.FormView"
+      }
+    }
+  },
+  {
+    "type": "TreeSingleGrid",
+    "name": "菜单维护",
+    "code": "meta_menu",
+    "config": {
+      "config": {
+        "objectCode": "meta_menu",
+        "idKey": "id",
+        "pidKey": "pid",
+        "rootIdentify": "",
+        "label": "title",
+        "isSync": false
+      },
+      "instanceCodes": {
+        "SearchView": "meta_menu.SearchView",
+        "TableTreeView": "meta_menu.TableTreeView",
+        "FormView": "meta_menu.FormView"
+      }
+    }
+  },
+  {
+    "type": "TreeSingleGrid",
+    "name": "路由维护",
+    "code": "meta_router",
+    "config": {
+      "config": {
+        "objectCode": "meta_router",
+        "idKey": "id",
+        "pidKey": "pid",
+        "rootIdentify": "",
+        "label": "cn",
+        "isSync": false
+      },
+      "instanceCodes": {
+        "SearchView": "meta_router.SearchView",
+        "TableTreeView": "meta_router.TableTreeView",
+        "FormView": "meta_router.FormView"
+      }
+    }
+  },
+  {
+    "type": "TreeSingleGrid",
+    "name": "字典管理",
+    "code": "meta_dict",
+    "config": {
+      "config": {
+        "objectCode": "meta_dict",
+        "idKey": "value",
+        "pidKey": "p_value",
+        "label": "key",
+        "rootIdentify": "",
+        "isSync": false
+      },
+      "instanceCodes": {
+        "SearchView": "meta_dict.SearchView",
+        "TableTreeView": "meta_dict.TableTreeView",
+        "FormView": "meta_dict.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "系统异常管理",
+    "code": "meta_exception",
+    "config": {
+      "config": {
+        "objectCode": "meta_exception"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_exception.SearchView",
+        "TableView": "meta_exception.TableView",
+        "FormView": "meta_exception.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "权限管理",
+    "code": "meta_auth",
+    "config": {
+      "config": {
+        "objectCode": "meta_auth"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_auth.SearchView",
+        "TableView": "meta_auth.TableView",
+        "FormView": "meta_auth.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "接口资源管理",
+    "code": "meta_api_resource",
+    "config": {
+      "config": {
+        "objectCode": "meta_api_resource"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_api_resource.SearchView",
+        "TableView": "meta_api_resource.TableView",
+        "FormView": "meta_api_resource.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "用户管理",
+    "code": "meta_user",
+    "config": {
+      "config": {
+        "objectCode": "meta_user"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_user.SearchView",
+        "TableView": "meta_user.TableView",
+        "FormView": "meta_user.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "角色管理",
+    "code": "meta_role",
+    "config": {
+      "config": {
+        "objectCode": "meta_role"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_role.SearchView",
+        "TableView": "meta_role.TableView",
+        "FormView": "meta_role.FormView"
+      }
+    }
+  }
+]

@@ -56,12 +56,12 @@ const metaMenus = [{
             "auths": ['menu:meta:router']
         },
         {
-            "path": "/meta/form-builder",
-            "title": "表单构建",
-            "icon": "form",
+            "path": "/meta/api-resource",
+            "title": "接口资源",
+            "icon": "api",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:form-builder']
+            "auths": ['menu:meta:api-resource']
         },
         {
             "path": "/meta/meta-conf",
@@ -71,38 +71,38 @@ const metaMenus = [{
             "disable": false,
             "auths": ['menu:meta:meta-conf']
         },
-        {
-            "path": "/meta/dict",
-            "title": "字典",
-            "icon": "dict",
-            "hidden": false,
-            "disable": false,
-            "auths": ['menu:meta:dict']
-        },
-        {
-            "path": "/meta/exception",
-            "title": "异常",
-            "icon": "el-icon-warning",
-            "hidden": false,
-            "disable": false,
-            "auths": ['menu:meta:exception']
-        },
-        {
-            "path": "/meta/auth",
-            "title": "权限配置",
-            "icon": "auth",
-            "hidden": false,
-            "disable": false,
-            "auths": ['menu:meta:auth']
-        },
-        {
-            "path": "/meta/api-resource",
-            "title": "接口资源",
-            "icon": "api",
-            "hidden": false,
-            "disable": false,
-            "auths": ['menu:meta:api-resource']
-        }
+        // {
+        //     "path": "/meta/dict",
+        //     "title": "字典",
+        //     "icon": "dict",
+        //     "hidden": false,
+        //     "disable": false,
+        //     "auths": ['menu:meta:dict']
+        // },
+        // {
+        //     "path": "/meta/exception",
+        //     "title": "异常",
+        //     "icon": "el-icon-warning",
+        //     "hidden": false,
+        //     "disable": false,
+        //     "auths": ['menu:meta:exception']
+        // },
+        // {
+        //     "path": "/meta/auth",
+        //     "title": "权限配置",
+        //     "icon": "auth",
+        //     "hidden": false,
+        //     "disable": false,
+        //     "auths": ['menu:meta:auth']
+        // },
+        // {
+        //     "path": "/meta/api-resource",
+        //     "title": "接口资源",
+        //     "icon": "api",
+        //     "hidden": false,
+        //     "disable": false,
+        //     "auths": ['menu:meta:api-resource']
+        // }
     ]
 }]
 const programMenus = []

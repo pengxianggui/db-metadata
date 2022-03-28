@@ -17,6 +17,11 @@ public class UIManager {
         return SmartAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }
 
+    public static MetaObjectViewAdapter getView(String ic) {
+        return ViewAssembleFactory.me().createMetaObjectViewAdapter(ic);
+    }
+
+    @Deprecated
     public static MetaObjectViewAdapter getView(IMetaObject metaObject, ComponentType componentType) {
         return ViewAssembleFactory.me().createMetaObjectViewAdapter(metaObject, componentType);
     }

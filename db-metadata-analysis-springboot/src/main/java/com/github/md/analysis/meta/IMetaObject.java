@@ -64,7 +64,7 @@ public interface IMetaObject {
     @JSONField(name = "config")
     String config();
 
-    boolean isSystem();
+    boolean buildIn();
 
     void config(String config);
 

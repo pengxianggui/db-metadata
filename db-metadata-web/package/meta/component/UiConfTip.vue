@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div style="max-width: 800px; max-height: 600px; overflow: auto">
     <h2>{{ componentName }}</h2>
     <vue-markdown :source="getSourceCode(componentName)"></vue-markdown>
 
     <br>
     <h2>Snippet For Render:</h2>
     <h3>表格图片渲染</h3>
-    <sql-box v-model="imgRender"></sql-box>
+    <code-box v-model="imgRender" :show-bar="false"></code-box>
     <h3>表格附件渲染</h3>
-    <sql-box v-model="fileRender"></sql-box>
+    <code-box v-model="fileRender" :show-bar="false"></code-box>
   </div>
 </template>
 

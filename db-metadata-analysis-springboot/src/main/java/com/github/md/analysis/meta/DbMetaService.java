@@ -3,6 +3,7 @@ package com.github.md.analysis.meta;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.*;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,6 @@ public class DbMetaService {
      *
      * @param schemaName
      * @param tableName
-     *
      * @return
      */
     public List<IMetaObject> seriesOfTable(String schemaName, String tableName) {
@@ -94,12 +94,32 @@ public class DbMetaService {
         return metaObject;
     }
 
+    /**
+     * id必须是元对象的记录id
+     *
+     * @param id
+     * @return
+     */
+    public IMetaObject findById(String id) {
+        if (StrKit.isBlank(id)) {
+            throw new MetaOperateException("必须指定主键, 当前主键:%s", id);
+        }
+
+        Record record = SpringAnalysisManager.me().dbMain().findById("meta_object", id);
+        if (record == null) {
+            return null;
+        }
+
+        String code = record.getStr("code");
+        return findByCode(code);
+    }
+
     public IMetaField findFieldByCode(String objectCode, String fieldCode) {
         IMetaField metaField = null;
         if (StrKit.notBlank(objectCode, fieldCode)) {
             Record field = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_field where object_code=? and field_code=? order by order_num",
-                                                                         objectCode,
-                                                                         fieldCode);
+                    objectCode,
+                    fieldCode);
             if (field == null) {
                 throw new MetaOperateException("未查询到结果.objectCode[%s],fieldCode[%s]", objectCode, fieldCode);
             }
@@ -122,6 +142,7 @@ public class DbMetaService {
                 re.dataMap().put("id", SnowFlake.me().nextId());
                 //TODO independent setting
                 re.objectCode(metaObject.code());
+                re.dataMap().put("build_in", metaObject.buildIn());
                 updateRecords.add(new Record().setColumns(re.dataMap()));
             });
             int[] result = SpringAnalysisManager.me().dbMain().batchSave("meta_field", updateRecords, 50);
@@ -140,10 +161,25 @@ public class DbMetaService {
         return moUpdated;
     }
 
+    /**
+     * 删除元对象
+     *
+     * @param objectCode
+     * @return
+     */
     public boolean deleteMetaObject(String objectCode) {
-        return SpringAnalysisManager.me().dbMain().delete("delete from meta_object where code=?", objectCode) > 0 && SpringAnalysisManager.me().dbMain().delete(
-                "delete from meta_field where object_code=?",
-                objectCode) > 0;
+        return SpringAnalysisManager.me().dbMain().delete("delete from meta_object where code=?", objectCode) > 0
+                && deleteMetaFields(objectCode);
+    }
+
+    /**
+     * 删除元对象对应的元字段
+     *
+     * @param objectCode
+     * @return
+     */
+    public boolean deleteMetaFields(String objectCode) {
+        return SpringAnalysisManager.me().dbMain().delete("delete from meta_field where object_code=?", objectCode) > 0;
     }
 
     /**
@@ -151,7 +187,6 @@ public class DbMetaService {
      * TODO [绕]
      *
      * @param objectCode
-     *
      * @return
      */
     public Record findObjectRecordByCode(String objectCode) {
@@ -168,7 +203,6 @@ public class DbMetaService {
      *
      * @param code
      * @param fieldCode
-     *
      * @return
      */
     public Record findFieldRecordByCode(String code, String fieldCode) {

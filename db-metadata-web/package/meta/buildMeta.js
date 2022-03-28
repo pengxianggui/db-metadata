@@ -13,9 +13,10 @@ const specials = {
         component_name: DropDownBox.name,
         name: 'component_name',
         label: 'component_name',
-        data_url: "/component/list",
+        data_url: "/component/list?view=false",
         conf: {
-            filterable: true
+            filterable: true,
+            disabled: true
         }
     },
     "render": {

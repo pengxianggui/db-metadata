@@ -14,6 +14,9 @@ export default function (Vue, opts) {
 
     Vue.prototype.$compile = utils.compile
     Vue.prototype.$dialog = utils.createDialog(Vue) // 传递Vue
+    Vue.prototype.$getGlobalComponents = () => { // 获取所有全局注册的组件
+        return Vue.options.components;
+    }
 
     Vue.prototype.$isRoot = isRoot
     Vue.prototype.$hasAnyRole = hasAnyRole

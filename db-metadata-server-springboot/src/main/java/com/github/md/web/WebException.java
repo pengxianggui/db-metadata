@@ -1,8 +1,10 @@
 package com.github.md.web;
+
 import cn.com.asoco.exception.UserVisibleException;
 import lombok.Getter;
 
 /**
+ * 业务异常
  * <pre>
  *     自定义异常
  *     范围: controller,Intercepter,Query Feature

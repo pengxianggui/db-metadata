@@ -1,17 +1,18 @@
 <template>
   <div>
     <template v-if="formType">
-      <el-form size="mini" :key="nativeValue.name" label-position="top">
-        <template v-for="(value, key) in nativeValue">
+      <el-form size="mini" :model="nativeValue" label-position="top">
+        <template v-for="key in keys">
           <template v-if="editableJudge(nativeValue.component_name, key)">
             <el-form-item :key="key" :label="key">
 
+              <component-selector v-model="nativeValue.component_name" scope="field" :components="fieldComponents"
+                                  :popper-append-to-body="false" v-if="key === 'component_name'"></component-selector>
+
               <!--              特殊-->
               <component :is="nativeValue.component_name" :meta="nativeValue"
-                         v-model="nativeValue[key]" v-if="key === 'default_value'"></component>
+                         v-model="nativeValue[key]" v-else-if="key === 'default_value'"></component>
 
-              <component-selector v-model="nativeValue['component_name']" scope="field"
-                                  v-else-if="key === 'component_name'"></component-selector>
 
               <!--              常规-->
               <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]"
@@ -23,6 +24,7 @@
         </template>
       </el-form>
     </template>
+
     <template v-else>
       <!-- 倘若直接使用v-model, JsonBox中若更改了component_name,将直接更新到上一层, 无法根据component_name的新值重新刷新配置,
       此处使用:value和@input组合解构v-model的语法糖-->
@@ -32,11 +34,13 @@
     <div style="display: flex; flex-direction: row">
       <span style="flex: 1"></span>
       <el-button size="mini" icon="el-icon-refresh" circle @click="changeType"></el-button>
+
       <el-popover placement="right" trigger="click"
                   popper-class="ui-conf-tip-popper">
         <ui-conf-tip :component-name="componentCode"></ui-conf-tip>
         <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
       </el-popover>
+
       <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"
                                 v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">
         <template #default="{open}">
@@ -56,11 +60,21 @@ import UiConfTip from "./UiConfTip";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {defaultMeta} from "../../core";
 import Val from "../../core/mixins/value";
-import {assertEmpty} from '@/../package/utils/common'
+import {assertEmpty, isEmpty} from '@/../package/utils/common'
+import {restUrl} from "../../constant/url";
+
+const reorder = function (value) {
+  let keys = Object.keys(value).sort()
+  let newValue = {};
+  keys.forEach(k => {
+    newValue[k] = value[k]
+  })
+  return newValue
+}
 
 export default {
   name: "UiConfEditor",
-  mixins: [Val()],
+  mixins: [Val(/*reorder*/)], // TODO 必须实现排序, 保证component_name在第一，但是这里有问题, 会导致双向绑定失效，因为内部新建了对象
   components: {ComponentSelector, UiConfTip, MetaFieldConfigButton},
   props: {
     value: {
@@ -78,7 +92,23 @@ export default {
   },
   data() {
     return {
-      formType: true
+      formType: true,
+      fieldComponents: []
+    }
+  },
+  watch: {
+    'fieldCode': {
+      handler: function () {
+        if (!isEmpty(this.fieldComponents)) {
+          return
+        }
+        this.$axios.safeGet(this.$compile(restUrl.COMPONENT_CODE_LIST, {
+          view: false
+        })).then(resp => {
+          this.fieldComponents = resp.data
+        })
+      },
+      immediate: true
     }
   },
   methods: {
@@ -128,6 +158,10 @@ export default {
     componentCode() {
       const {nativeValue: {component_name}} = this
       return component_name
+    },
+    keys() {
+      const {nativeValue = {}} = this
+      return Object.keys(nativeValue).sort()
     }
   }
 }

@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = { "f/tat", "feature/treeAndTable" })
+@RequestMapping(value = {"feature/treeAndTable" })
 public class TreeAndTableController extends ControllerAdapter {
 
     /**
@@ -91,7 +91,7 @@ public class TreeAndTableController extends ControllerAdapter {
         String featureCode = queryHelper.getFeatureCode();
         TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
 
-        String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignFieldCode();
+        String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignPrimaryKey();
         /** 优先通过ForeignFieldCodeKey取值 如无,再通过RELATE_ID_KEY  */
         String relateIdValue = parameterHelper.getPara(foreignFieldCodeKey, parameterHelper.getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
         Preconditions.checkArgument(StrKit.notBlank(relateIdValue), "树->表 关联ID[%s]丢失,请检查.", TreeAndTableConfig.RELATE_ID_KEY);
@@ -111,7 +111,7 @@ public class TreeAndTableController extends ControllerAdapter {
         QueryUrlBuilder queryUrlBuilder = queryHelper.queryBuilder();
         queryUrlBuilder.param("featureCode", featureCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/f/tat/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
+        FormView formView = ViewFactory.formView(metaObject).action("/feature/treeAndTable/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
         Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
 

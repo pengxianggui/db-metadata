@@ -29,15 +29,12 @@ public class SqlAnalysis {
     }
 
     public static boolean check(String sql) {
-        boolean flag = false;
         try {
-
             SQLUtils.parseStatements(getExecSql(sql), JdbcConstants.MYSQL);
-            flag = true;
+            return true;
         } catch (ParserException e) {
             throw new WebException("SQL格式不正确 %s", sql);
         }
-        return flag;
     }
 
     public static String getExecSql(String sql) {

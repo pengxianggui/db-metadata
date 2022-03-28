@@ -42,12 +42,12 @@ import java.util.stream.Collectors;
 @RequestMapping("meta")
 public class MetaController extends ControllerAdapter {
 
-    @GetMapping
-    public Ret index() {
-        String metaObjectCode = queryHelper().getObjectCode();
-        IMetaObject metaObject = metaService().findByCode(metaObjectCode);
-        return Ret.ok("data", metaObject);
-    }
+//    @GetMapping
+//    public Ret index() {
+//        String metaObjectCode = queryHelper().getObjectCode();
+//        IMetaObject metaObject = metaService().findByCode(metaObjectCode);
+//        return Ret.ok("data", metaObject);
+//    }
 
     /**
      * 新增导入元数据动作
@@ -125,13 +125,17 @@ public class MetaController extends ControllerAdapter {
         String tableName = parameterHelper.getPara("tableName");
         String objectName = parameterHelper.getPara("objectName");
         String objectCode = parameterHelper.getPara("objectCode");
+
         DbMetaService dbMetaService = metaService();
         Preconditions.checkArgument(dbMetaService.isExists(objectCode), "元对象已存在");
         IMetaObject metaObject = dbMetaService.importFromTable(schemaName, tableName);
         metaObject.name(objectName);
         metaObject.code(objectCode);
+
         UtilKit.setCreateUser(metaObject.dataMap());  //set createBy,createTime
+
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
+
         return status ? Ret.ok() : Ret.fail();
     }
 
@@ -143,7 +147,7 @@ public class MetaController extends ControllerAdapter {
         String[] objectCodes = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(objectCodess).toArray(new String[0]);
         for (String objectCode : objectCodes) {
             IMetaObject metaObject = dbMetaService.findByCode(objectCode);
-            Preconditions.checkArgument(!metaObject.isSystem(), "该对象属于系统元对象,不能删除");
+            Preconditions.checkArgument(!metaObject.buildIn(), "该对象属于系统元对象,不能删除");
 
             log.info("删除元对象{}数据", metaObject.code());
             dbMetaService.deleteMetaObject(metaObject.code());
@@ -220,56 +224,56 @@ public class MetaController extends ControllerAdapter {
         }
         return Ret.ok();
     }
-
-    /**
-     * 重新导入元对象
-     */
-    @MetaAccess(value = Type.API)
-    @Transactional
-    @GetMapping("resetImport")
-    public Ret resetImport() {
-        /**
-         * 1. 重新解析元对象对应的Table
-         * 2. 删除原元对象
-         *
-         * ext:
-         * 3. [可选]重新导入元对象
-         * 4. [可选]对已经有的配置是否进行重新计算
-         */
-        boolean deleteInstanceConfig = parameterHelper().getParaToBoolean("deleteInstanceConfig", false);
-        boolean autoImport = parameterHelper().getParaToBoolean("autoImport", false);
-
-        QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        IMetaObject metaObject = metaService().findByCode(objectCode);
-        //1. 删除元对象
-        boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());
-        log.info("{} 元对象删除,元子段:{}个,结果:{}", objectCode, metaObject.fields().size(), deleteStatus);
-
-        //2. 重新导入
-        metaObject = metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
-        boolean newInsertStatus = metaService().saveMetaObject(metaObject, true);
-        log.info("重新插入{}元对象,元字段:{}个,结果:{}", metaObject.code(), metaObject.fields().size(), newInsertStatus);
-
-        //3. 删除元对象配置
-        if (deleteInstanceConfig) {
-            log.info("{} 删除前端实例配置", objectCode);
-            componentService().deleteObjectAll(metaObject.code());
-        }
-
-        if (autoImport) {
-            log.info("{} 删除前端实例配置,并准备重新计算前端配置", objectCode);
-            componentService().deleteObjectAll(metaObject.code());
-            //自动初始化一些控件
-            for (ComponentType type : Components.me().getAutoInitComponents()) {
-                log.info("计算 {} - {} 配置", metaObject.code(), type.getCode());
-                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
-                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
-            }
-        }
-
-        return Ret.ok();
-    }
+//
+//    /**
+//     * 重新导入元对象 TODO 未验证，未使用
+//     */
+//    @MetaAccess(value = Type.API)
+//    @Transactional
+//    @GetMapping("resetImport")
+//    public Ret resetImport() {
+//        /**
+//         * 1. 重新解析元对象对应的Table
+//         * 2. 删除原元对象
+//         *
+//         * ext:
+//         * 3. [可选]重新导入元对象
+//         * 4. [可选]对已经有的配置是否进行重新计算
+//         */
+//        boolean deleteInstanceConfig = parameterHelper().getParaToBoolean("deleteInstanceConfig", false);
+//        boolean autoImport = parameterHelper().getParaToBoolean("autoImport", false);
+//
+//        QueryHelper queryHelper = queryHelper();
+//        String objectCode = queryHelper.getObjectCode();
+//        IMetaObject metaObject = metaService().findByCode(objectCode);
+//        //1. 删除元对象
+//        boolean deleteStatus = metaService().deleteMetaObject(metaObject.code());
+//        log.info("{} 元对象删除,元子段:{}个,结果:{}", objectCode, metaObject.fields().size(), deleteStatus);
+//
+//        //2. 重新导入
+//        metaObject = metaService().importFromTable(metaObject.schemaName(), metaObject.tableName());
+//        boolean newInsertStatus = metaService().saveMetaObject(metaObject, true);
+//        log.info("重新插入{}元对象,元字段:{}个,结果:{}", metaObject.code(), metaObject.fields().size(), newInsertStatus);
+//
+//        //3. 删除元对象配置
+//        if (deleteInstanceConfig) {
+//            log.info("{} 删除前端实例配置", objectCode);
+//            componentService().deleteObjectAll(metaObject.code());
+//        }
+//
+//        if (autoImport) {
+//            log.info("{} 删除前端实例配置,并准备重新计算前端配置", objectCode);
+//            componentService().deleteObjectAll(metaObject.code());
+//            //自动初始化一些控件
+//            for (ComponentType type : Components.me().getAutoInitComponents()) {
+//                log.info("计算 {} - {} 配置", metaObject.code(), type.getCode());
+//                MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
+//                componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+//            }
+//        }
+//
+//        return Ret.ok();
+//    }
 
     /**
      * 返回某元对象的关联Component 实例

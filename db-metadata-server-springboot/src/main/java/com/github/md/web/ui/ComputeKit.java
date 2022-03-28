@@ -29,7 +29,6 @@ public class ComputeKit {
      *
      * @param metaField
      * @param componentType
-     *
      * @return
      */
     public static Kv recommendFieldConfig(IMetaField metaField, ComponentType componentType) {
@@ -45,6 +44,7 @@ public class ComputeKit {
         builder.componentName(ComponentType.TEXTBOX);
         builder.name(metaField.fieldCode());
         builder.label(metaField.cn());
+        builder.sort(metaField.orderNum()); // 采用元字段的序号
         log.debug("auto compute config : {}", builder.render().toJson());
         if (instanceExtensions != null) {
             for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : instanceExtensions) {

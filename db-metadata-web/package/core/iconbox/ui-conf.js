@@ -42,6 +42,5 @@ export default {
     "component_name": "IconBox",
     "name": "IconBox",
     "label": "图标框",
-    'sort': 0,
-    "explain": "" // 字段解释
+    "explain": ""
 }

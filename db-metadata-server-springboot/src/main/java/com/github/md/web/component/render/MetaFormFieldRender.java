@@ -46,42 +46,33 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
             FormView formView = (FormView) component.getContainer();
             AttributeBuilder.FatAttributeBuilder builder = AttributeBuilder.newBuilder();
             if (formView.isAdd()) {
-                if (metaField.configParser().isAdd()) {
+//                if (metaField.configParser().isAdd()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().addStatus()) {
                         builder.disabled(true);
+                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
+                        builder.hidden(true);
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().addStatus()) {
                         builder.disabled(true);
-                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
-                        // TODO 实现隐藏功能
-                        throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus() not finished");
                     }
-                }
+//                }
             }
 
             if (formView.isUpdate()) {
-                if (metaField.configParser().isUpdate()) {
+//                if (metaField.configParser().isUpdate()) {
                     if (MetaFieldConfigParse.READONLY == metaField.configParser().updateStatus()) {
                         builder.disabled(true);
+                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
+                        builder.hidden(true);
                     } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().updateStatus()) {
                         builder.disabled(true);
-                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
-                        // TODO 实现隐藏
-                        throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus() not finished");
                     }
-                }
+//                }
             }
 
             if (formView.isView()) {
-                if (metaField.configParser().isView()) {
-                    if (MetaFieldConfigParse.READONLY == metaField.configParser().viewStatus()) {
-                        builder.disabled(true);
-                    } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().viewStatus()) {
-                        builder.disabled(true);
-                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().viewStatus()) {
-                        // TODO 实现隐藏
-                        throw new RuntimeException("MetaFieldConfigParse.HIDDEN == metaField.configParser().viewStatus() not finished");
-                    }
-                }
+//                if (metaField.configParser().isView()) {
+                    builder.disabled(true);
+//                }
             }
 
             UtilKit.deepMerge(component.getMeta(), builder.render(), true);

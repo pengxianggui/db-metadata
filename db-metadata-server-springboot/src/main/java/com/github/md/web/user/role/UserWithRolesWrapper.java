@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
  */
 public interface UserWithRolesWrapper extends User {
 
+    String avatar();
+
     MRRole[] roles();
 
     /**

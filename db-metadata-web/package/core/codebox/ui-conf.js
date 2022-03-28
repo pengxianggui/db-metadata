@@ -18,6 +18,7 @@ export default {
     "width": "auto",
     "height": "120px",
     'sort': 0,
+    "show-bar": true,
     "show-theme-chose": true,
     "show-mode-chose": true,
     "themes": ["darcula", "material", "ambiance", "elegant", "eclipse", "idea"],

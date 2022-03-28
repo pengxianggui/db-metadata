@@ -14,9 +14,7 @@ export default {
     "component_name": "FileBox",
     "name": "FileBox",
     "label": "文件上传框",
-    'sort': 0,
-    "inline": false,
-    "seats": [''],
+    "seats": [""],
     "conf": {
         "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
         "drag": false,
@@ -24,7 +22,7 @@ export default {
         "auto-upload": true,
         "show-file-list": true,
         "limit": 1,
-        "multiple": false,  // 暂时单选
+        "multiple": false
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

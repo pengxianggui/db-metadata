@@ -193,81 +193,53 @@ export function spliceKv(key, value, separatorBetweenKAndV = '_') {
 }
 
 /**
- * 将字符串转换为Array, 并返回。若无法转换或转换失败，则返回空数组
+ * 将值转为对象， 若已经是对象则直接返回, 若转换失败, 则依据第二个参数决定是返回原值还是空对象。默认是返回空对象
+ *
+ *
  * @param value
+ * @returns {{}|*}
  */
-export function convertToArray(value) {
-    if (isArray(value)) return value;
+export function convertToObject(value, returnEmptyIfErr = true) {
+    if (isObject(value)) {
+        return value
+    }
 
-    if (!isString(value)) return [];
     let result;
     try {
         result = JSON.parse(value);
-        return isArray(result) ? result : [];
+        if (!isObject(result)) {
+            throw new Error('value转换对象失败')
+        }
+        return result
     } catch (e) {
-        return [];
+        printWarn('value无法转为数组, value: %s', value)
+        return returnEmptyIfErr ? {} : value
     }
 }
 
 /**
- * 将字符串值转为对象, 若转换失败, 则返回原值
+ * 将值转为数组， 若已经是数组则直接返回, 若转换失败, 则依据第二个参数决定是返回原值还是空数组。默认是返回空数组
  * 若不为字符串则直接返回原值
  *
  * @param value
  * @returns {{}|*}
  */
-export function strToObject(value) {
-    if (isString(value)) {
-        let result;
-        try {
-            result = JSON.parse(value);
-            return isObject(result) ? result : value;
-        } catch (e) {
-            console.warn(`value can't be conver to Object, attention please. value:${value}`);
-            return value;
-        }
-    }
-    return value
-}
-
-/**
- * 将字符串值转为数组, 若转换失败, 则返回原值
- * 若不为字符串则直接返回原值
- *
- * @param value
- * @returns {{}|*}
- */
-export function strToArray(value) {
-    if (isString(value)) {
-        let result;
-        try {
-            result = JSON.parse(value);
-            return isArray(result) ? result : value;
-        } catch (e) {
-            console.warn(`value can't be conver to Array, attention please. value:${value}`);
-            return value;
-        }
-    }
-    return value
-}
-
-/**
- * 将字符串转换为数组。value就是数组，则直接返回，若是字符串，则尝试用指定分隔符(默认",")分隔为数组。
- * 若value既不是数组，也不是字符串，则直接返回空数组。
- * @param value
- * @param separator
- * @returns {*}
- */
-export function strSplitToArray(value, separator = ',') {
+export function convertToArray(value, returnEmptyIfErr = true) {
     if (isArray(value)) {
-        return value;
+        return value
     }
 
-    if (isString(value)) {
-        return value.split(separator);
+    let result;
+    try {
+        result = JSON.parse(value);
+        if (!isArray(result)) {
+            throw new Error('value转换数组失败')
+        }
+        return result
+    } catch (e) {
+        printWarn('value无法转为数组, value: %s', value)
+        return returnEmptyIfErr ? [] : value
     }
-
-    return []
 }
 
 /**
@@ -290,6 +262,25 @@ export function convertToString(value) {
 
 export function convertToNumber(value) {
     return toNumber(value);
+}
+
+/**
+ * 将字符串转换为数组。value就是数组，则直接返回，若是字符串，则尝试用指定分隔符(默认",")分隔为数组。
+ * 若value既不是数组，也不是字符串，则直接返回空数组。
+ * @param value
+ * @param separator
+ * @returns {*}
+ */
+export function strSplitToArray(value, separator = ',') {
+    if (isArray(value)) {
+        return value;
+    }
+
+    if (isString(value)) {
+        return value.split(separator);
+    }
+
+    return []
 }
 
 /**
@@ -381,6 +372,13 @@ export function assertEmpty(value, defaultValue) {
     return value;
 }
 
+export function assertBoolean(value, defaultValue) {
+    if (isBoolean(value)) {
+        return value
+    }
+    return defaultValue
+}
+
 /**
  * 若传入的value不为Object类型, 则返回defaultValue, 否则返回value
  * @param value
@@ -390,6 +388,11 @@ export function assertEmpty(value, defaultValue) {
 export function assertObject(value, defaultValue) {
     if (!isObject(value)) return defaultValue;
     return value;
+}
+
+export function assertArray(value, defaultValue) {
+    if (!isArray(value)) return defaultValue
+    return value
 }
 
 /**
@@ -600,9 +603,30 @@ export function isExternal(path) {
  */
 export function assert(condition, msg) {
     if (!condition) {
-        // throw new Error(`${msg}`)
-        console.error(msg)
+        let args = Array.prototype.slice.call(arguments);
+        args.shift()
+        args.shift()
+
+        console.error(msg, ...args)
     }
+}
+
+export function printErr(msg) {
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.error(`[meta-element]${msg}`, ...args)
+}
+
+export function printInfo(msg) {
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.info(`[meta-element]${msg}`, ...args)
+}
+
+export function printWarn(msg) {
+    let args = Array.prototype.slice.call(arguments);
+    args.shift()
+    console.warn(`[meta-element]${msg}`, ...args)
 }
 
 /**

@@ -35,10 +35,19 @@ public class FeatureService {
     public boolean createFeature(FeatureType type, String name, String code, MetaData config) {
         Record old = loadExistsFeature(code);
         if (old != null) {
-            throw new FeatureException("已经有一个名[%s]的[%s]模板使用了该[%s]Code", old.getStr("name"), old.getStr("type"), old.getStr("code"));
+            throw new FeatureException("已经有一个名[%s]的[%s]模板使用了该Code:[%s]", old.getStr("name"), old.getStr("type"), old.getStr("code"));
         }
         Record record = getRecord(type, name, code, config);
         return db().save("meta_feature", "id", record);
+    }
+
+    // insert or update(先删后加)
+    public boolean saveFeature(FeatureType type, String name, String code, MetaData config, boolean buildIn) {
+        db().delete("delete from meta_feature where code = ?", code);
+
+        Record record = getRecord(type, name, code, config);
+        record.set("build_in", buildIn);
+        return db().save("meta_feature", record);
     }
 
     private Record loadExistsFeature(String featureCode) {
@@ -66,7 +75,7 @@ public class FeatureService {
     private Record getRecord(FeatureType type, String name, String code, Kv config) {
         Record record = new Record();
         record.set("id", SnowFlake.me().nextId());
-        record.set("type", type.toString());
+        record.set("type", type.getCode());
         record.set("name", name);
         record.set("code", code);
         record.set("config", config == null ? Kv.create().toJson() : config.toJson());

@@ -15,12 +15,10 @@ export default {
     "component_name": "NumBox",
     "name": "NumBox",
     "label": "数字框",
-    'sort': 0,
-    "inline": true,
-    "default_value": 0,
+    "default_value": null,
     "conf": {
         "controls": true,
         "placeholder": "请输入数值.."
     },
-    "explain": "" // 字段解释
+    "explain": ""
 }

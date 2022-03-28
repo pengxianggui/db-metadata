@@ -1,5 +1,5 @@
 import {tagData} from './data'
-import {isArray, isEmpty, strToArray} from "../../utils/common"
+import {isArray, isEmpty, convertToArray} from "../../utils/common"
 import Cache from "../../constant/cacheKey"
 
 export function setToStorage(tag) {
@@ -19,7 +19,7 @@ export function getFormStorage() {
     let cacheTags = []
     let cacheTagsStr = localStorage.getItem(Cache.keyInLocal.TAG_AFFIX_KEY.value)
     if (!isEmpty(cacheTagsStr)) {
-        cacheTags = strToArray(cacheTagsStr)
+        cacheTags = convertToArray(cacheTagsStr)
         if (!isArray(cacheTags)) cacheTags = []
     }
     return cacheTags

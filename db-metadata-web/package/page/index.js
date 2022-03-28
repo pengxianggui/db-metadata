@@ -1,13 +1,23 @@
-import Dashboard from "./Dashboard";
-import Login from "./Login";
+import Dashboard from "./dashboard/Dashboard";
+import Login from "./login/Login";
 import Page401 from "./error/Page401";
 import Page404 from "./error/Page404";
+import ApiResourceList from "./api-resource/ApiResourceList";
+import AuthList from "./auth/AuthList";
+import RoleList from "./role/RoleList";
+import UserList from "./user/UserList";
+import DictList from "./dict/DictList";
+import ExceptionList from "./ex/ExceptionList";
 
-export default {
-    install(Vue, ops) {
-        Vue.component(Dashboard.name, Dashboard)
-        Vue.component(Login.name, Login)
-        Vue.component(Page401.name, Page401)
-        Vue.component(Page404.name, Page404)
-    }
-}
+export default [
+    Dashboard,
+    Login,
+    ApiResourceList,
+    AuthList,
+    RoleList,
+    UserList,
+    DictList,
+    ExceptionList,
+    Page404,
+    Page401
+]

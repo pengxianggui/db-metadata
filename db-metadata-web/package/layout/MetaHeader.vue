@@ -124,7 +124,6 @@ $headerHeight: 60px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    color: #777779;
 
     & > * {
       display: inline-block;

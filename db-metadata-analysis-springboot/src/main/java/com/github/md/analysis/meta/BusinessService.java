@@ -36,7 +36,6 @@ public class BusinessService {
      *
      * @param object
      * @param ids
-     *
      * @return
      */
     public Record findDataByIds(IMetaObject object, Object... ids) {
@@ -67,7 +66,7 @@ public class BusinessService {
 
     public boolean updateData(IMetaObject object, MetaData data) {
         Record old = Db.use(object.schemaName()).findByIds(object.tableName(), object.primaryKey(), data.getPks(object.primaryKey()));
-        boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data).removeNullValueColumns());
+        boolean status = Db.use(object.schemaName()).update(object.tableName(), object.primaryKey(), new Record().setColumns(data)/*.removeNullValueColumns()*/); // removeNullValueColumns导致无法将一些值置空
         buriedPoint(object, old.getColumns(), data);
         return status;
     }
@@ -81,7 +80,6 @@ public class BusinessService {
      *
      * @param object
      * @param ids
-     *
      * @return
      */
     public boolean deleteDatas(IMetaObject object, Object[] ids) {

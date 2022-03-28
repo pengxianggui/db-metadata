@@ -77,7 +77,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
             return null;
         }
 
-        User user = new DefaultUser(record);
+        DefaultUser user = new DefaultUser(record);
         List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
         MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
         return new DefaultUserWithRoles(user, roleArr);

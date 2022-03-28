@@ -1,6 +1,8 @@
 package com.github.md.web.kit;
 
+import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -10,14 +12,17 @@ import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.config.QuickJudge;
+import com.github.md.web.feature.FeatureType;
 import com.github.md.web.ui.MetaFieldViewAdapter;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -35,13 +40,17 @@ public class InitKit {
 
     private static final InitKit me = new InitKit();
 
-    private static final String OBJECT_CONFIG = "defaultObject.json";
+    private static final String OBJECT_CONFIG = "defaultObject.json"; // 系统内置的元数据
 
-    private static final String INSTANCE_JSON = "defaultInstance.json";
+    private static final String INSTANCE_JSON = "defaultInstance.json"; // 系统内置的实例配置数据
+
+    private static final String FEATURE_JSON = "defaultFeature.json"; // 系统内置的功能配置
 
     private static JSONObject jsonObjectConfig = new JSONObject();
 
     private static JSONObject jsonInstanceConfig = new JSONObject();
+
+    private static JSONArray jsonFeatureConfig = new JSONArray();
 
     static {
         loadConfig();
@@ -54,8 +63,10 @@ public class InitKit {
     private static void loadConfig() {
         String objectConfig = UtilKit.loadConfigByFile(OBJECT_CONFIG);
         String instanceConfig = UtilKit.loadConfigByFile(INSTANCE_JSON);
+        String featureConfig = UtilKit.loadConfigByFile(FEATURE_JSON);
         jsonObjectConfig = JSON.parseObject(objectConfig, Feature.OrderedField);
         jsonInstanceConfig = JSON.parseObject(instanceConfig, Feature.OrderedField);
+        jsonFeatureConfig = JSON.parseArray(featureConfig);
     }
 
     /**
@@ -118,6 +129,43 @@ public class InitKit {
         return this;
     }
 
+    /**
+     * 更新功能配置(依据defaultFeature.json，文件中未定义的功能不会被更新)
+     *
+     * @return
+     */
+    public InitKit updateFeatureConfig() {
+        log.info("开始导入系统内置功能...");
+
+        for (Object item : jsonFeatureConfig) {
+            JSONObject jsonItem = (JSONObject) item;
+            String typeStr = jsonItem.getString("type");
+            FeatureType type = FeatureType.V(typeStr);
+            String name = jsonItem.getString("name");
+            String code = jsonItem.getString("code");
+            JSONObject configJson = jsonItem.getJSONObject("config");
+            MetaData config = JSON.parseObject(JSONObject.toJSONString(configJson), type.getConfigEntity());
+
+            boolean flag = ServiceManager.featureService().saveFeature(type, name, code, config, true);
+            AssertUtil.isTrue(flag, "导入系统内置功能时发生错误, 数据未导入库， 功能编码:" + code);
+        }
+        return this;
+    }
+
+    private Record toFeature(JSONObject item) {
+        String type = item.getString("type");
+        String name = item.getString("name");
+        String code = item.getString("code");
+        JSONObject config = item.getJSONObject("config");
+
+        Record record = new Record();
+        record.set("type", type);
+        record.set("name", name);
+        record.set("code", code);
+        record.set("config", config);
+        return record;
+    }
+
     private void updateMetaObjects(List<IMetaObject> metaObjects) {
         for (IMetaObject metaObject : metaObjects) {
             updateMetaObject(metaObject);
@@ -138,6 +186,7 @@ public class InitKit {
     private void updateMetaObject(IMetaObject metaObject) {
         if (!jsonObjectConfig.containsKey(metaObject.code()))
             return;
+
         log.info("found the object configuration of {}", metaObject.code());
         JSONObject self = jsonObjectConfig.getJSONObject(metaObject.code());
         JSONObject fields = self.containsKey("_fields") ? self.getJSONObject("_fields") : new JSONObject();
@@ -284,7 +333,10 @@ public class InitKit {
     }
 
     /**
-     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultObject.json、defaultInstance.json
+     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultInstance.json.
+     * <p>
+     * 注意：方法内不会依据这两个json文件生成逻辑配置和UI实例配置，只是依据 {@link AppConst#SYS_TABLE} 确定要为哪些表初始化元对象和元字段，
+     * 然后再依据defaultInstance.json含有容器组件声明，确定要为这些元对象生成哪些容器下的实例配置, 其实例配置为自动计算生成，而不会使用defaultInstance.json内容进行覆盖。
      */
     public void initSysMeta() {
         QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);
@@ -296,14 +348,17 @@ public class InitKit {
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());
             IMetaObject metaObject = ServiceManager.metaService().importFromTable(mainDB, t.getTableName());
+            metaObject.dataMap().put("build_in", true);
             ServiceManager.metaService().saveMetaObject(metaObject, true);
-            metaObject = ServiceManager.metaService().findByCode(t.getTableName());
 
             // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
                 // 初始化实例配置
-                ServiceManager.componentService().newObjectConfig(metaObjectIViewAdapter.getComponent(), metaObject, metaObjectIViewAdapter.getInstanceConfig());
+                ServiceManager.componentService().newObjectConfig(
+                        metaObjectIViewAdapter.getComponent(),
+                        metaObject,
+                        metaObjectIViewAdapter.getInstanceConfig());
             }
         }
     }

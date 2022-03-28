@@ -7,17 +7,13 @@ import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
 import FormBuilder from "../../meta/form-builder";
 import MetaConfList from "../../meta/meta-conf";
-import DictList from "../../meta/dict";
-import ExceptionList from "../../meta/exception";
-import AuthList from "../../meta/rbac/AuthList";
-import ApiResourceList from "../../meta/rbac/ApiResourceList";
-import InstanceConfEdit from "../../meta/instance-component/InstanceConfEdit";
-import utils from "../../utils";
+import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
+import ApiResourceList from "../../page/api-resource/ApiResourceList";
 
 const routes = [
     {
         path: '/meta/manager',
-        name: 'Metadata',
+        name: 'MetaDataManager',
         meta: {
             title: "元数据管理",
             icon: "el-icon-warning",
@@ -27,7 +23,7 @@ const routes = [
         component: MetaDataManager
     }, {
         path: '/meta/feature',
-        name: 'Feature',
+        name: 'MetaFeatureList',
         meta: {
             title: '功能维护',
             icon: 'el-icon-warning-outline',
@@ -37,7 +33,7 @@ const routes = [
         component: MetaFeatureList
     }, {
         path: '/meta/global-conf-list',
-        name: 'MetaComponent',
+        name: 'GlobalConfList',
         meta: {
             title: "组件全局配置",
             icon: "el-icon-star-off",
@@ -47,7 +43,7 @@ const routes = [
         component: GlobalConfList
     }, {
         path: '/meta/global-conf',
-        name: 'MetaComponentEdit',
+        name: 'GlobalConf',
         meta: {
             title: "组件全局配置-编辑",
             icon: "el-icon-star-off",
@@ -58,7 +54,7 @@ const routes = [
         component: GlobalConf
     }, {
         path: '/meta/instance-conf-list',
-        name: 'MetaComponentInstance',
+        name: 'InstanceConfList',
         meta: {
             title: "组件实例配置",
             icon: "el-icon-star-on",
@@ -68,7 +64,7 @@ const routes = [
         component: InstanceConfList
     }, {
         path: '/meta/router',
-        name: 'MetaRouter',
+        name: 'RouterManager',
         meta: {
             title: "路由维护",
             icon: "el-icon-star-off",
@@ -79,7 +75,7 @@ const routes = [
         component: RouterManager
     }, {
         path: '/meta/menu',
-        name: 'MetaMenu',
+        name: 'MenuManager',
         meta: {
             title: "菜单维护",
             icon: "el-icon-star-off",
@@ -88,6 +84,17 @@ const routes = [
         },
         hidden: false,
         component: MenuManager
+    }, {
+        path: '/meta/api-resource',
+        name: 'ApiResourceList',
+        meta: {
+            title: "接口资源",
+            icon: "api",
+            noCache: false,
+            auths: ['route:meta:api-resource']
+        },
+        hidden: false,
+        component: ApiResourceList
     }, {
         path: '/meta/form-builder',
         name: 'FormBuilder',
@@ -105,7 +112,7 @@ const routes = [
         component: FormBuilder
     }, {
         path: '/meta/meta-conf',
-        name: 'MetaConf',
+        name: 'MetaConfList',
         meta: {
             title: 'MetaConf',
             icon: 'el-icon-s-tools',
@@ -114,49 +121,49 @@ const routes = [
         },
         component: MetaConfList
     }, {
-        path: '/meta/dict',
-        name: 'MetaDict',
-        meta: {
-            title: '字典',
-            icon: 'el-icon-collection',
-            noCache: false,
-            auths: ['route:meta:dict']
-        },
-        component: DictList
-    }, {
-        path: '/meta/exception',
-        name: 'MetaException',
-        meta: {
-            title: '异常',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:exception']
-        },
-        component: ExceptionList
-    }, {
-        path: '/meta/auth',
-        name: 'MetaAuth',
-        meta: {
-            title: '权限配置',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:auth']
-        },
-        component: AuthList
-    }, {
-        path: '/meta/api-resource',
-        name: 'ApiResource',
-        meta: {
-            title: '接口资源',
-            icon: 'el-icon-warning',
-            noCache: false,
-            auths: ['route:meta:api-resource']
-        },
-        component: ApiResourceList
-    }, {
+    //     path: '/meta/dict',
+    //     name: 'DictList',
+    //     meta: {
+    //         title: '字典',
+    //         icon: 'el-icon-collection',
+    //         noCache: false,
+    //         auths: ['route:meta:dict']
+    //     },
+    //     component: DictList
+    // }, {
+    //     path: '/meta/exception',
+    //     name: 'ExceptionList',
+    //     meta: {
+    //         title: '异常',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:exception']
+    //     },
+    //     component: ExceptionList
+    // }, {
+    //     path: '/meta/auth',
+    //     name: 'AuthList',
+    //     meta: {
+    //         title: '权限配置',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:auth']
+    //     },
+    //     component: AuthList
+    // }, {
+    //     path: '/meta/api-resource',
+    //     name: 'ApiResourceList',
+    //     meta: {
+    //         title: '接口资源',
+    //         icon: 'el-icon-warning',
+    //         noCache: false,
+    //         auths: ['route:meta:api-resource']
+    //     },
+    //     component: ApiResourceList
+    // }, {
         path: '/meta/instance-conf-edit',
-        component: InstanceConfEdit,
-        name: 'InstanceConfEdit',
+        component: InstanceConfEditor,
+        name: 'InstanceConfEditor',
         meta: {
             title: '组件实例配置-编辑',
             icon: 'edit',
@@ -165,10 +172,8 @@ const routes = [
         },
         hidden: true,
         props: (route) => ({
-            instanceCode: route.query.instanceCode,
-            objectCode: route.query.objectCode,
-            componentCode: route.query.componentCode,
-            fieldCode: utils.assertEmpty(route.query.fieldCode, '')
+            ic: route.query.instanceCode,
+            fc: route.query.fieldCode
         })
     }
 ]

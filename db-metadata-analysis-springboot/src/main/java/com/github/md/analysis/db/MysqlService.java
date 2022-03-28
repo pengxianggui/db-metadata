@@ -66,17 +66,30 @@ public class MysqlService implements DbService {
     }
 
     @Override
+    public boolean hasTable(String schema, String tableName) {
+        return getTableRecord(schema, tableName) != null;
+    }
+
+    @Override
     public Table getTable(String schema, String tableName) {
-        Optional<String> schemaName = showSchema().stream().filter(s -> schema.equalsIgnoreCase(s)).findFirst();
-        Record record = null;
+        Record record = getTableRecord(schema, tableName);
+        if (record == null) {
+            throw new MetaAnalysisException("表不存在: %s", tableName);
+        }
+        Table table = new Table(record);
+        return table.setColumns(getColumns(schema, tableName));
+    }
+
+    private Record getTableRecord(String schema, String tableName) {
+        Optional<String> schemaName = showSchema().stream().filter(s -> s.equalsIgnoreCase(schema)).findFirst();
+        Record record;
         String getTableSql = "select * from information_schema.tables where table_schema=? and table_name=?";
         if (schemaName.isPresent()) {
             record = Db.use(schema).findFirst(getTableSql, schema, tableName);
         } else {
-            record = SpringAnalysisManager.me().dbMain().findFirst(getTableSql, schema, tableName);
+            record = SpringAnalysisManager.me().dbMain().findFirst(getTableSql, SpringAnalysisManager.me().dbMain().getConfig().getName(), tableName);
         }
-        Table table = new Table(record);
-        return table.setColumns(getColumns(schema, tableName));
+        return record;
     }
 
     @Override

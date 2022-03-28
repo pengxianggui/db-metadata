@@ -19,6 +19,9 @@ public interface User {
     @JSONField(name = "userName")
     String userName();
 
+    @JSONField(name = "avatar")
+    String avatar();
+
     @JSONField(name = "attrs")
     Kv attrs();
 
@@ -35,4 +38,5 @@ public interface User {
                 .set("username", userName())
                 .set("attrs", attrs());
     }
+
 }

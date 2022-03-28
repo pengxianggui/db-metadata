@@ -1,6 +1,7 @@
 package com.github.md.web.ui;
 
 import com.github.md.web.ServiceManager;
+import com.github.md.web.kit.Dicts;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.query.dynamic.DefaultContext;
 import com.google.common.base.Joiner;
@@ -32,7 +33,6 @@ public class OptionsKit {
      * 前端直接能用的value,key
      *
      * @param values
-     *
      * @return
      */
     public static List<Kv> transKeyValue(String[] values) {
@@ -53,12 +53,12 @@ public class OptionsKit {
      * id,cn -> value,key
      *
      * @param records
-     *
      * @return
      */
     public static List<Kv> transKeyValue(List<Record> records) {
         List<Kv> result = Lists.newArrayList();
         for (Record record : records) {
+            // TODO 2.2 将id和cn 改为key和value， 每次写scopeSql都记不住是id和cn
             if (record.getColumns().containsKey("id") && record.getColumns().containsKey("cn")) {
                 log.debug("id-{},cn-{}", record.getStr("id"), record.getStr("cn"));
                 result.add(Kv.by("value", record.getStr("id")).set("key", record.getStr("cn")));
@@ -70,7 +70,7 @@ public class OptionsKit {
     public static Kv tranKeyValueFlatMapByArray(List<Kv> jsonArray) {
         Kv mapped = Kv.create();
         jsonArray.forEach(r -> {
-            mapped.set(r.getStr("value"), r.getStr("key"));
+            mapped.set(r.get("value"), r.get("key"));
         });
         return mapped;
     }
@@ -81,7 +81,6 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
-     *
      * @return
      */
     public static List<Kv> transKeyValueBySql(String sql, String dbConfig) {
@@ -98,7 +97,6 @@ public class OptionsKit {
      *
      * @param sql
      * @param dbConfig sql执行的数据源
-     *
      * @return
      */
     public static Kv transIdCnFlatMapBySql(String sql, String dbConfig) {
@@ -134,7 +132,6 @@ public class OptionsKit {
      *
      * @param fields
      * @param dataRecords
-     *
      * @return
      */
     public static <T extends Record> List<T> trans(Collection<IMetaField> fields, List<T> dataRecords) {
@@ -145,44 +142,51 @@ public class OptionsKit {
         // 因此, 对于不同的record, mapped可能是不同的
         for (T record : dataRecords) {
             //            final Kv mappeds = Kv.create();
-            final Map<String, Kv> mappeds = Kv.create();
+            final Map<IMetaField, Kv> mappeds = Kv.create();
 
             //计算需要转义的字段的映射关系
             for (IMetaField field : fields) {
                 configWrapper = field.configParser();
                 if (configWrapper.hasTranslation()) {
-                    if (configWrapper.isSql()) {
+                    // 注意优先级
+                    if (configWrapper.isOptions()) {
+                        Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
+                        mappeds.put(field, mapped);
+                    } else if (configWrapper.isDict()) {
+                        List<Kv> options = Dicts.me().getKvs(configWrapper.getDictName());
+                        Kv mapped = tranKeyValueFlatMapByArray(options);
+                        mappeds.put(field, mapped);
+                    } else if (configWrapper.isSql()) {
                         log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
                         String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
                         String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(),
-                                                                         ServiceManager.quickJudge().getRequest(),
-                                                                         new DefaultContext(record.getColumns()));
+                                ServiceManager.quickJudge().getRequest(),
+                                new DefaultContext(record.getColumns()));
 
                         Kv mapped = transIdCnFlatMapBySql(compileSql, dbConfig);
-                        mappeds.put(field.fieldCode(), mapped);
-                    }
-                    if (configWrapper.isOptions()) {
-                        Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
-                        mappeds.put(field.fieldCode(), mapped);
+                        mappeds.put(field, mapped);
                     }
                 } else {
                     if (field.dbType().isBoolean()) {
-                        mappeds.put(field.fieldCode(), transKeyValueFlatMapByBoolean());
+                        mappeds.put(field, transKeyValueFlatMapByBoolean());
                     }
                 }
             }
 
-            mappeds.forEach((fieldCode, mapped) -> {
-                //旧值
-                Object oldVal = record.getObject(fieldCode);
-                if ((oldVal instanceof String) && StrKit.notBlank((String) oldVal) && ((String) oldVal).contains(",")) { // 多值逻辑
-                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList((String) oldVal).toArray(new String[] {});
+            mappeds.forEach((field, mapped) -> {
+                Object oldVal = record.getObject(field.fieldCode()); // 旧值
+
+                if ((oldVal instanceof String) && StrKit.notBlank((String) oldVal)
+                        && field.configParser().isMultiple() && ((String) oldVal).contains(",")) { // 多值逻辑
+                    String[] ss = Splitter.on(",").trimResults().omitEmptyStrings().splitToList((String) oldVal).toArray(new String[]{});
                     for (int i = 0; i < ss.length; i++) {
-                        ss[i] = mapped.getStr(ss[i]);
+                        String newV = mapped.getStr(ss[i]);
+                        ss[i] = StrKit.defaultIfBlank(newV, ss[i]);
                     }
-                    record.set(fieldCode, Joiner.on(",").skipNulls().join(ss));
+                    record.set(field.fieldCode(), Joiner.on(",").skipNulls().join(ss));
                 } else { // 单值逻辑
-                    record.set(fieldCode, mapped.get(oldVal));
+                    Object newVal = mapped.get(oldVal);
+                    record.set(field.fieldCode(), newVal != null ? newVal : oldVal);
                 }
             });
         }
