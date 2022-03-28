@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequestMapping
 public class LoginController extends ControllerAdapter {
 
-    @PostMapping("${md.server.login.ctrl.login-path}")
+    @PostMapping("${md.server.login.ctrl.login-path:/user/login}")
     public Ret login(HttpServletResponse response) {
         String uid = parameterHelper().getPara(AuthenticationManager.me().loginService().loginKey());
         String pwd = parameterHelper().getPara(AuthenticationManager.me().loginService().pwdKey());
@@ -50,7 +50,7 @@ public class LoginController extends ControllerAdapter {
         }
     }
 
-    @PostMapping("${md.server.login.ctrl.logout-path}")
+    @PostMapping("${md.server.login.ctrl.logout-path:/user/logout}")
     public Ret logout() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         if (Objects.isNull(user)) {
@@ -60,7 +60,7 @@ public class LoginController extends ControllerAdapter {
         return flag ? Ret.ok() : Ret.fail();
     }
 
-    @GetMapping("${md.server.login.ctrl.info-path}")
+    @GetMapping("${md.server.login.ctrl.info-path:/user/info}")
     public Ret info() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         AssertUtil.isTrue(user != null, new UnLoginException("未登录"));

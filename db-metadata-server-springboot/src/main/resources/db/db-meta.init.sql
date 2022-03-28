@@ -579,7 +579,7 @@ CREATE TABLE `meta_router` (
 BEGIN;
 INSERT INTO `meta_router` VALUES ('2b17f805d48548ef89a574bd80a0dd3a', '698272484012724224', 'UserList', '用户列表', '/user', '', 'UserList', '{}', b'0', b'0', 0, '{}', b'1', 'auth', NULL, 'any', NULL, 'any', '', b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
 INSERT INTO `meta_router` VALUES ('696345295902085120', '698272484012724224', 'Dashboard', '首页', '/dashboard', '', 'Dashboard', NULL, b'0', b'0', -99999, '{}', b'1', 'auth', NULL, 'any', NULL, 'any', '', b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
-INSERT INTO `meta_router` VALUES ('698272484012724224', NULL, 'AdminLayout', '布局组件', '/', '/dashboard', 'MetaLayout', NULL, b'1', b'0', 0, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
+INSERT INTO `meta_router` VALUES ('698272484012724224', NULL, 'MetaLayout', '布局组件', '/', '/dashboard', 'MetaLayout', NULL, b'1', b'0', 0, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
 INSERT INTO `meta_router` VALUES ('698273043436408832', NULL, 'Login', '登录', '/login', NULL, 'Login', NULL, b'0', b'0', 1, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
 INSERT INTO `meta_router` VALUES ('698273460404752384', NULL, 'Page401', '401', '/401', NULL, 'Page401', NULL, b'0', b'0', 100, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
 INSERT INTO `meta_router` VALUES ('698273579418128384', NULL, 'Page404', '404', '*', NULL, 'Page404', NULL, b'0', b'0', 999999, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', '2022-03-24 03:01:37', 'SYSTEM', 'SYSTEM', NULL);
