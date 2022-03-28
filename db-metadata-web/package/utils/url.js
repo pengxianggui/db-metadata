@@ -6,7 +6,7 @@
  * @param url
  * @param params
  */
-import {assert, isString, isObject, isEmpty, assertUndefined} from "./common";
+import {assert, isString, isObject, isEmpty, assertUndefined, isArray} from "./common";
 
 /**
  * url编译。例如:
@@ -31,12 +31,17 @@ export function compile(url, params = {}) {
     let rex = new RegExp("\{.*?\}", "g");
     let v = url.match(rex);
 
-    for (let i in v) {
+    if (!isArray(v)) {
+        return url
+    }
+
+    for (let i = 0; i < v.length; i++) {
         let xv = v[i].replace(/\{/g, "").replace(/\}/g, "");
         if (Object.keys(params).indexOf(xv) > -1) {
             url = url.replace(v[i], assertUndefined(params[xv], ''));
         }
     }
+
     return url;
 }
 
