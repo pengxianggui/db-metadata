@@ -72,6 +72,7 @@ export default {
     login(model) {
       this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
         localStorage.setItem(appConfig.tokenKey, data.token)
+        this.$router.push('/')
         location.reload()
       })
     },
