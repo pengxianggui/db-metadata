@@ -16,7 +16,7 @@
 <dependency>
     <groupId>com.github.md</groupId>
     <artifactId>db-metadata-server-springboot</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.2-SNAPSHOT</version>
 </dependency>
 ```
 
