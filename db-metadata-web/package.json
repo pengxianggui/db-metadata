@@ -20,6 +20,7 @@
     "release": "npm run lib && npm run pub"
   },
   "dependencies": {
+    "vuepress": "^1.9.7",
     "@pxg/vue-address": "0.0.4",
     "@tinymce/tinymce-vue": "^3.2.2",
     "axios": "^0.19.0",
@@ -40,6 +41,7 @@
     "xml-loader": "^1.2.1"
   },
   "devDependencies": {
+    "vuepress-plugin-demo-container": "^0.2.0",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",

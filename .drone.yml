@@ -31,16 +31,6 @@ steps:
     when:
       local: false
 
-#  - name: build-cookbook
-#    image: node:12.16
-#    commands:
-#      - cd cookbook
-#      - npm cache clean --force
-#      - npm install
-#      - npm run docs:build
-#    when:
-#      local: false
-
   - name: build-server
     image: maven:3-alpine
     commands:
@@ -90,9 +80,9 @@ steps:
         from_secret: k8s_token
       namespace: tool
       deployment: db-metadata-web
-      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata-web
+      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
       container: db-metadata-web
-      tag: ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+      tag: web-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
     when:
       event:
         - push
@@ -106,9 +96,9 @@ steps:
         from_secret: k8s_token
       namespace: tool
       deployment: db-metadata-server
-      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata-server
+      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
       container: db-metadata-server
-      tag: ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+      tag: server-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
     when:
       event:
         - push
