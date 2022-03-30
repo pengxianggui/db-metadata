@@ -144,12 +144,20 @@ public class MetaDataTypeConvert {
         }
 
         try {
-            if (c == Timestamp.class && !s.equalsIgnoreCase("CURRENT_TIMESTAMP")) { // 特殊的默认值
-                long time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s).getTime();
-                return new Timestamp(time);
+            if (c == Timestamp.class) { // 特殊的默认值
+                if (s.equalsIgnoreCase("CURRENT_TIMESTAMP")) {
+                    return new Timestamp(new Date().getTime());
+                } else {
+                    long time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s).getTime();
+                    return new Timestamp(time);
+                }
             }
-            if (c == DateTime.class && !s.equalsIgnoreCase("CURRENT_TIMESTAMP")) {
-                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s);
+            if (c == DateTime.class) {
+                if (s.equalsIgnoreCase("CURRENT_TIMESTAMP")) {
+                    return new Date();
+                } else {
+                    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s);
+                }
             }
             if (c == Date.class) {
                 return new SimpleDateFormat("yyyy-MM-dd").parse(s);

@@ -8,7 +8,7 @@ export default {
     // 以下为非必要配置
     menus: menus, // 编程菜单
     axios: {  // axios配置
-        baseURL: '/meta'
+        baseURL: process.env.VUE_APP_BASE_API
     },
     // routerInterceptor: { // 路由守卫
     //     enable: true, // 开启内置的路由守卫。开启后，由MetaElement负责值守路由，并对路由鉴权。如果关闭，你需要自行维持路由鉴权，并维持用户状态。

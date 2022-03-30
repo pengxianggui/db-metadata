@@ -22,12 +22,10 @@ module.exports = {
         port: 8080,
         https: false,
         sockHost: 'localhost',
-        // proxy: 'http://192.168.110.67:8888'
         proxy: {
-            '^/meta/': {
-                target: 'http://localhost:8888',
-                // target: 'http://192.168.110.67:8888',
-                pathRewrite: {'^/meta': ''},
+            [process.env.VUE_APP_BASE_API]: {
+                target: process.env.VUE_APP_PROXY_URL,
+                pathRewrite: {['^' + process.env.VUE_APP_BASE_API]: ''},
                 changeOrigin: true
             }
         }

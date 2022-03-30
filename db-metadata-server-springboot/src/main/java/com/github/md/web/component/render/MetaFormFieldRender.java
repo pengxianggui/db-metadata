@@ -2,6 +2,7 @@ package com.github.md.web.component.render;
 
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentRender;
+import com.github.md.analysis.db.MetaDataTypeConvert;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
 import com.github.md.web.component.attr.AttributeBuilder;
@@ -39,7 +40,7 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
     public Kv render() {
         //先将实例配置,merge到meta
         //以数据库保存的实例配置为准
-        UtilKit.deepMerge(component.getMeta(), fieldInstanceConfig, true);
+        UtilKit.deepMerge(component.getMeta(), defaultValTypeConvert(fieldInstanceConfig), true);
 
         //TODO 根据表单和字段状态,计算显示属性 ReadOnly Disabled
         if (component.getContainer() instanceof FormView) {
@@ -47,36 +48,53 @@ public class MetaFormFieldRender<C extends Component> implements ComponentRender
             AttributeBuilder.FatAttributeBuilder builder = AttributeBuilder.newBuilder();
             if (formView.isAdd()) {
 //                if (metaField.configParser().isAdd()) {
-                    if (MetaFieldConfigParse.READONLY == metaField.configParser().addStatus()) {
-                        builder.disabled(true);
-                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
-                        builder.hidden(true);
-                    } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().addStatus()) {
-                        builder.disabled(true);
-                    }
+                if (MetaFieldConfigParse.READONLY == metaField.configParser().addStatus()) {
+                    builder.disabled(true);
+                } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().addStatus()) {
+                    builder.hidden(true);
+                } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().addStatus()) {
+                    builder.disabled(true);
+                }
 //                }
             }
 
             if (formView.isUpdate()) {
 //                if (metaField.configParser().isUpdate()) {
-                    if (MetaFieldConfigParse.READONLY == metaField.configParser().updateStatus()) {
-                        builder.disabled(true);
-                    } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
-                        builder.hidden(true);
-                    } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().updateStatus()) {
-                        builder.disabled(true);
-                    }
+                if (MetaFieldConfigParse.READONLY == metaField.configParser().updateStatus()) {
+                    builder.disabled(true);
+                } else if (MetaFieldConfigParse.HIDDEN == metaField.configParser().updateStatus()) {
+                    builder.hidden(true);
+                } else if (MetaFieldConfigParse.DISABLE == metaField.configParser().updateStatus()) {
+                    builder.disabled(true);
+                }
 //                }
             }
 
             if (formView.isView()) {
 //                if (metaField.configParser().isView()) {
-                    builder.disabled(true);
+                builder.disabled(true);
 //                }
             }
 
             UtilKit.deepMerge(component.getMeta(), builder.render(), true);
         }
+
         return component.getMeta();
+    }
+
+    /**
+     * 默认值类型转换。例如, 数据库中设置的默认值可能是下面这样的值:
+     * <pre>
+     *     CURRENT_TIMESTAMP、now()、等，统一在MetaDataTypeConvert中进行转换处理
+     * </pre>
+     *
+     * @param fieldInstanceConfig
+     * @return
+     */
+    private Kv defaultValTypeConvert(Kv fieldInstanceConfig) {
+        if (fieldInstanceConfig.containsKey("default_value")) {
+            fieldInstanceConfig.set("default_value", MetaDataTypeConvert.convert(metaField, fieldInstanceConfig.get("default_value")));
+        }
+        return fieldInstanceConfig;
     }
 }

@@ -28,19 +28,23 @@
     import {getToken} from "../../../access";
     import {resolve} from "../../../utils/url";
 
+    const conver = function (value) {
+        return (!utils.isObject(value) ? [] : [value]);
+    }
+
+    const reverse = function (value) {
+        if (utils.isArray(value)) {
+          return value.length > 0 ? value[0] : {}
+        }
+        if (utils.isObject(value)) {
+          return value
+        }
+        return {}
+    }
+
     export default {
         name: "UploadItem",
-        mixins: [Meta(), Val(function (value) {
-            return (!utils.isObject(value) ? [] : [value]);
-        }, function (value) {
-            if (utils.isArray(value)) {
-                return value.length > 0 ? value[0] : {}
-            }
-            if (utils.isObject(value)) {
-                return value
-            }
-            return {}
-        })],
+        mixins: [Meta(), Val(conver, reverse)],
         props: {
             value: {
                 type: Object
@@ -95,6 +99,14 @@
         mounted() {
             this.$nextTick(() => {
                 this.fileList = utils.deepClone(this.nativeValue);
+                // 兼容处理 axios配置了baseURL编辑预览失败问题
+                const {$axios: {defaults: {baseURL} = {}} = {}} = this
+                this.fileList.filter(item => !utils.isEmpty(item)).map(item => {
+                    this.$reverseMerge(item, {
+                      url: resolve(baseURL, item.url)
+                    })
+                    return item
+                })
             })
         },
         computed: {

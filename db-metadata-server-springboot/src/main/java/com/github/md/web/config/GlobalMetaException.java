@@ -78,7 +78,7 @@ public class GlobalMetaException {
             se.set("ext_url", request.getRequestURI());
             se.set("req_data", JSON.toJSONString(request.getParameterMap()));
             se.set("res_data", JSON.toJSONString(request.getParameterMap()));
-            se.set("created_by", "db-metadata-server");
+            se.set("created_by", "SYSTEM");
             se.set("created_time", new Date());
             SpringAnalysisManager.me().dbMain().save("meta_exception", se);
         } catch (Exception ex) {

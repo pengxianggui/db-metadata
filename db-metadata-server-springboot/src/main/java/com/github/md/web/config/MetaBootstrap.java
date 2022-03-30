@@ -3,6 +3,7 @@ package com.github.md.web.config;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.aop.AuditAop;
 import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
@@ -133,6 +134,7 @@ public class MetaBootstrap {
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());
 
+            PointCutChain.registerGlobalPointCut(new AuditAop());
             PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopAop());
         }
     }

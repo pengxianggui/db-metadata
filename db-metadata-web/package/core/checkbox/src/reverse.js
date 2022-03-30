@@ -4,8 +4,8 @@ export default function (value) {   // value is Array
     let newVal = value;
     const {value: inputVal} = this;
     switch (utils.typeOf(inputVal)) {
-        case "[object String]": // input: "a,b,c";  innerValue: ['a','b', 'c']; output: "a,b,c";
-            newVal = value.join(',');
+        case "[object String]": // input: "a,b,c";  innerValue: ['a', 'b', 'c']; output: "a,b,c";
+            newVal = utils.isEmpty(value) ? null : value.join(',');
             break;
     }
     return newVal;

@@ -17,7 +17,8 @@
     <!--    <master-slave-table-tmpl fc="meta_data"></master-slave-table-tmpl>-->
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
-    <form-view ic="meta_user.FormView" form-type="add"></form-view>
+<!--    <form-view ic="meta_user.FormView" form-type="add"></form-view>-->
+    <form-view ic="meta_user.FormView" form-type="update" primary-kv="706541200185888768"></form-view>
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->
