@@ -29,12 +29,6 @@ module.exports = {
                 // target: 'http://192.168.110.67:8888',
                 pathRewrite: {'^/meta': ''},
                 changeOrigin: true
-            },   // 超过11个node会提示MaxListenersExceededWarning
-            '^/file/': {
-                target: 'http://localhost:8888',
-                // target: 'http://192.168.110.67:8888',
-                pathRewrite: {'^/file': '/file'},
-                changeOrigin: true
             }
         }
     },

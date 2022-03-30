@@ -6,7 +6,7 @@
  * @param url
  * @param params
  */
-import {assert, isString, isObject, isEmpty, assertUndefined, isArray} from "./common";
+import {assert, isString, isObject, isEmpty, assertUndefined, isArray, isExternal} from "./common";
 
 /**
  * url编译。例如:
@@ -113,4 +113,23 @@ export function resolvePath(url, params) {
         .match(/\{([^)]*)\}/)
 
     return url + paramUrl[1]
+}
+
+/**
+ * 拼接两个path, 判断path参数前缀是否是'/'，防止重复斜杠。
+ * 若baseURL或path为空，或path为绝对地址(含有https、http开头)，则直接返回path， 不做拼接
+ * @param baseURL
+ * @param path
+ * @returns {string|*}
+ */
+export function resolve(baseURL, path) {
+    if (isEmpty(baseURL) || isEmpty(path) || isExternal(path)) {
+        return path
+    }
+
+    if (path.startsWith('/')) {
+        return baseURL + path
+    } else {
+        return baseURL + '/' + path
+    }
 }

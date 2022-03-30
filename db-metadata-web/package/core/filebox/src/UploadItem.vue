@@ -26,6 +26,7 @@
     import Val from "../../mixins/value";
     import {appConfig} from "../../../config";
     import {getToken} from "../../../access";
+    import {resolve} from "../../../utils/url";
 
     export default {
         name: "UploadItem",
@@ -98,8 +99,14 @@
         },
         computed: {
             conf() {
-                const {innerMeta: {conf = {}}, $attrs, $reverseMerge} = this
-                return $reverseMerge(conf, $attrs)
+                const {innerMeta: {conf = {}}, $attrs} = this
+                const finalConf = this.$reverseMerge(conf, $attrs)
+
+                const {defaults: {baseURL} = {}} = this.$axios
+                const {action} = finalConf
+                return this.$reverseMerge(finalConf, {
+                    action: resolve(baseURL, action)
+                })
             }
         }
     }
