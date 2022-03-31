@@ -429,7 +429,7 @@ export default {
       const {buttons: buttonsConf = {}} = this.operationColumnConf
       return buttonsConf
     },
-    // 支持无渲染的行为插槽 TODO 2.2 用法不明确, 移除
+    // 支持无渲染的行为插槽 TODO 2.3 用法不明确, 移除
     actions() {
       const {doDelete} = this;
       return {doDelete};

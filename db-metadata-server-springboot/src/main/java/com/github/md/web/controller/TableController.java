@@ -22,6 +22,7 @@ import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
@@ -94,11 +95,11 @@ public class TableController extends ControllerAdapter {
             result = queryPointCut.getResult(tableQueryInvocation);
         } else {
             result = metaService().paginate(pageIndex,
-                                            pageSize,
-                                            metaObject,
-                                            sqlPara.getSelect(),
-                                            MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                            sqlPara.getPara());
+                    pageSize,
+                    metaObject,
+                    sqlPara.getSelect(),
+                    MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                    sqlPara.getPara());
         }
 
 
@@ -130,7 +131,7 @@ public class TableController extends ControllerAdapter {
         }
 
         return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
-                                  excludeFields);
+                excludeFields);
     }
 
     /**
@@ -237,21 +238,18 @@ public class TableController extends ControllerAdapter {
 
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
         List<Record> result = businessService().findData(metaObject,
-                                                         sqlPara.getSelect(),
-                                                         MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                         sqlPara.getPara());
-
-        // TODO 2.2 添加转义规则后，构建树的关联字段值被转义了，导致树构建失败
-//        /*
-//         * escape field value;
-//         * 1. 是否需要转义的规则;
-//         */
-//        if (!queryHelper.list().raw()) {
-//            OptionsKit.trans(filteredFields, result);
-//        }
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 
-        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
+        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.getAfterFilter(
+                record -> {
+                    if (!queryHelper.list().raw()) { // 转义: 在递归序列化时进行转义
+                        OptionsKit.trans(filteredFields, Lists.newArrayList(record));
+                    }
+                }
+        ))));
     }
 }

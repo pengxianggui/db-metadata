@@ -58,7 +58,6 @@ public class OptionsKit {
     public static List<Kv> transKeyValue(List<Record> records) {
         List<Kv> result = Lists.newArrayList();
         for (Record record : records) {
-            // TODO 2.2 将id和cn 改为key和value， 每次写scopeSql都记不住是id和cn
             if (record.getColumns().containsKey("id") && record.getColumns().containsKey("cn")) {
                 log.debug("id-{},cn-{}", record.getStr("id"), record.getStr("cn"));
                 result.add(Kv.by("value", record.getStr("id")).set("key", record.getStr("cn")));

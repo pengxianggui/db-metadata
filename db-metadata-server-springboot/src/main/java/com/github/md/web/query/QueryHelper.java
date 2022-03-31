@@ -18,7 +18,6 @@ import java.util.List;
  * QueryHelper的目的是一个全局的统一获取系统核心参数的工具类
  * 防止Controller中散落大量的参数名。
  * <p>
- * TODO 2.2 对于一些核心入参的优先级需要清洗一遍, 原则: 完整名>简写
  * <pre>
  * objectCode > oc
  * fieldCode > fc
@@ -70,31 +69,31 @@ public class QueryHelper {
     }
 
     public String getFieldCode() {
-        return tp.getPara("f", tp.getPara("fieldCode"));
+        return tp.getPara("fieldCode", tp.getPara("f"));
     }
 
     public Integer getPageSize() {
-        return tp.getInt("s", tp.getInt("pageSize", 20));
+        return tp.getInt("pageSize", tp.getInt("s", 20));
     }
 
     public Integer getPageIndex() {
-        return tp.getInt("p", tp.getInt("pageIndex", 1));
+        return tp.getInt("pageIndex", tp.getInt("p", 1));
     }
 
     public String getComponentCode() {
-        return tp.getPara("compCode", tp.getPara("componentCode", tp.getPara("cc")));
+        return tp.getPara("componentCode", tp.getPara("compCode", tp.getPara("cc")));
     }
 
     public ComponentType getComponentType() {
-        return ComponentType.V(tp.getPara("compType", tp.getPara("componentType")));
+        return ComponentType.V(tp.getPara("componentType", tp.getPara("compType", tp.getPara("ct"))));
     }
 
     public String getInstanceCode() {
-        return tp.getPara("ic", tp.getPara("instanceCode"));
+        return tp.getPara("instanceCode", tp.getPara("ic"));
     }
 
     public String getInstanceName() {
-        return tp.getPara("in", tp.getPara("instanceName"));
+        return tp.getPara("instanceName", tp.getPara("in"));
     }
 
     public String[] getObjectCodes() {
@@ -183,11 +182,11 @@ public class QueryHelper {
     public class ListHelper {
 
         public String fs() {
-            return tp.getPara("fs", tp.getPara("fields", ""));
+            return tp.getPara("fields", tp.getPara("fs", ""));
         }
 
         public String efs() {
-            return tp.getPara("efs", tp.getPara("exfields", ""));
+            return tp.getPara("exfields", tp.getPara("efs", ""));
         }
 
         public String[] fields() {

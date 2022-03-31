@@ -5,6 +5,7 @@ import com.github.md.web.WebException;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * <p> @Date : 2020/8/6 </p>
@@ -13,6 +14,27 @@ import java.util.List;
  * <p> @author konbluesky </p>
  */
 public class TreeKit {
+
+    public final static AfterFilter getAfterFilter(Consumer<Record> callBack) {
+        return new AfterFilter() {
+            /* object为运行时传TreeNode */
+            @Override
+            public void writeAfter(Object object) {
+                if (object instanceof TreeNode) {
+                    TreeNode treeNode = (TreeNode) object;
+                    Object currNode = treeNode.currNode();
+                    if (currNode instanceof Record) {
+                        callBack.accept((Record) currNode);
+                        ((Record) currNode).getColumns().forEach((key, value) -> {
+                            writeKeyValue(key, value);
+                        });
+                    } else {
+                        throw new WebException("还未支持的TreeNode Json 转换");
+                    }
+                }
+            }
+        };
+    }
 
     /* TreeNode渲染时,通过filter 将currNode内容,渲染到json 根下 */
     public final static AfterFilter afterFilter = new AfterFilter() {

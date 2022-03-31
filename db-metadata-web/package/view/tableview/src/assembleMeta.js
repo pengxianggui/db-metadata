@@ -3,12 +3,12 @@ import utils from '../../../utils'
 // init column.showable of columns
 const initShowable = function (columns) {
     columns.forEach(item => {
-        // TODO 2.2 缓存到sessionStorage
-        if (!item.hasOwnProperty('showable')) { // default true: 默认所有字段均展示
+        // default true: 默认所有字段均展示
+        if (!item.hasOwnProperty('showable') || !utils.isBoolean(item.showable)) {
             item.showable = true;
         }
-    });
-};
+    })
+}
 
 export default function (mergedMeta) {
     const columnsKey = 'columns';
