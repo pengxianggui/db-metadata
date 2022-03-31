@@ -978,7 +978,8 @@
     "FormView": {
       "_fields": {
         "exp_chain": {
-          "component_name": "CodeBox"
+          "component_name": "CodeBox",
+          "height": "400px"
         },
         "req_data": {
           "component_name": "JsonBox"
