@@ -175,6 +175,12 @@
 - `conf`:   `operation-bar`配置项
 - `choseData`: 表格点选的数据
 
+### float-right-btn
+顶部操作条`浮动右侧`的插槽。传递参数:
+- `conf`:   `operation-bar`配置项
+- `choseData`: 表格勾选的数据
+- `activeData`: 表格点选的数据
+
 ### buttons
 操作列中按钮组的插槽。传递参数:
 - `scope`: 当前记录数据, 见`el-table`文档

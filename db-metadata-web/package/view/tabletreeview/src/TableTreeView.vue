@@ -1,40 +1,52 @@
 <template>
-  <el-container direction="vertical" class="el-card" ref="container">
+  <div  class="view-container" ref="container">
     <!-- operation bar -->
-    <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData" v-if="operationBarConf['show']">
-      <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
-                 :style="operationBarConf.style" v-bind="operationBarConf.conf"
-                 v-if="operationBarConf.show">
-        <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd">
-          <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
-                     v-if="operationBarConf.add.show">
-            {{operationBarConf.add.text}}
-          </el-button>
-        </slot>
-        <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
-              v-bind:batchDelete="handleBatchDelete">
-          <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
-                     v-if="multiSelect && operationBarConf.delete.show">
-            {{operationBarConf.delete.text}}
-          </el-button>
-        </slot>
-        <slot name="expand-btn" v-bind:conf="operationBarConf.expand" v-bind:choseData="choseData"
-              v-bind:expand="handleExpandAll">
-          <el-button @click="handleExpandAll" v-bind="operationBarConf.expand.conf"
-                     v-if="operationBarConf.expand.show">
-            {{operationBarConf.expand.text}}
-          </el-button>
-        </slot>
-        <slot name="shrink-btn" v-bind:conf="operationBarConf.shrink" v-bind:choseData="choseData"
-              v-bind:shrink="handleShrinkAll">
-          <el-button @click="handleShrinkAll" v-bind="operationBarConf.shrink.conf"
-                    v-if="operationBarConf.shrink.show">
-            {{operationBarConf.shrink.text}}
-          </el-button>
-        </slot>
-        <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-      </component>
+    <slot name="operation-bar" v-bind:conf="operationBarConf"
+          v-bind:choseData="choseData" v-bind:activeData="activeData" v-if="operationBarConf['show']">
+      <div class="operation-bar">
+
+        <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
+                   :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                   v-if="operationBarConf.show">
+          <slot name="prefix-btn" v-bind:conf="operationBarConf"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
+          <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd"
+                v-bind:choseData="choseData" v-bind:activeData="activeData">
+            <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
+                       v-if="operationBarConf.add.show">
+              {{operationBarConf.add.text}}
+            </el-button>
+          </slot>
+          <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"
+                v-bind:batchDelete="handleBatchDelete">
+            <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
+                       v-if="multiSelect && operationBarConf.delete.show">
+              {{operationBarConf.delete.text}}
+            </el-button>
+          </slot>
+          <slot name="expand-btn" v-bind:conf="operationBarConf.expand"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"
+                v-bind:expand="handleExpandAll">
+            <el-button @click="handleExpandAll" v-bind="operationBarConf.expand.conf"
+                       v-if="operationBarConf.expand.show">
+              {{operationBarConf.expand.text}}
+            </el-button>
+          </slot>
+          <slot name="shrink-btn" v-bind:conf="operationBarConf.shrink" v-bind:choseData="choseData"
+                v-bind:activeData="activeData" v-bind:shrink="handleShrinkAll">
+            <el-button @click="handleShrinkAll" v-bind="operationBarConf.shrink.conf"
+                      v-if="operationBarConf.shrink.show">
+              {{operationBarConf.shrink.text}}
+            </el-button>
+          </slot>
+          <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
+                v-bind:activeData="activeData"></slot>
+        </component>
+
+        <slot name="float-right-btn" v-bind:conf="operationBarConf"
+              v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
+      </div>
     </slot>
 
     <el-table :id="meta.name"
@@ -46,7 +58,6 @@
               @sort-change="sortChange"
               @selection-change="handleSelectionChange"
               @row-dblclick="$emit('row-dblclick', $event)"
-
               v-if="show">
 
       <!-- multi select conf -->
@@ -113,7 +124,7 @@
     </el-table>
 
     <slot name="behavior" :on="on" :actions="actions"></slot>
-  </el-container>
+  </div>
 </template>
 
 <script>
@@ -445,5 +456,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.view-container {
+  .operation-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 </style>

@@ -1,26 +1,38 @@
 <template>
   <div class="view-container" ref="container">
     <!-- 操作条 -->
-    <slot name="operation-bar" v-bind:conf="operationBarConf" v-bind:choseData="choseData">
-      <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
-                 :style="operationBarConf.style" v-bind="operationBarConf.conf"
-                 v-if="operationBarConf.show">
-        <slot name="prefix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-        <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:choseData="choseData" v-bind:add="handleAdd">
-          <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
-                     v-if="operationBarConf.add.show">
-            {{ operationBarConf.add.text }}
-          </el-button>
-        </slot>
-        <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete" v-bind:choseData="choseData"
-              v-bind:batchDelete="handleBatchDelete">
-          <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
-                     v-if="multiSelect && operationBarConf.delete.show">
-            {{ operationBarConf.delete.text }}
-          </el-button>
-        </slot>
-        <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"></slot>
-      </component>
+    <slot name="operation-bar" v-bind:conf="operationBarConf"
+          v-bind:choseData="choseData" v-bind:activeData="activeData">
+      <div class="operation-bar">
+
+        <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
+                   :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                   v-if="operationBarConf.show">
+          <slot name="prefix-btn" v-bind:conf="operationBarConf"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
+          <slot name="add-btn" v-bind:conf="operationBarConf.add"
+                v-bind:choseData="choseData" v-bind:activeData="activeData" v-bind:add="handleAdd">
+            <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
+                       v-if="operationBarConf.add.show">
+              {{ operationBarConf.add.text }}
+            </el-button>
+          </slot>
+          <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"
+                v-bind:batchDelete="handleBatchDelete">
+            <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
+                       v-if="multiSelect && operationBarConf.delete.show">
+              {{ operationBarConf.delete.text }}
+            </el-button>
+          </slot>
+          <slot name="suffix-btn" v-bind:conf="operationBarConf"
+                v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
+        </component>
+
+        <slot name="float-right-btn" v-bind:conf="operationBarConf"
+              v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
+
+      </div>
     </slot>
 
     <!-- 表格主体 -->
@@ -103,7 +115,7 @@
 
     <!-- 底部分页 -->
     <slot name="pagination" v-bind:pageModel="pageModel">
-      <div :style="paginationConf.style">
+      <div class="pagination-bar" :style="paginationConf.style">
         <el-pagination v-bind="paginationConf.conf"
                        :page-size.sync="pageModel.size"
                        :current-page.sync="pageModel.index"
@@ -111,6 +123,8 @@
                        @size-change="sizeChange"
                        @current-change="getData"
                        v-if="paginationConf.show"></el-pagination>
+        <slot name="pagination-extend" v-bind:choseData="choseData" v-bind:activeData="activeData"
+              v-bind:pageModel="pageModel"></slot>
       </div>
     </slot>
 
@@ -427,5 +441,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .view-container {
+    .operation-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 </style>

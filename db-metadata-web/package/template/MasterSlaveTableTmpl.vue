@@ -24,6 +24,9 @@
       <template #suffix-btn="scope">
         <slot name="suffix-btn" v-bind="scope"></slot>
       </template>
+      <template #float-right-btn="scope">
+        <slot name="float-right-btn" v-bind="scope"></slot>
+      </template>
 
       <template #buttons="scope">
         <slot name="buttons" v-bind="scope"></slot>
@@ -45,6 +48,10 @@
       </template>
       <template #inner-after-extend-btn="scope">
         <slot name="inner-after-extend-btn" v-bind="scope"></slot>
+      </template>
+
+      <template #pagination-extend="scope">
+        <slot name="pagination-extend" v-bind="scope"></slot>
       </template>
     </table-view>
 
@@ -77,6 +84,9 @@
             <template #suffix-btn="scope">
               <slot :name="slave.config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
             </template>
+            <template #float-right-btn="scope">
+              <slot :name="slave.config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
+            </template>
 
             <template #buttons="scope">
               <slot :name="slave.config.objectCode + '_buttons'" v-bind="scope"></slot>
@@ -99,7 +109,9 @@
               <slot :name="slave.config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
             </template>
 
-
+            <template #pagination-extend="scope">
+              <slot :name="slave.config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
+            </template>
 
           </table-view>
         </el-tab-pane>
@@ -137,6 +149,9 @@
         <template #suffix-btn="scope">
           <slot :name="config.slaves[0].config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
         </template>
+        <template #float-right-btn="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
+        </template>
 
         <template #buttons="scope">
           <slot :name="config.slaves[0].config.objectCode + '_buttons'" v-bind="scope"></slot>
@@ -158,6 +173,11 @@
         <template #inner-after-extend-btn="scope">
           <slot :name="config.slaves[0].config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
         </template>
+
+        <template #pagination-extend="scope">
+          <slot :name="config.slaves[0].config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
+        </template>
+
       </table-view>
     </div>
   </div>

@@ -18,6 +18,9 @@
       <template #suffix-btn="scope">
         <slot name="suffix-btn" v-bind="scope"></slot>
       </template>
+      <template #float-right-btn="scope">
+        <slot name="float-right-btn" v-bind="scope"></slot>
+      </template>
 
       <template #buttons="scope">
         <slot name="buttons" v-bind="scope"></slot>

@@ -33,6 +33,9 @@
           <template #suffix-btn="scope">
             <slot name="suffix-btn" v-bind="scope"></slot>
           </template>
+          <template #float-right-btn="scope">
+            <slot name="float-right-btn" v-bind="scope"></slot>
+          </template>
 
           <template #buttons="scope">
             <slot name="buttons" v-bind="scope"></slot>
@@ -52,6 +55,10 @@
           </template>
           <template #inner-after-extend-btn="scope">
             <slot name="inner-after-extend-btn" v-bind="scope"></slot>
+          </template>
+
+          <template #pagination-extend="scope">
+            <slot name="pagination-extend" v-bind="scope"></slot>
           </template>
         </table-view>
       </template>
