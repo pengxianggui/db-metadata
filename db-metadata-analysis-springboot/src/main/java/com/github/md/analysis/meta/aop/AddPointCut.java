@@ -9,29 +9,13 @@ package com.github.md.analysis.meta.aop;
 public interface AddPointCut extends IPointCut {
 
     /**
-     * 两类匹配策略
-     * 1. table match
-     * 2. meta_object match;
-     *
      * @return
      */
-    //    abstract boolean match();
-    default boolean addBefore(AopInvocation invocation) {
+    default boolean addBefore(FormInvocation invocation) {
         return true;
     }
 
-    //    @Override
-    //    public void intercept(Invocation inv) {
-    //        if (match()) {
-    //            addBefore();
-    //            inv.invoke();
-    //            addAfter();
-    //        } else {
-    //            inv.invoke();
-    //        }
-    //    }
-
-    default boolean addAfter(AopInvocation invocation) {
+    default boolean addAfter(FormInvocation invocation) {
         return true;
     }
 }

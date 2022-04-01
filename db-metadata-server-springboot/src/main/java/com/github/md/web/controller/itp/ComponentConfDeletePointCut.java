@@ -1,13 +1,12 @@
 package com.github.md.web.controller.itp;
 
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.aop.DeleteInvocation;
+import com.github.md.analysis.meta.aop.DeletePointCut;
+import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ComponentService;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.aop.AopInvocation;
-import com.github.md.analysis.meta.aop.DeletePointCut;
-import com.github.md.web.ServiceManager;
-import com.github.md.web.query.QueryHelper;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +28,13 @@ import java.util.List;
 public class ComponentConfDeletePointCut implements DeletePointCut {
 
     @Override
-    public boolean deleteBefore(AopInvocation invocation) {
-        QueryHelper queryHelper = new QueryHelper(invocation.getRequest());
+    public boolean deleteBefore(DeleteInvocation invocation) {
         IMetaObject metaObject = invocation.getMetaObject();
         Preconditions.checkArgument("meta_component_instance".equalsIgnoreCase(metaObject.code()), "该拦截器仅对meta_component_instance元对象启用");
 
-        Object[] ids = queryHelper.getPks(metaObject);
+        Object[] ids = invocation.getIds();
         List<String> instanceCodes = Lists.newArrayList();
         for (Object id : ids) {
-            Preconditions.checkArgument(id instanceof Object[] && ((Object[]) id).length == 1, "组件配置删除动作,不支持联合主键");
             Record record = ServiceManager.metaService().findDataByIds(metaObject, id);
 
             if (ComponentService.INSTANCE.META_OBJECT.toString().equalsIgnoreCase(record.getStr("type"))) {
@@ -50,7 +47,7 @@ public class ComponentConfDeletePointCut implements DeletePointCut {
     }
 
     @Override
-    public boolean deleteAfter(AopInvocation invocation) {
+    public boolean deleteAfter(DeleteInvocation invocation) {
         List<String> instanceCodes = (List<String>) invocation.getRet().get("instanceCodes");
 
         for (String instanceCode : instanceCodes) {

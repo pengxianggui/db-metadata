@@ -8,11 +8,11 @@ package com.github.md.analysis.meta.aop;
  */
 public interface DeletePointCut extends IPointCut {
 
-    default boolean deleteBefore(AopInvocation invocation) {
+    default boolean deleteBefore(DeleteInvocation invocation) {
         return true;
     }
 
-    default boolean deleteAfter(AopInvocation invocation) {
+    default boolean deleteAfter(DeleteInvocation invocation) {
         return true;
     }
 }

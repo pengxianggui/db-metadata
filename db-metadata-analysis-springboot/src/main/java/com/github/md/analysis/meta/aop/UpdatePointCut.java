@@ -8,11 +8,11 @@ package com.github.md.analysis.meta.aop;
  */
 public interface UpdatePointCut extends IPointCut {
 
-    default boolean updateBefore(AopInvocation invocation) {
+    default boolean updateBefore(FormInvocation invocation) {
         return true;
     }
 
-    default boolean updateAfter(AopInvocation invocation) {
+    default boolean updateAfter(FormInvocation invocation) {
         return true;
     }
 }

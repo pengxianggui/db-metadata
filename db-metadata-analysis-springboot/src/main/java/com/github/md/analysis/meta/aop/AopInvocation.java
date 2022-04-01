@@ -20,8 +20,6 @@ public class AopInvocation {
 
     private IMetaObject metaObject;
 
-    private MetaData formData;
-
     private Ret ret = new Ret().setOk();
 
     private HttpServletRequest request;
@@ -33,18 +31,9 @@ public class AopInvocation {
      */
     private boolean preOperateStatus = false;
 
-    /**
-     * FIXME 遗留债务,构造函数未能形成约束,三个构造函数初始化无法保证对所有参数初始统一;
-     * 会导致PointCut调用时出现空指针异常,加重了使用负担;
-     */
-    public AopInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams, HttpServletRequest request) {
+    public AopInvocation(IMetaObject metaObject, Kv httpParams, HttpServletRequest request) {
         this.metaObject = metaObject;
-        this.formData = formData;
         this.httpParams = httpParams;
         this.request = request;
-    }
-
-    public AopInvocation(IMetaObject metaObject, Kv httpParams, HttpServletRequest request) {
-        this(metaObject, null, httpParams, request);
     }
 }

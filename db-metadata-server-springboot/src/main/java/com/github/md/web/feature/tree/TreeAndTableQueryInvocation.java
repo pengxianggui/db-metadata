@@ -12,11 +12,11 @@ import lombok.Data;
  * <p> @author konbluesky </p>
  */
 @Data
-public class TreeAndTableInvocation extends TableQueryInvocation {
+public class TreeAndTableQueryInvocation extends TableQueryInvocation {
 
     private TreeAndTableConfig treeAndTableConfig;
 
-    public TreeAndTableInvocation(IMetaObject metaObject, QueryHelper queryHelper) {
+    public TreeAndTableQueryInvocation(IMetaObject metaObject, QueryHelper queryHelper) {
         super(metaObject, queryHelper);
     }
 }

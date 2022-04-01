@@ -3,11 +3,10 @@ package com.github.md.web.aop;
 import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.DbMetaService;
 import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.aop.AopInvocation;
+import com.github.md.analysis.meta.aop.DeleteInvocation;
 import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
-import com.github.md.web.query.QueryHelper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,17 +32,14 @@ public class MetaObjectAop implements DeletePointCut {
      * @return
      */
     @Override
-    public boolean deleteBefore(AopInvocation invocation) {
+    public boolean deleteBefore(DeleteInvocation invocation) {
         check(invocation);
 
-        QueryHelper queryHelper = new QueryHelper(invocation.getRequest());
-        IMetaObject metaObject = invocation.getMetaObject();
-
-        Object[] ids = queryHelper.getPks(metaObject);
+        Object[] idsArr = invocation.getIds();
         DbMetaService dbMetaService = ServiceManager.metaService();
 
-        for (Object jointId : ids) {
-            Object id = ((Object[]) jointId)[0];
+        for (Object ids : idsArr) {
+            Object id = ((Object[]) ids)[0];
             IMetaObject metaObjectOfData = dbMetaService.findById(String.valueOf(id));
 
             AssertUtil.isTrue(metaObjectOfData != null, new WebException("元对象不存在, id: %s", String.valueOf(id)));
@@ -61,7 +57,7 @@ public class MetaObjectAop implements DeletePointCut {
         return true;
     }
 
-    private void check(AopInvocation invocation) {
+    private void check(DeleteInvocation invocation) {
         IMetaObject metaObject = invocation.getMetaObject();
         if (!META_OBJECT_CODE.equals(metaObject.code())) {
             throw new RuntimeException(

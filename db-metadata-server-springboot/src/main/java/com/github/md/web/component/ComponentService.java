@@ -506,13 +506,34 @@ public class ComponentService {
         return true;
     }
 
-    public boolean deleteFieldConfig(String componentCode, String objectCode, String fieldCode) {
-        SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
+    /**
+     * 删除指定元字段在指定容器组件下的实例配置
+     *
+     * @param componentCode
+     * @param objectCode
+     * @param fieldCode
+     * @return 返回删除的记录数
+     */
+    public int deleteFieldConfig(String componentCode, String objectCode, String fieldCode) {
+        return SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where comp_code=? and type=? and dest_object=?",
                 componentCode,
                 INSTANCE.META_FIELD.toString(),
                 objectCode + "." + fieldCode);
-        return true;
     }
+
+    /**
+     * 删除指定元字段在所有容器组件下的实例配置。这通常用于元字段删除
+     *
+     * @param objectCode
+     * @param fieldCode
+     * @return 返回删除的记录数
+     */
+    public int deleteFieldConfig(String objectCode, String fieldCode) {
+        return SpringAnalysisManager.me().dbMain().delete("delete from " + META_COMPONENT_INSTANCE + " where type =? and dest_object=?",
+                INSTANCE.META_FIELD.toString(),
+                objectCode + "." + fieldCode);
+    }
+
 
     public boolean hasObjectConfig(String componentCode, String objectCode) {
         return SpringAnalysisManager.me().dbMain().queryInt("select count(1) from " + META_COMPONENT_INSTANCE + " where comp_code = ? and dest_object = ?",

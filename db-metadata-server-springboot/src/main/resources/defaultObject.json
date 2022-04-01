@@ -138,7 +138,7 @@
       "objectCode": "meta_object",
       "isNumberSequence": true,
       "orderBy": "created_time desc,updated_time desc",
-      "bizInterceptor": "com.github.md.web.aop.MetaObjectAop,com.github.md.web.controller.itp.BuildInDataPointCut"
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut,com.github.md.web.aop.MetaObjectAop"
     },
     "_fields": {
       "id": {

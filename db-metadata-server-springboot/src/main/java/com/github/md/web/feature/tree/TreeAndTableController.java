@@ -4,10 +4,7 @@ import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.*;
-import com.github.md.analysis.meta.aop.AddPointCut;
-import com.github.md.analysis.meta.aop.AopInvocation;
-import com.github.md.analysis.meta.aop.PointCutChain;
-import com.github.md.analysis.meta.aop.QueryPointCut;
+import com.github.md.analysis.meta.aop.*;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
 import com.github.md.web.component.ViewFactory;
@@ -113,19 +110,19 @@ public class TreeAndTableController extends ControllerAdapter {
 
         FormView formView = ViewFactory.formView(metaObject).action("/feature/treeAndTable/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
-        Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
+        Kv preFillMetaFields = queryHelper.hasMetaParams(metaObject);
 
-        /** 将关联RELATE_ID_KEY的value 获取到后,放入要disable的字段map中 */
+        /** 将关联RELATE_ID_KEY的value 获取到后,放入要预填充的字段map中 */
         if (StrKit.isBlank(foreignFieldCodeKey)) {
-            disableMetaFields.put(TreeAndTableConfig.RELATE_ID_KEY, relateIdValue);
+            preFillMetaFields.put(TreeAndTableConfig.RELATE_ID_KEY, relateIdValue);
         } else {
-            disableMetaFields.put(foreignFieldCodeKey, relateIdValue);
+            preFillMetaFields.put(foreignFieldCodeKey, relateIdValue);
         }
 
-        if (!disableMetaFields.isEmpty()) {
+        if (!preFillMetaFields.isEmpty()) {
             formView.buildChildren();
-            disableMetaFields.forEach((key, value) -> {
-                formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
+            preFillMetaFields.forEach((key, value) -> {
+                formView.getField(String.valueOf(key)).defaultVal(String.valueOf(value));
             });
         }
 
@@ -148,7 +145,7 @@ public class TreeAndTableController extends ControllerAdapter {
         AddPointCut addPointCut = (AddPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
         /** 将TreeAndTable中拦截器取出合并到AddPointCut拦截器中 */
         AddPointCut[] pointCut = Lists.asList(addPointCut, metaObjectConfigParse.addPointCut()).toArray(new AddPointCut[0]);
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper.getKv(), getRequest());
+        FormInvocation invocation = new FormInvocation(metaObject, parameterHelper.getKv(), getRequest(), metadata);
 
         boolean status = Db.tx(new IAtom() {
 
@@ -208,17 +205,17 @@ public class TreeAndTableController extends ControllerAdapter {
 
         /** pointCut构建 */
         QueryPointCut queryPointCut = (QueryPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
-        TreeAndTableInvocation treeAndTableInvocation = new TreeAndTableInvocation(metaObject, queryHelper);
-        treeAndTableInvocation.setSqlParaExt(sqlPara);
-        treeAndTableInvocation.setCompileWhere(compileWhere);
-        treeAndTableInvocation.setFilteredFields(filteredFields);
-        treeAndTableInvocation.setTreeAndTableConfig(treeAndTableConfig);
+        TreeAndTableQueryInvocation treeAndTableQueryInvocation = new TreeAndTableQueryInvocation(metaObject, queryHelper);
+        treeAndTableQueryInvocation.setSqlParaExt(sqlPara);
+        treeAndTableQueryInvocation.setCompileWhere(compileWhere);
+        treeAndTableQueryInvocation.setFilteredFields(filteredFields);
+        treeAndTableQueryInvocation.setTreeAndTableConfig(treeAndTableConfig);
 
         Page<Record> result = null;
         if (queryPointCut.prevent()) {
-            result = queryPointCut.getResult(treeAndTableInvocation);
+            result = queryPointCut.getResult(treeAndTableQueryInvocation);
         } else {
-            SqlParaExt pointCutSqlPara = (SqlParaExt) queryPointCut.queryWrapper(treeAndTableInvocation);
+            SqlParaExt pointCutSqlPara = (SqlParaExt) queryPointCut.queryWrapper(treeAndTableQueryInvocation);
             /** 当拦截点未设置时,使用默认查询逻辑 */
             if (pointCutSqlPara == null) {
                 result = metaService().paginate(pageIndex,

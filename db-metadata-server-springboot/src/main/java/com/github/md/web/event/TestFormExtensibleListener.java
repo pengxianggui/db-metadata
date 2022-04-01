@@ -20,6 +20,6 @@ public class TestFormExtensibleListener implements FormExtensibleListener {
     @Override
     public void handler(AopInvocation invocation) {
         log.error("===============================================");
-        log.error("{} {} {} {}", "hello", invocation.getMetaObject().code(), invocation.isPreOperateStatus(), invocation.getFormData().toJson());
+        log.error("{} {} {} {}", "hello", invocation.getMetaObject().code(), invocation.isPreOperateStatus());
     }
 }

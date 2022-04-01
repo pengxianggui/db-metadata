@@ -14,37 +14,37 @@ import lombok.extern.slf4j.Slf4j;
 public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, ViewPointCut, QueryPointCut {
 
     @Override
-    public boolean addBefore(AopInvocation invocation) {
+    public boolean addBefore(FormInvocation invocation) {
         log.error("[PointCut] default operation : this is addBefore!");
         return false;
     }
 
     @Override
-    public boolean addAfter(AopInvocation invocation) {
+    public boolean addAfter(FormInvocation invocation) {
         log.error("[PointCut] default operation :this is addAfter!");
         return false;
     }
 
     @Override
-    public boolean deleteBefore(AopInvocation invocation) {
+    public boolean deleteBefore(DeleteInvocation invocation) {
         log.error("[PointCut] default operation : this is deleteBefore!");
         return false;
     }
 
     @Override
-    public boolean deleteAfter(AopInvocation invocation) {
+    public boolean deleteAfter(DeleteInvocation invocation) {
         log.error("[PointCut] default operation : this is deleteAfter!");
         return false;
     }
 
     @Override
-    public boolean updateBefore(AopInvocation invocation) {
+    public boolean updateBefore(FormInvocation invocation) {
         log.error("[PointCut] default operation : this is updateBefore!");
         return false;
     }
 
     @Override
-    public boolean updateAfter(AopInvocation invocation) {
+    public boolean updateAfter(FormInvocation invocation) {
         log.error("[PointCut] default operation : this is updateAfter!");
         return false;
     }

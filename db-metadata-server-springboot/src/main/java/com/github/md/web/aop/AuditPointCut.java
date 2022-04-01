@@ -4,6 +4,7 @@ import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.AopInvocation;
+import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.user.User;
 import com.github.md.web.user.UserThreadLocal;
@@ -22,10 +23,10 @@ import java.util.Optional;
  * @author pengxg
  * @date 2022/3/30 11:32 上午
  */
-public class AuditAop implements AddPointCut, UpdatePointCut {
+public class AuditPointCut implements AddPointCut, UpdatePointCut {
 
     @Override
-    public boolean addBefore(AopInvocation invocation) {
+    public boolean addBefore(FormInvocation invocation) {
         MetaData formData = invocation.getFormData();
         IMetaField createdTimeMetaField = invocation.getMetaObject().getField("created_time");
         if (createdTimeMetaField != null && createdTimeMetaField.dbType().isDate()) {
@@ -42,7 +43,7 @@ public class AuditAop implements AddPointCut, UpdatePointCut {
     }
 
     @Override
-    public boolean updateBefore(AopInvocation invocation) {
+    public boolean updateBefore(FormInvocation invocation) {
         MetaData formData = invocation.getFormData();
         IMetaField updatedTimeMetaField = invocation.getMetaObject().getField("updated_time");
         if (updatedTimeMetaField != null && updatedTimeMetaField.dbType().isDate()) {

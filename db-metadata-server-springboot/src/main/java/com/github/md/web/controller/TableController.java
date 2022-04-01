@@ -2,14 +2,11 @@ package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.md.analysis.meta.*;
+import com.github.md.analysis.meta.aop.*;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.github.md.analysis.meta.aop.AopInvocation;
-import com.github.md.analysis.meta.aop.DeletePointCut;
-import com.github.md.analysis.meta.aop.PointCutChain;
-import com.github.md.analysis.meta.aop.QueryPointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.kit.UtilKit;
@@ -170,7 +167,7 @@ public class TableController extends ControllerAdapter {
             for (Object idInParam : idInParams) {
                 TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
                 Preconditions.checkNotNull(treeConfig, "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
-                treeConfig.setRootIdentify(String.valueOf(idInParam));
+                treeConfig.setRootIdentify(String.valueOf(((Object[]) idInParam)[0]));
 
                 List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
                 if (containsRoot) {
@@ -189,7 +186,7 @@ public class TableController extends ControllerAdapter {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         DeletePointCut[] pointCut = metaObjectConfigParse.deletePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, parameterHelper.getKv(), getRequest());
+        DeleteInvocation invocation = new DeleteInvocation(metaObject, parameterHelper.getKv(), getRequest(), ids);
 
         boolean status = Db.tx(new IAtom() {
 
@@ -203,7 +200,9 @@ public class TableController extends ControllerAdapter {
                     PointCutChain.deleteAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("删除异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
-                    log.error(e.getMessage(), e);
+                    if (log.isDebugEnabled()) {
+                        log.error(e.getMessage(), e);
+                    }
                     invocation.getRet().setFail(e);
                     s = false;
                 }

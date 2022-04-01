@@ -65,11 +65,11 @@ public class FormController extends ControllerAdapter {
                 .addForm();
 
         //TODO 手工build,方便后面编程式操作表单内元子控件
-        Kv disableMetaFields = queryHelper.hasMetaParams(metaObject);
-        if (!disableMetaFields.isEmpty()) {
+        Kv preFillMetaFields = queryHelper.hasMetaParams(metaObject);
+        if (!preFillMetaFields.isEmpty()) {
             formView.buildChildren();
-            disableMetaFields.forEach((key, value) -> {
-                formView.getField(String.valueOf(key)).disabled(true).defaultVal(String.valueOf(value));
+            preFillMetaFields.forEach((key, value) -> {
+                formView.getField(String.valueOf(key)).defaultVal(String.valueOf(value));
             });
         }
         return Ret.ok("data", formView.toKv());
@@ -83,12 +83,12 @@ public class FormController extends ControllerAdapter {
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
-        // TODO 在buildFormData 前应当校验 getRequest().getParameterMap() 参数的合法性
+        // TODO 2.3 在buildFormData 前应当校验 getRequest().getParameterMap() 参数的合法性
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         AddPointCut[] pointCut = metaObjectConfigParse.addPointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv(), getRequest());
+        FormInvocation invocation = new FormInvocation(metaObject, parameterHelper().getKv(), getRequest(), metadata);
 
         boolean status = Db.tx(new IAtom() {
 
@@ -155,7 +155,7 @@ public class FormController extends ControllerAdapter {
 
         MetaObjectConfigParse metaObjectConfigParse = metaObject.configParser();
         UpdatePointCut[] pointCut = metaObjectConfigParse.updatePointCut();
-        AopInvocation invocation = new AopInvocation(metaObject, metadata, parameterHelper().getKv(), getRequest());
+        FormInvocation invocation = new FormInvocation(metaObject, parameterHelper().getKv(), getRequest(), metadata);
 
         boolean status = Db.tx(new IAtom() {
 
@@ -169,7 +169,9 @@ public class FormController extends ControllerAdapter {
                     PointCutChain.updateAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("更新异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
-                    log.error(e.getMessage(), e);
+                    if (log.isDebugEnabled()) {
+                        log.error(e.getMessage(), e);
+                    }
                     invocation.getRet().setFail().set("msg", e.getMessage());
                     s = false;
                 }
@@ -197,7 +199,7 @@ public class FormController extends ControllerAdapter {
         FormView formView = ViewFactory.formView(metaObject).viewForm();
 
         ViewPointCut[] viewPointCuts = metaObject.configParser().viewPointCut();
-        FormQueryInvocation invocation = new FormQueryInvocation(metaObject);
+        DetailQueryInvocation invocation = new DetailQueryInvocation(metaObject);
 
         boolean status = Db.tx(() -> {
             boolean s = true;

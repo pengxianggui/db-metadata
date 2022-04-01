@@ -45,7 +45,7 @@ public class PointCutChain {
         }
     }
 
-    public static void addBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void addBefore(IPointCut[] pointCuts, FormInvocation invocation) {
 
         for (IPointCut addPointCut : addPointCuts) {
             if (addPointCut instanceof AddPointCut) {
@@ -67,7 +67,7 @@ public class PointCutChain {
         }
     }
 
-    public static void addAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void addAfter(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut addPointCut : addPointCuts) {
             if (addPointCut instanceof AddPointCut) {
                 ((AddPointCut) addPointCut).addAfter(invocation);
@@ -88,7 +88,7 @@ public class PointCutChain {
         }
     }
 
-    public static void updateBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void updateBefore(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut updatePointCut : updatePointCuts) {
             if (updatePointCut instanceof UpdatePointCut) {
                 ((UpdatePointCut) updatePointCut).updateBefore(invocation);
@@ -109,7 +109,7 @@ public class PointCutChain {
         }
     }
 
-    public static void updateAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void updateAfter(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut updatePointCut : updatePointCuts) {
             if (updatePointCut instanceof UpdatePointCut) {
                 ((UpdatePointCut) updatePointCut).updateAfter(invocation);
@@ -130,7 +130,7 @@ public class PointCutChain {
         }
     }
 
-    public static void deleteBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void deleteBefore(IPointCut[] pointCuts, DeleteInvocation invocation) {
         for (IPointCut deletePointCut : deletePointCuts) {
             if (deletePointCut instanceof DeletePointCut) {
                 ((DeletePointCut) deletePointCut).deleteBefore(invocation);
@@ -151,7 +151,7 @@ public class PointCutChain {
         }
     }
 
-    public static void deleteAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void deleteAfter(IPointCut[] pointCuts, DeleteInvocation invocation) {
         for (IPointCut deletePointCut : deletePointCuts) {
             if (deletePointCut instanceof DeletePointCut) {
                 ((DeletePointCut) deletePointCut).deleteAfter(invocation);
@@ -172,7 +172,7 @@ public class PointCutChain {
         }
     }
 
-    public static void viewBefore(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void viewBefore(IPointCut[] pointCuts, DetailQueryInvocation invocation) {
         for (IPointCut viewPointCut : viewPointCuts) {
             if (viewPointCut instanceof ViewPointCut) {
                 ((ViewPointCut) viewPointCut).viewBefore(invocation);
@@ -193,7 +193,7 @@ public class PointCutChain {
         }
     }
 
-    public static void viewAfter(IPointCut[] pointCuts, AopInvocation invocation) {
+    public static void viewAfter(IPointCut[] pointCuts, DetailQueryInvocation invocation) {
         for (IPointCut viewPointCut : viewPointCuts) {
             if (viewPointCut instanceof ViewPointCut) {
                 ((ViewPointCut) viewPointCut).viewAfter(invocation);

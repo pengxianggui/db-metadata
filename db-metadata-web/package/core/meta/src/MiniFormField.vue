@@ -36,6 +36,20 @@
         </template>
       </div>
     </el-form-item>
+
+    <el-divider content-position="left">
+      <span>表单配置</span>&nbsp;
+      <el-tooltip placement="right">
+        <div slot="content">
+          显示: 正常状态;
+          隐藏: 控件存在但不可见;
+          只读: 控件被disable了;
+          禁用: 该域不会存在于表单中。
+          注意只读和禁用的区别。
+        </div>
+        <i class="el-icon-question"></i>
+      </el-tooltip>
+    </el-divider>
     <el-form-item label="新增状态">
       <el-radio-group v-model="nativeValue.addStatus">
         <el-radio-button label="100">显示</el-radio-button>

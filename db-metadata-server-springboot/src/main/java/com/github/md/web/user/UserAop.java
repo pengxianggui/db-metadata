@@ -5,6 +5,7 @@ import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.AopInvocation;
+import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
@@ -23,7 +24,7 @@ public class UserAop implements AddPointCut, UpdatePointCut {
     private final String OBJECT_CODE = "meta_user";
 
     @Override
-    public boolean addBefore(AopInvocation invocation) {
+    public boolean addBefore(FormInvocation invocation) {
         check(invocation);
 
         MetaProperties metaProperties = ServiceManager.getAppProperties();
@@ -39,7 +40,7 @@ public class UserAop implements AddPointCut, UpdatePointCut {
     }
 
     @Override
-    public boolean updateBefore(AopInvocation invocation) {
+    public boolean updateBefore(FormInvocation invocation) {
         check(invocation);
 
         return true;

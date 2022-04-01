@@ -1,13 +1,13 @@
 package com.github.md.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
+import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
-import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.kit.tree.TreeConfig;
 import com.github.md.web.kit.tree.TreeNode;
@@ -21,10 +21,10 @@ import java.util.List;
  * @author pengxg
  * @date 2021/4/21 8:58 上午
  */
-public class PreventInfiniteLoopAop implements UpdatePointCut {
+public class PreventInfiniteLoopPointCut implements UpdatePointCut {
 
     @Override
-    public boolean updateBefore(AopInvocation invocation) {
+    public boolean updateBefore(FormInvocation invocation) {
         IMetaObject metaObject = invocation.getMetaObject();
 
         if (metaObject.configParser().isTreeStructure()) {

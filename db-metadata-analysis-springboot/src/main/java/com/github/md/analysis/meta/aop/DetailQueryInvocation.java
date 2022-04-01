@@ -1,7 +1,6 @@
-package com.github.md.web.controller;
+package com.github.md.analysis.meta.aop;
 
 import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.aop.QueryInvocation;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +9,12 @@ import lombok.Setter;
  * @author pengxg
  * @date 2021/4/9 10:56 上午
  */
-public class FormQueryInvocation extends QueryInvocation {
+public class DetailQueryInvocation extends QueryInvocation {
     @Setter
     @Getter
     private Record data;
 
-    public FormQueryInvocation(IMetaObject metaObject) {
+    public DetailQueryInvocation(IMetaObject metaObject) {
         super(metaObject);
     }
 }

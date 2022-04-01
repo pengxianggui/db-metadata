@@ -2,10 +2,7 @@ package com.github.md.analysis.meta;
 
 import com.jfinal.plugin.activerecord.Record;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p> @Date : 2019/9/11 </p>
@@ -139,6 +136,7 @@ public class MetaObject implements IMetaObject {
 
     @Override
     public IMetaField getField(String fieldCode) {
-        return fields.stream().filter(f -> fieldCode.equalsIgnoreCase(f.fieldCode())).findFirst().get();
+        Optional<IMetaField> optional = fields.stream().filter(f -> fieldCode.equalsIgnoreCase(f.fieldCode())).findFirst();
+        return optional.isPresent() ? optional.get() : null;
     }
 }

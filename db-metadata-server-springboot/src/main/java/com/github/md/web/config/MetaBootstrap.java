@@ -3,11 +3,11 @@ package com.github.md.web.config;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.aop.AuditAop;
+import com.github.md.web.aop.AuditPointCut;
 import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
-import com.github.md.web.feature.tree.PreventInfiniteLoopAop;
+import com.github.md.web.feature.tree.PreventInfiniteLoopPointCut;
 import com.github.md.web.kit.Dicts;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.kit.UtilKit;
@@ -134,8 +134,8 @@ public class MetaBootstrap {
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());
 
-            PointCutChain.registerGlobalPointCut(new AuditAop());
-            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopAop());
+            PointCutChain.registerGlobalPointCut(new AuditPointCut());
+            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopPointCut());
         }
     }
 

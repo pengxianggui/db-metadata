@@ -141,7 +141,7 @@ export default {
     handleActiveChange(row) {
       const {config: {tree: {config: {objectCode, primaryKey}}}} = this
       this.activeTreeData = row
-      this.refreshTableData()
+      this.refreshTableData() // TODO 2.2 点选树节点的子节点下的表数据，按理说也应当一并出来。也许这个可以让开发人员在功能上配置？
       this.$emit('tree-active-change', {
         row: row, // 树选中的单条记录
         treeObjectCode: objectCode, // 树的元对象编码
@@ -153,7 +153,7 @@ export default {
       this.refreshTableData()
     },
     handleAdd() {
-      if (utils.isEmpty(this.activeTreeData)) {
+      if (utils.isEmpty(this.activeTreeData)) { // TODO 2.2 树+表 模板 并不一定非得选中节点才能新增。也许可以让开发人员在功能上配置？
         this.$message.warning('请先选择树节点', '提示');
         return;
       }

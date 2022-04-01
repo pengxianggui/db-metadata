@@ -15,20 +15,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class QueryInvocation extends AopInvocation {
 
-    private QueryInvocation(IMetaObject metaObject, MetaData formData, Kv httpParams, HttpServletRequest request) {
-        super(metaObject, formData, httpParams, request);
-    }
-
     private QueryInvocation(IMetaObject metaObject, Kv httpParams, HttpServletRequest request) {
         super(metaObject, httpParams, request);
     }
 
     public QueryInvocation(IMetaObject metaObject) {
         super(metaObject, null, null);
-    }
-
-    @Override
-    public MetaData getFormData() {
-        throw new RuntimeException("错误的使用方式: QueryInvocation 中不能获取 FormData");
     }
 }
