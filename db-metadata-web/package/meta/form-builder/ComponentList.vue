@@ -55,7 +55,7 @@ export default {
     formItemCloneHandler(data) {
       let {name, label} = data;
       let meta = {
-        name: name + randomNum(5),
+        name: name + randomNum(8),
         label: label
       };
 
