@@ -13,6 +13,7 @@
 import {restUrl} from "@/../package/constant/url";
 import {appConfig} from "../../config";
 import {isEmpty} from "../../utils/common";
+import Token from "../../Token";
 
 export default {
   name: "Login",
@@ -71,7 +72,7 @@ export default {
   methods: {
     login(model) {
       this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
-        localStorage.setItem(appConfig.tokenKey, data.token)
+        Token.set(data.token)
         this.$router.push('/')
         location.reload()
       })

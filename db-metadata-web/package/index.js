@@ -61,10 +61,11 @@ import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import './asserts/svg/index' // 内置svg注册
 import {restUrl, routeUrl} from './constant/url'
 import {access} from "./access";
+import Token from "./Token"
 import User from './access'
-import Route from "./route";
-import Menu from "./menu";
-import {appConfig, configApp} from "./config";
+import Route from "./route"
+import Menu from "./menu"
+import {configApp} from "./config"
 import Theme from './theme'
 
 import configUrl from './constant/url'
@@ -184,7 +185,7 @@ export {
     routeUrl,
     restUrl,
     User,
-
+    Token,
     MetaHeader,
     MetaLayout
 }
