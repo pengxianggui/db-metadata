@@ -15,6 +15,7 @@
     "serve:local": "vue-cli-service serve --mode local",
     "serve:dev": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
+    "build:prod": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name db-metadata --dest lib package/index.js",
     "pub": "npm publish --registry https://registry.npmjs.org/",

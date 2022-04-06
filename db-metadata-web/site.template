@@ -10,13 +10,9 @@ server {
         index index.html;
         try_files $uri $uri/ /index.html;
     }
-    location /meta/ {
+    location /api/ {
         proxy_http_version 1.1;
         proxy_pass ${API_URL}/;
-    }
-    location /file {
-        proxy_http_version 1.1;
-        proxy_pass ${API_URL};
     }
     location /api-doc/ {
         proxy_http_version 1.1;

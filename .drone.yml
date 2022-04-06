@@ -27,7 +27,7 @@ steps:
       - cd db-metadata-web
       - npm cache clean --force
       - npm install
-      - npm run build
+      - npm run build:prod
     when:
       local: false
 
