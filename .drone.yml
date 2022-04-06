@@ -80,7 +80,7 @@ steps:
         from_secret: k8s_token
       namespace: system-tool
       commands:
-        - sh deploy.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER} $${DRONE_COMMIT_MESSAGE##*;}
+        - bash deploy.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER} $${DRONE_COMMIT_MESSAGE##*;}
       when:
         local: false
 #
