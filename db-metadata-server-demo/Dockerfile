@@ -8,7 +8,7 @@ VOLUME /tmp
 #  mkdir /run/nginx && touch /run/nginx/nginx.pid && \
 #  /usr/sbin/nginx
 COPY docker-entrypoint.sh docker-entrypoint.sh
-COPY target/db-metadata-server-demo-*.jar /app/app.jar
+COPY target/db-metadata-server-demo-*-SNAPSHOT.jar /app/app.jar
 
 RUN chmod a+x docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
