@@ -72,37 +72,49 @@ steps:
     when:
       local: false
 
-  - name: deploy-ui
+  - name: deploy
     image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
     settings:
-      kubernetes_server: https://rancher.asoco.com.cn/k8s/clusters/local
+      kubernetes_server: https://rancher1.asoco.com.cn/k8s/clusters/local
       kubernetes_token:
         from_secret: k8s_token
-      namespace: tool
-      deployment: db-metadata-web
-      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
-      container: db-metadata-web
-      tag: web-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
-    when:
-      event:
-        - push
-      local: false
-
-  - name: deploy-server
-    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
-    settings:
-      kubernetes_server: https://rancher.asoco.com.cn/k8s/clusters/local
-      kubernetes_token:
-        from_secret: k8s_token
-      namespace: tool
-      deployment: db-metadata-server
-      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
-      container: db-metadata-server
-      tag: server-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
-    when:
-      event:
-        - push
-      local: false
+      namespace: system-tool
+      commands:
+        - sh deploy.sh ${DRONE_BRANCH}-${DRONE_BUILD_NUMBER} $${DRONE_COMMIT_MESSAGE##*;}
+      when:
+        local: false
+#
+#  - name: deploy-ui
+#    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
+#    settings:
+#      kubernetes_server: https://rancher1.asoco.com.cn/k8s/clusters/local
+#      kubernetes_token:
+#        from_secret: k8s_token
+#      namespace: system-tool
+#      deployment: db-metadata-web
+#      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
+#      container: db-metadata-web
+#      tag: web-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+#    when:
+#      event:
+#        - push
+#      local: false
+#
+#  - name: deploy-server
+#    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
+#    settings:
+#      kubernetes_server: https://rancher1.asoco.com.cn/k8s/clusters/local
+#      kubernetes_token:
+#        from_secret: k8s_token
+#      namespace: system-tool
+#      deployment: db-metadata-server
+#      repo: registry.cn-hangzhou.aliyuncs.com/hthj_asoco/db-metadata
+#      container: db-metadata-server
+#      tag: server-${DRONE_BRANCH}-${DRONE_BUILD_NUMBER}
+#    when:
+#      event:
+#        - push
+#      local: false
 
 #  - name: dingtalk-notify
 #    image: lddsb/drone-dingtalk-message
