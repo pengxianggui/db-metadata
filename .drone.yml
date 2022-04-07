@@ -73,7 +73,7 @@ steps:
       local: false
 
   - name: deploy
-    image: registry.cn-hangzhou.aliyuncs.com/lm93129/drone-k8s-update
+    image: hthj-registry.cn-hangzhou.cr.aliyuncs.com/hthj_base/drone-k8s-update:1.0.0
     settings:
       kubernetes_server: https://rancher1.asoco.com.cn/k8s/clusters/local
       kubernetes_token:
