@@ -91,8 +91,8 @@ export default {
       this.$axios.post(url, params).then(({msg = '提交成功'}) => {
         this.$emit('ok', params); //  default callback
         this.$message.success(msg);
-      }).catch(({msg = 'Error'}) => {
-        console.error(msg)
+      }).catch(({msg, message = 'Error'}) => {
+        console.error(msg || message)
       })
     },
     onSubmit(ev) {

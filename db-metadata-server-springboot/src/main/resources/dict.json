@@ -41,6 +41,10 @@
   ],
   "authType": [
     {
+      "key": "默认",
+      "value": "default"
+    },
+    {
       "key": "菜单权限",
       "value": "menu"
     },
@@ -55,10 +59,6 @@
     {
       "key": "按钮权限",
       "value": "button"
-    },
-    {
-      "key": "其他",
-      "value": "other"
     }
   ],
   "apiResourceType": [

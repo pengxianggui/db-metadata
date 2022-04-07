@@ -35,7 +35,8 @@ const configInterceptor = function (router, axios) {
         if (state !== 'ok' && code != 0) {
             Message({
                 message: assertEmpty(msg, message),
-                type: "error"
+                type: "error",
+                customClass: 'max-z-index'
             })
 
             if (code === 401) { // 未认证

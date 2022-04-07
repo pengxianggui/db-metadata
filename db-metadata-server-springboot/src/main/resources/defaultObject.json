@@ -804,7 +804,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'router'",
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'router' or type = 'default'",
           "isMultiple": true
         }
       },
@@ -953,7 +953,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'menu'",
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'menu' or type = 'default'",
           "isMultiple": true
         }
       },
@@ -1467,7 +1467,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'api'",
+          "scopeSql": "select code as id, name as cn from meta_auth where type = 'api' or type ='default'",
           "isMultiple": true
         }
       },
