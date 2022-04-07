@@ -42,9 +42,6 @@ const configInterceptor = function (router, axios) {
                 clearUser()
                 router.push(routeUrl.R_LOGIN)
             }
-            if (code === 403) { // 无权限
-                router.push({path: routeUrl.R_401, query: res.data})
-            }
             return Promise.reject(res.data);
         }
 

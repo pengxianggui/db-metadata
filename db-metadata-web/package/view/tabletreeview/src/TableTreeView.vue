@@ -13,7 +13,7 @@
           <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd"
                 v-bind:choseData="choseData" v-bind:activeData="activeData">
             <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
-                       v-if="operationBarConf.add.show">
+                       v-if="operationBarConf.add.show" v-authorize="operationBarConf.add.authorize">
               {{operationBarConf.add.text}}
             </el-button>
           </slot>
@@ -21,7 +21,7 @@
                 v-bind:choseData="choseData" v-bind:activeData="activeData"
                 v-bind:batchDelete="handleBatchDelete">
             <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
-                       v-if="multiSelect && operationBarConf.delete.show">
+                       v-if="multiSelect && operationBarConf.delete.show" v-authorize="operationBarConf.delete.authorize">
               {{operationBarConf.delete.text}}
             </el-button>
           </slot>
@@ -105,15 +105,15 @@
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.view.show, scope.row)">{{buttonsConf.view.text}}</el-button>
+                             v-if="ifShow(buttonsConf.view.show, scope.row)" v-authorize="buttonsConf.view.authorize">{{buttonsConf.view.text}}</el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.edit.show, scope.row)">{{buttonsConf.edit.text}}</el-button>
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)" v-authorize="buttonsConf.edit.authorize">{{buttonsConf.edit.text}}</el-button>
                 </slot>
                 <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.delete.show, scope.row)">{{buttonsConf.delete.text}}</el-button>
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)" v-authorize="buttonsConf.delete.authorize">{{buttonsConf.delete.text}}</el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
               </component>

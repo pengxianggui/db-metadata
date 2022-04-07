@@ -28,6 +28,14 @@
           "size": "mini",
           "type": "primary",
           "icon": "el-icon-document-add"
+        },
+        "authorize": {
+          "need_permit": false,
+          "permit_by": "auth",
+          "auths": [],
+          "auth_match_mode": "any",
+          "roles": [],
+          "role_match_mode": "any"
         }
       },
       "delete": {
@@ -37,6 +45,14 @@
           "size": "mini",
           "type": "danger",
           "icon": "el-icon-delete-solid"
+        },
+        "authorize": {
+          "need_permit": false,
+          "permit_by": "auth",
+          "auths": [],
+          "auth_match_mode": "any",
+          "roles": [],
+          "role_match_mode": "any"
         }
       }
     },
@@ -62,6 +78,14 @@
             "size": "mini",
             "type": "success",
             "icon": "el-icon-view"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         },
         "edit": {
@@ -71,6 +95,14 @@
             "size": "mini",
             "type": "primary",
             "icon": "el-icon-edit"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         },
         "delete": {
@@ -80,6 +112,14 @@
             "size": "mini",
             "type": "danger",
             "icon": "el-icon-delete"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         }
       }
@@ -142,6 +182,14 @@
           "size": "mini",
           "type": "primary",
           "icon": "el-icon-document-add"
+        },
+        "authorize": {
+          "need_permit": false,
+          "permit_by": "auth",
+          "auths": [],
+          "auth_match_mode": "any",
+          "roles": [],
+          "role_match_mode": "any"
         }
       },
       "delete": {
@@ -151,6 +199,14 @@
           "size": "mini",
           "type": "danger",
           "icon": "el-icon-delete-solid"
+        },
+        "authorize": {
+          "need_permit": false,
+          "permit_by": "auth",
+          "auths": [],
+          "auth_match_mode": "any",
+          "roles": [],
+          "role_match_mode": "any"
         }
       },
       "expand": {
@@ -191,6 +247,14 @@
             "size": "mini",
             "type": "success",
             "icon": "el-icon-view"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         },
         "edit": {
@@ -200,6 +264,14 @@
             "size": "mini",
             "type": "primary",
             "icon": "el-icon-edit"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         },
         "delete": {
@@ -209,6 +281,14 @@
             "size": "mini",
             "type": "danger",
             "icon": "el-icon-delete"
+          },
+          "authorize": {
+            "need_permit": false,
+            "permit_by": "auth",
+            "auths": [],
+            "auth_match_mode": "any",
+            "roles": [],
+            "role_match_mode": "any"
           }
         }
       }
