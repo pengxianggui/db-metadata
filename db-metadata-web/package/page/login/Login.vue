@@ -13,7 +13,7 @@
 import {restUrl} from "@/../package/constant/url";
 import {appConfig} from "../../config";
 import {isEmpty} from "../../utils/common";
-import Token from "../../Token";
+import Token from "../../token";
 
 export default {
   name: "Login",

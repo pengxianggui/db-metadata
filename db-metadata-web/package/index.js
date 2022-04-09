@@ -61,7 +61,7 @@ import {MetaEasyEdit, MiniFormField, MiniFormObject} from "./core/meta"
 import './asserts/svg/index' // 内置svg注册
 import {restUrl, routeUrl} from './constant/url'
 import {access} from "./access";
-import Token from "./Token"
+import Token from "./token"
 import User from './access'
 import Route from "./route"
 import Menu from "./menu"
