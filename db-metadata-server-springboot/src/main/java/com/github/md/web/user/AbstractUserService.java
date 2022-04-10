@@ -1,7 +1,10 @@
 package com.github.md.web.user;
 
+import cn.com.asoco.http.HttpResult;
 import com.github.md.web.user.role.UserWithRolesWrapper;
+import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
 import com.jfinal.kit.StrKit;
+import lombok.AllArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,42 +17,53 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <p> @author konbluesky </p>
  */
+@AllArgsConstructor
 public abstract class AbstractUserService<U extends User, UR extends UserWithRolesWrapper> implements UserService<U>, LoginService<UR> {
+
+    private final TokenGenerator tokenGenerator;
+
+    public AbstractUserService() {
+        this(new DefaultTokenGenerator());
+    }
 
     @Override
     public UR getUser(HttpServletRequest request) {
         //cookie load
-        String uid = "";
+        String token = "";
 // TODO cookie和token是否需要都支持，然后配置应用？目前我们token用的居多，暂时不启用cookie
 //        if (request.getCookies() != null) {
 //            Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equalsIgnoreCase(cookieKey())).findFirst();
 //            if (cookie.isPresent()) {
-//                uid = cookie.get().getValue();
+//                token = cookie.get().getValue();
 //            }
 //        }
+
         //request load
-        uid = StrKit.defaultIfBlank(uid, request.getHeader(tokenKey()));
-        if (StrKit.notBlank(uid)) {
-            UR user = (UR) AuthenticationManager.me().getLoginUsers().getIfPresent(uid);
+        token = StrKit.defaultIfBlank(token, getToken(request));
+        if (StrKit.notBlank(token)) {
+            UR user = (UR) AuthenticationManager.me().getLoginUsers().getIfPresent(token);
             return user;
         }
         return null;
     }
 
     @Override
-    public boolean setLogged(UR user) {
-        AuthenticationManager.me().getLoginUsers().put(user.userId(), user); // 缓存到内存中
-        return logged(user);
+    public String setLogged(UR user) {
+        String token = tokenGenerator.generate(user);
+        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
+        return token;
     }
 
     @Override
     public boolean logged(UR user) {
-        return AuthenticationManager.me().getLoginUsers().getIfPresent(user.userId()) != null;
+        String token = tokenGenerator.generate(user);
+        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
     }
 
     @Override
     public boolean logout(UR user) {
-        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
+        String token = tokenGenerator.generate(user);
+        AuthenticationManager.me().getLoginUsers().invalidate(token);
         return !logged(user);
     }
 

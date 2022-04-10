@@ -3,9 +3,6 @@ package com.github.md.web.user;
 import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
-import com.github.md.web.upload.UploadFileResolve;
-import com.github.md.web.user.auth.IAuth;
-import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -34,18 +29,9 @@ public class LoginController extends ControllerAdapter {
         String uid = parameterHelper().getPara(AuthenticationManager.me().loginService().loginKey());
         String pwd = parameterHelper().getPara(AuthenticationManager.me().loginService().pwdKey());
 
-        UserWithRolesWrapper user = AuthenticationManager.me().login(uid, pwd);
-        if (user != null) {
-            LoginVO vo = new LoginVO(
-                    user.userId(), // TODO token生成并塞入
-                    user.userId(),
-                    user.userName(),
-                    user.avatar(),
-                    Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()),
-                    Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()),
-                    user.attrs()
-            );
-            return Ret.ok("data", vo);
+        LoginVO loginVO = AuthenticationManager.me().login(uid, pwd);
+        if (loginVO != null) {
+            return Ret.ok("data", loginVO);
         } else {
             return Ret.fail().set("msg", "用户名或密码输入错误");
         }
@@ -66,22 +52,8 @@ public class LoginController extends ControllerAdapter {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
 
-        String avatarUrl = null;
-        UploadFileResolve uploadFileResolve = new UploadFileResolve(user.avatar());
-        if (uploadFileResolve.hasFile()) {
-            avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
-        }
-
-        LoginVO vo = new LoginVO(
-                user.userId(), // TODO token生成并塞入
-                user.userId(),
-                user.userName(),
-                avatarUrl,
-                Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()),
-                Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()),
-                user.attrs()
-        );
-        return Ret.ok("data", vo);
+        String token = AuthenticationManager.me().loginService().getToken(getRequest());
+        return Ret.ok("data", new LoginVO(token, user));
     }
 
 }

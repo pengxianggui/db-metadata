@@ -12,6 +12,7 @@ import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,7 +155,7 @@ public class AuthenticationManager {
      * @param pwd
      * @return
      */
-    public UserWithRolesWrapper login(String uid, String pwd) {
+    public LoginVO login(String uid, String pwd) {
         String loginKey = loginService.loginKey();
         String pwdKey = loginService.pwdKey();
 
@@ -169,7 +170,16 @@ public class AuthenticationManager {
 
         if (userWithRolesWrapper == null) return null;
 
-        AssertUtil.isTrue(loginService.setLogged(userWithRolesWrapper), "登录失败, 无法保持登录状态");
-        return userWithRolesWrapper;
+        String token = loginService.setLogged(userWithRolesWrapper);
+        AssertUtil.isTrue(StrKit.notBlank(token), "登录失败, 无法保持登录状态");
+        return new LoginVO(token, userWithRolesWrapper);
+    }
+
+    public LoginVO getInfo(HttpServletRequest request) {
+        UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
+        AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
+
+        String token = request.getHeader(this.loginService.tokenKey());
+        return new LoginVO(token, user);
     }
 }

@@ -2,10 +2,7 @@ package com.github.md.web.user.support.defaults;
 
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.kit.PassKit;
-import com.github.md.web.user.AbstractUserService;
-import com.github.md.web.user.AuthenticationManager;
-import com.github.md.web.user.Root;
-import com.github.md.web.user.User;
+import com.github.md.web.user.*;
 import com.github.md.web.user.role.DefaultUserWithRoles;
 import com.github.md.web.user.role.MRRole;
 import com.google.common.collect.Lists;
@@ -24,6 +21,10 @@ import java.util.stream.Collectors;
  * @date 2022/2/18 10:40 上午
  */
 public class DefaultUserService extends AbstractUserService<DefaultUser, DefaultUserWithRoles> {
+
+    public DefaultUserService() {
+        super(new DefaultTokenGenerator());
+    }
 
     private DbPro db() {
         return SpringAnalysisManager.me().dbMain();
