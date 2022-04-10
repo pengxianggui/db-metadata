@@ -10,21 +10,21 @@
         <slot name="add-btn" v-bind:conf="operationBarConf.add" v-bind:add="handleAdd"
               v-bind:activeData="activeData" v-bind:choseData="choseData">
           <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
-                     v-if="operationBarConf.add.show && editable">
+                     v-if="operationBarConf.add.show && editable" v-authorize="operationBarConf.add.authorize">
             {{ operationBarConf.add.text }}
           </el-button>
         </slot>
         <slot name="edit-btn" v-bind:choseData="choseData" v-bind:activeData="activeData"
               v-bind:conf="operationBarConf" v-bind:edit="handleEdit">
           <el-button @click="handleEdit" v-bind="operationBarConf.edit.conf"
-                     v-if="operationBarConf.edit.show && editable">
+                     v-if="operationBarConf.edit.show && editable" v-authorize="operationBarConf.edit.authorize">
             {{ operationBarConf.edit.text }}
           </el-button>
         </slot>
         <slot name="batch-delete-btn" v-bind:choseData="choseData" v-bind:activeData="activeData"
               v-bind:conf="operationBarConf.delete" v-bind:batchDelete="handleBatchDelete">
           <el-button @click="handleDelete" v-bind="operationBarConf.delete.conf"
-                     v-if="operationBarConf.delete.show && editable">
+                     v-if="operationBarConf.delete.show && editable" v-authorize="operationBarConf.delete.authorize">
             {{ operationBarConf.delete.text }}
           </el-button>
         </slot>
