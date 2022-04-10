@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = {"feature/treeAndTable" })
+@RequestMapping(value = {"feature/treeAndTable"})
 public class TreeAndTableController extends ControllerAdapter {
 
     /**
@@ -122,7 +122,7 @@ public class TreeAndTableController extends ControllerAdapter {
         if (!preFillMetaFields.isEmpty()) {
             formView.buildChildren();
             preFillMetaFields.forEach((key, value) -> {
-                formView.getField(String.valueOf(key)).defaultVal(String.valueOf(value));
+                formView.getField(String.valueOf(key)).defaultVal(value);
             });
         }
 
@@ -219,16 +219,16 @@ public class TreeAndTableController extends ControllerAdapter {
             /** 当拦截点未设置时,使用默认查询逻辑 */
             if (pointCutSqlPara == null) {
                 result = metaService().paginate(pageIndex,
-                                                pageSize,
-                                                metaObject,
-                                                sqlPara.getSelect(),
-                                                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
-                                                sqlPara.getPara());
+                        pageSize,
+                        metaObject,
+                        sqlPara.getSelect(),
+                        MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                        sqlPara.getPara());
             } else {
                 /** 拦截器干预后的逻辑 */
                 result = metaService().paginate(pageIndex, pageSize, metaObject, pointCutSqlPara.getSelect(),
-                                                //                        pointCutSqlPara.getFromWhere(),
-                                                MetaSqlKit.where(pointCutSqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()), pointCutSqlPara.getPara());
+                        //                        pointCutSqlPara.getFromWhere(),
+                        MetaSqlKit.where(pointCutSqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()), pointCutSqlPara.getPara());
             }
         }
 
@@ -260,6 +260,6 @@ public class TreeAndTableController extends ControllerAdapter {
             result.setList(UtilKit.aliasList(result.getList(), alias));
         }
         return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
-                                  excludeFields);
+                excludeFields);
     }
 }

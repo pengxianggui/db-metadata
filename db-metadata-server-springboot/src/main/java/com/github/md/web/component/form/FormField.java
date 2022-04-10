@@ -31,7 +31,7 @@ public abstract class FormField extends Component {
         return this;
     }
 
-    public FormField defaultVal(String value) {
+    public FormField defaultVal(Object value) {
         builder.defaultVal(value);
         return this;
     }

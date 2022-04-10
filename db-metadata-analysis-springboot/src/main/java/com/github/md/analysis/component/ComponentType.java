@@ -72,4 +72,21 @@ public enum ComponentType {
         }
         return UNKNOWN;
     }
+
+    /**
+     * 判断组件是否为输入型的容器组件
+     *
+     * @return
+     */
+    public boolean isInputTypeView() {
+        if (!this.isView) {
+            return false;
+        }
+
+        if (this == ComponentType.FORMVIEW || this == ComponentType.SEARCHVIEW) {
+            return true;
+        }
+
+        return false;
+    }
 }

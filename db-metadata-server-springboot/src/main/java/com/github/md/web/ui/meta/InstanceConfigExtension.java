@@ -1,14 +1,15 @@
 package com.github.md.web.ui.meta;
 
-import com.github.md.web.component.attr.AttributeBuilder;
-import com.github.md.web.component.attr.RulesBuilder;
-import com.github.md.web.ui.OptionsKit;
-import com.github.md.web.upload.UploadKit;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.ConfigExtension;
 import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.MetaFieldConfigParse;
+import com.github.md.web.component.attr.AttributeBuilder;
+import com.github.md.web.ui.meta.form.*;
+import com.github.md.web.ui.meta.table.TableColumnConfigExtension;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Set;
 
 /**
  * TODO 除了定义根据 字段类型的推荐， 还应当支持根据 组件类型。来达到更精确的配置推荐
@@ -21,124 +22,38 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class InstanceConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> {
 
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> textRecommend = (metaField, builder, containerType) -> {
-        if (metaField.dbType().isText()) {
-            if (metaField.dbType().isLongText()) {
-                builder.componentName(ComponentType.RICHTEXTBOX);
-            } else {
-                if (metaField.dbType().is1Text(metaField.dbTypeLength().intValue())) { // 一个字符长度的text类型，视为下拉
-                    builder.componentName(ComponentType.DROPDOWN);
-                }
-                if (metaField.dbTypeLength() > 255L) {
-                    builder.componentName(ComponentType.TEXTAREABOX);
-                    builder.resizeable("none");
-                    builder.showOverflowTooltip(true);
-                }
-            }
+    // 表单、搜索面板 下的域配置扩展
+    private static final Set<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> formFieldConfigExtensions = Sets.newLinkedHashSet();
 
-            builder.maxlength(metaField.dbTypeLength().intValue());
-        }
-    };
+    // 表格、树形表格 下的域配置扩展
+    private static final Set<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> tableViewFieldConfigExtensions = Sets.newLinkedHashSet();
 
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> boolRecommend = ((metaField, builder, containerType) -> {
-        if (metaField.dbType().isBoolean()) {
-            switch (containerType) {
-                case FORMVIEW:
-                    builder.componentName(ComponentType.BOOLBOX);
-                    break;
-                case SEARCHVIEW:
-                    builder.componentName(ComponentType.DROPDOWN);
-                    builder.dataUrl("/dict?name=yn");
-                    break;
-            }
-        }
-    });
+    public InstanceConfigExtension() {
+        // 注意顺序！
+        formFieldConfigExtensions.add(new CommonRecommend());
+        formFieldConfigExtensions.add(new TextRecommend());
+        formFieldConfigExtensions.add(new BoolRecommend());
+        formFieldConfigExtensions.add(new NumRecommend());
+        formFieldConfigExtensions.add(new DateRecommend());
+        formFieldConfigExtensions.add(new JsonRecommend());
+        formFieldConfigExtensions.add(new OptionsRecommend());
+        formFieldConfigExtensions.add(new FileRecommend());
 
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> dateRecommend = (metaField, builder, containerType) -> {
-        //日期
-        if (metaField.dbType().isDate()) {
-            if (metaField.dbType().isDateTime()) {
-                builder.componentName(ComponentType.DATETIMEBOX);
-            }
-            if (metaField.dbType().isTime()) {
-                builder.componentName(ComponentType.DATETIMEBOX);
-            }
-            if (metaField.dbType().isDateOnly()) {
-                builder.componentName(ComponentType.DATEBOX);
-            }
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> numberRecommend = (metaField, builder, containerType) -> {
-        //数值
-        if (metaField.dbType().isNumber()) {
-            builder.componentName(ComponentType.NUMBERBOX);
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> jsonRecommend = (metaField, builder, containerType) -> {
-        //Json
-        if (metaField.dbType().isJson()) {
-            builder.componentName(ComponentType.JSONBOX);
-            builder.showOverflowTooltip(true);
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> optionsRecommend = (metaField, builder, containerType) -> {
-        log.debug("analysis metafield config");
-        MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
-        if (metaFieldConfigParse.hasTranslation()) {
-            builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
-            builder.componentName(ComponentType.DROPDOWN);
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> commonRecommend = (metaField, builder, containerType) -> {
-        MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
-        if (metaFieldConfigParse.isMultiple()) {
-            builder.multiple(true);
-        }
-
-        if (containerType == ComponentType.FORMVIEW) {
-            builder.defaultVal(metaFieldConfigParse.defaultVal());
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> uploadRecommend = (metaField, builder, containerType) -> {
-
-        //上传框
-        if (metaField.fieldCode().contains("file") || metaField.configParser().isFile()) {
-            builder.componentName(ComponentType.FILEBOX);
-            builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
-            builder.autoUpload(true);
-        }
-        if (metaField.fieldCode().contains("image")
-                || metaField.fieldCode().contains("avatar")
-                || metaField.fieldCode().contains("picture")
-                || metaField.configParser().isFile()) {
-            builder.componentName(ComponentType.IMAGEBOX);
-            builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));
-            builder.autoUpload(true);
-        }
-    };
-
-    private final ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> validateRecommend = (metaField, builder, containerType) -> {
-        MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
-        if (metaFieldConfigParse.isRequired()) {
-            builder.setConf("rules", new RulesBuilder().required(metaField).buildRules(metaField.fieldCode()));
-        }
-    };
+        tableViewFieldConfigExtensions.add(new TableColumnConfigExtension());
+    }
 
     @Override
     public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder config, ComponentType containerType) {
-        textRecommend.config(metaField, config, containerType);
-        boolRecommend.config(metaField, config, containerType);
-        dateRecommend.config(metaField, config, containerType);
-        numberRecommend.config(metaField, config, containerType);
-        jsonRecommend.config(metaField, config, containerType);
-        optionsRecommend.config(metaField, config, containerType);
-        commonRecommend.config(metaField, config, containerType);
-        uploadRecommend.config(metaField, config, containerType);
-        validateRecommend.config(metaField, config, containerType);
+        if (containerType == ComponentType.FORMVIEW || containerType == ComponentType.SEARCHVIEW) {
+            for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : formFieldConfigExtensions) {
+                configExtension.config(metaField, config, containerType);
+            }
+        }
+
+        if (containerType == ComponentType.TABLEVIEW || containerType == ComponentType.TABLETREEVIEW) {
+            for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : tableViewFieldConfigExtensions) {
+                configExtension.config(metaField, config, containerType);
+            }
+        }
     }
 }

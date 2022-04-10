@@ -37,20 +37,19 @@
       </div>
       <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue"
                :class="{'show-form-builder': elTabValue === '2'}">
-        <el-tab-pane label="元对象配置" name="0">
-          <el-form-item label="元对象配置">
-            <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :controls="true"
-                           @json-change="() => buildObjectConfMeta(confModel.conf)">
-              <template #button-expand="{value}">
-                <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
-                  <ui-conf-tip :component-name="confModel.conf['component_name']"></ui-conf-tip>
-                  <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
-                </el-popover>
-              </template>
-            </mini-form-box>
-          </el-form-item>
+        <el-tab-pane label="容器配置" name="0">
+          <!-- 使用 ui-conf-editor 替代? -->
+          <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :controls="true"
+                         @json-change="() => buildObjectConfMeta(confModel.conf)">
+            <template #button-expand="{value}">
+              <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
+                <ui-conf-tip :component-name="confModel.conf['component_name']"></ui-conf-tip>
+                <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
+              </el-popover>
+            </template>
+          </mini-form-box>
         </el-tab-pane>
-        <el-tab-pane label="元字段配置" name="1">
+        <el-tab-pane label="域配置" name="1">
           <div id="conf-panel">
             <div id="conf-content">
               <field-filter v-model="filterFields" :fields="Object.keys(confModel.fConf)"></field-filter>
@@ -60,7 +59,8 @@
                     <h1 :name="key">{{ index + 1 }}.{{ key }}</h1>
                     <el-card shadow>
                       <ui-conf-editor v-model="confModel.fConf[key]"
-                                      :object-code="confModel.objectCode" :field-code="key"></ui-conf-editor>
+                                      :object-code="confModel.objectCode" :field-code="key"
+                                      :view-component-code="cc"></ui-conf-editor>
                     </el-card>
                   </el-form-item>
                 </div>
@@ -78,7 +78,7 @@ import utils from '../../utils'
 import {restUrl} from "../../constant/url";
 import UiConfTip from '../component/UiConfTip'
 import extractConfig from './extractConfig'
-import buildMeta from '../buildMeta'
+import buildMeta from "../buildMeta";
 import FieldFilter from "../component/FieldFilter";
 import MetaObjectSelector from "../component/MetaObjectSelector";
 import ComponentSelector from "../component/ComponentSelector";
@@ -98,8 +98,10 @@ export default {
     UiConfEditor
   },
   props: {
-    ic: String,
-    fc: String
+    ic: String, // instanceCode
+    oc: String, // objectCode
+    fc: String, // fieldCode
+    cc: String, // componentCode
   },
   data() {
     const {ic: instanceCode} = this;
@@ -228,10 +230,10 @@ export default {
     },
 
     buildObjectConfMeta(value) {
-      this.objConfMeta = buildMeta(value);
+      this.objConfMeta = buildMeta(value, null, this.cc);
     },
     buildFieldConfMeta(value, key) {
-      this.fieldsConfMeta[key] = buildMeta(value, key);
+      this.fieldsConfMeta[key] = buildMeta(value, key, this.cc);
     }
   },
   computed: {

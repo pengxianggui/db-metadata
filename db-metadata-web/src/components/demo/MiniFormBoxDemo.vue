@@ -48,7 +48,7 @@
         },
         methods: {
             buildMeta(value) {
-                return buildMeta('MiniFormBox', value);
+                return buildMeta(value, 'MiniFormBox', 'TextBox');
             }
         }
     }

@@ -40,11 +40,16 @@ public class ComputeKit {
          * TODO 等待完善初级智能分配规则,根据元字段属性 指定一些控件类型
          */
         AttributeBuilder.FatAttributeBuilder builder = AttributeBuilder.newBuilder();
-        //set default componentName is "TextBox"
-        builder.componentName(ComponentType.TEXTBOX);
+
         builder.name(metaField.fieldCode());
         builder.label(metaField.cn());
         builder.sort(metaField.orderNum()); // 采用元字段的序号
+
+        if (componentType == ComponentType.FORMVIEW || componentType == ComponentType.SEARCHVIEW) {
+            //set default componentName is "TextBox"
+            builder.componentName(ComponentType.TEXTBOX);
+        }
+
         log.debug("auto compute config : {}", builder.render().toJson());
         if (instanceExtensions != null) {
             for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : instanceExtensions) {

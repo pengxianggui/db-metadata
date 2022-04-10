@@ -35,8 +35,7 @@
       <span style="flex: 1"></span>
       <el-button size="mini" icon="el-icon-refresh" circle @click="changeType"></el-button>
 
-      <el-popover placement="right" trigger="click"
-                  popper-class="ui-conf-tip-popper">
+      <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper" v-if="componentCode">
         <ui-conf-tip :component-name="componentCode"></ui-conf-tip>
         <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
       </el-popover>
@@ -83,11 +82,11 @@ export default {
         return {}
       }
     },
-    objectCode: {
-      type: String
-    },
-    fieldCode: {
-      type: String
+    objectCode: String,
+    fieldCode: String,
+    viewComponentCode: { // 容器组件编码
+      type: String,
+      required: true
     }
   },
   data() {
@@ -148,10 +147,10 @@ export default {
   },
   computed: {
     attrsConfMeta() {
-      const {nativeValue} = this
+      const {nativeValue, viewComponentCode} = this
       const value = {}
       for (let key of Object.keys(nativeValue)) {
-        value[key] = buildMeta(nativeValue[key], key)
+        value[key] = buildMeta(nativeValue[key], key, viewComponentCode)
       }
       return value
     },

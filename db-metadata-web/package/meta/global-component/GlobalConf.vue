@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     buildObjectConfMeta(value) {
-      this.confMeta = buildMeta(value);
+      this.confMeta = buildMeta(value, null, this.confModel.componentCode);
     },
     loadConf: function () {
       const {componentCode} = this.confModel;

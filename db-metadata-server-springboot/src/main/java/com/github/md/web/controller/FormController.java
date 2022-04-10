@@ -69,7 +69,7 @@ public class FormController extends ControllerAdapter {
         if (!preFillMetaFields.isEmpty()) {
             formView.buildChildren();
             preFillMetaFields.forEach((key, value) -> {
-                formView.getField(String.valueOf(key)).defaultVal(String.valueOf(value));
+                formView.getField(String.valueOf(key)).defaultVal(value);
             });
         }
         return Ret.ok("data", formView.toKv());

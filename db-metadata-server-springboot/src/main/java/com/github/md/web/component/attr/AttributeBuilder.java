@@ -33,6 +33,8 @@ public class AttributeBuilder {
 
         AttrCustomMeta label(String label);
 
+        AttrCustomMeta defaultVal(Object defaultVal);
+
         AttrCustomMeta options(List<Kv> options);
 
         AttrCustomMeta dataUrl(String url);
@@ -59,8 +61,6 @@ public class AttributeBuilder {
 
     interface InputAttr {
 
-        InputAttr defaultVal(String v);
-
         InputAttr maxlength(int v);
 
         InputAttr minlength(int v);
@@ -75,6 +75,32 @@ public class AttributeBuilder {
     interface TableAttr {
 
         TableAttr showOverflowTooltip(boolean flag);
+
+        TableAttr fit(boolean fit);
+
+        TableAttr width(String width);
+
+        TableAttr minWidth(String minWidth);
+
+        TableAttr fixed(String fixed);
+
+        /**
+         * @param align left/center/right
+         * @return
+         */
+        TableAttr align(String align);
+
+        /**
+         * @param headerAlign left/center/right
+         * @return
+         */
+        TableAttr headerAlign(String headerAlign);
+
+        TableAttr className(String className);
+
+        TableAttr labelClassName(String labelClassName);
+
+        TableAttr renderFn(String fn);
     }
 
     interface TreeTableAttr {
@@ -84,6 +110,8 @@ public class AttributeBuilder {
         TreeTableAttr multiSelect(boolean multi);
 
         TreeTableAttr editable(boolean editable);
+
+        TreeTableAttr fit(boolean fit);
 
         TreeTableAttr rowKey(String rowKey);
 
@@ -97,6 +125,8 @@ public class AttributeBuilder {
         TreeTableAttr lazy(boolean lazy);
 
         TreeTableAttr highlightCurrentRow(boolean isHighlight);
+
+        TreeTableAttr renderFn(String fn);
     }
 
     interface TreeAttr {
@@ -110,6 +140,8 @@ public class AttributeBuilder {
         FileUploadAttr actionUrl(String url);
 
         FileUploadAttr seats(String[] seats);
+
+        FileUploadAttr listType(String listType);
     }
 
     interface AttrRender {
@@ -154,11 +186,6 @@ public class AttributeBuilder {
         }
 
         @Override
-        public InputAttr defaultVal(String v) {
-            return set("default_value", v);
-        }
-
-        @Override
         public FatAttributeBuilder maxlength(int v) {
             return setConf("maxlength", v);
         }
@@ -199,6 +226,11 @@ public class AttributeBuilder {
         public AttrCustomMeta label(String label) {
             config.setIfNotBlank("label", label);
             return this;
+        }
+
+        @Override
+        public AttrCustomMeta defaultVal(Object defaultVal) {
+            return set("default_value", defaultVal);
         }
 
         @Override
@@ -285,6 +317,51 @@ public class AttributeBuilder {
             return setConf("show-overflow-tooltip", flag);
         }
 
+        @Override
+        public FatAttributeBuilder fit(boolean fit) {
+            return setConf("fit", fit);
+        }
+
+        @Override
+        public TableAttr width(String width) {
+            return setConf("width", width);
+        }
+
+        @Override
+        public TableAttr minWidth(String minWidth) {
+            return setConf("min-width", minWidth);
+        }
+
+        @Override
+        public TableAttr fixed(String fixed) {
+            return setConf("fixed", fixed);
+        }
+
+        @Override
+        public TableAttr align(String align) {
+            return setConf("align", align);
+        }
+
+        @Override
+        public TableAttr headerAlign(String headerAlign) {
+            return setConf("header-align", headerAlign);
+        }
+
+        @Override
+        public TableAttr className(String className) {
+            return setConf("class-name", className);
+        }
+
+        @Override
+        public TableAttr labelClassName(String labelClassName) {
+            return setConf("label-class-name", labelClassName);
+        }
+
+        @Override
+        public FatAttributeBuilder renderFn(String fn) {
+            return set("render", fn);
+        }
+
         /**
          * 扩展
          */
@@ -313,6 +390,11 @@ public class AttributeBuilder {
         public FileUploadAttr seats(String[] seats) {
             set("seats", seats);
             return this;
+        }
+
+        @Override
+        public FileUploadAttr listType(String listType) {
+            return setConf("list-type", listType);
         }
 
 

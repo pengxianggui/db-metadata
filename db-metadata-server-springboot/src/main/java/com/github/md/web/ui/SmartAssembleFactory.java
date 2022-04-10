@@ -45,6 +45,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
             case TABLEVIEW:
                 builder.dataUrl("/table/list?objectCode=" + metaObject.code());
                 builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
+                builder.fit(true);
                 break;
             case SEARCHVIEW:
                 if (metaObject.configParser().isTreeStructure()) {
@@ -54,6 +55,7 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
             case TABLETREEVIEW:
                 builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
                 builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
+                builder.fit(true);
                 break;
             case TREEVIEW:
                 builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
@@ -82,9 +84,14 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
         // WARN recommendComponent 中会根据各种规则,动态配置config,如与globalConfig中有冲突配置,使用覆盖策略;
         for (IMetaField field : fields) {
             Kv recommendConfig = ComputeKit.recommendFieldConfig(field, componentType);
-            Kv globalComponentConfig = UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"));
+
+            Kv globalComponentConfig = recommendConfig.containsKey("component_name") ?
+                    UtilKit.getKv(globalComponentAllConfig, recommendConfig.getStr("component_name"))
+                    : Kv.create();
             Kv fieldInstanceConfig = UtilKit.mergeUseNew(globalComponentConfig, recommendConfig);
+
             Component fieldComponent = FormFieldFactory.createFormFieldDefault(field, fieldInstanceConfig);
+
             metaFields.add(new MetaFieldViewAdapter(field, fieldComponent, globalComponentConfig, fieldInstanceConfig));
         }
         return metaFields;

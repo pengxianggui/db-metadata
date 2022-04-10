@@ -3,7 +3,7 @@
     <!-- 表单实例UI编辑器 -->
     <form-builder :ic="ic" v-if="componentCode === 'FormView'"></form-builder>
     <!-- 通用的实例UI编辑器 -->
-    <common-instance-editor :ic="ic" :ic-name="icName" :oc="objectCode" :fc="fc" v-else></common-instance-editor>
+    <common-instance-editor :ic="ic" :oc="objectCode" :fc="fc" :cc="componentCode" v-else></common-instance-editor>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
       type: String,
       required: true
     },
-    fc: {
+    fc: { // fieldCode
       type: String,
       required: false
     }
@@ -29,7 +29,6 @@ export default {
     return {
       componentCode: null,
       objectCode: null,
-      icName: null,
       loaded: false
     }
   },
@@ -37,10 +36,9 @@ export default {
     this.$axios.get(this.$compile(restUrl.COMPONENT_INSTANCE_INFO, {
       instanceCode: this.ic
     })).then((resp) => {
-      const {comp_code: componentCode, object_code: objectCode, name: icName} = resp.data
+      const {comp_code: componentCode, object_code: objectCode} = resp.data
       this.componentCode = componentCode
       this.objectCode = objectCode
-      this.icName = icName
       this.loaded = true // 加载完毕
     })
   }
