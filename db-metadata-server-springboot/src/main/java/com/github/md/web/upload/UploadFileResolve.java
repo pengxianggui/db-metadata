@@ -1,7 +1,9 @@
 package com.github.md.web.upload;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -11,13 +13,19 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class UploadFileResolve {
 
     @Getter
-    private final List<UploadFile> files;
+    private List<UploadFile> files;
 
     public UploadFileResolve(String fileJsonData) {
-        this.files = JSON.parseArray(fileJsonData, UploadFile.class);
+        try {
+            this.files = JSON.parseArray(fileJsonData, UploadFile.class);
+        } catch (Exception e) {
+            this.files = Lists.newArrayList();
+            log.error(e.getMessage(), e.getCause());
+        }
     }
 
     public boolean hasFile() {

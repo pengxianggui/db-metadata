@@ -3,6 +3,7 @@ package com.github.md.web.user;
 import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.upload.UploadFileResolve;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
@@ -65,15 +66,22 @@ public class LoginController extends ControllerAdapter {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
 
+        String avatarUrl = null;
+        UploadFileResolve uploadFileResolve = new UploadFileResolve(user.avatar());
+        if (uploadFileResolve.hasFile()) {
+            avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
+        }
+
         LoginVO vo = new LoginVO(
                 user.userId(), // TODO token生成并塞入
                 user.userId(),
                 user.userName(),
-                user.avatar(),
+                avatarUrl,
                 Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()),
                 Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()),
                 user.attrs()
         );
         return Ret.ok("data", vo);
     }
+
 }

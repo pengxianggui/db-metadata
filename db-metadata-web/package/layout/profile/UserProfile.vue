@@ -2,10 +2,11 @@
   <div class="user-profile">
     <div class="user-div">
       <el-dropdown>
-        <img :src="user.avatar" class="avatar" v-if="user.avatar">
+        <img :src="avatarSrc" class="avatar" v-if="user.avatar">
         <div class="avatar" v-else>
           <svg-icon :value="avatarSrc" class="svg-icon"></svg-icon>
         </div>
+
         <!--快捷菜单-->
         <el-dropdown-menu slot="dropdown">
           <slot></slot>
@@ -28,6 +29,7 @@ import {access, clearUser} from "../../access";
 import {isEmpty, randomInt} from "../../utils/common";
 import {restUrl, routeUrl} from '../../constant/url'
 import {appConfig} from '../../config'
+import {resolve} from "../../utils/url";
 
 export default {
   name: "UserProfile",
@@ -38,10 +40,14 @@ export default {
   },
   methods: {
     logout() {
-      this.$axios.safePost(restUrl.LOGOUT_URL).then(() => {
-        clearUser()
-        this.$router.push(routeUrl.R_LOGIN)
-      })
+      this.$confirm('确定退出登录?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios.safePost(restUrl.LOGOUT_URL).then(() => {
+          clearUser()
+          this.$router.push(routeUrl.R_LOGIN)
+        })
+      }).catch(() => {})
     },
     init: function () {
       this.$prompt('此操作将重置内置的元数据(元对象、元字段、组件默认配置、组件实例配置)。注意:此操作不会删除你业务表中的数据、以及你创建的元数据。若继续，请输入口令:',
@@ -68,7 +74,8 @@ export default {
     avatarSrc() {
       const {user: {age, sex, avatar}} = this
       if (!isEmpty(avatar)) {
-        return avatar
+        const {defaults: {baseURL} = {}} = this.$axios
+        return resolve(baseURL, avatar)
       }
 
       if (isEmpty(sex) || isEmpty(age)) {
