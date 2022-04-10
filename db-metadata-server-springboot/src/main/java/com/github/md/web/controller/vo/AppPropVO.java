@@ -22,4 +22,6 @@ public class AppPropVO {
     private boolean devMode; // 开发模式
     private String tokenKey; // 前后端token存储于header中key
     private boolean showGreeting = true; // 显示问候
+    private boolean showThemeSetting = true; // 显示主题设置入口
+    private boolean allowCustomTheme = false; // 是否允许用户自定义主题
 }
