@@ -1,9 +1,9 @@
 <template>
   <div class="view-container" ref="container">
     <!-- 操作条 -->
-    <slot name="operation-bar" v-bind:conf="operationBarConf"
-          v-bind:choseData="choseData" v-bind:activeData="activeData">
-      <div class="operation-bar">
+    <div class="operation-bar">
+      <slot name="operation-bar" v-bind:conf="operationBarConf"
+            v-bind:choseData="choseData" v-bind:activeData="activeData">
 
         <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
                    :style="operationBarConf.style" v-bind="operationBarConf.conf"
@@ -21,7 +21,8 @@
                 v-bind:choseData="choseData" v-bind:activeData="activeData"
                 v-bind:batchDelete="handleBatchDelete">
             <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
-                       v-if="multiSelect && operationBarConf.delete.show" v-authorize="operationBarConf.delete.authorize">
+                       v-if="multiSelect && operationBarConf.delete.show"
+                       v-authorize="operationBarConf.delete.authorize">
               {{ operationBarConf.delete.text }}
             </el-button>
           </slot>
@@ -32,8 +33,8 @@
         <slot name="float-right-btn" v-bind:conf="operationBarConf"
               v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
 
-      </div>
-    </slot>
+      </slot>
+    </div>
 
     <!-- 表格主体 -->
     <!-- TODO name作为id不保险，改为instanceCode -->
@@ -91,18 +92,22 @@
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.view.show, scope.row)" v-authorize="buttonsConf.view.authorize">{{ buttonsConf.view.text }}
+                             v-if="ifShow(buttonsConf.view.show, scope.row)" v-authorize="buttonsConf.view.authorize">
+                    {{ buttonsConf.view.text }}
                   </el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.edit.show, scope.row)" v-authorize="buttonsConf.edit.authorize">{{ buttonsConf.edit.text }}
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)" v-authorize="buttonsConf.edit.authorize">
+                    {{ buttonsConf.edit.text }}
                   </el-button>
                 </slot>
                 <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope"
                       v-bind:del="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.delete.show, scope.row)" v-authorize="buttonsConf.delete.authorize">{{ buttonsConf.delete.text }}
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)"
+                             v-authorize="buttonsConf.delete.authorize">
+                    {{ buttonsConf.delete.text }}
                   </el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
@@ -442,17 +447,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .view-container {
-    .operation-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .pagination-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.view-container {
+  .operation-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+
+  .pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 </style>

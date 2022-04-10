@@ -73,8 +73,9 @@ export default {
     login(model) {
       this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
         Token.set(data.token)
-        this.$router.push('/')
-        location.reload()
+        this.$router.push('/').then(() => {
+          location.reload()
+        })
       })
     },
     register(model) {

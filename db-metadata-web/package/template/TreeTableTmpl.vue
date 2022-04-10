@@ -24,7 +24,7 @@
           </template>
           <template #add-btn="scope">
             <slot name="add-btn" v-bind="scope">
-              <el-button v-bind="scope.conf.conf" @click="handleAdd">新增</el-button>
+              <el-button v-bind="scope.conf.conf" @click="handleAdd" v-authorize="scope.conf.authorize">新增</el-button>
             </slot>
           </template>
           <template #batch-delete-btn="scope">

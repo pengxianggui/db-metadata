@@ -1,6 +1,23 @@
 import {hasAnyRole, hasAnyAuth, hasAllRole, hasAllAuth, hasAuth, hasRole} from "../access"
 import {isObject, isString} from "../utils/common";
 
+const permitAuthorize = function (authorize) {
+    const {need_permit = false, permit_by = 'auth'} = authorize
+    if (need_permit !== true) {
+        return
+    }
+
+    let permit;
+    if (permit_by === 'auth') {
+        const {auths = [], auth_match_mode = 'any'} = authorize
+        permit = hasAuth(auths, auth_match_mode)
+    } else if (permit_by === 'role') {
+        const {roles = [], role_match_mode = 'any'} = authorize
+        permit = hasRole(roles, role_match_mode)
+    }
+    return permit
+}
+
 /**
  * `v-authorize`：只接受对象参数类型，参数格式如下：
  * <pre>
@@ -19,6 +36,21 @@ import {isObject, isString} from "../utils/common";
 export default function (Vue) {
     const directives = {
         'authorize': {
+            inserted: function (el, binding) {
+                const {value} = binding
+                if (!isObject(value)) {
+                    return
+                }
+
+                const permit = permitAuthorize(value);
+
+                if (permit === false) { // 无权限，则移除DOM
+                    el.parentNode.removeChild(el)
+                }
+            },
+
+            // operation-bar中按钮的权限控制必须依赖update钩子，因为其依据的meta数据异步加载。
+            // FIXME 不过难以避免的还是出现了闪烁。也许这些按钮得通过 render的方式创建VNode
             update: function (el, binding) {
                 const {value, oldValue} = binding
                 if (!isObject(value)) {
@@ -29,19 +61,7 @@ export default function (Vue) {
                     return
                 }
 
-                const {need_permit = false, permit_by = 'auth'} = binding.value
-                if (need_permit !== true) {
-                    return
-                }
-
-                let permit;
-                if (permit_by === 'auth') {
-                    const {auths = [], auth_match_mode = 'any'} = binding.value
-                    permit = hasAuth(auths, auth_match_mode)
-                } else if (permit_by === 'role') {
-                    const {roles = [], role_match_mode = 'any'} = binding.value
-                    permit = hasRole(roles, role_match_mode)
-                }
+                const permit = permitAuthorize(value)
 
                 if (permit === false) { // 无权限，则移除DOM
                     el.parentNode.removeChild(el)

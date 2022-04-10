@@ -70,12 +70,13 @@
             <template #prefix-btn="scope">
               <slot :name="slave.config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
             </template>
-            <template #add-btn="{conf}">
+            <template #add-btn="scope">
               <slot :name="slave.config.objectCode + '_add-btn'"
-                    v-bind:conf="conf" v-bind:add="handleAdd"
+                    v-bind:conf="scope.conf" v-bind:add="handleAdd"
                     v-bind:params="config.slaves[0]"
                     v-bind:activeMData="activeMData">
-                <el-button v-bind="conf.conf" @click="handleAdd(config.slaves[0])">新增</el-button>
+                <el-button v-bind="scope.conf.conf" @click="handleAdd(config.slaves[0])"
+                           v-authorize="scope.conf.authorize">新增</el-button>
               </slot>
             </template>
             <template #batch-delete-btn="scope">
@@ -135,12 +136,14 @@
         <template #prefix-btn="scope">
           <slot :name="config.slaves[0].config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
         </template>
-        <template #add-btn="{conf}">
+        <template #add-btn="scope">
           <slot :name="config.slaves[0].config.objectCode + '_add-btn'"
-                v-bind:conf="conf" v-bind:add="handleAdd"
+                v-bind:conf="scope.conf"
+                v-bind:add="handleAdd"
                 v-bind:params="config.slaves[0]"
                 v-bind:activeMData="activeMData">
-            <el-button v-bind="conf.conf" @click="handleAdd(config.slaves[0])">新增</el-button>
+            <el-button v-bind="scope.conf.conf" @click="handleAdd(config.slaves[0])"
+                       v-authorize="scope.conf.authorize">新增</el-button>
           </slot>
         </template>
         <template #batch-delete-btn="scope">

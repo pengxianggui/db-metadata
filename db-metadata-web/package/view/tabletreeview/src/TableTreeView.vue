@@ -1,10 +1,9 @@
 <template>
-  <div  class="view-container" ref="container">
+  <div class="view-container" ref="container">
     <!-- operation bar -->
-    <slot name="operation-bar" v-bind:conf="operationBarConf"
+    <div class="operation-bar">
+      <slot name="operation-bar" v-bind:conf="operationBarConf"
           v-bind:choseData="choseData" v-bind:activeData="activeData" v-if="operationBarConf['show']">
-      <div class="operation-bar">
-
         <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
                    :style="operationBarConf.style" v-bind="operationBarConf.conf"
                    v-if="operationBarConf.show">
@@ -14,15 +13,16 @@
                 v-bind:choseData="choseData" v-bind:activeData="activeData">
             <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                        v-if="operationBarConf.add.show" v-authorize="operationBarConf.add.authorize">
-              {{operationBarConf.add.text}}
+              {{ operationBarConf.add.text }}
             </el-button>
           </slot>
           <slot name="batch-delete-btn" v-bind:conf="operationBarConf.delete"
                 v-bind:choseData="choseData" v-bind:activeData="activeData"
                 v-bind:batchDelete="handleBatchDelete">
             <el-button @click="handleBatchDelete($event)" v-bind="operationBarConf.delete.conf"
-                       v-if="multiSelect && operationBarConf.delete.show" v-authorize="operationBarConf.delete.authorize">
-              {{operationBarConf.delete.text}}
+                       v-if="multiSelect && operationBarConf.delete.show"
+                       v-authorize="operationBarConf.delete.authorize">
+              {{ operationBarConf.delete.text }}
             </el-button>
           </slot>
           <slot name="expand-btn" v-bind:conf="operationBarConf.expand"
@@ -30,14 +30,14 @@
                 v-bind:expand="handleExpandAll">
             <el-button @click="handleExpandAll" v-bind="operationBarConf.expand.conf"
                        v-if="operationBarConf.expand.show">
-              {{operationBarConf.expand.text}}
+              {{ operationBarConf.expand.text }}
             </el-button>
           </slot>
           <slot name="shrink-btn" v-bind:conf="operationBarConf.shrink" v-bind:choseData="choseData"
                 v-bind:activeData="activeData" v-bind:shrink="handleShrinkAll">
             <el-button @click="handleShrinkAll" v-bind="operationBarConf.shrink.conf"
-                      v-if="operationBarConf.shrink.show">
-              {{operationBarConf.shrink.text}}
+                       v-if="operationBarConf.shrink.show">
+              {{ operationBarConf.shrink.text }}
             </el-button>
           </slot>
           <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
@@ -46,8 +46,8 @@
 
         <slot name="float-right-btn" v-bind:conf="operationBarConf"
               v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
-      </div>
-    </slot>
+      </slot>
+    </div>
 
     <el-table :id="meta.name"
               :ref="meta.name"
@@ -84,7 +84,7 @@
       </template>
 
       <slot name="operation-column">
-        <el-table-column  v-bind="operationColumnConf.conf" v-if="operationColumnConf.show">
+        <el-table-column v-bind="operationColumnConf.conf" v-if="operationColumnConf.show">
           <template #header>
             <span>操作</span>
             <el-popover placement="bottom-end" trigger="hover">
@@ -105,15 +105,22 @@
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
                   <el-button v-bind="buttonsConf.view.conf" @click="handleView($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.view.show, scope.row)" v-authorize="buttonsConf.view.authorize">{{buttonsConf.view.text}}</el-button>
+                             v-if="ifShow(buttonsConf.view.show, scope.row)" v-authorize="buttonsConf.view.authorize">
+                    {{ buttonsConf.view.text }}
+                  </el-button>
                 </slot>
                 <slot name="edit-btn" v-bind:conf="buttonsConf.edit.conf" v-bind:scope="scope" v-bind:edit="handleEdit">
                   <el-button v-bind="buttonsConf.edit.conf" @click="handleEdit($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.edit.show, scope.row)" v-authorize="buttonsConf.edit.authorize">{{buttonsConf.edit.text}}</el-button>
+                             v-if="ifShow(buttonsConf.edit.show, scope.row)" v-authorize="buttonsConf.edit.authorize">
+                    {{ buttonsConf.edit.text }}
+                  </el-button>
                 </slot>
-                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope" v-bind:delete="handleDelete">
+                <slot name="delete-btn" v-bind:conf="buttonsConf.delete.conf" v-bind:scope="scope"
+                      v-bind:delete="handleDelete">
                   <el-button v-bind="buttonsConf.delete.conf" @click="handleDelete($event, scope.row, scope.$index)"
-                             v-if="ifShow(buttonsConf.delete.show, scope.row)" v-authorize="buttonsConf.delete.authorize">{{buttonsConf.delete.text}}</el-button>
+                             v-if="ifShow(buttonsConf.delete.show, scope.row)"
+                             v-authorize="buttonsConf.delete.authorize">{{ buttonsConf.delete.text }}
+                  </el-button>
                 </slot>
                 <slot name="inner-after-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
               </component>
@@ -233,7 +240,7 @@ export default {
       if (!utils.isEmpty(primaryValue)) { // 更新
         let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
         url = restUrl.RECORD_TO_UPDATE
-        params = { primaryKv: primaryKv }
+        params = {primaryKv: primaryKv}
       } else { // 新增
         let fillParams = function (path) {
           if (!utils.isEmpty(activeData)) {
@@ -248,7 +255,7 @@ export default {
       this.openFormView(url, params);
     },
     openFormView(url, params = {}) {
-      this.$emit('open-form-view', { url: url, params: params })
+      this.$emit('open-form-view', {url: url, params: params})
     },
     // 删除单行
     handleDelete(ev, row, index) {
@@ -441,7 +448,7 @@ export default {
       return treeConf
     },
     buttonsConf() {
-      const {meta: { "operation-column": {buttons: buttonsConf = {}} = {}} = {}} = this
+      const {meta: {"operation-column": {buttons: buttonsConf = {}} = {}} = {}} = this
       return buttonsConf
     },
     // 支持无渲染的行为插槽
