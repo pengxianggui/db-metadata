@@ -28,7 +28,10 @@ export const access = {
  */
 export const detect = function (Vue) {
     return new Promise((resolve, reject) => {
-        if (!isEmpty(Token.get()) && isEmpty(access.user.id)) { // 有token但无用户信息则和服务端同步一次用户信息。 id有值时表示缓存中存在用户信息，(如果是刷新浏览器，用户信息会丢失，就需要从token重新取用户信息了)
+        const token = Token.get()
+        const userId = access.user.id
+
+        if (!isEmpty(token) && isEmpty(userId)) { // 有token但无用户信息则和服务端同步一次用户信息。 id有值时表示缓存中存在用户信息，(如果是刷新浏览器，用户信息会丢失，就需要从token重新取用户信息了)
             let headers = {}
             headers[appConfig.tokenKey] = Token.get()
             Vue.prototype.$axios.safeGet(restUrl.LOGIN_INFO, {

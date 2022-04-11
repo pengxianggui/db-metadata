@@ -1,6 +1,6 @@
 {
   "name": "db-metadata",
-  "version": "2.2.11",
+  "version": "2.2.14",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/db-metadata.common.js",
   "keywords": [
@@ -19,7 +19,7 @@
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name db-metadata --dest lib package/index.js",
     "pub": "npm publish --registry https://registry.npmjs.org/",
-    "release": "npm run lib && npm run pub"
+    "release": "npm version patch && npm run lib && npm run pub"
   },
   "dependencies": {
     "vuepress": "^1.9.7",
