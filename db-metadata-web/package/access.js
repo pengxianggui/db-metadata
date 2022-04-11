@@ -1,7 +1,8 @@
-import {isArray, isString, isEmpty} from "./utils/common";
+import {isArray, isString, isEmpty, printErr} from "./utils/common";
 import {appConfig} from "./config";
 import {restUrl} from "./constant/url";
 import Cache from "./constant/cacheKey";
+import Token from "./token";
 
 /**
  * 访问控制
@@ -27,15 +28,16 @@ export const access = {
  */
 export const detect = function (Vue) {
     return new Promise((resolve, reject) => {
-        if (!isEmpty(getToken()) && isEmpty(access.user.id)) { // 有token但无用户信息则和服务端同步一次用户信息。 id有值时表示缓存中存在用户信息，(如果是刷新浏览器，用户信息会丢失，就需要从token重新取用户信息了)
+        if (!isEmpty(Token.get()) && isEmpty(access.user.id)) { // 有token但无用户信息则和服务端同步一次用户信息。 id有值时表示缓存中存在用户信息，(如果是刷新浏览器，用户信息会丢失，就需要从token重新取用户信息了)
             let headers = {}
-            headers[appConfig.tokenKey] = getToken()
+            headers[appConfig.tokenKey] = Token.get()
             Vue.prototype.$axios.safeGet(restUrl.LOGIN_INFO, {
                 headers: headers
             }).then(({data}) => {
                 setUser(data)
                 resolve(data)
             }).catch(err => {
+                printErr('用户信息获取失败, tokenKey:%s, tokenValue:%s', appConfig.tokenKey, Token.get())
                 clearUser()
                 reject(err)
             });
@@ -43,20 +45,6 @@ export const detect = function (Vue) {
             resolve()
         }
     })
-}
-
-/**
- * 获取当前登录用户前端缓存的TOKEN
- */
-export const getToken = function () {
-    return localStorage.getItem(appConfig.tokenKey);
-}
-/**
- * 缓存token
- * @param token
- */
-export const setToken = function (token) {
-    localStorage.setItem(appConfig.tokenKey, token)
 }
 
 /**
@@ -272,7 +260,5 @@ export default {
     hasAllAuth,
     setUser,
     getUser,
-    clearUser,
-    setToken,
-    getToken
+    clearUser
 }

@@ -7,7 +7,8 @@ import {isEmpty, assertEmpty, printWarn} from "../utils/common";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
 import {routeUrl} from "../constant/url";
-import {clearUser, getToken} from "../access";
+import {clearUser} from "../access";
+import Token from "../token";
 import {validUrlCompiled, validParamsCompiled} from "../utils/url";
 
 /**
@@ -17,9 +18,9 @@ import {validUrlCompiled, validParamsCompiled} from "../utils/url";
 const configInterceptor = function (router, axios) {
     // 添加一个请求拦截器
     axios.interceptors.request.use(config => {
-            let token = getToken()
+            let token = Token.get()
             if (!isEmpty(token)) {
-                config.headers[appConfig.tokenKey] = getToken()
+                config.headers[appConfig.tokenKey] = Token.get()
             }
             return config
         },

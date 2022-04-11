@@ -27,7 +27,7 @@
     import Meta from "../../mixins/meta";
     import Val from "../../mixins/value";
     import {appConfig} from "../../../config";
-    import {getToken} from "../../../access";
+    import Token from "../../../token";
     import {resolve} from "../../../utils/url";
 
     const conver = function (value) {
@@ -60,7 +60,7 @@
             const {value} = this
             const hideUploadButton = !utils.isEmpty(value)
             const header = {}
-            header[appConfig.tokenKey] = getToken()
+            header[appConfig.tokenKey] = Token.get()
 
             return {
                 hideUploadButton: hideUploadButton,

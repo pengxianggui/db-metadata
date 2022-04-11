@@ -1,5 +1,6 @@
 import MetaLayout from "../layout/MetaLayout";
-import {access, clearUser, detect, getToken, getUser, hasAuth, hasRole} from "../access";
+import {access, clearUser, detect, hasAuth, hasRole} from "../access";
+import Token from "../token";
 
 import systemRoutes from './data/system'
 import assembleMetaRoute from './data/meta'
@@ -87,7 +88,7 @@ const permit = function (to, next) {
         need_permit = (permit_by == 'auth' ? !isEmpty(auths) : (!isEmpty(roles)))
     }
 
-    const token = getToken()
+    const token = Token.get()
     if (path === routeUrl.R_LOGIN && !isEmpty(token)) { // 去登录页
         next('/')
     } else {
