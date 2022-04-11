@@ -133,7 +133,7 @@ const components = [
     TreeSingleGridTmpl
 ];
 
-const install = function (Vue, opts = {}) {
+const install = async function (Vue, opts = {}) {
     if (install.installed) return;
 
     // 自定义url(接口url和路由url)覆盖: 优先级最高
@@ -155,8 +155,15 @@ const install = function (Vue, opts = {}) {
         }
     })
 
-    // 系统配置: 获取服务端关于系统设置的数据
-    configApp(Vue, opts)
+    // 系统配置: 获取服务端关于系统设置的数据. 注意:
+    // 这里不能采用"内部返回Promise回调，在回调中执行后续配置"的原因是, 会导致VueRouter的挂载优先执行，从而产生一个bug: 在动态路由下刷新，
+    // 未能触发db-metadata内部的路由钩子，从而导致路由钩子内的用户检测失效，直接表现用户数据丢失，虽然token还在。
+    // 采用同步阻塞是必要的，因为configApp获取的系统配置信息，里面有一些内容必须是先获取到，如果await/async不能满足，必要时可以采用原生XHR
+    // 进行同步请求访问。
+    // FIXME 但即使如上所述，还是存在一个问题，虽然内部路由钩子生效了，但是用户检测(detect)函数中从appConfig配置里取到的TokenKey依然是
+    //  前端静态的，而不是后端返回的。这意味着此处的await依旧未能保证内部路由钩子在configApp后执行。这个问题在鹊桥中发现。解决办法是
+    //  TokenKey就不定制了，就用默认的X-TOKEN。这也没什么大不了，但这是一个要解决的BUG
+    await configApp(Vue, opts)
 
     // 主题配置: 配置默认主题
     Theme.configDefaultTheme(opts)

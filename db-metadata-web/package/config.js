@@ -32,12 +32,12 @@ export const appConfig = {
     allowCustomTheme: true, // 是否允许自由定义
 }
 
-export const configApp = function (Vue, opts = {}) {
+export const configApp = async function (Vue, opts = {}) {
     const axios = Vue.prototype.$axios
     if (!axios) {
         printErr('axios必须配置')
     } else {
-        axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
+        await axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
             const {enableLogin} = data
             if (enableLogin === false) {
                 clearUser() // 防止后端禁用登录后，前端仍有缓存
