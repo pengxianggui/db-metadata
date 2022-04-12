@@ -41,7 +41,7 @@ public class DefaultAuthService implements AuthService {
     @Override
     public List<IAuth> findByUser(String userId) {
         List<IAuth> auths = Lists.newArrayList();
-        List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela ra, meta_user_role_rela ur, meta_user u where a.id = ra.auth_id and ra.role_id = ur.role_id and u.id=?", userId);
+        List<Record> records = db().find("select a.* from meta_auth a, meta_role_auth_rela ra, meta_user_role_rela ur, meta_user u where a.id = ra.auth_id and ra.role_id = ur.role_id and ur.user_id = u.id and u.id=?", userId);
         for (Record record : records) {
             auths.add(new DefaultAuth(record));
         }
