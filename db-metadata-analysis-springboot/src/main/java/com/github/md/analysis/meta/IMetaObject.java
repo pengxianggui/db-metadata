@@ -49,6 +49,11 @@ public interface IMetaObject {
     @JSONField(name = "primaryKey")
     String primaryKey();
 
+    /**
+     * 多主键
+     *
+     * @return
+     */
     boolean isMultiplePrimaryKey();
 
     void primaryKey(String primaryKey);

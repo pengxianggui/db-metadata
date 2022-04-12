@@ -153,7 +153,8 @@ public class QueryHelper {
             }
             //result : [[v1,v2],[v1,v2]]
         } else {
-            for (String vs : tp.getParaValues(metaObject.primaryKey())) {
+            String[] primaryKeys = tp.getParaValues("id");
+            for (String vs : primaryKeys) {
                 pks.add(new Object[]{vs});
             }
         }
