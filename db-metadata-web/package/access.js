@@ -95,8 +95,13 @@ export function hasAnyRole(needRoles) {
     if (isEmpty(needRoles)) {
         return true
     }
+
     if (!Array.isArray(userRoles)) {
         return false
+    }
+
+    if (isString(needRoles)) { // 视为英文逗号分隔的角色编码字符串
+        needRoles = needRoles.split(',')
     }
 
     return needRoles.some(r => userRoles.includes(r)) // route中定义的roles只要有一个符合即可
@@ -116,13 +121,17 @@ export function hasAnyAuth(needAuths) {
         return true;
     }
 
-
     const {auths: userAuths} = access.user
     if (isEmpty(needAuths)) {
         return true
     }
+
     if (!Array.isArray(userAuths)) {
         return false
+    }
+
+    if (isString(needAuths)) {
+        needAuths = needAuths.split(',')
     }
 
     return needAuths.some(r => userAuths.includes(r)) // route中定义的auths只要有一个符合即可
@@ -142,13 +151,17 @@ export function hasAllRole(needRoles) {
         return true;
     }
 
-
     const {roles: userRoles} = access.user
     if (isEmpty(needRoles)) {
         return true
     }
+
     if (!Array.isArray(userRoles)) {
         return false
+    }
+
+    if (isString(needRoles)) {
+        needRoles = needRoles.split(',')
     }
 
     return needRoles.every(r => userRoles.includes(r)) // route中定义的roles只要有一个符合即可
@@ -176,6 +189,10 @@ export function hasAllAuth(needAuths) {
 
     if (!Array.isArray(userAuths)) {
         return false
+    }
+
+    if (isString(needAuths)) {
+        needAuths = needAuths.split(',')
     }
 
     return needAuths.every(r => userAuths.includes(r)) // route中定义的auths只要有一个符合即可

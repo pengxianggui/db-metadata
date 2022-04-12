@@ -1,10 +1,16 @@
 package com.github.md.web.user.auth.defaults;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Objects;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * 默认的权限，即为meta_auth表。既为资源，也为权限。
@@ -19,26 +25,33 @@ import com.jfinal.plugin.activerecord.Record;
  * @author pengxg
  * @date 2021/10/15 9:51 上午
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class DefaultAuth implements IAuth {
-    private Record data;
+    private String code;
+    private String name;
+    private Map<String, Object> attrs;
 
     public DefaultAuth(Record record) {
-        this.data = record;
+        this.code = record.getStr("code");
+        this.name = record.getStr("name");
+        this.attrs = record.getColumns();
     }
 
     @Override
     public String code() {
-        return data.getStr("code");
+        return this.code;
     }
 
     @Override
     public String name() {
-        return data.getStr("name");
+        return this.name;
     }
 
     @Override
     public Kv toKv() {
-        return Kv.create().set(this.data.getColumns());
+        return Kv.create().set(this.attrs);
     }
 
     @Override
