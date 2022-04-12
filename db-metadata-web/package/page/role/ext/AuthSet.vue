@@ -82,7 +82,7 @@ export default {
     },
     allAuth() {
       return new Promise((resolve, reject) => {
-        this.$axios.safeGet(restUrl.AUTH_LIST_FOR_CURRENT_USER).then(({data: auths}) => {
+        this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: auths}) => {
           let map = utils.group(auths, 'type', '其它');
           for (let key in map) {
             map[key] = utils.group(map[key], 'group', '默认')
