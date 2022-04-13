@@ -1754,6 +1754,48 @@
           "isSearch": false
         }
       },
+      "code": {
+        "cn": "角色编码",
+        "config": {
+          "isNullable": false,
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "name": {
+        "cn": "角色名",
+        "config": {
+          "isNullable": false,
+          "isListShow": true,
+          "isSearch": true
+        }
+      },
+      "role_type": {
+        "cn": "角色类别",
+        "config": {
+          "scopeDict": "roleType"
+        }
+      },
+      "remark": {
+        "cn": "备注",
+        "config": {
+          "isNullable": true,
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
       "created_by": {
         "config": {
           "isListShow": false,
@@ -1788,42 +1830,6 @@
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
-        }
-      },
-      "code": {
-        "cn": "角色编码",
-        "config": {
-          "isNullable": false,
-          "isListShow": true,
-          "isSearch": true
-        }
-      },
-      "name": {
-        "cn": "角色名",
-        "config": {
-          "isNullable": false,
-          "isListShow": true,
-          "isSearch": true
-        }
-      },
-      "remark": {
-        "cn": "备注",
-        "config": {
-          "isNullable": true,
-          "isListShow": false,
-          "isSearch": false
-        }
-      },
-      "build_in": {
-        "cn": "系统内置",
-        "config": {
-          "defaultVal": false,
-          "isListShow": true,
-          "isSearch": true,
-          "addStatus": 10,
-          "updateStatus": 10,
-          "viewStatus": 30,
-          "scopeDict": "yn"
         }
       }
     }

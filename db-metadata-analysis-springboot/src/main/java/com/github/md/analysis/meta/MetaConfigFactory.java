@@ -68,6 +68,7 @@ public class MetaConfigFactory {
         return new MetaFieldConfigParse(config);
     }
 
+    @Deprecated
     private static Object convert(IMetaField metaField, String defaultValue) {
         try {
             return MetaDataTypeConvert.convert(metaField, defaultValue);

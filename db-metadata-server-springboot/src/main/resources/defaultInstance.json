@@ -1366,7 +1366,7 @@
         "id": {
           "sort": 0
         },
-        "group": {
+        "role_type": {
           "sort": 2
         },
         "remark": {
