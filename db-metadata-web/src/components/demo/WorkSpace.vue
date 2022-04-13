@@ -1,7 +1,8 @@
 <template>
   <div style="padding: 50px">
 
-<!--    <auth-set role-id="711640534434844672"></auth-set>-->
+    <tree-view ref="tree" :meta="treeMeta" @node-click="handleNodeClick"></tree-view>
+
 <!--    <el-button @click="openDialogJs">编程式弹窗(传meta)</el-button>-->
 <!--    <el-button @click="openDialogJs1">编程式弹窗(传ic)</el-button>-->
 <!--    <el-button @click="openDialogHtml">标签式弹窗</el-button>-->
@@ -36,6 +37,7 @@
 
 <script>
 import {getAddFormMeta} from "../../../package/utils/rest";
+import AuthSet from "../../../package/page/role/ext/AuthSet";
 
 export default {
   name: "WorkSpace",
@@ -43,6 +45,33 @@ export default {
   data() {
     return {
       visible: false,
+      treeMeta: {
+        "objectPrimaryKey": "id",
+        "objectCode": "meta_auth_module",
+        "label": "权限模块",
+        "data_url": "/table/tree?objectCode=meta_auth_module",
+        "operation-bar": {
+          "show": false
+        },
+        "editable": false,
+        "name": "meta_auth_moduleTreeView",
+        "conf": {
+          "check-strictly": true,
+          "accordion": false,
+          "indent": 16,
+          "show-checkbox": true,
+          "default-checked-keys": [],
+          "default-expand-all": false,
+          "default-expanded-keys": [],
+          "node-key": "id",
+          "props": {"children": "children", "label": "name"},
+          "expand-on-click-node": false,
+          "icon-class": "el-icon-caret-right",
+          "draggable": false,
+          "highlight-current": true,
+          "check-on-click-node": false
+        }
+      },
       singleGridConfig: {
         config: {
           objectCode: 'meta_auth'
@@ -103,6 +132,8 @@ export default {
   },
   computed: {},
   methods: {
+    handleNodeClick(row, node, event) {
+    },
     openDialogJs() {
       getAddFormMeta(this.$axios, 'meta_router.FormView').then(resp => {
         this.$dialog(resp.data, {}, {

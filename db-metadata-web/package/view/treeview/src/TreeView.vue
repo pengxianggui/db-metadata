@@ -254,6 +254,8 @@ export default {
       } else {
         this.activeData = row;
       }
+
+      this.$emit('node-click', row, node, event)
       this.$emit('active-change', this.activeData);
     },
     handleNodeCheck(row, {checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys}) {
@@ -261,8 +263,8 @@ export default {
       if (!multiSelect) return;
       this.choseData = checkedNodes;
       this.halfChoseData = halfCheckedNodes;
+      this.$emit('check', row, {checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys})
       this.$emit('chose-change', checkedNodes);
-      this.$emit('half-chose-change', halfCheckedNodes);
     },
 
     filter(value) {

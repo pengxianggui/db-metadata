@@ -1,17 +1,17 @@
 <template>
   <row-grid :span="[8, 16]" class="auth-set">
     <template #0>
-      <tree-view ref="tree" :meta="customMeta" @active-change="handleTreeClick"></tree-view>
+      <tree-view ref="tree" :meta="customMeta" @active-change="handleTreeClick" @check="handleCheck"></tree-view>
     </template>
     <template #1>
-      <div class="options">
+      <div class="right">
         <!-- 利用moduleId对所有权限进行过滤 -->
         <div class="opr">
           <el-input v-model="searchWord" placeholder="输入过滤" clearable></el-input>&nbsp;
           <el-button type="primary" @click="checkAll(filteredAuths)">全选</el-button>
           <el-button type="danger" @click="unCheckAll(filteredAuths)">取消全选</el-button>
         </div>
-        <el-checkbox-group v-model="checkedAuthIds">
+        <el-checkbox-group v-model="checkedAuthIds" class="options">
           <el-checkbox v-for="a in filteredAuths" :label="a.id" :key="a.id">
             <span>{{ a.name }}</span>&nbsp;
             <el-tooltip :content="a.remark" placement="right" v-if="a.remark">
@@ -72,6 +72,19 @@ export default {
     }
   },
   methods: {
+    handleCheck(row, {checkedKeys}) {
+      const {id: moduleId} = row
+      const {allAuths} = this
+      const checked = checkedKeys.indexOf(moduleId) > -1
+      allAuths.filter(a => a.module_id === moduleId).forEach(a => {
+        const index = this.checkedAuthIds.indexOf(a.id)
+        if (checked && index === -1) { // 树节点被选中，则该模块下没勾选的都勾上
+          this.checkedAuthIds.push(a.id)
+        } else if (!checked && index > -1) { // 树节点取消选中，则该模块下勾选了的，都取消勾选
+          this.checkedAuthIds.splice(index, 1)
+        }
+      })
+    },
     handleTreeClick(row) {
       this.moduleId = row.id
     },
@@ -139,13 +152,16 @@ export default {
 
 <style scoped lang="scss">
 .auth-set {
-  .options {
-    max-height: 700px;
-    overflow: auto;
-
+  .right {
     .opr {
       display: flex;
       flex-direction: row;
+    }
+
+    .options {
+      overflow: auto;
+      max-height: 400px;
+      min-height: 200px;
     }
 
     .el-checkbox {
