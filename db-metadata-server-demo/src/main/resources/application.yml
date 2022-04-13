@@ -1,6 +1,13 @@
 server:
   port: 8888
 
+logging:
+  level:
+    self: debug
+    root: info
+  group:
+    self: com.dbmeta.demo,com.github.md
+
 spring:
   datasource:
     username: root

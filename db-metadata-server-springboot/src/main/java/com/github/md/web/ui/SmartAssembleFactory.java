@@ -61,7 +61,9 @@ public class SmartAssembleFactory implements MetaViewAdapterFactory {
                 builder.dataUrl("/table/tree?objectCode=" + metaObject.code());
                 builder.deleteUrl("/table/delete?objectCode=" + metaObject.code());
                 JSONObject jsonObject = JSON.parseObject(metaObject.configParser().treeConfig());
-                builder.props(jsonObject.getString("label"), "children");
+                if (jsonObject != null && jsonObject.containsKey("label")) { // 非空判断，允许延后设置
+                    builder.props(jsonObject.getString("label"), "children");
+                }
                 break;
         }
         return UtilKit.mergeUseNew(globalComponentConfig, builder.render());

@@ -41,7 +41,8 @@ public class MetaConfigFactory {
     public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
-        config.set("defaultVal", convert(metaField, defaultValue));
+//        config.set("defaultVal", convert(metaField, defaultValue));
+        config.set("defaultVal", defaultValue);
         config.set("objectCode", metaField.objectCode());
         config.set("fieldCode", metaField.fieldCode());
         config.set("isMultiple", false);

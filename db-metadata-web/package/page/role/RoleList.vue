@@ -5,7 +5,7 @@
         <el-button size="mini" icon="el-icon-setting" @click="toBindRole(scope)"></el-button>
       </template>
     </single-grid-tmpl>
-    <el-dialog :visible.sync="visible" width="800px"
+    <el-dialog :visible.sync="visible" width="1000px"
                :title="'为角色' + activeRow.name + '配置权限:'">
       <auth-set ref="AuthSet" :role-id="activeRow.id" v-if="visible"></auth-set>
       <template #footer>
@@ -50,6 +50,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.footer {
+  display: flex;
+  flex-direction: row;
+}
 </style>

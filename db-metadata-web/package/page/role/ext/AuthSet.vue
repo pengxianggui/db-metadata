@@ -1,38 +1,33 @@
 <template>
-  <div>
-    <el-tabs v-model="activeTab">
-      <el-tab-pane v-for="(type, index) in authTypes" :label="type.key" :name="'' + index" :key="type.value">
-        <div v-if="model[type.value]">
-          <el-checkbox :indeterminate="model[type.value].isIndeterminate" v-model="model[type.value].checkAll"
-                       @change="handleCheckAllChange($event, type.value)">全选
-          </el-checkbox>
-          <div style="margin: 15px 0;"></div>
-
-          <el-checkbox-group v-model="model[type.value].value" @change="handleCheckedCitiesChange($event, type.value)">
-            <div v-for="(v, k) in authMap[type.value]">
-              <h4 class="group-title">【{{ k }}】</h4>
-              <div class="group-options">
-                <el-checkbox class="role-item" v-for="r in v" :label="r.id" :key="r.id">
-                  <span>{{ r.name }}</span>&nbsp;
-                  <el-tooltip :content="r.remark" placement="right" v-if="r.remark">
-                    <i class="el-icon-question"></i>
-                  </el-tooltip>
-                </el-checkbox>
-              </div>
-            </div>
-          </el-checkbox-group>
+  <row-grid :span="[8, 16]" class="auth-set">
+    <template #0>
+      <tree-view ref="tree" :meta="customMeta" @active-change="handleTreeClick"></tree-view>
+    </template>
+    <template #1>
+      <div class="options">
+        <!-- 利用moduleId对所有权限进行过滤 -->
+        <div class="opr">
+          <el-input v-model="searchWord" placeholder="输入过滤" clearable></el-input>&nbsp;
+          <el-button type="primary" @click="checkAll(filteredAuths)">全选</el-button>
+          <el-button type="danger" @click="unCheckAll(filteredAuths)">取消全选</el-button>
         </div>
-      </el-tab-pane>
-    </el-tabs>
-
-  </div>
+        <el-checkbox-group v-model="checkedAuthIds">
+          <el-checkbox v-for="a in filteredAuths" :label="a.id" :key="a.id">
+            <span>{{ a.name }}</span>&nbsp;
+            <el-tooltip :content="a.remark" placement="right" v-if="a.remark">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+    </template>
+  </row-grid>
 </template>
 
 <script>
 import {restUrl} from "../../../constant/url";
 import {utils} from "../../../index";
 
-// TODO 当前页面为了实现分组下的【全选】交互，实现的太复杂了。需要简化
 export default {
   name: "AuthSet",
   props: {
@@ -43,133 +38,120 @@ export default {
   },
   data() {
     return {
-      activeTab: '0',
-      options: [],
-      model: {},
-      authMap: {},
-      authTypes: []
+      customMeta: {
+        "objectPrimaryKey": "id",
+        "objectCode": "meta_auth_module",
+        "label": "权限模块",
+        "data_url": "/table/tree?objectCode=meta_auth_module",
+        "operation-bar": {
+          "show": false
+        },
+        "editable": false,
+        "name": "meta_auth_moduleTreeView",
+        "conf": {
+          "check-strictly": true,
+          "accordion": false,
+          "indent": 16,
+          "show-checkbox": true,
+          "default-checked-keys": [],
+          "default-expand-all": false,
+          "default-expanded-keys": [],
+          "node-key": "id",
+          "props": {"children": "children", "label": "name"},
+          "expand-on-click-node": false,
+          "icon-class": "el-icon-caret-right",
+          "draggable": false,
+          "highlight-current": true,
+          "check-on-click-node": false
+        }
+      },
+      moduleId: null,
+      searchWord: null,
+      allAuths: [],
+      checkedAuthIds: []
     }
   },
   methods: {
-    handleCheckAllChange(val, type) {
-      let typeModel = this.authMap[type];
-      if (val) {
-        Object.keys(typeModel).forEach(group => {
-          let authIds = typeModel[group].map(a => a.id)
-          this.model[type].value.push(...authIds)
-        })
-      } else {
-        this.model[type].value = []
-      }
-      this.model[type].isIndeterminate = false
-    },
-    handleCheckedCitiesChange(value, type) {
-      let checkedCount = value.length;
-      let sumLength = Object.keys(this.authMap[type]).map(k => this.authMap[type][k].length).reduce((length1, length2) => length1 + length2)
-
-      this.model[type].checkAll = checkedCount === sumLength
-      this.model[type].isIndeterminate = checkedCount > 0 && checkedCount < sumLength;
+    handleTreeClick(row) {
+      this.moduleId = row.id
     },
     doBind() {
-      const {model} = this
-      const value = []
-      Object.keys(model).forEach(type => {
-        value.push(...model[type].value)
-      })
+      const {checkedAuthIds} = this
       return this.$axios.safePost(utils.compile(restUrl.AUTH_SET_FOR_ROLE, {roleId: this.roleId}), {
-        authId: value.join(',')
+        authId: checkedAuthIds.join(',')
       })
     },
-    allAuth() {
-      return new Promise((resolve, reject) => {
-        this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: auths}) => {
-          let map = utils.group(auths, 'type', '其它');
-          for (let key in map) {
-            map[key] = utils.group(map[key], 'group', '默认')
-          }
-
-          // init model
-          Object.keys(map).forEach(type => {
-            this.$set(this.model, type, {
-              checkAll: false,
-              isIndeterminate: true,
-              value: []
-            })
-          })
-
-          resolve({map, auths})
-        }).catch(err => {
-          reject(err)
-        })
-      });
+    checkAll(filteredAuths) {
+      filteredAuths.forEach(a => {
+        if (this.checkedAuthIds.indexOf(a.id) === -1) {
+          this.checkedAuthIds.push(a.id)
+        }
+      })
     },
-    getAuthOfRole(roleId, list = []) {
-      this.$axios.safeGet(utils.compile(restUrl.AUTH_LIST_FOR_ROLE, {roleId: roleId}))
-          .then(({data: auths = []}) => {
-            let hadAuthCodes = auths.map(a => a.id)
-            list.forEach(a => {
-              if (hadAuthCodes.indexOf(a.id) > -1) {
-                this.model[a.type].value.push(a.id)
-              }
-            })
-
-            Object.keys(this.model).forEach(type => {
-              this.handleCheckedCitiesChange(this.model[type].value, type)
-            })
-          })
-    },
-    getAuthTypeOptions() {
-      this.$axios.safeGet(utils.compile(restUrl.COMPONENT_OPTIONS, {
-        objectCode: 'meta_auth', // 固定元对象和原字段
-        fieldCode: 'type'
-      })).then(({data: authTypes}) => {
-        this.authTypes = authTypes
+    unCheckAll(filteredAuths) {
+      filteredAuths.forEach(a => {
+        const index = this.checkedAuthIds.indexOf(a.id);
+        if (index > -1) {
+          this.checkedAuthIds.splice(index, 1)
+        }
       })
     }
   },
-  mounted() {
-    this.allAuth().then(({map, auths: list}) => {
-      this.authMap = map
-      this.getAuthOfRole(this.roleId, list)
-      this.getAuthTypeOptions()
-    });
+  watch: {
+    checkedModuleIds: function (newV, oldV = []) {
+      if (newV.sort().toString() !== oldV.sort().toString()) {
+        this.$refs['tree'].handleCleanChose()
+        this.$nextTick(() => {
+          this.$refs['tree'].setCheckedKeys(Array.from(new Set(newV)))
+        })
+      }
+    }
+  },
+  created() {
+    // 1. 获取所有权限
+    this.$axios.safeGet(restUrl.AUTH_LIST).then(({data: auths}) => {
+      this.allAuths = auths
+
+      this.$axios.safeGet(utils.compile(restUrl.AUTH_LIST_FOR_ROLE, {roleId: this.roleId}))
+          .then(({data: auths = []}) => {
+            this.checkedAuthIds = auths.map(a => a.id)
+          })
+    })
   },
   computed: {
-    // authMap() {
-    //   let map = utils.group(this.options, 'type', '其它');
-    //   for (let key in map) {
-    //     map[key] = utils.group(map[key], 'group', '默认')
-    //   }
-    //
-    //   Object.keys(map).forEach(type => {
-    //     this.$set(this.model, type, {
-    //       checkAll: false,
-    //       isIndeterminate: true,
-    //       value: []
-    //     })
-    //   })
-    //
-    //   return map
-    // },
-    // groups() {
-    //   return utils.group(this.options, 'group')
-    // }
+    filteredAuths() {
+      const {allAuths, moduleId, searchWord} = this
+      return allAuths.filter(a => {
+        return (utils.isEmpty(moduleId) || a.module_id === moduleId)
+            && (utils.isEmpty(searchWord) || a.name.indexOf(searchWord) > -1)
+      }).sort((a1, a2) => {
+        return utils.assertEmpty(a1.module_id, '').localeCompare(utils.assertEmpty(a2.module_id))
+      });
+    },
+    checkedModuleIds() {
+      const {checkedAuthIds, allAuths} = this
+      const checkedModuleIds = allAuths.filter(a => checkedAuthIds.indexOf(a.id) > -1).map(a => a.module_id)
+      return Array.from(new Set(checkedModuleIds));
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.role-item {
-  width: 150px;
-  height: 40px;
-}
+.auth-set {
+  .options {
+    max-height: 700px;
+    overflow: auto;
 
-.group-title {
-  font-size: 15px;
-}
+    .opr {
+      display: flex;
+      flex-direction: row;
+    }
 
-.group-options {
-  padding-left: 20px;
-  border-left: 3px solid #3f9eff;
+    .el-checkbox {
+      display: block;
+      margin: 15px;
+    }
+  }
 }
 </style>

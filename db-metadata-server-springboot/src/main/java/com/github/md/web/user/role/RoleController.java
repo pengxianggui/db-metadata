@@ -20,14 +20,13 @@ import java.util.stream.Collectors;
 @RequestMapping("role")
 public class RoleController extends ControllerAdapter {
 
-    @Authorize(value = "api:get:auths-of-role")
     @GetMapping("{roleId}/auths")
     public Ret getAuths(@PathVariable("roleId") String roleId) {
         List<IAuth> auths = AuthenticationManager.me().authService().findByRole(roleId);
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
-    @Authorize(value = "api:bind:auths-to-role")
+    @Authorize(value = "bind:roles:to-user")
     @PostMapping("{roleId}/auths")
     public Ret bindAuths(@PathVariable("roleId") String roleId) {
         Kv kv = parameterHelper().getKv();

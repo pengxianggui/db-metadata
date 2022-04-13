@@ -39,28 +39,6 @@
       "value": "META_FIELD"
     }
   ],
-  "authType": [
-    {
-      "key": "默认",
-      "value": "default"
-    },
-    {
-      "key": "菜单权限",
-      "value": "menu"
-    },
-    {
-      "key": "路由权限",
-      "value": "router"
-    },
-    {
-      "key": "接口权限",
-      "value": "api"
-    },
-    {
-      "key": "按钮权限",
-      "value": "button"
-    }
-  ],
   "apiResourceType": [
     {
       "key": "普通接口",

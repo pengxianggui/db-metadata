@@ -1,6 +1,7 @@
 <template>
   <div style="padding: 50px">
 
+<!--    <auth-set role-id="711640534434844672"></auth-set>-->
 <!--    <el-button @click="openDialogJs">编程式弹窗(传meta)</el-button>-->
 <!--    <el-button @click="openDialogJs1">编程式弹窗(传ic)</el-button>-->
 <!--    <el-button @click="openDialogHtml">标签式弹窗</el-button>-->
@@ -18,7 +19,7 @@
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
 <!--    <form-view ic="meta_user.FormView" form-type="add"></form-view>-->
-    <form-view ic="meta_user.FormView" form-type="update" primary-kv="706541200185888768"></form-view>
+<!--    <form-view ic="meta_user.FormView" form-type="update" primary-kv="706541200185888768"></form-view>-->
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->
@@ -38,6 +39,7 @@ import {getAddFormMeta} from "../../../package/utils/rest";
 
 export default {
   name: "WorkSpace",
+  components: {AuthSet},
   data() {
     return {
       visible: false,

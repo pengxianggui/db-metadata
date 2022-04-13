@@ -206,6 +206,23 @@ INSERT INTO `meta_auth` VALUES ('2022-03-24 03:01:36', NULL, 'SYSTEM', 'SYSTEM',
 COMMIT;
 
 -- ----------------------------
+-- Table structure for meta_auth_module
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_auth_module`;
+CREATE TABLE `meta_auth_module` (
+                                    `id` varchar(32) COLLATE utf8_bin NOT NULL,
+                                    `name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '模块',
+                                    `pid` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '父模块',
+                                    `order` int(11) DEFAULT NULL COMMENT '排序',
+                                    `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+                                    `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                                    `updated_time` timestamp NULL DEFAULT NULL,
+                                    `created_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+                                    `updated_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+                                    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='权限模块';
+
+-- ----------------------------
 -- Table structure for meta_change_log
 -- ----------------------------
 DROP TABLE IF EXISTS `meta_change_log`;

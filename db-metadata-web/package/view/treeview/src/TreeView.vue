@@ -250,7 +250,7 @@ export default {
 
       if (row[primaryKey] === this.activeData[primaryKey]) {  // cancel active row
         this.activeData = {};
-        // this.treeRef.setCurrentNode()
+        this.treeRef.setCurrentKey(null)
       } else {
         this.activeData = row;
       }

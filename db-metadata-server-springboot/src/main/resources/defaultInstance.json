@@ -937,7 +937,7 @@
         "id": {
           "sort": 0
         },
-        "order_num": {
+        "order": {
           "sort": 3
         },
         "remark": {
@@ -1247,7 +1247,7 @@
             },
             "columns": {
               "0": [
-                "group"
+                "module_id"
               ],
               "1": [
                 "type"
@@ -1263,12 +1263,50 @@
         "code": {
           "explain": "确保唯一"
         },
-        "group": {
-          "explain": "分组仅用于绑定操作界面中的优化呈现"
+        "module_id": {
+          "conf": {
+            "filterable": true
+          }
         },
         "type": {
-          "explain": "权限类别很重要(例如, 【接口资源】模块中设置访问接口所需的权限时，只能选择接口权限; 其次，也用于绑定操作界面中的优化呈现)",
-          "default_value": "default"
+          "explain": "权限类别参考字典项目[authType]"
+        },
+        "remark": {
+          "sort": 99
+        }
+      }
+    }
+  },
+  "meta_auth_module": {
+    "SearchView": {},
+    "TreeView": {
+      "config": {
+        "editable": true,
+        "conf": {
+          "props": {
+            "label": "name",
+            "children": "children"
+          }
+        }
+      }
+    },
+    "FormView": {
+      "config": {
+        "conf": {
+          "label-width": "120px"
+        }
+      },
+      "_fields": {
+        "id": {
+          "sort": 0
+        },
+        "name": {
+          "explain": "一般与菜单保持一致"
+        },
+        "pid": {
+          "conf": {
+            "filterable": true
+          }
         },
         "remark": {
           "sort": 99

@@ -252,7 +252,7 @@
         "pidKey": "p_value",
         "label": "key"
       },
-      "orderBy": "order_num asc"
+      "orderBy": "`order` asc"
     },
     "_fields": {
       "id": {
@@ -291,7 +291,7 @@
           "isNullable": false
         }
       },
-      "order_num": {
+      "order": {
         "config": {
           "isSearch": false
         }
@@ -804,7 +804,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'router' or type = 'default'",
+          "scopeSql": "select code as id, name as cn from meta_auth where FIND_IN_SET('router', type);",
           "isMultiple": true
         }
       },
@@ -953,7 +953,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'menu' or type = 'default'",
+          "scopeSql": "select code as id, name as cn from meta_auth where FIND_IN_SET('menu', type);",
           "isMultiple": true
         }
       },
@@ -1242,6 +1242,24 @@
           "viewStatus": 30
         }
       },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
       "remark": {
         "config": {
           "isListShow": true,
@@ -1467,7 +1485,7 @@
         "config": {
           "isListShow": false,
           "isSearch": false,
-          "scopeSql": "select code as id, name as cn from meta_auth where type = 'api' or type ='default'",
+          "scopeSql": "select code as id, name as cn from meta_auth where FIND_IN_SET('api', type);",
           "isMultiple": true
         }
       },
@@ -1590,18 +1608,20 @@
           "isSearch": true
         }
       },
-      "group": {
+      "module_id": {
         "config": {
-          "isSearch": false
+          "isSearch": false,
+          "scopeSql": "select id, name as cn from meta_auth_module"
         }
       },
       "type": {
         "cn": "权限类别",
         "config": {
-          "isNullable": false,
+          "isNullable": true,
           "isListShow": true,
           "isSearch": true,
-          "scopeDict": "authType"
+          "scopeDict": "authType",
+          "isMultiple": true
         }
       },
       "remark": {
@@ -1620,6 +1640,100 @@
           "updateStatus": 10,
           "viewStatus": 30,
           "scopeDict": "yn"
+        }
+      }
+    }
+  },
+  "meta_auth_module": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_auth_module",
+      "isNumberSequence": true,
+      "structure": "tree",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "structureConfig": {
+        "idKey": "id",
+        "pidKey": "pid",
+        "label": "name"
+      },
+      "orderBy": "`order` asc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "name": {
+        "isListShow": false,
+        "isSearch": true
+      },
+      "pid": {
+        "config": {
+          "isSearch": false,
+          "isFile": false,
+          "scopeSql": "select id, name as cn from meta_auth_module",
+          "addStatus": 100,
+          "defaultVal": "",
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
         }
       }
     }

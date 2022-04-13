@@ -1,4 +1,4 @@
-import {isBoolean, isEmpty} from "../../../utils/common";
+import {isBoolean, isEmpty, printErr} from "../../../utils/common";
 import utils from "../../../utils";
 import {compile} from "../../../utils/url";
 import {restUrl} from "../../../constant/url";
@@ -55,7 +55,7 @@ export const ViewMetaBuilder = function (defaultMeta, callback) {
                             .then(({data}) => {
                                 this._refreshMeta(data)
                             }).catch((err) => {
-                                // this._refreshMeta(defaultMeta) // 异常，则重新使用默认覆盖
+                                printErr(err)
                             })
                     }
                 },

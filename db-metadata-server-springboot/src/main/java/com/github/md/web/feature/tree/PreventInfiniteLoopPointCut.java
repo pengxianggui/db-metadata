@@ -31,7 +31,9 @@ public class PreventInfiniteLoopPointCut implements UpdatePointCut {
             TreeConfig treeConfig = JSON.parseObject(metaObject.configParser().treeConfig(), TreeConfig.class);
 
             MetaData data = invocation.getFormData();
-            Object idVal = data.get(treeConfig.getIdKey());
+            String primaryKey = metaObject.primaryKey();
+            Object idVal = data.get(primaryKey);
+
             Object pidVal = data.get(treeConfig.getPidKey());
 
             Object[][] ids = { { idVal } };

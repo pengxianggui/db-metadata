@@ -15,18 +15,20 @@
           "FormView": "meta_object.FormView"
         }
       },
-      "slaves": [{
-        "config": {
-          "objectCode": "meta_field",
-          "foreignPrimaryKey": "object_code",
-          "order": 0
-        },
-        "instanceCodes": {
-          "SearchView": "meta_field.SearchView",
-          "TableView": "meta_field.TableView",
-          "FormView": "meta_field.FormView"
+      "slaves": [
+        {
+          "config": {
+            "objectCode": "meta_field",
+            "foreignPrimaryKey": "object_code",
+            "order": 0
+          },
+          "instanceCodes": {
+            "SearchView": "meta_field.SearchView",
+            "TableView": "meta_field.TableView",
+            "FormView": "meta_field.FormView"
+          }
         }
-      }]
+      ]
     }
   },
   {
@@ -150,17 +152,31 @@
     }
   },
   {
-    "type": "SingleGrid",
+    "type": "TreeTable",
     "name": "权限管理",
     "code": "meta_auth",
     "config": {
-      "config": {
-        "objectCode": "meta_auth"
+      "tree": {
+        "config": {
+          "isSync": false,
+          "objectCode": "meta_auth_module",
+          "primaryKey": "id"
+        },
+        "instanceCodes": {
+          "TreeView": "meta_auth_module.TreeView",
+          "FormView": "meta_auth_module.FormView"
+        }
       },
-      "instanceCodes": {
-        "SearchView": "meta_auth.SearchView",
-        "TableView": "meta_auth.TableView",
-        "FormView": "meta_auth.FormView"
+      "table": {
+        "config": {
+          "objectCode": "meta_auth",
+          "foreignPrimaryKey": "module_id"
+        },
+        "instanceCodes": {
+          "FormView": "meta_auth.FormView",
+          "TableView": "meta_auth.TableView",
+          "SearchView": "meta_auth.SearchView"
+        }
       }
     }
   },

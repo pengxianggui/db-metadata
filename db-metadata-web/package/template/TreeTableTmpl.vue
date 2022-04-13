@@ -123,6 +123,8 @@ export default {
 
       if (!utils.isEmpty(foreignPrimaryValue)) { // 树有点选，做筛选
         this.filterParams[foreignPrimaryKey + "_eq"] = foreignPrimaryValue
+      } else { // 树未点选，则移除树的关联筛选
+        delete this.filterParams[foreignPrimaryKey + "_eq"]
       }
 
       this.$nextTick(() => {
@@ -197,7 +199,7 @@ export default {
     openTreeFormView({url, params = {}}) {
       const {config: {tree: {instanceCodes}}} = this
       this.$merge(params, {
-        instanceCode: instanceCodes.TreeView
+        instanceCode: instanceCodes.FormView
       })
 
       const finalUrl = this.$compile(url, params)

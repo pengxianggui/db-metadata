@@ -86,14 +86,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok();
     }
 
-    /**
-     * 清空存储元数据的几张系统内置表。详见 {@link AppConst#SYS_TABLE}
-     *
-     * @return
-     */
-    @MetaAccess(value = Type.API)
-    @GetMapping("truncate")
-    public Ret truncate() {
+    private Ret truncate() {
         preConditionCheck();
 
         StringBuilder sb = new StringBuilder();

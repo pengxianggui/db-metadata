@@ -139,15 +139,11 @@ export const FEATURE_TYPE = {
             "tree": {
                 "config": {
                     "objectCode": null,
-                    // "idKey": null,
-                    // "pidKey": null,
-                    // "rootIdentify": null,
-                    // "label": null,
-                    // "isSync": false,
-                    // "primaryKey": null
+                    "primaryKey": null
                 },
                 "instanceCodes": {
-                    "TreeView": null
+                    "TreeView": null,
+                    "FormView": null
                 }
             },
             "table": {
