@@ -5,7 +5,7 @@ const metaMenus = [{
     "hidden": false,
     "disable": false,
     "order": 999999, // 平台维护总是排最后
-    "auths": ['menu:meta:platform-ops'],
+    "auths": ['menu:platform-ops'],
     "children": [
         {
             "path": "/meta/manager",
@@ -13,7 +13,7 @@ const metaMenus = [{
             "icon": "meta_data",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:manager']
+            "auths": ['menu:meta_data']
         },
         {
             "path": "/meta/feature",
@@ -21,7 +21,7 @@ const metaMenus = [{
             "icon": "feature",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:feature']
+            "auths": ['menu:meta_feature']
         },
         {
             "path": "/meta/global-conf-list",
@@ -29,7 +29,7 @@ const metaMenus = [{
             "icon": "component",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:component']
+            "auths": ['menu:meta_component']
         },
         {
             "path": "/meta/instance-conf-list",
@@ -37,7 +37,7 @@ const metaMenus = [{
             "icon": "component_instance",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:component-instance']
+            "auths": ['menu:meta_component_instance']
         },
         {
             "path": "/meta/menu",
@@ -45,7 +45,7 @@ const metaMenus = [{
             "icon": "menu",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:menu']
+            "auths": ['menu:meta_menu']
         },
         {
             "path": "/meta/router",
@@ -53,7 +53,7 @@ const metaMenus = [{
             "icon": "router",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:router']
+            "auths": ['menu:meta_router']
         },
         {
             "path": "/meta/api-resource",
@@ -61,47 +61,15 @@ const metaMenus = [{
             "icon": "api",
             "hidden": false,
             "disable": false,
-            "auths": ['menu:meta:api-resource']
-        },
-        {
-            "path": "/meta/meta-conf",
-            "title": "MetaConf",
-            "icon": "el-icon-s-tools",
-            "hidden": true,
-            "disable": false,
-            "auths": ['menu:meta:meta-conf']
+            "auths": ['menu:meta_api_resource']
         },
         // {
-        //     "path": "/meta/dict",
-        //     "title": "字典",
-        //     "icon": "dict",
-        //     "hidden": false,
+        //     "path": "/meta/meta-conf",
+        //     "title": "MetaConf",
+        //     "icon": "el-icon-s-tools",
+        //     "hidden": true,
         //     "disable": false,
-        //     "auths": ['menu:meta:dict']
-        // },
-        // {
-        //     "path": "/meta/exception",
-        //     "title": "异常",
-        //     "icon": "el-icon-warning",
-        //     "hidden": false,
-        //     "disable": false,
-        //     "auths": ['menu:meta:exception']
-        // },
-        // {
-        //     "path": "/meta/auth",
-        //     "title": "权限配置",
-        //     "icon": "auth",
-        //     "hidden": false,
-        //     "disable": false,
-        //     "auths": ['menu:meta:auth']
-        // },
-        // {
-        //     "path": "/meta/api-resource",
-        //     "title": "接口资源",
-        //     "icon": "api",
-        //     "hidden": false,
-        //     "disable": false,
-        //     "auths": ['menu:meta:api-resource']
+        //     "auths": ['menu:meta:meta-conf']
         // }
     ]
 }]

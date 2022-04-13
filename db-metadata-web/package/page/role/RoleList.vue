@@ -6,7 +6,7 @@
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="1000px"
-               :title="'为角色' + activeRow.name + '配置权限:'">
+               :title="'为角色【' + activeRow.name + '】配置权限:'">
       <auth-set ref="AuthSet" :role-id="activeRow.id" v-if="visible"></auth-set>
       <template #footer>
         <el-button size="mini" @click="visible = false">取消</el-button>

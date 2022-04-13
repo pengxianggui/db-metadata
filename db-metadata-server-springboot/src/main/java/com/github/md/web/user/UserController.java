@@ -30,7 +30,7 @@ public class UserController extends ControllerAdapter {
         return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
-    @Authorize(value = "api:bind:roles-to-user")
+    @Authorize(value = "bind:roles:to-user")
     @PostMapping("{userId}/roles")
     public Ret bindRoles(@PathVariable("userId") String userId) {
         Kv kv = parameterHelper().getKv();

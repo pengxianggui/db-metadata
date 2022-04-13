@@ -5,8 +5,6 @@ import GlobalConf from "../../meta/global-component/GlobalConf";
 import InstanceConfList from "../../meta/instance-component/InstanceConfList";
 import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
-import FormBuilder from "../../meta/form-builder";
-import MetaConfList from "../../meta/meta-conf";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 import ApiResourceList from "../../page/api-resource/ApiResourceList";
 
@@ -18,7 +16,7 @@ const routes = [
             title: "元数据管理",
             icon: "el-icon-warning",
             noCache: false,
-            auths: ['route:meta:manager']
+            auths: ['route:meta_data']
         },
         component: MetaDataManager
     }, {
@@ -28,27 +26,27 @@ const routes = [
             title: '功能维护',
             icon: 'el-icon-warning-outline',
             noCache: false,
-            auths: ['route:meta:feature']
+            auths: ['route:meta_feature']
         },
         component: MetaFeatureList
     }, {
         path: '/meta/global-conf-list',
         name: 'GlobalConfList',
         meta: {
-            title: "组件全局配置",
+            title: "组件默认配置",
             icon: "el-icon-star-off",
             noCache: false,
-            auths: ['route:meta:global-conf-list']
+            auths: ['route:meta_component']
         },
         component: GlobalConfList
     }, {
         path: '/meta/global-conf',
         name: 'GlobalConf',
         meta: {
-            title: "组件全局配置-编辑",
+            title: "组件默认配置-编辑",
             icon: "el-icon-star-off",
             noCache: false,
-            auths: ['route:meta:global-conf-edit']
+            auths: ['route:meta_component:edit']
         },
         hidden: true,
         component: GlobalConf
@@ -59,7 +57,7 @@ const routes = [
             title: "组件实例配置",
             icon: "el-icon-star-on",
             noCache: false,
-            auths: ['route:meta:instance-conf-list']
+            auths: ['route:meta_component_instance']
         },
         component: InstanceConfList
     }, {
@@ -69,7 +67,7 @@ const routes = [
             title: "路由维护",
             icon: "el-icon-star-off",
             noCache: false,
-            auths: ['route:meta:router']
+            auths: ['route:meta_router']
         },
         hidden: false,
         component: RouterManager
@@ -80,7 +78,7 @@ const routes = [
             title: "菜单维护",
             icon: "el-icon-star-off",
             noCache: false,
-            auths: ['route:meta:menu']
+            auths: ['route:meta_menu']
         },
         hidden: false,
         component: MenuManager
@@ -91,75 +89,19 @@ const routes = [
             title: "接口资源",
             icon: "api",
             noCache: false,
-            auths: ['route:meta:api-resource']
+            auths: ['route:meta_api_resource']
         },
         hidden: false,
         component: ApiResourceList
     }, {
-        path: '/meta/form-builder',
-        name: 'FormBuilder',
-        meta: {
-            title: "表单构建",
-            icon: "el-icon-s-order",
-            noCache: false,
-            auths: ['route:meta:form-builder']
-        },
-        props: (route) => ({
-            ic: route.query.ic,
-            oc: route.query.oc,
-            cc: route.query.cc
-        }),
-        component: FormBuilder
-    }, {
-        path: '/meta/meta-conf',
-        name: 'MetaConfList',
-        meta: {
-            title: 'MetaConf',
-            icon: 'el-icon-s-tools',
-            noCache: false,
-            auths: ['route:meta:meta-conf']
-        },
-        component: MetaConfList
-    }, {
-    //     path: '/meta/dict',
-    //     name: 'DictList',
+    //     path: '/meta/meta-conf',
+    //     name: 'MetaConfList',
     //     meta: {
-    //         title: '字典',
-    //         icon: 'el-icon-collection',
-    //         noCache: false,
-    //         auths: ['route:meta:dict']
+    //         title: 'MetaConf',
+    //         icon: 'el-icon-s-tools',
+    //         noCache: false
     //     },
-    //     component: DictList
-    // }, {
-    //     path: '/meta/exception',
-    //     name: 'ExceptionList',
-    //     meta: {
-    //         title: '异常',
-    //         icon: 'el-icon-warning',
-    //         noCache: false,
-    //         auths: ['route:meta:exception']
-    //     },
-    //     component: ExceptionList
-    // }, {
-    //     path: '/meta/auth',
-    //     name: 'AuthList',
-    //     meta: {
-    //         title: '权限配置',
-    //         icon: 'el-icon-warning',
-    //         noCache: false,
-    //         auths: ['route:meta:auth']
-    //     },
-    //     component: AuthList
-    // }, {
-    //     path: '/meta/api-resource',
-    //     name: 'ApiResourceList',
-    //     meta: {
-    //         title: '接口资源',
-    //         icon: 'el-icon-warning',
-    //         noCache: false,
-    //         auths: ['route:meta:api-resource']
-    //     },
-    //     component: ApiResourceList
+    //     component: MetaConfList
     // }, {
         path: '/meta/instance-conf-edit',
         component: InstanceConfEditor,
@@ -168,7 +110,7 @@ const routes = [
             title: '组件实例配置-编辑',
             icon: 'edit',
             noCache: false,
-            auths: ['route:meta:instance-conf-edit']
+            auths: ['route:meta_component_instance:edit']
         },
         hidden: true,
         props: (route) => ({
