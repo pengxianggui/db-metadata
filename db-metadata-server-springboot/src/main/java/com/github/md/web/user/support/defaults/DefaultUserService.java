@@ -85,6 +85,12 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     }
 
     @Override
+    public boolean resetPass(Object userId) {
+        db().update("update meta_user set password = ? where id=?", PassKit.encryptPass(), userId);
+        return true;
+    }
+
+    @Override
     public DefaultUserWithRoles createRoot(Root root) {
         return new DefaultUserWithRoles(root);
     }

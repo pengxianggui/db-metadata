@@ -89,7 +89,7 @@
             <options-input v-model="nativeValue.scopeOptions"></options-input>
           </el-tab-pane>
           <el-tab-pane label="字典名" name="scopeDict">
-            <drop-down-box data-url="/dict/names" v-model="nativeValue.scopeDict"></drop-down-box>
+            <drop-down-box data-url="/dict/names" v-model="nativeValue.scopeDict" :filterable="true"></drop-down-box>
           </el-tab-pane>
           <el-tab-pane label="sql" name="scopeSql">
             <code-box :check="true" v-model="nativeValue.scopeSql" :show-bar="false"></code-box>

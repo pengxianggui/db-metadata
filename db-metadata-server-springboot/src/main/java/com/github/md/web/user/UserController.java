@@ -66,4 +66,12 @@ public class UserController extends ControllerAdapter {
 
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
+
+    @MetaAccess
+    @ApiOperation("重置用户密码")
+    @PostMapping("reset-pass")
+    public Ret resetPass(@RequestBody String userId) {
+        boolean flag = AuthenticationManager.me().userService().resetPass(userId);
+        return flag ? Ret.ok().set("msg", "重置成功") : Ret.fail();
+    }
 }

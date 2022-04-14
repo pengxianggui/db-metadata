@@ -3,17 +3,17 @@ package com.github.md.web.user.support.local;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.md.web.user.Root;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.io.Files;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.AbstractUserService;
 import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.Root;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleFactory;
-import com.github.md.analysis.kit.Kv;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.system.ApplicationHome;
 
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -123,5 +122,10 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     @Override
     public boolean bindRolesForUser(String userId, String... roleIds) {
         return false;
+    }
+
+    @Override
+    public boolean resetPass(Object userId) {
+        throw new OprNotSupportException("本地文件用户服务不支持重置密码");
     }
 }

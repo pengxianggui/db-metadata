@@ -12,13 +12,16 @@
     </el-divider>
     <div v-if="refresh">
       <el-form-item label="搜索面板" prop="instanceCodes.SearchView" required error="必填">
-        <drop-down-box v-model="value.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(value,'SearchView')"></drop-down-box>
+        <drop-down-box v-model="value.instanceCodes.SearchView" :filterable="true"
+                       :data-url="getInstanceCodeOptionsUrl(value,'SearchView')"></drop-down-box>
       </el-form-item>
       <el-form-item label="表格" prop="instanceCodes.TableView" required error="必填">
-        <drop-down-box v-model="value.instanceCodes.TableView" :data-url="getInstanceCodeOptionsUrl(value,'TableView')"></drop-down-box>
+        <drop-down-box v-model="value.instanceCodes.TableView" :filterable="true"
+                       :data-url="getInstanceCodeOptionsUrl(value,'TableView')"></drop-down-box>
       </el-form-item>
       <el-form-item label="表单" prop="instanceCodes.FormView" required error="必填">
-        <drop-down-box v-model="value.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(value,'FormView')"></drop-down-box>
+        <drop-down-box v-model="value.instanceCodes.FormView" :filterable="true"
+                       :data-url="getInstanceCodeOptionsUrl(value,'FormView')"></drop-down-box>
       </el-form-item>
     </div>
   </el-form>

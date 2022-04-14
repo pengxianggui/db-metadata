@@ -24,4 +24,11 @@ public interface UserService<U extends User> {
      * @return
      */
     boolean bindRolesForUser(String userId, String... roleIds);
+
+    /**
+     * 密码重置
+     *
+     * @return
+     */
+    boolean resetPass(Object userId);
 }

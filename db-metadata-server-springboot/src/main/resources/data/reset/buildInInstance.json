@@ -418,6 +418,9 @@
     },
     "TableView": {
       "config": {
+        "operation-bar": {
+          "group": false
+        },
         "operation-column": {
           "conf": {
             "fixed": "right",

@@ -4,7 +4,7 @@
       <template #add-btn="{conf}">
         <auto-computed-button>
           <template #default="{click}">
-            <el-button v-bind="conf.conf" @click="click">添加</el-button>
+            <el-button v-bind="conf.conf" @click="click">一键配置实例</el-button>
           </template>
         </auto-computed-button>
       </template>

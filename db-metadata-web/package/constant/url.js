@@ -75,6 +75,7 @@ export const restUrl = {
     LOGIN_URL: '/user/login', // 登录接口地址
     LOGOUT_URL: '/user/logout', // 登出接口地址
     LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
+    RESET_PASS: '/user/reset-pass' // 用户密码重置接口
 };
 
 export default function (opts = {}) {

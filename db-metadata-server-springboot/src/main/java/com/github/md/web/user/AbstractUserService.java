@@ -1,6 +1,5 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.http.HttpResult;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
 import com.jfinal.kit.StrKit;

@@ -3,6 +3,7 @@
     <single-grid-tmpl :fc="fc">
       <template #inner-before-extend-btn="{scope}">
         <el-button size="mini" @click="toBindRole(scope)" class="el-icon-setting"></el-button>
+        <el-button size="mini" v-bind="scope.conf" icon="el-icon-lock" @click="resetPass(scope)"></el-button>
       </template>
       <template #add-btn="{conf, add}">
         <el-button v-bind="conf.conf" @click="add" v-if="addable">新增</el-button>
@@ -23,6 +24,7 @@
 <script>
 import RoleSet from "./ext/RoleSet";
 import {appConfig} from "../../config";
+import {restUrl} from "../../constant/url";
 
 export default {
   name: "UserList",
@@ -50,6 +52,16 @@ export default {
     doBind() {
       this.$refs['RoleSet'].doBind().then(() => {
         this.visible = false;
+      })
+    },
+    resetPass({row}) {
+      const {id: userId, username} = row
+      this.$confirm(`确定为用户${username}重置密码?`, '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios.safePost(restUrl.RESET_PASS, userId).then(({message = '重置成功'}) => {
+          this.$message.success(message)
+        })
       })
     }
   }

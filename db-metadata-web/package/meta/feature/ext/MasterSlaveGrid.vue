@@ -3,11 +3,11 @@
     <el-divider content-position="left">主表</el-divider>
     <el-divider content-position="right">配置</el-divider>
     <el-form-item label="元对象" prop="master.config.objectCode" required error="必填">
-      <drop-down-box v-model="value.master.config.objectCode"
+      <drop-down-box v-model="value.master.config.objectCode" :filterable="true"
                      :data-url="getObjectCodeUrl(value.master)" @change="resetMasterRelate(value.master)"></drop-down-box>
     </el-form-item>
     <el-form-item label="关联主键" prop="master.config.primaryKey" required error="必填">
-      <drop-down-box v-model="value.master.config.primaryKey"
+      <drop-down-box v-model="value.master.config.primaryKey" :filterable="true"
                      :data-url="getFieldCodeUrl(value.master)"></drop-down-box>
     </el-form-item>
 
@@ -19,15 +19,15 @@
     </el-divider>
     <div v-if="refresh">
       <el-form-item label="搜索面板" prop="master.instanceCodes.SearchView" required error="必填">
-        <drop-down-box v-model="value.master.instanceCodes.SearchView"
+        <drop-down-box v-model="value.master.instanceCodes.SearchView" :filterable="true"
                        :data-url="getInstanceCodeOptionsUrl(value.master, 'SearchView')"></drop-down-box>
       </el-form-item>
       <el-form-item label="表格" prop="master.instanceCodes.TableView" required error="必填">
-        <drop-down-box v-model="value.master.instanceCodes.TableView"
+        <drop-down-box v-model="value.master.instanceCodes.TableView" :filterable="true"
                        :data-url="getInstanceCodeOptionsUrl(value.master, 'TableView')"></drop-down-box>
       </el-form-item>
       <el-form-item label="表单" prop="master.instanceCodes.FormView" required error="必填">
-        <drop-down-box v-model="value.master.instanceCodes.FormView"
+        <drop-down-box v-model="value.master.instanceCodes.FormView" :filterable="true"
                        :data-url="getInstanceCodeOptionsUrl(value.master, 'FormView')"></drop-down-box>
       </el-form-item>
     </div>
@@ -37,11 +37,11 @@
       <el-tab-pane v-for="(slave, index) in value.slaves" :label="'从表' + index" :name="index + ''" :key="slave.config.objectCode">
         <el-divider content-position="right">配置</el-divider>
         <el-form-item label="元对象" :prop="'slaves.' + index + '.config.objectCode'" required error="必填">
-          <drop-down-box v-model="slave.config.objectCode" :data-url="getObjectCodeUrl(slave)"
+          <drop-down-box v-model="slave.config.objectCode" :data-url="getObjectCodeUrl(slave)" :filterable="true"
                          @change="resetSlaveRelate(slave)"></drop-down-box>
         </el-form-item>
         <el-form-item label="关联主键" :prop="'slaves.' + index + '.config.foreignPrimaryKey'" required error="必填">
-          <drop-down-box v-model="slave.config.foreignPrimaryKey"
+          <drop-down-box v-model="slave.config.foreignPrimaryKey" :filterable="true"
                          :data-url="getFieldCodeUrl(slave)"></drop-down-box>
         </el-form-item>
 
@@ -51,13 +51,13 @@
         </el-divider>
         <div v-if="refresh">
           <el-form-item label="搜索面板" :prop="'slaves.' + index + '.instanceCodes.SearchView'" required error="必填">
-            <drop-down-box v-model="slave.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(slave, 'SearchView')"></drop-down-box>
+            <drop-down-box v-model="slave.instanceCodes.SearchView" :data-url="getInstanceCodeOptionsUrl(slave, 'SearchView')" :filterable="true"></drop-down-box>
           </el-form-item>
           <el-form-item label="表格" :prop="'slaves.' + index + '.instanceCodes.TableView'" required error="必填">
-            <drop-down-box v-model="slave.instanceCodes.TableView" :data-url="getInstanceCodeOptionsUrl(slave, 'TableView')"></drop-down-box>
+            <drop-down-box v-model="slave.instanceCodes.TableView" :data-url="getInstanceCodeOptionsUrl(slave, 'TableView')" :filterable="true"></drop-down-box>
           </el-form-item>
           <el-form-item label="表单" :prop="'slaves.' + index + '.instanceCodes.FormView'" required error="必填">
-            <drop-down-box v-model="slave.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(slave, 'FormView')"></drop-down-box>
+            <drop-down-box v-model="slave.instanceCodes.FormView" :data-url="getInstanceCodeOptionsUrl(slave, 'FormView')" :filterable="true"></drop-down-box>
           </el-form-item>
         </div>
       </el-tab-pane>
