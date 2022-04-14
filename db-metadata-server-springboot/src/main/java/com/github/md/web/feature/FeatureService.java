@@ -43,7 +43,7 @@ public class FeatureService {
 
     // insert or update(先删后加)
     public boolean saveFeature(FeatureType type, String name, String code, MetaData config, boolean buildIn) {
-        db().delete("delete from meta_feature where code = ?", code);
+        db().delete("delete from meta_feature where code = ? and build_in = ?", code, buildIn);
 
         Record record = getRecord(type, name, code, config);
         record.set("build_in", buildIn);

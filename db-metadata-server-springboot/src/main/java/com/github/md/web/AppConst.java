@@ -15,7 +15,7 @@ public class AppConst {
     public static final HashBasedTable<String, String, Boolean> SYS_TABLE = HashBasedTable.create();
 
     /**
-     * 是否可清理。注意, 只会清理内建数据(build_in)
+     * 是否可清理。注意, 只会清理内建数据(build_in=true)
      */
     public static final String CLEARABLE = "clearable";
 
@@ -35,6 +35,8 @@ public class AppConst {
         SYS_TABLE.put("meta_auth", CLEARABLE, true);
         SYS_TABLE.put("meta_auth_module", CLEARABLE, true);
         SYS_TABLE.put("meta_role", CLEARABLE, true);
+        SYS_TABLE.put("meta_role_auth_rela", CLEARABLE, true);
         SYS_TABLE.put("meta_user", CLEARABLE, true);
+        SYS_TABLE.put("meta_user_role_rela", CLEARABLE, true);
     }
 }

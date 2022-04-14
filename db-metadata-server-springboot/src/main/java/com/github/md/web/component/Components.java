@@ -2,6 +2,7 @@ package com.github.md.web.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.reflect.ClassPath;
@@ -30,7 +31,7 @@ final public class Components {
 
     private static final Components me = new Components();
 
-    private static final String JSON_TEMPLATE_JSON = "jsonTemplate.json";
+    private static final String JSON_TEMPLATE_JSON = "data/reset/buildInComponent.json";
 
     private final List<Class<? extends Component>> pluginList = new ArrayList<Class<? extends Component>>();
 
@@ -69,6 +70,7 @@ final public class Components {
      * 2. 自动依jsonTemplate.json 为准 进行组件配置更新(开发模式下)
      */
     public void init() {
+        log.info("即将执行组件默认配置的自动刷新...");
         autoRegister();
         Kv staticGlobalConfig = Kv.create().set(loadTmplConfigFromFile().getInnerMap());
         for (Map.Entry<ComponentType, Class<? extends Component>> componentTypeClassEntry : registry.entrySet()) {

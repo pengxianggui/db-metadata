@@ -63,6 +63,14 @@ const metaMenus = [{
             "disable": false,
             "auths": ['menu:meta_api_resource']
         },
+        {
+            "path": "/meta/meta-auth",
+            "title": "权限配置",
+            "icon": "auth",
+            "hidden": false,
+            "disable": false,
+            "auths": ['menu:meta_auth']
+        },
         // {
         //     "path": "/meta/meta-conf",
         //     "title": "MetaConf",

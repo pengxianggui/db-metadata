@@ -7,6 +7,7 @@ import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 import ApiResourceList from "../../page/api-resource/ApiResourceList";
+import AuthList from "../../page/auth/AuthList";
 
 const routes = [
     {
@@ -16,6 +17,7 @@ const routes = [
             title: "元数据管理",
             icon: "el-icon-warning",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_data']
         },
         component: MetaDataManager
@@ -26,6 +28,7 @@ const routes = [
             title: '功能维护',
             icon: 'el-icon-warning-outline',
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_feature']
         },
         component: MetaFeatureList
@@ -36,6 +39,7 @@ const routes = [
             title: "组件默认配置",
             icon: "el-icon-star-off",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_component']
         },
         component: GlobalConfList
@@ -46,6 +50,7 @@ const routes = [
             title: "组件默认配置-编辑",
             icon: "el-icon-star-off",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_component:edit']
         },
         hidden: true,
@@ -57,9 +62,26 @@ const routes = [
             title: "组件实例配置",
             icon: "el-icon-star-on",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_component_instance']
         },
         component: InstanceConfList
+    }, {
+        path: '/meta/instance-conf-edit',
+        component: InstanceConfEditor,
+        name: 'InstanceConfEditor',
+        meta: {
+            title: '组件实例配置-编辑',
+            icon: 'edit',
+            noCache: false,
+            need_permit: true,
+            auths: ['route:meta_component_instance:edit']
+        },
+        hidden: true,
+        props: (route) => ({
+            ic: route.query.instanceCode,
+            fc: route.query.fieldCode
+        })
     }, {
         path: '/meta/router',
         name: 'RouterManager',
@@ -67,6 +89,7 @@ const routes = [
             title: "路由维护",
             icon: "el-icon-star-off",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_router']
         },
         hidden: false,
@@ -78,6 +101,7 @@ const routes = [
             title: "菜单维护",
             icon: "el-icon-star-off",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_menu']
         },
         hidden: false,
@@ -89,34 +113,22 @@ const routes = [
             title: "接口资源",
             icon: "api",
             noCache: false,
+            need_permit: true,
             auths: ['route:meta_api_resource']
         },
         hidden: false,
         component: ApiResourceList
     }, {
-    //     path: '/meta/meta-conf',
-    //     name: 'MetaConfList',
-    //     meta: {
-    //         title: 'MetaConf',
-    //         icon: 'el-icon-s-tools',
-    //         noCache: false
-    //     },
-    //     component: MetaConfList
-    // }, {
-        path: '/meta/instance-conf-edit',
-        component: InstanceConfEditor,
-        name: 'InstanceConfEditor',
+        path: '/meta/meta-auth',
+        name: 'AuthList',
         meta: {
-            title: '组件实例配置-编辑',
-            icon: 'edit',
+            title: '权限配置',
+            icon: 'el-icon-s-tools',
             noCache: false,
-            auths: ['route:meta_component_instance:edit']
+            need_permit: true,
+            auths: ['route:meta_auth']
         },
-        hidden: true,
-        props: (route) => ({
-            ic: route.query.instanceCode,
-            fc: route.query.fieldCode
-        })
+        component: AuthList
     }
 ]
 

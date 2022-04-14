@@ -25,7 +25,7 @@ import java.util.List;
 public class DictController extends ControllerAdapter {
 
     /**
-     * 入参key必须是根字典的value
+     * 入参name是根字典的value, 即字典项的编码
      *
      * @return
      */

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
@@ -24,6 +25,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,11 +44,13 @@ public class InitKit {
 
     private static final InitKit me = new InitKit();
 
-    private static final String OBJECT_CONFIG = "defaultObject.json"; // 系统内置的元数据
+    private static final String OBJECT_CONFIG = "data/reset/buildInObject.json"; // 系统内置的元数据
 
-    private static final String INSTANCE_JSON = "defaultInstance.json"; // 系统内置的实例配置数据
+    private static final String INSTANCE_JSON = "data/reset/buildInInstance.json"; // 系统内置的实例配置数据
 
-    private static final String FEATURE_JSON = "defaultFeature.json"; // 系统内置的功能配置
+    private static final String FEATURE_JSON = "data/reset/buildInFeature.json"; // 系统内置的功能配置
+
+    private static final String BIZ_DATA_SQL = "data/reset/buildInBizData.sql"; // 内建业务数据
 
     private static JSONObject jsonObjectConfig = new JSONObject();
 
@@ -70,25 +76,25 @@ public class InitKit {
     }
 
     /**
-     * 更新元对象配置(依据defaultObject.json, 文件中未定义的元对象将不会被更新)
+     * 更新元对象配置(依据buildInObject.json, 文件中未定义的元对象将不会被更新)
      *
      * @return
      */
     public InitKit updateMetaObjectConfig() {
-        log.info("Start the MetaObject configuration import.....");
+        log.info("即将依据{}对内置元对象和元字段进行更新操作...", OBJECT_CONFIG);
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
         updateMetaObjects(lists);
         return this;
     }
 
     /**
-     * 依据元对象配置更新其所有已有的容器实例配置。即通过元对象、原字段逻辑配置，推导一些实例配置，减轻defaultInstance.json工作量，防止重复
+     * 依据元对象配置更新其所有已有的容器实例配置。即通过元对象、原字段逻辑配置，推导一些实例配置，减轻buildInInstance.json工作量，防止重复
      * 配置一些东西。
      *
      * @return
      */
     public InitKit updateInstanceConfigByMetaObject() {
-        log.info("Start to infer instance config through object config(field config)...");
+        log.info("即将对内置实例配置进行更新，更新依据为{}...", OBJECT_CONFIG);
         for (String objectCode : jsonObjectConfig.keySet()) {
             JSONObject self = jsonObjectConfig.getJSONObject(objectCode);
             JSONObject fields = self.containsKey("_fields") ? self.getJSONObject("_fields") : new JSONObject();
@@ -113,15 +119,15 @@ public class InitKit {
     }
 
     /**
-     * 更新组件实例配置(依据defaultInstance.json, 文件中未定义的元对象将不会被更新)
+     * 更新组件实例配置(依据buildInInstance.json, 文件中未定义的元对象将不会被更新)
      *
      * @return
      */
     public InitKit updateInstanceConfig() {
-        log.info("Start the MetaObject configuration import.....");
+        log.info("即将对内置实例配置进行更新，更新依据为{}...", INSTANCE_JSON);
         List<IMetaObject> lists = ServiceManager.metaService().findAll();
         for (IMetaObject metaObject : lists) {
-            // 应当由defaultInstance.json中的配置决定要更新那些容器组件
+            // 应当由buildInInstance.json中的配置决定要更新那些容器组件
             for (ComponentType componentType : getPredefinedComponentType(metaObject.code())) {
                 updateMetaComponentInstance(metaObject, componentType);
             }
@@ -130,12 +136,12 @@ public class InitKit {
     }
 
     /**
-     * 更新功能配置(依据defaultFeature.json，文件中未定义的功能不会被更新)
+     * 更新功能配置(依据buildInFeature.json，文件中未定义的功能不会被更新)。入库时采用先删后插
      *
      * @return
      */
     public InitKit updateFeatureConfig() {
-        log.info("开始导入系统内置功能...");
+        log.info("即将对内置功能进行更新，更新依据为{}...", FEATURE_JSON);
 
         for (Object item : jsonFeatureConfig) {
             JSONObject jsonItem = (JSONObject) item;
@@ -175,7 +181,7 @@ public class InitKit {
     /**
      * <pre>
      * 1. 获取元对象列表
-     * 2. 以元对象列表分解 defaultObject.json 配置
+     * 2. 以元对象列表分解 buildInObject.json 配置
      * 3. 分解元对象自身
      *      3.1 取元对象数据 key 与 json key 交集 ,防止无效key混入map,导致更新失败
      *      3.2 merge
@@ -246,7 +252,7 @@ public class InitKit {
                 }
             }
         } catch (Exception e) {
-            log.error("Error loading default configuration in [defaultObject.json]");
+            log.error("Error loading default configuration in [buildInObject.json]");
             log.error(e.getMessage(), e);
         }
     }
@@ -317,7 +323,7 @@ public class InitKit {
     }
 
     /**
-     * 获取defaultInstance.json中指定元对象编码预定义的组件类型
+     * 获取buildInInstance.json中指定元对象编码预定义的组件类型
      *
      * @param code
      * @return
@@ -333,12 +339,13 @@ public class InitKit {
     }
 
     /**
-     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 defaultInstance.json.
+     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 buildInInstance.json.
      * <p>
-     * 注意：方法内不会依据这两个json文件生成逻辑配置和UI实例配置，只是依据 {@link AppConst#SYS_TABLE} 确定要为哪些表初始化元对象和元字段，
-     * 然后再依据defaultInstance.json含有容器组件声明，确定要为这些元对象生成哪些容器下的实例配置, 其实例配置为自动计算生成，而不会使用defaultInstance.json内容进行覆盖。
+     * 注意：方法内不会导入buildInInstance.json文件中定义的UI实例配置，只是依据 {@link AppConst#SYS_TABLE} 确定要为哪些表初始化元对象和元字段，
+     * 然后再依据buildInInstance.json含有容器组件声明，确定要为这些元对象生成哪些容器下的实例配置, 其实例配置为自动计算生成，而不会使用buildInInstance.json内容进行覆盖。
      */
     public void initSysMeta() {
+        log.info("即将执行内置元对象、内置元字段、内置实例配置的初始化(依据自动计算)...");
         QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);
         String mainDB = quickJudge.mainDbStr();
         List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge.mainDbStr())
@@ -351,7 +358,7 @@ public class InitKit {
             metaObject.dataMap().put("build_in", true);
             ServiceManager.metaService().saveMetaObject(metaObject, true);
 
-            // 根据 defaultInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
+            // 根据 buildInInstance.json 中定义了的元对象 初始化系统表元对象对应的容器组件
             for (ComponentType type : InitKit.me().getPredefinedComponentType(metaObject.code())) {
                 MetaObjectViewAdapter metaObjectIViewAdapter = UIManager.getSmartAutoView(metaObject, type);
                 // 初始化实例配置
@@ -361,6 +368,23 @@ public class InitKit {
                         metaObjectIViewAdapter.getInstanceConfig());
             }
         }
+    }
+
+    /**
+     * 刷新 除元数据(元对象、元字段、组件默认配置、组件全局配置、功能) 外的其他内建业务数据
+     *
+     * @return
+     */
+    public InitKit updateBizData() {
+        log.info("即将对内置业务数据(接口资源、权限、权限模块、字典、菜单、路由、角色)进行更新，更新依据为{}...", BIZ_DATA_SQL);
+        String sql = UtilKit.loadConfigByFile(BIZ_DATA_SQL);
+
+        Resource sqlResource = new ByteArrayResource(sql.getBytes());
+        SpringAnalysisManager.me().dbMain().execute((conn -> {
+            ScriptUtils.executeSqlScript(conn, sqlResource);
+            return true;
+        }));
+        return this;
     }
 }
 

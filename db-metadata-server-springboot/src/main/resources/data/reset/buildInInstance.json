@@ -937,8 +937,11 @@
         "id": {
           "sort": 0
         },
-        "order": {
+        "value_db_type": {
           "sort": 3
+        },
+        "order": {
+          "sort": 4
         },
         "remark": {
           "sort": 99

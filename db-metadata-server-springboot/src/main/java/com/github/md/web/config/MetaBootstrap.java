@@ -53,9 +53,7 @@ public class MetaBootstrap {
     private void startInit() {
         stepList.add(new DbInitStep());
         stepList.add(new EventInitStep());
-        stepList.add(new StaticDictInitStep());
         stepList.add(new ExtensionInitStep());
-        stepList.add(new MetaDataInit());
         stepList.add(new ComponentInitStep());
         stepList.add(new MetaObjectAndInstanceInitStep());
 
@@ -75,12 +73,12 @@ public class MetaBootstrap {
      */
     class DbInitStep implements InitStep {
         public static final String META_OBJECT = "meta_object";
-        public static final String DB_INIT_SQL = "db/db-meta.init.sql";
+        public static final String DB_INIT_SQL = "data/init/db-meta.init.sql";
 
         @Override
         public void init() {
             if (!ServiceManager.mysqlService().hasTable(null, META_OBJECT)) { // 不存在meta_object表，则执行初始化脚本
-                log.warn("检测到DbMeta为首次运行, 开始执行数据库初始化脚本....................................................");
+                log.info("检测到DbMeta为首次运行, 开始执行数据库初始化脚本...");
 
                 try {
                     Thread.sleep(3000);
@@ -95,6 +93,22 @@ public class MetaBootstrap {
                     ScriptUtils.executeSqlScript(conn, sqlResource);
                     return true;
                 }));
+
+                // 初始化数据
+                log.info("执行数据初始化...");
+                int size = ServiceManager.metaService().findAll().size();
+                if (size == 0) { // 尚未初始化
+                    Components.me().init(); // 初始化组件(全局配置)
+
+                    InitKit.me().initSysMeta(); // 初始化系统元数据
+
+                    // 根据固定文件(buildInObject.json)更新元对象/元字段配置
+                    InitKit.me().updateMetaObjectConfig()       // 根据buildInObject.json更新元对象/原字段配置
+                            .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
+                            .updateInstanceConfig()            // 依据buildInInstance.json覆盖已入库的UI实例配置
+                            .updateFeatureConfig()             // 更新内置功能
+                            .updateBizData();                  // 依据buildInData.sql 导入其他内建数据
+                }
             }
         }
     }
@@ -113,17 +127,6 @@ public class MetaBootstrap {
     }
 
     /**
-     * 字典初始化。 从文件中读取到内存
-     */
-    class StaticDictInitStep implements InitStep {
-
-        @Override
-        public void init() {
-            Dicts.me().init();
-        }
-    }
-
-    /**
      * 扩展初始化
      */
     class ExtensionInitStep implements InitStep {
@@ -136,28 +139,6 @@ public class MetaBootstrap {
 
             PointCutChain.registerGlobalPointCut(new AuditPointCut());
             PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopPointCut());
-        }
-    }
-
-    /**
-     * 元数据初始化。 元对象、元字段、组件全局配置、组件实例配置 的自动初始化。判断meta_object表是否为空。若未空表示还未进行过初始化，则执行初始化。
-     */
-    class MetaDataInit implements InitStep {
-
-        @Override
-        public void init() {
-            int size = ServiceManager.metaService().findAll().size();
-            if (size == 0) { // 尚未初始化
-                Components.me().init(); // 初始化组件(全局配置)
-
-                InitKit.me().initSysMeta(); // 初始化系统元数据
-
-                // 根据固定文件(defaultObject.json)更新元对象/元字段配置
-                InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
-                        .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
-                        .updateInstanceConfig()            // 依据defaultInstance.json覆盖已入库的UI实例配置
-                        .updateFeatureConfig(); // 更新内置功能
-            }
         }
     }
 

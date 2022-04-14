@@ -291,6 +291,15 @@
           "isNullable": false
         }
       },
+      "value_db_type": {
+        "cn": "值类型",
+        "config": {
+          "isSearch": false,
+          "isNullable": false,
+          "defaultVal": "VARCHAR",
+          "scopeDict": "dbFieldType"
+        }
+      },
       "order": {
         "config": {
           "isSearch": false
@@ -550,7 +559,16 @@
         "config": {
           "isSearch": true,
           "updateStatus": 30,
-          "scopeDict": "metaType"
+          "scopeOptions": [
+            {
+              "key": "对象配置",
+              "value": "META_OBJECT"
+            },
+            {
+              "key": "字段配置",
+              "value": "META_FIELD"
+            }
+          ]
         }
       }
     }
@@ -1451,6 +1469,20 @@
           "isSearch": true,
           "scopeRange": [],
           "scopeDict": "apiResourceType",
+          "scopeOptions": [
+            {
+              "key": "普通接口",
+              "value": "0"
+            },
+            {
+              "key": "接口+元对象",
+              "value": "1"
+            },
+            {
+              "key": "接口+功能",
+              "value": "2"
+            }
+          ],
           "defaultVal": "0"
         }
       },

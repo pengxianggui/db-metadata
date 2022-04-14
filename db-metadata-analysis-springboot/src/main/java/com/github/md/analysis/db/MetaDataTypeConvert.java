@@ -90,17 +90,18 @@ public class MetaDataTypeConvert {
             return null;
         }
         String typeName = field.dbType().rawData();
-        //        Integer size = field.dbTypeLength().intValue();
-        Class clazz = getType(typeName);
-        //        // DB类型特殊转换规则
-        //        if ((typeName.equalsIgnoreCase("tinyint")) || (typeName.equalsIgnoreCase("varchar") && size == 1)) {
-        //            clazz = Boolean.class;
-        //        }
-        o = cast(String.valueOf(o), clazz);
-//        if (String.valueOf(o).equalsIgnoreCase("null")) {
-//            return null;
-//        }
-        return o;
+        return convert(String.valueOf(o), typeName);
+    }
+
+    /**
+     * 将字符串值转换为指定类型
+     *
+     * @param value       字符串值
+     * @param dbFieldType 数据库字段类型
+     * @return
+     */
+    public static Object convert(String value, String dbFieldType) {
+        return cast(value, getType(dbFieldType));
     }
 
     public static Object cast(String s, Class c) {

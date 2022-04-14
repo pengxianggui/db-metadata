@@ -4,16 +4,12 @@ import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.Table;
-import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.kit.InitKit;
-import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.web.ui.UIManager;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
@@ -77,15 +73,21 @@ public class DBController extends ControllerAdapter {
         InitKit.me().initSysMeta(); // 初始化系统元数据
 
         // 根据固定文件(defaultObject.json)更新元对象/元字段配置
-        InitKit.me().updateMetaObjectConfig()       // 根据defaultObject.json更新元对象/原字段配置
+        InitKit.me().updateMetaObjectConfig()       // 根据buildInObject.json更新元对象/原字段配置
                 .updateInstanceConfigByMetaObject() // 依据已入库的元对象/原字段配置推导UI实例配置
-                .updateInstanceConfig()            //  依据defaultInstance.json覆盖已入库的UI实例配置
-                .updateFeatureConfig();             // 依据defaultFeature.json覆盖系统内置的功能配置
+                .updateInstanceConfig()            //  依据buildInInstance.json覆盖已入库的UI实例配置
+                .updateFeatureConfig()             // 依据buildInFeature.json覆盖系统内置的功能配置
+                .updateBizData();                  // 依据buildInData.sql 导入其他内建数据
 
         log.info("重置完毕！");
         return Ret.ok();
     }
 
+    /**
+     * 先对指定表的内建数据执行删除操作
+     *
+     * @return
+     */
     private Ret truncate() {
         preConditionCheck();
 
@@ -94,8 +96,8 @@ public class DBController extends ControllerAdapter {
         Set<String> tables = AppConst.SYS_TABLE.column(AppConst.CLEARABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
 
-        sb.append("即将清除的数据表:").append(tables);
-        log.warn("清空meta相关表{}", sb);
+        sb.append("即将执行内建数据清理的数据表:").append(tables);
+        log.warn("{}", sb.toString());
         tables.forEach(key -> {
             Db.delete("delete from " + key + " where build_in=?", true);
         });
