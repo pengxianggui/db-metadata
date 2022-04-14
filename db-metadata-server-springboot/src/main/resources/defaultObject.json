@@ -1275,6 +1275,7 @@
     "build_in": true,
     "config": {
       "objectCode": "meta_config",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
       "structure": "list",
       "isNumberSequence": true,
       "orderBy": "created_time desc"
@@ -1323,6 +1324,18 @@
           "addStatus": 10,
           "updateStatus": 10,
           "viewStatus": 30
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
         }
       },
       "created_by": {

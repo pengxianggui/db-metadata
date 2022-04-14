@@ -15,7 +15,7 @@ public class AppConst {
     public static final HashBasedTable<String, String, Boolean> SYS_TABLE = HashBasedTable.create();
 
     /**
-     * 是否可清理
+     * 是否可清理。注意, 只会清理内建数据(build_in)
      */
     public static final String CLEARABLE = "clearable";
 
@@ -24,17 +24,17 @@ public class AppConst {
         SYS_TABLE.put("meta_field", CLEARABLE, true);
         SYS_TABLE.put("meta_component", CLEARABLE, true);
         SYS_TABLE.put("meta_component_instance", CLEARABLE, true);
-        SYS_TABLE.put("meta_router", CLEARABLE, false);
-        SYS_TABLE.put("meta_menu", CLEARABLE, false);
-        SYS_TABLE.put("meta_feature", CLEARABLE, false);
+        SYS_TABLE.put("meta_router", CLEARABLE, true);
+        SYS_TABLE.put("meta_menu", CLEARABLE, true);
+        SYS_TABLE.put("meta_feature", CLEARABLE, true);
         SYS_TABLE.put("meta_config", CLEARABLE, false);
         SYS_TABLE.put("meta_change_log", CLEARABLE, false);
         SYS_TABLE.put("meta_exception", CLEARABLE, false);
-        SYS_TABLE.put("meta_dict", CLEARABLE, false);
-        SYS_TABLE.put("meta_api_resource", CLEARABLE, false);
-        SYS_TABLE.put("meta_auth", CLEARABLE, false);
-        SYS_TABLE.put("meta_auth_module", CLEARABLE, false);
-        SYS_TABLE.put("meta_role", CLEARABLE, false);
-        SYS_TABLE.put("meta_user", CLEARABLE, false);
+        SYS_TABLE.put("meta_dict", CLEARABLE, true);
+        SYS_TABLE.put("meta_api_resource", CLEARABLE, true);
+        SYS_TABLE.put("meta_auth", CLEARABLE, true);
+        SYS_TABLE.put("meta_auth_module", CLEARABLE, true);
+        SYS_TABLE.put("meta_role", CLEARABLE, true);
+        SYS_TABLE.put("meta_user", CLEARABLE, true);
     }
 }
