@@ -40,7 +40,6 @@ export const detect = function (Vue) {
                 setUser(data)
                 resolve(data)
             }).catch(err => {
-                printErr('用户信息获取失败, tokenKey:%s, tokenValue:%s', appConfig.tokenKey, Token.get())
                 clearUser()
                 reject(err)
             });
