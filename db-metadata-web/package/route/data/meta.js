@@ -5,6 +5,7 @@ import GlobalConf from "../../meta/global-component/GlobalConf";
 import InstanceConfList from "../../meta/instance-component/InstanceConfList";
 import RouterManager from "../../meta/route/RouterManager";
 import MenuManager from "../../meta/menu/MenuManager";
+import ProfileMenuManager from "../../meta/profile-menu/ProfileMenuManager";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 import ApiResourceList from "../../page/api-resource/ApiResourceList";
 import AuthList from "../../page/auth/AuthList";
@@ -106,6 +107,18 @@ const routes = [
         },
         hidden: false,
         component: MenuManager
+    }, {
+        path: '/meta/profile-menu',
+        name: 'ProfileMenuManager',
+        meta: {
+            title: "Profile菜单维护",
+            icon: "el-icon-star-off",
+            noCache: false,
+            need_permit: true,
+            auths: ['route:meta_profile_menu']
+        },
+        hidden: false,
+        component: ProfileMenuManager
     }, {
         path: '/meta/api-resource',
         name: 'ApiResourceList',

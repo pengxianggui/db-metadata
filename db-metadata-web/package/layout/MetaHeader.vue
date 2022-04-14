@@ -13,7 +13,7 @@
     </div>
 
     <div class="dock">
-      <div v-if="greeting">欢迎您: {{ user.username }}</div>
+      <div v-if="greeting && user.username">欢迎您: {{ user.username }}</div>
 
       <theme-set v-if="themeSetting"></theme-set>
 

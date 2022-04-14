@@ -26,6 +26,7 @@ public class AppConst {
         SYS_TABLE.put("meta_component_instance", CLEARABLE, true);
         SYS_TABLE.put("meta_router", CLEARABLE, true);
         SYS_TABLE.put("meta_menu", CLEARABLE, true);
+        SYS_TABLE.put("meta_profile_menu", CLEARABLE, true);
         SYS_TABLE.put("meta_feature", CLEARABLE, true);
         SYS_TABLE.put("meta_config", CLEARABLE, false);
         SYS_TABLE.put("meta_change_log", CLEARABLE, false);

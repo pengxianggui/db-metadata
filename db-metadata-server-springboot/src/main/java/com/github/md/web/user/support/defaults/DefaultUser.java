@@ -60,4 +60,9 @@ public class DefaultUser implements User {
         UtilKit.deepMerge(attrs(), attrs, true);
         return attrs();
     }
+
+    @Override
+    public Kv toKv() {
+        return Kv.create().set(this.data.getColumns());
+    }
 }

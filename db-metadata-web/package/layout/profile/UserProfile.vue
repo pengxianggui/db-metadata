@@ -1,15 +1,20 @@
 <template>
   <div class="user-profile">
     <div class="user-div">
-      <el-dropdown>
+      <el-dropdown v-if="user.id">
         <img :src="avatarSrc" class="avatar" v-if="user.avatar">
         <div class="avatar" v-else>
           <svg-icon :value="avatarSrc" class="svg-icon"></svg-icon>
         </div>
 
         <!--快捷菜单-->
-        <el-dropdown-menu slot="dropdown">
+        <!-- FIXME 很奇怪, 异步更新的profileMenus并不会触发dom更新。借助v-if实现也是无奈之举 -->
+        <el-dropdown-menu slot="dropdown" v-if="profileMenusLoaded">
           <slot></slot>
+          <el-dropdown-item v-for="m in profileMenus" @click.native="toPath(m.path)" :key="m.id">
+            <svg-icon :value="m.icon"></svg-icon>
+            <span>{{m.title}}</span>
+          </el-dropdown-item>
           <el-dropdown-item @click.native="init" v-any-auths="['api:app-init']">
             <svg-icon value="reset"></svg-icon>
             <span>系统重置</span>
@@ -20,22 +25,68 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <div v-else>
+        <el-link type="primary" @click="toLogin">登录</el-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {access, clearUser} from "../../access";
-import {isEmpty, randomInt} from "../../utils/common";
+import {access, clearUser, hasAuth, hasRole} from "../../access";
+import {isEmpty, randomInt, strSplitToArray} from "../../utils/common";
 import {restUrl, routeUrl} from '../../constant/url'
 import {appConfig} from '../../config'
 import {resolve} from "../../utils/url";
+
+// 判断是否有指定菜单的权限
+const hasMenuAuth = function (menu) {
+  const {
+    need_permit = true,
+    permit_by = 'auth',
+    auths = [],
+    roles = [],
+    auth_match_mode = 'any',
+    role_match_mode = 'any'
+  } = menu
+  if (!need_permit) {
+    return true
+  }
+
+  let has;
+  if (permit_by == 'role') {
+    // 数据库中roles可能是以英文逗号分隔的字符串。而编程菜单采用的是数组，因此兼容处理下
+    has = hasRole(strSplitToArray(roles, ','), role_match_mode)
+  } else {
+    // 数据库中auths可能是以英文逗号分隔的字符串。而编程菜单采用的是数组，因此兼容处理下
+    has = hasAuth(strSplitToArray(auths, ','), auth_match_mode)
+  }
+
+  return has
+}
+
+// 处理菜单: 剔除隐藏的菜单和无权限的菜单
+const dealMenus = function (menus) {
+  let menuList = []
+
+  menus.forEach((m) => {
+    const {hidden = false} = m
+    if (hidden === false && hasMenuAuth(m)) {
+      menuList.push(m)
+    }
+  })
+
+  menuList.sort((m1, m2) => m1.order - m2.order);
+  return menuList
+}
 
 export default {
   name: "UserProfile",
   data() {
     return {
-      user: access.user
+      user: access.user,
+      profileMenus: [],
+      profileMenusLoaded: false
     }
   },
   methods: {
@@ -47,7 +98,8 @@ export default {
           clearUser()
           this.$router.push(routeUrl.R_LOGIN)
         })
-      }).catch(() => {})
+      }).catch(() => {
+      })
     },
     init: function () {
       this.$prompt('此操作将重置内置的元数据: <br>元对象、元字段、组件默认配置、组件实例配置、功能 <br>以及内置的非元数据: <br>路由、菜单、权限、权限模块、字典、接口资源、角色' +
@@ -70,7 +122,21 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    toLogin() {
+      this.$router.push(routeUrl.R_LOGIN)
+    },
+    toPath(path) {
+      this.$router.push(path)
     }
+  },
+  created() {
+    this.$axios.safeGet(restUrl.PROFILE_MENU_DATA).then(resp => {
+      const {data: profileMenus} = resp
+      const menus = dealMenus(profileMenus)
+      this.profileMenus.push(...menus)
+      this.profileMenusLoaded = true
+    })
   },
   computed: {
     avatarSrc() {

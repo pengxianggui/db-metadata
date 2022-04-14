@@ -60,6 +60,7 @@ export const restUrl = {
     MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&featureCode={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)
     LIST_FEATURE_TYPE: '/feature/list', // 列出所有的功能类型code
     MENU_DATA: '/menu',
+    PROFILE_MENU_DATA: '/menu/profile',
     ROUTE_DATA: '/router',
 
     // TODO 这部分太偏业务了，耦合在db-meta里显得比较突兀，有两个优化方案：
@@ -75,6 +76,8 @@ export const restUrl = {
     LOGIN_URL: '/user/login', // 登录接口地址
     LOGOUT_URL: '/user/logout', // 登出接口地址
     LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
+    USER_DETAIL: '/user/detail', // 获取用户详情记录
+    USER_UPDATE: '/user/update', // 更新用户详情记录
     RESET_PASS: '/user/reset-pass' // 用户密码重置接口
 };
 

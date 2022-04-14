@@ -4,6 +4,12 @@ export default function (Vue) {
     const filters = {
         stringify: function (value) {
             return utils.convertToString(value);
+        },
+        defaultStr: function (value, defaultVal) {
+            if (utils.isEmpty(value)) {
+                return defaultVal
+            }
+            return value
         }
     }
 

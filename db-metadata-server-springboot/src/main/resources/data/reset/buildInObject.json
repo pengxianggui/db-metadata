@@ -909,7 +909,163 @@
           "updateStatus": 100
         }
       },
-      "meta": {
+      "title": {
+        "config": {
+          "isSearch": true
+        }
+      },
+      "hidden": {
+        "config": {
+          "isSearch": false
+        }
+      },
+      "disable": {
+        "cn": "禁用",
+        "config": {
+          "isSearch": false
+        }
+      },
+      "icon": {
+        "cn": "图标",
+        "config": {
+          "isSearch": false
+        }
+      },
+      "path": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "order": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
+      "need_permit": {
+        "cn": "需要鉴权",
+        "config": {
+          "isListShow": false,
+          "isSearch": true,
+          "defaultVal": true,
+          "scopeDict": "yn"
+        }
+      },
+      "permit_by": {
+        "cn": "鉴权依据",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeDict": "authorizeBy",
+          "defaultVal": "auth"
+        }
+      },
+      "auths": {
+        "cn": "需要的权限",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_auth where FIND_IN_SET('menu', type);",
+          "isMultiple": true
+        }
+      },
+      "auth_match_mode": {
+        "cn": "权限匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeDict": "authorizeMatchMode"
+        }
+      },
+      "roles": {
+        "cn": "需要的角色",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "scopeSql": "select code as id, name as cn from meta_role",
+          "isMultiple": true
+        }
+      },
+      "role_match_mode": {
+        "cn": "角色匹配模式",
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "isMultiple": false,
+          "scopeRange": [],
+          "scopeDict": "authorizeMatchMode"
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "remark": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": true,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      }
+    }
+  },
+  "meta_profile_menu": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_profile_menu",
+      "isNumberSequence": true,
+      "structure": "list",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "`order` asc"
+    },
+    "_fields": {
+      "id": {
         "config": {
           "isSearch": false
         }

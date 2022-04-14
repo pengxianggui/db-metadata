@@ -48,6 +48,14 @@ const metaMenus = [{
             "auths": ['menu:meta_menu']
         },
         {
+            "path": "/meta/profile-menu",
+            "title": "Profile菜单维护",
+            "icon": "menu",
+            "hidden": false,
+            "disable": false,
+            "auths": ['menu:meta_profile_menu']
+        },
+        {
             "path": "/meta/router",
             "title": "路由维护",
             "icon": "router",

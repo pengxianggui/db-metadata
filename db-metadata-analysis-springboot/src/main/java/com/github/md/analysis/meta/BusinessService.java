@@ -46,6 +46,16 @@ public class BusinessService {
         return Db.use(metaObject.schemaName()).paginate(pageIndex, pageSize, select, sqlExceptSelect, paras);
     }
 
+    /**
+     * 根据元对象查询所有数据
+     *
+     * @param metaObject
+     * @return
+     */
+    public List<Record> findData(IMetaObject metaObject) {
+        return Db.use(metaObject.schemaName()).findAll(metaObject.tableName());
+    }
+
     public List<Record> findData(IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
         return Db.use(metaObject.schemaName()).find(select + sqlExceptSelect, paras);
     }

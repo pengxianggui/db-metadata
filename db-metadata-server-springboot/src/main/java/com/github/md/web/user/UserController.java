@@ -3,7 +3,10 @@ package com.github.md.web.user;
 import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.query.FormDataFactory;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.user.role.MRRole;
@@ -40,6 +43,25 @@ public class UserController extends ControllerAdapter {
 
         boolean flag = AuthenticationManager.me().userService()
                 .bindRolesForUser(userId, roleIdArr);
+        return flag ? Ret.ok() : Ret.fail();
+    }
+
+    @Authorize(justSign = true)
+    @GetMapping("detail")
+    public Ret getUserData() {
+        String userId = UserThreadLocal.getUser().userId();
+        User user = AuthenticationManager.me().userService().findById(userId);
+        return Ret.ok().set("data", user.toKv());
+    }
+
+    @Authorize(justSign = true)
+    @PostMapping("update")
+    public Ret updateUserData() {
+        IMetaObject metaObject = metaService().findByCode(AuthenticationManager.me().userService().userObjectCode());
+        MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
+        String userId = UserThreadLocal.getUser().userId();
+        metadata.set(metaObject.primaryKey(), userId);
+        boolean flag = metaService().updateData(metaObject, metadata);
         return flag ? Ret.ok() : Ret.fail();
     }
 

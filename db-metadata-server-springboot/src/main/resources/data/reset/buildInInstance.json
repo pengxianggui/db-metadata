@@ -877,6 +877,206 @@
       }
     }
   },
+  "meta_profile_menu": {
+    "SearchView": {
+      "config": {
+        "expand": true
+      },
+      "_fields": {
+        "build_in": {
+          "default_value": null
+        },
+        "need_permit": {
+          "default_value": null
+        }
+      }
+    },
+    "TableView": {},
+    "FormView": {
+      "config": {
+        "conf": {
+          "label-width": "140px"
+        },
+        "layout": [
+          {
+            "name": "RowGrid69537",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 2,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "title"
+              ],
+              "1": [
+                "icon"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid75393",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 3,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "path"
+              ],
+              "1": [
+                "order"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid55990",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 4,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "hidden"
+              ],
+              "1": [
+                "disable"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid78458",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 5,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "need_permit"
+              ],
+              "1": [
+                "permit_by"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid13692",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 6,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "auths"
+              ],
+              "1": [
+                "auth_match_mode"
+              ]
+            }
+          },
+          {
+            "name": "RowGrid47425",
+            "label": "栅格布局",
+            "component_name": "RowGrid",
+            "sort": 7,
+            "conf": {
+              "span": [
+                12,
+                12
+              ],
+              "show-line": false
+            },
+            "columns": {
+              "0": [
+                "roles"
+              ],
+              "1": [
+                "role_match_mode"
+              ]
+            }
+          }
+        ]
+      },
+      "_fields": {
+        "id": {
+          "sort": 0
+        },
+        "icon": {
+          "component_name": "IconBox"
+        },
+        "path": {
+          "explain": "菜单点击后跳转的路由地址"
+        },
+        "hidden": {
+          "component_name": "BoolBox",
+          "explain": "菜单不可见(即使有权限)",
+          "default_value": false
+        },
+        "disable": {
+          "component_name": "BoolBox",
+          "explain": "菜单可见(如果有权限), 但不可点击",
+          "default_value": false
+        },
+        "need_permit": {
+          "explain": "若取消勾选，则表示此资源无需保护(后面配置项无效)。优先级最高(0)",
+          "default_value": true
+        },
+        "permit_by": {
+          "explain": "鉴权判定依据(按角色判定还是按权限判定), 分别对应后续配置项"
+        },
+        "auth_match_mode": {
+          "explain": "当【需要的权限】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部权限才能访问; 任一匹配: 用户拥有其中一个权限即可访问"
+        },
+        "auths": {
+          "conf": {
+            "filterable": true
+          },
+          "explain": "选择访问此接口资源需要的权限(可多选)。当【鉴权依据】为【按权限判定】时才有效)"
+        },
+        "role_match_mode": {
+          "explain": "当【需要的角色】多值时，则此项描述了匹配模式。全部匹配: 需要用户拥有全部角色才能访问; 任一匹配: 用户拥有其中一个角色即可访问"
+        },
+        "roles": {
+          "conf": {
+            "filterable": true
+          },
+          "explain": "选择访问此接口资源需要的角色(可多选。当【鉴权依据】为【按角色判定】时才有效)"
+        },
+        "remark": {
+          "sort": 99
+        }
+      }
+    }
+  },
   "meta_dict": {
     "SearchView": {
       "config": {

@@ -5,6 +5,7 @@
 BEGIN;
 INSERT INTO `meta_api_resource` VALUES ('694223070646374400', '路由数据', '0', '/router', '', b'0', b'0', 'auth', '', 'any', '', 'any', '路由接口, 属于系统数据, 需要不登录也能正常获取', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('694225274480496640', '菜单数据', '0', '/menu', '', b'1', b'1', 'auth', '', 'any', '', 'any', '菜单数据，登录后才能进入管理界面;登录即可访问', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712008473520508928', 'Profile菜单数据', '0', '/menu/profile', '', b'1', b'1', 'auth', '', 'any', '', 'any', '菜单数据，登录后才能进入管理界面;登录即可访问', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('694227116228743168', '系统属性', '0', '/app/config', '', b'0', b'0', 'auth', '', 'any', '', 'any', '系统配置数据, 无需鉴权', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('694231657120665600', '登录接口', '0', '/user/login', '', b'0', b'0', 'auth', '', 'any', '', 'any', '用户登录接口', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('694231832820060160', '当前登录用户信息接口', '0', '/user/info', '', b'1', b'1', 'auth', '', 'any', '', 'any', '当前用户获取其登录信息的接口', b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -36,7 +37,11 @@ INSERT INTO `meta_api_resource` VALUES ('696172706986594304', '组件实例配�
 INSERT INTO `meta_api_resource` VALUES ('696175296763793408', '菜单数据列表', '1', '/table/tree', 'meta_menu', b'1', b'0', 'auth', 'query:meta_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696175533460951040', '新增菜单', '1', '/form/doAdd', 'meta_menu', b'1', b'0', 'auth', 'add:meta_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696175709512667136', '更新菜单', '1', '/form/doUpdate', 'meta_menu', b'1', b'0', 'auth', 'update:meta_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_api_resource` VALUES ('696175862860615680', '菜单删除', '1', '/table/delete', 'meta_menu', b'1', b'0', 'auth', 'delete:meta_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('696175862860615680', '删除菜单', '1', '/table/delete', 'meta_menu', b'1', b'0', 'auth', 'delete:meta_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712009183419043840', 'Profile菜单数据列表', '1', '/table/list', 'meta_profile_menu', b'1', b'0', 'auth', 'query:meta_profile_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712009220052094976', '新增Profile菜单', '1', '/form/doAdd', 'meta_profile_menu', b'1', b'0', 'auth', 'add:meta_profile_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712009246052585472', '更新Profile菜单', '1', '/form/doUpdate', 'meta_profile_menu', b'1', b'0', 'auth', 'update:meta_profile_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712009271683977216', '删除Profile菜单', '1', '/table/delete', 'meta_profile_menu', b'1', b'0', 'auth', 'delete:meta_profile_menu', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696176715805888512', '路由列表', '1', '/table/tree', 'meta_router', b'1', b'0', 'auth', 'query_meta_router', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696176920043327488', '更新路由', '1', '/form/doUpdate', 'meta_router', b'1', b'0', 'auth', 'update:meta_router', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696177008371175424', '新增路由', '1', '/form/doAdd', 'meta_router', b'1', b'0', 'auth', 'add:meta_router', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -82,6 +87,7 @@ INSERT INTO `meta_auth` VALUES ('694149240007561216', 'menu:meta_feature', '菜�
 INSERT INTO `meta_auth` VALUES ('694149341149007872', 'menu:meta_component', '菜单:组件全局配置', '711604231555125248', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694149424439496704', 'menu:meta_component_instance', '菜单:组件实例配置', '711604268704075776', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694149476058796032', 'menu:meta_menu', '菜单:菜单维护', '711604305995632640', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712010564985032704', 'menu:meta_profile_menu', '菜单:Profile菜单维护', '712009913366351872', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694149530551193600', 'menu:meta_router', '菜单:路由维护', '711604336572108800', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694149774206701568', 'menu:meta_dict', '菜单:字典管理', '711603985097822208', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694149834445295616', 'menu:meta_exception', '菜单:异常信息', '711604059425083392', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -97,6 +103,7 @@ INSERT INTO `meta_auth` VALUES ('694343885119426560', 'route:meta_component', '�
 INSERT INTO `meta_auth` VALUES ('694344082931191808', 'route:meta_component:edit', '页面:组件全局配置-编辑', '711604231555125248', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694344336845967360', 'route:meta_router', '页面:路由维护', '711604336572108800', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694344409273208832', 'route:meta_menu', '页面:菜单维护', '711604305995632640', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712011228934967296', 'route:meta_profile_menu', '页面:Profile菜单维护', '712009913366351872', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694344675334688768', 'route:meta_dict', '页面:字典管理', '711603985097822208', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694344780561387520', 'route:meta_exception', '页面:异常信息', '711604059425083392', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('694344875012919296', 'route:meta_auth', '页面:权限配置', '711604024738189312', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -122,6 +129,10 @@ INSERT INTO `meta_auth` VALUES ('696155922124378112', 'add:meta_menu', '新增�
 INSERT INTO `meta_auth` VALUES ('696156011769237504', 'delete:meta_menu', '删除菜单', '711604305995632640', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696156079964426240', 'update:meta_menu', '更新菜单', '711604305995632640', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696156165645668352', 'query:meta_menu', '查询菜单', '711604305995632640', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712012617731936256', 'add:meta_profile_menu', '新增Profile菜单', '712009913366351872', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712012649470234624', 'delete:meta_profile_menu', '删除Profile菜单', '712009913366351872', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712012675860795392', 'update:meta_profile_menu', '更新Profile菜单', '712009913366351872', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712012702054223872', 'query:meta_profile_menu', '查询Profile菜单', '712009913366351872', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159659219881984', 'add:meta_user', '新增用户', '711603857981050880', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159713649364992', 'delete:meta_user', '删除用户', '711603857981050880', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159771941801984', 'update:meta_user', '更新用户', '711603857981050880', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -165,21 +176,22 @@ COMMIT;
 -- Records of meta_auth_module
 -- ----------------------------
 BEGIN;
+INSERT INTO `meta_auth_module` VALUES ('711604523105390592', '首页', NULL, 0, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603723775905792', '系统管理', NULL, 99, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711603760899690496', '平台维护', NULL, 100, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603857981050880', '用户管理', '711603723775905792', 0, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603907276705792', '角色管理', '711603723775905792', 1, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603985097822208', '字典管理', '711603723775905792', 2, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711604024738189312', '权限配置', '711603760899690496', 7, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711604059425083392', '异常信息', '711603723775905792', 4, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('711604059425083392', '异常信息', '711603723775905792', 3, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('711603760899690496', '平台维护', NULL, 100, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604134998052864', '元数据管理', '711603760899690496', 0, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604182171389952', '功能维护', '711603760899690496', 1, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604231555125248', '组件全局配置', '711603760899690496', 2, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604268704075776', '组件实例配置', '711603760899690496', 3, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604305995632640', '菜单维护', '711603760899690496', 4, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711604336572108800', '路由维护', '711603760899690496', 5, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711604368734031872', '接口资源', '711603760899690496', 6, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth_module` VALUES ('711604523105390592', '首页', NULL, 0, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('712009913366351872', 'Profile菜单维护', '711603760899690496', 5, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('711604336572108800', '路由维护', '711603760899690496', 6, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('711604368734031872', '接口资源', '711603760899690496', 7, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('711604024738189312', '权限配置', '711603760899690496', 8, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 
 
@@ -250,11 +262,18 @@ COMMIT;
 -- ----------------------------
 BEGIN;
 INSERT INTO `meta_menu` VALUES ('696347057069363200', '', '首页', b'0', b'0', 'dashboard', '/dashboard', 0, '', b'0', 'auth', '', 'any', '', 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_menu` VALUES ('702190979259699200', '7bcfbe31357f48bf8c88072a18208599', '字典管理', b'0', b'0', 'dict', '/dict', 3, NULL, b'1', 'auth', 'menu:meta_dict', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_menu` VALUES ('702191170834534400', '7bcfbe31357f48bf8c88072a18208599', '异常信息', b'0', b'0', 'el-icon-warning', '/exception', 99, NULL, b'1', 'auth', 'menu:meta_exception', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_menu` VALUES ('7bcfbe31357f48bf8c88072a18208599', NULL, '系统管理', b'0', b'0', 'system-manager', '/user', 3, NULL, b'1', 'auth', 'menu:sys', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_menu` VALUES ('96eab66157be4165b9916d6f8b079dd9', '7bcfbe31357f48bf8c88072a18208599', '角色管理', b'0', b'0', 'role', '/role', 1, NULL, b'1', 'auth', 'menu:meta_role', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_menu` VALUES ('7bcfbe31357f48bf8c88072a18208599', NULL, '系统管理', b'0', b'0', 'system-manager', '/user', 99, NULL, b'1', 'auth', 'menu:sys', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_menu` VALUES ('f49ce02324d94fa698a0db718e380074', '7bcfbe31357f48bf8c88072a18208599', '用户管理', b'0', b'0', 'user_manage', '/user', 0, NULL, b'1', 'auth', 'menu:meta_user', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_menu` VALUES ('96eab66157be4165b9916d6f8b079dd9', '7bcfbe31357f48bf8c88072a18208599', '角色管理', b'0', b'0', 'role', '/role', 1, NULL, b'1', 'auth', 'menu:meta_role', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_menu` VALUES ('702190979259699200', '7bcfbe31357f48bf8c88072a18208599', '字典管理', b'0', b'0', 'dict', '/dict', 2, NULL, b'1', 'auth', 'menu:meta_dict', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_menu` VALUES ('702191170834534400', '7bcfbe31357f48bf8c88072a18208599', '系统异常', b'0', b'0', 'el-icon-warning', '/exception', 3, NULL, b'1', 'auth', 'menu:meta_exception', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+COMMIT;
+
+-- ----------------------------
+-- Records of meta_profile_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `meta_profile_menu` VALUES ('712018050123173888', '个人中心', b'0', b'0', 'profile', '/profile', 0, '', b'0', 'auth', '', 'any', '', 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -356,14 +375,15 @@ COMMIT;
 -- Records of meta_router
 -- ----------------------------
 BEGIN;
-INSERT INTO `meta_router` VALUES ('2b17f805d48548ef89a574bd80a0dd3a', '698272484012724224', 'UserList', '用户列表', '/user', NULL, 'UserList', '{}', b'0', b'0', 0, '{}', b'1', 'auth', 'route:meta_user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_router` VALUES ('696345295902085120', '698272484012724224', 'Dashboard', '首页', '/dashboard', '', 'Dashboard', NULL, b'0', b'0', -99999, '{}', b'1', 'auth', NULL, 'any', NULL, 'any', '', b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_router` VALUES ('698272484012724224', NULL, 'MetaLayout', '布局组件', '/', '/dashboard', 'MetaLayout', NULL, b'1', b'0', 0, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_router` VALUES ('698273043436408832', NULL, 'Login', '登录', '/login', NULL, 'Login', NULL, b'0', b'0', 1, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('698272484012724224', NULL, 'MetaLayout', '布局组件', '/', '/dashboard', 'MetaLayout', NULL, b'1', b'0', 0, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('696345295902085120', '698272484012724224', 'Dashboard', '首页', '/dashboard', '', 'Dashboard', NULL, b'0', b'0', -99999, '{}', b'1', 'auth', NULL, 'any', NULL, 'any', '', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('712017299766382592', '698272484012724224', 'Profile', '个人中心', '/profile', '', 'Profile', NULL, b'0', b'0', 0, '{}', b'1', 'auth', NULL, 'any', NULL, 'any', '', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('712017406171680768', '698272484012724224', 'UserList', '用户管理', '/user', NULL, 'UserList', '{}', b'0', b'0', 1, '{}', b'1', 'auth', 'route:meta_user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('712017436462944256', '698272484012724224', 'RoleList', '角色管理', '/role', NULL, 'RoleList', '{}', b'0', b'0', 2, '{}', b'1', 'auth', 'route:meta_role', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('702189989265543168', '698272484012724224', 'DictList', '字典管理', '/dict', NULL, 'DictList', NULL, b'0', b'0', 3, '{}', b'1', 'auth', 'route:meta_dict', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router` VALUES ('702190236326825984', '698272484012724224', 'ExceptionList', '系统异常', '/exception', NULL, 'ExceptionList', NULL, b'0', b'0', 4, '{}', b'1', 'auth', 'route:meta_exception', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_router` VALUES ('698273460404752384', NULL, 'Page401', '401', '/401', NULL, 'Page401', NULL, b'0', b'0', 100, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_router` VALUES ('698273579418128384', NULL, 'Page404', '404', '*', NULL, 'Page404', NULL, b'0', b'0', 999999, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_router` VALUES ('702189989265543168', '698272484012724224', 'DictList', '字典维护', '/dict', NULL, 'DictList', NULL, b'0', b'0', 0, '{}', b'1', 'auth', 'route:meta_dict', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_router` VALUES ('702190236326825984', '698272484012724224', 'ExceptionList', '系统异常', '/exception', NULL, 'ExceptionList', NULL, b'0', b'0', 0, '{}', b'1', 'auth', 'route:meta_exception', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_router` VALUES ('e5a688069fcf43c8ab98af55c105890e', '698272484012724224', 'RoleList', '角色列表', '/role', NULL, 'RoleList', '{}', b'0', b'0', 0, '{}', b'1', 'auth', 'route:meta_role', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 

@@ -94,4 +94,9 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     public DefaultUserWithRoles createRoot(Root root) {
         return new DefaultUserWithRoles(root);
     }
+
+    @Override
+    public String userObjectCode() {
+        return "meta_user";
+    }
 }

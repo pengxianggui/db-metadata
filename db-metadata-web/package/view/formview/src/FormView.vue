@@ -128,14 +128,14 @@ export default {
       const {columns = [], form_type} = meta
       switch (form_type.toUpperCase()) {
         case formTypes.add: // 新增表单：备选值取默认值
-          columns.forEach(item => {
+          columns.filter(item => item.component_name !== 'RowGrid').forEach(item => {
             this.$set(this.model, item.name, utils.assertUndefined(model[item.name], item.default_value));
           });
           break;
         case formTypes.update: // 更新表单、查看表单: 备选址取record值
         case formTypes.view:
           const {record = {}} = meta
-          columns.forEach(item => {
+          columns.filter(item => item.component_name !== 'RowGrid').forEach(item => {
             this.$set(this.model, item.name, utils.assertUndefined(model[item.name], record[item.name]));
           });
           break;

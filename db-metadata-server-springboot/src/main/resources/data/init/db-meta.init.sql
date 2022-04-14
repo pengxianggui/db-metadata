@@ -285,6 +285,33 @@ CREATE TABLE `meta_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
 
 -- ----------------------------
+-- Table structure for meta_profile_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_profile_menu`;
+CREATE TABLE `meta_profile_menu` (
+                             `id` varchar(32) NOT NULL,
+                             `title` varchar(255) NOT NULL COMMENT '菜单名',
+                             `hidden` bit(1) NOT NULL DEFAULT b'0' COMMENT '隐藏',
+                             `disable` bit(1) NOT NULL DEFAULT b'0' COMMENT '禁用',
+                             `icon` text COMMENT '图标',
+                             `path` varchar(255) DEFAULT NULL COMMENT '路径',
+                             `order` int(11) DEFAULT '0' COMMENT '排序',
+                             `remark` text COMMENT '备注',
+                             `need_permit` bit(1) NOT NULL DEFAULT b'1' COMMENT '需要鉴权(关闭则后面配置无效)',
+                             `permit_by` varchar(10) NOT NULL DEFAULT 'auth' COMMENT '判定依据(auth-权限;role-角色)',
+                             `auths` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT '需要的权限编码(逗号分隔)',
+                             `auth_match_mode` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'any' COMMENT '权限匹配模式(any-任一匹配;all-所有匹配)',
+                             `roles` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT '需要的角色编码(逗号分隔)',
+                             `role_match_mode` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'any' COMMENT '角色匹配模式(any-任一匹配;all-所有匹配)',
+                             `build_in` bit(1) NOT NULL DEFAULT b'0' COMMENT '系统内置',
+                             `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `created_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '创建人',
+                             `updated_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+                             `updated_by` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '更新人',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Profile菜单';
+
+-- ----------------------------
 -- Table structure for meta_object
 -- ----------------------------
 DROP TABLE IF EXISTS `meta_object`;

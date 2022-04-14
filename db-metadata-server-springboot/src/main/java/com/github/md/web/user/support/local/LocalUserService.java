@@ -128,4 +128,9 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     public boolean resetPass(Object userId) {
         throw new OprNotSupportException("本地文件用户服务不支持重置密码");
     }
+
+    @Override
+    public String userObjectCode() {
+        throw new OprNotSupportException("本地文件用户服务不支持获取用户元对象编码");
+    }
 }

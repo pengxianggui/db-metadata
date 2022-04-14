@@ -97,6 +97,21 @@
     }
   },
   {
+    "type": "SingleGrid",
+    "name": "Profile菜单维护",
+    "code": "meta_profile_menu",
+    "config": {
+      "config": {
+        "objectCode": "meta_profile_menu"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_profile_menu.SearchView",
+        "TableView": "meta_profile_menu.TableView",
+        "FormView": "meta_profile_menu.FormView"
+      }
+    }
+  },
+  {
     "type": "TreeSingleGrid",
     "name": "路由维护",
     "code": "meta_router",

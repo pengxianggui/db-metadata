@@ -31,4 +31,11 @@ public interface UserService<U extends User> {
      * @return
      */
     boolean resetPass(Object userId);
+
+    /**
+     * 用户元对象编码
+     *
+     * @return
+     */
+    String userObjectCode();
 }

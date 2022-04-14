@@ -8,9 +8,11 @@ import RoleList from "./role/RoleList";
 import UserList from "./user/UserList";
 import DictList from "./dict/DictList";
 import ExceptionList from "./ex/ExceptionList";
+import Profile from "./user/Profile";
 
 export default [
     Dashboard,
+    Profile,
     Login,
     ApiResourceList,
     AuthList,

@@ -28,14 +28,10 @@ import java.util.List;
 @RequestMapping("menu")
 public class MenuController extends ControllerAdapter {
 
-    private String objectCode() {
-        return "meta_menu";
-    }
-
     @MetaAccess(value = Type.API)
     @GetMapping
     public Ret index() {
-        IMetaObject metaObject = metaService().findByCode(objectCode());
+        IMetaObject metaObject = metaService().findByCode("meta_menu");
         ParameterHelper parameterHelper = parameterHelper();
         TreeConfig treeConfig = treeConfig();
         String pid = parameterHelper.getPara(treeConfig.getPidKey(), "").trim();
@@ -47,6 +43,14 @@ public class MenuController extends ControllerAdapter {
 
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
         return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
+    }
+
+    @MetaAccess(value = Type.API)
+    @GetMapping("profile")
+    public Ret profileMenu() {
+        IMetaObject metaObject = metaService().findByCode("meta_profile_menu");
+        List<Record> records = businessService().findData(metaObject);
+        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(records)));
     }
 
     private TreeConfig treeConfig() {
