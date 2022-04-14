@@ -38,4 +38,12 @@ public interface UserService<U extends User> {
      * @return
      */
     String userObjectCode();
+
+    /**
+     * 为用户设置密码
+     * @param userId 用户id
+     * @param password 明文密码
+     * @return
+     */
+    boolean setPass(Object userId, String password);
 }

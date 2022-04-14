@@ -1,4 +1,5 @@
-import {isArray, isString, isEmpty, printErr} from "./utils/common";
+import {isArray, isString, isEmpty} from "./utils/common";
+import utils from './utils'
 import {appConfig} from "./config";
 import {restUrl} from "./constant/url";
 import Cache from "./constant/cacheKey";
@@ -11,15 +12,7 @@ import Token from "./token";
 export const access = {
     root: '0', // ROOT用户的用户id。为0表示是ROOT用户, 是DbMeta内置的用户，ROOT用户拥有所有权限, 即使没有绑定任何角色、权限。是DbMeta初始化时内置的用户
     // 当前用户
-    user: {
-        id: null,
-        username: null,
-        phone: null,
-        avatar: null,
-        roles: [],
-        auths: [],
-        attrs: {}
-    }
+    user: {}
 }
 
 /**
@@ -241,13 +234,9 @@ export function setAuths(auths = []) {
     return access.user.auths;
 }
 
-export function setUser({id = '', username = '', phone, avatar, roles = [], auths = []}) {
-    access.user.id = id;
-    access.user.username = username;
-    access.user.phone = phone;
-    access.user.avatar = avatar;
-    setRoles(roles)
-    setAuths(auths)
+export function setUser(user) {
+    utils.clear(access.user)
+    utils.reverseMerge(access.user, user)
 }
 
 export function getUser() {
@@ -266,7 +255,7 @@ export function getAuths() {
  * 清除用户信息和token
  */
 export function clearUser() {
-    setUser({id: null, username: '', phone: '', roles: [], auths: []})
+    setUser({})
     localStorage.removeItem(appConfig.tokenKey)
     Cache.clear()
 }

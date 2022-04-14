@@ -47,14 +47,6 @@ public class UserController extends ControllerAdapter {
     }
 
     @Authorize(justSign = true)
-    @GetMapping("detail")
-    public Ret getUserData() {
-        String userId = UserThreadLocal.getUser().userId();
-        User user = AuthenticationManager.me().userService().findById(userId);
-        return Ret.ok().set("data", user.toKv());
-    }
-
-    @Authorize(justSign = true)
     @PostMapping("update")
     public Ret updateUserData() {
         IMetaObject metaObject = metaService().findByCode(AuthenticationManager.me().userService().userObjectCode());
@@ -92,8 +84,18 @@ public class UserController extends ControllerAdapter {
     @MetaAccess
     @ApiOperation("重置用户密码")
     @PostMapping("reset-pass")
-    public Ret resetPass(@RequestBody String userId) {
+    public Ret resetPass() {
+        String userId = parameterHelper().get("userId");
         boolean flag = AuthenticationManager.me().userService().resetPass(userId);
         return flag ? Ret.ok().set("msg", "重置成功") : Ret.fail();
+    }
+
+    @Authorize(justSign = true)
+    @PostMapping("set-pass")
+    public Ret setPass() {
+        String password = parameterHelper().get("password");
+        String userId = UserThreadLocal.getUser().userId();
+        boolean flag = AuthenticationManager.me().userService().setPass(userId, password);
+        return flag ? Ret.ok().set("msg", "密码修改成功") : Ret.fail();
     }
 }

@@ -30,10 +30,8 @@ export const restUrl = {
     COMP_CONF_UPDATE: '/component/doUpdate', // 组件(默认|实例)配置更新
 
     COMP_GOBAL_CONF_LOAD: '/component/load?componentCode={componentCode}',    // 组件默认配置加载
-    COMP_GOBAL_CONF_DELETE: '/component/delete?componentCode={componentCode}',    // 组件默认配置删除
     COMP_INSTANCE_CONF_LOAD_EDIT: '/component/load?instanceCode={instanceCode}', // 组件实例配置加载
     COMP_INSTANCE_CONF_LOAD_NEW: '/component/load?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置加载[自动计算-新增时]
-    COMP_INSTANCE_CONF_DELETE: '/component/delete/?componentCode={componentCode}&objectCode={objectCode}', // 组件实例配置删除
 
 
     VIEW_INSTANCE_CONF: '/component/meta?ic={instanceCode}', // 容器组件实例配置
@@ -76,9 +74,9 @@ export const restUrl = {
     LOGIN_URL: '/user/login', // 登录接口地址
     LOGOUT_URL: '/user/logout', // 登出接口地址
     LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
-    USER_DETAIL: '/user/detail', // 获取用户详情记录
     USER_UPDATE: '/user/update', // 更新用户详情记录
-    RESET_PASS: '/user/reset-pass' // 用户密码重置接口
+    RESET_PASS: '/user/reset-pass', // 用户密码重置接口
+    SET_PASS: '/user/set-pass' // 用户设置密码
 };
 
 export default function (opts = {}) {

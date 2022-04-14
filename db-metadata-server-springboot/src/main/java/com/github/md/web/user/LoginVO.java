@@ -21,27 +21,16 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class LoginVO {
-    private String token;
-    private String id;
-    private String username;
-    private String avatar;
-    private Set<String> roles;
-    private Set<String> auths;
-    private Kv attrs;
+    private Kv data;
 
     public LoginVO(String token, UserWithRolesWrapper user) {
-        this.token = token;
-        this.id = user.userId();
-        this.username = user.userName();
-        this.roles = Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet());
-        this.auths = Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet());
-        this.attrs = user.attrs();
-
         String avatarUrl = null;
         UploadFileResolve uploadFileResolve = new UploadFileResolve(user.avatar());
         if (uploadFileResolve.hasFile()) {
             avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
         }
-        this.avatar = avatarUrl;
+        this.data = user.toKv().set("token", token)
+                .set("avatar", avatarUrl)
+                .delete("password");
     }
 }

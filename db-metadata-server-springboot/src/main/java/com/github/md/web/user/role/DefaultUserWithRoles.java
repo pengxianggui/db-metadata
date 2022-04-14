@@ -1,11 +1,13 @@
 package com.github.md.web.user.role;
 
 import com.github.md.analysis.kit.Kv;
-import com.github.md.web.user.User;
+import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.support.defaults.DefaultUser;
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2020/8/12 </p>
@@ -53,5 +55,15 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
     @Override
     public Kv attrs(Map attrs) {
         return user.attrs(attrs);
+    }
+
+    @Override
+    public Kv toKv() {
+        return this.user.toKv()
+                .set("id", userId())
+                .set("username", userName())
+                .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
+                .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
+                .set("attrs", attrs());
     }
 }

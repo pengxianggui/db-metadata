@@ -103,6 +103,18 @@ export function isEmpty(value) {
 }
 
 /**
+ * 清空对象所有的键值
+ * @param obj
+ */
+export function clear(obj) {
+    if (isObject(obj)) {
+        for (let key in obj) {
+            delete obj[key]
+        }
+    }
+}
+
+/**
  * 将字符串转为对象或数组
  * @param str
  * @returns {{}|any}

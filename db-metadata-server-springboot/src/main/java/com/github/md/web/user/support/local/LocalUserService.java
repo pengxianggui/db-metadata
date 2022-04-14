@@ -130,6 +130,11 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     }
 
     @Override
+    public boolean setPass(Object userId, String password) {
+        throw new OprNotSupportException("本地文件用户服务不支持设置密码");
+    }
+
+    @Override
     public String userObjectCode() {
         throw new OprNotSupportException("本地文件用户服务不支持获取用户元对象编码");
     }

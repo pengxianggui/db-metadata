@@ -59,7 +59,7 @@ export default {
       this.$confirm(`确定为用户${username}重置密码?`, '提示', {
         type: 'warning'
       }).then(() => {
-        this.$axios.safePost(restUrl.RESET_PASS, userId).then(({message = '重置成功'}) => {
+        this.$axios.safePost(restUrl.RESET_PASS, {userId: userId}).then(({message = '重置成功'}) => {
           this.$message.success(message)
         })
       })
