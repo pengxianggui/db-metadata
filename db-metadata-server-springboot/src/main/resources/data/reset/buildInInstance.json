@@ -938,7 +938,9 @@
           "sort": 0
         },
         "value_db_type": {
-          "sort": 3
+          "sort": 3,
+          "filterable": true,
+          "explain": "有时我们希望字典的值是非字符串类型, 你可以设置【值类型】。选择一个MySQL字段类型，系统将依据此类型将字典值自动转换为指定类型。比如, 你可以输入值为true，指定值类型为BIT。"
         },
         "order": {
           "sort": 4

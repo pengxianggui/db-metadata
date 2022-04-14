@@ -101,10 +101,17 @@ public class MetaDataTypeConvert {
      * @return
      */
     public static Object convert(String value, String dbFieldType) {
-        return cast(value, getType(dbFieldType));
+        return convert(value, getType(dbFieldType));
     }
 
-    public static Object cast(String s, Class c) {
+    /**
+     * 将字符串值转换为指定类型
+     *
+     * @param s 字符串值
+     * @param c 需要转换的java类型
+     * @return
+     */
+    public static Object convert(String s, Class c) {
         if (s == null) {
             return null;
         }

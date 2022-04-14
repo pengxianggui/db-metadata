@@ -294,6 +294,7 @@ INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696886708112855
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '697160516417753088', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '697160698198888448', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '711618459557040128', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696152559060127744', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149240007561216', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149341149007872', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149424439496704', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();

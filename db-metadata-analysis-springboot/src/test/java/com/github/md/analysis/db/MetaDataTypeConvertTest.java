@@ -1,11 +1,6 @@
 package com.github.md.analysis.db;
 
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Date;
-
-import static com.github.md.analysis.db.MetaDataTypeConvert.cast;
+import static com.github.md.analysis.db.MetaDataTypeConvert.convert;
 
 /**
  * <p> @Date : 2021/9/1 </p>
@@ -17,7 +12,7 @@ class MetaDataTypeConvertTest {
 
     public static void main(String[] args) {
         {
-            Object s = cast("false", Boolean.class);
+            Object s = convert("false", Boolean.class);
             System.out.println(s);
             System.out.println(s.getClass());
         }
