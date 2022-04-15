@@ -140,7 +140,13 @@ export default {
       this.getAllNodes().forEach(node => node.expanded = false);
     },
     handleAdd() {
-      this.doEdit();
+      const params = {}
+      const {activeData = {}, treeConfig: {idKey, pidKey}} = this
+
+      if (!utils.isEmpty(activeData) && !utils.isEmpty(idKey) && !utils.isEmpty(pidKey)) {
+        params[pidKey] = activeData[idKey]
+      }
+      this.openFormView(utils.resolvePath(restUrl.RECORD_TO_ADD, params))
     },
     handleEdit() {
       const {activeData, primaryKey} = this
@@ -150,22 +156,23 @@ export default {
       }
 
       const primaryValue = utils.extractValue(activeData, primaryKey)
-      this.doEdit(primaryValue) // params ev,row,index is for convenient to override
+      let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
+      this.openFormView(restUrl.RECORD_TO_UPDATE, {primaryKv: primaryKv})
     },
-    doEdit(primaryValue) {
-      const {primaryKey} = this
-      let url, params
-
-      if (!utils.isEmpty(primaryValue)) { // 更新
-        let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-
-        url = restUrl.RECORD_TO_UPDATE
-        params = {primaryKv: primaryKv}
-      } else { // 新增
-        url = restUrl.RECORD_TO_ADD
-      }
-      this.openFormView(url, params);
-    },
+    // doEdit(primaryValue) {
+    //   const {primaryKey} = this
+    //   let url, params
+    //
+    //   if (!utils.isEmpty(primaryValue)) { // 更新
+    //     let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
+    //
+    //     url = restUrl.RECORD_TO_UPDATE
+    //     params = {primaryKv: primaryKv}
+    //   } else { // 新增
+    //     url = restUrl.RECORD_TO_ADD
+    //   }
+    //   this.openFormView(url, params);
+    // },
     // 删除单行
     handleDelete() {
       const {activeData, choseData} = this
@@ -349,12 +356,16 @@ export default {
     treeRef() {
       return this.$refs[this.treeRefName]
     },
-    treeConf() {
+    treeConf() { // el-tree 的配置项
       const {meta: {conf}, $attrs} = this
       const treeConf = {}
       this.$reverseMerge(treeConf, conf)
       this.$reverseMerge(treeConf, $attrs)
       return treeConf
+    },
+    treeConfig() { // 树结构配置信息
+      const {meta: {treeConfig = {}}} = this;
+      return treeConfig
     },
     multiSelect() {
       const {meta: {conf: {'show-checkbox': multiSelect} = {}} = {}} = this

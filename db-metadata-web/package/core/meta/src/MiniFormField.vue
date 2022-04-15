@@ -108,6 +108,7 @@
 import utils from '../../../utils'
 import OptionsInput from '../../../meta/form-builder/relate/OptionsInput'
 import {isEmpty, isString} from "../../../utils/common";
+import {restUrl} from "../../../constant/url";
 
 export default {
   name: "MiniFormField",
@@ -162,7 +163,7 @@ export default {
   },
   methods: {
     checkSql(sql) {
-      this.$axios.safeGet(this.$compile('/check/sql?sql={sql}', {sql: sql})).then(({msg = '校验通过'}) => {
+      this.$axios.safeGet(this.$compile(restUrl.CHECK_SQL, {sql: sql})).then(({msg = '校验通过'}) => {
         this.$message.success(msg)
       }).catch(({msg}) => {
         this.$message.error(msg)

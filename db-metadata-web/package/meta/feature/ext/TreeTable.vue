@@ -90,15 +90,13 @@ export default {
     resetTreeRelate(item) {
       this.$reverseMerge(item, {
         "config": {
-          "idKey": null,
-          "pidKey": null,
-          "rootIdentify": null,
-          "label": null,
-          "isSync": false,
+          "objectCode": null,
           "primaryKey": null
         },
         "instanceCodes": {
-          "TreeView": null
+          "TreeView": null,
+          "FormView": null,
+          "SearchView": null
         }
       })
     },

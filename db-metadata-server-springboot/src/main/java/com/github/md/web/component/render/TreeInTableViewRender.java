@@ -32,7 +32,8 @@ public class TreeInTableViewRender implements ComponentRender<TableTreeView> {
         this.componentInstanceConfig = instanceFlatConfig;
         component.getMeta().putIfAbsent("objectCode", metaObject.code());
         Preconditions.checkNotNull(metaObject.configParser().treeConfig(), "未找到[%s]对象的数据结构配置信息,请在[元对象配置]设置[数据结构->树形表]", metaObject.code());
-        component.getMeta().putIfAbsent("treeInTableConfig", JSON.parseObject(metaObject.configParser().treeConfig()));
+        // 将元对象的树结构配置设置到组件实例配置中
+        component.getMeta().putIfAbsent("treeConfig", JSON.parseObject(metaObject.configParser().treeConfig()));
     }
 
     @Override

@@ -226,33 +226,23 @@ export default {
       }
       this.openFormView(url, params)
     },
+    // 新增一行
+    handleAdd() {
+      const {activeData, treeConfig: {idKey, pidKey}} = this
+
+      let params = {}
+      if (!utils.isEmpty(activeData) && !utils.isEmpty(idKey) && !utils.isEmpty(pidKey)) {
+        params[pidKey] = activeData[idKey]
+      }
+      this.openFormView(utils.resolvePath(restUrl.RECORD_TO_ADD, params))
+    },
     handleEdit(ev, row, index) { // edit/add
       if (ev) ev.stopPropagation();
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);
 
-      this.doEdit(primaryValue, ev, row, index); // params ev,row,index is for convenient to override
-    },
-    doEdit(primaryValue) {
-      const {activeData, primaryKey, treeConf: {idKey, pidKey}} = this;
-      let url, params;
-
-      if (!utils.isEmpty(primaryValue)) { // 更新
-        let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-        url = restUrl.RECORD_TO_UPDATE
-        params = {primaryKv: primaryKv}
-      } else { // 新增
-        let fillParams = function (path) {
-          if (!utils.isEmpty(activeData)) {
-            let params = {}
-            params[pidKey] = activeData[idKey]
-            path = resolvePath(path, params)
-          }
-          return path
-        }
-        url = fillParams(restUrl.RECORD_TO_ADD)
-      }
-      this.openFormView(url, params);
+      let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
+      this.openFormView(restUrl.RECORD_TO_UPDATE, {primaryKv: primaryKv})
     },
     openFormView(url, params = {}) {
       this.$emit('open-form-view', {url: url, params: params})
@@ -327,10 +317,6 @@ export default {
           this.getData();
         })
       });
-    },
-    // 新增一行
-    handleAdd() {
-      this.doEdit();
     },
     handleRowClick(row, col, event) {
       this.$emit('row-click', {row, col, event})
@@ -443,9 +429,9 @@ export default {
 
       return utils.mergeObject({}, operationColumn, operationColumnConf);
     },
-    treeConf() {
-      const {meta: {treeInTableConfig: treeConf}} = this;
-      return treeConf
+    treeConfig() {
+      const {meta: {treeConfig}} = this;
+      return treeConfig
     },
     buttonsConf() {
       const {meta: {"operation-column": {buttons: buttonsConf = {}} = {}} = {}} = this

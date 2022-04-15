@@ -143,7 +143,8 @@ export const FEATURE_TYPE = {
                 },
                 "instanceCodes": {
                     "TreeView": null,
-                    "FormView": null
+                    "FormView": null,
+                    "SearchView": null
                 }
             },
             "table": {
