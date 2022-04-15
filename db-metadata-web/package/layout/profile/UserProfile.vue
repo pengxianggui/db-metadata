@@ -1,10 +1,9 @@
 <template>
   <div class="user-profile">
     <div class="user-div">
-      <el-dropdown v-if="user.id">
-        <img :src="avatarSrc" class="avatar" v-if="user.avatar">
-        <div class="avatar" v-else>
-          <svg-icon :value="avatarSrc" class="svg-icon"></svg-icon>
+      <el-dropdown v-if="user.id" class="">
+        <div>
+          <svg-icon :value="avatarSrc" class="avatar"></svg-icon>
         </div>
 
         <!--快捷菜单-->
@@ -140,15 +139,16 @@ export default {
   },
   computed: {
     avatarSrc() {
-      const {user: {age, sex, avatar}} = this
-      if (!isEmpty(avatar)) {
-        const {defaults: {baseURL} = {}} = this.$axios
-        return resolve(baseURL, avatar)
-      }
-
-      if (isEmpty(sex) || isEmpty(age)) {
-        return 'monster' + randomInt(1, 2)
-      }
+      // const {user: {age, sex, avatar}} = this
+      // if (!isEmpty(avatar)) {
+      //   const {defaults: {baseURL} = {}} = this.$axios
+      //   return resolve(baseURL, avatar)
+      // }
+      //
+      // if (isEmpty(sex) || isEmpty(age)) {
+      //   return 'avatar' + randomInt(1, 2)
+      // }
+      return this.user.avatar
     },
     enableCertification() {
       return appConfig.enableCertification
@@ -179,17 +179,14 @@ $headerHeight: 60px;
 
     div.avatar {
       display: inline-block;
+      height: 100%;
+      width: 100%;
       font-size: 25px;
       border: 1px solid #cbcbd7;
       border-radius: $avatarSideLength / 2;
       line-height: $avatarSideLength;
       padding: 5px;
       box-sizing: border-box;
-
-      .svg-icon {
-        height: 100%;
-        width: 100%;
-      }
     }
   }
 }

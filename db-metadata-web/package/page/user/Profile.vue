@@ -3,10 +3,7 @@
     <row-grid :span="[12, 12]">
       <template #0>
         <div class="avatar-box">
-          <img :src="avatarSrc" class="avatar" v-if="user.avatar">
-          <div class="avatar" v-else>
-            <svg-icon :value="avatarSrc" class="svg-icon"></svg-icon>
-          </div>
+          <svg-icon :value="avatarSrc" class="avatar"></svg-icon>
         </div>
       </template>
       <template #1>
@@ -120,15 +117,16 @@ export default {
   },
   computed: {
     avatarSrc() {
-      const {user: {age, sex, avatar}} = this
-      if (!isEmpty(avatar)) {
-        const {defaults: {baseURL} = {}} = this.$axios
-        return resolve(baseURL, avatar)
-      }
-
-      if (isEmpty(sex) || isEmpty(age)) {
-        return 'monster' + randomInt(1, 2)
-      }
+      // const {user: {age, sex, avatar}} = this
+      // if (!isEmpty(avatar)) {
+      //   const {defaults: {baseURL} = {}} = this.$axios
+      //   return resolve(baseURL, avatar)
+      // }
+      //
+      // if (isEmpty(sex) || isEmpty(age)) {
+      //   return 'monster' + randomInt(1, 2)
+      // }
+      return this.user.avatar
     },
   }
 }
@@ -157,10 +155,13 @@ export default {
 
   .avatar-box {
     text-align: center;
+
     .avatar {
-      width: 200px;
-      height: 200px;
-      font-size: 200px;
+      $avatarBorderLength: 200px;
+      width: $avatarBorderLength;
+      height: $avatarBorderLength;
+      font-size: $avatarBorderLength;
+      border-radius: $avatarBorderLength / 2;
     }
   }
 }

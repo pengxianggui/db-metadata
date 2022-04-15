@@ -407,7 +407,7 @@ CREATE TABLE `meta_user` (
                              `id` varchar(32) CHARACTER SET utf8 NOT NULL,
                              `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '用户名',
                              `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '密码',
-                             `avatar` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT '头像',
+                             `avatar` json DEFAULT NULL COMMENT '头像',
                              `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
                              `realname` varchar(255) DEFAULT NULL COMMENT '真实姓名',
                              `sex` varchar(1) DEFAULT NULL COMMENT '性别',

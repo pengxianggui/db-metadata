@@ -31,7 +31,8 @@ public class DefaultUser implements User {
             attrMap = new HashMap();
         }
 
-        data.set("attrs", attrMap);
+        // FIXME 存成字符串是防止 ActiveRecord 入库时json值保存出错。这是一个需要解决的问题： ActiveRecord 支持JSON存储
+        data.set("attrs", JSONObject.toJSONString(attrMap));
         this.data = data;
     }
 
@@ -52,7 +53,7 @@ public class DefaultUser implements User {
 
     @Override
     public Kv attrs() {
-        return Kv.create().set((Map) data.get("attrs"));
+        return Kv.create().set(JSONObject.parseObject(data.get("attrs")));
     }
 
     @Override

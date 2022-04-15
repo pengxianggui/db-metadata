@@ -1085,6 +1085,12 @@
       "_fields": {
         "build_in": {
           "default_value": null
+        },
+        "p_value": {
+          "filterable": true
+        },
+        "type": {
+          "filterable": true
         }
       }
     },
@@ -1539,7 +1545,7 @@
           "show": true,
           "conf": {
             "fixed": "right",
-            "width": "220"
+            "width": "220px"
           }
         }
       }
@@ -1600,7 +1606,7 @@
           "show": true,
           "conf": {
             "fixed": "right",
-            "width": "220"
+            "width": "280px"
           }
         }
       },

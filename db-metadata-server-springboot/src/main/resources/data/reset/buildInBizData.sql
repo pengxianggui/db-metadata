@@ -62,6 +62,7 @@ INSERT INTO `meta_api_resource` VALUES ('696339795437293568', '用户列表', '1
 INSERT INTO `meta_api_resource` VALUES ('696339990992523264', '用户新增接口', '1', '/form/doAdd', 'meta_user', b'1', b'0', 'auth', 'add:meta_user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696340082122166272', '用户更新接口', '1', '/form/doUpdate', 'meta_user', b'1', b'0', 'auth', 'update:meta_user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696340217535270912', '用户删除接口', '1', '/table/delete', 'meta_user', b'1', b'0', 'auth', 'delete:meta_user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_api_resource` VALUES ('712273842910924800', '用户密码重置接口', '0', '/user/reset-pass', NULL, b'1', b'0', 'auth', 'reset:pass:for-user', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696342334748626944', '角色新增接口', '1', '/form/doAdd', 'meta_role', b'1', b'0', 'auth', 'add:meta_role', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696342436988981248', '角色删除接口', '1', '/table/delete', 'meta_role', b'1', b'0', 'auth', 'delete:meta_role', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_api_resource` VALUES ('696342549929005056', '角色更新接口', '1', '/form/doUpdate', 'meta_role', b'1', b'0', 'auth', 'update:meta_role', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -137,14 +138,15 @@ INSERT INTO `meta_auth` VALUES ('696159659219881984', 'add:meta_user', '新增�
 INSERT INTO `meta_auth` VALUES ('696159713649364992', 'delete:meta_user', '删除用户', '711603857981050880', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159771941801984', 'update:meta_user', '更新用户', '711603857981050880', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159836404060160', 'query:meta_user', '查询用户', '711603857981050880', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('696886596984770560', 'route:meta_user', '页面:用户管理', '711603857981050880', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('697160516417753088', 'bind:roles:to-user', '为指定用户绑定角色', '711603857981050880', 'api,button', '为用户绑定角色', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('712273213945679872', 'reset:pass:for-user', '重置密码', '711603857981050880', 'api,button', '为指定用户重置密码', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159898110660608', 'add:meta_role', '新增角色', '711603907276705792', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696159978653880320', 'delete:meta_role', '删除角色', '711603907276705792', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696160054025523200', 'update:meta_role', '更新角色', '711603907276705792', 'api,button', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696160111751729152', 'query:meta_role', '查询角色', '711603907276705792', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696176274166648832', 'query_meta_router', '查询路由', '711604336572108800', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth` VALUES ('696886596984770560', 'route:meta_user', '页面:用户管理', '711603857981050880', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('696886708112855040', 'route:meta_role', '页面:角色管理', '711603907276705792', 'router', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
-INSERT INTO `meta_auth` VALUES ('697160516417753088', 'bind:roles:to-user', '为指定用户绑定角色', '711603857981050880', 'api,button', '为用户绑定角色', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('697160698198888448', 'bind:auths-to-role', '为指定角色绑定权限', '711603907276705792', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('711618459557040128', 'menu:sys', '菜单:系统管理', '711603723775905792', 'menu', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('711621009249275904', 'add:meta_object', '创建元对象', '711604134998052864', 'api,button', '拥有元对象创建权限', b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -311,6 +313,7 @@ INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696160111751729
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696886596984770560', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696886708112855040', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '697160516417753088', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '712273213945679872', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '697160698198888448', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '711618459557040128', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696152559060127744', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
@@ -318,6 +321,7 @@ INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149240007561
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149341149007872', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149424439496704', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149476058796032', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '712010564985032704', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149530551193600', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149907166138368', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149960505102336', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();

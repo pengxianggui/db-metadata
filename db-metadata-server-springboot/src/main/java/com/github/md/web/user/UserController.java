@@ -53,7 +53,7 @@ public class UserController extends ControllerAdapter {
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
         String userId = UserThreadLocal.getUser().userId();
         metadata.set(metaObject.primaryKey(), userId);
-        boolean flag = metaService().updateData(metaObject, metadata);
+        boolean flag = AuthenticationManager.me().userService().updateById(userId, metadata);
         return flag ? Ret.ok() : Ret.fail();
     }
 

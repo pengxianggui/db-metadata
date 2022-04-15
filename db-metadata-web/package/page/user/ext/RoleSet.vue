@@ -74,7 +74,7 @@ export default {
       const {options} = this
       const groups = {}
       options.forEach(o => {
-        let group = (utils.isEmpty(o.group) ? '默认' : o.group)
+        let group = (utils.isEmpty(o.role_type) ? '默认' : o.role_type)
         if (groups.hasOwnProperty(group)) {
           groups[group].push(o)
         } else {

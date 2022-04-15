@@ -605,6 +605,9 @@ export function param2Obj(url) {
  * @returns {Boolean}
  */
 export function isExternal(path) {
+    if (isEmpty(path)) {
+        return false;
+    }
     return /^(https?:|mailto:|tel:)/.test(path)
 }
 

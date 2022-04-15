@@ -1,29 +1,48 @@
 <template>
-    <div v-if="isExternal" :style="styleExternalIcon"
-         class="svg-external-icon svg-icon" v-on="$listeners" v-bind="$attrs"></div>
-    <i v-else-if="value.startsWith('el-icon')" :class="value" class="svg-icon"></i>
+    <div v-if="valueType === 'external'" :style="styleExternalIcon"
+         class="external-icon svg-icon" v-on="$listeners" v-bind="$attrs"></div>
+    <img v-else-if="valueType === 'internal'" :src="imgSrc" class="internal-icon svg-icon">
+    <i v-else-if="valueType === 'icon'" :class="value" class="svg-icon"></i>
     <svg v-else aria-hidden="true" class="svg-icon" v-on="$listeners" v-bind="$attrs">
         <use :xlink:href="iconName"/>
     </svg>
 </template>
 
 <script>
-    import {isExternal} from '../../../utils/common'
+    import {utils} from "../../../index";
 
     export default {
         name: 'SvgIcon',
         props: {
             value: {
                 type: String,
-                required: true
+                required: false
             }
         },
         computed: {
-            isExternal() {
-                return isExternal(this.value)
+            valueType() { // 值类型：external: 外部链接、internal:相对路径地址、icon: el-icon图标、svg: svg图标
+              const {value} = this
+              if (utils.isEmpty(value)) {
+                return 'svg'
+              }
+
+              if (utils.isExternal(value)) { // 外部链接
+                return 'external'
+              } else if (value.startsWith('/')) { // 相对路径
+                return 'internal'
+              } else if (value.startsWith('el-icon-')) { // ElementUI原生图标
+                return 'icon'
+              } else {
+                return 'svg'
+              }
             },
             iconName() {
-                return `#me-icon-${this.value}`
+                const value = utils.assertEmpty(this.value, 'defaultSvg')
+                return `#me-icon-${value}`
+            },
+            imgSrc() {
+                const {defaults: {baseURL} = {}} = this.$axios
+                return utils.resolve(baseURL, this.value)
             },
             styleExternalIcon() {
                 return {
@@ -44,9 +63,13 @@
         text-align: center;
     }
 
-    .svg-external-icon {
+    .external-icon {
         background-color: currentColor;
         mask-size: cover !important;
+        display: inline-block;
+    }
+
+    .internal-icon {
         display: inline-block;
     }
 </style>

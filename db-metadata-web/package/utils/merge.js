@@ -7,9 +7,10 @@ import * as common from './common'
  * @param opt1 opt1中的k-v将保留
  * @param opt2 不会改变opt2
  * @param deep 是否深拷贝模式, 默认true
+ * * @param ignoreNullAndUndefined 若为true, 则当opt2中的键值如果是null或undefined, 则不会覆盖到opt1中。默认是false
  * @returns {} 返回merge后的opt1的深拷贝对象
  */
-export function merge(opt1, opt2, deep = true) {
+export function merge(opt1, opt2, deep = true, ignoreNullAndUndefined = false) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
@@ -25,11 +26,18 @@ export function merge(opt1, opt2, deep = true) {
     let deepMerge = function (obj1, obj2) {
         if (!common.isObject(obj1) || !common.isObject(obj2)) return;
         for (let key in obj2) {
+            let valueOfObj1 = obj1[key]
+            let valueOfObj2 = obj2[key]
+
+            if (ignoreNullAndUndefined === true && (common.isUndefined(valueOfObj2) || common.isNull(valueOfObj2))) {
+                continue
+            }
+
             if (!(key in obj1)) {
-                set(merge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
+                set(merge.prototype.Vue, self, obj1, key, common.deepClone(valueOfObj2));
             } else {
                 if (!deep) return;
-                deepMerge(obj1[key], obj2[key])
+                deepMerge(valueOfObj1, valueOfObj2)
             }
         }
     };
@@ -45,9 +53,10 @@ export function merge(opt1, opt2, deep = true) {
  * @param opt1 opt1中的k-v将被覆盖
  * @param opt2
  * @param deep 是否深拷贝模式, 默认true
+ * @param ignoreNullAndUndefined 若为true, 则当opt2中的键值如果是null或undefined, 则不会覆盖到opt1中。默认是false
  * @returns {} 返回merge后的opt1的深拷贝对象
  */
-export function reverseMerge(opt1, opt2, deep = true) {
+export function reverseMerge(opt1, opt2, deep = true, ignoreNullAndUndefined = false) {
     let self = this;
 
     if (opt2 === null || !common.isObject(opt2)) {
@@ -62,14 +71,21 @@ export function reverseMerge(opt1, opt2, deep = true) {
 
     let deepMerge = function (obj1, obj2) {
         for (let key in obj2) {
+            let valueOfObj1 = obj1[key]
+            let valueOfObj2 = obj2[key]
+
+            if (ignoreNullAndUndefined === true && (common.isUndefined(valueOfObj2) || common.isNull(valueOfObj2))) {
+                continue
+            }
+
             if (key in obj1) {
-                if (common.isObject(obj1[key]) && common.isObject(obj2[key]) && deep) {
-                    deepMerge(obj1[key], obj2[key])
+                if (common.isObject(valueOfObj1) && common.isObject(valueOfObj2) && deep) {
+                    deepMerge(valueOfObj1, valueOfObj2)
                 } else {
-                    set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
+                    set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(valueOfObj2));
                 }
             } else {
-                set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(obj2[key]));
+                set(reverseMerge.prototype.Vue, self, obj1, key, common.deepClone(valueOfObj2));
             }
         }
     };

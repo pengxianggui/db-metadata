@@ -15,6 +15,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.springframework.boot.system.ApplicationHome;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -87,6 +89,13 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     public LocalUser findById(Object idValue) {
         List<LocalUser> userList = findAll();
         return userList.stream().filter(u -> String.valueOf(idValue).equals(u.userId())).findFirst().orElse(null);
+    }
+
+    @Override
+    public boolean updateById(Object idValue, Map data) {
+        data.put(LocalUser.ID_KEY, idValue);
+        LocalUser user = new LocalUser(data);
+        return updateById(user);
     }
 
     /**

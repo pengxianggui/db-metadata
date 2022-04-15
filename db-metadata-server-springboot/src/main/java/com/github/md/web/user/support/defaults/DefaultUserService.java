@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,8 +50,19 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     }
 
     @Override
+    public boolean updateById(Object idValue, Map data) {
+        Record record = new Record().setColumns(data);
+        return updateById(new DefaultUser(record));
+    }
+
+    @Override
     public boolean updateById(DefaultUser user) {
-        return db().update("meta_user", user.getData());
+        boolean flag = db().update("meta_user", user.getData());
+        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+        MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
+        DefaultUserWithRoles defaultUserWithRoles = new DefaultUserWithRoles(user, roleArr);
+        setLogged(defaultUserWithRoles); // 更新会话缓存
+        return flag;
     }
 
     @Override

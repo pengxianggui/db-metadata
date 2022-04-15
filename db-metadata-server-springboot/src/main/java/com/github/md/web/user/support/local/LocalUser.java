@@ -16,6 +16,8 @@ import java.util.Map;
  */
 public class LocalUser implements User, UserWithRolesWrapper {
 
+    public static final String ID_KEY = "userId";
+
     Kv attrs;
 
     MRRole[] roles;
@@ -36,7 +38,7 @@ public class LocalUser implements User, UserWithRolesWrapper {
 
     @Override
     public String userId() {
-        return attrs.getStr("userId");
+        return attrs.getStr(ID_KEY);
     }
 
     @Override

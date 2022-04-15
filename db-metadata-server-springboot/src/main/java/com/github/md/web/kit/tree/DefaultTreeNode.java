@@ -79,10 +79,14 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
 
     @Override
     public int compareTo(TreeNode node) {
-        if (this.getTreeConfig().isAsc()) {
-            return getOrder().compareTo(node.getOrder());
-        } else {
-            return 0 - getOrder().compareTo(node.getOrder());
+        try {
+            if (this.getTreeConfig().isAsc()) {
+                return getOrder().compareTo(node.getOrder());
+            } else {
+                return 0 - getOrder().compareTo(node.getOrder());
+            }
+        } catch (ClassCastException e) { // 排序前后的两个值类型不同时会抛出异常,
+            return 0;
         }
     }
 
@@ -108,6 +112,7 @@ public class DefaultTreeNode implements TreeNode<String, Record> {
 
     /**
      * 防止 数据库 内置字段时会带上反引号。如: `index`
+     *
      * @param orderBy
      * @return
      */
