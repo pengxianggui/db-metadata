@@ -54,8 +54,12 @@
               <i class="el-icon-success"></i>
               <span>反选</span>
             </el-dropdown-item>
+            <el-dropdown-item command="getData">
+              <i class="el-icon-refresh"></i>
+              <span>刷新数据</span>
+            </el-dropdown-item>
             <slot name="suffix-btn" v-bind:conf="operationBarConf" v-bind:choseData="choseData"
-                v-bind:activeData="activeData"></slot>
+                  v-bind:activeData="activeData"></slot>
           </el-dropdown-menu>
         </el-dropdown>
       </component>
@@ -65,6 +69,7 @@
     <el-tree :ref="treeRefName" :data="innerData"
              v-bind="treeConf"
              :props="props"
+             :default-expanded-keys="defaultExpandedKeys"
              @node-click="handleNodeClick"
              @node-contextmenu="$emit('node-contextmenu')"
              @check-change="$emit('check-change')"
@@ -105,7 +110,8 @@ export default {
       innerData: [],
       activeData: {},
       choseData: [],
-      halfChoseData: []
+      halfChoseData: [],
+      defaultExpandedKeys: []
     }
   },
   methods: {
@@ -159,20 +165,6 @@ export default {
       let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
       this.openFormView(restUrl.RECORD_TO_UPDATE, {primaryKv: primaryKv})
     },
-    // doEdit(primaryValue) {
-    //   const {primaryKey} = this
-    //   let url, params
-    //
-    //   if (!utils.isEmpty(primaryValue)) { // 更新
-    //     let primaryKv = (primaryKey.length <= 1 ? primaryValue[0] : utils.spliceKvs(primaryKey, primaryValue));
-    //
-    //     url = restUrl.RECORD_TO_UPDATE
-    //     params = {primaryKv: primaryKv}
-    //   } else { // 新增
-    //     url = restUrl.RECORD_TO_ADD
-    //   }
-    //   this.openFormView(url, params);
-    // },
     // 删除单行
     handleDelete() {
       const {activeData, choseData} = this
@@ -184,15 +176,7 @@ export default {
         this.handleBatchDelete([activeData])
         return
       }
-      this.$message.warning('请点击或勾选要删除的节点')
-      // const primaryValue = utils.extractValue(activeData, primaryKey);
-      // let primaryKvExp;
-      // if (primaryKey.length > 1 && primaryValue.length > 1) { // 联合主键, 目标: primaryKvExp="id=pk1_v1,pk2_v2"
-      //   primaryKvExp = 'id=' + utils.spliceKvs(primaryKey, primaryValue);
-      // } else {    // 单主键, 目标: primaryKvExp="pk=v"
-      //   primaryKvExp = utils.spliceKv(primaryKey[0], primaryValue[0], '=');
-      // }
-      // this.doDelete([activeData], primaryKvExp);
+      this.$message.warning('请点选要删除的节点')
     },
     // 批量删除
     handleBatchDelete(dataArr) {
@@ -226,7 +210,7 @@ export default {
      * 单条删除("id=pk1_v1,pk2_v2" 或 "pk=v"), 批量删除("id=pk1_v1,pk2_v2&id=pk1_v3,pk2_v4" 或 "pk=v1,v2,v3")
      */
     doDelete(data, primaryKvExp) {
-      const {meta: {delete_url, conf: { props: {label} = {}}}} = this;
+      const {meta: {delete_url, conf: {props: {label} = {}}}} = this;
 
       const labels = data.map(d => d[label])
       const deleteDataLabels = labels.join(',')
@@ -273,7 +257,15 @@ export default {
       this.$emit('check', row, {checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys})
       this.$emit('chose-change', checkedNodes);
     },
-
+    keepExpandedKeys() {
+      const {idKey} = this.treeConfig
+      this.$nextTick(() => {
+        const nodes = this.treeRef.store._getAllNodes()
+        if (utils.isArray(nodes)) {
+          this.defaultExpandedKeys = nodes.filter(n => n.expanded).map(n => n.data[idKey])
+        }
+      })
+    },
     filter(value) {
       this.treeRef.filter(value);
     },
@@ -326,6 +318,7 @@ export default {
 
       let url = this.meta['data_url'];
 
+      this.keepExpandedKeys()
       this.$axios.safeGet(url, {
         params: params
       }).then(({data}) => {

@@ -131,8 +131,7 @@ public class QueryHelper {
      * </pre>
      *
      * @param metaObject
-     * @return 复合主键[[v1, v2], [v1, v2]]
-     * 单主键[[v1],[v2]]
+     * @return 一定是个二维数组。复合主键: [[v1, v2], [v1, v2]]; 单主键: [[v1],[v2]]
      */
     public Object[] getPks(IMetaObject metaObject) {
         List<Object[]> pks = new ArrayList<>();

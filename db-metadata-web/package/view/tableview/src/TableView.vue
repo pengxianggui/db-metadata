@@ -7,6 +7,7 @@
 
         <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
                    :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                   :class="{'not-btn-group': !operationBarConf.group}"
                    v-if="operationBarConf.show">
           <slot name="prefix-btn" v-bind:conf="operationBarConf"
                 v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
@@ -452,6 +453,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .not-btn-group > * {
+      margin: 0 5px;
+    }
   }
 
   .pagination-bar {

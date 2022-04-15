@@ -56,12 +56,20 @@ public class TreeKit {
         }
     };
 
+    /**
+     * 从tree中提取出所有主键，放到result中
+     *
+     * @param tree
+     * @param result 这是一个主键列表，注意，由于dbmeta需要兼容联合主键的情况，所以result中的元素是数组
+     * @param <S>
+     * @param <N>
+     */
     public static <S, N> void getChildIds(List<TreeNode<S, N>> tree, List<Object> result) {
         for (TreeNode treeNode : tree) {
             if (treeNode.getChildren() != null && !treeNode.getChildren().isEmpty()) {
                 getChildIds(treeNode.getChildren(), result);
             } else {
-                result.add(treeNode.getId());
+                result.add(new Object[]{treeNode.getId()});
             }
         }
     }
