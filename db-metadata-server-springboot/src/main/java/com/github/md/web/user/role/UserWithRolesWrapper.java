@@ -93,6 +93,7 @@ public interface UserWithRolesWrapper extends User {
         return Kv.create()
                 .set("id", userId())
                 .set("username", userName())
+                .set("avatar", avatar())
                 .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
                 .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
                 .set("attrs", attrs());

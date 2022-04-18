@@ -168,18 +168,8 @@ public class AuthenticationManager {
             userWithRolesWrapper = loginService.login(uid, pwd);
         }
 
-        if (userWithRolesWrapper == null) return null;
+        AssertUtil.isTrue(userWithRolesWrapper != null, "用户名或密码输入错误");
 
-        String token = loginService.setLogged(userWithRolesWrapper);
-        AssertUtil.isTrue(StrKit.notBlank(token), "登录失败, 无法保持登录状态");
-        return new LoginVO(token, userWithRolesWrapper);
-    }
-
-    public LoginVO getInfo(HttpServletRequest request) {
-        UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
-        AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
-
-        String token = request.getHeader(this.loginService.tokenKey());
-        return new LoginVO(token, user);
+        return loginService.setLogged(userWithRolesWrapper);
     }
 }

@@ -2,11 +2,16 @@ package com.github.md.web.user.support.local;
 
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
+import com.github.md.web.user.LoginVO;
 import com.github.md.web.user.User;
+import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/12/13 </p>
@@ -14,7 +19,7 @@ import java.util.Map;
  *
  * <p> @author konbluesky </p>
  */
-public class LocalUser implements User, UserWithRolesWrapper {
+public class LocalUser implements User, UserWithRolesWrapper, LoginVO {
 
     public static final String ID_KEY = "userId";
 
@@ -79,5 +84,40 @@ public class LocalUser implements User, UserWithRolesWrapper {
             }
         }
         return false;
+    }
+
+    @Override
+    public String getToken() {
+        return userId();
+    }
+
+    @Override
+    public String getId() {
+        return userId();
+    }
+
+    @Override
+    public String getUsername() {
+        return userName();
+    }
+
+    @Override
+    public String getAvatar() {
+        return avatar();
+    }
+
+    @Override
+    public Set<String> getRoles() {
+        return Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> getAuths() {
+        return Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Map<String, Object> getAttrs() {
+        return attrs();
     }
 }

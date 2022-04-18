@@ -3,8 +3,10 @@ package com.github.md.web.user.support.defaults;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.*;
+import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.DefaultUserWithRoles;
 import com.github.md.web.user.role.MRRole;
+import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -12,6 +14,7 @@ import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +26,10 @@ import java.util.stream.Collectors;
  */
 public class DefaultUserService extends AbstractUserService<DefaultUser, DefaultUserWithRoles> {
 
+    protected final TokenGenerator tokenGenerator;
+
     public DefaultUserService() {
-        super(new DefaultTokenGenerator());
+        this.tokenGenerator = new DefaultTokenGenerator();
     }
 
     private DbPro db() {
@@ -94,6 +99,44 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
         List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
         MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
         return new DefaultUserWithRoles(user, roleArr);
+    }
+
+    @Override
+    public LoginVO getInfo(HttpServletRequest request) {
+        UserWithRolesWrapper user = getUser(request);
+        String token = tokenGenerator.generate(user);
+        return createLoginVO(token, user);
+    }
+
+    @Override
+    public LoginVO setLogged(DefaultUserWithRoles user) {
+        String token = tokenGenerator.generate(user);
+        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
+        return createLoginVO(token, user);
+    }
+
+    private LoginVO createLoginVO(String token, UserWithRolesWrapper user) {
+        return DefaultLoginVO.builder()
+                .token(token)
+                .id(user.userId())
+                .username(user.userName())
+                .avatar(user.avatar())
+                .roles(Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()))
+                .auths(Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()))
+                .attrs(user.attrs()).build();
+    }
+
+    @Override
+    public boolean logged(DefaultUserWithRoles user) {
+        String token = tokenGenerator.generate(user);
+        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
+    }
+
+    @Override
+    public boolean logout(DefaultUserWithRoles user) {
+        String token = tokenGenerator.generate(user);
+        AuthenticationManager.me().getLoginUsers().invalidate(token);
+        return !logged(user);
     }
 
     @Override

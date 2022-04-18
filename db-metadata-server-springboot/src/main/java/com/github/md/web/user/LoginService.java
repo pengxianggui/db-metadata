@@ -61,10 +61,6 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      */
     U getUser(HttpServletRequest request);
 
-    default String getToken(HttpServletRequest request) {
-        return request.getHeader(tokenKey());
-    }
-
     /**
      * 登录验证。若验证成功，则返回用户。
      *
@@ -73,6 +69,14 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @return
      */
     U login(String username, String password);
+
+    /**
+     * 获取登录信息
+     *
+     * @param request
+     * @return
+     */
+    LoginVO getInfo(HttpServletRequest request);
 
     /**
      * 新建用户动作(注册)
@@ -91,9 +95,9 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 例如缓存到redis，或内存，或生成jwt。
      *
      * @param user
-     * @return token
+     * @return token 返回token
      */
-    String setLogged(U user);
+    LoginVO setLogged(U user);
 
     /**
      * 登出操作

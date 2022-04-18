@@ -8,6 +8,7 @@ import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.AbstractUserService;
 import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.LoginVO;
 import com.github.md.web.user.Root;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleFactory;
@@ -15,9 +16,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
 import org.springframework.boot.system.ApplicationHome;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +57,28 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
             AuthenticationManager.me().getLoginUsers().put(user.userId(), user);
         }
         return user;
+    }
+
+    @Override
+    public LoginVO getInfo(HttpServletRequest request) {
+        return getInfo(request);
+    }
+
+    @Override
+    public LoginVO setLogged(LocalUser user) {
+        AuthenticationManager.me().getLoginUsers().put(user.userId(), user);
+        return user;
+    }
+
+    @Override
+    public boolean logout(LocalUser user) {
+        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
+        return !logged(user);
+    }
+
+    @Override
+    public boolean logged(LocalUser user) {
+        return AuthenticationManager.me().getLoginUsers().getIfPresent(user.userId()) != null;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class LoginController extends ControllerAdapter {
 
         LoginVO loginVO = AuthenticationManager.me().login(uid, pwd);
         if (loginVO != null) {
-            return Ret.ok("data", loginVO.getData());
+            return Ret.ok("data", loginVO);
         } else {
             return Ret.fail().set("msg", "用户名或密码输入错误");
         }
@@ -52,8 +52,8 @@ public class LoginController extends ControllerAdapter {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
 
-        String token = AuthenticationManager.me().loginService().getToken(getRequest());
-        return Ret.ok("data", new LoginVO(token, user).getData());
+        LoginVO loginVO = AuthenticationManager.me().loginService().getInfo(getRequest());
+        return Ret.ok("data", loginVO);
     }
 
 }

@@ -62,6 +62,7 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
         return this.user.toKv()
                 .set("id", userId())
                 .set("username", userName())
+                .set("avatar", avatar())
                 .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
                 .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
                 .set("attrs", attrs());

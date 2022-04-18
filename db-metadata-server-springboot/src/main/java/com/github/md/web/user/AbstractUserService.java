@@ -19,12 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 @AllArgsConstructor
 public abstract class AbstractUserService<U extends User, UR extends UserWithRolesWrapper> implements UserService<U>, LoginService<UR> {
 
-    private final TokenGenerator tokenGenerator;
-
-    public AbstractUserService() {
-        this(new DefaultTokenGenerator());
-    }
-
     @Override
     public UR getUser(HttpServletRequest request) {
         //cookie load
@@ -38,7 +32,7 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
 //        }
 
         //request load
-        token = StrKit.defaultIfBlank(token, getToken(request));
+        token = StrKit.defaultIfBlank(token, request.getHeader(tokenKey()));
         if (StrKit.notBlank(token)) {
             UR user = (UR) AuthenticationManager.me().getLoginUsers().getIfPresent(token);
             return user;
@@ -46,25 +40,25 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
         return null;
     }
 
-    @Override
-    public String setLogged(UR user) {
-        String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
-        return token;
-    }
-
-    @Override
-    public boolean logged(UR user) {
-        String token = tokenGenerator.generate(user);
-        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
-    }
-
-    @Override
-    public boolean logout(UR user) {
-        String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().invalidate(token);
-        return !logged(user);
-    }
+//    @Override
+//    public LoginVO setLogged(UR user) {
+//        String token = tokenGenerator.generate(user);
+//        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
+//        return token;
+//    }
+//
+//    @Override
+//    public boolean logged(UR user) {
+//        String token = tokenGenerator.generate(user);
+//        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
+//    }
+//
+//    @Override
+//    public boolean logout(UR user) {
+//        String token = tokenGenerator.generate(user);
+//        AuthenticationManager.me().getLoginUsers().invalidate(token);
+//        return !logged(user);
+//    }
 
     @Override
     public boolean isExpired(UR user) {

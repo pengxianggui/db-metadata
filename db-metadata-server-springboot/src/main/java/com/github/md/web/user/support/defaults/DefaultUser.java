@@ -1,8 +1,10 @@
 package com.github.md.web.user.support.defaults;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONValidator;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
+import com.github.md.web.upload.UploadFileResolve;
 import com.github.md.web.user.User;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.Getter;
@@ -48,7 +50,18 @@ public class DefaultUser implements User {
 
     @Override
     public String avatar() {
-        return data.getStr("avatar");
+        String avatarUrl;
+        String avatarValue = data.getStr("avatar");
+        if (JSONValidator.from(avatarValue).getType() == JSONValidator.Type.Array) {
+            UploadFileResolve uploadFileResolve = new UploadFileResolve(avatarValue);
+            if (uploadFileResolve.hasFile()) {
+                avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
+                return avatarUrl;
+            }
+            return null;
+        }
+
+        return avatarValue;
     }
 
     @Override

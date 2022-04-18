@@ -176,18 +176,6 @@ $headerHeight: 60px;
       vertical-align: middle;
       cursor: pointer;
     }
-
-    div.avatar {
-      display: inline-block;
-      height: 100%;
-      width: 100%;
-      font-size: 25px;
-      border: 1px solid #cbcbd7;
-      border-radius: $avatarSideLength / 2;
-      line-height: $avatarSideLength;
-      padding: 5px;
-      box-sizing: border-box;
-    }
   }
 }
 </style>
