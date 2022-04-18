@@ -10,9 +10,9 @@ import com.github.md.web.user.auth.defaults.AuthorizePermit;
 import com.github.md.web.user.auth.defaults.MetaApiResource;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
+import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,16 +85,6 @@ public class AuthenticationManager {
     }
 
     /**
-     * 获取当前登录用户
-     *
-     * @param request
-     * @return
-     */
-    public UserWithRolesWrapper getUser(HttpServletRequest request) {
-        return this.loginService.getUser(request);
-    }
-
-    /**
      * 鉴权: 判定用户是否拥有某个资源的访问权限。你应当在你的 {@link MRAuthInterceptDoer}中执行此鉴权函数
      *
      * @param user      用户
@@ -129,7 +119,7 @@ public class AuthenticationManager {
      * @return
      */
     public boolean isRoot(User user) {
-        return user.userId().equals(Root.me().userId());
+        return Root.me().equals(user);
     }
 
     public UserService userService() {
@@ -163,13 +153,69 @@ public class AuthenticationManager {
 
         UserWithRolesWrapper userWithRolesWrapper;
         if (uid.equals(rootKv.get(loginKey)) && pwd.equals(rootKv.get(pwdKey))) { // 优先鉴定ROOT
-            userWithRolesWrapper = loginService.createRoot(Root.me());
-        } else {
-            userWithRolesWrapper = loginService.login(uid, pwd);
+            userWithRolesWrapper = Root.me();
+            String token = new DefaultTokenGenerator().generate(userWithRolesWrapper);
+            AuthenticationManager.me().getLoginUsers().put(token, userWithRolesWrapper);
+            return DefaultLoginVO.builder().token(token)
+                    .id(userWithRolesWrapper.userId())
+                    .username(userWithRolesWrapper.userName())
+                    .avatar(userWithRolesWrapper.avatar())
+                    .attrs(userWithRolesWrapper.attrs()).build();
         }
 
+        userWithRolesWrapper = loginService.login(uid, pwd);
         AssertUtil.isTrue(userWithRolesWrapper != null, "用户名或密码输入错误");
-
         return loginService.setLogged(userWithRolesWrapper);
+    }
+
+    /**
+     * 获取当前登录用户, 兼容ROOT
+     *
+     * @param request
+     * @return
+     */
+    public UserWithRolesWrapper getUser(HttpServletRequest request) {
+        UserWithRolesWrapper user = getLoginUsers().getIfPresent(request.getHeader(loginService.tokenKey()));
+        if (isRoot(user)) {
+            return user;
+        }
+
+        return this.loginService.getUser(request);
+    }
+
+    /**
+     * 获取当前登录的用户信息，兼容ROOT
+     *
+     * @param request
+     * @return
+     */
+    public LoginVO getInfo(HttpServletRequest request) {
+        UserWithRolesWrapper user = getUser(request);
+        if (isRoot(user)) {
+            String token = new DefaultTokenGenerator().generate(user);
+            return DefaultLoginVO.builder().token(token)
+                    .id(user.userId())
+                    .username(user.userName())
+                    .avatar(user.avatar())
+                    .attrs(user.attrs()).build();
+        }
+
+        return this.loginService.getInfo(request);
+    }
+
+    /**
+     * 兼容ROOT登出
+     *
+     * @param user
+     * @return
+     */
+    public boolean logout(UserWithRolesWrapper user) {
+        if (isRoot(user)) {
+            String token = new DefaultTokenGenerator().generate(user);
+            getLoginUsers().invalidate(token);
+            return true;
+        }
+
+        return loginService.logout(user);
     }
 }

@@ -43,16 +43,14 @@ public class LoginController extends ControllerAdapter {
         if (Objects.isNull(user)) {
             throw new UserException("未登录");
         }
-        boolean flag = AuthenticationManager.me().loginService().logout(user);
+        boolean flag = AuthenticationManager.me().logout(user);
         return flag ? Ret.ok() : Ret.fail();
     }
 
     @GetMapping("${md.server.login.ctrl.info-path:/user/info}")
     public Ret info() {
-        UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        AssertUtil.isTrue(user != null, new UnLoginException("未登录"));
-
-        LoginVO loginVO = AuthenticationManager.me().loginService().getInfo(getRequest());
+        LoginVO loginVO = AuthenticationManager.me().getInfo(getRequest());
+        AssertUtil.isTrue(loginVO != null, new UnLoginException("未登录"));
         return Ret.ok("data", loginVO);
     }
 

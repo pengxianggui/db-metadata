@@ -9,7 +9,6 @@ import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.AbstractUserService;
 import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.LoginVO;
-import com.github.md.web.user.Root;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.RoleFactory;
 import com.google.common.base.Joiner;
@@ -79,11 +78,6 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     @Override
     public boolean logged(LocalUser user) {
         return AuthenticationManager.me().getLoginUsers().getIfPresent(user.userId()) != null;
-    }
-
-    @Override
-    public LocalUser createRoot(Root me) {
-        return new LocalUser(me.getData().getColumns());
     }
 
     @Override

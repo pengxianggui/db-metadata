@@ -1,7 +1,6 @@
 package com.github.md.web.user;
 
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
 import com.jfinal.kit.StrKit;
 import lombok.AllArgsConstructor;
 
@@ -39,26 +38,6 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
         }
         return null;
     }
-
-//    @Override
-//    public LoginVO setLogged(UR user) {
-//        String token = tokenGenerator.generate(user);
-//        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
-//        return token;
-//    }
-//
-//    @Override
-//    public boolean logged(UR user) {
-//        String token = tokenGenerator.generate(user);
-//        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
-//    }
-//
-//    @Override
-//    public boolean logout(UR user) {
-//        String token = tokenGenerator.generate(user);
-//        AuthenticationManager.me().getLoginUsers().invalidate(token);
-//        return !logged(user);
-//    }
 
     @Override
     public boolean isExpired(UR user) {

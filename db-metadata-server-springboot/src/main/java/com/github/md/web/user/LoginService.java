@@ -122,12 +122,4 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @return
      */
     boolean isExpired(U user);
-
-    /**
-     * 创建静态的ROOT用户
-     *
-     * @param me
-     * @return
-     */
-    U createRoot(Root me);
 }

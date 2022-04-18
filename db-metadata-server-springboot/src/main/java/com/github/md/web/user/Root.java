@@ -7,57 +7,58 @@ import com.github.md.web.ex.OprNotSupportException;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.github.md.web.user.support.defaults.DefaultUser;
-import com.jfinal.plugin.activerecord.Record;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 静态ROOT用户, 右配置 meta.app.root决定
+ * 静态ROOT用户, 由配置 meta.app.root决定
  *
  * @author pengxg
  * @date 2022/3/7 8:55 上午
  */
-public class Root extends DefaultUser implements UserWithRolesWrapper {
+public final class Root implements UserWithRolesWrapper {
     private static Root instance;
 
-    private Root(Record record) {
-        super(record);
+    private String id;
+    private String username;
+    private String password;
+    private String avatar;
+    private Map<String, String> attrs;
+
+    private Root(Map<String, String> root) {
+        this.id = root.get("id");
+        this.username = root.get("username");
+        this.password = root.get("password");
+        this.avatar = root.get("avatar");
+        this.attrs = root;
     }
 
     public static Root me() {
         if (instance == null) {
             synchronized (Root.class) {
                 if (instance == null) {
-                    Map<String, Object> attrs = new HashMap<>();
-                    attrs.put("id", "0");
-                    attrs.put("username", "ROOT");
-                    attrs.put("password", "888888");
-
-
                     MetaProperties metaProp = ServiceManager.getAppProperties();
                     Map<String, String> root = metaProp.getApp().getRoot();
 
-                    if (root != null) {
-                        if (root.containsKey("id")) {
-                            attrs.put("id", root.get("id"));
-                        }
-                        if (root.containsKey("username")) {
-                            attrs.put("username", root.get("username"));
-                        }
-                        if (root.containsKey("password")) {
-                            attrs.put("password", root.get("password"));
-                        }
-                        if (root.containsKey("avatar")) {
-                            attrs.put("avatar", root.get("avatar"));
-                        }
+                    if (root == null) {
+                        root = new HashMap<>();
                     }
 
-                    Record record = new Record();
-                    record.setColumns(attrs);
-                    record.set("attrs", attrs);
-                    instance = new Root(record);
+                    if (!root.containsKey("id")) {
+                        root.put("id", "0");
+                    }
+                    if (!root.containsKey("username")) {
+                        root.put("username", "ROOT");
+                    }
+                    if (!root.containsKey("password")) {
+                        root.put("password", "888888");
+                    }
+                    if (!root.containsKey("avatar")) {
+                        root.put("avatar", "root");
+                    }
+
+                    instance = new Root(root);
                 }
             }
         }
@@ -65,8 +66,28 @@ public class Root extends DefaultUser implements UserWithRolesWrapper {
     }
 
     @Override
+    public String userId() {
+        return id;
+    }
+
+    @Override
+    public String userName() {
+        return username;
+    }
+
+    @Override
+    public Kv attrs() {
+        return Kv.create().set(attrs);
+    }
+
+    @Override
     public Kv attrs(Map attrs) {
         throw new OprNotSupportException("ROOT用户不允许动态添加属性");
+    }
+
+    @Override
+    public String avatar() {
+        return avatar;
     }
 
     @Override
@@ -76,7 +97,7 @@ public class Root extends DefaultUser implements UserWithRolesWrapper {
 
     @Override
     public boolean hasRole(String nameOrCode) {
-        return true;
+        return true; // ROOT用户视为有一切角色
     }
 
     @Override
@@ -91,6 +112,6 @@ public class Root extends DefaultUser implements UserWithRolesWrapper {
 
     @Override
     public boolean hasAuth(IAuth... auths) {
-        return true;
+        return true; // ROOT用户视为有一切权限
     }
 }

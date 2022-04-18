@@ -37,7 +37,6 @@ md:
     root:
       username: ROOT
       password: 888888
-      avatar: https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.zhimg.com%2Fv2-6c5d88139317020cb9eba2b74405222e_fhd.jpg&refer=http%3A%2F%2Fpic1.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650694803&t=165d678299addea890404e8488e69dc1
 
   server:
     enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。
