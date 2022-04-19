@@ -117,8 +117,7 @@ export default {
     resetSlaveRelate(item) {
       this.$reverseMerge(item, {
         "config": {
-          "foreignPrimaryKey": null,
-          "order": 0
+          "foreignPrimaryKey": null
         },
         "instanceCodes": {
           "SearchView": null,

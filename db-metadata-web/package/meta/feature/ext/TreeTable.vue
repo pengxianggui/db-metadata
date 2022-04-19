@@ -90,7 +90,6 @@ export default {
     resetTreeRelate(item) {
       this.$reverseMerge(item, {
         "config": {
-          "objectCode": null,
           "primaryKey": null
         },
         "instanceCodes": {

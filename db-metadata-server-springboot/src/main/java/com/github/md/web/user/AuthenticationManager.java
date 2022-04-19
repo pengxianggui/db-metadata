@@ -13,6 +13,7 @@ import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -175,7 +176,12 @@ public class AuthenticationManager {
      * @return
      */
     public UserWithRolesWrapper getUser(HttpServletRequest request) {
-        UserWithRolesWrapper user = getLoginUsers().getIfPresent(request.getHeader(loginService.tokenKey()));
+        String token = request.getHeader(loginService.tokenKey());
+        if (StrKit.isBlank(token)) {
+            return null;
+        }
+
+        UserWithRolesWrapper user = getLoginUsers().getIfPresent(token);
         if (isRoot(user)) {
             return user;
         }
