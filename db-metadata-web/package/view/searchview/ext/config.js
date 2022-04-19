@@ -2,22 +2,19 @@ import {isObject} from "../../../utils/common";
 
 export default {
     "TextBox": {
-        "value": "%v%",
+        "value": "全匹配",
+        "optional": true, // 是否显示操作符选项，开启时用户配置的 show-symbol-option 才生效
+        "optionSlot": "prepend", // 选项位置的slot名
         "options": {
-            "%v": "lk_l",
-            "v%": "lk_r",
-            "%v%": "lk"
-        }
-    },
-    "BoolBox": {
-        "value": "=",
-        "options": {
-            "=": "eq"
+            "前匹配": "lk_r",
+            "后匹配": "lk_l",
+            "全匹配": "lk"
         }
     },
     "NumBox": {
         "value": "=",
-        "optional": true,   // 供用户选择
+        "optional": true,
+        "optionSlot": "prepend",
         "options": {
             "=": "eq",
             "!=": "ne",
@@ -29,26 +26,39 @@ export default {
     },
     "DropDownBox": {
         "value": "in",
+        "optional": false,
+        "optionSlot": "prefix",
         "options": {
-            "in": "in"
+            "in": "in",
+            "nin": "nin"
         }
     },
     "DateBox": {
         "value": "range",
+        "optional": false,
         "options": {
             "range": "range"
         }
     },
     "TimeBox": {
         "value": "range",
+        "optional": false,
         "options": {
             "range": "range"
         }
     },
     "DateTimeBox": {
         "value": "range",
+        "optional": false,
         "options": {
             "range": "range"
+        }
+    },
+    "BoolBox": {
+        "value": "=",
+        "optional": false,
+        "options": {
+            "=": "eq"
         }
     }
 };
@@ -73,9 +83,10 @@ export const toParams = function (model= {}) {
         if (value == null || value.length == 0) continue;
 
         switch (symbol.value) {
+            case "nin":
             case "in":
                 value = Array.isArray(value) ? value.join(',') : value;
-                params[name + 'in'] = value;
+                params[name + symbol.value] = value;
                 break;
             case "range":
                 params[name + "gt"] = value[0];

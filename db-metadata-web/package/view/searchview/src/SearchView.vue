@@ -17,13 +17,15 @@
       <el-form :ref="meta['name']" v-bind="formConf" :model="model" inline
                @keyup.enter.native="emitSearch" class="search-form">
         <template v-for="item in meta.columns">
-          <el-form-item class="form-item" :key="item.name" :label="item.label||item.name" :prop="item.name"
+          <el-form-item class="form-item" :key="item.name" :label="item.label || item.name" :prop="item.name"
                         v-if="model.hasOwnProperty(item.name)">
+
             <component v-model="model[item.name]['value']"
-                       :is="item.component_name"
+                       :is="item.component_name === 'NumBox' ? 'TextBox' : item.component_name"
                        :meta="item"
                        @change="changeHandler(item.name)">
-              <template #prepend v-if="model[item.name]['symbol']['optional']">
+              <template v-slot:[model[item.name].symbol.optionSlot]
+                        v-if="model[item.name]['symbol']['optional'] === true && item['show-symbol-option'] === true">
                 <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">
                   <el-option v-for="(value, key) in model[item.name]['symbol']['options']"
                              :key="key" :value="key">
@@ -32,40 +34,6 @@
                 </el-select>
               </template>
             </component>
-
-            <!--                        <drop-down-box v-model="model[item.name]['value']" :meta="item|decorate('DropDownBox')"-->
-            <!--                                       v-if="['DropDownBox'].indexOf(item.component_name) >= 0">-->
-            <!--                        </drop-down-box>-->
-
-            <!--                        <bool-box v-model="model[item.name]['value']" :meta="item"-->
-            <!--                                  v-else-if="['BoolBox'].indexOf(item.component_name) >= 0"></bool-box>-->
-
-            <!--                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
-            <!--                                        is-range type="daterange"-->
-            <!--                                        v-else-if="['DateBox'].indexOf(item.component_name) >= 0">-->
-            <!--                        </el-date-picker>-->
-
-            <!--                        <el-time-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
-            <!--                                        is-range type="timerange"-->
-            <!--                                        v-else-if="['TimeBox'].indexOf(item.component_name) >= 0">-->
-            <!--                        </el-time-picker>-->
-
-            <!--                        <el-date-picker v-model="model[item.name]['value']" v-bind="item.conf"-->
-            <!--                                        is-range type="datetimerange"-->
-            <!--                                        v-else-if="['DateTimeBox'].indexOf(item.component_name) >= 0">-->
-            <!--                        </el-date-picker>-->
-
-            <!--                        <el-input v-model="model[item.name]['value']" v-bind="item.conf" clearable v-else>-->
-            <!--                            <template #prepend v-if="model[item.name]['symbol']['optional']">-->
-            <!--                                <el-select v-model="model[item.name]['symbol']['value']" style="width: 60px;">-->
-            <!--                                    <el-option v-for="(value, key) in model[item.name]['symbol']['options']"-->
-            <!--                                               :key="key" :value="key">-->
-            <!--                                        {{key}}-->
-            <!--                                    </el-option>-->
-            <!--                                </el-select>-->
-            <!--                            </template>-->
-            <!--                        </el-input>-->
-
           </el-form-item>
         </template>
         <el-form-item>
@@ -179,6 +147,16 @@ export default {
 .search-form {
   .el-form-item {
     margin: 5px;
+
+    ::v-deep {
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    }
   }
 }
 

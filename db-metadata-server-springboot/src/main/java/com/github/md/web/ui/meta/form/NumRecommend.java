@@ -11,8 +11,18 @@ import com.github.md.web.component.attr.AttributeBuilder;
 public class NumRecommend extends FieldComponentConfigExtension {
     @Override
     public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder builder, ComponentType type) {
-        if (metaField.dbType().isNumber()) {
-            builder.componentName(ComponentType.NUMBERBOX);
+        if (!metaField.dbType().isNumber()) {
+            return;
+        }
+
+        switch (type) {
+            case FORMVIEW:
+                builder.componentName(ComponentType.NUMBERBOX);
+                break;
+            case SEARCHVIEW:
+                builder.componentName(ComponentType.NUMBERBOX);
+                builder.showSymbolOption(true); // 默认设为显示操作符选项
+                break;
         }
     }
 }

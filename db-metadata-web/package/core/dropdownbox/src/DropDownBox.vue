@@ -31,6 +31,14 @@
                 </slot>
             </el-option-group>
         </template>
+
+
+        <template #prefix>
+          <slot name="prefix"></slot>
+        </template>
+        <template #empty>
+          <slot name="empty"></slot>
+        </template>
     </el-select>
 </template>
 

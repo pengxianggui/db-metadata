@@ -46,6 +46,8 @@ public class AttributeBuilder {
         AttrCustomMeta hidden(boolean hidden);
 
         AttrCustomMeta sort(int sort);
+
+        AttrCustomMeta showSymbolOption(boolean show);
     }
 
     interface AttrAbility {
@@ -310,6 +312,12 @@ public class AttributeBuilder {
         @Override
         public AttrCustomMeta sort(int sort) {
             return set("sort", sort);
+        }
+
+        @Override
+        public AttrCustomMeta showSymbolOption(boolean show) {
+            set("show-symbol-option", show);
+            return this;
         }
 
         @Override

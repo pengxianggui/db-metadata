@@ -51,8 +51,8 @@ export const assembleMeta = function (meta) {
             case 'DateTimeBox':
                 this.$reverseMerge(colMeta, {"conf": {"is-range": true, "type": 'datetimerange'}})
                 break;
-            case 'NumBox': // NumBox无法设置"比较操作符"插槽, 改为TextBox
-                colMeta.component_name = 'TextBox'
+            case 'NumBox':
+                this.$reverseMerge(colMeta, {"conf": {"controls": false}})
                 break;
         }
     })

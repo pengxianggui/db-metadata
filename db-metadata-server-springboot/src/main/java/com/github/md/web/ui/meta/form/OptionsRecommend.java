@@ -17,6 +17,7 @@ public class OptionsRecommend extends FieldComponentConfigExtension {
         if (metaFieldConfigParse.hasTranslation()) {
             builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
             builder.componentName(ComponentType.DROPDOWN);
+            builder.showSymbolOption(false); // 先禁用。因为前端下拉组件没有很好的插槽位，以便呈现操作符选项列表
         }
     }
 }
