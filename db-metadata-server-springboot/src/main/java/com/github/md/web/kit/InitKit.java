@@ -158,20 +158,6 @@ public class InitKit {
         return this;
     }
 
-    private Record toFeature(JSONObject item) {
-        String type = item.getString("type");
-        String name = item.getString("name");
-        String code = item.getString("code");
-        JSONObject config = item.getJSONObject("config");
-
-        Record record = new Record();
-        record.set("type", type);
-        record.set("name", name);
-        record.set("code", code);
-        record.set("config", config);
-        return record;
-    }
-
     private void updateMetaObjects(List<IMetaObject> metaObjects) {
         for (IMetaObject metaObject : metaObjects) {
             updateMetaObject(metaObject);

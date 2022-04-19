@@ -138,7 +138,7 @@ public class FormController extends ControllerAdapter {
 
         Record d = metaService().findDataByIds(metaObject, dataIds);
 
-        FormDataFactory.buildUpdateFormData(metaObject, d);
+        FormDataFactory.buildFormData(metaObject, d, FormView.FormType.UPDATE);
 
         return (Ret.ok("data", formView.toKv().set("record", d)));
     }
@@ -207,7 +207,9 @@ public class FormController extends ControllerAdapter {
                 PointCutChain.viewBefore(viewPointCuts, invocation);
                 Object[] dataIds = queryHelper.getPks(metaObject);
                 Record d = metaService().findDataByIds(metaObject, dataIds);
-                //                    FormDataFactory.buildUpdateFormData(metaObject, d);
+
+                FormDataFactory.buildFormData(metaObject, d, FormView.FormType.VIEW);
+
                 /**
                  * escape field value;
                  * 1. 是否需要转义的规则;

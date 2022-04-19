@@ -6,6 +6,10 @@
  */
 package com.github.md.analysis.db;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONValidator;
 import com.github.md.analysis.MetaAnalysisException;
 import com.github.md.analysis.meta.IMetaField;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +75,7 @@ public class MetaDataTypeConvert {
             put("VARCHAR", String.class);
             put("MEDIUMTEXT", String.class);
             put("LONGTEXT", String.class);
-            put("JSON", String.class);
+            put("JSON", JSON.class);
         }
     };
 
@@ -121,6 +125,7 @@ public class MetaDataTypeConvert {
                 // empty string only cast to string.class
                 return null;
             }
+
             if (c == Integer.class) {
                 return Integer.parseInt(s);
             }
@@ -145,6 +150,15 @@ public class MetaDataTypeConvert {
             }
             if (c == Byte[].class) {
                 return s.getBytes();
+            }
+            if (c == JSON.class) {
+                if (JSONValidator.from(s).getType() == JSONValidator.Type.Array) {
+                    return JSONArray.parseArray(s);
+                } else if (JSONValidator.from(s).getType() == JSONValidator.Type.Object) {
+                    return JSONObject.parseObject(s);
+                } else {
+                    return null;
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

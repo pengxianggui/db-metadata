@@ -1,5 +1,6 @@
 package com.github.md.web.ui.meta.form;
 
+import com.alibaba.fastjson.JSONArray;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.component.attr.AttributeBuilder;
@@ -26,6 +27,12 @@ public class FileRecommend extends FieldComponentConfigExtension {
         } else {
             builder.componentName(ComponentType.FILEBOX);
             builder.listType("text");
+        }
+
+        if (metaField.dbType().isJson()) {
+            builder.defaultVal(new JSONArray());
+        } else {
+            builder.defaultVal(null);
         }
 
         builder.actionUrl(UploadKit.uploadUrl(metaField.objectCode(), metaField.fieldCode()));

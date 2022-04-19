@@ -16,7 +16,7 @@ public class DbTypeJudge {
     }
 
     public boolean isText() {
-        return isSmallText() || isBigText() || isJson() || isLongText();
+        return isSmallText() || isBigText() || isLongText();
     }
 
     public boolean isSmallText() {

@@ -2,17 +2,18 @@ package com.github.md.web.query;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.github.md.web.WebException;
-import com.github.md.web.upload.UploadFile;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.db.MetaDataTypeConvert;
 import com.github.md.analysis.db.SnowFlake;
+import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
+import com.github.md.web.WebException;
+import com.github.md.web.component.form.FormView;
 import com.github.md.web.kit.UtilKit;
-import com.github.md.analysis.kit.Kv;
+import com.github.md.web.upload.UploadFile;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.util.Objects;
 public class FormDataFactory {
 
     /**
+     * 构建表单数据，注意：此方法用于"入"方向——即接口接收参数后，构建表单数据后入库。
      * <pre>
      *      根据request 参数,metaObject 构建MetaData,其中包含对元字段特殊配置的处理
      *      关于数据库保存"null"字符串的情况的几种说明:
@@ -70,6 +72,9 @@ public class FormDataFactory {
                             if (metaObject.configParser().isUUIDPrimary()) {
                                 formData.set(metaField.fieldCode(), StrKit.getRandomUUID());
                             }
+                            if (metaObject.configParser().isAutoIncrement()) {
+                                // do nothing 由数据库去自增
+                            }
                         } else {
                             formData.set(metaField.fieldCode(), castedValue);
                         }
@@ -94,21 +99,30 @@ public class FormDataFactory {
                     }
                 }
 
-
                 // 文件类型处理
                 if (metaField.configParser().isFile()) {
                     List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
-                    // 确保入库的文件字段 必须是有效的[]
-                    if (files != null && files.size() > 0) {
-                        for (UploadFile uploadFile : files) {
-                            if (fileConfig == null || fileConfig.isEmpty()) {
-                                uploadFile.setSeat("default");
+
+                    if (metaField.dbType().isJson()) {
+                        // 确保入库的文件字段 必须是有效的[]
+                        if (files != null && files.size() > 0) {
+                            for (UploadFile uploadFile : files) {
+                                if (fileConfig == null || fileConfig.isEmpty()) {
+                                    uploadFile.setSeat("default");
+                                }
                             }
+                            formData.set(metaField.fieldCode(), JSON.toJSONString(files));
+                        } else {
+                            formData.set(metaField.fieldCode(), new JSONArray().toJSONString());
                         }
-                        formData.set(metaField.fieldCode(), JSON.toJSONString(files));
-                    } else {
-                        formData.set(metaField.fieldCode(), "[]");
+                    } else { // 解析出url，并只存储url。 这种情况时只保留一个资源。
+                        if (files != null && files.size() > 0) {
+                            UploadFile uploadFile = files.get(0);
+                            formData.set(metaField.fieldCode(), uploadFile.getUrl());
+                        } else {
+                            formData.set(metaField.fieldCode(), null);
+                        }
                     }
                     continue;
                 }
@@ -157,6 +171,12 @@ public class FormDataFactory {
                     continue;
                 }
 
+                // FIXME HACK json格式处理: ActiveRecord 无法直接将JSON格式插入，需要转换为json字符串
+                if (metaField.dbType().isJson()) {
+                    formData.set(metaField.fieldCode(), JSON.toJSONString(castedValue));
+                    continue;
+                }
+
                 // set 该metafile 转换后的value
                 if (castedValue != null) {
                     formData.set(metaField.fieldCode(), castedValue);
@@ -178,28 +198,43 @@ public class FormDataFactory {
         return formData;
     }
 
-    public static void buildUpdateFormData(IMetaObject metaObject, Record record) {
+    /**
+     * 构建表单数据。注意此方法仅用于"出"方向——即接口响应包装表单数据
+     *
+     * @param metaObject
+     * @param record
+     * @param formType
+     */
+    public static void buildFormData(IMetaObject metaObject, Record record, FormView.FormType formType) {
         for (IMetaField metaField : metaObject.fields()) {
             try {
-                // 确保回传给前端的文件字段 必须是有效的[]
                 if (metaField.configParser().isFile()) {
-                    String filepath = record.getStr(metaField.fieldCode());
-                    if (StrKit.isBlank(filepath)) {
-                        filepath = "[]";
+                    String value = record.getStr(metaField.fieldCode());
+
+                    if (StrKit.isBlank(value)) {
+                        record.set(metaField.fieldCode(), new JSONArray());
+                        continue;
                     }
-                    JSONArray value = new JSONArray();
-                    try {
-                        value = JSON.parseArray(filepath); // 防止因业务数据格式错误导致程序无法运行
-                    } catch (JSONException e) {
-                        log.error(e.getMessage());
+
+                    JSONArray valueJSON;
+                    if (metaField.dbType().isJson()) {
+                        valueJSON = JSON.parseArray(value);
+                    } else { // 包装成JSON
+                        valueJSON = new JSONArray();
+                        valueJSON.add(new JSONObject(Kv.by("url", value)));
                     }
-                    record.set(metaField.fieldCode(), value);
+
+                    record.set(metaField.fieldCode(), valueJSON);
                     continue;
+
                 }
 
                 if (metaField.dbType().isJson()) {
-                    record.set(metaField.fieldCode(), JSON.parse(record.get(metaField.fieldCode())));
+                    record.set(metaField.fieldCode(), MetaDataTypeConvert.convert(metaField, record.get(metaField.fieldCode())));
+                    continue;
                 }
+
+                record.set(metaField.fieldCode(), MetaDataTypeConvert.convert(metaField, record.get(metaField.fieldCode())));
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 continue;

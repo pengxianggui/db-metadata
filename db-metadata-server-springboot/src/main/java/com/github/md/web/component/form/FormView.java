@@ -98,4 +98,8 @@ public class FormView extends ViewContainer {
         meta.setIfNotBlank("action", action);
         meta.putIfAbsent("component_name", type());
     }
+
+    public enum FormType {
+        ADD, UPDATE, VIEW
+    }
 }
