@@ -12,11 +12,12 @@
               class="router-link"
               @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
           >
+            <svg-icon value="affix" v-if="isAffix(tag)" class="affixed-icon" style="font-size: 9px;"></svg-icon>
             <span>{{ tag.meta.title }}</span>
             <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
           </router-link>
         </template>
-        <list direction="column" class="tag-menu">
+        <list direction="column" class="tag-menu" @mouseleave.native="closePopMenu('popMenu' + index)">
           <list-item class="tag-menu-item"
                      @click="refreshSelectedTag(selectedTag); closePopMenu('popMenu' + index)" v-if="isActive(tag)">
             <svg-icon value="refresh"></svg-icon>
@@ -279,21 +280,6 @@ $tagBarHeight: 40px;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
   border-bottom: 1px solid #d8dce5;
 
-  //white-space: nowrap;
-  //overflow-x: auto;
-  //overflow-y: hidden;
-  //
-  //// 隐藏横向滚动条
-  //// IE10+
-  //-ms-overflow-style: none;
-  //// FireFox
-  //overflow: -moz-scrollbars-none;
-  //&::-webkit-scrollbar {
-  //  display: none;
-  //  //width: 0 !important;
-  //  //height: 0 !important;
-  //}
-
   $tagHeight: $tagBarHeight;
 
   .tags-view-item {
@@ -311,6 +297,11 @@ $tagBarHeight: 40px;
     .router-link {
       display: block;
       padding: 0 10px;
+
+      .affixed-icon {
+        margin-top: 3px;
+        float: left;
+      }
     }
 
     &:first-of-type {
@@ -319,6 +310,16 @@ $tagBarHeight: 40px;
 
     &:last-of-type {
       //margin-right: 5px;
+    }
+
+    .el-icon-close {
+      display: none;
+    }
+
+    &:hover {
+      .el-icon-close {
+        display: inline;
+      }
     }
   }
 }

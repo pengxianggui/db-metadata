@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
     <div class="user-div">
-      <el-dropdown v-if="user.id" class="">
+      <el-dropdown v-if="user.id">
         <div>
           <svg-icon :value="avatarSrc" class="avatar"></svg-icon>
         </div>
@@ -18,7 +18,7 @@
             <svg-icon value="reset"></svg-icon>
             <span>系统重置</span>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="logout" v-if="enableCertification">
+          <el-dropdown-item divided @click.native="logout" v-if="enableCertification">
             <svg-icon value="logout"></svg-icon>
             <span>登出</span>
           </el-dropdown-item>
