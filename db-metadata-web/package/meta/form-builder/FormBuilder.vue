@@ -33,7 +33,7 @@
         <WorkArea v-model="meta" :active-item.sync="activeItem"></WorkArea>
       </div>
       <div style="width: 300px;">
-        <ConfArea v-model="meta" :active-item="activeItem" :object-code="meta.objectCode" :field-code="activeItem.name"></ConfArea>
+        <ConfArea v-model="meta" :active-item="activeItem" :object-code="objectCode" :field-code="activeItem.name"></ConfArea>
       </div>
     </div>
   </div>

@@ -10,7 +10,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="表单配置">
-      <ui-conf-editor v-model="formMeta" :object-code="objectCode"
+      <ui-conf-editor v-model="formMeta" :object-code="objectCode" :field-code="fieldCode"
                       view-component-code="FormView"></ui-conf-editor>
     </el-tab-pane>
   </el-tabs>

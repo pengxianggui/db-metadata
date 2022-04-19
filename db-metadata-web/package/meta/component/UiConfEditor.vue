@@ -7,7 +7,8 @@
             <el-form-item :key="key" :label="key">
 
               <component-selector v-model="nativeValue.component_name" scope="field" :components="fieldComponents"
-                                  :popper-append-to-body="false" v-if="key === 'component_name'"></component-selector>
+                                  :popper-append-to-body="false" :disabled="nativeValue.component_name === viewComponentCode"
+                                  v-if="key === 'component_name'"></component-selector>
 
               <!--              特殊-->
               <component :is="nativeValue.component_name" :meta="nativeValue"
@@ -87,7 +88,7 @@ export default {
   },
   data() {
     return {
-      formType: true,
+      formType: false,
       fieldComponents: []
     }
   },
@@ -142,11 +143,11 @@ export default {
     },
     openHelpDoc() {
       const {viewComponentCode, componentCode: fieldComponentCode} = this
-      if (viewComponentCode === 'FormView') {
+      if (viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView') {
         window.open(`https://doc-dbmeta.asoco.com.cn/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
-      } else {
-        window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
+        return
       }
+      window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
     }
   },
   computed: {

@@ -1,11 +1,11 @@
 <template>
   <div class="page-container">
-    <el-form :model="confModel" label-width="80px" class="demo-form-inline" size="mini" style="height: 100%">
+    <el-form :model="confModel" class="demo-form-inline" size="mini" style="height: 100%">
       <div class="opr-box">
         <el-button size="mini" type="primary" plain @click="$goBack()">
           <i class="el-icon-back"></i><span>返回</span>
         </el-button>
-        <el-form-item label="组件" class="inline">
+        <el-form-item label="组件" class="inline" label-width="80px">
           <component-selector v-model="confModel.componentCode" @change="loadConf"></component-selector>
         </el-form-item>
         <span style="flex: 1"></span>
@@ -26,17 +26,13 @@
         <el-row class="conf-box">
           <el-col>
             <h2 align="center">{{ confModel.componentCode }}</h2>
-            <el-form-item>
+            <el-form-item style="width: 80%; margin: 0 auto;">
               <mini-form-box v-model="confModel.conf" class="shadow" :disable="true"
                              :meta="confMeta" :controls="true"
                              @json-change="buildObjectConfMeta(confModel.conf)">
                 <template #button-expand="{value}">
-                  <el-popover placement="right" trigger="click"
-                              popper-class="ui-conf-tip-popper">
-                    <ui-conf-tip :component-name="confModel.conf['component_name']"></ui-conf-tip>
-                    <el-button slot="reference" size="mini" icon="el-icon-question"
-                               circle></el-button>
-                  </el-popover>
+
+                  <el-button size="mini" icon="el-icon-question" circle @click="openHelpDoc"></el-button>
                 </template>
               </mini-form-box>
             </el-form-item>
@@ -140,6 +136,14 @@ export default {
       this.$dialog(this.confModel['conf'], data, {
         title: '预览'
       })
+    },
+    openHelpDoc() {
+      const {componentCode} = this.confModel;
+      if (['FormView', 'TreeView', 'TableView', 'TableTreeView', 'SearchView'].indexOf(componentCode) > -1) {
+        window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
+        return
+      }
+      window.open(`https://doc-dbmeta.asoco.com.cn/component/field/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
     }
   },
   mounted() {

@@ -8,6 +8,7 @@ import JsonBox from "../core/jsonbox";
 import MiniFormBox from '../core/miniformbox'
 import DefaultMiniFormBoxMeta from '../core/miniformbox/ui-conf'
 import DefaultJsonBoxMeta from '../core/jsonbox/ui-conf'
+import IconBox from "../core/iconbox/src/IconBox";
 
 /**
  * 定义各容器组件下的特殊的配置字段(包括容器组件和域组件)
@@ -44,6 +45,11 @@ const specials = {
             name: 'render',
             label: 'render',
             height: "250px"
+        },
+        "icon": {
+            component_name: IconBox.name,
+            name: 'icon',
+            label: '图标'
         }
     },
     "TableTreeView": {
@@ -86,7 +92,7 @@ function buildMetaByBoolean(key, value) {
     }
 }
 
-function buildMetaByObject(key, value) {
+function buildMetaByObject(key, value, componentCode) {
     let defaultMeta;
     let meta = {
         name: key,
@@ -103,7 +109,7 @@ function buildMetaByObject(key, value) {
         meta.columns = [];
         let keys = Object.keys(value);
         for (let i = 0; i < keys.length; i++) {
-            meta.columns.push(buildMeta(keys[i], value[keys[i]]));
+            meta.columns.push(buildMeta(keys[i], value[keys[i]], componentCode));
         }
     }
     return utils.merge(meta, defaultMeta);
@@ -140,7 +146,7 @@ function buildMeta(key, value, componentCode) {
         case "[object Array]":
             return buildMetaByArray(key, value);
         case "[object Object]":
-            return buildMetaByObject(key, value);
+            return buildMetaByObject(key, value, componentCode);
         default:
             return buildMetaByString(key, value);
     }
