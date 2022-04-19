@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div id="instance-conf-container" ref="instance-conf-container" class="page-container">
     <el-form id="form-box" size="mini" ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px">
       <div id="opr-box">
         <el-button size="mini" type="primary" plain @click="$goBack()">
@@ -16,7 +16,7 @@
 
         <span style="flex: 1"></span>
         <el-button-group>
-          <!--          <ui-config-help></ui-config-help>-->
+          <full-screen :target="$refs['instance-conf-container']" id="instance-conf-container"></full-screen>
           <el-button size="mini" icon="el-icon-view" type="primary" @click="preview"></el-button>
           <el-button size="mini" icon="el-icon-view" type="warning" @click="jsonView"></el-button>
           <!-- TODO 判断是否有未提交内容, 进行保存提示 -->
@@ -38,16 +38,8 @@
       <el-tabs id="tab-box-instance-conf-edit" type="border-card" v-model="elTabValue"
                :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="容器配置" name="0">
-          <!-- 使用 ui-conf-editor 替代? -->
-          <mini-form-box v-model="confModel.conf" class="shadow" :meta="objConfMeta" :controls="true"
-                         @json-change="() => buildObjectConfMeta(confModel.conf)">
-            <template #button-expand="{value}">
-              <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper">
-                <ui-conf-tip :component-name="confModel.conf['component_name']"></ui-conf-tip>
-                <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
-              </el-popover>
-            </template>
-          </mini-form-box>
+          <ui-conf-editor v-model="confModel.conf" :object-code="confModel.objectCode"
+                          :view-component-code="cc"></ui-conf-editor>
         </el-tab-pane>
         <el-tab-pane label="域配置" name="1">
           <div id="conf-panel">
@@ -266,51 +258,55 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-#form-box {
-  position: relative;
-  height: 100%;
+.page-container {
+  background-color: #f7f7f7;
 
-  #opr-box {
-    display: flex;
-    margin-bottom: 5px;
-    align-items: center;
-  }
-
-  #tab-box-instance-conf-edit {
+  #form-box {
+    position: relative;
     height: 100%;
-  }
-}
 
-.blank-tip {
-  height: 400px;
-  line-height: 400px;
-  text-align: center;
-  border: 1px solid #eee;
-  margin: 5px 0;
-  color: #999999;
-}
+    #opr-box {
+      display: flex;
+      margin-bottom: 5px;
+      align-items: center;
+    }
 
-.shadow {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-}
-
-.field-conf-parent {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 20px;
-}
-
-#conf-panel {
-  display: flex;
-
-  & ul {
-    padding: 0;
-    list-style: none;
+    #tab-box-instance-conf-edit {
+      height: 100%;
+    }
   }
 
-  #conf-content {
-    flex: 1;
-    overflow: auto;
+  .blank-tip {
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    border: 1px solid #eee;
+    margin: 5px 0;
+    color: #999999;
+  }
+
+  .shadow {
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  }
+
+  .field-conf-parent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+
+  #conf-panel {
+    display: flex;
+
+    & ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    #conf-content {
+      flex: 1;
+      overflow: auto;
+    }
   }
 }
 </style>

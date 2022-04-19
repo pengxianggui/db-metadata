@@ -28,17 +28,13 @@
     <template v-else>
       <!-- 倘若直接使用v-model, JsonBox中若更改了component_name,将直接更新到上一层, 无法根据component_name的新值重新刷新配置,
       此处使用:value和@input组合解构v-model的语法糖-->
-      <json-box :value="nativeValue" mode="code" @input="handleJsonChange"></json-box>
+      <json-box :value="nativeValue" mode="form" @input="handleJsonChange"></json-box>
     </template>
 
-    <div style="display: flex; flex-direction: row">
+    <div class="bottom-btn-group">
       <span style="flex: 1"></span>
       <el-button size="mini" icon="el-icon-refresh" circle @click="changeType"></el-button>
-
-      <el-popover placement="right" trigger="click" popper-class="ui-conf-tip-popper" v-if="componentCode">
-        <ui-conf-tip :component-name="componentCode"></ui-conf-tip>
-        <el-button slot="reference" size="mini" icon="el-icon-question" circle></el-button>
-      </el-popover>
+      <el-button size="mini" icon="el-icon-question" circle @click="openHelpDoc"></el-button>
 
       <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"
                                 v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">
@@ -143,6 +139,14 @@ export default {
       } else {
         this.$emit('input', value)
       }
+    },
+    openHelpDoc() {
+      const {viewComponentCode, componentCode: fieldComponentCode} = this
+      if (viewComponentCode === 'FormView') {
+        window.open(`https://doc-dbmeta.asoco.com.cn/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
+      } else {
+        window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
+      }
     }
   },
   computed: {
@@ -166,6 +170,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .bottom-btn-group {
+    display: flex;
+    flex-direction: row;
 
+    & > * {
+      margin: 0 !important;
+    }
+  }
 </style>

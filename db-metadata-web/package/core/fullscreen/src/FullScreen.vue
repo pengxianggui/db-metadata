@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="click" icon="el-icon-full-screen" size="mini" circle></el-button>
+  <el-button @click="click" icon="el-icon-full-screen" size="mini"></el-button>
 </template>
 
 <script>

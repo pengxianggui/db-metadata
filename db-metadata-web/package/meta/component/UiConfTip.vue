@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 800px; max-height: 600px; overflow: auto">
+  <div class="ui-conf-tip">
     <h2>{{ componentName }}</h2>
     <vue-markdown :source="getSourceCode(componentName)"></vue-markdown>
 
@@ -74,6 +74,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.ui-conf-tip {
+  z-index: 9999999 !important;
+  max-width: 800px;
+  max-height: 600px;
+  overflow: auto;
+}
 </style>

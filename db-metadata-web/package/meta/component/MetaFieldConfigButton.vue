@@ -3,7 +3,7 @@
     <slot v-bind:open="openLogicConf">
       <el-button @click="openLogicConf()">元字段逻辑配置</el-button>
     </slot>
-    <dialog-box :visible.sync="logicConf.dialogShow" :title="'编辑逻辑配置:' + fieldCode">
+    <dialog-box :visible.sync="logicConf.dialogShow" :title="'编辑元字段配置:' + fieldCode">
       <field-conf @callback="logicConf.dialogShow = false" :object-code="logicConf.objectCode"
                   :field-code="logicConf.fieldCode"></field-conf>
       <template #footer><span></span></template>  <!-- 表单自带button条 -->

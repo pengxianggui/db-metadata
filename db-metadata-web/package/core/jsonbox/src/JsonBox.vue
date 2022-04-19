@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     innerMode() {
-      const {$attrs: {mode: attrMode} = {}, innerMeta: {conf: {mode: metaMode} = {}}} = this
+      const {mode: attrMode, innerMeta: {conf: {mode: metaMode} = {}}} = this
       return utils.assertEmpty(attrMode, metaMode);
     }
   }

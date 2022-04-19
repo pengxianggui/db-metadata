@@ -4,7 +4,7 @@
       <mini-form v-bind="conf" :meta="innerMeta" v-model="nativeValue"></mini-form>
     </template>
     <template v-else>
-      <json-box v-model="nativeValue" mode="code" @input="$emit('json-change')" v-bind="conf"></json-box>
+      <json-box v-model="nativeValue" mode="form" @input="$emit('json-change')" v-bind="conf"></json-box>
     </template>
     <div style="display: flex;" v-if="showControls">
       <span>
