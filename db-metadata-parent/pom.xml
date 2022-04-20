@@ -25,10 +25,9 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:https://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
-        <connection>scm:git:https://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
+        <developerConnection>scm:git:git@gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
+        <connection>scm:git:git@gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
         <url>https://gitlab.asoco.com.cn/hthjAssets/db-metadata</url>
-        <tag>HEAD</tag>
     </scm>
 
     <build>
