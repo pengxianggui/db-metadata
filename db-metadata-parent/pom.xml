@@ -6,7 +6,7 @@
 
     <groupId>com.github.md</groupId>
     <artifactId>db-metadata-parent</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>db-metadata-parent</name>
 
@@ -23,6 +23,13 @@
         <module>../db-metadata-analysis-springboot</module>
         <module>../db-metadata-server-demo</module>
     </modules>
+
+    <scm>
+        <developerConnection>scm:git:https://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
+        <connection>scm:git:https://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
+        <url>https://gitlab.asoco.com.cn/hthjAssets/db-metadata</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <build>
         <plugins>
@@ -46,6 +53,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
             </plugin>
             <!--            <plugin>-->
             <!--                <groupId>org.apache.maven.plugins</groupId>-->
