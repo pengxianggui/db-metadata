@@ -5,6 +5,7 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.*;
+import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
 import com.github.md.web.component.ViewFactory;
@@ -20,6 +21,7 @@ import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.QueryUrlBuilder;
 import com.github.md.web.query.dynamic.CompileRuntime;
+import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.ui.UIManager;
@@ -88,6 +90,9 @@ public class TreeAndTableController extends ControllerAdapter {
         String featureCode = queryHelper.getFeatureCode();
         TreeAndTableConfig treeAndTableConfig = featureService().loadFeatureConfig(featureCode);
 
+        String instanceCode = treeAndTableConfig.getInstanceCodeInTable(ComponentType.FORMVIEW);
+        ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
+
         String foreignFieldCodeKey = treeAndTableConfig.getTableConfig().getForeignPrimaryKey();
         /** 优先通过ForeignFieldCodeKey取值 如无,再通过RELATE_ID_KEY  */
         String relateIdValue = parameterHelper.getPara(foreignFieldCodeKey, parameterHelper.getPara(TreeAndTableConfig.RELATE_ID_KEY, ""));
@@ -108,7 +113,8 @@ public class TreeAndTableController extends ControllerAdapter {
         QueryUrlBuilder queryUrlBuilder = queryHelper.queryBuilder();
         queryUrlBuilder.param("featureCode", featureCode);
 
-        FormView formView = ViewFactory.formView(metaObject).action("/feature/treeAndTable/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
+        FormView formView = ViewFactory.formView(metaObject, componentInstanceConfig)
+                .action("/feature/treeAndTable/doAdd" + queryUrlBuilder.toQueryString(true)).addForm();
         /** 公共逻辑: 获取请求中已挂的参数 */
         Kv preFillMetaFields = queryHelper.hasMetaParams(metaObject);
 

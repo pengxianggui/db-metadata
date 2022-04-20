@@ -1152,6 +1152,11 @@
         "id": {
           "sort": 0
         },
+        "p_value": {
+          "conf": {
+            "filterable": true
+          }
+        },
         "value_db_type": {
           "sort": 3,
           "conf": {

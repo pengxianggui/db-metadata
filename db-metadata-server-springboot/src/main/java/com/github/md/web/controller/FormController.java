@@ -132,7 +132,7 @@ public class FormController extends ControllerAdapter {
 
         Object[] dataIds = queryHelper.getPks(metaObject);
 
-        FormView formView = ViewFactory.formView(metaObject)
+        FormView formView = ViewFactory.formView(metaObject, componentInstanceConfig)
                 .action("/form/doUpdate?objectCode=" + objectCode)
                 .updateForm();
 
@@ -196,7 +196,7 @@ public class FormController extends ControllerAdapter {
         String objectCode = componentInstanceConfig.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
-        FormView formView = ViewFactory.formView(metaObject).viewForm();
+        FormView formView = ViewFactory.formView(metaObject, componentInstanceConfig).viewForm();
 
         ViewPointCut[] viewPointCuts = metaObject.configParser().viewPointCut();
         DetailQueryInvocation invocation = new DetailQueryInvocation(metaObject);

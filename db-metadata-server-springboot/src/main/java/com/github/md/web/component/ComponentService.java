@@ -296,6 +296,7 @@ public class ComponentService {
      * @param destCode
      * @return
      */
+    @Deprecated
     public ComponentInstanceConfig loadObjectConfig(String componentCode, String destCode) {
         //load single object config
         Record objectConfig = SpringAnalysisManager.me().dbMain().findFirst(

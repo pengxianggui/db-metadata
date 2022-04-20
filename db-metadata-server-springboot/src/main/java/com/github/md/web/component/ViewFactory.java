@@ -58,10 +58,10 @@ public class ViewFactory {
         return searchView;
     }
 
-    public static TableTreeView tableTreeView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TABLETREEVIEW.getCode(), metaObject.code());
-        return tableTreeView(metaObject, instanceFlatConfig);
-    }
+//    public static TableTreeView tableTreeView(IMetaObject metaObject) {
+//        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TABLETREEVIEW.getCode(), metaObject.code());
+//        return tableTreeView(metaObject, instanceFlatConfig);
+//    }
 
     public static TableTreeView tableTreeView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
         TableTreeView tableTreeView = new TableTreeView(metaObject.code() + ComponentType.TABLETREEVIEW.getCode(), metaObject.name());
@@ -69,10 +69,10 @@ public class ViewFactory {
         return tableTreeView;
     }
 
-    public static TreeView treeView(IMetaObject metaObject) {
-        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TREEVIEW.getCode(), metaObject.code());
-        return treeView(metaObject, instanceFlatConfig);
-    }
+//    public static TreeView treeView(IMetaObject metaObject) {
+//        ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.TREEVIEW.getCode(), metaObject.code());
+//        return treeView(metaObject, instanceFlatConfig);
+//    }
 
     public static TreeView treeView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {
         TreeView treeView = new TreeView(metaObject.code() + ComponentType.TREEVIEW.getCode(), metaObject.name());
@@ -81,28 +81,28 @@ public class ViewFactory {
         return treeView;
     }
 
-    public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType) {
-        Component component = null;
-        switch (componentType) {
-            case FORMVIEW:
-                component = formView(metaObject);
-                break;
-            case TABLEVIEW:
-                component = tableView(metaObject);
-                break;
-            case SEARCHVIEW:
-                component = searchView(metaObject);
-                break;
-            case TABLETREEVIEW:
-                component = tableTreeView(metaObject);
-                break;
-            case TREEVIEW:
-                component = treeView(metaObject);
-                break;
-            default:
-        }
-        return component;
-    }
+//    public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType) {
+//        Component component = null;
+//        switch (componentType) {
+//            case FORMVIEW:
+//                component = formView(metaObject);
+//                break;
+//            case TABLEVIEW:
+//                component = tableView(metaObject);
+//                break;
+//            case SEARCHVIEW:
+//                component = searchView(metaObject);
+//                break;
+//            case TABLETREEVIEW:
+//                component = tableTreeView(metaObject);
+//                break;
+//            case TREEVIEW:
+//                component = treeView(metaObject);
+//                break;
+//            default:
+//        }
+//        return component;
+//    }
 
     public static Component createViewComponent(IMetaObject metaObject, ComponentType componentType, ComponentInstanceConfig instanceFlatConfig) {
         Component component = null;

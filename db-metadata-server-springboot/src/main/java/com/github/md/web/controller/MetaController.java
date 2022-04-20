@@ -64,21 +64,21 @@ public class MetaController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
-    /**
-     * mock metas 数据
-     * Fixme
-     *
-     * @deprecated
-     */
-    @GetMapping("fields")
-    public Ret fields() {
-        log.error("接口废弃 -> /table/meta");
-        //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
-        String objectCode = queryHelper().getObjectCode("meta_field");
-        IMetaObject metaObject = metaService().findByCode(objectCode);
-        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list?objectCode=" + metaObject.code());
-        return Ret.ok("data", tableView.toKv());
-    }
+//    /**
+//     * mock metas 数据
+//     * Fixme
+//     *
+//     * @deprecated
+//     */
+//    @GetMapping("fields")
+//    public Ret fields() {
+//        log.error("接口废弃 -> /table/meta");
+//        //        Preconditions.checkNotNull(null, "接口废弃 -> /table/meta");
+//        String objectCode = queryHelper().getObjectCode("meta_field");
+//        IMetaObject metaObject = metaService().findByCode(objectCode);
+//        TableView tableView = ViewFactory.tableView(metaObject).dataUrl("/table/list?objectCode=" + metaObject.code());
+//        return Ret.ok("data", tableView.toKv());
+//    }
 
     /**
      * 右键菜单使用,直接编辑元对象配置信息
