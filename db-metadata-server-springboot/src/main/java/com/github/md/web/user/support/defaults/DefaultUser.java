@@ -6,6 +6,7 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.upload.UploadFileResolve;
 import com.github.md.web.user.User;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.Getter;
 
@@ -52,7 +53,7 @@ public class DefaultUser implements User {
     public String avatar() {
         String avatarUrl;
         String avatarValue = data.getStr("avatar");
-        if (JSONValidator.from(avatarValue).getType() == JSONValidator.Type.Array) {
+        if (StrKit.notBlank(avatarValue) && JSONValidator.from(avatarValue).getType() == JSONValidator.Type.Array) {
             UploadFileResolve uploadFileResolve = new UploadFileResolve(avatarValue);
             if (uploadFileResolve.hasFile()) {
                 avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
