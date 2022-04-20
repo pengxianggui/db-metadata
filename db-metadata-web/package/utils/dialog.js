@@ -81,8 +81,8 @@ export function createDialog(Vue) {
                             return this.meta.conf
                         },
                         width() {
-                            const {meta: {style: {width = '50%'} = {}} = {}} = this
-                            return width
+                            const {meta: {style: {width: widthInMeta = '50%'} = {}} = {}, conf: {width: widthInAttr}} = this
+                            return utils.assertEmpty(widthInAttr, widthInMeta)
                         }
                     }
                 });

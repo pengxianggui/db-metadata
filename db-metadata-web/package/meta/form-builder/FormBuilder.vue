@@ -24,6 +24,17 @@
         <el-tooltip content="保存" placement="top">
           <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success"></el-button>
         </el-tooltip>
+
+<!--        <el-dropdown>-->
+<!--          <el-button @click="preview" icon="el-icon-view" size="mini" type="primary">页面</el-button>-->
+<!--          <el-dropdown-menu>-->
+<!--            <el-dropdown-item @click.native="preview('ADD')">新增模式</el-dropdown-item>-->
+<!--            <el-dropdown-item @click.native="preview('UPDATE')">更新模式</el-dropdown-item>-->
+<!--            <el-dropdown-item @click.native="preview('VIEW')">查看模式</el-dropdown-item>-->
+<!--          </el-dropdown-menu>-->
+<!--        </el-dropdown>-->
+<!--        <el-button @click="jsonView" icon="el-icon-view" size="mini" type="warning">JSON</el-button>-->
+
       </el-button-group>
       <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
@@ -75,7 +86,8 @@ export default {
       instanceCode: instanceCode,
       instanceName: null,
       objectCode: null,
-      componentCode: null
+      componentCode: null,
+      formType: null, // 表单模式(ADD/UPDATE/VIEW)
     }
   },
   methods: {
@@ -99,8 +111,25 @@ export default {
 
         // 提取元字段在FormView下的UI配置
         Object.keys(fieldsMap).forEach(key => this.meta.columns.push(extractConfig.call(this, fieldsMap, key)));
-
         gridInfoStructured(this.meta) // 结构化meta(建立递归的布局支持)
+
+        // TODO 加载不同表单模式下的配置，然后依据前者将 默认的缺省配置meta中的 禁用和隐藏的字段移除掉。
+        // let promise
+        // switch (this.formType) {
+        //   case 'ADD':
+        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode}))
+        //     break;
+        //   case 'UPDATE':
+        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null}))
+        //     break;
+        //   case 'VIEW':
+        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null}))
+        //     break;
+        //   default:
+        //     promise = new Promise((resolve, reject) => resolve({}))
+        // }
+
+
       }).catch(({msg}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
         this.setInitState();
@@ -108,16 +137,64 @@ export default {
     },
 
     jsonView() {
-      this.$dialog(DefaultJsonBoxMeta, this.meta, {
+      const jsonBoxMeta = this.$reverseMerge(DefaultJsonBoxMeta, {
+        conf: {mode: 'form'}
+      })
+
+      this.$dialog(jsonBoxMeta, this.meta, {
         title: "Json预览"
       })
     },
-    preview() {
+    preview(formType) {
       const {meta: {width}} = this
       this.$dialog(this.meta, null, {
         title: "视图预览",
         width: width
       })
+
+      // const {meta: {width}, instanceCode} = this
+      // let promise
+      // switch (formType) {
+      //   case 'ADD':
+      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode}))
+      //     break;
+      //   case 'UPDATE':
+      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null}))
+      //     break;
+      //   case 'VIEW':
+      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null}))
+      //     break;
+      //   default:
+      //     promise = new Promise((resolve, reject) => resolve({}))
+      // }
+      //
+      // const copyMeta = utils.deepClone(this.meta)
+      // const recursiveRemove = function (meta, keepColumnCodes) {
+      //   const {columns = []} = meta
+      //   if (utils.isArray(columns) && columns.length > 0) {
+      //     let i = columns.length
+      //     while (i--) {
+      //       const {component_name, name} = columns[i]
+      //       if (component_name != 'RowGrid' && keepColumnCodes.indexOf(name) == -1) {
+      //         columns.splice(i, 1)
+      //       }
+      //     }
+      //   }
+      // }
+      //
+      // promise.then(({data = {}}) => {
+      //   const {columns} = data
+      //   if (!utils.isEmpty(columns)) {
+      //     const keepColumnCodes = columns.map(c => c.name) // 移除隐藏、禁用的
+      //     recursiveRemove(copyMeta, keepColumnCodes)
+      //     debugger
+      //   }
+      //
+      //   this.$dialog(copyMeta, null, {
+      //     title: "视图预览",
+      //     width: width
+      //   })
+      // })
     },
     submitForm() {
       const {meta: {columns}, instanceCode, instanceName, objectCode} = this
@@ -151,11 +228,7 @@ export default {
 
         params[objectCode] = objectConf;
 
-        this.$axios({
-          method: 'POST',
-          url: restUrl.COMP_CONF_UPDATE,
-          data: params
-        }).then(({msg = '配置保存成功'}) => {
+        this.$axios.post(restUrl.COMP_CONF_UPDATE, params).then(({msg = '配置保存成功'}) => {
           this.$message.success(msg);
           this.$goBack()
         })
@@ -169,15 +242,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  #form-builder {
-    display: flex; flex-direction: column; padding: 5px;height: 100%;box-sizing: border-box; background-color: white;
+#form-builder {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: white;
 
-    .opr-box {
-      display: flex; margin: 2px; align-items: center;
-    }
-
-    #form-builder-main {
-      display: flex; height: calc(100% - 32px); box-sizing: border-box;
-    }
+  .opr-box {
+    display: flex;
+    margin: 2px;
+    align-items: center;
   }
+
+  #form-builder-main {
+    display: flex;
+    height: calc(100% - 32px);
+    box-sizing: border-box;
+  }
+}
 </style>
