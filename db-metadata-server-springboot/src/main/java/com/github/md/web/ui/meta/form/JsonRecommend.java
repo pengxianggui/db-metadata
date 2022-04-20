@@ -11,8 +11,10 @@ import com.github.md.web.component.attr.AttributeBuilder;
 public class JsonRecommend extends FieldComponentConfigExtension {
     @Override
     public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder builder, ComponentType type) {
-        if (metaField.dbType().isJson()) {
-            builder.componentName(ComponentType.JSONBOX);
+        if (!metaField.dbType().isJson()) {
+            return;
         }
+
+        builder.componentName(ComponentType.JSONBOX);
     }
 }

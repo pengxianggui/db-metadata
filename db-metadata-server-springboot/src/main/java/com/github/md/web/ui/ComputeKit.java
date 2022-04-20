@@ -45,11 +45,6 @@ public class ComputeKit {
         builder.label(metaField.cn());
         builder.sort(metaField.orderNum()); // 采用元字段的序号
 
-        if (componentType == ComponentType.FORMVIEW || componentType == ComponentType.SEARCHVIEW) {
-            //set default componentName is "TextBox"
-            builder.componentName(ComponentType.TEXTBOX);
-        }
-
         log.debug("auto compute config : {}", builder.render().toJson());
         if (instanceExtensions != null) {
             for (ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> configExtension : instanceExtensions) {

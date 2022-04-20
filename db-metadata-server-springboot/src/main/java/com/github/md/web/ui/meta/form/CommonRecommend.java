@@ -18,6 +18,8 @@ public class CommonRecommend extends FieldComponentConfigExtension {
             builder.multiple(true);
         }
 
+        builder.componentName(ComponentType.TEXTBOX); // 缺省
+
         if (type == ComponentType.FORMVIEW) {
             // 此处不能对默认值进行计算，因为builder.defaultVal只是从元字段中推导默认值 到 实例配置中，当用户访问实例配置时，实例配置还会
             // 进行转义为真实值。通常情况下，其实这里计算也没什么问题，但是日期类型很特别，如果数据库默认是CURRENT_TIMESTAMP, 那么就有问题了

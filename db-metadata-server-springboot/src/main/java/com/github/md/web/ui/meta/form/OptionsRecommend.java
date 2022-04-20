@@ -14,9 +14,14 @@ public class OptionsRecommend extends FieldComponentConfigExtension {
     @Override
     public void config(IMetaField metaField, AttributeBuilder.FatAttributeBuilder builder, ComponentType type) {
         MetaFieldConfigParse metaFieldConfigParse = metaField.configParser();
-        if (metaFieldConfigParse.hasTranslation()) {
-            builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
-            builder.componentName(ComponentType.DROPDOWN);
+        if (!metaFieldConfigParse.hasTranslation()) {
+            return;
+        }
+
+        builder.dataUrl(OptionsKit.buildUrl(metaField.objectCode(), metaField.fieldCode()));
+        builder.componentName(ComponentType.DROPDOWN);
+
+        if (type == ComponentType.SEARCHVIEW) {
             builder.showSymbolOption(false); // 先禁用。因为前端下拉组件没有很好的插槽位，以便呈现操作符选项列表
         }
     }

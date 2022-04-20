@@ -23,10 +23,10 @@ import java.util.Set;
 public class InstanceConfigExtension implements ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType> {
 
     // 表单、搜索面板 下的域配置扩展
-    private static final Set<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> formFieldConfigExtensions = Sets.newLinkedHashSet();
+    private static final Set<FieldComponentConfigExtension> formFieldConfigExtensions = Sets.newLinkedHashSet();
 
     // 表格、树形表格 下的域配置扩展
-    private static final Set<ConfigExtension<IMetaField, AttributeBuilder.FatAttributeBuilder, ComponentType>> tableViewFieldConfigExtensions = Sets.newLinkedHashSet();
+    private static final Set<TableColumnConfigExtension> tableViewFieldConfigExtensions = Sets.newLinkedHashSet();
 
     public InstanceConfigExtension() {
         // 注意顺序！
