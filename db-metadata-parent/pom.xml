@@ -16,6 +16,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring-boot.version>2.5.4</spring-boot.version>
+        <!-- 配置在settings.xml中的gitlab的账密 -->
+        <project.scm.id>GitLabScm</project.scm.id>
     </properties>
 
     <modules>
@@ -25,12 +27,22 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:git@gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
-        <connection>scm:git:git@gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
-        <url>https://gitlab.asoco.com.cn/hthjAssets/db-metadata</url>
+        <developerConnection>scm:git:http://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
+        <connection>scm:git:http://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
+        <url>https://gitlab.asoco.com.cn/hthjAssets/db-metadata/tree/spring-boot</url>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -56,10 +68,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
                 <configuration>
+                    <providerImplementations>
+                        <git>jgit</git>
+                    </providerImplementations>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <tagBase>https://gitlab.asoco.com.cn/hthjAssets/db-metadata/-/tags</tagBase>
+                    <tagNameFormat>v.@{project.version}</tagNameFormat>
+                    <goals>-f pom.xml deploy</goals>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-jgit</artifactId>
+                        <version>1.11.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <!--            <plugin>-->
             <!--                <groupId>org.apache.maven.plugins</groupId>-->
@@ -140,6 +164,7 @@
             <!--            </plugin>-->
         </plugins>
     </build>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
