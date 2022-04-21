@@ -11,11 +11,20 @@
     <name>db-metadata-parent</name>
 
     <properties>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring-boot.version>2.5.4</spring-boot.version>
+        <lombok.version>1.18.20</lombok.version>
+        <fastjson.version>1.2.78</fastjson.version>
+        <druid.version>1.2.6</druid.version>
+        <activerecord.version>4.9.16</activerecord.version>
+        <asoco-common.version>2.2.0-SNAPSHOT</asoco-common.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <hutool.version>5.7.20</hutool.version>
+        <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
         <!-- 配置在settings.xml中的gitlab的账密 -->
         <project.scm.id>GitLabScm</project.scm.id>
     </properties>
@@ -23,7 +32,6 @@
     <modules>
         <module>../db-metadata-server-springboot</module>
         <module>../db-metadata-analysis-springboot</module>
-        <module>../db-metadata-server-demo</module>
     </modules>
 
     <scm>
@@ -41,18 +49,31 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>3.0.0-M1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.7</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
                 <configuration>
                     <attach>true</attach>
                 </configuration>
@@ -168,9 +189,39 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.github.md</groupId>
+                <artifactId>db-metadata-analysis-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hthjsj</groupId>
+                <artifactId>asoco-common</artifactId>
+                <version>${asoco-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jfinal</groupId>
+                <artifactId>activerecord</artifactId>
+                <version>${activerecord.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.20</version>
+                <version>${lombok.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -180,7 +231,12 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.78</version>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-crypto</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
