@@ -111,6 +111,7 @@ const compLib = {
 export const isLayoutComp = (componentName) => {
     return extract(compLib['布局组件']).findIndex(c => c.name === componentName) > -1
 }
+
 // 拍平: 提取组件列表
 export const extract = (value) => {
     return value.map(e => e.comp)

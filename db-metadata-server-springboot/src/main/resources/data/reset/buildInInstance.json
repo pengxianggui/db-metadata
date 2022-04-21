@@ -1625,7 +1625,7 @@
       },
       "_fields": {
         "avatar": {
-          "render": " function(h, value) {\n  const v = JSON.parse(value)\n  if (v.length > 0) {\n  const picUrl = v[0]['url']\n  return h('el-image', {\n    attrs: {\n      src: picUrl,\n      \"preview-src-list\":[picUrl]\n    },\n      style: {\n      width: '30px',\n      height: '30px'\n      }\n  }, null)\n  }\n  return h('span', null, null)\n}"
+          "render": " function(h, value) {\n  if (value.length > 0) {\n\tlet url = value;\n  return h('el-image', {\n    attrs: {\n      src: url,\n      \"preview-src-list\": [url]\n    },\n      style: {\n      width: '30px',\n      height: '30px'\n      }\n  }, null)\n  }\n  return h('span', null, null)\n}"
         }
       }
     },

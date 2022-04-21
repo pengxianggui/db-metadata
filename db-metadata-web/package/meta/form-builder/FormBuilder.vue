@@ -14,6 +14,14 @@
       </div>
 
       <span style="flex: 1"></span>
+      <el-tooltip placement="bottom">
+        <svg-icon value="el-icon-question"></svg-icon>
+        <div slot="content">
+          不同模式的差异只能通过元字段的逻辑配置来决定，对当前模式的更改会影响其他模式。
+        </div>
+      </el-tooltip>
+      <drop-down-box v-model="formType" :options="formTypeOptions" size="mini" :filterable="false" style="width: 100px;"
+                     @change="formTypeChange"></drop-down-box>&nbsp;
       <el-button-group style="margin-right: 10px;">
         <el-tooltip content="视图预览" placement="top">
           <el-button @click="preview" icon="el-icon-view" size="mini" type="primary"></el-button>
@@ -24,17 +32,6 @@
         <el-tooltip content="保存" placement="top">
           <el-button @click="submitForm" icon="el-icon-download" size="mini" type="success"></el-button>
         </el-tooltip>
-
-<!--        <el-dropdown>-->
-<!--          <el-button @click="preview" icon="el-icon-view" size="mini" type="primary">页面</el-button>-->
-<!--          <el-dropdown-menu>-->
-<!--            <el-dropdown-item @click.native="preview('ADD')">新增模式</el-dropdown-item>-->
-<!--            <el-dropdown-item @click.native="preview('UPDATE')">更新模式</el-dropdown-item>-->
-<!--            <el-dropdown-item @click.native="preview('VIEW')">查看模式</el-dropdown-item>-->
-<!--          </el-dropdown-menu>-->
-<!--        </el-dropdown>-->
-<!--        <el-button @click="jsonView" icon="el-icon-view" size="mini" type="warning">JSON</el-button>-->
-
       </el-button-group>
       <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
@@ -44,7 +41,7 @@
         <WorkArea v-model="meta" :active-item.sync="activeItem"></WorkArea>
       </div>
       <div style="width: 300px;">
-        <ConfArea v-model="meta" :active-item="activeItem" :object-code="objectCode" :field-code="activeItem.name"></ConfArea>
+        <ConfArea v-model="meta" :active-item="activeItem" :field-code="activeItem.name"></ConfArea>
       </div>
     </div>
   </div>
@@ -65,6 +62,9 @@ import {gridInfoFattened, gridInfoStructured} from "./formViewMetaParser";
 
 export default {
   name: "FormBuilder",
+  provide: {
+    objectCode: 'objectCode'
+  },
   components: {
     ComponentList,
     WorkArea,
@@ -87,13 +87,23 @@ export default {
       instanceName: null,
       objectCode: null,
       componentCode: null,
-      formType: null, // 表单模式(ADD/UPDATE/VIEW)
+      formType: 'ADD', // 表单模式(ADD/UPDATE/VIEW)
+      formTypeOptions: [
+        {key: '新增状态', value: 'ADD', instanceUrl: this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode})},
+        {key: '编辑状态', value: 'UPDATE', instanceUrl: this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null})},
+        {key: '查看状态', value: 'VIEW', instanceUrl: this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null})}
+      ]
     }
   },
   methods: {
     setInitState() {
       this.meta = this.$merge({}, DefaultFormViewMeta);
       this.activeItem = {}
+    },
+    formTypeChange() {
+      this.$confirm('当前未保存的变更可能会丢失。确定切换状态?', '提示').then(() => {
+        this.instanceConfLoad(this.instanceCode)
+      })
     },
     instanceConfLoad(instanceCode) {
       this.setInitState();
@@ -109,33 +119,30 @@ export default {
         // 提取元对象在FormView下的UI配置
         this.$reverseMerge(this.meta, extractConfig.call(this, data, objectCode));
 
-        // 提取元字段在FormView下的UI配置
-        Object.keys(fieldsMap).forEach(key => this.meta.columns.push(extractConfig.call(this, fieldsMap, key)));
-        gridInfoStructured(this.meta) // 结构化meta(建立递归的布局支持)
-
         // TODO 加载不同表单模式下的配置，然后依据前者将 默认的缺省配置meta中的 禁用和隐藏的字段移除掉。
-        // let promise
-        // switch (this.formType) {
-        //   case 'ADD':
-        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode}))
-        //     break;
-        //   case 'UPDATE':
-        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null}))
-        //     break;
-        //   case 'VIEW':
-        //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null}))
-        //     break;
-        //   default:
-        //     promise = new Promise((resolve, reject) => resolve({}))
-        // }
+        this.$axios.safeGet(this.formTypeOptions.find(o => this.formType === o.value).instanceUrl).then(({data: {columns}} = {}) => {
+          let validFieldNames = []
+          if (!utils.isEmpty(columns)) {
+            validFieldNames = columns.map(c => c.name)
+          }
 
+          // 提取元字段在FormView下的UI配置
+          Object.keys(fieldsMap).forEach(key => {
+            const fieldMeta = extractConfig.call(this, fieldsMap, key)
+            if (validFieldNames.indexOf(key) == -1) {
+              fieldMeta.hidden = true // 在this.formType模式下，此域被禁用，隐藏掉。需要在提交时移除hidden属性
+            }
+            this.meta.columns.push(fieldMeta)
+          });
+
+          gridInfoStructured(this.meta) // 结构化meta(建立递归的布局支持)
+        })
 
       }).catch(({msg}) => {
         console.error('[ERROR] url: %s, msg: %s', url, msg);
         this.setInitState();
       })
     },
-
     jsonView() {
       const jsonBoxMeta = this.$reverseMerge(DefaultJsonBoxMeta, {
         conf: {mode: 'form'}
@@ -151,50 +158,6 @@ export default {
         title: "视图预览",
         width: width
       })
-
-      // const {meta: {width}, instanceCode} = this
-      // let promise
-      // switch (formType) {
-      //   case 'ADD':
-      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode}))
-      //     break;
-      //   case 'UPDATE':
-      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null}))
-      //     break;
-      //   case 'VIEW':
-      //     promise = this.$axios.safeGet(this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null}))
-      //     break;
-      //   default:
-      //     promise = new Promise((resolve, reject) => resolve({}))
-      // }
-      //
-      // const copyMeta = utils.deepClone(this.meta)
-      // const recursiveRemove = function (meta, keepColumnCodes) {
-      //   const {columns = []} = meta
-      //   if (utils.isArray(columns) && columns.length > 0) {
-      //     let i = columns.length
-      //     while (i--) {
-      //       const {component_name, name} = columns[i]
-      //       if (component_name != 'RowGrid' && keepColumnCodes.indexOf(name) == -1) {
-      //         columns.splice(i, 1)
-      //       }
-      //     }
-      //   }
-      // }
-      //
-      // promise.then(({data = {}}) => {
-      //   const {columns} = data
-      //   if (!utils.isEmpty(columns)) {
-      //     const keepColumnCodes = columns.map(c => c.name) // 移除隐藏、禁用的
-      //     recursiveRemove(copyMeta, keepColumnCodes)
-      //     debugger
-      //   }
-      //
-      //   this.$dialog(copyMeta, null, {
-      //     title: "视图预览",
-      //     width: width
-      //   })
-      // })
     },
     submitForm() {
       const {meta: {columns}, instanceCode, instanceName, objectCode} = this
@@ -215,6 +178,7 @@ export default {
           gridInfoFattened(objectConf) // TODO 2.4 由于目前UIConf的接口要求必须拍平字段的配置参数, 所以栅格设置数据先丢失，后面根据更新后的接口调整此处的逻辑
 
           objectConf.columns.forEach(c => {
+            delete c['hidden']
             fieldsMap[c.name] = c
           })
           delete objectConf['columns']; // 平铺, 接口不接受层级结构
@@ -230,7 +194,6 @@ export default {
 
         this.$axios.post(restUrl.COMP_CONF_UPDATE, params).then(({msg = '配置保存成功'}) => {
           this.$message.success(msg);
-          this.$goBack()
         })
       })
     }

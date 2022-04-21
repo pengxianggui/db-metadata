@@ -32,10 +32,10 @@ import UiConfEditor from "../component/UiConfEditor";
 
 export default {
   name: "ConfArea",
+  inject: ['objectCode'],
   props: {
     value: Object,
     activeItem: Object,
-    objectCode: String,
     fieldCode: String
   },
   components: {OptionsInput, MetaFieldConfigButton, UiConfTip, ComponentSelector, ComponentPlus, UiConfEditor},

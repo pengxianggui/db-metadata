@@ -3,7 +3,8 @@
     <div class="work-area">
       <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%; width:100%">
         <template #form-item>
-          <nest-form-item-editor :columns="formMeta.columns" :active.sync="selectItemName"
+          <nest-form-item-editor :columns="formMeta.columns"
+                                 :active.sync="selectItemName"
                                  @formItemClick="handleFormItemClick"
                                  @formItemDelete="handleFormItemDelete"
                                  @layoutItemDelete="handleLayoutItemDelete"
@@ -31,6 +32,7 @@ import {refreshColumnsSort, isEmptyGridRow} from './formViewMetaParser'
 
 export default {
   name: "WorkArea",
+  inject: ['objectCode'],
   components: {
     DropDownBox,
     FormView,
@@ -51,15 +53,15 @@ export default {
       return isLayoutComp(componentName)
     },
     handleLayoutItemDelete(columns, item, index, ev) {
-      const {formMeta: {objectCode}} = this
+      const {objectCode} = this
       if (objectCode && !isEmptyGridRow(item)) {
-        this.$message.warning('当前处于编辑模式, 只允许删除空的栅格容器')
+        this.$message.warning('当前处于编辑模式, 只允许删除空的栅格容器。当前栅格容器也许在其他表单状态下有域组件')
         return false;
       }
       columns.splice(index, 1)
     },
     handleFormItemDelete(columns, item, index, ev) {
-      const {formMeta: {objectCode}} = this
+      const {objectCode} = this
       if (objectCode) {
         this.$message.warning('编辑元对象时不允许移除控件')
         return false
@@ -68,6 +70,7 @@ export default {
     },
     // 新增
     handleAdd({to, from, item, clone, oldIndex, newIndex}) {
+      // TODO 新增脱离了元对象的前提， 暂不支持
       // const {formMeta: {objectCode}} = this
       // if (objectCode) {
       //   this.$message.warning('编辑元对象时不允许新增控件')

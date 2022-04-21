@@ -33,7 +33,7 @@ public class Dicts {
      * @return
      */
     public List<Kv> names() {
-        List<Record> records = SpringAnalysisManager.me().dbMain().find("select * from meta_dict where p_value is null");
+        List<Record> records = SpringAnalysisManager.me().dbMain().find("select * from meta_dict where p_value is null order by `order` asc");
 
         if (CollectionUtils.isEmpty(records)) {
             return Lists.newArrayList();
@@ -48,7 +48,7 @@ public class Dicts {
      * @return
      */
     public List<Kv> getKvs(String value) {
-        List<Record> records = SpringAnalysisManager.me().dbMain().find("select * from meta_dict where p_value = ?", value);
+        List<Record> records = SpringAnalysisManager.me().dbMain().find("select * from meta_dict where p_value = ? order by `order` asc", value);
         return records.stream().map(r -> Kv.by("key", r.getStr("key"))
                 .set("value", MetaDataTypeConvert.convert(r.getStr("value"), StrKit.defaultIfBlank(r.getStr("value_db_type"), "VARCHAR"))))
                 .collect(Collectors.toList());

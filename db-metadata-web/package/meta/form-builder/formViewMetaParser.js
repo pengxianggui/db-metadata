@@ -252,7 +252,6 @@ export function refreshColumnsSort(columns) {
  * @param gridRowMeta
  */
 export function isEmptyGridRow(gridRowMeta) {
-    console.log(gridRowMeta)
     const {component_name: componentName, columns = []} = gridRowMeta
 
     if (!isLayoutComp(componentName)) {
@@ -272,6 +271,41 @@ export function isEmptyGridRow(gridRowMeta) {
     return true;
 }
 
+/**
+ * 判断容器组件是否可显示: 当为空栅格，或栅格下存在显示的(hidden!==true)域组件时, 即为可显示。如果不是栅格配置，也返回true
+ * @param gridRowMeta
+ */
+export const isLayoutCompShow = (gridRowMeta) => {
+    const {component_name: componentName, columns = []} = gridRowMeta
+
+    if (!isLayoutComp(componentName)) {
+        return true;
+    }
+
+    if (isEmptyGridRow(gridRowMeta)) { // 空栅格也必须显示，否则无法添加栅格了
+        return true
+    }
+
+    const keys = Object.keys(columns)
+    for (let i = 0; i < keys.length; i++) {
+        let k = keys[i]
+        let v = columns[k]
+        for (let j = 0; j < v.length; j++) {
+            const {hidden, component_name: componentName} = v[j]
+            if (isLayoutComp(componentName)) {
+                if (isLayoutCompShow(v[j])) {
+                    return true
+                }
+            } else {
+                if (hidden !== true) {
+                    return true
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 /**
  * TODO 测试 {@link gridInfoFattened} 和 {@link gridInfoStructured}

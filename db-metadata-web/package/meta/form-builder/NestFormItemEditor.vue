@@ -7,12 +7,13 @@
       <div v-for="(item, i) in columns" :key="i" class="cycle-item" @click="cycleItemClick(item, $event)">
         <!-- 布局组件-->
         <template v-if="isLayoutComp(item)">
-          <div class="layout-item" :class="{'active': active === item.name}">
+          <div class="layout-item" :class="{'active': active === item.name}" v-if="isLayoutCompShow(item)">
             <i class="el-icon-s-grid handle"></i>
             <component :is="item.component_name" :meta="item" :show-line="true"
                        style="min-height: 80px">
               <template v-for="(c, j) in item.conf.span" v-slot:[j]>
-                <nest-form-item-editor :columns="fillColumns(item.columns, j)" :active.sync="active"
+                <nest-form-item-editor :columns="fillColumns(item.columns, j)"
+                                       :active.sync="active"
                                        @formItemClick="cycleItemClick"
                                        @add="handleAdd"
                                        @formItemDelete="deleteFormItem"
@@ -27,14 +28,14 @@
 
         <!-- 表单组件-->
         <template v-else>
-          <div :class="{'active': active === item.name}" class="form-item">
+          <div :class="{'active': active === item.name}" class="form-item" v-if="item.hidden !== true">
             <i class="el-icon-s-grid handle" @click="$emit('update:active', item.name)"></i>
             <el-form-item :label="item.label || item.name" :prop="item.name"
                           v-if="!item.hasOwnProperty('showable') || item.showable">
               <component :is="item.component_name" :meta="item"></component>
             </el-form-item>
             <el-button class="delete-btn" size="mini" icon="el-icon-delete"
-                       @click="deleteFormItem(columns, item, i, $event)"></el-button>
+                       @click="deleteFormItem(columns, item, i, $event)" v-if="!objectCode"></el-button>
           </div>
         </template>
 
@@ -45,33 +46,36 @@
 
 <script>
 import {isLayoutComp} from "./relate/componentData";
+import {isLayoutCompShow} from "./formViewMetaParser";
 import draggable from "vuedraggable";
 import {isUndefined} from "../../utils/common";
 
 export default {
   name: "NestFormItemEditor",
+  inject: ['objectCode'],
   components: {
     draggable
   },
   props: {
-    columns: {
+    columns: { // 所有域配置数组
       type: Array,
       required: true
     },
-    active: {
-      type: String
-    }
+    active: String // 选中激活的域配置
   },
   methods: {
-    fillColumns(columns, j) {
-      if (isUndefined(columns[j])) {
-        this.$set(columns, j, [])
+    fillColumns(item, j) {
+      if (isUndefined(item[j])) {
+        this.$set(item, j, [])
       }
-      return columns[j]
+      return item[j]
     },
-    isLayoutComp(column) {
-      const {component_name: componentName} = column
+    isLayoutComp(item) {
+      const {component_name: componentName} = item
       return isLayoutComp(componentName)
+    },
+    isLayoutCompShow(item) {
+      return isLayoutCompShow(item)
     },
     cycleItemClick(item, ev) {
       if (ev) ev.stopPropagation()
@@ -94,15 +98,6 @@ export default {
     handleEnd(e) {
       this.$emit('end', e)
     }
-  },
-  computed: {
-    // sortedColumns() {
-    //   return this.columns.sort((c1, c2) => {
-    //     const {sort: sort1 = 99999} = c1
-    //     const {sort: sort2 = 99999} = c2
-    //     return sort1 - sort2
-    //   })
-    // }
   }
 }
 </script>

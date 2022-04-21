@@ -82,7 +82,7 @@ export function createDialog(Vue) {
                         },
                         width() {
                             const {meta: {style: {width: widthInMeta = '50%'} = {}} = {}, conf: {width: widthInAttr}} = this
-                            return utils.assertEmpty(widthInAttr, widthInMeta)
+                            return utils.assertEmpty(widthInMeta, widthInAttr)
                         }
                     }
                 });
