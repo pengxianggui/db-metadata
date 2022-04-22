@@ -1,6 +1,8 @@
 <template>
   <div class="layout" :style="layoutStyle">
 
+    <svg-icon value="dev_mode" class="dev-mode" v-if="devMode"></svg-icon>
+
     <template v-if="isRow">
       <meta-menu :theme-conf="menuConf"></meta-menu>
       <div class="body" :style="bodyStyle">
@@ -79,6 +81,7 @@ import Theme from '../theme'
 import MetaHeader from "./MetaHeader";
 import MetaMenu from "./MetaMenu";
 import MetaMain from "./MetaMain";
+import {appConfig} from "../config";
 
 export default {
   name: "MetaLayout",
@@ -119,6 +122,9 @@ export default {
       } : {
         "flex-direction": "row",
       }
+    },
+    devMode() {
+      return appConfig.devMode
     }
   }
 }
@@ -127,6 +133,17 @@ export default {
 <style scoped lang="scss">
 
 .layout {
+
+  .dev-mode {
+    width: 120px;
+    height: 120px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    pointer-events: none;
+  }
+
   width: 100%;
   height: 100%;
   overflow: hidden;

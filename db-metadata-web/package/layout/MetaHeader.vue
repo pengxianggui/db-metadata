@@ -47,11 +47,11 @@ export default {
     appLogo: String,
     showGreeting: {
       type: Boolean,
-      default: () => true
+      default: () => null
     },
     showThemeSetting: {
       type: Boolean,
-      default: () => true
+      default: () => null
     },
     themeConf: Object
   },
