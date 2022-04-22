@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     logo() {
-      return assertEmpty(this.appLogo, appConfig.logo)
+      return assertEmpty(this.appLogo, assertEmpty(appConfig.logo, 'meta'))
     },
     name() {
       return assertEmpty(this.appName, appConfig.name)

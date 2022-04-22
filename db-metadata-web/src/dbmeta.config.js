@@ -20,9 +20,6 @@ export default {
     components: [Route1_2], // 如果你的组件需要能够被动态路由配置时选中，那么需要传入此component中
     // restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置。参考【内置接口地址】
     // routeUrl: {}, // 用于覆盖内置的路由地址。参考【内置路由列表】
-    // access: { // 访问权限配置
-    //     root: '0' // ROOT用户的id, 默认就是0。
-    // },
     // theme: { // 默认的主题设置。如果是下面的配置，可以不提供。需要覆盖什么，就提供什么（优先级低于用户自主配置的）
     //     layout: 'row',
     //     themeColor: 'light', // light/dark。下面颜色的属性会覆盖此light代表的属性配置

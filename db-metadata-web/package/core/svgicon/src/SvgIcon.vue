@@ -1,7 +1,8 @@
 <template>
     <div v-if="valueType === 'external'" :style="styleExternalIcon"
          class="external-icon svg-icon" v-on="$listeners" v-bind="$attrs"></div>
-    <img v-else-if="valueType === 'internal'" :src="imgSrc" class="internal-icon svg-icon">
+    <img v-else-if="valueType === 'internal' || valueType === 'relative'"
+         :src="imgSrc" class="internal-icon svg-icon">
     <i v-else-if="valueType === 'icon'" :class="value" class="svg-icon"></i>
     <svg v-else aria-hidden="true" class="svg-icon" v-on="$listeners" v-bind="$attrs">
         <use :xlink:href="iconName"/>
@@ -28,8 +29,10 @@
 
               if (utils.isExternal(value)) { // 外部链接
                 return 'external'
-              } else if (value.startsWith('/')) { // 相对路径
+              } else if (value.startsWith('/')) { // 内部链接
                 return 'internal'
+              } else if (value.startsWith('.')) { // 相对地址： 前端静态资源
+                return 'relative'
               } else if (value.startsWith('el-icon-')) { // ElementUI原生图标
                 return 'icon'
               } else {
@@ -41,8 +44,12 @@
                 return `#me-icon-${value}`
             },
             imgSrc() {
-                const {defaults: {baseURL} = {}} = this.$axios
-                return utils.resolve(baseURL, this.value)
+                if (this.valueType === 'internal') {
+                  const {defaults: {baseURL} = {}} = this.$axios
+                  return utils.resolve(baseURL, this.value)
+                } else if (this.valueType === 'relative') {
+                  return this.value
+                }
             },
             styleExternalIcon() {
                 return {

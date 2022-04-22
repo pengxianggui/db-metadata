@@ -26,7 +26,7 @@ md:
     addable: true # 系统是否支持用户添加其他用户
     default_pass: 888888 # 默认(初始)密码， 当添加用户时、用户注册(未提供密码时)，将使用此默认密码
     pass-encrypt-key: DB-Metadata is delicious # 用户密码加密密钥。无论什么方式，入库的明文密码都需要使用此密钥进行加密。加密方式为AES对称加密
-    login-bg: # 登录页背景色(如blue、#0000FF)或背景图(地址，会设置到url()中)
+    login-bg: \#2f4a75 # 登录页背景色(如blue、#0000FF)或背景图(地址，会设置到url()中)
     reset-pass: dbmeta # 重置口令, 默认dbmeta
     show-greeting: true # 显示问候语
     show-theme-setting: true # 显示主题设置入口, 设为false，则用户无法设置主题

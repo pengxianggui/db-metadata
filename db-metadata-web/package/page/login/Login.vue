@@ -25,7 +25,7 @@ export default {
     const {loginBg} = appConfig
     let style = {}
     if (!isEmpty(loginBg)) {
-      if (loginBg.startsWith('http')) {
+      if (loginBg.startsWith('http') || loginBg.startsWith('.')) {
         style['background-image'] = `url(${loginBg})`
       } else {
         style['background'] = `${loginBg}`
@@ -73,9 +73,7 @@ export default {
     login(model) {
       this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
         Token.set(data.token)
-        this.$router.push('/').then(() => {
-          location.reload()
-        })
+        location.reload()
       })
     },
     register(model) {
