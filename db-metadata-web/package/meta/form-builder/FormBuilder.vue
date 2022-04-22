@@ -62,8 +62,10 @@ import {gridInfoFattened, gridInfoStructured} from "./formViewMetaParser";
 
 export default {
   name: "FormBuilder",
-  provide: {
-    objectCode: 'objectCode'
+  provide() {
+    return {
+      objectCode: this.objectCode
+    }
   },
   components: {
     ComponentList,
@@ -75,18 +77,19 @@ export default {
     ic: {
       type: String,
       required: true
-    }
+    },
+    oc: String
   },
   data() {
-    const {ic: instanceCode} = this
+    const {ic: instanceCode, oc: objectCode} = this
     return {
       metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
       meta: this.$merge({}, DefaultFormViewMeta), // FormView渲染的元数据
       activeItem: {},
       instanceCode: instanceCode,
       instanceName: null,
-      objectCode: null,
-      componentCode: null,
+      objectCode: objectCode,
+      componentCode: 'FormView',
       formType: 'ADD', // 表单模式(ADD/UPDATE/VIEW)
       formTypeOptions: [
         {key: '新增状态', value: 'ADD', instanceUrl: this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode})},
@@ -111,13 +114,11 @@ export default {
 
       this.$axios.safeGet(url).then(resp => {
         let {data} = resp;
-        let {instanceName, fieldsMap, objectCode, componentCode} = data;
+        let {instanceName, fieldsMap} = data;
         this.instanceName = instanceName
-        this.objectCode = objectCode
-        this.componentCode = componentCode
 
         // 提取元对象在FormView下的UI配置
-        this.$reverseMerge(this.meta, extractConfig.call(this, data, objectCode));
+        this.$reverseMerge(this.meta, extractConfig.call(this, data, this.objectCode));
 
         // TODO 加载不同表单模式下的配置，然后依据前者将 默认的缺省配置meta中的 禁用和隐藏的字段移除掉。
         this.$axios.safeGet(this.formTypeOptions.find(o => this.formType === o.value).instanceUrl).then(({data: {columns}} = {}) => {

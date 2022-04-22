@@ -23,9 +23,6 @@ public class CCUUConfigExtension implements ConfigExtension<IMetaField, Attribut
                 config.inline(true);
             }
         }
-        if (containerType == ComponentType.FILEBOX || containerType == ComponentType.IMAGEBOX) {
-            config.seats(Lists.newArrayList("default").toArray(new String[0]));
-        }
 
         //        if (containerType == ComponentType.TABLEVIEW) {
         //            MetaFieldConfigParse parse = metaObj.configParser();

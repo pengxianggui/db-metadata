@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONValidator;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.kit.UtilKit;
-import com.github.md.web.upload.UploadFileResolve;
+import com.github.md.web.upload.JsonUploadFileResolve;
 import com.github.md.web.user.User;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
@@ -54,7 +54,7 @@ public class DefaultUser implements User {
         String avatarUrl;
         String avatarValue = data.getStr("avatar");
         if (StrKit.notBlank(avatarValue) && JSONValidator.from(avatarValue).getType() == JSONValidator.Type.Array) {
-            UploadFileResolve uploadFileResolve = new UploadFileResolve(avatarValue);
+            JsonUploadFileResolve uploadFileResolve = new JsonUploadFileResolve(avatarValue);
             if (uploadFileResolve.hasFile()) {
                 avatarUrl = uploadFileResolve.getFiles().get(0).getUrl();
                 return avatarUrl;

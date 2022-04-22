@@ -30,7 +30,7 @@
               <el-button type="primary" icon="el-icon-plus" size="mini"
                          @click="nativeValue.seats.push('')"></el-button>
               <el-button type="primary" icon="el-icon-minus" size="mini"
-                         @click="nativeValue.seats.splice(index-1,1)"></el-button>
+                         @click="nativeValue.seats.splice(index - 1,1)" v-if="index !== 1"></el-button>
             </template>
           </el-input>
         </template>

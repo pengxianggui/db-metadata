@@ -1,7 +1,7 @@
 <template>
   <div class="page-container" v-if="loaded">
     <!-- 表单实例UI编辑器 -->
-    <form-builder :ic="ic" v-if="componentCode === 'FormView'"></form-builder>
+    <form-builder :ic="ic" v-if="componentCode === 'FormView'" :oc="objectCode"></form-builder>
     <!-- 通用的实例UI编辑器 -->
     <common-instance-editor :ic="ic" :oc="objectCode" :fc="fc" :cc="componentCode" v-else></common-instance-editor>
   </div>

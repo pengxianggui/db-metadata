@@ -4,19 +4,21 @@
                 :limit="1"
                 v-bind="conf"
                 :headers="headers"
-                :on-preview="handlePictureCardPreview"
+                :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :on-success="handleOnSuccess"
                 :before-remove="beforeRemove"
                 :on-exceed="handleExceed"
                 :before-upload="handleBeforeUpload"
-                :file-list="fileList">
+                :file-list="fileList" :class="{__hide: hideUploadButton}">
             <i class="el-icon-plus"></i>
         </el-upload>
         <span>{{seat}}</span>
         <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
+
+        <!-- TODO 提供下载按钮 -->
     </div>
 </template>
 
@@ -55,9 +57,12 @@
             }
         },
         data() {
+          const {value} = this
+          const hideUploadButton = !utils.isEmpty(value)
           const header = {}
           header[appConfig.tokenKey] = Token.get()
             return {
+                hideUploadButton: hideUploadButton,
                 fileList: [],
                 dialogImageUrl: '',
                 dialogVisible: false,
@@ -65,14 +70,18 @@
             };
         },
         methods: {
+            handleChange(file, fileList) {
+              this.hideUploadButton = fileList.length >= 1
+            },
             handleBeforeUpload(file) {
                 return file;
             },
             handleRemove(file, fileList) {
+              this.handleChange(file, fileList)
+              this.nativeValue = []
             },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+            handlePreview(file) {
+                window.open(file.url)
             },
             handleExceed(files, fileList) {
                 this.$message.warning('文件数量超过设定值：' + files.length);
@@ -124,6 +133,15 @@
     }
 </script>
 
+<style lang="scss" scoped>
+  .upload-item {
+    ::v-deep {
+      .__hide .el-upload--text {
+        display: none;
+      }
+    }
+  }
+</style>
 <style scoped>
 
 </style>

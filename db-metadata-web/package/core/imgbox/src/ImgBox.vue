@@ -1,7 +1,7 @@
 <template>
   <div class="img-box">
     <template v-if="innerMeta.hasOwnProperty('seats')">
-      <upload-item class="upload-item" v-for="(seat, index) in seats" :key="seat" :seat="seat"
+      <upload-item class="upload-item" v-for="(seat, index) in seats" :key="seat + index" :seat="seat"
                    :meta="innerMeta" v-model="nativeValue[index]" :multiple="false"
                    @input="changeHandler" :show-file-list="true" v-bind="conf"></upload-item>
     </template>
@@ -54,6 +54,7 @@ export default {
 .img-box {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 
   .upload-item {
     flex: 1;

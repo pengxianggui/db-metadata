@@ -19,6 +19,7 @@
         <el-dialog :visible.sync="dialogVisible" :append-to-body="true">
             <img width="100%" :src="imageUrl" alt="">
         </el-dialog>
+        <!-- TODO 提供下载按钮 -->
     </div>
 </template>
 

@@ -1,5 +1,8 @@
 package com.github.md.web.upload;
 
+import cn.com.asoco.util.AssertUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
 import com.github.md.web.ServiceManager;
@@ -77,7 +80,7 @@ public class UploadController extends ControllerAdapter {
             throw new WebException(e.getMessage());
         }
 
-        String url = uploadService().upload(destFile, objectCode, fieldCode);
+        String url = uploadService().upload(metaField, destFile);
         Kv result = Kv.by("name", destFile.getName());
         result.set("value", url);
         result.set("url", UploadKit.previewUrl(url));
@@ -115,22 +118,32 @@ public class UploadController extends ControllerAdapter {
         Preconditions.checkArgument(StrKit.notBlank(objectCode, fieldCode, id), "必传参数条件不满足:objectCode=%s,fieldCode=%s,id=%s", objectCode, fieldCode, id);
 
         IMetaField metaField = metaService().findFieldByCode(objectCode, fieldCode);
-        String fileJsonData = metaService().findDataFieldById(metaField.getParent(), metaField, id);
+        String fieldValue = metaService().findDataFieldById(metaField.getParent(), metaField, id);
 
-        Preconditions.checkNotNull(fileJsonData, "未找到可下载的文件地址");
+        Preconditions.checkNotNull(fieldValue, "未找到可下载的文件地址");
 
-        UploadFileResolve fileResolve = uploadService().getFileResovler(fileJsonData);
-        UploadFile file = fileResolve.getDefaultSeat();
-        File targetFile = uploadService().getFile(Paths.get(uploadService().getBasePath(), objectCode, fieldCode, file.getUploadedName()).toString());
+        UploadService uploadService = uploadService();
+        List<File> files = uploadService.getFile(metaField, id, fieldValue);
 
+        File targetFile;
+        AssertUtil.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
+        if (files.size() == 1) {
+            targetFile = files.get(0);
+        } else {  // 当有多个文件时，应当一并压缩打包下载
+            String tmpdir = System.getProperty("java.io.tmpdir");
+            targetFile = Paths.get(tmpdir, fieldCode + "_" + id + ".zip").toFile();
+            ZipUtil.zip(targetFile, false, files.toArray(new File[files.size()]));
+        }
+
+        AssertUtil.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", targetFile.getName()));
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
 
-        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(file.getName()).get()).body(new FileSystemResource(targetFile));
+        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
     }
 
     /**

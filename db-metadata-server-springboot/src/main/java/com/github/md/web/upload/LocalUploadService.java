@@ -1,6 +1,7 @@
 package com.github.md.web.upload;
 
 import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.analysis.meta.IMetaField;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import com.github.md.web.config.QuickJudge;
@@ -11,10 +12,16 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * 本地文件上传服务
+ * 本地文件上传服务。上传文件位置：${baseUploadPath}/${objectCode}/${fieldCode}/${fileName}
+ * <p>
+ * 其中baseUploadPath为服务器本地路径，可通过md.server.upload.base-upload-path进行配置
  * <p> @Date : 2019/12/4 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -25,9 +32,12 @@ import java.util.Date;
 public class LocalUploadService implements UploadService {
 
     @Override
-    public String upload(File file, String... splitMarkers) {
+    public String upload(IMetaField metaField, File file) {
+        String objectCode = metaField.objectCode();
+        String fieldCode = metaField.fieldCode();
+
         String basePath = getBasePath();
-        String destPath = Joiner.on("/").skipNulls().join(splitMarkers);
+        String destPath = Joiner.on("/").skipNulls().join(new String[]{objectCode, fieldCode});
         log.info("Joiner filePath : {}", destPath);
         if (!basePath.endsWith("/")) {
             basePath += "/";
@@ -64,12 +74,29 @@ public class LocalUploadService implements UploadService {
     }
 
     @Override
+    public List<File> getFile(IMetaField metaField, String primaryValue, String fieldValue) {
+        UploadFileResolve uploadFileResolve = getFileResovler(metaField, fieldValue);
+        String objectCode = metaField.objectCode(),
+                fieldCode = metaField.fieldCode();
+        if (uploadFileResolve.hasFile()) {
+            return uploadFileResolve.getFiles().stream()
+                    .map(f -> getFile(Paths.get(getBasePath(), objectCode, fieldCode, f.getUploadedName()).toString()))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public File getFile(String filePath) {
         return new File(filePath);
     }
 
     @Override
-    public UploadFileResolve getFileResovler(String fileJsonData) {
-        return new UploadFileResolve(fileJsonData);
+    public UploadFileResolve getFileResovler(IMetaField metaField, String fieldValue) {
+        if (metaField.dbType().isJson()) {
+            return new JsonUploadFileResolve(fieldValue);
+        } else {
+            return new StrUploadFileResolve(fieldValue);
+        }
     }
 }
