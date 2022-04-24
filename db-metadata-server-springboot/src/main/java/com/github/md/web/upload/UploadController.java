@@ -60,14 +60,6 @@ public class UploadController extends ControllerAdapter {
     @MetaAccess(value = Type.API)
     @PostMapping("upload")
     public Ret index(MultipartRequest request) {
-        QueryHelper queryHelper = queryHelper();
-        String objectCode = queryHelper.getObjectCode();
-        String fieldCode = queryHelper.getFieldCode();
-
-        IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
-
-        Preconditions.checkArgument(metaField.configParser().isFile(), "对象{}-字段{}未配置文件属性不正确: 请配置元字段类型为文件", objectCode, fieldCode);
-        Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
 
         List<MultipartFile> uploadFiles = new ArrayList<>();
         request.getFileMap().forEach((k, v) -> {
@@ -83,7 +75,19 @@ public class UploadController extends ControllerAdapter {
             throw new WebException(e.getMessage());
         }
 
-        String url = uploadService().upload(metaField, destFile);
+        QueryHelper queryHelper = queryHelper();
+        String objectCode = queryHelper.getObjectCode();
+        String fieldCode = queryHelper.getFieldCode();
+
+        String url;
+        if (StrKit.notBlank(objectCode, fieldCode)) {
+            IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
+            Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
+            url = (metaField == null ? uploadService().upload(destFile) : uploadService().upload(metaField, destFile));
+        } else {
+            url = uploadService().upload(destFile);
+        }
+
         Kv result = Kv.by("name", destFile.getName());
         result.set("value", url);
         result.set("url", UploadKit.previewUrl(url));
@@ -94,13 +98,31 @@ public class UploadController extends ControllerAdapter {
      * 富文本中的图片上传
      */
     @MetaAccess(value = Type.API)
-    @PostMapping(RichTextBox.UPLOAD_API_PATH)
-    public void richText(MultipartFile uploadFile) {
-        //        UploadService uploadService = ServiceManager.fileService();
-        //
-        //        String url = uploadService.upload(file.getFile());
-        //        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, UploadKit.previewUrl(url));
-        //        renderJson(result); // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
+    @PostMapping("upload/rich-text")
+    public Kv richText(MultipartFile file) {
+        String tmpdir = System.getProperty("java.io.tmpdir");
+        File destFile = Paths.get(tmpdir, file.getOriginalFilename()).toFile();
+
+        try {
+            file.transferTo(destFile);
+        } catch (Exception e) {
+            throw new WebException(e.getMessage());
+        }
+
+        QueryHelper queryHelper = queryHelper();
+        String objectCode = queryHelper.getObjectCode();
+        String fieldCode = queryHelper.getFieldCode();
+
+        String url;
+        if (StrKit.notBlank(objectCode, fieldCode)) {
+            IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
+            url = uploadService().upload(metaField, destFile);
+        } else {
+            url = uploadService().upload(destFile);
+        }
+
+        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, UploadKit.previewUrl(url));
+        return result; // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
     }
 
     /**

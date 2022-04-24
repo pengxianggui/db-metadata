@@ -16,11 +16,19 @@ public interface UploadService {
     /**
      * 上传文件
      *
-     * @param metaField 元字段
+     * @param metaField 元字段。表明文件所属的元字段
      * @param file      文件
      * @return 返回文件地址, 可以是相对路径，也可以是绝对路径(或者http://xxx)。只要 {@link #getFile(String)} 能获取到即可。
      */
     String upload(IMetaField metaField, File file);
+
+    /**
+     * 上传文件
+     *
+     * @param file 文件
+     * @return 返回文件地址, 可以是相对路径，也可以是绝对路径(或者http://xxx)。只要 {@link #getFile(String)} 能获取到即可。
+     */
+    String upload(File file);
 
     /**
      * 获取文件。获取指定资源的文件。

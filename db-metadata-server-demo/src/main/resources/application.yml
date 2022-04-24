@@ -16,6 +16,11 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+
 # db-metadata完整的默认配置
 md:
   dev-mode: true # 开发模式。为true时系统将允许一些操作(比如清空元对象，重新全量生成等)

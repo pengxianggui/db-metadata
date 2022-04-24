@@ -649,7 +649,7 @@
     "name": "RichTextBox",
     "label": "富文本",
     "conf": {
-      "images_upload_url": "/file/upload/richText"
+      "images_upload_url": "/file/upload/rich-text?objectCode={objectCode}&fieldCode={fieldCode}"
     },
     "explain": ""
   },

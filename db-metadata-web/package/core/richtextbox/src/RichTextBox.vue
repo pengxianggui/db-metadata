@@ -1,7 +1,7 @@
 <template>
   <vue-tinymce-text v-model="nativeValue"
                     :toolbar="toolbar" :menubar="menubar"
-                    :width="width" :height="height" v-bind:config="innerMeta['conf']"></vue-tinymce-text>
+                    :width="width" :height="height" v-bind:config="conf"></vue-tinymce-text>
 </template>
 
 <script>
@@ -47,8 +47,20 @@ export default {
       required: false,
       default: 'auto'
     }
-  }
-  ,
+  },
+  computed: {
+    baseURL() {
+      const {defaults: {baseURL} = {}} = this.$axios
+      return baseURL
+    },
+    conf() {
+      const {innerMeta: {conf = {}}, baseURL} = this
+      this.$reverseMerge(conf, {
+        images_upload_url: baseURL + conf.images_upload_url
+      })
+      return conf
+    }
+  },
   data() {
     return {}
   }
