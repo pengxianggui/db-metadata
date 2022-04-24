@@ -1,6 +1,6 @@
 <template>
   <drop-down-box v-model="nativeValue" :meta="meta" :options="components" v-bind="$attrs"
-                 @change="$emit('change')" @clear="$emit('clear')"></drop-down-box>
+                 @change="$emit('change', $event)" @clear="$emit('clear', $event)"></drop-down-box>
 </template>
 
 <script>

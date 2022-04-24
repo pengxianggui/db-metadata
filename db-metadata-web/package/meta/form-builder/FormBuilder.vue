@@ -20,8 +20,8 @@
           不同模式的差异只能通过元字段的逻辑配置来决定，对当前模式的更改会影响其他模式。
         </div>
       </el-tooltip>
-      <drop-down-box v-model="formType" :options="formTypeOptions" size="mini" :filterable="false" style="width: 100px;"
-                     @change="formTypeChange"></drop-down-box>&nbsp;
+      <drop-down-box v-model="formType" :options="formTypeOptions" size="mini"
+                     :filterable="false" :clearable="false" @change="formTypeChange" style="width: 100px;"></drop-down-box>&nbsp;
       <el-button-group style="margin-right: 10px;">
         <el-tooltip content="视图预览" placement="top">
           <el-button @click="preview" icon="el-icon-view" size="mini" type="primary"></el-button>
@@ -35,13 +35,13 @@
       </el-button-group>
       <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
-    <div id="form-builder-main">
+    <div id="form-builder-main" v-if="loaded">
       <ComponentList :form-meta="meta" :edit-mode="true" style="width: 200px; overflow: auto;"></ComponentList>
       <div style="flex: 5;margin:0 5px">
-        <WorkArea v-model="meta" :active-item.sync="activeItem"></WorkArea>
+        <WorkArea v-model="meta" :field-code.sync="activeFieldCode"></WorkArea>
       </div>
       <div style="width: 300px;">
-        <ConfArea v-model="meta" :active-item="activeItem" :field-code="activeItem.name"></ConfArea>
+        <ConfArea v-model="meta" :field-code.sync="activeFieldCode"></ConfArea>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@ export default {
     return {
       metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
       meta: this.$merge({}, DefaultFormViewMeta), // FormView渲染的元数据
-      activeItem: {},
+      activeFieldCode: null, // 点选的域的字段名，就是fieldCode
       instanceCode: instanceCode,
       instanceName: null,
       objectCode: objectCode,
@@ -95,13 +95,14 @@ export default {
         {key: '新增状态', value: 'ADD', instanceUrl: this.$compile(restUrl.RECORD_TO_ADD, {instanceCode: instanceCode})},
         {key: '编辑状态', value: 'UPDATE', instanceUrl: this.$compile(restUrl.RECORD_TO_UPDATE, {instanceCode: instanceCode, primaryKv: null})},
         {key: '查看状态', value: 'VIEW', instanceUrl: this.$compile(restUrl.RECORD_TO_VIEW, {instanceCode: instanceCode, primaryKv: null})}
-      ]
+      ],
+      loaded: false
     }
   },
   methods: {
     setInitState() {
       this.meta = this.$merge({}, DefaultFormViewMeta);
-      this.activeItem = {}
+      this.activeFieldCode = null
     },
     formTypeChange() {
       this.$confirm('当前未保存的变更可能会丢失。确定切换状态?', '提示').then(() => {
@@ -137,6 +138,7 @@ export default {
           });
 
           gridInfoStructured(this.meta) // 结构化meta(建立递归的布局支持)
+          this.loaded = true
         })
 
       }).catch(({msg}) => {

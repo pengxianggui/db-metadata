@@ -1,3 +1,4 @@
+import utils from '../../utils'
 import {elementVersion} from "../../config";
 
 export const ConfDesc = `
@@ -10,11 +11,11 @@ export const ConfDesc = `
 |conf|ElementUI(` + elementVersion + `)中<a target="_blank" href="https://element.eleme.cn/2.12/#/zh-CN/component/upload#attribute">el-upload</a>的原生配置项|object|-|-|
 `;
 
-export default {
+const defaultMeta = {
     "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
-    "seats": [""],
+    "seats": [],
     "conf": {
         "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
         "drag": false,
@@ -25,4 +26,26 @@ export default {
         "multiple": false,  // 暂时单选
     },
     "explain": ""
+}
+
+export default defaultMeta
+
+/**
+ * 构造动态meta
+ * @param objectCode
+ * @param fieldCode
+ * @returns {{}}
+ */
+export const callback = function (objectCode, fieldCode) {
+    let meta = {}
+    utils.merge(meta, defaultMeta)
+    utils.reverseMerge(meta, {
+        conf: {
+            action: utils.compile(defaultMeta.conf.action, {
+                objectCode: objectCode,
+                fieldCode: fieldCode
+            })
+        }
+    })
+    return meta
 }

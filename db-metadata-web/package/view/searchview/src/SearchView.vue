@@ -62,7 +62,7 @@ import symbols from '../ext/config'
 import {toParams} from "../ext/config";
 import DefaultMeta from '../ui-conf'
 import {assembleMeta} from '../ui-conf'
-import {defaultMeta} from '@/../package/core/index'
+import {buildDefaultMeta} from '@/../package/core/index'
 import {ViewMetaBuilder} from "../../ext/mixins";
 import {isEmpty} from "@/../package/utils/common";
 
@@ -93,7 +93,7 @@ export default {
       const {columns = []} = meta
       columns.forEach(item => {
         const {component_name: componentName, default_value: defaultValue} = item
-        this.$merge(item, defaultMeta[componentName]); // merge column
+        this.$merge(item, buildDefaultMeta(componentName)); // merge column
         let symbol = util.deepClone(symbols.hasOwnProperty(componentName) ? symbols[componentName] : symbols['TextBox']);
         let value = null;
         if (!isEmpty(defaultValue)) {

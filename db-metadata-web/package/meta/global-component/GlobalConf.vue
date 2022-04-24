@@ -52,13 +52,12 @@ import {restUrl} from "../../constant/url";
 import EleProps from '../../constant/element-props'
 import DefaultJsonBoxMeta from '../../core/jsonbox/ui-conf'
 import buildMeta from "../buildMeta";
-import UiConfTip from "../component/UiConfTip";
 import ComponentSelector from "../component/ComponentSelector";
 import {assertEmpty} from "../../utils/common";
 
 export default {
   name: "GlobalConf",
-  components: {UiConfTip, ComponentSelector},
+  components: {ComponentSelector},
   data() {
     let confMeta = {
       name: "conf",

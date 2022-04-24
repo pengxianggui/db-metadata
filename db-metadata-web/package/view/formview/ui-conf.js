@@ -33,7 +33,6 @@ export default {
     "component_name": "FormView",
     "name": "FormView",
     "label": "表单模板",
-    // "action": "/form/doAdd/{objectCode}", // form action (url), pxg_todo 屏蔽, FormBuilder实例配置时,会导致此属性和值配入库中, 但是此值需要区分三种表单环境
     "style": { // 表单上的样式
         "width": "60%"
     },

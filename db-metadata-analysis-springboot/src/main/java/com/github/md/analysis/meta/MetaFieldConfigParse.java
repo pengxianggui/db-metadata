@@ -134,10 +134,6 @@ public class MetaFieldConfigParse extends MetaData {
         return Boolean.parseBoolean(getStr("isFile"));
     }
 
-    public List<String> fileConfig() {
-        return JSON.parseArray(getStr("seats"), String.class);
-    }
-
     /**
      * addStatus/updateStatus 控制展示行为
      * 正常(能看,能生成sql)

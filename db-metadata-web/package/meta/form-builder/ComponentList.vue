@@ -25,7 +25,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import {defaultMeta} from '../../core/index'
+import {buildDefaultMeta} from '../../core/index'
 import compLib, {extract} from './relate/componentData'
 import {randomNum, isEmpty} from '../../utils/common'
 
@@ -59,7 +59,7 @@ export default {
         label: label
       };
 
-      this.$merge(meta, defaultMeta[name]);
+      this.$merge(meta, buildDefaultMeta(name));
       return meta;
     },
     handleEnd() {

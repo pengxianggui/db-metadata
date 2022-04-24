@@ -27,7 +27,7 @@ export default function Val(conver, reverse) {
                         val = reverse.call(this, val);
                     }
 
-                    if (utils.isEmpty(val)) {
+                    if (utils.isUndefined(val) || utils.isNull(val)) {
                         val = null
                     }
                     return this.$emit("input", val); // 通过 input 事件更新 model

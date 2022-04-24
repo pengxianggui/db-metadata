@@ -18,6 +18,7 @@ import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 文件上传/下载
@@ -158,6 +161,14 @@ public class UploadController extends ControllerAdapter {
 
         File targetFile = uploadService().getFile(Paths.get(uploadService().getBasePath(), path).toString());
 
-        return ResponseEntity.ok().contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
+        String fileName = URLEncoder.encode(targetFile.getName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+
+        Optional<MediaType> optional = MediaTypeFactory.getMediaType(fileName);
+        return ResponseEntity.ok().headers(headers).contentType(optional.orElse(MediaType.APPLICATION_OCTET_STREAM)).body(new FileSystemResource(targetFile));
     }
 }

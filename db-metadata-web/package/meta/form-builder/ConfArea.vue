@@ -1,7 +1,8 @@
 <template>
   <el-tabs type="border-card" style="height: 100%; overflow: auto;">
     <el-tab-pane label="域配置" style="height: 100%;">
-      <ui-conf-editor v-model="activeItem" :object-code="objectCode" :field-code="fieldCode"
+      <ui-conf-editor v-model="activeItem"
+                      :object-code="objectCode" :field-code="fieldCode"
                       view-component-code="FormView"
                       v-if="!isEmpty(activeItem)"></ui-conf-editor>
       <div v-else class="blank-tip">
@@ -18,10 +19,7 @@
 
 <script>
 import OptionsInput from './relate/OptionsInput'
-import UiConfTip from "../component/UiConfTip";
-import confFilter from './relate/confFilter'
 import confComponentMapping from './relate/confComponentMapping'
-import DefaultTextBoxMeta from '../../core/textbox/ui-conf'
 import {isLayoutComp} from "./relate/componentData";
 import MetaFieldConfigButton from "../component/MetaFieldConfigButton";
 import utils from '@/../package/utils'
@@ -29,16 +27,14 @@ import ComponentSelector from "../component/ComponentSelector";
 import ComponentPlus from "../component/ComponentPlus";
 import UiConfEditor from "../component/UiConfEditor";
 
-
 export default {
   name: "ConfArea",
   inject: ['objectCode'],
   props: {
     value: Object,
-    activeItem: Object,
     fieldCode: String
   },
-  components: {OptionsInput, MetaFieldConfigButton, UiConfTip, ComponentSelector, ComponentPlus, UiConfEditor},
+  components: {OptionsInput, MetaFieldConfigButton, ComponentSelector, ComponentPlus, UiConfEditor},
   data() {
     return {
       metaMapping: confComponentMapping
@@ -50,16 +46,6 @@ export default {
     },
     isLayoutComp(componentName) {
       return isLayoutComp(componentName)
-    },
-    editableJudge(componentName, key) {
-      return confFilter(componentName, key);
-    },
-    getShowComponentName(key) {
-      const metaMapping = this.metaMapping;
-      if (metaMapping.hasOwnProperty(key)) {
-        return metaMapping[key].component_name;
-      }
-      return DefaultTextBoxMeta.component_name;
     }
   },
   watch: {
@@ -77,6 +63,29 @@ export default {
       },
       set: function (newVal) {
         this.$emit('input', newVal);
+      }
+    },
+    activeItem: {
+      get: function () {
+        const {fieldCode, value: {columns = []}} = this
+        if (!utils.isEmpty(fieldCode)) {
+          for (let i = 0; i < columns.length; i++) {
+            if (fieldCode === columns[i].name) {
+              return columns[i]
+            }
+          }
+        }
+        return null
+      },
+      set: function (newVal) {
+        const {fieldCode, value: {columns = []}} = this
+        if (!utils.isEmpty(fieldCode)) {
+          for (let i = 0; i < columns.length; i++) {
+            if (fieldCode === columns[i].name) {
+              columns[i] = newVal
+            }
+          }
+        }
       }
     }
   }

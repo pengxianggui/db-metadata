@@ -50,6 +50,10 @@ public class AttributeBuilder {
         AttrCustomMeta showSymbolOption(boolean show);
     }
 
+    interface UploadAbility {
+        UploadAbility limit(int limit);
+    }
+
     interface AttrAbility {
 
         AttrAbility disabled(boolean v);
@@ -151,7 +155,7 @@ public class AttributeBuilder {
         Kv render();
     }
 
-    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr, TreeAttr {
+    public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr, TreeAttr, UploadAbility {
 
         private Kv config = Kv.create();
 
@@ -410,6 +414,11 @@ public class AttributeBuilder {
         public TreeAttr props(String label, String children) {
             setConf("props", Kv.create().set("label", label).set("children", children));
             return this;
+        }
+
+        @Override
+        public UploadAbility limit(int limit) {
+            return setConf("limit", limit);
         }
     }
 }

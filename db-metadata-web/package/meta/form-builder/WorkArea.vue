@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="work-area">
-      <form-view :ref="formMeta.name" :meta="formMeta" style="height: 100%; width:100%">
+      <form-view :ref="value.name" :meta="value" style="height: 100%; width:100%">
         <template #form-item>
-          <nest-form-item-editor :columns="formMeta.columns"
-                                 :active.sync="selectItemName"
-                                 @formItemClick="handleFormItemClick"
-                                 @formItemDelete="handleFormItemDelete"
-                                 @layoutItemDelete="handleLayoutItemDelete"
+          <nest-form-item-editor :columns="value.columns"
+                                 :active.sync="fieldCode"
+                                 @form-item-click="handleFormItemClick"
+                                 @form-item-delete="handleFormItemDelete"
+                                 @layout-item-delete="handleLayoutItemDelete"
                                  @add="handleAdd"
                                  @move="handleMove"
                                  @end="handleEnd"
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import utils from '../../utils'
 import draggable from 'vuedraggable'
 import FormView from "@/../package/view/formview/src/FormView";
 import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
@@ -41,11 +40,10 @@ export default {
   },
   props: {
     value: Object,
-    activeItem: Object
+    fieldCode: String
   },
   data() {
     return {
-      selectItemName: null
     }
   },
   methods: {
@@ -80,26 +78,24 @@ export default {
     },
     handleEnd(e) {
       // 重新计算排序值
-      refreshColumnsSort(this.formMeta.columns)
+      refreshColumnsSort(this.value.columns)
     },
     handleMove(e) {
     },
     // 点击选中
     handleFormItemClick(column) {
       const {name} = column
-      this.selectItemName = name
-
-      this.$emit('update:activeItem', column)
+      this.$emit('update:field-code', name)
     }
   },
   computed: {
-    formMeta() {
-      let formMeta = this.value;
-      if (!utils.isArray(formMeta.columns)) {
-        this.$set(formMeta, 'columns', []);
-      }
-      return formMeta;
-    },
+    // formMeta() {
+    //   let formMeta = this.value;
+    //   if (!utils.isArray(formMeta.columns)) {
+    //     this.$set(formMeta, 'columns', []);
+    //   }
+    //   return formMeta;
+    // },
   }
 }
 </script>

@@ -68,7 +68,6 @@
 <script>
 import utils from '../../utils'
 import {restUrl} from "../../constant/url";
-import UiConfTip from '../component/UiConfTip'
 import extractConfig from './extractConfig'
 import buildMeta from "../buildMeta";
 import FieldFilter from "../component/FieldFilter";
@@ -82,7 +81,6 @@ import DefaultJsonBoxMeta from "../../core/jsonbox/ui-conf";
 export default {
   name: "CommonInstanceEditor",
   components: {
-    UiConfTip,
     FieldFilter,
     MetaObjectSelector,
     ComponentSelector,
@@ -308,10 +306,5 @@ export default {
       overflow: auto;
     }
   }
-}
-</style>
-<style>
-.ui-conf-tip-popper {
-  box-shadow: 4px 12px 26px 0 rgba(0, 0, 0, 0.2)
 }
 </style>

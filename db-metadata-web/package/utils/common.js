@@ -663,14 +663,25 @@ export function execute(fn, params) {
 /**
  * 删除一个对象所有的属性
  * @param value
+ * @param ignoreKeys 不删的key数组，也可以传一个key字符串
  */
-export function deleteAllAttrs(value) {
+export function deleteAllAttrs(value, ignoreKeys = []) {
     if (!isObject(value)) {
         return {}
     }
 
+    if (isString(ignoreKeys)) {
+        ignoreKeys = [ignoreKeys]
+    }
+
+    if (!isArray(ignoreKeys)) {
+        ignoreKeys = []
+    }
+
     for (let key of Object.keys(value)) {
-        delete value[key]
+        if (ignoreKeys.indexOf(key) == -1) {
+            delete value[key]
+        }
     }
     return value
 }

@@ -50,6 +50,12 @@ export default {
   name: "FormView",
   components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
   mixins: [ViewMetaBuilder(DefaultMeta), ViewMixin],
+  provide() {
+    return {
+      isView: this.isView,
+      objectCode: this.objectCode
+    }
+  },
   props: {
     model: { // 外部model的值拥有最高优先级, 但是key却是依据meta来确定
       type: Object,
@@ -79,10 +85,9 @@ export default {
       this.$set(this.model, name, value)
     },
     doSubmit(ev) {
-      let {meta, model: params} = this;
-      const {action, objectCode} = meta;
+      let {meta, model: params, objectCode} = this;
 
-      let url = this.$compile(action, {objectCode: objectCode});
+      let url = this.$compile(meta.action, {objectCode: objectCode});
       params['objectCode'] = objectCode;
 
       utils.filterEmptyStrToNull(params)
@@ -151,6 +156,10 @@ export default {
     isView() {
       const {meta: {form_type = formTypes.add}} = this
       return formTypes.view.toUpperCase() === form_type.toUpperCase()
+    },
+    objectCode() {
+      const {meta: {objectCode}} = this
+      return objectCode
     },
     rules() {
       const {meta: {conf: {rules} = {}} = {}} = this

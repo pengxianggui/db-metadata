@@ -101,17 +101,11 @@ public class FormDataFactory {
 
                 // 文件类型处理
                 if (metaField.configParser().isFile()) {
-                    List<String> fileConfig = metaField.configParser().fileConfig();
                     List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
 
                     if (metaField.dbType().isJson()) {
                         // 确保入库的文件字段 必须是有效的[]
                         if (files != null && files.size() > 0) {
-                            for (UploadFile uploadFile : files) {
-                                if (fileConfig == null || fileConfig.isEmpty()) {
-                                    uploadFile.setSeat("default");
-                                }
-                            }
                             formData.set(metaField.fieldCode(), JSON.toJSONString(files));
                         } else {
                             formData.set(metaField.fieldCode(), new JSONArray().toJSONString());

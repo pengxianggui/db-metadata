@@ -14,10 +14,10 @@
               <template v-for="(c, j) in item.conf.span" v-slot:[j]>
                 <nest-form-item-editor :columns="fillColumns(item.columns, j)"
                                        :active.sync="active"
-                                       @formItemClick="cycleItemClick"
+                                       @form-item-click="cycleItemClick"
                                        @add="handleAdd"
-                                       @formItemDelete="deleteFormItem"
-                                       @layoutItemDelete="deleteLayoutItem"
+                                       @form-item-delete="deleteFormItem"
+                                       @layout-item-delete="deleteLayoutItem"
                                        style="height: 100%"></nest-form-item-editor>
               </template>
             </component>
@@ -79,15 +79,15 @@ export default {
     },
     cycleItemClick(item, ev) {
       if (ev) ev.stopPropagation()
-      this.$emit('formItemClick', item)
+      this.$emit('form-item-click', item)
     },
     deleteFormItem(columns, item, index, ev) {
       if (ev) ev.stopPropagation()
-      this.$emit('formItemDelete', columns, item, index, ev)
+      this.$emit('form-item-delete', columns, item, index, ev)
     },
     deleteLayoutItem(columns, item, index, ev) {
       if (ev) ev.stopPropagation()
-      this.$emit('layoutItemDelete', columns, item, index, ev)
+      this.$emit('layout-item-delete', columns, item, index, ev)
     },
     handleAdd(row) {
       this.$emit('add', row)

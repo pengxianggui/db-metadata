@@ -19,23 +19,6 @@
         </el-tooltip>
       </div>
     </el-form-item>
-    <el-form-item v-if="nativeValue.isFile" label="上传插槽">
-      <el-tooltip content="只有一个插槽时可不填,多个插槽时插槽名称指定后,生成多个上传组件后会标识每个上传组件传到哪一个插槽" placement="right">
-        <i class="el-icon-question"></i>
-      </el-tooltip>
-      <div class="upload-seats">
-        <template v-for="index in nativeValue.seats.length">
-          <el-input v-model="nativeValue.seats[index-1]" :placeholder="'第'+index+'个位置插槽名称'" size="mini">
-            <template slot="append">
-              <el-button type="primary" icon="el-icon-plus" size="mini"
-                         @click="nativeValue.seats.push('')"></el-button>
-              <el-button type="primary" icon="el-icon-minus" size="mini"
-                         @click="nativeValue.seats.splice(index - 1,1)" v-if="index !== 1"></el-button>
-            </template>
-          </el-input>
-        </template>
-      </div>
-    </el-form-item>
 
     <el-divider content-position="left">
       <span>表单配置</span>&nbsp;
@@ -129,7 +112,6 @@ export default {
       activeOption: 'scopeOptions',
 
       config: {
-        seats: [""],
         addStatus: 100,
         updateStatus: 100,
         viewStatus: 30,

@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import {isLayoutComp} from "../../../meta/form-builder/relate/componentData";
-import {isArray} from "../../../utils/common";
+import {isLayoutComp} from "../../../meta/form-builder/relate/componentData"
+import utils from '../../../utils'
 import FormFieldView from "./FormFieldView";
 
 export default {
@@ -74,7 +74,7 @@ export default {
     },
     extractSpan(column) {
       const {conf: {span} = {}} = column
-      if (!isArray(span)) {
+      if (!utils.isArray(span)) {
         console.error(`[Meta-Element] 容器组件 ${column.component_name} 的配置项 conf.span不正确, 请检查！`)
       }
       return span

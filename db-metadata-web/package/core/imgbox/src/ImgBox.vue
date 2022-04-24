@@ -1,12 +1,15 @@
 <template>
   <div class="img-box">
-    <template v-if="innerMeta.hasOwnProperty('seats')">
-      <upload-item class="upload-item" v-for="(seat, index) in seats" :key="seat + index" :seat="seat"
-                   :meta="innerMeta" v-model="nativeValue[index]" :multiple="false"
+    <template v-if="seats.length > 0">
+      <!-- seat模式 -->
+      <upload-item class="upload-item" v-for="(seat, index) in seats" :key="seat + index"
+                   :seat="seat" :meta="innerMeta" v-model="nativeValue[index]" mode="seat"
                    @input="changeHandler" :show-file-list="true" v-bind="conf"></upload-item>
     </template>
     <template v-else>
-      <!--            <upload-item :meta="innerMeta" v-model="value"></upload-item>-->
+      <!-- 普通模式 -->
+      <upload-item :meta="innerMeta" v-model="nativeValue" mode="default"
+                    :show-file-list="true" v-bind="conf"></upload-item>
     </template>
   </div>
 </template>
@@ -19,7 +22,7 @@ import UploadItem from "./UploadItem"
 import Val from "../../mixins/value";
 
 export default {
-  mixins: [Meta(DefaultMeta), Val(conver, reverse)], // value入参限定为Array，为对象类型，无需维护组件内外的双向绑定, 因此无需添加中间nativeValue
+  mixins: [Meta(DefaultMeta), Val(conver, reverse)],
   components: {UploadItem},
   name: 'ImgBox',
   label: '图片上传框',
