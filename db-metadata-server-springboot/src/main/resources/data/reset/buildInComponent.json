@@ -434,9 +434,7 @@
     "component_name": "ImgBox",
     "name": "ImgBox",
     "label": "图片上传框",
-    "seats": [
-      ""
-    ],
+    "seats": [],
     "conf": {
       "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
       "drag": false,
@@ -452,9 +450,7 @@
     "component_name": "FileBox",
     "name": "FileBox",
     "label": "文件上传框",
-    "seats": [
-      ""
-    ],
+    "seats": [],
     "conf": {
       "action": "/file/upload?objectCode={objectCode}&fieldCode={fieldCode}",
       "drag": false,
