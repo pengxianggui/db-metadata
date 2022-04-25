@@ -10,5 +10,5 @@ import com.github.md.web.user.AuthenticationConfigurer;
  * @date 2022/4/25 9:37 上午
  */
 public abstract class DbMetaConfigurer implements AuthenticationConfigurer, UploadConfigurer {
-
+    // TODO 元对象、元字段、组件实例配置的扩展入口也放到这里
 }
