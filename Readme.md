@@ -1,11 +1,12 @@
 # db-metadata
 
-一个公司自研的低代码快速开发工具。
+一个公司自研的低/零代码快速开发工具。
 
 ## 传送门
 
 - [文档地址](https://doc-dbmeta.asoco.com.cn/): 参考文档
-- [集成DEMO](https://gitlab.asoco.com.cn/pengxianggui/db-metadata-demo): 一个快速集成的demo示例
+- [db-metadata集成DEMO代码](https://gitlab.asoco.com.cn/pengxianggui/db-metadata-demo): 一个快速集成的demo代码示例
+- [db-metadata集成DEMO访问](http://dev-dbmeta.asoco.com.cn/#/login): 一个快速集成的demo的访问示例
 
 ## 介绍
 
@@ -14,16 +15,14 @@
 >
 >但现状是一个大型项目,或者系统中通常有很多子系统或子模块组成,并不是每个子模块都要具有完整的用户权限、登录、菜单管理、字典等等功能。
 > 如果是在人员有限且项目规模不大,而且又是从0->1这个阶段开始的话，选择任何一个开源的快速开发框架都是合适的，如果系统非0->1这个阶段已经上线且具备一些功能了，再引入快速开发框架的效果和成本就值得考虑了；
->
->DMBS 的定位首先是一套功能引擎,其次才是开发平台
->
+
 
 #### 社区的一些参考的快速开发平台
 
 > 社区相对活跃,功能完备,技术栈新的
 
 - [jeesite - https://jeesite.gitee.io/](https://jeesite.gitee.io/) - [演示地址](http://demo.jeesite.com/)
-- [jeecg - http://www.jeecg.com/](http://www.jeecg.com/)- [演示地址](http://boot.jeecg.com/)
+- [jeecg - http://www.jeecg.com/](http://www.jeecg.com/) - [演示地址](http://boot.jeecg.com/)
 - [eova - http://www.eova.cn/](http://www.eova.cn/) - [演示地址](http://pro.eova.cn/)
     - 元对象的一些设计思路来源
 
@@ -35,6 +34,9 @@
 - Jdk1.8
 - Guava
 - FastJson
+- Vue
+- VueRouter
+- ElementUI
 
 ### 能干什么
 
@@ -43,6 +45,7 @@
     - 主子表
     - 单表
     - 树表
+    - 树+表
 - 图形样式设计
 - 天然支持分布式应用
 - 可当纯后端提供数据接口
@@ -58,68 +61,13 @@
 ├── db-metadata-analysis-springboot   数据库分析组件
 ├── db-metadata-parent                父pom
 ├── db-metadata-server-springboot     引入dbMeta后端唯一需要依赖的模块
-└── db-metadata-web                   dbMeta前端,即meta-element. 可直接运行, 也可以打包发布
-└── db-metadata-server-demo           dbMeta后端引入的一个demo工程
+└── db-metadata-web                   dbMeta前端. 可直接运行, 也可以打包发布
 ```
 
-### 安装部署
-
-### 依赖配置
-
-### 集成
-
-## 用户文档
-
-### 基础术语
-
-#### 元对象
-
-> 《Thinking in Java》开篇就写到“一切皆对象”，Linux世界中“一切皆文件”，在DBMS中可以理解成一切的一切都离不开“元对象”； 什么是元对象，“元数据”是描述数据的数据，那么元对象就是描述对象的对象,狭隘的理解，一个元对象可以代表一个“表”，“一个视图”
-
-#### 元子段
-
-#### Component
-
-> 组件的抽象是为了服务与前端的展示，每一个前端框架种组件都可以抽象为一个组件
-
-```
-- 数据展示(ViewComponent)
-    - 表格组件(依赖元对象)(TableView)
-    - 表单组件(依赖元对象)
-    - 树型组件(依赖元对象)
-    - 搜索组件(依赖元对象)(简单的可以使用穿梭框)
-- 表单(FormView)
-    - 单选组件(元子段)FormField
-    - 多选组件(元子段)
-    - 输入组件(元子段)
-    - 业务查询组件
-    - 开关组件(元子段)
-    - 日期组件(元子段)
-    - 范围组件(元子段)
-    - 上传组件(元子段)
-```
-
-#### Component实例
-
-> 单纯的组件是没有灵魂的，元对象和元字段是组件的数据灵魂
->
-
-#### 模板
-
-什么是模板，模板是各种前端组件的集合,模板不能直接使用，模板硬编码编辑
-
-#### 功能
-
-> 功能可以是一个按钮+背后的逻辑  
-> 功能可以是一个纯背后的逻辑  
-> 功能可以是一个页面  
-> 公式:
-
-```
-功能 = (SearchBar(Component) + UIConfig + 元对象) * n
-功能 = Table(Component) + UIConfig + 元对象
-功能 = 功能 * n
-```
+### 分支说明
+- master: db-metadata最早基于Jfinal开发, 因此Jfinal版本托管在master分支; 注意: 此分支很久没有改动了。考虑到Jfinal的小众, 不再维护；
+- spring-boot: 基于SpringBoot的db-metadata， 无Jfinal依赖, 完全在SpringBoot基础上搭建的。适合SpringBoot项目集成。
+- 其他分支非主分支。
 
 ### 架构设计
 
