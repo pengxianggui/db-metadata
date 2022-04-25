@@ -42,9 +42,12 @@ public class MetaProperties {
         private String passEncryptKey = "DB-Metadata is delicious";
         private String loginBg; // 登录背景图
         private String resetPass = "dbmeta";
+        private Boolean showVersion = false; // 在系统名后显示当前dbmeta版本号
         private Boolean showGreeting = true; // 显示问候
         private Boolean showThemeSetting = true; // 显示主题设置
         private Boolean allowCustomTheme = false; // 允许自定义主题
+        private String docUrl = "https://doc-dbmeta.asoco.com.cn";
+
         private Map<String, String> root; // ROOT账号配置
     }
 

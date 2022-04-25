@@ -54,6 +54,7 @@ import DefaultJsonBoxMeta from '../../core/jsonbox/ui-conf'
 import buildMeta from "../buildMeta";
 import ComponentSelector from "../component/ComponentSelector";
 import {assertEmpty} from "../../utils/common";
+import {appConfig} from "../../config";
 
 export default {
   name: "GlobalConf",
@@ -139,10 +140,10 @@ export default {
     openHelpDoc() {
       const {componentCode} = this.confModel;
       if (['FormView', 'TreeView', 'TableView', 'TableTreeView', 'SearchView'].indexOf(componentCode) > -1) {
-        window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
+        window.open(`${appConfig.docUrl}/component/view/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
         return
       }
-      window.open(`https://doc-dbmeta.asoco.com.cn/component/field/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
+      window.open(`${appConfig.docUrl}/component/field/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
     }
   },
   mounted() {

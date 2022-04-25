@@ -9,6 +9,8 @@ import com.google.common.collect.HashBasedTable;
  * <p> @author konbluesky </p>
  */
 public class AppConst {
+    public static final String version = "v2.2";
+
     /**
      * row代表表名, column代表属性, value代表值
      */

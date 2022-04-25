@@ -1,6 +1,7 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Ret;
+import com.github.md.web.AppConst;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.controller.vo.AppPropVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ public class AppController extends ControllerAdapter {
     @GetMapping("config")
     public Ret config() {
         AppPropVO vo = new AppPropVO(
+                AppConst.version,
                 metaProperties.getApp().getName(),
+                metaProperties.getApp().getShowVersion(),
                 metaProperties.getApp().getLogo(),
                 metaProperties.getApp().getRegisterable(),
                 metaProperties.getApp().getAddable(),
@@ -32,7 +35,8 @@ public class AppController extends ControllerAdapter {
                 metaProperties.getApp().getLoginBg(),
                 metaProperties.getApp().getShowGreeting(),
                 metaProperties.getApp().getShowThemeSetting(),
-                metaProperties.getApp().getAllowCustomTheme()
+                metaProperties.getApp().getAllowCustomTheme(),
+                metaProperties.getApp().getDocUrl()
         );
         return Ret.ok("data", vo);
     }

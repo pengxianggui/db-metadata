@@ -24,7 +24,8 @@ export const appConfig = {
     showGreeting: true,
     showThemeSetting: true,
     allowCustomTheme: true, // 是否允许自由定义
-    loginBg: null
+    loginBg: null,
+    docUrl: null
 }
 
 export const configApp = async function (Vue, opts = {}) {

@@ -58,6 +58,7 @@ import {buildDefaultMeta} from "../../core";
 import Val from "../../core/mixins/value";
 import utils from '../../utils'
 import {restUrl} from "../../constant/url";
+import {appConfig} from "../../config";
 
 const reorder = function (value) {
   let keys = Object.keys(value).sort()
@@ -130,10 +131,10 @@ export default {
     openHelpDoc() { // 可配
       const {viewComponentCode, componentCode: fieldComponentCode} = this
       if (viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView') {
-        window.open(`https://doc-dbmeta.asoco.com.cn/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
+        window.open(`${appConfig.docUrl}/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
         return
       }
-      window.open(`https://doc-dbmeta.asoco.com.cn/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
+      window.open(`${appConfig.docUrl}/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
     }
   },
   computed: {
