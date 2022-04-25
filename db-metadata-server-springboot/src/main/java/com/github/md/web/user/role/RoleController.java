@@ -22,7 +22,7 @@ public class RoleController extends ControllerAdapter {
 
     @GetMapping("{roleId}/auths")
     public Ret getAuths(@PathVariable("roleId") String roleId) {
-        List<IAuth> auths = AuthenticationManager.me().authService().findByRole(roleId);
+        List<IAuth> auths = AuthenticationManager.me().getAuthService().findByRole(roleId);
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
@@ -31,7 +31,7 @@ public class RoleController extends ControllerAdapter {
     public Ret bindAuths(@PathVariable("roleId") String roleId) {
         Kv kv = parameterHelper().getKv();
         String authId = StrKit.defaultIfBlank(kv.getStr("authId"), "");
-        boolean flag = AuthenticationManager.me().roleService().bindAuthsForRole(roleId, authId.split(","));
+        boolean flag = AuthenticationManager.me().getRoleService().bindAuthsForRole(roleId, authId.split(","));
         return flag ? Ret.ok() : Ret.fail();
     }
 }

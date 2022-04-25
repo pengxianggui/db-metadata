@@ -10,6 +10,7 @@ import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.ui.SqlAnalysis;
+import com.github.md.web.upload.UploadManager;
 import com.github.md.web.upload.UploadService;
 
 /**
@@ -34,7 +35,7 @@ public class ServiceManager {
     }
 
     public static UploadService fileService() {
-        return AnalysisSpringUtil.getBean(UploadService.class);
+        return UploadManager.me().getUploadService();
     }
 
     public static FeatureService featureService() {

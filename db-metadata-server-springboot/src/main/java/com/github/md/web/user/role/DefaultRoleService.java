@@ -8,7 +8,6 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +42,7 @@ public class DefaultRoleService implements RoleService {
         List<Record> records = db().find("select r.* from meta_role r,  meta_user_role_rela rela where r.id = rela.role_id and rela.user_id=?", userId);
         for (Record data : records) {
             DefaultRole role = new DefaultRole(data);
-            List<IAuth> auths = AuthenticationManager.me().authService().findByRole(role.id());
+            List<IAuth> auths = AuthenticationManager.me().getAuthService().findByRole(role.id());
             role.setAuths(auths);
             roles.add(role);
         }

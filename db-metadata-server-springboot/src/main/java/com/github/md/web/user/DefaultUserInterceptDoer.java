@@ -17,7 +17,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
     }
 
     @Override
-    public boolean preCertify(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public User preCertify(HttpServletRequest request, HttpServletResponse response, Object handler) {
         UserWithRolesWrapper user = getUser(request);
 
         if (user == null) {
@@ -31,7 +31,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
 //            cookie.setMaxAge((int) TimeUnit.HOURS.toSeconds(6));
 //            response.addCookie(cookie);
         }
-        return true;
+        return user;
     }
 
     /**

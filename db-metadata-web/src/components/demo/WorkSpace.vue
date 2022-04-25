@@ -20,7 +20,7 @@
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
 <!--    <form-view ic="meta_user.FormView" form-type="add"></form-view>-->
-    <form-view ic="t_department.FormView" form-type="update" primary-kv="713731202925858816" style="width: 100%"></form-view>
+    <form-view ic="t_employee.FormView" form-type="update" primary-kv="1" style="width: 100%"></form-view>
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->

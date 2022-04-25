@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="upload-item">
     <el-upload
         v-bind="conf"
         :headers="headers"
@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     handleChange(file, fileList) {
-      this.hideUploadButton = (fileList.length >= 1 && this.mode !== 'default') // seat模式下只能传1个，因此在已经有文件时需要隐藏上传按钮
     },
     handleBeforeUpload(file) {
       return file;
@@ -128,6 +127,13 @@ export default {
           })
         }
       })
+
+      if (this.mode === 'default') {
+        const {conf: {limit}} = this
+        this.hideUploadButton = (newV.length >= limit)
+      } else {
+        this.hideUploadButton = (newV.length >= 1) // seat模式下只能传1个，因此在已经有文件时需要隐藏上传按钮
+      }
     }
   },
   mounted() {

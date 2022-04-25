@@ -50,7 +50,7 @@ public class AuthorizePermit implements MRPermit<User, AnnotateApiResource> {
         if (user instanceof UserWithRolesWrapper) { // 优先使用内存缓存
             ownRoles = Arrays.asList(((UserWithRolesWrapper) user).roles()).stream().map(MRRole::code).collect(Collectors.toList());
         } else {
-            List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+            List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
             ownRoles = roles.stream().map(MRRole::code).collect(Collectors.toList());
         }
 
@@ -66,7 +66,7 @@ public class AuthorizePermit implements MRPermit<User, AnnotateApiResource> {
         if (user instanceof UserWithRolesWrapper) { // 优先使用内存缓存
             ownAuths = Arrays.asList(((UserWithRolesWrapper) user).auths()).stream().map(IAuth::code).collect(Collectors.toList());
         } else {
-            List<IAuth> auths = AuthenticationManager.me().authService().findByUser(user.userId());
+            List<IAuth> auths = AuthenticationManager.me().getAuthService().findByUser(user.userId());
             ownAuths = auths.stream().map(IAuth::code).collect(Collectors.toList());
         }
 

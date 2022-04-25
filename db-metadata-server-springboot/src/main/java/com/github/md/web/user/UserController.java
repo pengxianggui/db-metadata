@@ -29,7 +29,7 @@ public class UserController extends ControllerAdapter {
     @Authorize(justSign = true)
     @GetMapping("{userId}/roles")
     public Ret getRoles(@PathVariable("userId") String userId) {
-        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(userId);
+        List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(userId);
         return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
@@ -41,7 +41,7 @@ public class UserController extends ControllerAdapter {
 
         String[] roleIdArr = roleId.split(",");
 
-        boolean flag = AuthenticationManager.me().userService()
+        boolean flag = AuthenticationManager.me().getUserService()
                 .bindRolesForUser(userId, roleIdArr);
         return flag ? Ret.ok() : Ret.fail();
     }
@@ -49,11 +49,11 @@ public class UserController extends ControllerAdapter {
     @Authorize(justSign = true)
     @PostMapping("update")
     public Ret updateUserData() {
-        IMetaObject metaObject = metaService().findByCode(AuthenticationManager.me().userService().userObjectCode());
+        IMetaObject metaObject = metaService().findByCode(AuthenticationManager.me().getUserService().userObjectCode());
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
         String userId = UserThreadLocal.getUser().userId();
         metadata.set(metaObject.primaryKey(), userId);
-        boolean flag = AuthenticationManager.me().userService().updateById(userId, metadata);
+        boolean flag = AuthenticationManager.me().getUserService().updateById(userId, metadata);
         return flag ? Ret.ok() : Ret.fail();
     }
 
@@ -63,8 +63,8 @@ public class UserController extends ControllerAdapter {
     public Ret getRoles() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         List<MRRole> roles = AuthenticationManager.me().isRoot(user)
-                ? AuthenticationManager.me().roleService().findAll()
-                : AuthenticationManager.me().roleService().findByUser(user.userId());
+                ? AuthenticationManager.me().getRoleService().findAll()
+                : AuthenticationManager.me().getRoleService().findByUser(user.userId());
 
         return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
@@ -75,8 +75,8 @@ public class UserController extends ControllerAdapter {
     public Ret getAuths() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         List<IAuth> auths = AuthenticationManager.me().isRoot(user)
-                ? AuthenticationManager.me().authService().findAll()
-                : AuthenticationManager.me().authService().findByUser(user.userId());
+                ? AuthenticationManager.me().getAuthService().findAll()
+                : AuthenticationManager.me().getAuthService().findByUser(user.userId());
 
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
@@ -86,7 +86,7 @@ public class UserController extends ControllerAdapter {
     @PostMapping("reset-pass")
     public Ret resetPass() {
         String userId = parameterHelper().get("userId");
-        boolean flag = AuthenticationManager.me().userService().resetPass(userId);
+        boolean flag = AuthenticationManager.me().getUserService().resetPass(userId);
         return flag ? Ret.ok().set("msg", "重置成功") : Ret.fail();
     }
 
@@ -95,7 +95,7 @@ public class UserController extends ControllerAdapter {
     public Ret setPass() {
         String password = parameterHelper().get("password");
         String userId = UserThreadLocal.getUser().userId();
-        boolean flag = AuthenticationManager.me().userService().setPass(userId, password);
+        boolean flag = AuthenticationManager.me().getUserService().setPass(userId, password);
         return flag ? Ret.ok().set("msg", "密码修改成功") : Ret.fail();
     }
 }

@@ -3,11 +3,8 @@ package com.github.md.web.user;
 import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
+import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.user.auth.*;
-import com.github.md.web.user.auth.defaults.AnnotateApiResource;
-import com.github.md.web.user.auth.defaults.ApiResourcePermit;
-import com.github.md.web.user.auth.defaults.AuthorizePermit;
-import com.github.md.web.user.auth.defaults.MetaApiResource;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
@@ -17,8 +14,8 @@ import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 认证管理
@@ -35,11 +32,16 @@ public class AuthenticationManager {
      * 需要注意得是loginUsers得put动作 只能由loginService来做
      */
     @Getter
-    private final Cache<String, UserWithRolesWrapper> loginUsers = CacheBuilder.newBuilder().maximumSize(1000).build();
+    private final Cache<String, UserWithRolesWrapper> loginUsers = CacheBuilder.newBuilder()
+            .maximumSize(10000).expireAfterWrite(7, TimeUnit.DAYS).build();
 
+    @Getter
     private UserService userService;
+    @Getter
     private LoginService loginService;
+    @Getter
     private RoleService roleService;
+    @Getter
     private AuthService authService;
 
     @Getter
@@ -50,39 +52,23 @@ public class AuthenticationManager {
     /**
      * 资源、判定器映射表，指定资源要使用的判定器
      */
-    private static final Map<Class<? extends MResource>, MRPermit> resourcePermitMapping = new HashMap<>();
+    private final Map<Class<? extends MResource>, MRPermit> resourcePermitMapping;
 
     public static AuthenticationManager me() {
-        AuthenticationConfigurer configurer = AnalysisSpringUtil.getBean(AuthenticationConfigurer.class);
-        if (me.userService == null) {
-            me.userService = configurer.configUserService();
-        }
-        if (me.loginService == null) {
-            me.loginService = configurer.configLoginService();
-        }
-        if (me.roleService == null) {
-            me.roleService = configurer.configRoleService();
-        }
-        if (me.authService == null) {
-            me.authService = configurer.configAuthService();
-        }
-
-        if (me.userIntercept == null) {
-            me.userIntercept = new UserIntercept(configurer.configUserInterceptDoer());
-        }
-        if (me.authIntercept == null) {
-            me.authIntercept = new MRAuthIntercept(configurer.configAuthInterceptDoer());
-        }
-
-        // 配置默认鉴权控制
-        resourcePermitMapping.put(MetaApiResource.class, new ApiResourcePermit()); // 基于数据的接口资源判定
-        resourcePermitMapping.put(AnnotateApiResource.class, new AuthorizePermit()); // 基于注解的接口资源判定
-        configurer.configPermitMapping(resourcePermitMapping);
-
         return me;
     }
 
     private AuthenticationManager() {
+        AuthenticationConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+        AuthenticationRegistry registry = new AuthenticationRegistry();
+        configurer.configAuthentication(registry);
+        userService = registry.getUserService();
+        loginService = registry.getLoginService();
+        roleService = registry.getRoleService();
+        authService = registry.getAuthService();
+        userIntercept = new UserIntercept(registry.getUserInterceptDoer());
+        authIntercept = new MRAuthIntercept(registry.getAuthInterceptDoers());
+        resourcePermitMapping = registry.getResourcePermitMapping();
     }
 
     /**
@@ -123,19 +109,19 @@ public class AuthenticationManager {
         return Root.me().equals(user);
     }
 
-    public UserService userService() {
+    public UserService getUserService() {
         return this.userService;
     }
 
-    public LoginService loginService() {
+    public LoginService getLoginService() {
         return this.loginService;
     }
 
-    public RoleService roleService() {
+    public RoleService getRoleService() {
         return this.roleService;
     }
 
-    public AuthService authService() {
+    public AuthService getAuthService() {
         return this.authService;
     }
 

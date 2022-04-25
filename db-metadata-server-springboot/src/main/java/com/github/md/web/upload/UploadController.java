@@ -75,6 +75,7 @@ public class UploadController extends ControllerAdapter {
             throw new WebException(e.getMessage());
         }
 
+        UploadService uploadService = uploadService();
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -83,9 +84,9 @@ public class UploadController extends ControllerAdapter {
         if (StrKit.notBlank(objectCode, fieldCode)) {
             IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
             Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
-            url = (metaField == null ? uploadService().upload(destFile) : uploadService().upload(metaField, destFile));
+            url = (metaField == null ? uploadService.upload(destFile) : uploadService.upload(metaField, destFile));
         } else {
-            url = uploadService().upload(destFile);
+            url = uploadService.upload(destFile);
         }
 
         Kv result = Kv.by("name", destFile.getName());

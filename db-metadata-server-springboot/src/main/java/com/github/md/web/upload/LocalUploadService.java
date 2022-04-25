@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
  *
  * <p> @author konbluesky </p>
  */
-@Service
 @Slf4j
 public class LocalUploadService implements UploadService {
 

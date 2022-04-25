@@ -42,8 +42,8 @@ public class ApiResourcePermit implements MRPermit<User, MetaApiResource> {
             hasRoles = Arrays.asList(((UserWithRolesWrapper) user).roles());
             hasAuths = Arrays.asList(((UserWithRolesWrapper) user).auths());
         } else {
-            hasRoles = AuthenticationManager.me().roleService().findByUser(user.userId());
-            hasAuths = AuthenticationManager.me().authService().findByUser(user.userId());
+            hasRoles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
+            hasAuths = AuthenticationManager.me().getAuthService().findByUser(user.userId());
         }
 
         if (CollectionUtils.isEmpty(hasRoles)) hasRoles = Lists.newArrayList();

@@ -26,8 +26,8 @@ public class LoginController extends ControllerAdapter {
 
     @PostMapping("${md.server.login.ctrl.login-path:/user/login}")
     public Ret login(HttpServletResponse response) {
-        String uid = parameterHelper().getPara(AuthenticationManager.me().loginService().loginKey());
-        String pwd = parameterHelper().getPara(AuthenticationManager.me().loginService().pwdKey());
+        String uid = parameterHelper().getPara(AuthenticationManager.me().getLoginService().loginKey());
+        String pwd = parameterHelper().getPara(AuthenticationManager.me().getLoginService().pwdKey());
 
         LoginVO loginVO = AuthenticationManager.me().login(uid, pwd);
         if (loginVO != null) {

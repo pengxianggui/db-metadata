@@ -26,7 +26,12 @@ public class UserIntercept implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        return this.userInterceptDoer.preCertify(request, response, handler);
+        User user = this.userInterceptDoer.preCertify(request, response, handler);
+        if (user != null) {
+            UserThreadLocal.setUser(user);
+        }
+
+        return true;
     }
 
     @Override

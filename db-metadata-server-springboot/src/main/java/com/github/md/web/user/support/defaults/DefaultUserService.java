@@ -63,7 +63,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     @Override
     public boolean updateById(DefaultUser user) {
         boolean flag = db().update("meta_user", user.getData());
-        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+        List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
         MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
         DefaultUserWithRoles defaultUserWithRoles = new DefaultUserWithRoles(user, roleArr);
         setLogged(defaultUserWithRoles); // 更新会话缓存
@@ -96,7 +96,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
         }
 
         DefaultUser user = new DefaultUser(record);
-        List<MRRole> roles = AuthenticationManager.me().roleService().findByUser(user.userId());
+        List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
         MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
         return new DefaultUserWithRoles(user, roleArr);
     }
