@@ -36,18 +36,17 @@ public class AuthenticationManager {
             .maximumSize(10000).expireAfterWrite(7, TimeUnit.DAYS).build();
 
     @Getter
-    private UserService userService;
+    private final UserService userService;
     @Getter
-    private LoginService loginService;
+    private final LoginService loginService;
     @Getter
-    private RoleService roleService;
+    private final RoleService roleService;
     @Getter
-    private AuthService authService;
-
+    private final AuthService authService;
     @Getter
-    private UserIntercept userIntercept; // 用户认证拦截器
+    private final UserIntercept userIntercept; // 用户认证拦截器
     @Getter
-    private MRAuthIntercept authIntercept; // 用户鉴权拦截器
+    private final MRAuthIntercept authIntercept; // 用户鉴权拦截器
 
     /**
      * 资源、判定器映射表，指定资源要使用的判定器
@@ -107,22 +106,6 @@ public class AuthenticationManager {
      */
     public boolean isRoot(User user) {
         return Root.me().equals(user);
-    }
-
-    public UserService getUserService() {
-        return this.userService;
-    }
-
-    public LoginService getLoginService() {
-        return this.loginService;
-    }
-
-    public RoleService getRoleService() {
-        return this.roleService;
-    }
-
-    public AuthService getAuthService() {
-        return this.authService;
     }
 
     /**
