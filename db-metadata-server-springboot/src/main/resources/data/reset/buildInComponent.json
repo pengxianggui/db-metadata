@@ -502,7 +502,25 @@
     },
     "columns": [],
     "directly_trigger": [],
-    "explain": ""
+    "explain": "",
+    "buttons": {
+      "show": true,
+      "submit": {
+        "show": true,
+        "label": "搜索",
+        "conf": {
+          "type": "primary",
+          "icon": "el-icon-search"
+        }
+      },
+      "reset": {
+        "show": true,
+        "label": "重置",
+        "conf": {
+          "icon": "el-icon-refresh-left"
+        }
+      }
+    }
   },
   "FormView": {
     "component_name": "FormView",
