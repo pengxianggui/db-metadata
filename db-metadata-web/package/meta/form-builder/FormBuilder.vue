@@ -38,10 +38,10 @@
     <div id="form-builder-main" v-if="loaded">
       <ComponentList :form-meta="meta" :edit-mode="true" style="width: 200px; overflow: auto;"></ComponentList>
       <div style="flex: 5;margin:0 5px">
-        <WorkArea v-model="meta" :field-code.sync="activeFieldCode"></WorkArea>
+        <WorkArea v-model="meta" :active-item.sync="activeItem"></WorkArea>
       </div>
       <div style="width: 300px;">
-        <ConfArea v-model="meta" :field-code.sync="activeFieldCode"></ConfArea>
+        <ConfArea v-model="meta" :active-item="activeItem"></ConfArea>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@ export default {
     return {
       metaObjectCodeUrl: restUrl.OBJECT_CODE_LIST,
       meta: this.$merge({}, DefaultFormViewMeta), // FormView渲染的元数据
-      activeFieldCode: null, // 点选的域的字段名，就是fieldCode
+      activeItem: {},
       instanceCode: instanceCode,
       instanceName: null,
       objectCode: objectCode,
@@ -102,7 +102,7 @@ export default {
   methods: {
     setInitState() {
       this.meta = this.$merge({}, DefaultFormViewMeta);
-      this.activeFieldCode = null
+      this.activeItem = {}
     },
     formTypeChange() {
       this.$confirm('当前未保存的变更可能会丢失。确定切换状态?', '提示').then(() => {

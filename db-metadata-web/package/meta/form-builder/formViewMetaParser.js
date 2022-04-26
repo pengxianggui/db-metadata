@@ -1,4 +1,4 @@
-import {deepClone, isObject, isString} from "../../utils/common";
+import utils from '../../utils'
 import {isLayoutComp} from "./relate/componentData";
 
 /**
@@ -161,7 +161,7 @@ export function gridInfoFattened(formMeta) {
     try {
         for (let i = 0; i < columns.length; i++) {
             let rowGrid = extractField(columns, i, fields)
-            if (isObject(rowGrid)) {
+            if (utils.isObject(rowGrid)) {
                 layout.push(rowGrid)
             }
         }
@@ -202,9 +202,45 @@ export function gridInfoStructured(formMeta) {
     return formMeta
 }
 
+/**
+ * 将一个新的域配置更新到formMeta中
+ * @param formMeta 表单的meta配置，columns有内容，是一个可能含有栅格布局的层级结构内容
+ * @param fieldMeta 需要替换进去的新的域配置值
+ */
+export function setFieldConfig(formMeta, fieldMeta) {
+
+}
+
+/**
+ * 从表单实例配置中读取指定域名称的域配置。深度优先遍历
+ * @param formMeta
+ * @param fieldName
+ */
+export function getFieldConfig(formMeta, fieldName) {
+    if (utils.isEmpty(formMeta) || utils.isEmpty(fieldName)) {
+        return null;
+    }
+
+    const {columns = []} = formMeta
+    for (let i = 0; i < columns.length; i++) {
+        let {name, component_name} = columns[i]
+        if (name === fieldName) {
+            return columns[i]
+        }
+
+        if (isLayoutComp(component_name)) {
+            let fieldMeta = getFieldConfig(columns[i], fieldName)
+            if (!utils.isEmpty(fieldMeta)) {
+                return fieldMeta
+            }
+        }
+    }
+    return null
+}
+
 const restoreField = function (obj, key, formColumns) {
     const rowGrid = obj[key]
-    if (isString(rowGrid)) {
+    if (utils.isString(rowGrid)) {
         let index = formColumns.findIndex(element => element.name === rowGrid)
         if (index >= 0) { // 也可能此字段被逻辑控制隐藏、禁用而找不到了
             obj[key] = formColumns[index]
@@ -232,7 +268,7 @@ const extractField = function (obj, key, fields) {
         })
         return formItem
     } else {
-        fields.push(deepClone(formItem))
+        fields.push(utils.deepClone(formItem))
         obj[key] = formItem.name
     }
 }

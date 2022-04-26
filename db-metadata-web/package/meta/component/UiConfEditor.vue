@@ -1,37 +1,39 @@
 <template>
   <div>
-    <template v-if="formType">
-      <el-form size="mini" :model="nativeValue" label-position="top">
-        <template v-for="key in keys">
-          <template v-if="editableJudge(nativeValue.component_name, key)">
-            <el-form-item :key="key" :label="key">
+    <el-form size="mini" :model="value" label-position="top" v-show="formType">
+      <template v-for="key in keys">
+        <template v-if="editableJudge(value.component_name, key)">
+          <el-form-item :key="key" :label="key">
 
-              <component-selector v-model="nativeValue.component_name" @change="handleCompChange"
-                                  scope="field" :components="fieldComponents"
-                                  :popper-append-to-body="false" :disabled="nativeValue.component_name === viewComponentCode"
-                                  v-if="key === 'component_name'"></component-selector>
+            <component-selector v-model="value.component_name" @change="handleCompChange"
+                                scope="field" :components="fieldComponents"
+                                :popper-append-to-body="false" :disabled="value.component_name === viewComponentCode"
+                                v-if="key === 'component_name'"></component-selector>
 
-              <!--              特殊-->
-              <component :is="nativeValue.component_name" :meta="nativeValue"
-                         v-model="nativeValue[key]" v-else-if="key === 'default_value'"></component>
+            <!--              特殊-->
+            <component :is="value.component_name" :meta="value"
+                       v-model="value[key]" v-else-if="key === 'default_value'"></component>
 
 
-              <!--              常规-->
-              <component :is="attrsConfMeta[key]['component_name']" v-model="nativeValue[key]"
-                         :meta="attrsConfMeta[key]"
-                         v-else></component>
+            <!--              常规-->
+            <component :is="attrsConfMeta[key]['component_name']" v-model="value[key]"
+                       :meta="attrsConfMeta[key]"
+                       v-else></component>
 
-            </el-form-item>
-          </template>
+          </el-form-item>
         </template>
-      </el-form>
-    </template>
+      </template>
+    </el-form>
 
-    <template v-else>
-      <!-- 倘若直接使用v-model, JsonBox中若更改了component_name,将直接更新到上一层, 无法根据component_name的新值重新刷新配置,
-      此处使用:value和@input组合解构v-model的语法糖-->
-      <json-box v-model="nativeValue" mode="tree"></json-box>
-    </template>
+    <!--
+     这里有一个大坑！不能直接使用v-model，会产生两个问题:
+     1. 由于JsonBox内部v-model实现，会导致更新后的值内存地址发生了变化，即value不在是原先那个value，这会导致域配置的更新没有体现到容器配置中。
+        因为value就是容器配置中columns中点选的那个域配置，是同一个内存地址。而之所以上面的form不会产生这样的问题，是form形式是直接修改value里的属性值，
+        而不是改value，因此value指针指向的内存地址是不变的。对value的改动，就是对容器配置中columns点选域配置的改变。
+     2. 倘若直接使用v-model, JsonBox中若更改了component_name, 则无法根据component_name的新值重新刷新配置
+     解决办法: 此处使用:value和@input组合解构v-model的语法糖，如此一来就可以在handleInput方法中避免上述两个问题。
+    -->
+    <json-box :value="value" @input="handleInput" mode="tree" v-show="!formType"></json-box>
 
     <div class="bottom-btn-group">
       <span style="flex: 1"></span>
@@ -39,7 +41,7 @@
       <el-button size="mini" icon="el-icon-question" circle @click="openHelpDoc"></el-button>
 
       <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"
-                                v-if="objectCode && fieldCode && !isLayoutComp(nativeValue.component_name)">
+                                v-if="objectCode && fieldCode && !isLayoutComp(value.component_name)">
         <template #default="{open}">
           <el-button size="mini" icon="el-icon-s-tools" circle @click="open"></el-button>
         </template>
@@ -55,23 +57,12 @@ import {isLayoutComp} from "../form-builder/relate/componentData";
 import ComponentSelector from "./ComponentSelector";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
 import {buildDefaultMeta} from "../../core";
-import Val from "../../core/mixins/value";
 import utils from '../../utils'
 import {restUrl} from "../../constant/url";
 import {appConfig} from "../../config";
 
-const reorder = function (value) {
-  let keys = Object.keys(value).sort()
-  let newValue = {};
-  keys.forEach(k => {
-    newValue[k] = value[k]
-  })
-  return newValue
-}
-
 export default {
   name: "UiConfEditor",
-  mixins: [Val(/*reorder*/)], // TODO 必须实现排序, 保证component_name在第一，但是这里有问题, 会导致双向绑定失效，因为内部新建了对象
   components: {ComponentSelector, MetaFieldConfigButton},
   props: {
     value: {
@@ -85,12 +76,16 @@ export default {
     viewComponentCode: { // 容器组件编码
       type: String,
       required: true
+    },
+    defaultFormType: {
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
     return {
-      formType: false,
-      fieldComponents: []
+      fieldComponents: [],
+      formType: this.defaultFormType
     }
   },
   watch: {
@@ -109,6 +104,18 @@ export default {
     }
   },
   methods: {
+    handleInput(newV) {
+      // 这里先删除this.value的所有属性，然后在merge上去，是防止value变量指向的内存地址发生变化。
+      const {component_name: oldComponentName} = this.value
+      const {component_name: newComponentName} = newV
+
+      if (oldComponentName !== newComponentName) {
+        this.$message.warning('请在表单模式中下拉切换组件, 否则可能导致配置异常')
+      }
+
+      utils.deleteAllAttrs(this.value)
+      this.$merge(this.value, newV)
+    },
     editableJudge(componentName, key) {
       return confFilter(componentName, key);
     },
@@ -116,15 +123,14 @@ export default {
       return isLayoutComp(componentName)
     },
     changeType() {
-      const {formType} = this;
-      this.formType = !formType;
-      this.$emit('change-type', this.formType); // hook
+      this.formType = !this.formType;
+      this.$emit('change-type', this.formType);
     },
-    handleCompChange() {
-      const {nativeValue: {component_name}, objectCode, fieldCode} = this
-      utils.deleteAllAttrs(this.nativeValue, ['name', 'label']) // TODO 不能一刀切的删除掉所有属性，比如 ImgBox转FileBox时，如果一刀切，那么action就要重新配置
-      const defMeta = buildDefaultMeta(component_name, objectCode, fieldCode)
-      this.$merge(this.nativeValue, utils.assertEmpty(defMeta, {
+    handleCompChange(newV) {
+      const {objectCode, fieldCode} = this
+      utils.deleteAllAttrs(this.value, ['name', 'label'])
+      const defMeta = buildDefaultMeta(newV, objectCode, fieldCode)
+      this.$merge(this.value, utils.assertEmpty(defMeta, {
         component_name: 'TextBox'
       }))
     },
@@ -140,20 +146,20 @@ export default {
   },
   computed: {
     attrsConfMeta() {
-      const {nativeValue, viewComponentCode} = this
-      const value = {}
-      for (let key of Object.keys(nativeValue)) {
-        value[key] = buildMeta(nativeValue[key], key, viewComponentCode)
+      const {value, viewComponentCode} = this
+      const attrsConfMeta = {}
+      for (let key of Object.keys(value)) {
+        attrsConfMeta[key] = buildMeta(value[key], key, viewComponentCode)
       }
-      return value
+      return attrsConfMeta
     },
     componentCode() {
-      const {nativeValue: {component_name}} = this
+      const {value: {component_name}} = this
       return component_name
     },
     keys() {
-      const {nativeValue = {}} = this
-      return Object.keys(nativeValue).sort()
+      const {value = {}} = this
+      return Object.keys(value).sort()
     }
   }
 }

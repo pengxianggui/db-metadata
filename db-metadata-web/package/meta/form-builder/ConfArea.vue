@@ -2,8 +2,9 @@
   <el-tabs type="border-card" style="height: 100%; overflow: auto;">
     <el-tab-pane label="域配置" style="height: 100%;">
       <ui-conf-editor v-model="activeItem"
-                      :object-code="objectCode" :field-code="fieldCode"
+                      :object-code="objectCode" :field-code="activeItem.name"
                       view-component-code="FormView"
+                      :default-form-type="true"
                       v-if="!isEmpty(activeItem)"></ui-conf-editor>
       <div v-else class="blank-tip">
         请先选择一个字段
@@ -11,7 +12,8 @@
     </el-tab-pane>
 
     <el-tab-pane label="表单配置">
-      <ui-conf-editor v-model="formMeta" :object-code="objectCode" :field-code="fieldCode"
+      <ui-conf-editor v-model="value" :object-code="objectCode" :field-code="activeItem.name"
+                      :default-form-type="true"
                       view-component-code="FormView"></ui-conf-editor>
     </el-tab-pane>
   </el-tabs>
@@ -32,7 +34,7 @@ export default {
   inject: ['objectCode'],
   props: {
     value: Object,
-    fieldCode: String
+    activeItem: Object
   },
   components: {OptionsInput, MetaFieldConfigButton, ComponentSelector, ComponentPlus, UiConfEditor},
   data() {
@@ -46,47 +48,6 @@ export default {
     },
     isLayoutComp(componentName) {
       return isLayoutComp(componentName)
-    }
-  },
-  watch: {
-    formMeta: {
-      handler: function (newVal) {
-        this.$emit('input', newVal);
-      },
-      deep: true
-    }
-  },
-  computed: {
-    formMeta: {
-      get: function () {
-        return this.value;
-      },
-      set: function (newVal) {
-        this.$emit('input', newVal);
-      }
-    },
-    activeItem: {
-      get: function () {
-        const {fieldCode, value: {columns = []}} = this
-        if (!utils.isEmpty(fieldCode)) {
-          for (let i = 0; i < columns.length; i++) {
-            if (fieldCode === columns[i].name) {
-              return columns[i]
-            }
-          }
-        }
-        return null
-      },
-      set: function (newVal) {
-        const {fieldCode, value: {columns = []}} = this
-        if (!utils.isEmpty(fieldCode)) {
-          for (let i = 0; i < columns.length; i++) {
-            if (fieldCode === columns[i].name) {
-              columns[i] = newVal
-            }
-          }
-        }
-      }
     }
   }
 }

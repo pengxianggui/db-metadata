@@ -4,7 +4,7 @@
       <form-view :ref="value.name" :meta="value" style="height: 100%; width:100%">
         <template #form-item>
           <nest-form-item-editor :columns="value.columns"
-                                 :active.sync="fieldCode"
+                                 :active-item="activeItem"
                                  @form-item-click="handleFormItemClick"
                                  @form-item-delete="handleFormItemDelete"
                                  @layout-item-delete="handleLayoutItemDelete"
@@ -40,7 +40,8 @@ export default {
   },
   props: {
     value: Object,
-    fieldCode: String
+    fieldCode: String,
+    activeItem: Object
   },
   data() {
     return {
@@ -84,8 +85,7 @@ export default {
     },
     // 点击选中
     handleFormItemClick(column) {
-      const {name} = column
-      this.$emit('update:field-code', name)
+      this.$emit('update:active-item', column)
     }
   },
   computed: {

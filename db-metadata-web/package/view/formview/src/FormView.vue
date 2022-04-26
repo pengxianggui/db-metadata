@@ -17,11 +17,9 @@
           v-bind:submit="onSubmit" v-bind:cancel="onCancel" v-if="!isView && buttonsConf.show">
       <el-form-item class="form-item-button">
         <el-button :id="meta.name + 'submit'" v-bind="buttonsConf.submit.conf"
-                   @click="onSubmit" v-text="buttonsConf.submit.label"
-                   v-if="buttonsConf.submit.show"></el-button>
+                   @click="onSubmit" v-if="buttonsConf.submit.show">{{buttonsConf.submit.label}}</el-button>
         <el-button :id="meta.name + 'cancel'" v-bind="buttonsConf.cancel.conf"
-                   @click="onCancel" v-text="buttonsConf.cancel.label"
-                   v-if="buttonsConf.cancel.show"></el-button>
+                   @click="onCancel" v-if="buttonsConf.cancel.show">{{buttonsConf.cancel.label}}</el-button>
       </el-form-item>
     </slot>
     <!-- render-less behavior slot -->

@@ -25,6 +25,11 @@ const specials = {
                 filterable: true,
                 disabled: true
             }
+        },
+        "icon": {
+            component_name: IconBox.name,
+            name: 'icon',
+            label: '图标'
         }
     },
     "FormView": {
@@ -37,6 +42,11 @@ const specials = {
                 filterable: true,
                 disabled: true
             }
+        },
+        "icon": {
+            component_name: IconBox.name,
+            name: 'icon',
+            label: '图标'
         }
     },
     "TableView": {

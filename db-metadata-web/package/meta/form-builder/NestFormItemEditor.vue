@@ -4,17 +4,17 @@
     <slot v-if="columns.length === 0"></slot>
 
     <template v-else>
-      <div v-for="(item, i) in columns" :key="i" class="cycle-item" @click="cycleItemClick(item, $event)">
+      <div v-for="(item, i) in columns" :key="i" class="cycle-item" @click="formItemClick(item, $event)">
         <!-- 布局组件-->
         <template v-if="isLayoutComp(item)">
-          <div class="layout-item" :class="{'active': active === item.name}" v-if="isLayoutCompShow(item)">
+          <div class="layout-item" :class="{'active': activeItem.name === item.name}" v-if="isLayoutCompShow(item)">
             <i class="el-icon-s-grid handle"></i>
             <component :is="item.component_name" :meta="item" :show-line="true"
                        style="min-height: 80px">
               <template v-for="(c, j) in item.conf.span" v-slot:[j]>
                 <nest-form-item-editor :columns="fillColumns(item.columns, j)"
-                                       :active.sync="active"
-                                       @form-item-click="cycleItemClick"
+                                       :active-item="activeItem"
+                                       @form-item-click="formItemClick"
                                        @add="handleAdd"
                                        @form-item-delete="deleteFormItem"
                                        @layout-item-delete="deleteLayoutItem"
@@ -28,8 +28,8 @@
 
         <!-- 表单组件-->
         <template v-else>
-          <div :class="{'active': active === item.name}" class="form-item" v-if="item.hidden !== true">
-            <i class="el-icon-s-grid handle" @click="$emit('update:active', item.name)"></i>
+          <div :class="{'active': activeItem.name === item.name}" class="form-item" v-if="item.hidden !== true">
+            <i class="el-icon-s-grid handle" @click="formItemClick(item, $event)"></i>
             <el-form-item :label="item.label || item.name" :prop="item.name"
                           v-if="!item.hasOwnProperty('showable') || item.showable">
               <component :is="item.component_name" :meta="item"></component>
@@ -61,7 +61,7 @@ export default {
       type: Array,
       required: true
     },
-    active: String // 选中激活的域配置
+    activeItem: Object // 选中激活的域配置
   },
   methods: {
     fillColumns(item, j) {
@@ -77,7 +77,7 @@ export default {
     isLayoutCompShow(item) {
       return isLayoutCompShow(item)
     },
-    cycleItemClick(item, ev) {
+    formItemClick(item, ev) {
       if (ev) ev.stopPropagation()
       this.$emit('form-item-click', item)
     },
