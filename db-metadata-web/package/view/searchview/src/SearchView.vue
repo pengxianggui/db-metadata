@@ -37,9 +37,11 @@
           </el-form-item>
         </template>
         <el-form-item>
-          <slot name="action" v-bind:model="model">
-            <el-button type="primary" @click="emitSearch" icon="el-icon-search">搜索</el-button>
-            <el-button @click="onReset" icon="el-icon-refresh-left">重置</el-button>
+          <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf">
+            <el-button type="primary" @click="emitSearch"
+                       v-bind="buttonsConf.submit.conf" v-if="buttonsConf.submit.show">{{buttonsConf.submit.label}}</el-button>
+            <el-button @click="onReset"
+                       v-bind="buttonsConf.reset.conf" v-if="buttonsConf.reset.show">{{buttonsConf.reset.label}}</el-button>
           </slot>
         </el-form-item>
       </el-form>
@@ -130,6 +132,10 @@ export default {
     directlyTrigger() {
       const {meta: {directly_trigger: directlyTrigger}} = this
       return directlyTrigger
+    },
+    buttonsConf() {
+      const {buttons: buttonsConf = {}} = this.meta
+      return buttonsConf
     }
   }
 }

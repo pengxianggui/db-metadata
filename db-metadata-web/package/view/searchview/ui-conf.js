@@ -24,6 +24,24 @@ export default {
     },
     "columns": [],
     "directly_trigger": [], // 直接触发的字段name, 即change后无需点击搜索按钮可直接触发搜索action
+    "buttons": {
+        "show": true,
+        "submit": {
+            "show": true,
+            "label": "搜索",
+            "conf": {
+                "type": "primary",
+                "icon": "el-icon-search"
+            }
+        },
+        "reset": {
+            "show": true,
+            "label": "重置",
+            "conf": {
+                "icon": "el-icon-refresh-left"
+            }
+        }
+    }
 }
 
 /**
