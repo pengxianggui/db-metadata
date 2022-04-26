@@ -6,6 +6,7 @@
     "data_url": "/table/list?objectCode={objectCode}",
     "delete_url": "/table/delete?objectCode={objectCode}&{primaryKvExp}",
     "multi_select": true,
+    "show_index": false,
     "conf": {
       "default-sort": {
         "prop": "id",

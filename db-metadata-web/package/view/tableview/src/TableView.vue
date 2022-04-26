@@ -1,12 +1,12 @@
 <template>
   <div class="view-container" ref="container">
     <!-- 操作条 -->
-    <div class="operation-bar">
+    <div class="operation-bar" :style="operationBarConf.style">
       <slot name="operation-bar" v-bind:conf="operationBarConf"
             v-bind:choseData="choseData" v-bind:activeData="activeData">
 
         <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
-                   :style="operationBarConf.style" v-bind="operationBarConf.conf"
+                   v-bind="operationBarConf.conf"
                    :class="{'not-btn-group': !operationBarConf.group}"
                    v-if="operationBarConf.show">
           <slot name="prefix-btn" v-bind:conf="operationBarConf"
@@ -53,6 +53,10 @@
         <el-table-column type="selection" width="55"></el-table-column>
       </template>
 
+      <el-table-column label="序号" width="60" v-if="showIndex">
+        <template #default="{row, column, $index}">{{ $index + 1 }}</template>
+      </el-table-column>
+
       <template v-for="item in columns">
         <el-table-column v-if="item.showable"
                          :key="item.code"
@@ -72,7 +76,8 @@
       </template>
 
       <slot name="operation-column">
-        <el-table-column v-bind="operationColumnConf.conf" v-if="operationColumnConf.show">
+        <el-table-column v-bind="operationColumnConf.conf" :style="operationColumnConf.style"
+                         v-if="operationColumnConf.show">
           <template #header>
             <span>操作</span>
             <el-popover placement="bottom-end" trigger="hover">
@@ -88,7 +93,7 @@
           </template>
           <template slot-scope="scope">
             <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
-              <component :is="buttonsConf.group ? 'el-button-group' : 'div'"
+              <component :is="buttonsConf.group ? 'el-button-group' : 'div'" :style="buttonsConf.style"
                          v-if="ifShow(buttonsConf.show, scope.row)">
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
@@ -407,6 +412,10 @@ export default {
       columnsValid(columns)
       return columns
     },
+    showIndex() {
+      const {meta: {show_index = false}} = this
+      return show_index
+    },
     multiSelect() {
       const {meta: {multi_select = false}} = this;
       return multi_select
@@ -453,6 +462,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 5px;
 
     .not-btn-group > * {
       margin: 0 5px;

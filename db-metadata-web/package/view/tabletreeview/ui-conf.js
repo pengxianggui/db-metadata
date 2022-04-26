@@ -47,6 +47,14 @@ export default {
         "add": {
             "show": true,
             "text": "新增",
+            "authorize": {
+                "need_permit": false,
+                "permit_by": "auth",
+                "auths": [],
+                "auth_match_mode": "any",
+                "roles": [],
+                "role_match_mode": "any"
+            },
             "conf": {
                 "size": "mini",
                 "type": "primary",
@@ -56,6 +64,14 @@ export default {
         "delete": {
             "show": true,
             "text": "删除",
+            "authorize": {
+                "need_permit": false,
+                "permit_by": "auth",
+                "auths": [],
+                "auth_match_mode": "any",
+                "roles": [],
+                "role_match_mode": "any"
+            },
             "conf": {
                 "size": "mini",
                 "type": "danger",
@@ -96,6 +112,14 @@ export default {
             "view": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "success",
@@ -105,6 +129,14 @@ export default {
             "edit": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "primary",
@@ -114,6 +146,14 @@ export default {
             "delete": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "danger",

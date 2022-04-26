@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <span>
     <template v-if="enable">
       <template>
         <pop-menu trigger="right-click">
@@ -39,7 +39,7 @@
       </template>
     </template>
     <template v-else>{{ label }}</template>
-  </div>
+  </span>
 </template>
 
 <script>

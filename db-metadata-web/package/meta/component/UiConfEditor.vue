@@ -130,7 +130,8 @@ export default {
     },
     openHelpDoc() { // 可配
       const {viewComponentCode, componentCode: fieldComponentCode} = this
-      if (viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView') {
+      if ((viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView')
+          || (viewComponentCode === 'SearchView' && fieldComponentCode !== 'SearchView') ) {
         window.open(`${appConfig.docUrl}/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
         return
       }

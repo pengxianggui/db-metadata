@@ -23,6 +23,7 @@ export default {
     "data_url": "/table/list?objectCode={objectCode}", // required
     "delete_url": '/table/delete?objectCode={objectCode}&{primaryKvExp}',
     "multi_select": true, //多选
+    "show_index": false, // 在首列显示序号
     "conf": { // el-table原生配置
         "default-sort": {"prop": "id", "order": "descending"}, // descending, ascending
         "highlight-current-row": true,
@@ -38,6 +39,14 @@ export default {
         "add": {
             "show": true,
             "text": "新增",
+            "authorize": {
+                "need_permit": false,
+                "permit_by": "auth",
+                "auths": [],
+                "auth_match_mode": "any",
+                "roles": [],
+                "role_match_mode": "any"
+            },
             "conf": {
                 "size": "mini",
                 "type": "primary",
@@ -47,6 +56,14 @@ export default {
         "delete": {
             "show": true,
             "text": "删除",
+            "authorize": {
+                "need_permit": false,
+                "permit_by": "auth",
+                "auths": [],
+                "auth_match_mode": "any",
+                "roles": [],
+                "role_match_mode": "any"
+            },
             "conf": {
                 "size": "mini",
                 "type": "danger",
@@ -72,6 +89,14 @@ export default {
             "view": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "success",
@@ -81,6 +106,14 @@ export default {
             "edit": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "primary",
@@ -90,6 +123,14 @@ export default {
             "delete": {
                 "show": true, // Boolean/Function
                 "text": "",
+                "authorize": {
+                    "need_permit": false,
+                    "permit_by": "auth",
+                    "auths": [],
+                    "auth_match_mode": "any",
+                    "roles": [],
+                    "role_match_mode": "any"
+                },
                 "conf": {
                     "size": "mini",
                     "type": "danger",

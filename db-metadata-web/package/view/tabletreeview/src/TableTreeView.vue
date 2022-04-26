@@ -1,7 +1,7 @@
 <template>
   <div class="view-container" ref="container">
     <!-- operation bar -->
-    <div class="operation-bar">
+    <div class="operation-bar" :style="operationBarConf.style">
       <slot name="operation-bar" v-bind:conf="operationBarConf"
           v-bind:choseData="choseData" v-bind:activeData="activeData" v-if="operationBarConf['show']">
         <component :is="operationBarConf.group ? 'el-button-group' : 'div'"
@@ -84,7 +84,8 @@
       </template>
 
       <slot name="operation-column">
-        <el-table-column v-bind="operationColumnConf.conf" v-if="operationColumnConf.show">
+        <el-table-column v-bind="operationColumnConf.conf" :style="operationColumnConf.style"
+                         v-if="operationColumnConf.show">
           <template #header>
             <span>操作</span>
             <el-popover placement="bottom-end" trigger="hover">
@@ -100,7 +101,7 @@
           </template>
           <template slot-scope="scope">
             <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
-              <component :is="buttonsConf.group ? 'el-button-group' : 'div'"
+              <component :is="buttonsConf.group ? 'el-button-group' : 'div'" :style="buttonsConf.style"
                          v-if="ifShow(buttonsConf.show, scope.row)">
                 <slot name="inner-before-extend-btn" v-bind:scope="scope" v-bind:conf="buttonsConf"></slot>
                 <slot name="view-btn" v-bind:conf="buttonsConf.view.conf" v-bind:scope="scope" v-bind:view="handleView">
@@ -455,6 +456,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 5px;
   }
 }
 </style>
