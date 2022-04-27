@@ -2,7 +2,7 @@
   <div style="display: flex;">
     <svg-icon value="theme" @click.native="visible = true" style="cursor: pointer; font-size: 20px;"></svg-icon>
 
-    <el-drawer title="主题设置" :visible.sync="visible" direction="rtl" size="30%" :show-close="false">
+    <el-drawer title="主题设置" :append-to-body="true" :visible.sync="visible" direction="rtl" size="30%" :show-close="false">
       <template #title>
         <h3 style="margin: 0">主题设置</h3>
         <el-button-group>
