@@ -15,7 +15,7 @@
                   v-if="meta.columns && meta.columns.length > 0">
     <div class="view-container">
       <el-form :ref="meta['name']" v-bind="formConf" :model="model" inline
-               @keyup.enter.native="emitSearch" class="search-form">
+               @keyup.enter.native="emitSearch" @submit.native.prevent class="search-form">
         <template v-for="item in meta.columns">
           <el-form-item class="form-item" :key="item.name" :label="item.label || item.name" :prop="item.name"
                         v-if="model.hasOwnProperty(item.name)">
