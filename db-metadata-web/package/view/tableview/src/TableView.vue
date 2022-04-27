@@ -57,23 +57,21 @@
         <template #default="{row, column, $index}">{{ $index + 1 }}</template>
       </el-table-column>
 
-      <template v-for="item in columns">
-        <el-table-column v-if="item.showable"
-                         :key="item.code"
-                         v-bind="item.conf"
-                         :prop="item.name"
-                         :label="item.label || item.name"
-                         show-overflow-tooltip>
-          <template #header>
-            <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label || item.name">
-              <template #label>{{ item.label || item.name }}</template>
-            </meta-easy-edit>
-          </template>
-          <template #default="scope">
-            <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
-          </template>
-        </el-table-column>
-      </template>
+      <el-table-column v-for="item in columns"
+                       :key="item.code"
+                       v-bind="item.conf"
+                       :prop="item.name"
+                       :label="item.label"
+                       show-overflow-tooltip>
+        <template #header>
+          <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
+            <template #label>{{ item.label }}</template>
+          </meta-easy-edit>
+        </template>
+        <template #default="scope">
+          <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
+        </template>
+      </el-table-column>
 
       <slot name="operation-column">
         <el-table-column v-bind="operationColumnConf.conf" :style="operationColumnConf.style"
@@ -83,14 +81,15 @@
             <el-popover placement="bottom-end" trigger="hover">
               <i slot="reference" class="el-icon-caret-bottom" style="cursor: pointer"></i>
               <!-- TODO 2.5 字段控制的显隐应当缓存到sessionStorage中, 缓存key应当包含instanceCode+fieldCode确保唯一 -->
-              <el-checkbox v-for="item in columns"
-                           v-model="item.showable"
-                           :key="item.name"
-                           :label="item.label || item.name"
-                           @change="$forceUpdate(); getData()"
+              <el-checkbox v-for="(v, k) in showColumns"
+                           v-model="v.show"
+                           :key="k"
+                           :label="v.label"
+                           @change="$forceUpdate()"
                            style="display: block;"></el-checkbox>
             </el-popover>
           </template>
+
           <template slot-scope="scope">
             <slot name="buttons" v-bind:scope="scope" v-bind:conf="buttonsConf">
               <component :is="buttonsConf.group ? 'el-button-group' : 'div'" :style="buttonsConf.style"
@@ -166,6 +165,7 @@ export default {
       choseData: [],
       activeData: {},
       sortParams: {},
+      showColumns: {}, // 控制列的显隐 {col1: true}
       pageModel: {
         size: 10,
         index: 1,
@@ -350,7 +350,7 @@ export default {
     },
     // get business data
     getData() {
-      const {meta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey} = this;
+      const {meta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey, showColumns} = this;
 
       if (utils.isEmpty(data_url)) {
         utils.printErr('缺少 data_url 属性配置')
@@ -359,10 +359,10 @@ export default {
 
       let params = {};
       const {index, size} = pageModel;
-      const columnNames = columns.filter(column => {
-        const {hidden = false} = column
-        return !assertBoolean(hidden, false)
-      }).map(column => column['name']);
+
+      const columnNames = columns
+          .filter(({hidden = false}) => !assertBoolean(hidden, false))
+          .map(column => column['name']);
 
       utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
       utils.mergeObject(params, filterParams, sortParams, {
@@ -408,9 +408,9 @@ export default {
       return objectCode
     },
     columns() {
-      const {meta: {columns = []}} = this
+      const {meta: {columns = []}, showColumns} = this
       columnsValid(columns)
-      return columns
+      return columns.filter(c => showColumns[c.name].show)
     },
     showIndex() {
       const {meta: {show_index = false}} = this

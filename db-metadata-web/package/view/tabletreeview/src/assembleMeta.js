@@ -1,21 +1,14 @@
 import utils from '../../../utils'
 
-// init column.showable of columns
-const initShowable = function (columns) {
-    columns.forEach(item => {
-        if (!item.hasOwnProperty('showable')) { // default true
-            item.showable = true;
-        }
-    });
-};
+export default function (meta) {
+    const {columns = []} = meta
+    columns.forEach(c => {
+        c.label = utils.assertEmpty(c.label, c.name)
 
-export default function (mergedMeta) {
-    const columnsKey = 'columns';
-    if (utils.hasProp(mergedMeta, columnsKey) && utils.isArray(mergedMeta[columnsKey])) {
-        initShowable(mergedMeta[columnsKey]);
-    }
-
-    const {"tree-props": treeProps} = this; // 该属性支持独立传入
-    utils.reverseMerge(mergedMeta['conf']['tree-props'], treeProps);
-    return mergedMeta;
+        this.$set(this.showColumns, c.name, {
+            label: c.label,
+            show: true
+        })
+    })
+    return meta
 }

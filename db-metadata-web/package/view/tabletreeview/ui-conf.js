@@ -102,7 +102,8 @@ export default {
         "show": true,
         "conf": {
             "fixed": "right",
-            "width": "180"
+            "width": "180",
+            "header-align": "center"
         },
         "style": {},
         "buttons": {
