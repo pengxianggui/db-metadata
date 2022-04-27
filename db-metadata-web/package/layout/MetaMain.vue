@@ -42,7 +42,6 @@ export default {
 
   .fixed-header {
     right: 0;
-    z-index: 9;
     width: 100%;
   }
 

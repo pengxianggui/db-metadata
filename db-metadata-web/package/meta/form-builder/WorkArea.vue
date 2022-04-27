@@ -87,15 +87,6 @@ export default {
     handleFormItemClick(column) {
       this.$emit('update:active-item', column)
     }
-  },
-  computed: {
-    // formMeta() {
-    //   let formMeta = this.value;
-    //   if (!utils.isArray(formMeta.columns)) {
-    //     this.$set(formMeta, 'columns', []);
-    //   }
-    //   return formMeta;
-    // },
   }
 }
 </script>
@@ -105,8 +96,6 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  //border: 10px solid #dddddd;
-  //padding: 10px;
 }
 
 .opr-box {
@@ -126,7 +115,6 @@ export default {
   .form-item {
     background: white;
     position: relative;
-    z-index: 1;
     padding: 0;
     border: 1px dashed #DDDDDD;
     box-sizing: border-box;
@@ -141,14 +129,14 @@ export default {
       font-size: 20px;
       color: #409EFF;
       cursor: move;
-      z-index: 999;
+      z-index: 1;
     }
 
     .form-item-delete-btn {
       position: absolute;
       right: 0;
       bottom: 0;
-      z-index: 3;
+      //z-index: 3;
     }
   }
 }
@@ -160,18 +148,4 @@ export default {
   box-sizing: border-box;
   color: #999999;
 }
-
-
-/*!* 遮挡区(遮挡住) *!*/
-//.form-item::after {
-//  content: " ";
-//  display: block;
-//  left: 0;
-//  top: 0;
-//  right: 0;
-//  bottom: 0;
-//  position: absolute;
-//  z-index: 2;
-//}
-
 </style>

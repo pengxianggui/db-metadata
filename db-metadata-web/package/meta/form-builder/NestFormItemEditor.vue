@@ -138,7 +138,6 @@ $choseFormItemThemeColor: #409eff;
     font-size: 20px;
     color: $choseFormItemThemeColor;
     cursor: move;
-    z-index: 999;
   }
 
   .delete-btn {
@@ -172,7 +171,8 @@ $choseLayoutItemThemeColor: #e6a23c;
     font-size: 20px;
     color: $choseFormItemThemeColor;
     cursor: move;
-    z-index: 999;
+    //z-index: 999;
+    z-index: 2;
   }
 
   & > .delete-btn {
@@ -191,6 +191,7 @@ $choseLayoutItemThemeColor: #e6a23c;
     height: 25px;
     text-align: center;
     padding: 0;
+    z-index: 1;
   }
 }
 

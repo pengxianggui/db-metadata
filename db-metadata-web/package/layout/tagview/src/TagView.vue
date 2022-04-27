@@ -272,7 +272,6 @@ export default {
 <style lang="scss" scoped>
 $tagBarHeight: 40px;
 #tags-view-container {
-  z-index: 99;
   height: $tagBarHeight;
   box-sizing: border-box;
   width: 100%;
