@@ -73,6 +73,7 @@ div.container {
     overflow: hidden;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    z-index: 1;
 
     i {
       width: $toggleButtonWidth;
