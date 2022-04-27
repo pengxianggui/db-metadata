@@ -19,5 +19,6 @@ public class TableColumnConfigExtension implements ConfigExtension<IMetaField, A
         builder.width("auto");
         builder.minWidth("60px");
         builder.renderFn("");
+        builder.hidden(false);
     }
 }
