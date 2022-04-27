@@ -12,7 +12,12 @@
         accept="image/*"
         :on-change="handleChange"
         :file-list="fileList" :class="{__hide: hideUploadButton}">
-      <i slot="default" class="el-icon-plus"></i>
+      <div slot="default" class="upload-btn">
+        <i class="icon el-icon-plus"></i>
+        <el-tooltip :content="'请上传' + seat" :disabled="seat.length <= 6" v-if="seat">
+          <i class="seat-name">请上传{{ seat | subStr(6) }}</i>
+        </el-tooltip>
+      </div>
       <div slot="file" slot-scope="{file}" v-if="isView">
         <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
         <span class="el-upload-list__item-actions">
@@ -25,7 +30,6 @@
             </span>
       </div>
     </el-upload>
-    <p class="name">{{ seat }}</p>
     <el-dialog :visible.sync="dialogVisible" :append-to-body="true">
       <img width="100%" :src="imageUrl" alt="">
     </el-dialog>
@@ -202,10 +206,25 @@ export default {
 </style>
 <style lang="scss" scoped>
 .upload-item {
-  p.name {
-    margin: 0;
-    text-align: left;
-    color: #666666;
+  .upload-btn {
+    height: 100%;
+    line-height: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    & > .seat-name {
+      overflow: hidden;
+      font-size: 12px;
+    }
   }
+
+  //p.name {
+  //  margin: 0;
+  //  text-align: left;
+  //  color: #666666;
+  //}
 }
 </style>
