@@ -6,13 +6,17 @@
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :on-success="handleOnSuccess"
+        :on-error="handleOnError"
         :before-remove="beforeRemove"
         :on-exceed="handleExceed"
         :before-upload="handleBeforeUpload"
         :file-list="fileList" :class="{__hide: hideUploadButton}">
-      <i class="el-icon-plus"></i>
+
+      <div slot="default" class="upload-btn">
+        <i class="seat-name" v-if="seat">请上传{{ seat }}：</i>
+        <i class="icon el-icon-plus"></i>
+      </div>
     </el-upload>
-    <span>{{ seat }}</span>
   </div>
 </template>
 
@@ -96,6 +100,10 @@ export default {
       let fileName = utils.isEmpty(file.name) ? file.url : file.name
       return this.$confirm(`确定移除 ${fileName}？`).then(data => {});
     },
+    handleOnError(err, file, fileList) {
+      const {message = '上传失败'} = err
+      this.$message.warning(message)
+    },
     handleOnSuccess(response, file, fileList) {
       const {seat} = this
       if (response.state === 'ok') {
@@ -177,6 +185,17 @@ export default {
   }
 }
 </style>
-<style scoped>
+<style scoped lang="scss">
+.upload-item {
+  .upload-btn {
+    height: 100%;
+    line-height: 20px;
+    padding: 10px;
+    box-sizing: border-box;
 
+    & > .seat-name {
+      overflow: hidden;
+    }
+  }
+}
 </style>

@@ -5,6 +5,7 @@
         :headers="headers"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
+        :on-error="handleOnError"
         :on-success="handleOnSuccess"
         :before-remove="beforeRemove"
         :on-exceed="handleExceed"
@@ -127,6 +128,10 @@ export default {
     handleDownload(file) {
       window.open(file.url)
     },
+    handleOnError(err, file, fileList) {
+      const {message = '上传失败'} = err
+      this.$message.warning(message)
+    },
     handleOnSuccess(response, file, fileList) {
       const {seat} = this
       if (response.state === 'ok') {
@@ -220,11 +225,5 @@ export default {
       font-size: 12px;
     }
   }
-
-  //p.name {
-  //  margin: 0;
-  //  text-align: left;
-  //  color: #666666;
-  //}
 }
 </style>

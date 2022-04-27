@@ -26,7 +26,7 @@
           </div>
         </template>
 
-        <!-- 表单组件-->
+        <!-- 表单组件 TODO 防止编辑模式可以点击控件触发控件行为 -->
         <template v-else>
           <div :class="{'active': activeItem.name === item.name}" class="form-item" v-if="item.hidden !== true">
             <i class="el-icon-s-grid handle" @click="formItemClick(item, $event)"></i>
