@@ -350,7 +350,7 @@ export default {
     },
     // get business data
     getData() {
-      const {meta: {data_url, columns = []}, pageModel, filterParams, sortParams, primaryKey, showColumns} = this;
+      const {meta: {data_url}, columns, pageModel, filterParams, sortParams, primaryKey} = this;
 
       if (utils.isEmpty(data_url)) {
         utils.printErr('缺少 data_url 属性配置')

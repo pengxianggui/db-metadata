@@ -2,13 +2,24 @@ import utils from '../../../utils'
 
 export default function (meta) {
     const {columns = []} = meta
-    columns.forEach(c => {
-        c.label = utils.assertEmpty(c.label, c.name)
 
-        this.$set(this.showColumns, c.name, {
-            label: c.label,
+    let i = columns.length
+    while (i-- > 0) {
+        const {hidden = false, name, label} = columns[i]
+        if (hidden === true) {
+            columns.splice(i, 1)
+            continue;
+        }
+
+        // 处理数据
+        let finalLabel = utils.assertEmpty(label, name)
+        columns[i].label = finalLabel
+
+        // 初始化showColumns
+        this.$set(this.showColumns, name, {
+            label: finalLabel,
             show: true
         })
-    })
+    }
     return meta
 }
