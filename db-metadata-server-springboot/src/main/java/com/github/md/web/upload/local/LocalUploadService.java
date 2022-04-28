@@ -7,7 +7,6 @@ import com.github.md.web.upload.UploadService;
 import com.google.common.base.Joiner;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,10 +31,6 @@ public class LocalUploadService implements UploadService {
 
     public LocalUploadService(LocalProperties properties) {
         this.properties = properties;
-        if (StrKit.isBlank(properties.getBaseUploadPath())) {
-            throw new InvalidConfigurationPropertyValueException("md.server.upload.local.base-upload-path",
-                    properties.getBaseUploadPath(), "不允许为空");
-        }
     }
 
     @Override
@@ -98,7 +93,7 @@ public class LocalUploadService implements UploadService {
     }
 
     private String getBasePath() {
-        String basePath = properties.getBaseUploadPath();
+        String basePath = StrKit.defaultIfBlank(properties.getBaseUploadPath(), "/opt/www/db-meta-serve");
         if (!basePath.endsWith("/")) {
             basePath += "/";
         }
