@@ -47,7 +47,7 @@ public class AsocoOssUploadService implements UploadService {
             Map<String, Object> paramsMap = new HashMap<>();
 
             String tmpdir = System.getProperty("java.io.tmpdir");
-            File tempFile = Paths.get(tmpdir, file.getOriginalFilename()).toFile();
+            File tempFile = Paths.get(tmpdir, getFileNameWithAffix(file)).toFile();
             file.transferTo(tempFile);
 
             paramsMap.put("file", tempFile);
