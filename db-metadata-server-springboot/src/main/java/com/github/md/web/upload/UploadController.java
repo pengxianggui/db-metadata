@@ -66,14 +66,14 @@ public class UploadController extends ControllerAdapter {
             uploadFiles.add(v);
         });
 
-        String tmpdir = System.getProperty("java.io.tmpdir");
-        File destFile = Paths.get(tmpdir, uploadFiles.get(0).getOriginalFilename()).toFile();
-
-        try {
-            uploadFiles.get(0).transferTo(destFile);
-        } catch (Exception e) {
-            throw new WebException(e.getMessage());
+        if (uploadFiles.size() == 0) {
+            throw new WebException("未发现文件资源");
         }
+
+        if (uploadFiles.size() > 1) {
+            throw new WebException("暂不支持多文件上传, 请一个个上传");
+        }
+        MultipartFile file = uploadFiles.get(0);
 
         UploadService uploadService = uploadService();
         QueryHelper queryHelper = queryHelper();
@@ -84,14 +84,14 @@ public class UploadController extends ControllerAdapter {
         if (StrKit.notBlank(objectCode, fieldCode)) {
             IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
             Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
-            url = (metaField == null ? uploadService.upload(destFile) : uploadService.upload(metaField, destFile));
+            url = (metaField == null ? uploadService.upload(file) : uploadService.upload(metaField, file));
         } else {
-            url = uploadService.upload(destFile);
+            url = uploadService.upload(file);
         }
 
-        Kv result = Kv.by("name", destFile.getName());
+        Kv result = Kv.by("name", file.getName());
         result.set("value", url);
-        result.set("url", UploadKit.previewUrl(url));
+        result.set("url", url);
         return Ret.ok("data", result);
     }
 
@@ -101,15 +101,6 @@ public class UploadController extends ControllerAdapter {
     @MetaAccess(value = Type.API)
     @PostMapping("upload/rich-text")
     public Kv richText(MultipartFile file) {
-        String tmpdir = System.getProperty("java.io.tmpdir");
-        File destFile = Paths.get(tmpdir, file.getOriginalFilename()).toFile();
-
-        try {
-            file.transferTo(destFile);
-        } catch (Exception e) {
-            throw new WebException(e.getMessage());
-        }
-
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -117,12 +108,12 @@ public class UploadController extends ControllerAdapter {
         String url;
         if (StrKit.notBlank(objectCode, fieldCode)) {
             IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
-            url = uploadService().upload(metaField, destFile);
+            url = uploadService().upload(metaField, file);
         } else {
-            url = uploadService().upload(destFile);
+            url = uploadService().upload(file);
         }
 
-        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, UploadKit.previewUrl(url));
+        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, url);
         return result; // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
     }
 
@@ -182,7 +173,7 @@ public class UploadController extends ControllerAdapter {
     public ResponseEntity<FileSystemResource> tmpPre() {
         String path = parameterHelper().getPara("path", "");
 
-        File targetFile = uploadService().getFile(Paths.get(uploadService().getBasePath(), path).toString());
+        File targetFile = uploadService().getFile(path);
 
         String fileName = URLEncoder.encode(targetFile.getName());
         HttpHeaders headers = new HttpHeaders();

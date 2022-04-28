@@ -14,7 +14,6 @@ public final class UploadRegistry {
     private final Map<String, UploadService> uploadServiceMapping = new HashMap<>();
 
     UploadRegistry() {
-        config("local", new LocalUploadService());
     }
 
     /**

@@ -8,6 +8,9 @@ import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.config.NotFinishException;
+import com.github.md.web.upload.local.LocalUploadService;
+import com.github.md.web.upload.asocooss.AsocoOssUploadService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +19,7 @@ import java.util.Map;
  * @author pengxg
  * @date 2022/4/25 9:41 上午
  */
+@Slf4j
 public class UploadManager {
     private static final UploadManager me = new UploadManager();
 
@@ -26,12 +30,20 @@ public class UploadManager {
     }
 
     private UploadManager() {
+        configDefault();
+
         UploadConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
         UploadRegistry uploadRegistry = new UploadRegistry();
         configurer.configUploadService(uploadRegistry);
         for (Map.Entry<String, UploadService> entry : uploadRegistry.getUploadServiceMapping().entrySet()) {
             config(entry.getKey(), entry.getValue());
         }
+    }
+
+    private void configDefault() {
+        MetaProperties metaProperties = AnalysisSpringUtil.getBean(MetaProperties.class);
+        config("local", new LocalUploadService(metaProperties.getServer().getUpload().getLocal()));
+        config("asoco-oss", new AsocoOssUploadService(metaProperties.getServer().getUpload().getAsocoOss()));
     }
 
     public void config(String mode, UploadService uploadService) {
@@ -48,7 +60,7 @@ public class UploadManager {
     public UploadService getUploadService() {
         MetaProperties metaProperties = ServiceManager.getAppProperties();
         String mode = metaProperties.getServer().getUpload().getMode();
-        return uploadServiceMapping.get(mode);
+        return getUploadService(mode);
     }
 
     /**

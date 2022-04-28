@@ -25,8 +25,6 @@ public interface QuickJudge {
 
     String mainDbStr();
 
-    String baseUploadPath();
-
     /**
      * ===========================================================================
      * Continue to increase on demand
@@ -59,14 +57,4 @@ public interface QuickJudge {
     default HttpServletResponse getResponse() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
-
-    //    final class INSTANCE {
-    //
-    //        private INSTANCE() {
-    //        }
-    //
-    //        public static QuickJudge getInstance() {
-    //            return AnalysisSpringUtil.getBean(QuickJudge.class);
-    //        }
-    //    }
 }

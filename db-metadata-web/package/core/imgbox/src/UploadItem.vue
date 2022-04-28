@@ -139,7 +139,7 @@ export default {
         const {url, name, value} = response.data
 
         // 将后端url等值设置到file
-        file.url = resolve(this.baseURL, url);
+        file.url = utils.isExternal(url) ? url : resolve(this.baseURL, url)
         file.name = name;
         file.value = value;
         file.seat = seat;
@@ -158,7 +158,7 @@ export default {
           this.nativeValue = []
         } else {
           this.nativeValue = newV.filter(f => !utils.isEmpty(f)).map(f => {
-            let url = f.url.substring(this.baseURL.length)
+            let url = utils.isExternal(f.url) ? f.url : f.url.substring(this.baseURL.length)
             return {name: f.name, value: f.value, url: url}
           })
         }
