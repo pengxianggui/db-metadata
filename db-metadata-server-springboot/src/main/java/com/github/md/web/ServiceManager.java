@@ -10,8 +10,9 @@ import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.ui.SqlAnalysis;
-import com.github.md.web.upload.UploadManager;
-import com.github.md.web.upload.UploadService;
+import com.github.md.web.file.DownloadService;
+import com.github.md.web.file.FileManager;
+import com.github.md.web.file.UploadService;
 
 /**
  * FIXME 这个类逐步过度 0908
@@ -34,8 +35,12 @@ public class ServiceManager {
         return AnalysisSpringUtil.getBean(ComponentService.class);
     }
 
-    public static UploadService fileService() {
-        return UploadManager.me().getUploadService();
+    public static UploadService uploadService() {
+        return FileManager.me().getUploadService();
+    }
+
+    public static DownloadService downloadService() {
+        return FileManager.me().getDownloadService();
     }
 
     public static FeatureService featureService() {

@@ -1,4 +1,4 @@
-package com.github.md.web.upload.asocooss;
+package com.github.md.web.file.asocooss;
 
 import lombok.Getter;
 import lombok.Setter;

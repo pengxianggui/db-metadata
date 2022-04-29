@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.component.attr.AttributeBuilder;
-import com.github.md.web.upload.UploadKit;
+import com.github.md.web.file.UploadKit;
 
 /**
  * @author pengxg

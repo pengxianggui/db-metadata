@@ -1,11 +1,10 @@
-package com.github.md.web.upload;
+package com.github.md.web.file;
 
 import cn.com.asoco.util.AssertUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.github.md.web.user.auth.annotations.Type;
 import com.github.md.web.user.auth.annotations.MetaAccess;
-import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.google.common.base.Preconditions;
 import com.github.md.analysis.meta.IMetaField;
@@ -37,9 +36,6 @@ import java.util.Optional;
 
 /**
  * 文件上传/下载
- * UploadController与FileController 共用/file 路径
- * /file/upload -> index()
- * /file/down -> down()
  *
  * <p> @Date : 2019/12/4 </p>
  * <p> @Project : db-meta-serve</p>
@@ -49,7 +45,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("file")
-public class UploadController extends ControllerAdapter {
+public class FileController extends ControllerAdapter {
 
     /**
      * /**
@@ -80,14 +76,7 @@ public class UploadController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
-        String url;
-        if (StrKit.notBlank(objectCode, fieldCode)) {
-            IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
-            Preconditions.checkArgument(request.getFileMap().size() > 0 && request.getFileMap().size() == 1, "该接口仅作为单文件上传用,对象{}-字段{}", objectCode, fieldCode);
-            url = (metaField == null ? uploadService.upload(file) : uploadService.upload(metaField, file));
-        } else {
-            url = uploadService.upload(file);
-        }
+        String url = uploadService.upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
 
         Kv result = Kv.by("name", file.getName());
         result.set("value", url);
@@ -105,14 +94,7 @@ public class UploadController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
-        String url;
-        if (StrKit.notBlank(objectCode, fieldCode)) {
-            IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
-            url = uploadService().upload(metaField, file);
-        } else {
-            url = uploadService().upload(file);
-        }
-
+        String url = uploadService().upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
         Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, url);
         return result; // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
     }
@@ -139,8 +121,8 @@ public class UploadController extends ControllerAdapter {
 
         Preconditions.checkNotNull(fieldValue, "未找到可下载的文件地址");
 
-        UploadService uploadService = uploadService();
-        List<File> files = uploadService.getFile(metaField, id, fieldValue);
+        DownloadService downloadService = downloadService();
+        List<File> files = downloadService.getFile(metaField, id, fieldValue);
 
         File targetFile;
         AssertUtil.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
@@ -173,7 +155,7 @@ public class UploadController extends ControllerAdapter {
     public ResponseEntity<FileSystemResource> tmpPre() {
         String path = parameterHelper().getPara("path", "");
 
-        File targetFile = uploadService().getFile(path);
+        File targetFile = downloadService().getFile(path);
 
         String fileName = URLEncoder.encode(targetFile.getName());
         HttpHeaders headers = new HttpHeaders();

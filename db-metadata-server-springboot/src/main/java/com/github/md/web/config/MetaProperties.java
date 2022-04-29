@@ -1,8 +1,8 @@
 package com.github.md.web.config;
 
 import com.github.md.analysis.AnalysisProperties;
-import com.github.md.web.upload.local.LocalProperties;
-import com.github.md.web.upload.asocooss.AsocoOssProperties;
+import com.github.md.web.file.local.LocalProperties;
+import com.github.md.web.file.asocooss.AsocoOssProperties;
 import lombok.Data;
 
 import java.util.ArrayList;

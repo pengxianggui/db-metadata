@@ -13,7 +13,8 @@ import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.web.upload.UploadService;
+import com.github.md.web.file.DownloadService;
+import com.github.md.web.file.UploadService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +49,11 @@ public class ControllerAdapter {
     }
 
     public UploadService uploadService() {
-        return ServiceManager.fileService();
+        return ServiceManager.uploadService();
+    }
+
+    public DownloadService downloadService() {
+        return ServiceManager.downloadService();
     }
 
     public QuickJudge quickJudge() {

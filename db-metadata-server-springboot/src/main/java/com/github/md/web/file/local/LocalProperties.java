@@ -1,4 +1,4 @@
-package com.github.md.web.upload.local;
+package com.github.md.web.file.local;
 
 import lombok.Getter;
 import lombok.Setter;

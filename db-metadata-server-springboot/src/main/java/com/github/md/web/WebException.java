@@ -16,6 +16,9 @@ import lombok.Getter;
  */
 @Getter
 public class WebException extends UserVisibleException {
+    public WebException(Exception ex) {
+        super(ex);
+    }
 
     public WebException(String message) {
         super(message, 500);

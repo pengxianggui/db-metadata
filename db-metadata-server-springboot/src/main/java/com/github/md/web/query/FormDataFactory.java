@@ -13,7 +13,7 @@ import com.github.md.analysis.meta.MetaFieldConfigParse;
 import com.github.md.web.WebException;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.kit.UtilKit;
-import com.github.md.web.upload.UploadFile;
+import com.github.md.web.file.UploadFile;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;

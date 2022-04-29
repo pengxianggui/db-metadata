@@ -1,9 +1,8 @@
-package com.github.md.web.upload.local;
+package com.github.md.web.file.local;
 
-import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.WebException;
-import com.github.md.web.upload.UploadFileResolve;
-import com.github.md.web.upload.UploadService;
+import com.github.md.web.file.DownloadService;
+import com.github.md.web.file.UploadService;
 import com.google.common.base.Joiner;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 本地文件上传服务。上传文件位置：${baseUploadPath}/${objectCode}/${fieldCode}/${fileName}
@@ -25,43 +21,21 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class LocalUploadService implements UploadService {
+public class LocalFileService implements UploadService, DownloadService {
+    public static final String modeName = "local";
 
     private final LocalProperties properties;
 
-    public LocalUploadService(LocalProperties properties) {
+    public LocalFileService(LocalProperties properties) {
         this.properties = properties;
     }
 
     @Override
-    public String upload(IMetaField metaField, MultipartFile file) {
-        String objectCode = metaField.objectCode();
-        String fieldCode = metaField.fieldCode();
-        String destPath = Joiner.on("/").skipNulls().join(new String[]{objectCode, fieldCode});
+    public String upload(MultipartFile file, String... splitMarkers) {
+        String destPath = Joiner.on("/").skipNulls().join(splitMarkers);
         File targetFile = toTargetFile(getBasePath() + destPath, file);
         String url = targetFile.getPath().replaceFirst(getBasePath(), "");
         return previewUrl(url);
-    }
-
-    @Override
-    public String upload(MultipartFile file) {
-        String destPath = Joiner.on("/").skipNulls().join(new String[]{"anonymous", "anonymous"});
-        File targetFile = toTargetFile(getBasePath() + destPath, file);
-        String url = targetFile.getPath().replaceFirst(getBasePath(), "");
-        return previewUrl(url);
-    }
-
-    @Override
-    public List<File> getFile(IMetaField metaField, String primaryValue, String fieldValue) {
-        UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
-        String objectCode = metaField.objectCode(),
-                fieldCode = metaField.fieldCode();
-        if (uploadFileResolve.hasFile()) {
-            return uploadFileResolve.getFiles().stream()
-                    .map(f -> getFile(Paths.get(getBasePath(), objectCode, fieldCode, f.getUploadedName()).toString()))
-                    .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
     }
 
     @Override

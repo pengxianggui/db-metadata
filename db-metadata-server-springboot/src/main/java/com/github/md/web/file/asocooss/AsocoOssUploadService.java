@@ -1,22 +1,17 @@
-package com.github.md.web.upload.asocooss;
+package com.github.md.web.file.asocooss;
 
 import cn.com.asoco.http.HttpResult;
 import cn.com.asoco.util.AssertUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.web.upload.FileUploadException;
-import com.github.md.web.upload.UploadFile;
-import com.github.md.web.upload.UploadFileResolve;
-import com.github.md.web.upload.UploadService;
-import com.google.common.collect.Lists;
+import com.github.md.web.file.FileUploadException;
+import com.github.md.web.file.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 public class AsocoOssUploadService implements UploadService {
+    public static final String modeName = "asoco-oss";
     private AsocoOssProperties asocoOssProperties;
 
     public AsocoOssUploadService(AsocoOssProperties properties) {
@@ -37,12 +33,7 @@ public class AsocoOssUploadService implements UploadService {
     }
 
     @Override
-    public String upload(IMetaField metaField, MultipartFile file) {
-        return upload(file);
-    }
-
-    @Override
-    public String upload(MultipartFile file) {
+    public String upload(MultipartFile file, String... splitMarkers) {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
@@ -61,28 +52,7 @@ public class AsocoOssUploadService implements UploadService {
             return this.asocoOssProperties.getBasicServiceUrl() + result.getData();
 
         } catch (Exception e) {
-            throw new FileUploadException(e.getMessage());
+            throw new FileUploadException(file, e);
         }
-    }
-
-    @Override
-    public File getFile(String filePath) {
-        String tmpdir = System.getProperty("java.io.tmpdir");
-        File file = Paths.get(tmpdir, filePath).toFile();
-        HttpUtil.downloadFile(filePath, file);
-        return file;
-    }
-
-    @Override
-    public List<File> getFile(IMetaField metaField, String primaryValue, String fieldValue) {
-        List<File> files = Lists.newArrayList();
-        UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
-        if (uploadFileResolve.hasFile()) {
-            for (UploadFile file : uploadFileResolve.getFiles()) {
-                files.add(getFile(file.getUrl()));
-            }
-        }
-
-        return files;
     }
 }
