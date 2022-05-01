@@ -133,7 +133,7 @@ const components = [
     TreeSingleGridTmpl
 ];
 
-const install = async function (Vue, opts = {}) {
+const install = function (Vue, opts = {}) {
     if (install.installed) return;
 
     // 自定义url(接口url和路由url)覆盖: 优先级最高
@@ -160,10 +160,18 @@ const install = async function (Vue, opts = {}) {
     // 未能触发db-metadata内部的路由钩子，从而导致路由钩子内的用户检测失效，直接表现用户数据丢失，虽然token还在。
     // 采用同步阻塞是必要的，因为configApp获取的系统配置信息，里面有一些内容必须是先获取到，如果await/async不能满足，必要时可以采用原生XHR
     // 进行同步请求访问。
-    // FIXME 但即使如上所述，还是存在一个问题，虽然内部路由钩子生效了，但是用户检测(detect)函数中从appConfig配置里取到的TokenKey依然是
-    //  前端静态的，而不是后端返回的。这意味着此处的await依旧未能保证内部路由钩子在configApp后执行。这个问题在鹊桥中发现。解决办法是
-    //  TokenKey就不定制了，就用默认的X-TOKEN。这也没什么大不了，但这是一个要解决的BUG
-    await configApp(Vue, opts)
+    // 2022-5-1: await/async依然不能满足需求，因为await/async机制必须满足一个条件，整个调用链都必须用这两个关键词去修饰。但是由于业务系统中
+    //  采用的是Vue.use, 而在Vue.use前面加await是不行的，编译就通过不了，这就导致代码的执行顺序是configApp执行后， 调用链一直向上，凡是加了await的
+    //  地方后面就等待，因此主题配置、菜单、路由注册是等待了，但是Vue.use没法加await，所以Vue.use后面的代码就不等了，因此new Vue还是先执行，
+    //  也就是router先挂载了。而configApp后面的代码: 主题配置、菜单、路由数据、路由拦截器的执行却实实在在被阻塞了，结果就是router先注册，
+    //  registerInterceptor里的beforeEach拦截器后注册。因此，产生bug: 编程式的路由，如果直接刷新，那么beforeEach钩子未执行，导致用户状态丢失。
+    //
+    //  因此总结一下， 必须实现:
+    //  1. configApp必须返回后端数据后，再执行后面的配置(因为后面的配置依赖后端响应的系统配置数据)
+    //  2. router.beforeEach又必须先于new Vue({router})执行
+    //  因此configApp必须是同步的，且同步效果要一直传递到外面的Vue.use, 因此await/async不支持。采取的办法是configApp内部采用原生的XMLHttpRequest。
+    //  这种方式也存在一个问题: 那就是同步导致的浏览器阻塞，如果这个请求费了10s, 浏览器就会卡10s, 但是这是可以讲得清楚的。因为系统配置是系统访问前必须加载的。
+    configApp(Vue, opts)
 
     // 主题配置: 配置默认主题
     Theme.configDefaultTheme(opts)

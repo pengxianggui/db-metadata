@@ -28,19 +28,32 @@ export const appConfig = {
     docUrl: null
 }
 
-export const configApp = async function (Vue, opts = {}) {
-    const axios = Vue.prototype.$axios
-    if (!axios) {
-        printErr('axios必须配置')
-        return
-    }
-    await axios.get(restUrl.GET_APP_CONFIG).then(({data}) => {
-        const {enableLogin} = data
-        if (enableLogin === false) {
-            clearUser() // 防止后端禁用登录后，前端仍有缓存
+export const configApp = function (Vue, opts = {}) {
+    const {axios: {baseURL}} = opts
+
+    // 同步请求
+    let request = new XMLHttpRequest();
+    request.open('GET', baseURL + restUrl.GET_APP_CONFIG, false);
+    request.send(null);
+    if (request.status === 200) {
+        const res = JSON.parse(request.responseText)
+        const {state, code, data, message, msg} = res
+
+        if (state !== 'ok' && code !== 0) {
+            utils.printErr('系统配置信息获取失败！将采用默认的系统配置: %s, 错误信息: %s',
+                JSON.stringify(appConfig),
+                utils.assertEmpty(message, msg))
+        } else {
+            utils.reverseMerge(appConfig, data)
         }
-        utils.reverseMerge(appConfig, data)
-    }).catch(err => {
-        printErr(err)
-    })
+
+    } else { // 系统配置失败，则系统不可用
+        utils.printErr('系统配置信息获取失败！将采用默认的系统配置: %s, 错误码: %s',
+            JSON.stringify(appConfig),
+            request.status)
+    }
+
+    if (appConfig.enableCertification === false) {
+        clearUser()  // 防止后端禁用登录后，前端仍有缓存
+    }
 }
