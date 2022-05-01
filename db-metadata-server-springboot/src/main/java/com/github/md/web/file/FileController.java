@@ -78,7 +78,7 @@ public class FileController extends ControllerAdapter {
 
         String url = uploadService.upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
 
-        Kv result = Kv.by("name", file.getName());
+        Kv result = Kv.by("name", file.getOriginalFilename());
         result.set("value", url);
         result.set("url", url);
         return Ret.ok("data", result);
