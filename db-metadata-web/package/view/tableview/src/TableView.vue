@@ -408,7 +408,7 @@ export default {
     columns() {
       const {meta: {columns = []}, showColumns} = this
       columnsValid(columns)
-      return columns.filter(c => showColumns[c.name].show)
+      return columns.filter(c => c.hidden !== true && showColumns[c.name].show)
     },
     showIndex() {
       const {meta: {show_index = false}} = this

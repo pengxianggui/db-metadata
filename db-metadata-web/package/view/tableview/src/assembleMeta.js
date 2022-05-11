@@ -5,11 +5,7 @@ export default function (meta) {
 
     let i = columns.length
     while (i-- > 0) {
-        const {hidden = false, name, label} = columns[i]
-        if (hidden === true) {
-            columns.splice(i, 1)
-            continue;
-        }
+        const {name, label} = columns[i]
 
         // 处理数据
         let finalLabel = utils.assertEmpty(label, name)
