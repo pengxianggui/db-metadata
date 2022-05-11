@@ -1,7 +1,7 @@
 <template>
     <el-card>
         <h4>点击应用SingleGridTmpl渲染相应元对象</h4>
-        <el-button v-for="object in objectCodes" @click="jump(object.code)" :key="object.code" class="el-card">
+        <el-button v-for="object in objectCodes" @click="jump(object.code)" :key="object.code" class="el-card md_el-card">
             <b>{{object.code}}</b>
         </el-button>
         <iframe id="iframe" :src="path" frameborder="0" width="100%" height="500" style="padding: 20px;"></iframe>

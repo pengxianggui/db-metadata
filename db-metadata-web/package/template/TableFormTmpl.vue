@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <row-grid :span="[14, 10]">
       <template #0>
         <table-view :ref="config.table.config.objectCode"
@@ -25,7 +25,7 @@
         </table-view>
       </template>
       <template #1>
-        <div class="el-card" style="margin-left: 5px">
+        <div class="el-card md_el-card" style="margin-left: 5px">
           <form-view :meta-url="formMetaUrl" @ok="refreshTableData" v-if="formShow">
             <template #action="scope">
               <slot name="action" v-bind="scope"></slot>

@@ -1,5 +1,5 @@
 <template>
-  <div class="el-card">
+  <div class="el-card md_el-card">
     <template v-if="formType">
       <mini-form v-bind="conf" :meta="innerMeta" v-model="nativeValue"></mini-form>
     </template>

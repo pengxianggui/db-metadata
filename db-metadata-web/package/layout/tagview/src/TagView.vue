@@ -1,5 +1,5 @@
 <template>
-  <scroll-pane id="tags-view-container" ref="scrollPane" :style="tagBarStyle" v-if="tagConf.show">
+  <scroll-pane id="md_view-container" ref="scrollPane" :style="tagBarStyle" v-if="tagConf.show">
     <template v-for="(tag, index) in visitedViews">
       <pop-menu :ref="'popMenu' + index" trigger="right-click" @show="openMenu(tag)" class="tags-view-item"
                 :style="isActive(tag) ? activeTagStyle : {}">
@@ -271,7 +271,7 @@ export default {
 
 <style lang="scss" scoped>
 $tagBarHeight: 40px;
-#tags-view-container {
+#md_view-container {
   height: $tagBarHeight;
   box-sizing: border-box;
   width: 100%;

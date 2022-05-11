@@ -1,6 +1,6 @@
 <template>
   <el-popover :trigger="nativeTrigger" :placement="placement" v-model="visible"
-              popper-class="no-padding" v-bind="$attrs" @show="$emit('show')">
+              popper-class="md_no-padding" v-bind="$attrs" @show="$emit('show')">
     <span slot="reference" @click.right="rightClickHander">
         <slot name="label">
             <i class="el-icon-caret-bottom" style="cursor: pointer"></i>

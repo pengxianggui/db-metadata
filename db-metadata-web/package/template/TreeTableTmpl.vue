@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <row-grid :span="[6, 18]">
       <template #0>
         <tree-view :ref="config.tree.config.objectCode"

@@ -1,5 +1,5 @@
 <template>
-  <div class="err-page-container">
+  <div class="md_page-container">
     <div>
       <svg-icon value="404" style="font-size: 450px"></svg-icon>
     </div>
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.err-page-container {
+.md_page-container {
   width: 1000px;
   max-width: 100%;
   margin: auto;

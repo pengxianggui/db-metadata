@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <search-view :ic="config.master.instanceCodes.SearchView" @search="mHandleSearch"></search-view>
     <table-view :ref="config.master.config.objectCode"
                 :ic="config.master.instanceCodes.TableView"
@@ -58,7 +58,7 @@
     <el-divider></el-divider>
 
     <!-- multi slave -->
-    <div class="el-card" v-if="config.slaves.length > 1">
+    <div class="el-card md_el-card" v-if="config.slaves.length > 1">
       <el-tabs type="border-card">
         <el-tab-pane v-for="slave in config.slaves" :key="slave.config.objectCode" :label="slave.config.objectCode">
           <search-view :ic="slave.instanceCodes.SearchView" @search="sHandleSearch(slave, arguments)"></search-view>
@@ -120,7 +120,7 @@
     </div>
 
     <!-- single slave -->
-    <div class="el-card" v-if="config.slaves.length === 1">
+    <div class="el-card md_el-card" v-if="config.slaves.length === 1">
       <search-view :ic="config.slaves[0].instanceCodes.SearchView"
                    @search="sHandleSearch(config.slaves[0], arguments)"></search-view>
       <table-view :ref="config.slaves[0].config.objectCode"

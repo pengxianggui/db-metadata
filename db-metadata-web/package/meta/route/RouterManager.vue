@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <tree-single-grid-tmpl :fc="fc"></tree-single-grid-tmpl>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div id="_main">
+  <div id="md_main">
     <div class="fixed-header">
       <tag-view @cache-view-change="(value) => cachedViews = value"></tag-view>
     </div>
@@ -32,7 +32,7 @@ export default {
 
 <style scoped lang="scss">
 
-#_main {
+#md_main {
   flex: 1;
   overflow: auto;
   height: 100%;

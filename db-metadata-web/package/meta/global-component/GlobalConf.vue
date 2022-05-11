@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <el-form :model="confModel" class="demo-form-inline" size="mini" style="height: 100%">
       <div class="opr-box">
         <el-button size="mini" type="primary" plain @click="$goBack()">
@@ -156,7 +156,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page-container {
+.md_page-container {
   $oprBarHeight: 50px;
 
   .opr-box {
