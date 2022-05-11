@@ -370,9 +370,7 @@ export default {
 
       let params = {};
 
-      const columnNames = columns
-          .filter(({hidden = false}) => !assertBoolean(hidden, false))
-          .map(column => column['name']);
+      const columnNames = columns.map(column => column['name']);
 
       utils.mergeArray(columnNames, primaryKey); // 主键必请求,防止编辑/删除异常
       utils.mergeObject(params, filterParams, sortParams, {
