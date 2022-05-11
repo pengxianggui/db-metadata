@@ -832,7 +832,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -851,7 +850,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -976,7 +974,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -995,7 +992,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -1137,7 +1133,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -1156,7 +1151,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -1623,7 +1617,6 @@
         "config": {
           "isListShow": true,
           "isSearch": true,
-          "scopeRange": [],
           "scopeDict": "apiResourceType",
           "scopeOptions": [
             {
@@ -1696,7 +1689,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },
@@ -1715,7 +1707,6 @@
           "isListShow": false,
           "isSearch": false,
           "isMultiple": false,
-          "scopeRange": [],
           "scopeDict": "authorizeMatchMode"
         }
       },

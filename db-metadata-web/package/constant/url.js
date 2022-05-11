@@ -53,6 +53,7 @@ export const restUrl = {
     LOAD_INSTANCE_CODE_BY_OBJECT: '/component/contact?objectCode={objectCode}&kv={kv}', // 查询在objectCode下的所有容器实例配置编码
 
     CHECK_SQL: '/check/sql?sql={sql}',
+    CHECK_API: '/check/url?url={url}',
     FEATURE_ADD: '/feature/doAdd?ft={featureType}', // 添加功能类别
     FEATURE_LOAD: '/feature/load?fc={featureCode}', // 加载功能配置
     MASTER_SLAVE_TO_ADD_S: '/feature/masterSlave/toAddS?objectCode={objectCode}&featureCode={featureCode}&{foreignKeyName}={foreignKeyValue}', // 主子表子表新增URL(TO)

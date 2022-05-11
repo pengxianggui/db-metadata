@@ -45,21 +45,7 @@ public class MetaFieldConfigParse extends MetaData {
          * 2. hasDataOpts
          * 3. 指定数据源
          */
-        return isRange() || isSql() || isOptions() || isDict();
-    }
-
-    @Deprecated
-    public boolean isRange() {
-        return range().length > 0;
-    }
-
-    @Deprecated
-    public String[] range() {
-        JSONArray jsonArray = getAs("scopeRange");
-        if (jsonArray == null) {
-            jsonArray = new JSONArray();
-        }
-        return jsonArray.toArray(new String[jsonArray.size()]);
+        return isSql() || isOptions() || isDict() || isUrl();
     }
 
     public boolean isOptions() {
@@ -87,12 +73,20 @@ public class MetaFieldConfigParse extends MetaData {
         return StrKit.notBlank(scopeSql());
     }
 
+    public boolean isUrl() {
+        return StrKit.notBlank(scopeUrl());
+    }
+
     public String scopeSql() {
         String s = getStr("scopeSql");
         if (StrKit.notBlank(s)) {
             return s.split(";")[0];
         }
         return null;
+    }
+
+    public String scopeUrl() {
+        return getStr("scopeUrl");
     }
 
     public String dbConfig() {

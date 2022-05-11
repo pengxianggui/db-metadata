@@ -38,7 +38,7 @@
     <div class="bottom-btn-group">
       <span style="flex: 1"></span>
       <el-button size="mini" icon="el-icon-refresh" circle @click="changeType"></el-button>
-      <el-button size="mini" icon="el-icon-question" circle @click="openHelpDoc"></el-button>
+      <doc-link :path="docPath"></doc-link>
 
       <meta-field-config-button :object-code="objectCode" :field-code="fieldCode"
                                 v-if="objectCode && fieldCode && !isLayoutComp(value.component_name)">
@@ -56,14 +56,14 @@ import confFilter from "../form-builder/relate/confFilter";
 import {isLayoutComp} from "../form-builder/relate/componentData";
 import ComponentSelector from "./ComponentSelector";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
+import DocLink from "../../doc/DocLink";
 import {buildDefaultMeta} from "../../core";
 import utils from '../../utils'
 import {restUrl} from "../../constant/url";
-import {appConfig} from "../../config";
 
 export default {
   name: "UiConfEditor",
-  components: {ComponentSelector, MetaFieldConfigButton},
+  components: {ComponentSelector, MetaFieldConfigButton, DocLink},
   props: {
     value: {
       type: Object,
@@ -133,15 +133,6 @@ export default {
       this.$merge(this.value, utils.assertEmpty(defMeta, {
         component_name: 'TextBox'
       }))
-    },
-    openHelpDoc() { // 可配
-      const {viewComponentCode, componentCode: fieldComponentCode} = this
-      if ((viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView')
-          || (viewComponentCode === 'SearchView' && fieldComponentCode !== 'SearchView') ) {
-        window.open(`${appConfig.docUrl}/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`, "帮助文档", "width=1100,height=700")
-        return
-      }
-      window.open(`${appConfig.docUrl}/component/view/${viewComponentCode.toLowerCase()}.html#域配置`, "帮助文档", "width=1100,height=700")
     }
   },
   computed: {
@@ -160,6 +151,14 @@ export default {
     keys() {
       const {value = {}} = this
       return Object.keys(value).sort()
+    },
+    docPath() {
+      const {viewComponentCode, componentCode: fieldComponentCode} = this
+      if ((viewComponentCode === 'FormView' && fieldComponentCode !== 'FormView')
+          || (viewComponentCode === 'SearchView' && fieldComponentCode !== 'SearchView') ) {
+        return `/component/field/${fieldComponentCode.toLowerCase()}.html#配置项`
+      }
+      return `/component/view/${viewComponentCode.toLowerCase()}.html#域配置`
     }
   }
 }

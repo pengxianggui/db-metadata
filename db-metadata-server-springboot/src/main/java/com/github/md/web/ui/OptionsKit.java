@@ -1,6 +1,16 @@
 package com.github.md.web.ui;
 
+import cn.com.asoco.util.AssertUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.analysis.meta.MetaFieldConfigParse;
+import com.github.md.web.Server;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.WebException;
 import com.github.md.web.kit.Dicts;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.query.dynamic.DefaultContext;
@@ -8,9 +18,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.MetaFieldConfigParse;
-import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -89,6 +96,49 @@ public class OptionsKit {
     }
 
     /**
+     * 执行metaField中scopeApi中的url请求，将结果包装成Kv列表返回
+     *
+     * @param url
+     * @return
+     * @throws WebException 若请求失败，或响应数据格式不符合要求，则抛出异常
+     */
+    public static List<Kv> transKeyValueByUrl(String url) {
+        if (!url.matches("^https?://.+$")) { // 相对路径，视为本地接口访问
+            url = URLUtil.completeUrl(Server.getUrl(), url);
+        }
+
+        List<Kv> options = Lists.newArrayList();
+        String res;
+        try {
+            res = HttpUtil.get(url, 20000);
+        } catch (Exception e) {
+            log.error("url请求失败。 url: {}, errMsg: {}", url, e.getMessage());
+            throw new WebException("接口请求失败, url: %s, errMsg: %s", url, e.getMessage());
+        }
+
+        try {
+            JSONObject resJson = JSONObject.parseObject(res);
+            JSONArray data = resJson.getJSONArray("data");
+            for (Object option : data) {
+                JSONObject optionObj = JSONObject.parseObject(JSONObject.toJSONString(option));
+                AssertUtil.isTrue(optionObj.containsKey("key") && optionObj.containsKey("value"), "data数组中元素对象必须同时含有key和value");
+                options.add(Kv.create().set(optionObj));
+            }
+
+            boolean valid = data.stream().allMatch(option -> {
+                JSONObject optionObj = JSONObject.parseObject(JSONObject.toJSONString(option));
+                return optionObj.containsKey("key") && optionObj.containsKey("value");
+            });
+            AssertUtil.isTrue(valid, new WebException("data数组中元素必须同时含有key和value"));
+
+            return options;
+        } catch (Exception e) {
+            log.error("url响应数据格式不符合要求。 url: {}, 响应数据: {}, errMsg: {}", url, res, e.getMessage());
+            throw new WebException("url响应数据格式不符合要求, 响应数据格式不符合要求。 url: %s, 响应数据: %s, errMsg: %s", url, res, e.getMessage());
+        }
+    }
+
+    /**
      * 执行metaField 中 scopeSql 中的语句
      * mapped:
      * 10000:张三
@@ -148,14 +198,22 @@ public class OptionsKit {
                 configWrapper = field.configParser();
                 if (configWrapper.hasTranslation()) {
                     // 注意优先级
-                    if (configWrapper.isOptions()) {
+                    if (configWrapper.isOptions()) { // 静态数组
                         Kv mapped = tranKeyValueFlatMapByArray(configWrapper.options());
                         mappeds.put(field, mapped);
-                    } else if (configWrapper.isDict()) {
+                    } else if (configWrapper.isDict()) { // 字典
                         List<Kv> options = Dicts.me().getKvs(configWrapper.getDictName());
                         Kv mapped = tranKeyValueFlatMapByArray(options);
                         mappeds.put(field, mapped);
-                    } else if (configWrapper.isSql()) {
+                    } else if (configWrapper.isUrl()) { // 接口数据
+                        try {
+                            List<Kv> options = transKeyValueByUrl(configWrapper.scopeUrl());
+                            Kv mapped = tranKeyValueFlatMapByArray(options);
+                            mappeds.put(field, mapped);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    } else if (configWrapper.isSql()) { // sql数据
                         log.info("{}-{} has sql translation logic:{}", field.objectCode(), field.fieldCode(), configWrapper.isSql());
                         String dbConfig = StrKit.defaultIfBlank(configWrapper.dbConfig(), field.getParent().schemaName());
                         String compileSql = new CompileRuntime().compile(configWrapper.scopeSql(),

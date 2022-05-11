@@ -117,14 +117,22 @@ export function resolvePath(url, params) {
 
 /**
  * 拼接两个path, 判断path参数前缀是否是'/'，防止重复斜杠。
- * 若baseURL或path为空，或path为绝对地址(含有https、http开头)，则直接返回path， 不做拼接
+ *
+ * 若path为绝对地址(https或http开头), 或baseURL为空, 则直接返回path。
+ *
  * @param baseURL
  * @param path
  * @returns {string|*}
  */
 export function resolve(baseURL, path) {
-    if (isEmpty(baseURL) || isEmpty(path) || isExternal(path)) {
+    if (isExternal(path)) {
         return path
+    }
+    if (isEmpty(baseURL)) {
+        return path
+    }
+    if (isEmpty(path)) {
+        return baseURL
     }
 
     if (path.startsWith('/')) {

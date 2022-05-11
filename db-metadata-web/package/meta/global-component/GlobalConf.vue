@@ -31,8 +31,7 @@
                              :meta="confMeta" :controls="true"
                              @json-change="buildObjectConfMeta(confModel.conf)">
                 <template #button-expand="{value}">
-
-                  <el-button size="mini" icon="el-icon-question" circle @click="openHelpDoc"></el-button>
+                  <doc-link :path="docPath"></doc-link>
                 </template>
               </mini-form-box>
             </el-form-item>
@@ -53,12 +52,12 @@ import EleProps from '../../constant/element-props'
 import DefaultJsonBoxMeta from '../../core/jsonbox/ui-conf'
 import buildMeta from "../buildMeta";
 import ComponentSelector from "../component/ComponentSelector";
+import DocLink from "../../doc/DocLink";
 import {assertEmpty} from "../../utils/common";
-import {appConfig} from "../../config";
 
 export default {
   name: "GlobalConf",
-  components: {ComponentSelector},
+  components: {ComponentSelector, DocLink},
   data() {
     let confMeta = {
       name: "conf",
@@ -136,20 +135,21 @@ export default {
       this.$dialog(this.confModel['conf'], data, {
         title: '预览'
       })
-    },
-    openHelpDoc() {
-      const {componentCode} = this.confModel;
-      if (['FormView', 'TreeView', 'TableView', 'TableTreeView', 'SearchView'].indexOf(componentCode) > -1) {
-        window.open(`${appConfig.docUrl}/component/view/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
-        return
-      }
-      window.open(`${appConfig.docUrl}/component/field/${componentCode.toLowerCase()}.html`, "帮助文档", "width=1100,height=700")
     }
   },
   mounted() {
     const {componentCode} = this.confModel;
     if (!utils.isEmpty(componentCode)) {
       this.loadConf();
+    }
+  },
+  computed: {
+    docPath() {
+      const {componentCode} = this.confModel;
+      if (['FormView', 'TreeView', 'TableView', 'TableTreeView', 'SearchView'].indexOf(componentCode) > -1) {
+        return `/component/view/${componentCode.toLowerCase()}.html`
+      }
+      return `/component/field/${componentCode.toLowerCase()}.html`
     }
   }
 }

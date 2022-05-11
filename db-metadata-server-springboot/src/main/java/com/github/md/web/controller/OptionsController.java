@@ -52,6 +52,11 @@ public class OptionsController extends ControllerAdapter {
             List<Kv> options = Dicts.me().getKvs(metaFieldConfigParse.getDictName());
             return Ret.ok("data", options);
         }
+        // 再接口数据
+        if (metaFieldConfigParse.isUrl()) {
+            List<Kv> options = OptionsKit.transKeyValueByUrl(metaFieldConfigParse.scopeUrl());
+            return Ret.ok("data", options);
+        }
         // 最后sql
         if (metaFieldConfigParse.isSql()) {
             IMetaObject metaObject = metaField.getParent();

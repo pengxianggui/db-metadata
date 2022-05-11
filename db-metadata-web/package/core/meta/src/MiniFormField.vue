@@ -60,8 +60,15 @@
     <el-form-item label="数据源" class="form-item-options">
       <z-toggle-panel :default-open="hasTranslation" label-position="top-left">
         <template #label="{open}">
-          <el-tooltip content="优先级: 静态数组 > 字典名 > 指定SQL" placement="right">
+          <el-tooltip placement="right">
             <i class="el-icon-question"></i>
+            <div slot="content">
+              <span>优先级: 静态数组 > 字典名 > 接口 > 指定SQL</span>
+              <doc-link path="/guide/further-use/metaFieldConfig.html#数据源">
+                <span>更多详见:</span>
+                <template #link="{open}"><el-link @click="open">文档</el-link></template>
+              </doc-link>
+            </div>
           </el-tooltip>
           &nbsp;
           <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
@@ -73,6 +80,19 @@
           </el-tab-pane>
           <el-tab-pane label="字典名" name="scopeDict">
             <drop-down-box data-url="/dict/names" v-model="nativeValue.scopeDict" :filterable="true"></drop-down-box>
+          </el-tab-pane>
+          <el-tab-pane label="接口" name="scopeUrl">
+            <text-box v-model="nativeValue.scopeUrl" placeholder="请输入服务端可访问的接口地址">
+              <template #append>
+                <el-button @click="checkApi(nativeValue.scopeUrl)">接口校验</el-button>
+              </template>
+            </text-box>
+            <doc-link path="/guide/further-use/metaFieldConfig.html#数据源-接口">
+              <span>接口响应数据必须满足特定的条件, 详见:</span>
+              <template #link="{open}">
+                <el-link @click="open()">文档</el-link>
+              </template>
+            </doc-link>
           </el-tab-pane>
           <el-tab-pane label="sql" name="scopeSql">
             <code-box :check="true" v-model="nativeValue.scopeSql" :show-bar="false"></code-box>
@@ -90,6 +110,7 @@
 <script>
 import utils from '../../../utils'
 import OptionsInput from '../../../meta/form-builder/relate/OptionsInput'
+import DocLink from "../../../doc/DocLink";
 import {isEmpty, isString} from "../../../utils/common";
 import {restUrl} from "../../../constant/url";
 
@@ -98,7 +119,7 @@ export default {
   label: "元字段Config迷你表单",
   description: "输入控件的一种,JsonBox的表单表现形式",
   components: {
-    OptionsInput
+    OptionsInput, DocLink
   },
   props: {
     value: {
@@ -121,9 +142,9 @@ export default {
         isMultiple: false,
         isFile: false,
         scopeSql: null,
+        scopeUrl: null,
         scopeOptions: [],
         scopeDict: null, // 字典名
-        scopeRange: [], // 不明
         isListShow: true,
       }
     }
@@ -133,11 +154,13 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      const {scopeOptions, scopeDict, scopeSql} = this.config
+      const {scopeOptions, scopeDict, scopeUrl, scopeSql} = this.config
       if (!isEmpty(scopeOptions)) {
         this.activeOption = 'scopeOptions'
       } else if (!isEmpty(scopeDict)) {
         this.activeOption = 'scopeDict'
+      } else if (!isEmpty(scopeUrl)) {
+        this.activeOption = 'scopeUrl'
       } else if (!isEmpty(scopeSql)) {
         this.activeOption = 'scopeSql'
       }
@@ -146,6 +169,13 @@ export default {
   methods: {
     checkSql(sql) {
       this.$axios.safeGet(this.$compile(restUrl.CHECK_SQL, {sql: sql})).then(({msg = '校验通过'}) => {
+        this.$message.success(msg)
+      }).catch(({msg}) => {
+        this.$message.error(msg)
+      })
+    },
+    checkApi(url) {
+      this.$axios.safeGet(this.$compile(restUrl.CHECK_API, {url: encodeURIComponent(url)})).then(({msg = '校验通过'}) => {
         this.$message.success(msg)
       }).catch(({msg}) => {
         this.$message.error(msg)
