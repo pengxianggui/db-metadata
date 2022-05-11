@@ -1,5 +1,5 @@
 <template>
-  <div class="err-page-container">
+  <div class="md_err-page-container">
     <div>
       <el-button icon="el-icon-arrow-left" class="pan-back-btn" @click="back">返回</el-button>
       <div v-if="msg">
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.err-page-container {
+.md_err-page-container {
   width: 1000px;
   max-width: 100%;
   margin: auto;

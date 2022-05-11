@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <form-view :ic="config.instanceCodes.FormView" @ok="handleOk" @cancel="handleCancel">
       <template #action="scope">
         <slot name="action" v-bind="scope"></slot>

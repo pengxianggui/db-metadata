@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <search-view :ic="config.instanceCodes.SearchView" @search="handleSearch"></search-view>
     <table-tree-view :ref="tableRefName"
                      :ic="config.instanceCodes.TableTreeView"

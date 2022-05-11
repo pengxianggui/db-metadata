@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container" v-if="loaded">
+  <div class="md_page-container" v-if="loaded">
     <!-- 表单实例UI编辑器 -->
     <form-builder :ic="ic" v-if="componentCode === 'FormView'" :oc="objectCode"></form-builder>
     <!-- 通用的实例UI编辑器 -->

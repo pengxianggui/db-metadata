@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <master-slave-table-tmpl :fc="fc" :ref="fc">
       <template #add-btn="{conf}">
         <el-button v-bind="conf.conf" type="primary" @click="toAddMetaObject" icon="el-icon-plus">创建元对象</el-button>

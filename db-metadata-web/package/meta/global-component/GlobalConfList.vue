@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <single-grid-tmpl :fc="fc">
       <template #edit-btn="{scope, conf}">
         <el-button v-bind="conf" @click="handlerConf($event, scope.row, scope.$index)"></el-button>

@@ -13,7 +13,7 @@
 <template>
   <z-toggle-panel :label-position="meta['label-position']" :default-open="meta['expand']"
                   v-if="meta.columns && meta.columns.length > 0">
-    <div class="view-container">
+    <div class="md_view-container">
       <el-form :ref="meta['name']" v-bind="formConf" :model="model" inline
                @keyup.enter.native="emitSearch" @submit.native.prevent class="search-form">
         <template v-for="item in meta.columns">

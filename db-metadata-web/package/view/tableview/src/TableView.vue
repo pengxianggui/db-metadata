@@ -1,5 +1,5 @@
 <template>
-  <div class="view-container" ref="container">
+  <div class="md_view-container" ref="container">
     <!-- 操作条 -->
     <div class="operation-bar" :style="operationBarConf.style">
       <slot name="operation-bar" v-bind:conf="operationBarConf"
@@ -456,7 +456,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.view-container {
+.md_view-container {
   .operation-bar {
     display: flex;
     justify-content: space-between;

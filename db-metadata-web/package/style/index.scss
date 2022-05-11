@@ -6,7 +6,7 @@ html, body {
   height: 100%;
 }
 
-.el-card {
+.md_el-card {
   padding: 10px;
   box-sizing: border-box;
 }
@@ -19,31 +19,19 @@ form .inline {
   min-width: 50px;
 }
 
-.quote {
-  margin: 10px;
-  padding: 10px;
-  border-left: 5px solid #409EFF;
-  color: #666666;
-  background-color: #eeeeee;
-}
-
-.no-padding {
+.md_no-padding {
   padding: 0;
 }
 
-.hover-danger-plain:hover {
-  color: #F56C6C !important;
-}
-
-.hover-warning-plain:hover {
+.md_hover-warning-plain:hover {
   color: #e6a23c !important;
 }
 
 
 
-#_main {
+#md_main {
   // 页面容器
-.page-container {
+.md_page-container {
     height: 100%;
     width: 100%;
     color: #303133;
@@ -52,13 +40,13 @@ form .inline {
     box-sizing: border-box;
 
     // 嵌套只留外层的padding, 防止padding过多
-    & .page-container {
+    & .md_page-container {
       padding: 0;
     }
   }
 
   // 容器视图
-  .view-container {
+  .md_view-container {
     border: 1px solid #EBEEF5;
     padding: 5px;
     box-sizing: border-box;
@@ -67,7 +55,7 @@ form .inline {
   }
 }
 
-.max-z-index {
+.md_max-z-index {
   z-index: 9999999 !important;
 }
 

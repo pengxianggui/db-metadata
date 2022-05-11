@@ -1,5 +1,5 @@
 <template>
-  <div id="instance-conf-container" ref="instance-conf-container" class="page-container">
+  <div id="instance-conf-container" ref="instance-conf-container" class="md_page-container">
     <el-form id="form-box" size="mini" ref="InstanceConf" :rules="rules" :model="confModel" label-width="80px">
       <div id="opr-box">
         <el-button size="mini" type="primary" plain @click="$goBack()">
@@ -25,7 +25,7 @@
               <i class="el-icon-upload"></i>
               <span>保存</span>
               <el-dropdown-menu slot="dropdown" trigger="click">
-                <el-dropdown-item size="mini" @click.native="rollback" class="hover-warning-plain">
+                <el-dropdown-item size="mini" @click.native="rollback" class="md_hover-warning-plain">
                   <i class="el-icon-refresh"></i>
                   <span>配置回滚</span>
                 </el-dropdown-item>
@@ -256,7 +256,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.page-container {
+.md_page-container {
   background-color: #f7f7f7;
 
   #form-box {

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="md_page-container">
     <single-grid-tmpl :fc="fc" :ref="fc">
       <template #add-btn="{conf}">
         <el-button v-bind="conf.conf" @click="openAdd">新增</el-button>
