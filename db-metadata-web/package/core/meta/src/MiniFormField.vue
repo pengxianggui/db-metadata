@@ -104,6 +104,15 @@
         </el-tabs>
       </z-toggle-panel>
     </el-form-item>
+
+    <el-divider content-position="left">
+      <doc-link path="/guide/further-use/metaFieldConfig.html">
+        <span><i class="el-icon-question"></i>元字段配置, 详见:</span>
+        <template #link="{open}">
+          <el-link @click="open()">文档</el-link>
+        </template>
+      </doc-link>
+    </el-divider>
   </el-form>
 </template>
 

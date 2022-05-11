@@ -1,6 +1,7 @@
 <template>
   <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label shadow-border" label-position="right"
            label-width="130px">
+
     <el-form-item label="元对象编码">
       <el-col :span="6">
         <el-input v-model="nativeValue.objectCode" size="mini" readonly></el-input>
@@ -61,6 +62,15 @@
       <el-input placeholder="配置业务拦截器 完整的包名,多个拦截器使用逗号分割 例如: com.github.md.web.controller.itp.MetaFieldEditPointCut"
                 v-model="nativeValue.bizInterceptor"></el-input>
     </el-form-item>
+
+    <el-divider content-position="left">
+      <doc-link path="/guide/further-use/metaObjectConfig.html">
+        <span><i class="el-icon-question"></i>元对象配置, 详见:</span>
+        <template #link="{open}">
+          <el-link @click="open()">文档</el-link>
+        </template>
+      </doc-link>
+    </el-divider>
   </el-form>
 </template>
 
@@ -68,12 +78,13 @@
 import utils from '../../../utils'
 import {isEmpty} from "../../../utils/common";
 import {restUrl} from "../../../constant/url";
+import DocLink from "../../../doc/DocLink";
 
 export default {
   name: "MiniFormObject",
   label: "元对象Config迷你表单",
   description: "输入控件的一种,JsonBox的表单表现形式",
-  components: {},
+  components: {DocLink},
   props: {
     value: {
       type: [Object, String],
