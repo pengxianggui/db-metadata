@@ -209,6 +209,7 @@ export default {
       })
     },
     refreshSelectedTag(view) {
+      // this.$emit('refresh', view)
       this.deleteCachedView(view).then(() => {
         const {fullPath} = view
         this.$nextTick(() => {

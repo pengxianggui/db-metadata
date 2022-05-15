@@ -1,14 +1,15 @@
 <template>
   <div id="_main">
     <div class="fixed-header">
-      <tag-view @cache-view-change="(value) => cachedViews = value"></tag-view>
+      <tag-view></tag-view>
     </div>
     <div class="stage">
       <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->
       <transition name="fade-transform" mode="out-in">
-        <keep-alive :include="cachedViews">
-          <router-view :key="$route.fullPath"></router-view>
+        <keep-alive>
+          <router-view :key="$route.fullPath" v-if="$route.meta.noCache === false"></router-view>
         </keep-alive>
+        <router-view :key="$route.fullPath" v-if="$route.meta.noCache === true"></router-view>
       </transition>
     </div>
   </div>
@@ -24,7 +25,6 @@ export default {
   },
   data() {
     return {
-      cachedViews: []
     }
   }
 }
