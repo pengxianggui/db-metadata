@@ -20,7 +20,39 @@ public interface MRAuthInterceptDoer extends Comparable<MRAuthInterceptDoer> {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     * 判断是否支持。对于返回false的，则拦截器不生效
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     */
+    default boolean support(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        return true;
+    }
+
+    /**
+     * 鉴权执行
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     */
     boolean preAuth(HttpServletRequest request, HttpServletResponse response, Object handler);
+
+    /**
+     * 是否中断后续鉴权链。若返回true，则 优先级{@link #order()} 小于当前鉴权执行器的 则不会执行。
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     */
+    default boolean interruptAuthChain(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        return false;
+    }
 
     @Override
     default int compareTo(MRAuthInterceptDoer o) {

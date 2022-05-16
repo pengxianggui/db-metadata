@@ -1,5 +1,6 @@
 package com.github.md.web.user.auth;
 
+import cn.com.asoco.util.AssertUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -7,7 +8,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p> @Date : 2019/12/17 </p>
@@ -18,18 +20,29 @@ import java.util.Collection;
 @Slf4j
 public class MRAuthIntercept implements HandlerInterceptor {
 
-    private Collection<MRAuthInterceptDoer> interceptDoers;
+    private List<MRAuthInterceptDoer> interceptDoers;
 
-    public MRAuthIntercept(Collection<MRAuthInterceptDoer> interceptDoers) {
+    public MRAuthIntercept(List<MRAuthInterceptDoer> interceptDoers) {
         this.interceptDoers = CollectionUtils.isEmpty(interceptDoers) ? Lists.newArrayList() : interceptDoers;
+        Collections.sort(this.interceptDoers);
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        boolean flag = interceptDoers.stream().allMatch(doer -> doer.preAuth(request, response, handler));
-        if (!flag) {
-            throw new UnauthorizedException("无权限访问!");
+        boolean flag = true;
+        for (MRAuthInterceptDoer interceptDoer : interceptDoers) {
+            if (!interceptDoer.support(request, response, handler)) {
+                continue;
+            }
+
+            flag = interceptDoer.preAuth(request, response, handler);
+            if (flag == false || interceptDoer.interruptAuthChain(request, response, handler)) {
+                break;
+            }
         }
+
+        AssertUtil.isTrue(flag, new UnauthorizedException("无权限访问!"));
+
         return true;
     }
 }

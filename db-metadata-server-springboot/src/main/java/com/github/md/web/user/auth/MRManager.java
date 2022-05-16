@@ -1,19 +1,20 @@
 package com.github.md.web.user.auth;
 
 import cn.com.asoco.util.AssertUtil;
-import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.user.UnLoginException;
 import com.github.md.web.user.User;
-import com.github.md.web.user.auth.defaults.MetaApiResource;
 import com.github.md.web.user.auth.defaults.AnnotateApiResource;
-import com.github.md.web.user.auth.defaults.AuthorizePermit;
 import com.github.md.web.user.auth.defaults.ApiResourcePermit;
+import com.github.md.web.user.auth.defaults.AuthorizePermit;
+import com.github.md.web.user.auth.defaults.MetaApiResource;
 import com.google.common.collect.Lists;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p> @Date : 2019/12/16 </p>
@@ -26,9 +27,6 @@ import java.util.*;
 public class MRManager {
 
     private static final MRManager me = new MRManager();
-
-    @Getter
-    private MRAuthIntercept mrAuthIntercept;
 
     /**
      * 注册多个资源访问器
@@ -58,10 +56,6 @@ public class MRManager {
     }
 
     public static MRManager me() {
-        if (me.mrAuthIntercept == null) {
-            Map<String, MRAuthInterceptDoer> map = AnalysisSpringUtil.getBeansOfTypes(MRAuthInterceptDoer.class);
-            me.mrAuthIntercept = new MRAuthIntercept(map.values());
-        }
         return me;
     }
 
