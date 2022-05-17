@@ -140,7 +140,7 @@
         <el-link type="info" @click="reset">重置</el-link>
 <!--        隐藏高级配置功能-->
         <el-link type="info" @click="themeData.freeMode = !themeData.freeMode" v-if="allowCustomTheme">
-          {{ themeData.freeMode ? '简单配置' : '高级配置' }}
+          {{ themeData.freeMode ? '简单配置' : '自定义配置' }}
         </el-link>
       </div>
     </el-drawer>
