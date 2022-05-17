@@ -5,12 +5,10 @@
     </div>
     <div class="stage">
       <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->
-      <transition name="fade-transform" mode="out-in">
-        <keep-alive>
-          <router-view :key="$route.fullPath" v-if="$route.meta.noCache === false"></router-view>
-        </keep-alive>
-        <router-view :key="$route.fullPath" v-if="$route.meta.noCache === true"></router-view>
-      </transition>
+      <keep-alive>
+        <router-view :key="$route.fullPath" v-if="$route.meta.noCache === false"></router-view>
+      </keep-alive>
+      <router-view :key="$route.fullPath" v-if="$route.meta.noCache === true"></router-view>
     </div>
   </div>
 </template>
