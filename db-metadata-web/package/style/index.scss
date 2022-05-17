@@ -76,3 +76,8 @@ form .inline {
     font-size: 12px !important;
   }
 }
+
+// 解决富文本框 RichTextBox中的 子弹窗(如上传) 的z-index值比el-dialog还要小，导致在el-dialog弹窗下面的问题。
+.tox.tox-tinymce-aux {
+  z-index: 4000;
+}

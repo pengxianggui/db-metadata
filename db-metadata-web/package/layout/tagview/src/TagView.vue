@@ -209,6 +209,7 @@ export default {
       })
     },
     refreshSelectedTag(view) {
+      // FIXME 通过路由跳转实现刷新，会导致其他tagview下的页面也被刷新了
       // this.$emit('refresh', view)
       this.deleteCachedView(view).then(() => {
         const {fullPath} = view

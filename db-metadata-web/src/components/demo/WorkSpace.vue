@@ -20,7 +20,9 @@
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
 <!--    <form-view ic="meta_user.FormView" form-type="add"></form-view>-->
-    <form-view ic="t_employee.FormView" form-type="update" primary-kv="3" style="width: 100%"></form-view>
+<!--    <form-view ic="t_employee.FormView" form-type="update" primary-kv="3" style="width: 100%"></form-view>-->
+
+    <rich-text-box v-model="value"></rich-text-box>
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->
@@ -44,6 +46,7 @@ export default {
   components: {AuthSet},
   data() {
     return {
+      value: '',
       visible: false,
       treeMeta: {
         "objectPrimaryKey": "id",

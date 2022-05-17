@@ -45,11 +45,9 @@ export function createDialog(Vue) {
             }
 
             metaPromise.then(({data: meta}) => {
-                let DialogTmpl = Vue.extend(
-                    // 'DialogTmpl',
-                    {
+                let dialog = new (Vue.extend({
                     template: `
-                      <el-dialog :visible.sync="visible" v-bind="conf" center  :width="width">
+                      <el-dialog :visible.sync="visible" v-bind="conf" center :width="width" :destroy-on-close="true" @closed="handleClosed">
                       <component :ref="meta.name" :is="meta.component_name" :meta="meta" v-model="data" v-bind="props"
                                  @ok="ok" @cancel="cancel"></component>
                       </el-dialog>
@@ -71,6 +69,9 @@ export function createDialog(Vue) {
                         cancel: function (params) {
                             this.visible = false;
                             reject(params);
+                        },
+                        handleClosed: function () {
+                            this.remove() // 移除
                         }
                     },
                     computed: {
@@ -85,12 +86,16 @@ export function createDialog(Vue) {
                             return utils.assertEmpty(widthInMeta, widthInAttr)
                         }
                     }
-                });
+                }))().$mount();
 
-                let dialog = new DialogTmpl().$mount();
+                dialog.remove = () => {
+                    document.body.removeChild(dialog.$el)
+                    // parentComponent.$el.removeChild(dialog.$el);
+                    dialog.$destroy()
+                }
 
                 // doubt 貌似两种方式都不能保证vue devTool检测到弹窗内的组件
-                document.getElementById('app').appendChild(dialog.$el);
+                document.body.appendChild(dialog.$el);
                 // parentComponent.$el.appendChild(dialog.$el);
             })
         });
