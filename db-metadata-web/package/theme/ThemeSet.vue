@@ -16,7 +16,7 @@
         <el-form :model="themeData">
           <h5>布局</h5>
           <el-form-item label="布局" prop="layout">
-            <radio-box v-model="themeData.layout" :options="layouts" class="hidden-radio">
+            <radio-box v-model="themeData.layout" :options="layouts" class="layout-radio hidden-radio">
               <template #column="{option}">
                 <svg-icon :value="option.icon.light"
                           :class="{'active': themeData.layout == 'column'}"></svg-icon>
