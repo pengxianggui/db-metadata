@@ -13,9 +13,6 @@ export default {
     // routerInterceptor: { // 路由守卫
     //     enable: true, // 开启内置的路由守卫。开启后，由MetaElement负责值守路由，并对路由鉴权。如果关闭，你需要自行维持路由鉴权，并维持用户状态。
     // },
-    // axiosInterceptor: { // axios拦截器
-    //     enable: true
-    // },
     // layout: MyLayout, // 布局组件(可选，空则默认。若为默认，则编程路由需要自行使用MetaElement中导出的MetaLayout)
     components: [Route1_2], // 如果你的组件需要能够被动态路由配置时选中，那么需要传入此component中
     // restUrl: {}, // rest请求, 用于覆盖内部rest请求url. 基本无需配置。参考【内置接口地址】
