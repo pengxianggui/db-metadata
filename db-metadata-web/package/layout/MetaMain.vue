@@ -6,9 +6,9 @@
     <div class="stage">
       <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->
       <keep-alive>
-        <router-view :key="$route.fullPath" v-if="$route.meta.noCache === false"></router-view>
+        <router-view :key="$route.fullPath" v-if="cacheCurrentRoute"></router-view>
       </keep-alive>
-      <router-view :key="$route.fullPath" v-if="$route.meta.noCache === true"></router-view>
+      <router-view :key="$route.fullPath" v-if="!cacheCurrentRoute"></router-view>
     </div>
   </div>
 </template>
@@ -23,6 +23,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  computed: {
+    cacheCurrentRoute() {
+      return this.$route.meta.noCache === true ? false : true;
     }
   }
 }
