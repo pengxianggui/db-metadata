@@ -18,7 +18,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring-boot.version>2.5.4</spring-boot.version>
         <lombok.version>1.18.20</lombok.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <druid.version>1.2.6</druid.version>
         <activerecord.version>4.9.16</activerecord.version>
         <asoco-common.version>2.2.0-SNAPSHOT</asoco-common.version>
