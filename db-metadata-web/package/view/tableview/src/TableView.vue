@@ -69,6 +69,7 @@
           </meta-easy-edit>
         </template>
         <template #default="scope">
+          <!--  TODO 2.4 如何将内容列也作为插槽提供扩展 -->
           <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
         </template>
       </el-table-column>

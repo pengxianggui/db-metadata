@@ -52,7 +52,7 @@ CREATE TABLE `meta_auth` (
                              `code` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '权限编码',
                              `name` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '权限名',
                              `module_id` varchar(32) DEFAULT NULL COMMENT '所属模块',
-                             `type` varchar(20) DEFAULT NULL COMMENT '权限类别',
+                             `type` varchar(100) DEFAULT NULL COMMENT '权限类别',
                              `remark` varchar(500) DEFAULT NULL COMMENT '备注',
                              `build_in` bit(1) NOT NULL DEFAULT b'0' COMMENT '系统内置',
                              `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

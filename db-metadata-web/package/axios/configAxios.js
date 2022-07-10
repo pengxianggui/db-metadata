@@ -60,7 +60,7 @@ const configInterceptor = function (router, axios) {
 }
 
 export default function (opts) {
-    const {router, axios: axiosConfig} = opts
+    const {router, axios: axiosConfig = {}} = opts
 
     const axios = Axios.create(axiosConfig)
 
