@@ -743,6 +743,12 @@
           "viewStatus": 10
         }
       },
+      "props": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false
+        }
+      },
       "layout": {
         "cn": "布局路由",
         "config": {

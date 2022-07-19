@@ -627,6 +627,10 @@
           "component_name": "PageSelector",
           "explain": "请选择一个组件, 用以承担此路由的页面(可选的组件列表均来自Vue全局注册的页面/模板组件。\n请开发人员在全局注册的页面组件中提供meta: {isPage: true}配置项，标识其为页面组件)"
         },
+        "props": {
+          "component_name": "JsonBox",
+          "explain": "对应VueRouter的props。注意格式必须是: {\"type\": \"boolean\", \"value\": \"true\"}。type可选: boolean/object/function， 分别对应props的布尔模式、对象模式和函数模式。三种类型下的value值类型分别为: Boolean类型、对象类型和匿名函数字符串"
+        },
         "layout": {
           "component_name": "BoolBox",
           "explain": "是否是布局路由",
@@ -1724,7 +1728,9 @@
         },
         "avatar": {
           "component_name": "ImgBox",
-          "seats": [""],
+          "seats": [
+            ""
+          ],
           "sort": 2,
           "conf": {
             "action": "/file/upload?objectCode=meta_user&fieldCode=avatar"

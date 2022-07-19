@@ -1,5 +1,6 @@
 <template>
   <div class="el-card">
+    <router-link to="/user/1">去详情</router-link>
     <h1>可用的编程菜单</h1>
     <p>这是你自己开发的页面。你想怎么开发就怎么开发。</p>
 

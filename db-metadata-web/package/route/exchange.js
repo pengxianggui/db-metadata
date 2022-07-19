@@ -1,4 +1,4 @@
-import {isEmpty, convertToObject, isObject, isArray} from "../utils/common";
+import {isEmpty, convertToObject, isObject, isArray, isBoolean, printErr, printWarn} from "../utils/common";
 import Pages from '../page/index'
 import Tmpls from '../template/index'
 import MetaLayout from "../layout/MetaLayout";
@@ -54,8 +54,46 @@ export const exchangeComponent = function (Vue, componentName) {
     return getComponent404(Vue, componentName)
 }
 
-const includes = ['path', 'name', 'component', 'children', 'meta', 'redirect'] // 滤出的字段
+const includes = ['path', 'name', 'component', 'children', 'meta', 'redirect', 'props'] // 滤出的字段
 
+/**
+ * 将props值转为VueRouter标准值(布尔/对象/函数)
+ * @param propsValue
+ * @returns {boolean|any}
+ */
+const exchangeProps = function (propsValue) {
+    if (isEmpty(propsValue)) {
+        return false; // props: false
+    }
+
+    try {
+        const propsJson = JSON.parse(propsValue)
+        const {type, value} = propsJson
+        switch (type) {
+            case 'boolean':
+                if (!isBoolean(value)) {
+                    throw new Error('动态路由路由数据异常, type为boolean, 值非boolean类型')
+                }
+                return value;
+            case 'object':
+                return JSON.parse(value)
+            case 'function':
+                return eval(value)
+            default:
+                return false;
+        }
+    } catch (error) { // 解析失败, 发生异常, 都设为false, false也是VueRouter中props的默认值
+        printWarn(error.message)
+        return false; // props: false
+    }
+}
+
+/**
+ * 转换route数据中的kv
+ * @param route 最终的route
+ * @param r 路由数据
+ * @param k 路由数据中的key
+ */
 const exchangeRouteKey = function (route, r, k) {
     let value;
     switch (k) {
@@ -86,6 +124,9 @@ const exchangeRouteKey = function (route, r, k) {
                 role_match_mode: role_match_mode
             }
             merge(value, convertToObject(r[k]))
+            break;
+        case 'props':
+            value = exchangeProps(r[k])
             break;
         default:
             value = r[k]
