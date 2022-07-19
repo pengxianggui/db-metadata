@@ -566,7 +566,7 @@ export function assertProp(object, ...keys) {
  */
 export function strToFn(fnStr) {
     if (isFunction(fnStr)) return fnStr;
-    if (!isString(fnStr) || isEmpty(fnStr)) throw "fnStr is not a valid string";
+    if (!isString(fnStr) || isEmpty(fnStr)) throw new Error("fnStr is not a valid string");
 
     const firstCurlyBraces = fnStr.indexOf('{');
     const lastCurlyBraces = fnStr.lastIndexOf('}');
