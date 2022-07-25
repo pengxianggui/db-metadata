@@ -22,6 +22,12 @@ public interface User {
     @JSONField(name = "avatar")
     String avatar();
 
+    @JSONField(name = "phone")
+    String phone();
+
+    @JSONField(name = "email")
+    String email();
+
     /**
      * 返回User所有属性(key对应数据库字段)
      *

@@ -33,6 +33,16 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
     }
 
     @Override
+    public String phone() {
+        return user.phone();
+    }
+
+    @Override
+    public String email() {
+        return user.email();
+    }
+
+    @Override
     public MRRole[] roles() {
         return roles;
     }

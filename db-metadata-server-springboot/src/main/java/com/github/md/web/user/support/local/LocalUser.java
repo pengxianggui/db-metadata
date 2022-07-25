@@ -72,6 +72,16 @@ public class LocalUser implements User, UserWithRolesWrapper, LoginVO {
     }
 
     @Override
+    public String phone() {
+        return null;
+    }
+
+    @Override
+    public String email() {
+        return null;
+    }
+
+    @Override
     public MRRole[] roles() {
         return roles;
     }

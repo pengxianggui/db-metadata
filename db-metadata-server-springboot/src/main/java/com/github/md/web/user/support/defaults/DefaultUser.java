@@ -66,6 +66,16 @@ public class DefaultUser implements User {
     }
 
     @Override
+    public String phone() {
+        return null;
+    }
+
+    @Override
+    public String email() {
+        return null;
+    }
+
+    @Override
     public Kv attrs() {
         return Kv.create().set(JSONObject.parseObject(data.get("attrs")));
     }
