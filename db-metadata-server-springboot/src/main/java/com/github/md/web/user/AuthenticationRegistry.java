@@ -67,7 +67,8 @@ public class AuthenticationRegistry {
                         ? ApiResourceFactory.createAnnotateApiResource(request, (HandlerMethod) handler)
                         : ApiResourceFactory.createMetaApiResource(request, (HandlerMethod) handler);
 
-                UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
+//                UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
+                User user = UserThreadLocal.getUser();
                 return AuthenticationManager.me().permit(user, resource);
 
             }
