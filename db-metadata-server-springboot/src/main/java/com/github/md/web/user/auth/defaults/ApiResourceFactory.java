@@ -31,7 +31,7 @@ public class ApiResourceFactory {
     }
 
     /**
-     * 构建基于数据的api接口资源
+     * 构建基于数据的api接口资源。若数据库未维护此接口权限描述， 则默认为登录即可访问。
      *
      * @param request
      * @param handlerMethod
@@ -66,7 +66,7 @@ public class ApiResourceFactory {
         Record record = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_api_resource where type=? and uri=? and meta_code=?",
                 type.getCode(), uri, metaCode);
         if (record == null) {
-            return null;
+            return MetaApiResource.createDefault();
         }
         return new MetaApiResource(record);
     }

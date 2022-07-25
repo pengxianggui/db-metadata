@@ -23,6 +23,23 @@ public class MetaApiResource implements MResource {
         this.data = data;
     }
 
+    /**
+     * 默认资源描述。登录即可访问
+     *
+     * @return
+     */
+    public static MetaApiResource createDefault() {
+        Record data = new Record();
+        data.set("need_permit", true);
+        data.set("just_sign", true);
+        data.set("auths", new String[0]);
+        data.set("roles", new String[0]);
+        data.set("auth_match_mode", MatchMode.any.name());
+        data.set("role_match_mode", MatchMode.any.name());
+        data.set("permit_by", PermitBy.auth.name());
+        return new MetaApiResource(data);
+    }
+
     @Override
     public String mResourceId() {
         return this.data.getStr("id");
