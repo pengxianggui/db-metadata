@@ -39,7 +39,7 @@
                :class="{'show-form-builder': elTabValue === '2'}">
         <el-tab-pane label="容器配置" name="0">
           <ui-conf-editor v-model="confModel.conf" :object-code="confModel.objectCode"
-                          :view-component-code="cc"></ui-conf-editor>
+                          :view-component-code="cc" :default-form-type="true"></ui-conf-editor>
         </el-tab-pane>
         <el-tab-pane label="域配置" name="1">
           <div id="conf-panel">
@@ -52,7 +52,7 @@
                     <el-card shadow>
                       <ui-conf-editor v-model="confModel.fConf[key]"
                                       :object-code="confModel.objectCode" :field-code="key"
-                                      :view-component-code="cc"></ui-conf-editor>
+                                      :view-component-code="cc" :default-form-type="true"></ui-conf-editor>
                     </el-card>
                   </el-form-item>
                 </div>

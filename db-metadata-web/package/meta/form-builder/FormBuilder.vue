@@ -36,13 +36,9 @@
       <full-screen :target="$refs['formBuilder']" id="form-builder"></full-screen>
     </div>
     <div id="form-builder-main" v-if="loaded">
-      <ComponentList :form-meta="meta" :edit-mode="true" style="width: 200px; overflow: auto;"></ComponentList>
-      <div style="flex: 5;margin:0 5px">
-        <WorkArea v-model="meta" :active-item.sync="activeItem"></WorkArea>
-      </div>
-      <div style="width: 300px;">
-        <ConfArea v-model="meta" :active-item="activeItem"></ConfArea>
-      </div>
+      <ComponentList :form-meta="meta" :edit-mode="false" class="component-pool"></ComponentList>
+      <WorkArea v-model="meta" :active-item.sync="activeItem" class="work-area"></WorkArea>
+      <ConfArea v-model="meta" :active-item="activeItem" class="conf-area"></ConfArea>
     </div>
   </div>
 </template>
@@ -226,6 +222,24 @@ export default {
     display: flex;
     height: calc(100% - 32px);
     box-sizing: border-box;
+
+    .component-pool {
+      overflow: auto;
+      width: 200px;
+    }
+
+    .work-area {
+      flex: 5;
+      overflow: auto;
+      position: relative;
+      border: 5px solid #dddddd;
+      padding: 5px;
+    }
+
+    .conf-area {
+      flex: 2;
+      //min-width: 360px;
+    }
   }
 }
 </style>

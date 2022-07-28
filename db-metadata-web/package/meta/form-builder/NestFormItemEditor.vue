@@ -89,8 +89,8 @@ export default {
       if (ev) ev.stopPropagation()
       this.$emit('layout-item-delete', columns, item, index, ev)
     },
-    handleAdd(row) {
-      this.$emit('add', row)
+    handleAdd(e) {
+      this.$emit('add', e)
     },
     handleMove(e) {
       this.$emit('move', e)

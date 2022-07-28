@@ -5,6 +5,7 @@
                       :object-code="objectCode" :field-code="activeItem.name"
                       view-component-code="FormView"
                       :default-form-type="true"
+                      json-box-height="480px"
                       v-if="!isEmpty(activeItem)"></ui-conf-editor>
       <div v-else class="blank-tip">
         请先选择一个字段
@@ -14,7 +15,8 @@
     <el-tab-pane label="表单配置">
       <ui-conf-editor v-model="value" :object-code="objectCode" :field-code="activeItem.name"
                       :default-form-type="true"
-                      view-component-code="FormView"></ui-conf-editor>
+                      view-component-code="FormView"
+                      json-box-height="480px"></ui-conf-editor>
     </el-tab-pane>
   </el-tabs>
 </template>

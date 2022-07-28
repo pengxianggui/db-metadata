@@ -21,86 +21,86 @@ import RichTextBox from "../../../core/richtextbox/src/RichTextBox";
 import RowGrid from "../../../core/rowgrid/src/RowGrid";
 
 const compLib = {
+    "布局组件": [{
+        icon: 'rowgrid',
+        comp: RowGrid
+    }],
     "基础组件": [
         {
-            icon: '',
+            icon: 'textbox',
             comp: TextBox
         },
         {
-            icon: '',
+            icon: 'textareabox',
             comp: TextAreaBox
         },
         {
-            icon: '',
+            icon: 'passbox',
             comp: PassBox
         },
         {
-            icon: '',
+            icon: 'numbox',
             comp: NumBox
         },
         {
-            icon: '',
+            icon: 'boolbox',
             comp: BoolBox
         },
         {
-            icon: '',
+            icon: 'checkbox',
             comp: CheckBox
         },
         {
-            icon: '',
+            icon: 'radiobox',
             comp: RadioBox
         },
         {
-            icon: '',
+            icon: 'dropdownbox',
             comp: DropDownBox
         },
         {
-            icon: '',
+            icon: 'datebox',
             comp: DateBox
         },
         {
-            icon: '',
+            icon: 'timebox',
             comp: TimeBox
         },
         {
-            icon: '',
+            icon: 'datetimebox',
             comp: DateTimeBox
         },
         {
-            icon: '',
+            icon: 'filebox',
             comp: FileBox
         },
         {
-            icon: '',
+            icon: 'imgbox',
             comp: ImgBox
         }
     ],
     "高级组件": [
         {
-            icon: '',
+            icon: 'findbox',
             comp: FindBox
         },
         {
-            icon: '',
+            icon: 'jsonbox',
             comp: JsonBox
         },
         {
-            icon: '',
+            icon: 'iconbox',
             comp: IconBox
         },
         {
-            icon: '',
+            icon: 'regionbox',
             comp: RegionBox
         },
         {
-            icon: '',
+            icon: 'richtextbox',
             comp: RichTextBox
         }
-    ],
-    "布局组件": [{
-        icon: '',
-        comp: RowGrid
-    }]
+    ]
 }
 
 /**

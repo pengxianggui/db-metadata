@@ -1,23 +1,21 @@
 <template>
-  <div class="container">
-    <div class="work-area">
-      <form-view :ref="value.name" :meta="value" style="height: 100%; width:100%">
-        <template #form-item>
-          <nest-form-item-editor :columns="value.columns"
-                                 :active-item="activeItem"
-                                 @form-item-click="handleFormItemClick"
-                                 @form-item-delete="handleFormItemDelete"
-                                 @layout-item-delete="handleLayoutItemDelete"
-                                 @add="handleAdd"
-                                 @move="handleMove"
-                                 @end="handleEnd"
-                                 style="height: 100%">
-            <div class="blank-tip">从左侧拖拽来添加表单项</div>
-          </nest-form-item-editor>
-        </template>
-        <template #action><span></span></template>
-      </form-view>
-    </div>
+  <div class="work-area">
+    <form-view :ref="value.name" :meta="value" style="height: 100%; width:100%">
+      <template #form-item>
+        <nest-form-item-editor :columns="value.columns"
+                               :active-item="activeItem"
+                               @form-item-click="handleFormItemClick"
+                               @form-item-delete="handleFormItemDelete"
+                               @layout-item-delete="handleLayoutItemDelete"
+                               @add="handleAdd"
+                               @move="handleMove"
+                               @end="handleEnd"
+                               style="height: 100%">
+          <div class="blank-tip">从左侧拖拽来添加表单项</div>
+        </nest-form-item-editor>
+      </template>
+      <template #action><span></span></template>
+    </form-view>
   </div>
 </template>
 
@@ -44,8 +42,7 @@ export default {
     activeItem: Object
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     isLayoutComps({component_name: componentName}) { // 判断是否容器组件
@@ -82,6 +79,7 @@ export default {
       refreshColumnsSort(this.value.columns)
     },
     handleMove(e) {
+      return true;
     },
     // 点击选中
     handleFormItemClick(column) {
@@ -92,26 +90,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.opr-box {
-  display: flex;
-  margin-bottom: 5px;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .work-area {
-  flex: 1;
-  overflow: auto;
-  position: relative;
-  border: 5px solid #dddddd;
-  padding: 5px;
-
   .form-item {
     background: white;
     position: relative;
@@ -139,13 +118,14 @@ export default {
       //z-index: 3;
     }
   }
+
+  .blank-tip {
+    height: 100%;
+    line-height: 400px;
+    text-align: center;
+    box-sizing: border-box;
+    color: #999999;
+  }
 }
 
-.blank-tip {
-  height: 100%;
-  line-height: 400px;
-  text-align: center;
-  box-sizing: border-box;
-  color: #999999;
-}
 </style>

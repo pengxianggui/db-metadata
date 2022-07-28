@@ -33,7 +33,8 @@
      2. 倘若直接使用v-model, JsonBox中若更改了component_name, 则无法根据component_name的新值重新刷新配置
      解决办法: 此处使用:value和@input组合解构v-model的语法糖，如此一来就可以在handleInput方法中避免上述两个问题。
     -->
-    <json-box :value="value" @input="handleInput" mode="tree" v-show="!formType"></json-box>
+    <json-box :value="value" @input="handleInput" mode="code" :modes="['code']"
+              :height="jsonBoxHeight" v-show="!formType"></json-box>
 
     <div class="bottom-btn-group">
       <span style="flex: 1"></span>
@@ -80,6 +81,10 @@ export default {
     defaultFormType: {
       type: Boolean,
       default: () => false
+    },
+    jsonBoxHeight: {
+      type: String,
+      default: () => '300px'
     }
   },
   data() {

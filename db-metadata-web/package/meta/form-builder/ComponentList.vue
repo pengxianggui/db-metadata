@@ -6,15 +6,13 @@
         <draggable :clone="formItemCloneHandler"
                    :group="{ name: 'form', pull: 'clone', put: false }"
                    :list="v | extract"
-                   @end="handleEnd"
                    @start="handleStart"
+                   @end="handleEnd"
                    :move="handleMove"
                    :sort="false"
                    class="grid-box">
           <div v-for="c in v" class="grid-item">
-            <!--            TODO icon美化-->
-            <!--            <i class="el-icon-receiving"></i>-->
-            <!--            <svg-icon :value="c.icon"></svg-icon>-->
+            <svg-icon :value="c.icon" class="icon"></svg-icon>
             <span>{{ c.comp.label }}</span>
           </div>
         </draggable>
@@ -26,7 +24,7 @@
 <script>
 import draggable from 'vuedraggable'
 import {buildDefaultMeta} from '../../core/index'
-import compLib, {extract} from './relate/componentData'
+import compLib, {extract, isLayoutComp} from './relate/componentData'
 import {randomNum, isEmpty} from '../../utils/common'
 
 export default {
@@ -62,11 +60,18 @@ export default {
       this.$merge(meta, buildDefaultMeta(name));
       return meta;
     },
-    handleEnd() {
+    handleEnd(event) {
     },
-    handleStart() {
+    handleStart(event) {
     },
-    handleMove(e) {
+    handleMove(event) {
+      const {draggedContext: {element}} = event
+      const allowDrag = isLayoutComp(element.name)
+      if (!allowDrag) {
+        this.$message.closeAll(); // 防止下面这句提示疯狂炸屏
+        this.$message.warning('目前编辑模式下, 只允许添加布局组件')
+      }
+      return allowDrag
     }
   },
   computed: {
@@ -101,6 +106,10 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    .icon {
+      font-size: 20px;
+    }
   }
 }
 </style>

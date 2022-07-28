@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <vue-json-editor v-model="nativeValue"
-                     :mode="innerMode"
-                     v-bind="$reverseMerge(innerMeta.conf, $attrs)">
-    </vue-json-editor>
-  </div>
+  <vue-json-editor v-model="nativeValue"
+                   :mode="innerMode"
+                   :modes="innerModes"
+                   v-bind="$reverseMerge(innerMeta.conf, $attrs)"
+                   class="json-editor" :style="style">
+  </vue-json-editor>
+
 </template>
 
 <script>
@@ -21,6 +22,9 @@ export default {
   mixins: [Meta(DefaultMeta), Val(conver, reverse)],
   name: "JsonBox",
   label: "Json框",
+  inject: {
+    isView: {default: false}
+  },
   components: {
     vueJsonEditor
   },
@@ -31,13 +35,45 @@ export default {
       validator: (val) => {
         return modes.indexOf(val) > -1
       }
+    },
+    modes: {
+      type: Array
+    },
+    height: {
+      type: String,
+      default: () => 'auto'
     }
   },
   computed: {
     innerMode() {
-      const {mode: attrMode, innerMeta: {conf: {mode: metaMode} = {}}} = this
+      const {mode: attrMode, innerMeta: {conf: {mode: metaMode} = {}}, isView} = this
+      if (isView) {
+        return "view"
+      }
       return utils.assertEmpty(attrMode, metaMode);
+    },
+    innerModes() {
+      const {modes: attrModes, innerMeta: {conf: {modes: metaModes} = {}}, isView} = this
+      if (isView) { // view模式下，只能选view
+        return ['view']
+      }
+      return utils.assertEmpty(attrModes, metaModes)
+    },
+    style() {
+      return {
+        height: this.height
+      }
     }
   }
 };
 </script>
+<style scoped lang="scss">
+.json-editor {
+  ::v-deep {
+    .jsoneditor-vue {
+      height: 100%;
+    }
+  }
+}
+
+</style>
