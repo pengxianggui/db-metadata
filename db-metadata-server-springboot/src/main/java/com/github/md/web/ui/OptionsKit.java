@@ -196,6 +196,11 @@ public class OptionsKit {
             //计算需要转义的字段的映射关系
             for (IMetaField field : fields) {
                 configWrapper = field.configParser();
+
+                if (!configWrapper.escape()) {
+                    continue;
+                }
+
                 if (configWrapper.hasTranslation()) {
                     // 注意优先级
                     if (configWrapper.isOptions()) { // 静态数组

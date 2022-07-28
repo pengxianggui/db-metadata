@@ -210,7 +210,7 @@ public class TreeAndTableController extends ControllerAdapter {
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
         /** pointCut构建 */
-        QueryPointCut queryPointCut = (QueryPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
+        TableQueryPointCut tableQueryPointCut = (TableQueryPointCut) treeAndTableConfig.getTreeFeatureIntercept().tableIntercept();
         TreeAndTableQueryInvocation treeAndTableQueryInvocation = new TreeAndTableQueryInvocation(metaObject, queryHelper);
         treeAndTableQueryInvocation.setSqlParaExt(sqlPara);
         treeAndTableQueryInvocation.setCompileWhere(compileWhere);
@@ -218,10 +218,10 @@ public class TreeAndTableController extends ControllerAdapter {
         treeAndTableQueryInvocation.setTreeAndTableConfig(treeAndTableConfig);
 
         Page<Record> result = null;
-        if (queryPointCut.prevent()) {
-            result = queryPointCut.getResult(treeAndTableQueryInvocation);
+        if (tableQueryPointCut.prevent()) {
+            result = tableQueryPointCut.getResult(treeAndTableQueryInvocation);
         } else {
-            SqlParaExt pointCutSqlPara = (SqlParaExt) queryPointCut.queryWrapper(treeAndTableQueryInvocation);
+            SqlParaExt pointCutSqlPara = (SqlParaExt) tableQueryPointCut.queryWrapper(treeAndTableQueryInvocation);
             /** 当拦截点未设置时,使用默认查询逻辑 */
             if (pointCutSqlPara == null) {
                 result = metaService().paginate(pageIndex,
@@ -238,14 +238,7 @@ public class TreeAndTableController extends ControllerAdapter {
             }
         }
 
-
-        /**
-         * escape field value;
-         * 1. 是否需要转义的规则;
-         */
-        if (!queryHelper.list().raw()) {
-            result.setList(OptionsKit.trans(filteredFields, result.getList()));
-        }
+        result.setList(OptionsKit.trans(filteredFields, result.getList())); // 转义
 
         /**
          * 别名替换,参数中遇

@@ -34,7 +34,7 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     /**
-     * 是否需要翻译
+     * 是否有数据源配置
      *
      * @return
      */
@@ -46,6 +46,19 @@ public class MetaFieldConfigParse extends MetaData {
          * 3. 指定数据源
          */
         return isSql() || isOptions() || isDict() || isUrl();
+    }
+
+    /**
+     * 是否需要转义。显示时，是否需要转义。TODO 应当细分下，支持表格显示时无需转义，详情时需要转义。这个涉及元字段配置的UI，乃至数据结构的调整
+     *
+     * @return 若元字段未配置，则默认为true(向下兼容)
+     */
+    public boolean escape() {
+        String escape = getStr("escape");
+        if (StrKit.isBlank(escape)) {
+            return true;
+        }
+        return Boolean.parseBoolean(escape);
     }
 
     public boolean isOptions() {

@@ -5,6 +5,8 @@ import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.aop.QueryInvocation;
 import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.query.QueryHelper;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import lombok.Data;
 
 import java.util.Collection;
@@ -28,6 +30,8 @@ public class TableQueryInvocation extends QueryInvocation {
     private Collection<IMetaField> filteredFields;
 
     private boolean prevent;
+
+    private Page<Record> data;
 
     public TableQueryInvocation(IMetaObject object, QueryHelper queryHelper) {
         super(object);

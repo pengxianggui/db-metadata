@@ -8,10 +8,20 @@ package com.github.md.analysis.meta.aop;
  */
 public interface ViewPointCut<T extends AopInvocation> extends IPointCut {
 
+    /**
+     * 返回false, 则后续拦截器不会执行
+     * @param invocation
+     * @return
+     */
     default boolean viewBefore(T invocation) {
         return false;
     }
 
+    /**
+     * 返回false, 则后续拦截器不会执行
+     * @param invocation
+     * @return
+     */
     default boolean viewAfter(T invocation) {
         return false;
     }

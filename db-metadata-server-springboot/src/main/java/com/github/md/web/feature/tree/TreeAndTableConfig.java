@@ -52,7 +52,7 @@ public class TreeAndTableConfig extends FeatureConfig implements TreeConfigGette
             }
 
             try {
-                intercept = (TreeAndTableIntercept) Class.forName(bizInterceptor).newInstance();
+                intercept = (TreeAndTableIntercept) Thread.currentThread().getContextClassLoader().loadClass(bizInterceptor).newInstance();
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 log.error(e.getMessage(), e);
             } catch (NullPointerException e) {

@@ -76,6 +76,12 @@ public class FileController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
+        IMetaField metaField = metaService().findFieldByCode(objectCode, fieldCode);
+        if (!metaField.configParser().isFile()) {
+            log.error("当前字段类型非文件类型, 请在元字段配置中，勾选'是否文件'选项");
+            throw new WebException("当前字段类型非文件类型");
+        }
+
         String url = uploadService.upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
 
         Kv result = Kv.by("name", file.getOriginalFilename());

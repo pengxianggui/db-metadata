@@ -1,6 +1,6 @@
 <template>
-  <el-form ref="sub_form" :model="nativeValue" size="mini" class="align-to-label shadow-border "
-           label-position="left" label-width="80px">
+  <el-form ref="sub_form" :model="nativeValue" size="mini" class="form shadow-border"
+           label-position="left" label-width="100px">
     <el-form-item label="默认值">
       <el-col :span="6">
         <!--  TODO: 应当根据元字段的数据类型决定使用什么控件设置默认值  -->
@@ -73,7 +73,6 @@
           &nbsp;
           <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
         </template>
-
         <el-tabs v-model="activeOption">
           <el-tab-pane label="静态数组" name="scopeOptions">
             <options-input v-model="nativeValue.scopeOptions"></options-input>
@@ -103,6 +102,16 @@
           </el-tab-pane>
         </el-tabs>
       </z-toggle-panel>
+    </el-form-item>
+    <el-form-item>
+      <template #label>
+        <span>是否转义</span>&nbsp;
+        <el-tooltip placement="right">
+          <div slot="content">勾选后, 列表页、详情页等显示处, 会自动将原始值转义为显示值(转义依据参考【数据源】配置)</div>
+          <i class="el-icon-question"></i>
+        </el-tooltip>
+      </template>
+      <bool-box v-model="nativeValue.escape"></bool-box>
     </el-form-item>
 
     <el-divider content-position="left">
@@ -155,6 +164,7 @@ export default {
         scopeOptions: [],
         scopeDict: null, // 字典名
         isListShow: true,
+        escape: true
       }
     }
   },
@@ -222,14 +232,9 @@ export default {
   margin: 0 10px 0 0 !important;
 }
 
-.align-to-label {
-  margin-top: 5px;
-}
-
 .shadow-border {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-  padding: 15px 0px 5px 5px;
-
+  padding: 15px;
 }
 
 .upload-seats {

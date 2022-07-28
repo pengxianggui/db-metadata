@@ -96,7 +96,7 @@ public class MetaObjectConfigParse extends MetaData {
      *
      * @return
      */
-    public QueryPointCut queryPointCut() {
+    public TableQueryPointCut queryPointCut() {
         return pointCutFactory.queryPointCut();
     }
 
@@ -112,7 +112,7 @@ public class MetaObjectConfigParse extends MetaData {
      *
      * @return
      *
-     * @see com.hthjsj.web.kit.tree.TreeConfig
+     * @see com.github.md.web.kit.tree.TreeConfig
      */
     public String treeConfig() {
         if (StrKit.notBlank(getStr("structureConfig"))) {

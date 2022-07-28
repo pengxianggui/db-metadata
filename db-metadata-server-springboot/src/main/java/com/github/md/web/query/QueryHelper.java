@@ -196,9 +196,5 @@ public class QueryHelper {
         public String[] excludeFields() {
             return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(efs()).toArray(new String[0]);
         }
-
-        public boolean raw() {
-            return tp.getParaToBoolean("raw", false);
-        }
     }
 }

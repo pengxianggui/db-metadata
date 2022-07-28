@@ -30,7 +30,7 @@ public class PointCutFactory implements Serializable, Cloneable {
             if (ss.contains(",")) {
                 return ss.split(",");
             } else {
-                return new String[] { ss };
+                return new String[]{ss};
             }
         }
     }
@@ -42,7 +42,7 @@ public class PointCutFactory implements Serializable, Cloneable {
 
         T clazz = null;
         try {
-            clazz = (T) Class.forName(interceptorStr).newInstance();
+            clazz = (T) Thread.currentThread().getContextClassLoader().loadClass(interceptorStr).newInstance();
             return clazz;
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             log.error(e.getMessage(), e);
@@ -54,13 +54,13 @@ public class PointCutFactory implements Serializable, Cloneable {
         return (T) EMPTY_POINT_CUT;
     }
 
-    public QueryPointCut queryPointCut() {
+    public TableQueryPointCut queryPointCut() {
         String[] interceptors = interceptors();
         Object o = null;
         for (String i : interceptors) {
             o = interceptor(i);
-            if (o instanceof QueryPointCut) {
-                return (QueryPointCut) o;
+            if (o instanceof TableQueryPointCut) {
+                return (TableQueryPointCut) o;
             }
         }
         return EMPTY_POINT_CUT;

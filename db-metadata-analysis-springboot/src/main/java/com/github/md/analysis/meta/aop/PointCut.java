@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, ViewPointCut, QueryPointCut {
+public class PointCut implements AddPointCut, UpdatePointCut, DeletePointCut, ViewPointCut, TableQueryPointCut {
 
     @Override
     public boolean addBefore(FormInvocation invocation) {

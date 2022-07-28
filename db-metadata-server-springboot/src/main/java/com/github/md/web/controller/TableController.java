@@ -81,15 +81,17 @@ public class TableController extends ControllerAdapter {
         String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
 
         /* pointCut构建 */
-        QueryPointCut queryPointCut = metaObject.configParser().queryPointCut();
+        TableQueryPointCut tableQueryPointCut = metaObject.configParser().queryPointCut();
         TableQueryInvocation tableQueryInvocation = new TableQueryInvocation(metaObject, queryHelper);
         tableQueryInvocation.setSqlParaExt(sqlPara);
         tableQueryInvocation.setCompileWhere(compileWhere);
         tableQueryInvocation.setFilteredFields(filteredFields);
 
+        PointCutChain.queryBefore(tableQueryInvocation, tableQueryPointCut); // 前置扩展
+
         Page<Record> result = null;
-        if (queryPointCut.prevent()) {
-            result = queryPointCut.getResult(tableQueryInvocation);
+        if (tableQueryPointCut.prevent()) {
+            result = tableQueryPointCut.getResult(tableQueryInvocation);
         } else {
             result = metaService().paginate(pageIndex,
                     pageSize,
@@ -99,20 +101,22 @@ public class TableController extends ControllerAdapter {
                     sqlPara.getPara());
         }
 
+        // 后置扩展
+        tableQueryInvocation.setData(result);
+        PointCutChain.queryAfter(tableQueryInvocation, tableQueryPointCut);
 
         /*
          * escape field value;
-         * 1. 是否需要转义的规则;
+         * 1. 是否需要默认转义的规则;
          */
-        if (!queryHelper.list().raw()) {
-            result.setList(OptionsKit.trans(filteredFields, result.getList()));
-        }
+        result.setList(OptionsKit.trans(filteredFields, result.getList()));
 
         /*
          * 别名替换,参数中遇
          * a->b=123
          * c->d=123
          * 执行别名替换处理
+         * TODO 废弃
          */
         Kv alias = Kv.create();
         AtomicBoolean hasAlias = new AtomicBoolean(false);
@@ -244,11 +248,7 @@ public class TableController extends ControllerAdapter {
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 
         return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.getAfterFilter(
-                record -> {
-                    if (!queryHelper.list().raw()) { // 转义: 在递归序列化时进行转义
-                        OptionsKit.trans(filteredFields, Lists.newArrayList(record));
-                    }
-                }
+                record -> OptionsKit.trans(filteredFields, Lists.newArrayList(record)) // 递归序列化时进行转义
         ))));
     }
 }

@@ -8,10 +8,20 @@ package com.github.md.analysis.meta.aop;
  */
 public interface DeletePointCut extends IPointCut {
 
+    /**
+     * 返回false, 则后续拦截器不会执行
+     * @param invocation
+     * @return
+     */
     default boolean deleteBefore(DeleteInvocation invocation) {
         return true;
     }
 
+    /**
+     * 返回false, 则后续拦截器不会执行
+     * @param invocation
+     * @return
+     */
     default boolean deleteAfter(DeleteInvocation invocation) {
         return true;
     }

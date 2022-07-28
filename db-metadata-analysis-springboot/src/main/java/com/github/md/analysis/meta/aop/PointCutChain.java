@@ -30,6 +30,8 @@ public class PointCutChain {
 
     private static final List<IPointCut> viewPointCuts = new ArrayList<>(0);
 
+    private static final List<IPointCut> tableQueryPointCuts = new ArrayList<>(0);
+
     public static void registerGlobalPointCut(IPointCut pointCut) {
         if (pointCut != null && pointCut instanceof AddPointCut) {
             addPointCuts.add(pointCut);
@@ -43,8 +45,17 @@ public class PointCutChain {
         if (pointCut != null && pointCut instanceof ViewPointCut) {
             viewPointCuts.add(pointCut);
         }
+        if (pointCut != null && pointCut instanceof TableQueryPointCut) {
+            tableQueryPointCuts.add(pointCut);
+        }
     }
 
+    /**
+     * 执行表单新增前pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void addBefore(IPointCut[] pointCuts, FormInvocation invocation) {
 
         for (IPointCut addPointCut : addPointCuts) {
@@ -67,6 +78,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行表单新增后pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void addAfter(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut addPointCut : addPointCuts) {
             if (addPointCut instanceof AddPointCut) {
@@ -88,6 +105,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行表单更新前pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void updateBefore(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut updatePointCut : updatePointCuts) {
             if (updatePointCut instanceof UpdatePointCut) {
@@ -109,6 +132,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行表单更新后pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void updateAfter(IPointCut[] pointCuts, FormInvocation invocation) {
         for (IPointCut updatePointCut : updatePointCuts) {
             if (updatePointCut instanceof UpdatePointCut) {
@@ -130,6 +159,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行删除前pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void deleteBefore(IPointCut[] pointCuts, DeleteInvocation invocation) {
         for (IPointCut deletePointCut : deletePointCuts) {
             if (deletePointCut instanceof DeletePointCut) {
@@ -151,6 +186,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行删除后pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void deleteAfter(IPointCut[] pointCuts, DeleteInvocation invocation) {
         for (IPointCut deletePointCut : deletePointCuts) {
             if (deletePointCut instanceof DeletePointCut) {
@@ -172,6 +213,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行表单详情前的pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void viewBefore(IPointCut[] pointCuts, DetailQueryInvocation invocation) {
         for (IPointCut viewPointCut : viewPointCuts) {
             if (viewPointCut instanceof ViewPointCut) {
@@ -193,6 +240,12 @@ public class PointCutChain {
         }
     }
 
+    /**
+     * 执行表单详情前的pointCut
+     *
+     * @param pointCuts
+     * @param invocation
+     */
     public static void viewAfter(IPointCut[] pointCuts, DetailQueryInvocation invocation) {
         for (IPointCut viewPointCut : viewPointCuts) {
             if (viewPointCut instanceof ViewPointCut) {
@@ -213,4 +266,61 @@ public class PointCutChain {
             }
         }
     }
+
+    /**
+     * 列表查询前的pointCut
+     *
+     * @param invocation
+     * @param pointCuts
+     */
+    public static void queryBefore(QueryInvocation invocation, IPointCut... pointCuts) {
+        for (IPointCut pointCut : tableQueryPointCuts) {
+            if (pointCut instanceof TableQueryPointCut) {
+                ((TableQueryPointCut) pointCut).queryBefore(invocation);
+            }
+        }
+
+
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut pointCut = pointCuts[i];
+            if (pointCut instanceof TableQueryPointCut) {
+                boolean s = ((TableQueryPointCut) pointCut).queryBefore(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", pointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 列表查询后的pointCut
+     *
+     * @param invocation
+     * @param pointCuts
+     */
+    public static void queryAfter(QueryInvocation invocation, IPointCut... pointCuts) {
+        for (IPointCut pointCut : tableQueryPointCuts) {
+            if (pointCut instanceof TableQueryPointCut) {
+                ((TableQueryPointCut) pointCut).queryAfter(invocation);
+            }
+        }
+
+
+        for (int i = 0; i < pointCuts.length; i++) {
+            IPointCut pointCut = pointCuts[i];
+            if (pointCut instanceof TableQueryPointCut) {
+                boolean s = ((TableQueryPointCut) pointCut).queryAfter(invocation);
+                if (s) {
+                    continue;
+                } else {
+                    log.info("拦截器 {} 执行中断,调用链总长:{} ,当前:{}", pointCut.getClass().getSimpleName(), pointCuts.length, i);
+                    break;
+                }
+            }
+        }
+    }
+
 }

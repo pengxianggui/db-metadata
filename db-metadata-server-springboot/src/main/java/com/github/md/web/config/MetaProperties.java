@@ -62,6 +62,8 @@ public class MetaProperties {
 
         private ComponentProperties component = new ComponentProperties();
 
+        private InstanceProperties instance = new InstanceProperties();
+
         private boolean enableCertification = true;
 
         private Login login = new Login();
@@ -91,6 +93,11 @@ public class MetaProperties {
     public static class MetaObjectProperties {
 
         boolean replaceFromJsonFile;
+    }
+
+    @Data
+    public static class InstanceProperties {
+        boolean recomputeWhenMetaFieldUpdate;
     }
 
     @Data

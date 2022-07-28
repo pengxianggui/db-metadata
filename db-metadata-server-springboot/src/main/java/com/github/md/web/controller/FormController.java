@@ -210,13 +210,7 @@ public class FormController extends ControllerAdapter {
 
                 FormDataFactory.buildFormData(metaObject, d, FormView.FormType.VIEW);
 
-                /**
-                 * escape field value;
-                 * 1. 是否需要转义的规则;
-                 */
-                if (!queryHelper.list().raw()) {
-                    d = OptionsKit.trans(metaObject.fields(), Lists.newArrayList(d)).get(0);
-                }
+                d = OptionsKit.trans(metaObject.fields(), Lists.newArrayList(d)).get(0);
                 invocation.setData(d);
                 PointCutChain.viewAfter(viewPointCuts, invocation);
             } catch (Exception e) {

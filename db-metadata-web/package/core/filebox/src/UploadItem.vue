@@ -14,7 +14,7 @@
 
       <div slot="default" class="upload-btn">
         <i class="seat-name" v-if="seat">请上传{{ seat }}：</i>
-        <i class="icon el-icon-plus" v-if="isView"></i>
+        <i class="icon el-icon-plus" v-if="!isView"></i>
       </div>
     </el-upload>
   </div>

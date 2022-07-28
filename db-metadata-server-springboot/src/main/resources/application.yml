@@ -76,9 +76,11 @@ md:
         bucket-name: db-metadata-demo
     event-enabled: true
     component:
-      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultInstance.json)中推导组件实例配置，并覆盖数据库
+      replace-from-json-file: false # 是否开启每次启动时从json文件(buildInComponent.json、buildInInstance.json)中推导组件实例配置，并覆盖数据库
     meta-object:
-      replace-from-json-file: true # 是否开启每次启动时从json文件(defaultObject.json)中推导元对象逻辑配置，并覆盖数据库
+      replace-from-json-file: false # 是否开启每次启动时从json文件(buildInObject.json)中推导元对象逻辑配置，并覆盖数据库
+    instance:
+      recompute-when-meta-field-update: false # 元字段更新时，是否重新计算元字段的UI实例配置。默认是false
 
   analysis:
     extension:
