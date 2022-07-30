@@ -14,6 +14,8 @@ import com.github.md.web.query.QueryHelper;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.jfinal.kit.StrKit;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -43,6 +45,7 @@ import java.util.Optional;
  * <p> @author konbluesky </p>
  */
 @Slf4j
+@Api(tags = "文件上传/下载")
 @RestController
 @RequestMapping("file")
 public class FileController extends ControllerAdapter {
@@ -53,6 +56,7 @@ public class FileController extends ControllerAdapter {
      * param fieldCode
      * param file
      */
+    @ApiOperation(value = "文件上传", notes = "兼容普通上传和dbmeta内置上传组件的上传")
     @MetaAccess(value = Type.API)
     @PostMapping("upload")
     public Ret index(MultipartRequest request) {
@@ -95,6 +99,7 @@ public class FileController extends ControllerAdapter {
     /**
      * 富文本中的图片上传
      */
+    @ApiOperation(value = "文件上传(富文本中)", notes = "dbmeta内置组件富文本中的文件上传略有区别，响应数据需要包装成json")
     @MetaAccess(value = Type.API)
     @PostMapping("upload/rich-text")
     public Kv richText(MultipartFile file) {
@@ -112,6 +117,7 @@ public class FileController extends ControllerAdapter {
      * param fieldCode
      * param 业务记录 id
      */
+    @ApiOperation(value = "文件下载", notes = "适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)，仅适用于dbmeta文件(/图片)控件的下载")
     @MetaAccess(value = Type.API)
     @GetMapping("down")
     public ResponseEntity<FileSystemResource> down() {
@@ -158,6 +164,7 @@ public class FileController extends ControllerAdapter {
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
+    @ApiOperation(value = "图片预览/文件下载", notes = "适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)")
     @MetaAccess(value = Type.API)
     @GetMapping("preview")
     public ResponseEntity<FileSystemResource> tmpPre() {
