@@ -58,7 +58,7 @@ public class FileController extends ControllerAdapter {
      */
     @ApiOperation(value = "文件上传", notes = "兼容普通上传和dbmeta内置上传组件的上传。Content-Type: multipart/form-data; 文件上传key为file。响应数据格式为{\"name\":name, \"value\":path, \"url\":url}")
     @MetaAccess(value = Type.API)
-    @PostMapping("upload")
+    @PostMapping(value = "upload", consumes = {"multipart/form-data"})
     public Ret index(MultipartRequest request) {
 
         List<MultipartFile> uploadFiles = new ArrayList<>();
