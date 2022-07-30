@@ -45,7 +45,7 @@ import java.util.Optional;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-@Api(tags = "文件上传/下载")
+@Api(tags = "文件上传、下载")
 @RestController
 @RequestMapping("file")
 public class FileController extends ControllerAdapter {
@@ -56,7 +56,7 @@ public class FileController extends ControllerAdapter {
      * param fieldCode
      * param file
      */
-    @ApiOperation(value = "文件上传", notes = "兼容普通上传和dbmeta内置上传组件的上传")
+    @ApiOperation(value = "文件上传", notes = "兼容普通上传和dbmeta内置上传组件的上传。Content-Type: multipart/form-data; 文件上传key为file。响应数据格式为{\"name\":name, \"value\":path, \"url\":url}")
     @MetaAccess(value = Type.API)
     @PostMapping("upload")
     public Ret index(MultipartRequest request) {
