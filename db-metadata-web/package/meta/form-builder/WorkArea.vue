@@ -26,6 +26,7 @@ import DropDownBox from "../../core/dropdownbox/src/DropDownBox";
 import {isLayoutComp} from './relate/componentData'
 import NestFormItemEditor from "./NestFormItemEditor"
 import {refreshColumnsSort, isEmptyGridRow} from './formViewMetaParser'
+import {utils} from "../../index";
 
 export default {
   name: "WorkArea",
@@ -58,8 +59,10 @@ export default {
     },
     handleFormItemDelete(columns, item, index, ev) {
       const {objectCode} = this
-      if (objectCode) {
-        this.$message.warning('编辑元对象时不允许移除控件')
+      const {component_name} = item
+
+      if (!utils.isEmpty(objectCode) && !utils.isEmpty(component_name)) { // component_name为空说明是无效控件
+        this.$message.warning('编辑实例配置时不允许移除控件')
         return false
       }
       columns.splice(index, 1)
