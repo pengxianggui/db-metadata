@@ -29,5 +29,14 @@ public interface IAuth {
         return "Empty permission name.";
     }
 
+    /**
+     * 所属模块ID
+     *
+     * @return
+     */
+    default String moduleId() {
+        return "Empty moduleId.";
+    }
+
     Kv toKv();
 }

@@ -29,13 +29,17 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 public class DefaultAuth implements IAuth {
+    private String id;
     private String code;
     private String name;
+    private String moduleId;
     private Map<String, Object> attrs;
 
     public DefaultAuth(Record record) {
+        this.id = record.getStr("id");
         this.code = record.getStr("code");
         this.name = record.getStr("name");
+        this.moduleId = record.getStr("module_id");
         this.attrs = record.getColumns();
     }
 

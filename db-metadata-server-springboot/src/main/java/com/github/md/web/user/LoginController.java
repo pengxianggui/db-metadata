@@ -20,7 +20,7 @@ import java.util.Objects;
  * <p> @author konbluesky </p>
  */
 @ConditionalOnProperty(name = {"md.server.login.ctrl.enable"}, havingValue = "true", matchIfMissing = true)
-@RestController
+@RestController("metaLoginController")
 @RequestMapping
 public class LoginController extends ControllerAdapter {
 

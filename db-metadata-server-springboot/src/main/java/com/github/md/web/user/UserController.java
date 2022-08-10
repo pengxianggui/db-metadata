@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author pengxg
  * @date 2022/2/18 5:20 下午
  */
-@RestController
+@RestController("metaUserController")
 @RequestMapping("user")
 public class UserController extends ControllerAdapter {
 

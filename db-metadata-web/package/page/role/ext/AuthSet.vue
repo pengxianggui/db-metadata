@@ -76,7 +76,7 @@ export default {
       const {id: moduleId} = row
       const {allAuths} = this
       const checked = checkedKeys.indexOf(moduleId) > -1
-      allAuths.filter(a => a.module_id === moduleId).forEach(a => {
+      allAuths.filter(a => a.moduleId === moduleId).forEach(a => {
         const index = this.checkedAuthIds.indexOf(a.id)
         if (checked && index === -1) { // 树节点被选中，则该模块下没勾选的都勾上
           this.checkedAuthIds.push(a.id)
@@ -135,15 +135,15 @@ export default {
     filteredAuths() {
       const {allAuths, moduleId, searchWord} = this
       return allAuths.filter(a => {
-        return (utils.isEmpty(moduleId) || a.module_id === moduleId)
+        return (utils.isEmpty(moduleId) || a.moduleId === moduleId)
             && (utils.isEmpty(searchWord) || a.name.indexOf(searchWord) > -1)
       }).sort((a1, a2) => {
-        return utils.assertEmpty(a1.module_id, '').localeCompare(utils.assertEmpty(a2.module_id))
+        return utils.assertEmpty(a1.moduleId, '').localeCompare(utils.assertEmpty(a2.moduleId))
       });
     },
     checkedModuleIds() {
       const {checkedAuthIds, allAuths} = this
-      const checkedModuleIds = allAuths.filter(a => checkedAuthIds.indexOf(a.id) > -1).map(a => a.module_id)
+      const checkedModuleIds = allAuths.filter(a => checkedAuthIds.indexOf(a.id) > -1).map(a => a.moduleId)
       return Array.from(new Set(checkedModuleIds));
     }
   }
