@@ -1,6 +1,7 @@
 package com.github.md.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.meta.aop.*;
 import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -25,7 +26,13 @@ public class MetaObjectConfigParse extends MetaData {
     }
 
     MetaObjectConfigParse(String config) {
-        set(JSON.parseObject(StrKit.defaultIfBlank(config, "{}")));
+        try {
+            JSONObject configObj = JSON.parseObject(StrKit.defaultIfBlank(config, "{}"));
+            set(configObj);
+        } catch (Exception e) {
+            log.error("json转化错误, errMsg: {}", e.getMessage());
+            set(new JSONObject());
+        }
     }
 
     public boolean isUUIDPrimary() {
@@ -111,7 +118,6 @@ public class MetaObjectConfigParse extends MetaData {
      * TODO 前端直传,但是使用com.hthjsj.web.kit.tree.TreeConfig数据结构
      *
      * @return
-     *
      * @see com.github.md.web.kit.tree.TreeConfig
      */
     public String treeConfig() {

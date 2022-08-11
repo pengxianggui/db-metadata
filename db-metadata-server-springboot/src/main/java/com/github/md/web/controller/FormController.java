@@ -49,7 +49,7 @@ public class FormController extends ControllerAdapter {
      *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
      * </pre>
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -118,7 +118,7 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toUpdate")
     public Ret toUpdate() {
         QueryHelper queryHelper = queryHelper();
@@ -184,7 +184,7 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();

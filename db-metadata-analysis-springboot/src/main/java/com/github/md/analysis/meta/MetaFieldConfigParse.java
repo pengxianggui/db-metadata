@@ -2,8 +2,10 @@ package com.github.md.analysis.meta;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class MetaFieldConfigParse extends MetaData {
 
     public static final int NORMAL = 100;
@@ -30,7 +33,13 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     MetaFieldConfigParse(String config) {
-        set(JSON.parseObject(config));
+        try {
+            JSONObject configObj = JSON.parseObject(StrKit.defaultIfBlank(config, "{}"));
+            set(configObj);
+        } catch (Exception e) {
+            log.error("json转化错误, errMsg: {}", e.getMessage());
+            set(new JSONObject());
+        }
     }
 
     /**
