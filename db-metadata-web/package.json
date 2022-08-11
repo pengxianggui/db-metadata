@@ -1,6 +1,6 @@
 {
   "name": "db-metadata",
-  "version": "2.2.43",
+  "version": "2.2.44",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/db-metadata.common.js",
   "keywords": [
