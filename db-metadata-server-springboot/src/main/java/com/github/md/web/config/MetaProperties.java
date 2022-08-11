@@ -108,13 +108,27 @@ public class MetaProperties {
         private String pwdKey = "password";
 
         LoginCtrl ctrl = new LoginCtrl();
+        /**
+         * 认证拦截器需要作用的路径
+         */
         List<String> includes = new ArrayList<>();
+        /**
+         * 认证拦截器排除路径
+         */
         List<String> excludes = new ArrayList<>();
 
         public List<String> getExcludes() {
             excludes.add("/app/config");
             excludes.add("/router");
             excludes.add("/user/login");
+            excludes.add("/error");
+
+            excludes.add("/doc.html");
+            excludes.add("/webjars/**");
+            excludes.add("/index.html");
+            excludes.add("/template/**");
+            excludes.add("/static/**");
+            excludes.add("/favicon.ico");
             return excludes;
         }
 
@@ -127,13 +141,27 @@ public class MetaProperties {
     @Data
     public static class Auth {
         boolean enable = false;
+        /**
+         * 鉴权拦截器需要作用的路径
+         */
         List<String> includes = new ArrayList<>();
+        /**
+         * 鉴权拦截器需要排除的路径
+         */
         List<String> excludes = new ArrayList<>();
 
         public List<String> getExcludes() {
             excludes.add("/app/config");
             excludes.add("/router");
             excludes.add("/user/login");
+            excludes.add("/error");
+
+            excludes.add("/doc.html");
+            excludes.add("/webjars/**");
+            excludes.add("/index.html");
+            excludes.add("/template/**");
+            excludes.add("/static/**");
+            excludes.add("/favicon.ico");
             return excludes;
         }
 

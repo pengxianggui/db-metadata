@@ -13,6 +13,9 @@
                 v-bind:choseData="choseData" v-bind:activeData="activeData"></slot>
           <slot name="add-btn" v-bind:conf="operationBarConf.add"
                 v-bind:choseData="choseData" v-bind:activeData="activeData" v-bind:add="handleAdd">
+            <!-- FIXME v-authorize 未生效，需要判断是否是因为组件实例数据是异步的，其实还没加载，这里就已经渲染完毕了。这个问题需要解决。
+                  而下面数据行中的能生效，是因为表业务数据加载完毕，才会执行v-authorize, 所以歪打正着的在实例数据加载完毕后才渲染，所以能生效
+             -->
             <el-button @click="handleAdd" v-bind="operationBarConf.add.conf"
                        v-if="operationBarConf.add.show" v-authorize="operationBarConf.add.authorize">
               {{ operationBarConf.add.text }}

@@ -1,6 +1,5 @@
 package com.github.md.analysis;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,16 +30,5 @@ public class AnalysisProperties {
 
     public AnalysisProperties(@Qualifier(BIZ_DATA_SOURCE_PROPERTIES) Map<String, DataSourceProperties> sourceConfig) {
         this.sourceConfig = sourceConfig;
-    }
-
-    @Deprecated
-    @Data
-    public static class Extension {
-
-        private boolean metaObjectEnabled;
-
-        private boolean metaFieldEnabled;
-
-        private boolean componentInstanceEnabled;
     }
 }
