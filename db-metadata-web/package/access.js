@@ -263,7 +263,7 @@ export function getAuths() {
  */
 export function clearUser() {
     setUser({})
-    localStorage.removeItem(appConfig.tokenKey)
+    Token.remove()
     Cache.clear()
 }
 

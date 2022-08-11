@@ -21,6 +21,8 @@ export const appConfig = {
     enableCertification: true,
     devMode: false,
     tokenKey: 'X-TOKEN',
+    loginKey: 'username',
+    pwdKey: 'password',
     showGreeting: true,
     showThemeSetting: true,
     allowCustomTheme: true, // 是否允许自由定义

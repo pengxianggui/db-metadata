@@ -32,6 +32,8 @@ public class AppController extends ControllerAdapter {
                 metaProperties.getServer().isEnableCertification(),
                 metaProperties.isDevMode(),
                 metaProperties.getServer().getLogin().getTokenKey(),
+                metaProperties.getServer().getLogin().getLoginKey(),
+                metaProperties.getServer().getLogin().getPwdKey(),
                 metaProperties.getApp().getLoginBg(),
                 metaProperties.getApp().getShowGreeting(),
                 metaProperties.getApp().getShowThemeSetting(),

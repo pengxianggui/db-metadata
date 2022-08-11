@@ -71,7 +71,11 @@ export default {
   },
   methods: {
     login(model) {
-      this.$axios.safePost(restUrl.LOGIN_URL, model).then(({data}) => {
+      let formData = {}
+      formData[appConfig.loginKey] = model.username
+      formData[appConfig.pwdKey] = model.password
+
+      this.$axios.safePost(restUrl.LOGIN_URL, formData).then(({data}) => {
         Token.set(data.token)
         this.$router.push('/').then(() => {
           location.reload()

@@ -8,8 +8,13 @@ const get = function () {
     return localStorage.getItem(appConfig.tokenKey)
 }
 
+const remove = function () {
+    localStorage.removeItem(appConfig.tokenKey)
+}
+
 
 export default {
     set,
-    get
+    get,
+    remove
 }
