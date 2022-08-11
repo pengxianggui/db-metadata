@@ -54,6 +54,9 @@ public class ApiResourceFactory {
             case API_WITH_META_OBJECT:
                 metaCode = queryHelper.getObjectCode();
                 break;
+            case API_WITH_META_INSTANCE:
+                metaCode = queryHelper.getInstanceCode();
+                break;
             case API_WITH_META_FEATURE:
                 metaCode = queryHelper.getFeatureCode();
                 break;
