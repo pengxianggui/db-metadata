@@ -31,7 +31,7 @@ public class DefaultDataSourceRegistrar implements DataSourceRegistrar {
     public DefaultDataSourceRegistrar(IDataSource mainDataSource, @Qualifier(BIZ_DATA_SOURCE) List<IDataSource> bizDataSource) {
         if (mainDataSource.dataSourceType() == DataSourceType.MAIN) {
             cacheSchameKey = mainDataSource.schemaName();
-            dataSourceMap.put(mainDataSource.schemaName(), mainDataSource);
+            dataSourceMap.put(cacheSchameKey, mainDataSource);
         }
         bizDataSource.forEach(s -> {
             if (dataSourceMap.containsKey(s.schemaName())) {
@@ -44,7 +44,7 @@ public class DefaultDataSourceRegistrar implements DataSourceRegistrar {
     @Override
     public IDataSource mainSource() {
         if (StrKit.isBlank(cacheSchameKey)) {
-            throw new MetaAnalysisException("mainDBSource not found");
+            throw new MetaAnalysisException("mainDBSource(%s) not found", cacheSchameKey);
         }
         return dataSourceMap.get(cacheSchameKey);
     }
