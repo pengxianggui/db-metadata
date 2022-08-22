@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: db-metadata 发布到maven 私服
+name: db-metadata发布到maven私服
 
 steps:
   # 添加认证信息
