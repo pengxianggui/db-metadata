@@ -4,6 +4,7 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.ex.OprNotSupportException;
+import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
@@ -52,7 +53,7 @@ public final class Root implements UserWithRolesWrapper {
                         root.put("username", "ROOT");
                     }
                     if (!root.containsKey("password")) {
-                        root.put("password", "888888");
+                        root.put("password", PassKit.encryptPass("888888")); // ROOT账号默认密码
                     }
                     if (!root.containsKey("avatar")) {
                         root.put("avatar", "root");

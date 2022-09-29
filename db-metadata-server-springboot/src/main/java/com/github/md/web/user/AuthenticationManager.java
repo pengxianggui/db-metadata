@@ -4,6 +4,7 @@ import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.DbMetaConfigurer;
+import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
@@ -122,7 +123,10 @@ public class AuthenticationManager {
         Kv rootKv = Root.me().attrs();
 
         UserWithRolesWrapper userWithRolesWrapper;
-        if (uid.equals(rootKv.get(loginKey)) && pwd.equals(rootKv.get(pwdKey))) { // 优先鉴定ROOT
+        if (uid.equals(rootKv.get(loginKey))) { // 优先鉴定ROOT
+            String encryptedPass = PassKit.encryptPass(pwd);
+            AssertUtil.isTrue(encryptedPass.equals(rootKv.get(pwdKey)), "密码错误！"); // TODO 超过4次将锁定ROOT账号
+
             userWithRolesWrapper = Root.me();
             String token = new DefaultTokenGenerator().generate(userWithRolesWrapper);
             AuthenticationManager.me().getLoginUsers().put(token, userWithRolesWrapper);
