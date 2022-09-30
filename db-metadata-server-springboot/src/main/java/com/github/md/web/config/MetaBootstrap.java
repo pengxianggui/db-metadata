@@ -4,6 +4,7 @@ import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.aop.AuditPointCut;
+import com.github.md.web.aop.UniqueConstraintAop;
 import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
@@ -121,8 +122,9 @@ public class MetaBootstrap {
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
             ComputeKit.addInstanceExtension(new CCUUConfigExtension());
 
-            PointCutChain.registerGlobalPointCut(new AuditPointCut());
-            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopPointCut());
+            PointCutChain.registerGlobalPointCut(new AuditPointCut()); // 审计
+            PointCutChain.registerGlobalPointCut(new UniqueConstraintAop()); // 唯一约束校验
+            PointCutChain.registerGlobalPointCut(new PreventInfiniteLoopPointCut()); // 防止树结构无穷循环(头尾连接)
         }
     }
 

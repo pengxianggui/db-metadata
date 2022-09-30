@@ -10,6 +10,7 @@
     <el-form-item label="开关设置">
       <div class="el-checkbox-group">
         <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
+        <el-checkbox v-model="nativeValue.isUnique" label="是否唯一" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
@@ -156,6 +157,7 @@ export default {
         viewStatus: 30,
         defaultVal: null,
         isNullable: true,
+        isUnique: false,
         isSearch: false,
         isMultiple: false,
         isFile: false,

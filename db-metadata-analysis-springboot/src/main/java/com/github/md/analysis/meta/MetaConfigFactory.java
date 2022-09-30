@@ -41,6 +41,7 @@ public class MetaConfigFactory {
     public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
         Kv config = Kv.create();
         config.set("isNullable", "yes".equalsIgnoreCase(isNUll));
+        config.set("isUnique", false); // // todo: 如何将 isUnique信息也从数据字典里取出来呢? 涉及表的约束信息
 //        config.set("defaultVal", convert(metaField, defaultValue));
         config.set("defaultVal", defaultValue);
         config.set("objectCode", metaField.objectCode());

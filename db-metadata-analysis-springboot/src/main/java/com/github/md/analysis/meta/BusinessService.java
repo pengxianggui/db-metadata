@@ -11,9 +11,12 @@ import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 面向业务数据库查询的方法,主要是基于数据源不同而拆分开的
@@ -58,6 +61,28 @@ public class BusinessService {
 
     public List<Record> findData(IMetaObject metaObject, String select, String sqlExceptSelect, Object... paras) {
         return Db.use(metaObject.schemaName()).find(select + sqlExceptSelect, paras);
+    }
+
+    /**
+     * 根据指定字段查询。比如: fieldNames为["name"], params为["张三"], 则查询语句为: select * from table where name = '张三'。
+     * 字段和参数顺序对应。
+     * <p>
+     * 若fieldNames为null 或 空数组，则表示不根据任何字段作为条件，则等同于 select * from table。
+     *
+     * @param metaObject
+     * @param fieldNames
+     * @param paras
+     * @return
+     */
+    public List<Record> findData(IMetaObject metaObject, String[] fieldNames, Object... paras) {
+        if (fieldNames != null && fieldNames.length != paras.length) {
+            throw new MetaAnalysisException("参数错误: 字段数量和参数数量不一致。fieldNames: %s, params: %s");
+        }
+
+        String where = fieldNames == null || fieldNames.length == 0
+                ? " 1=1 " : Arrays.stream(fieldNames).map(fn -> fn + "=? ").collect(Collectors.joining(" and "));
+        String sql = String.format("select * from %s where %s", metaObject.tableName(), where);
+        return Db.use(metaObject.schemaName()).find(sql, paras);
     }
 
     public <T> T findDataFieldById(IMetaObject object, IMetaField metaField, String id) {

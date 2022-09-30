@@ -126,6 +126,15 @@ public class MetaFieldConfigParse extends MetaData {
         return !Boolean.parseBoolean(getStr("isNullable"));
     }
 
+    /**
+     * 是否唯一
+     *
+     * @return
+     */
+    public boolean isUnique() {
+        return Boolean.parseBoolean(getStr("isUnique"));
+    }
+
     public String defaultVal() {
         return getStr("defaultVal");
     }
