@@ -22,16 +22,19 @@ public final class Root implements UserWithRolesWrapper {
     private static Root instance;
 
     private String id;
-    private String username;
-    private String password;
+    private String username; // 登录名
+    private String password; // 登录密码
     private String avatar;
     private Map<String, String> attrs;
 
     private Root(Map<String, String> root) {
-        this.id = root.get("id");
-        this.username = root.get("username");
-        this.password = root.get("password");
-        this.avatar = root.get("avatar");
+        final String loginKey = ServiceManager.getAppProperties().getServer().getLogin().getLoginKey();
+        final String passKey = ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
+
+        this.id = root.getOrDefault("id", "0");
+        this.username = root.getOrDefault(loginKey, "ROOT");
+        this.password = root.getOrDefault(passKey, PassKit.encryptPass("888888"));
+        this.avatar = root.getOrDefault("avatar", "root");
         this.attrs = root;
     }
 
@@ -46,24 +49,29 @@ public final class Root implements UserWithRolesWrapper {
                         root = new HashMap<>();
                     }
 
-                    if (!root.containsKey("id")) {
-                        root.put("id", "0");
-                    }
-                    if (!root.containsKey("username")) {
-                        root.put("username", "ROOT");
-                    }
-                    if (!root.containsKey("password")) {
-                        root.put("password", PassKit.encryptPass("888888")); // ROOT账号默认密码
-                    }
-                    if (!root.containsKey("avatar")) {
-                        root.put("avatar", "root");
-                    }
-
                     instance = new Root(root);
                 }
             }
         }
         return instance;
+    }
+
+    /**
+     * ROOT登录账号
+     *
+     * @return
+     */
+    public String getLoginName() {
+        return username;
+    }
+
+    /**
+     * ROOT登录密码
+     *
+     * @return
+     */
+    public String getLoginPass() {
+        return password;
     }
 
     @Override

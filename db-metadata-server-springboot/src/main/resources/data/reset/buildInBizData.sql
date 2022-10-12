@@ -171,6 +171,7 @@ INSERT INTO `meta_auth` VALUES ('711627199916150784', 'query:meta_component', '�
 INSERT INTO `meta_auth` VALUES ('711627319839690752', 'query:meta_feature', '查询功能', '711604182171389952', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('711627452220313600', 'query:meta_object', '查询元对象', '711604134998052864', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth` VALUES ('711627513272602624', 'query:meta_field', '查询元字段', '711604134998052864', 'api', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth` VALUES ('776878700145807360', 'module:sys_setting','模块:系统设置', '776878487079358464', 'menu,router,api,button', '模块权限: 【拥有系统】设置模块的所有权限', b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 
 
@@ -184,6 +185,7 @@ INSERT INTO `meta_auth_module` VALUES ('711603857981050880', '用户管理', '71
 INSERT INTO `meta_auth_module` VALUES ('711603907276705792', '角色管理', '711603723775905792', 1, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603985097822208', '字典管理', '711603723775905792', 2, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604059425083392', '异常信息', '711603723775905792', 3, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_auth_module` VALUES ('776878487079358464', '系统设置', '711603723775905792', 4, '系统设置: 导入/导出全量元数据', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711603760899690496', '平台维护', NULL, 100, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604134998052864', '元数据管理', '711603760899690496', 0, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_auth_module` VALUES ('711604182171389952', '功能维护', '711603760899690496', 1, NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
@@ -269,6 +271,7 @@ INSERT INTO `meta_menu` VALUES ('f49ce02324d94fa698a0db718e380074', '7bcfbe31357
 INSERT INTO `meta_menu` VALUES ('96eab66157be4165b9916d6f8b079dd9', '7bcfbe31357f48bf8c88072a18208599', '角色管理', b'0', b'0', 'role', '/role', 1, NULL, b'1', 'auth', 'menu:meta_role', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_menu` VALUES ('702190979259699200', '7bcfbe31357f48bf8c88072a18208599', '字典管理', b'0', b'0', 'dict', '/dict', 2, NULL, b'1', 'auth', 'menu:meta_dict', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_menu` VALUES ('702191170834534400', '7bcfbe31357f48bf8c88072a18208599', '系统异常', b'0', b'0', 'el-icon-warning', '/exception', 3, NULL, b'1', 'auth', 'menu:meta_exception', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_menu` VALUES ('776879192854892544', '7bcfbe31357f48bf8c88072a18208599', '系统设置', b'0', b'0', 'el-icon-setting', '/sys-setting', 4, NULL, b'1', 'auth','module:sys_setting', 'any', NULL, 'any', b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -317,6 +320,8 @@ INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '712273213945679
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '697160698198888448', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '711618459557040128', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '696152559060127744', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711640534434844672', '776878700145807360', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '711618459557040128', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149240007561216', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149341149007872', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '694149424439496704', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
@@ -372,6 +377,7 @@ INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '711627199916150
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '711627319839690752', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '711627452220313600', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '711627513272602624', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
+INSERT INTO `meta_role_auth_rela` VALUES ('711660585720352768', '776878700145807360', b'1', NOW(), NULL, NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 COMMIT;
 
 
@@ -389,5 +395,6 @@ INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `compon
 INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `component`, `components`, `layout`, `disable`, `order`, `meta`, `need_permit`, `permit_by`, `auths`, `auth_match_mode`, `roles`, `role_match_mode`, `remark`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('702190236326825984', '698272484012724224', 'ExceptionList', '系统异常', '/exception', NULL, 'ExceptionList', NULL, b'0', b'0', 4, '{}', b'1', 'auth', 'route:meta_exception', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `component`, `components`, `layout`, `disable`, `order`, `meta`, `need_permit`, `permit_by`, `auths`, `auth_match_mode`, `roles`, `role_match_mode`, `remark`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('698273460404752384', NULL, 'Page401', '401', '/401', NULL, 'Page401', NULL, b'0', b'0', 100, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `component`, `components`, `layout`, `disable`, `order`, `meta`, `need_permit`, `permit_by`, `auths`, `auth_match_mode`, `roles`, `role_match_mode`, `remark`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('698273579418128384', NULL, 'Page404', '404', '*', NULL, 'Page404', NULL, b'0', b'0', 999999, '{}', b'0', 'auth', NULL, 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
+INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `component`, `components`, `layout`, `disable`, `order`, `meta`, `need_permit`, `permit_by`, `auths`, `auth_match_mode`, `roles`, `role_match_mode`, `remark`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES('776879995753730048','698272484012724224', 'SysSetting', '系统设置', '/sys-setting', NULL, 'SysSetting', NULL, b'0', b'0', 9, '{}', b'1', 'auth', 'module:sys_setting', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;
 

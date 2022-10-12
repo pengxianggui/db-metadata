@@ -117,15 +117,11 @@ public class AuthenticationManager {
      * @return
      */
     public LoginVO login(String uid, String pwd) {
-        String loginKey = loginService.loginKey();
-        String pwdKey = loginService.pwdKey();
-
-        Kv rootKv = Root.me().attrs();
-
+        Root root = Root.me();
         UserWithRolesWrapper userWithRolesWrapper;
-        if (uid.equals(rootKv.get(loginKey))) { // 优先鉴定ROOT
+        if (uid.equals(root.getLoginName())) { // 优先鉴定ROOT
             String encryptedPass = PassKit.encryptPass(pwd);
-            AssertUtil.isTrue(encryptedPass.equals(rootKv.get(pwdKey)), "密码错误！"); // TODO 超过4次将锁定ROOT账号
+            AssertUtil.isTrue(encryptedPass.equals(root.getLoginPass()), "密码错误！"); // TODO 超过4次将锁定ROOT账号
 
             userWithRolesWrapper = Root.me();
             String token = new DefaultTokenGenerator().generate(userWithRolesWrapper);

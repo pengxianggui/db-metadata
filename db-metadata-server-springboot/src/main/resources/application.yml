@@ -7,9 +7,9 @@ logging:
 
 spring:
   datasource:
-    username: root
-    password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/metadata?useSSL=false&characterEncoding=utf-8
+    url:
+    username:
+    password:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -20,7 +20,7 @@ spring:
 
 # db-metadata完整的默认配置
 md:
-  dev-mode: false # 开发模式。为true时系统将允许一些操作(比如清空元对象，重新全量生成等)
+  dev-mode: false # 开发模式。为true时系统将启用ROOT账号，并允许一些操作(比如清空元对象，重新全量生成等)
   app: # 应用配置
     name: DB-Metadata低代码开发工具 # 系统名
     logo: meta # 系统logo, svg图，http地址
@@ -40,7 +40,7 @@ md:
     root:
       id: 0 # id为0是判断是用户是ROOT的唯一依据
       username: ROOT
-      password: 888888
+      password: 727227682e82393805614e2a7774d03d # 为aes加密值，加密密钥为 md.app.pass-encrypt-key。此密码明文为888888
 
   server:
     enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。

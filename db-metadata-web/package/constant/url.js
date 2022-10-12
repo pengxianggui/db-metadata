@@ -77,7 +77,9 @@ export const restUrl = {
     LOGIN_INFO: '/user/info', // 获取登录用户信息接口地址
     USER_UPDATE: '/user/update', // 更新用户详情记录
     RESET_PASS: '/user/reset-pass', // 用户密码重置接口
-    SET_PASS: '/user/set-pass' // 用户设置密码
+    SET_PASS: '/user/set-pass', // 用户设置密码
+    META_DATA_BACKUP: '/meta/backup', // 元数据备份下载(导出)
+    META_DATA_RESTORE: '/meta/restore' // 元数据备份上传(还原)
 };
 
 export default function (opts = {}) {

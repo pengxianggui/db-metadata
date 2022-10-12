@@ -9,7 +9,7 @@ import com.google.common.collect.HashBasedTable;
  * <p> @author konbluesky </p>
  */
 public class AppConst {
-    public static final String version = "v2.2";
+    public static final String version = "v2.2.2-beta"; // pom若为snapshot, 则为dbmeta为beta测试版本。
 
     /**
      * row代表表名, column代表属性, value代表值

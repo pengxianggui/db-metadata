@@ -8,6 +8,7 @@ import RoleList from "./role/RoleList";
 import UserList from "./user/UserList";
 import DictList from "./dict/DictList";
 import ExceptionList from "./ex/ExceptionList";
+import SysSetting from "./sys-setting/SysSetting";
 import Profile from "./user/Profile";
 
 export default [
@@ -20,6 +21,7 @@ export default [
     UserList,
     DictList,
     ExceptionList,
+    SysSetting,
     Page404,
     Page401
 ]

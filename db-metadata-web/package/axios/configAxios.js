@@ -3,13 +3,12 @@
  * @param axios
  */
 import Axios from 'axios'
-import {isEmpty, assertEmpty, printWarn} from "../utils/common";
+import utils from "../utils";
 import {Message} from "element-ui";
 import {appConfig} from "../config";
 import {routeUrl} from "../constant/url";
 import {clearUser} from "../access";
 import Token from "../token";
-import {validUrlCompiled, validParamsCompiled} from "../utils/url";
 
 /**
  * 配置axios默认的拦截器
@@ -19,7 +18,7 @@ const configInterceptor = function (router, axios) {
     // 添加一个请求拦截器
     axios.interceptors.request.use(config => {
             let token = Token.get()
-            if (!isEmpty(token)) {
+            if (!utils.isEmpty(token)) {
                 config.headers[appConfig.tokenKey] = Token.get()
             }
             return config
@@ -29,13 +28,16 @@ const configInterceptor = function (router, axios) {
             return Promise.reject(err)
         });
 
-    // 响应拦截器
+    // 响应拦截器: 注意，只对响应类型为application/json的数据进行全局错误判断。其他类型，会直接将res给到业务层
     axios.interceptors.response.use(res => {
-        const {state, msg, message, code} = res.data
+        const {data: {state, msg, message, code}, headers: {'content-type': contentType}} = res
+        if (contentType.indexOf('application/json') == -1) {
+            return Promise.resolve(res)
+        }
 
         if (state !== 'ok' && code != 0) {
             Message({
-                message: assertEmpty(msg, message),
+                message: utils.assertEmpty(msg, message),
                 type: "error",
                 customClass: 'md_max-z-index'
             })
@@ -52,7 +54,7 @@ const configInterceptor = function (router, axios) {
         console.error("[ERROR] ", err);
         const {msg, message} = err
         Message({
-            message: assertEmpty(msg, message),
+            message: utils.assertEmpty(msg, message),
             type: "error"
         })
         return Promise.reject(err)
@@ -61,10 +63,9 @@ const configInterceptor = function (router, axios) {
 
 export default function (opts) {
     const {router, axios: axiosConfig = {}} = opts
-
     const axios = Axios.create(axiosConfig)
 
-    if (isEmpty(axios)) {
+    if (utils.isEmpty(axios)) {
         console.error('[MetaElement] 必须配置axios!请实例化axios并配置')
         return
     }
@@ -88,10 +89,10 @@ export default function (opts) {
     axios.safeGet = function (url, config = {}) {
         const {params = {}} = config
 
-        if (!validUrlCompiled(url) || !validParamsCompiled(params)) {
+        if (!utils.validUrlCompiled(url) || !utils.validParamsCompiled(params)) {
             console.warn('url: ' + url + ' 未编译 ...')
             const paramsStr = JSON.stringify(params)
-            printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
+            utils.printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
             return new Promise(((resolve, reject) => {
             }))
         }
@@ -100,10 +101,10 @@ export default function (opts) {
     }
     axios.safePost = function (url, data, config = {}) {
         const {params = {}} = config
-        if (!validUrlCompiled(url) || !validParamsCompiled(params)) {
+        if (!utils.validUrlCompiled(url) || !utils.validParamsCompiled(params)) {
             console.warn('url: ' + url + ' 未编译 ...')
             const paramsStr = JSON.stringify(params)
-            printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
+            utils.printWarn(`请求含有未编译内容, url: ${url}, params: ${paramsStr}`)
             return new Promise(((resolve, reject) => {
             }))
         }
