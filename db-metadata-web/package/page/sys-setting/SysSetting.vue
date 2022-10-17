@@ -3,7 +3,7 @@
     <el-collapse v-model="active">
       <el-collapse-item title="元数据备份/还原" name="1">
         <el-button type="primary" icon="el-icon-download" @click="exportBackup">导出元数据备份</el-button>
-        <uploader-button url="/meta/restore" panel-title="备份还原，请上传导出的ZIP文件">
+        <uploader-button url="/meta/restore" panel-title="备份还原，请上传导出的ZIP文件" v-any-auths="['meta:restore']">
           <template #default="{click}">
             <el-button type="danger" plain icon="el-icon-upload2" @click="click">导入元数据还原</el-button>
           </template>
