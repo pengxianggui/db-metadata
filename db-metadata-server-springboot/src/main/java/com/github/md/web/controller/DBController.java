@@ -94,13 +94,18 @@ public class DBController extends ControllerAdapter {
 
         StringBuilder sb = new StringBuilder();
 
-        Set<String> tables = AppConst.SYS_TABLE.column(AppConst.CLEARABLE).entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+        Set<AppConst.INNER_TABLE> resetableTable = AppConst.INNER_TABLE.getResetableTable();
 
-        sb.append("即将执行内建数据清理的数据表:").append(tables);
+        sb.append("即将执行内建数据清理的数据表:").append(resetableTable);
         log.warn("{}", sb.toString());
-        tables.forEach(key -> {
-            Db.delete("delete from " + key + " where build_in=? and updated_time is not null", true); // 对于内置数据，如果用户更新过，则不删除
+        resetableTable.forEach(table -> {
+            final String tableName = table.getTableName();
+            log.warn("即将执行{}表的内建数据清理", tableName);
+            if (table.isBuildInSql()) { // 如果内建数据存在于sql中，则支持保留用户更新过的内建数据
+                Db.delete("delete from " + tableName + " where build_in=? and updated_time is null", true); // 对于维护在sql中的内置数据，如果用户更新过，则不删除
+            } else {
+                Db.delete("delete from " + tableName + " where build_in=?", true); // 对于没有维护在sql中的内建数据(若元对象元字段等，他们存在于json中), 则即使用户更新过，也一并删除，重置。
+            }
         });
 
         return Ret.ok("msg", sb.toString());

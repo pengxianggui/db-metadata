@@ -23,17 +23,18 @@ import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 只初始化系统表对应的元数据和实例配置, 参考 {@link AppConst#SYS_TABLE}
+ * 只初始化系统表对应的元数据和实例配置, 参考 {@link AppConst.INNER_TABLE}
  * <p> @Date : 2019/11/30 </p>
  * <p> @Project : db-meta-serve</p>
  *
@@ -325,18 +326,19 @@ public class InitKit {
     }
 
     /**
-     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst#SYS_TABLE} 和 文件 buildInInstance.json.
+     * 初始化系统元数据: 元对象、元字段、实例配置。依据: {@link AppConst.INNER_TABLE} 和 文件 buildInInstance.json.
      * <p>
-     * 注意：方法内不会导入buildInInstance.json文件中定义的UI实例配置，只是依据 {@link AppConst#SYS_TABLE} 确定要为哪些表初始化元对象和元字段，
+     * 注意：方法内不会导入buildInInstance.json文件中定义的UI实例配置，只是依据 {@link AppConst.INNER_TABLE} 确定要为哪些表初始化元对象和元字段，
      * 然后再依据buildInInstance.json含有容器组件声明，确定要为这些元对象生成哪些容器下的实例配置, 其实例配置为自动计算生成，而不会使用buildInInstance.json内容进行覆盖。
      */
     public void initSysMeta() {
         log.info("即将执行内置元对象、内置元字段、内置实例配置的初始化(依据自动计算)...");
         QuickJudge quickJudge = AnalysisSpringUtil.getBean(QuickJudge.class);
         String mainDB = quickJudge.mainDbStr();
+        Set<String> innerTables = Arrays.stream(AppConst.INNER_TABLE.values()).map(AppConst.INNER_TABLE::getTableName).collect(Collectors.toSet());
         List<Table> sysTables = ServiceManager.mysqlService().showTables(quickJudge.mainDbStr())
-                // 过滤出系统表
-                .stream().filter(t -> AppConst.SYS_TABLE.rowKeySet().contains(t.getTableName())).collect(Collectors.toList());
+                // 过滤出内置表
+                .stream().filter(t -> innerTables.contains(t.getTableName())).collect(Collectors.toList());
 
         for (Table t : sysTables) {
             log.info("init table:{} - {}", t.getTableName(), t.getTableComment());

@@ -23,10 +23,7 @@ import java.util.stream.Collectors;
  * @date 2022/10/9 1:18 下午
  */
 public class MetaDataExport {
-    private static Set<String> DEFAULT_EXCLUDE_EXPORT_TABLE = Sets.newHashSet("meta_exception", "meta_user", "meta_user_role_rela", "meta_role", "meta_role_auth_rela");
-    private static Set<String> DEFAULT_EXPORT_TABLE = AppConst.SYS_TABLE.rowKeySet().stream()
-            .filter(t -> !DEFAULT_EXCLUDE_EXPORT_TABLE.contains(t))
-            .collect(Collectors.toSet());
+    private static Set<String> DEFAULT_EXPORT_TABLE = AppConst.INNER_TABLE.getDefaultExportTable().stream().map(AppConst.INNER_TABLE::getTableName).collect(Collectors.toSet());
 
     /**
      * 默认需要导出的表。排除meta_exception, 这是异常日志表。

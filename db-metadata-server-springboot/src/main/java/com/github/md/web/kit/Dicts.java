@@ -42,7 +42,7 @@ public class Dicts {
     }
 
     /**
-     * 获取指定字典下的k-v对。优先从数据库中获取，再从静态文件中获取
+     * 获取指定字典下的k-v对
      *
      * @param value
      * @return

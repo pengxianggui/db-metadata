@@ -1194,14 +1194,25 @@
     "TableView": {
       "config": {
         "operation-bar": {
-          "show": false
-        },
-        "buttons": {
-          "edit": {
+          "show": true,
+          "add": {
             "show": false
           },
           "delete": {
-            "show": false
+            "show": true
+          }
+        },
+        "operation-column": {
+          "buttons": {
+            "view": {
+              "show": true
+            },
+            "edit": {
+              "show": false
+            },
+            "delete": {
+              "show": true
+            }
           }
         }
       }
