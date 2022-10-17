@@ -31,7 +31,7 @@
       <el-collapse-item title="元数据重置" name="2" v-any-auths="['api:app-init']">
         <el-button type="danger" @click="init">
           <svg-icon value="reset"></svg-icon>
-          <span>系统重置</span>
+          <span>重置内置元数据</span>
         </el-button>
       </el-collapse-item>
     </el-collapse>
@@ -102,7 +102,7 @@ export default {
         })
       })
     },
-    init: function () {
+    init() {
       this.$prompt(`
             <p>此操作将重置那些【系统内置】的数据，以下数据将被重置: </p>
             <ul>
@@ -118,7 +118,7 @@ export default {
             </ul>
             <p>注意: </p>
             <ol>
-                <li>此功能应用场景是当你误操作把内置数据更新坏了，而你又忘了怎么更新回来。或数据库里误删了这些内置数据</li>
+                <li>此功能应用场景是: 1.当你误操作把内置数据更新坏了，而你又忘了怎么更新回来, 或数据库里误删了这些内置数据; 2. dbmeta升级了，需要同步升级数据。</li>
                 <li>系统内置是dbmeta首次启动时自动初始化的数据，而启动后，人为页面操作生成的这些数据不是系统内置的，因此这些数据不受影响。<b>但仍然建议你执行备份操作！</b></li>
             </ol>
           `,
@@ -140,7 +140,7 @@ export default {
           background: 'rgba(0, 0, 0, 0.7)'
         })
 
-        this.$axios.get('/db/init?token=' + data.value).then(({msg = '初始化成功'}) => {
+        this.$axios.post('/db/init?token=' + data.value).then(({msg = '初始化成功'}) => {
           this.$message.success(msg);
           this.$router.go(0);
         }).catch(({msg = '发生错误'}) => {
