@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.Db;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,7 +64,7 @@ public class DBController extends ControllerAdapter {
 
     @MetaAccess(value = Type.API)
     @Transactional
-    @GetMapping("init")
+    @PostMapping("init")
     public Ret init() {
         preConditionCheck();
         truncate();
@@ -99,7 +100,7 @@ public class DBController extends ControllerAdapter {
         sb.append("即将执行内建数据清理的数据表:").append(tables);
         log.warn("{}", sb.toString());
         tables.forEach(key -> {
-            Db.delete("delete from " + key + " where build_in=?", true);
+            Db.delete("delete from " + key + " where build_in=? and updated_time is not null", true); // 对于内置数据，如果用户更新过，则不删除
         });
 
         return Ret.ok("msg", sb.toString());
