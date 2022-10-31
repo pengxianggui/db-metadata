@@ -26,7 +26,7 @@ public class RoleController extends ControllerAdapter {
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
-    @Authorize(value = "bind:roles:to-user")
+    @Authorize(value = "bind:auths:to-role")
     @PostMapping("{roleId}/auths")
     public Ret bindAuths(@PathVariable("roleId") String roleId) {
         Kv kv = parameterHelper().getKv();
