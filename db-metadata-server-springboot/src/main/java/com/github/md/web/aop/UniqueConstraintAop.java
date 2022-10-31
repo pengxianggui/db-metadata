@@ -8,11 +8,9 @@ import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
-import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,7 +48,7 @@ public class UniqueConstraintAop implements AddPointCut, UpdatePointCut {
             }
 
             for (IMetaField metaField : fieldSet) {
-                if (notViolationUniqueConstraint(metaField, formData)) {
+                if (notViolationUniqueConstraint(metaField, formData, metaObject.primaryKey())) {
                     continue;
                 }
                 throw new WebException(String.format("%s:%s已存在", metaField.cn(), formData.get(metaField.fieldCode())));
@@ -68,14 +66,18 @@ public class UniqueConstraintAop implements AddPointCut, UpdatePointCut {
     /**
      * 是否遵循唯一约束。若遵循，则返回true, 否则返回false
      *
-     * @param metaField 元字段
-     * @param formData  表单数据
+     * @param metaField  元字段
+     * @param formData   表单数据
+     * @param primaryKey 主键
      * @return
      */
-    private boolean notViolationUniqueConstraint(IMetaField metaField, MetaData formData) {
+    private boolean notViolationUniqueConstraint(IMetaField metaField, MetaData formData, String primaryKey) {
         final String fieldName = metaField.fieldCode();
-        List<Record> recordList = ServiceManager.businessService().findData(metaField.getParent(), new String[]{fieldName}, formData.get(fieldName));
-        return CollectionUtils.isEmpty(recordList);
+        if (formData.get(primaryKey) == null) { // 主键null
+            return !ServiceManager.businessService().exist(metaField, formData.get(fieldName));
+        } else {
+            return !ServiceManager.businessService().exist(metaField, formData.get(fieldName), formData.get(primaryKey));
+        }
     }
 
 }

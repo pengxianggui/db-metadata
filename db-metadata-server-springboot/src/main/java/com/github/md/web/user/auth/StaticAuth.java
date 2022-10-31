@@ -2,9 +2,7 @@ package com.github.md.web.user.auth;
 
 import com.github.md.analysis.kit.Kv;
 import com.google.common.base.Objects;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * <p> @Date : 2020/8/12 </p>
@@ -12,16 +10,28 @@ import lombok.Getter;
  *
  * <p> @author konbluesky </p>
  */
+@Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class StaticAuth implements IAuth {
 
-    private final String code;
+    private String code;
 
-    private final String name;
+    private String name;
 
     public static IAuth of(String code, String name) {
         return new StaticAuth(code, name);
+    }
+
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 
     @Override

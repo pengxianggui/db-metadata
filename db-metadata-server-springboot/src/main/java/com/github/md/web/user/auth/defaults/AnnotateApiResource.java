@@ -26,8 +26,13 @@ public class AnnotateApiResource implements MResource {
         this.request = request;
     }
 
+    @Deprecated
     public static AnnotateApiResource by(HttpServletRequest request, HandlerMethod handler) {
         Authorize authorize = handler.getMethodAnnotation(Authorize.class);
+        return new AnnotateApiResource(authorize, request);
+    }
+
+    public static AnnotateApiResource by(HttpServletRequest request, Authorize authorize) {
         return new AnnotateApiResource(authorize, request);
     }
 

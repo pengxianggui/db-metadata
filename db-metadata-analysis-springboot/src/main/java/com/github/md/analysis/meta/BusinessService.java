@@ -64,6 +64,35 @@ public class BusinessService {
     }
 
     /**
+     * 判断元字段中是否存在指定值
+     *
+     * @param metaField  元字段，可限定schema、table和field
+     * @param fieldValue 值
+     * @return
+     */
+    public boolean exist(IMetaField metaField, Object fieldValue) {
+        IMetaObject metaObject = metaField.getParent();
+        return Db.use(metaObject.schemaName()).queryInt(
+                String.format("select count(*) from %s where %s = ?", metaObject.tableName(), metaField.fieldCode()),
+                fieldValue) > 0;
+    }
+
+    /**
+     * 判断元字段中是否存在指定值, 同时其主键不等于指定值
+     *
+     * @param metaField    元字段，可限定schema、table和field
+     * @param fieldValue   字段值, 等于此值
+     * @param primaryValue 主键值, 不等于此值
+     * @return
+     */
+    public boolean exist(IMetaField metaField, Object fieldValue, Object primaryValue) {
+        IMetaObject metaObject = metaField.getParent();
+        return Db.use(metaObject.schemaName()).queryInt(
+                String.format("select count(*) from %s where %s = ? and %s != ?", metaObject.tableName(), metaField.fieldCode(), metaObject.primaryKey()),
+                fieldValue, primaryValue) > 0;
+    }
+
+    /**
      * 根据指定字段查询。比如: fieldNames为["name"], params为["张三"], 则查询语句为: select * from table where name = '张三'。
      * 字段和参数顺序对应。
      * <p>

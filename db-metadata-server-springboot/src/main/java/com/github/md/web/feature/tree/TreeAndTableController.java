@@ -166,15 +166,19 @@ public class TreeAndTableController extends ControllerAdapter {
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
                     log.error(e.getMessage(), e);
+                    invocation.getRet().setFail();
                     s = false;
+                    throw e;
                 }
                 return s;
             }
         });
 
-        EventKit.post(FormMessage.AddMessage(invocation));
+        if (status) {
+            EventKit.post(FormMessage.AddMessage(invocation));
+        }
 
-        return (status ? Ret.ok() : Ret.fail());
+        return invocation.getRet();
     }
 
     @MetaAccess(value = Type.API_WITH_META_FEATURE)
