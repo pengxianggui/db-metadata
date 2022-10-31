@@ -8,6 +8,7 @@ import com.github.md.web.aop.UniqueConstraintAop;
 import com.github.md.web.component.Components;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
+import com.github.md.web.event.user.UserStatusChangeListener;
 import com.github.md.web.feature.tree.PreventInfiniteLoopPointCut;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.kit.UtilKit;
@@ -107,7 +108,8 @@ public class MetaBootstrap {
         public void init() {
             EventKit.init(false, "db-event-bus");
             EventKit.register(new FormListener());
-            //            ExtensibleListenerManager.me().addFormListeners(new TestFormExtensibleListener());
+            EventKit.register(new UserStatusChangeListener());
+//                        ExtensibleListenerManager.me().getFormListeners().add(new TestFormExtensibleListener());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.github.md.web.event;
 
 import com.github.md.analysis.meta.aop.AopInvocation;
+import com.github.md.web.component.form.FormView;
 import lombok.Getter;
 
 /**
@@ -14,18 +15,19 @@ public class FormMessage implements EventMessage {
 
     private final AopInvocation invocation;
 
-    private final String type;
+    private final FormView.FormType type;
 
-    private FormMessage(AopInvocation invocation, String formType) {
+    private FormMessage(AopInvocation invocation, FormView.FormType formType) {
         this.invocation = invocation;
         this.type = formType;
     }
 
     public static FormMessage AddMessage(AopInvocation invocation) {
-        return new FormMessage(invocation, "add");
+        return new FormMessage(invocation, FormView.FormType.ADD);
     }
 
     public static FormMessage UpdateMessage(AopInvocation invocation) {
-        return new FormMessage(invocation, "update");
+        return new FormMessage(invocation, FormView.FormType.UPDATE);
     }
+
 }

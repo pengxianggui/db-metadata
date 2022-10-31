@@ -12,6 +12,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * @author pengxg
  * @date 2022/2/18 10:40 上午
  */
+@Slf4j
 public class DefaultUserService extends AbstractUserService<DefaultUser, DefaultUserWithRoles> {
 
     protected final TokenGenerator tokenGenerator;
@@ -62,12 +64,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public boolean updateById(DefaultUser user) {
-        boolean flag = db().update("meta_user", user.getData());
-        List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
-        MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
-        DefaultUserWithRoles defaultUserWithRoles = new DefaultUserWithRoles(user, roleArr);
-        setLogged(defaultUserWithRoles); // 更新会话缓存
-        return flag;
+        return db().update("meta_user", user.getData());
     }
 
     @Override
@@ -84,6 +81,28 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
                     }).collect(Collectors.toList());
             return db().batchSave("meta_user_role_rela", inserts, 20).length == inserts.size();
         });
+    }
+
+    @Override
+    public void refresh(String userId) {
+        Map.Entry<String, DefaultUserWithRoles> hitEntry = getAllLoggedUsers().entrySet().stream()
+                .filter(entry -> entry.getValue().userId().equals(userId)).findFirst().orElse(null);
+        if (hitEntry == null) {
+            log.warn("user is not logged! can refresh. userId: {}", userId);
+            return;
+        }
+
+        final String token = hitEntry.getKey();
+        Record record = db().findFirst("select * from meta_user where id=?", userId);
+        if (record == null) {
+            log.warn("user is not exist! can refresh. userId: {}", userId);
+            return;
+        }
+
+        DefaultUser user = new DefaultUser(record);
+        List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(user.userId());
+        MRRole[] roleArr = CollectionUtils.isEmpty(roles) ? new MRRole[0] : roles.toArray(new MRRole[roles.size()]);
+        AuthenticationManager.me().getLoginUsers().put(token, new DefaultUserWithRoles(user, roleArr)); // 缓存到内存中, 保持token不变
     }
 
     @Override
@@ -128,8 +147,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public boolean logged(DefaultUserWithRoles user) {
-        String token = tokenGenerator.generate(user);
-        return AuthenticationManager.me().getLoginUsers().getIfPresent(token) != null;
+        return logged(user.userId());
     }
 
     @Override

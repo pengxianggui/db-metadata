@@ -5,6 +5,7 @@ import com.jfinal.kit.StrKit;
 import lombok.AllArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 按优先级依次从cookie或请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。
@@ -37,6 +38,11 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
             return user;
         }
         return null;
+    }
+
+    @Override
+    public Map<String, UR> getAllLoggedUsers() {
+        return (Map<String, UR>) AuthenticationManager.me().getLoginUsers().asMap();
     }
 
     @Override

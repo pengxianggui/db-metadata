@@ -1,5 +1,6 @@
 package com.github.md.web;
 
+import com.github.md.web.event.ExtensibleListenerConfigurer;
 import com.github.md.web.file.FileConfigurer;
 import com.github.md.web.user.AuthenticationConfigurer;
 
@@ -9,6 +10,6 @@ import com.github.md.web.user.AuthenticationConfigurer;
  * @author pengxg
  * @date 2022/4/25 9:37 上午
  */
-public abstract class DbMetaConfigurer implements AuthenticationConfigurer, FileConfigurer {
+public abstract class DbMetaConfigurer implements AuthenticationConfigurer, FileConfigurer, ExtensibleListenerConfigurer {
     // TODO 元对象、元字段、组件实例配置的扩展入口也放到这里
 }

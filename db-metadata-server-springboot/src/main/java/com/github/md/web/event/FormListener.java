@@ -13,18 +13,10 @@ public class FormListener implements MetaEventListener<FormMessage> {
     @Subscribe
     @Override
     public void handler(FormMessage formMessage) {
-        if (formMessage.getType().equalsIgnoreCase("add")) {
-            ExtensibleListenerManager.me().getAddFormListeners().forEach(f -> {
-                if (f.isHit(formMessage.getInvocation())) {
-                    f.handler(formMessage.getInvocation());
-                }
-            });
-        } else if (formMessage.getType().equalsIgnoreCase("update")) {
-            ExtensibleListenerManager.me().getUpdateFormListeners().forEach(f -> {
-                if (f.isHit(formMessage.getInvocation())) {
-                    f.handler(formMessage.getInvocation());
-                }
-            });
-        }
+        ExtensibleListenerManager.me().getRegistry().getFormListeners().forEach(f -> {
+            if (f.isHit(formMessage)) {
+                f.handler(formMessage);
+            }
+        });
     }
 }

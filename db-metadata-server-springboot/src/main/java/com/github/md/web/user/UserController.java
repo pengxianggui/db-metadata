@@ -6,6 +6,8 @@ import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.event.EventKit;
+import com.github.md.web.event.user.UserStatusChangeMessage;
 import com.github.md.web.query.FormDataFactory;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.annotations.MetaAccess;
@@ -43,6 +45,10 @@ public class UserController extends ControllerAdapter {
 
         boolean flag = AuthenticationManager.me().getUserService()
                 .bindRolesForUser(userId, roleIdArr);
+
+        if (flag) {
+            EventKit.post(UserStatusChangeMessage.create(userId, UserStatusChangeMessage.Type.ROLE));
+        }
         return flag ? Ret.ok() : Ret.fail();
     }
 

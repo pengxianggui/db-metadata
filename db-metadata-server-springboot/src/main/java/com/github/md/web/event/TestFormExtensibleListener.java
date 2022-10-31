@@ -10,16 +10,17 @@ import lombok.extern.slf4j.Slf4j;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class TestFormExtensibleListener implements FormExtensibleListener {
+public class TestFormExtensibleListener implements ExtensibleListener<FormMessage> {
 
     @Override
-    public boolean isHit(AopInvocation invocation) {
-        return invocation.getMetaObject().code().equalsIgnoreCase("test_table");
+    public boolean isHit(FormMessage message) {
+        return message.getInvocation().getMetaObject().code().equalsIgnoreCase("test_table");
     }
 
     @Override
-    public void handler(AopInvocation invocation) {
+    public void handler(FormMessage message) {
         log.error("===============================================");
+        AopInvocation  invocation = message.getInvocation();
         log.error("{} {} {} {}", "hello", invocation.getMetaObject().code(), invocation.isPreOperateStatus());
     }
 }
