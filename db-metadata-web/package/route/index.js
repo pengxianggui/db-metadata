@@ -6,7 +6,7 @@ import systemRoutes from './data/system'
 import assembleMetaRoute from './data/meta'
 import assembleDynamicRoute from './data/dynamic'
 import {routeUrl} from "../constant/url";
-import {isBoolean, isEmpty} from "../utils/common";
+import {assert, isArray, isBoolean, isEmpty, isFunction, isString} from "../utils/common";
 import {appConfig} from "../config";
 
 /**
@@ -67,11 +67,24 @@ function registerRouteData(Vue, opts) {
 }
 
 /**
+ * 路由上的 角色/权限 编码配置不一定是 字符串数组，还支持一个返回字符串数组的函数。函数入参为(to, from, next)， 路由钩子参数
+ * @param rolesOrAuths
+ */
+const parseRolesOrAuth = function (rolesOrAuths, to, from, next) {
+    if (isFunction(rolesOrAuths)) {
+        const arr = rolesOrAuths(to, from ,next);
+        assert(isArray(arr), `[MetaElement] 当路由参数meta.roles(或meta.auths)为函数时, 返回值必须为字符串数组。其含义为角色编码数组(或权限编码数组)`)
+        return arr;
+    }
+    return rolesOrAuths
+}
+
+/**
  * 判定是否有路由权限，若无，则前往401，若有，则放行
  * @param to
  * @param next
  */
-const permit = function (to, next) {
+const permit = function (to, from, next) {
     let {
         path,
         meta: {
@@ -98,8 +111,8 @@ const permit = function (to, next) {
             if (isEmpty(access.user.id)) { // 无用户信息
                 clearUser()
                 next(routeUrl.R_LOGIN)
-            } else if ((permit_by === 'role' && hasRole(roles, role_match_mode))
-                || (permit_by === 'auth' && hasAuth(auths, auth_match_mode))) { // 有权限
+            } else if ((permit_by === 'role' && hasRole(parseRolesOrAuth(roles, to, from, next), role_match_mode))
+                || (permit_by === 'auth' && hasAuth(parseRolesOrAuth(auths, to, from, next), auth_match_mode))) { // 有权限
                 next()
             } else { // 无权限
                 next(routeUrl.R_401)
@@ -117,7 +130,7 @@ function registerInterceptor(Vue, opts) {
             detect(Vue).finally(() => {
                 // 启用认证, 此判断只能放到这里，如果放到registerInterceptor, 会导致appConfig异步请求和路由钩子执行时机的问题，导致编程路由刷新不会触发此钩子
                 if (appConfig.enableCertification) {
-                    permit(to, next)
+                    permit(to, from, next)
                 } else { // 未启用，直接放行
                     clearUser()
                     if (to.path === routeUrl.R_LOGIN) {

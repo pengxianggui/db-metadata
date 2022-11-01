@@ -612,7 +612,7 @@ export function isExternal(path) {
 }
 
 /**
- * 断言， 条件成立通过, 成立抛出错误
+ * 断言， 条件为true通过, 否则抛出错误
  * @param condition
  * @param msg
  */
