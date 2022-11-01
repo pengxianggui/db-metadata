@@ -11,6 +11,7 @@ import com.github.md.analysis.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
  *
  * <p> @author konbluesky </p>
  */
+@Order
 @RestControllerAdvice
 @Slf4j
 public class GlobalMetaException {
