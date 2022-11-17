@@ -1,6 +1,7 @@
 <template>
   <div class="el-card">
     <router-link to="/user/1">去详情</router-link>
+    <el-button @click="refresh">刷新页面</el-button>
     <h1>可用的编程菜单</h1>
     <p>这是你自己开发的页面。你想怎么开发就怎么开发。</p>
 
@@ -21,6 +22,19 @@ export default {
   name: "Route1_2",
   data() {
     return {
+    }
+  },
+  methods: {
+    refresh() {
+      this.$notify({
+        title: '操作成功',
+        message: "我是消息主体",
+        dangerouslyUseHTMLString: true,
+        type: 'success',
+        duration: 5000,
+        position: 'bottom-right'
+      })
+      this.$refresh()
     }
   }
 

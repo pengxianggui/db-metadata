@@ -41,5 +41,15 @@ export default function (Vue, opts) {
             }
         })
     }
+
+    /**
+     * 刷新当前路由，非地址栏刷新，不会出现空白。必须在vue组件中调用
+     */
+    Vue.prototype.$refresh = function () {
+        let {currentRoute: {fullPath}} = this.$router
+        this.$router.replace({
+            path: '/__redirect' + fullPath
+        })
+    }
 }
 
