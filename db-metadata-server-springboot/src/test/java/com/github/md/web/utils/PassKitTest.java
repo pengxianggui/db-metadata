@@ -15,7 +15,7 @@ public class PassKitTest {
     @Test
     public void test() {
         String pass1 = PassKit.encryptPass();
-        String pass2 = PassKit.encryptPass("888888");
+        String pass2 = PassKit.encryptPass("2m7lcQUK2X6AbhurgPyl7A==");
         log.info(pass1);
         log.info(pass2);
     }

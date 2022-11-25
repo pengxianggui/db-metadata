@@ -15,7 +15,7 @@ public class UtilTest {
     @Test
     public void testEncrypt() {
         final String key = "DB-Metadata is delicious";
-        String encryptPass = SecureUtil.aes(key.getBytes()).encryptHex("888888");
+        String encryptPass = SecureUtil.aes(key.getBytes()).encryptHex("2m7lcQUK2X6AbhurgPyl7A==");
         log.info("encryptPass: {}", encryptPass);
         log.info("decryptPass: {}", SecureUtil.aes(key.getBytes()).decryptStr(encryptPass));
     }

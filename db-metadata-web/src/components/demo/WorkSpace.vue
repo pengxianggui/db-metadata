@@ -20,9 +20,12 @@
     <!--        <tree-single-grid-tmpl fc="meta_router"></tree-single-grid-tmpl>-->
 
 <!--    <form-view ic="meta_user.FormView" form-type="add"></form-view>-->
-<!--    <form-view ic="t_employee.FormView" form-type="update" primary-kv="3" style="width: 100%"></form-view>-->
+<!--    <form-view ic="alarm_handle.FormView" form-type="update" primary-kv="4996" style="width: 100%"></form-view>-->
+    <form-view ic="meta_user.FormView" form-type="update" primary-kv="793514130693820416" style="width: 100%"></form-view>
 
-    <rich-text-box v-model="value"></rich-text-box>
+<!--    <file-box v-model="value" :meta="{conf: {action: '/file/upload', limit: 10}}"></file-box>-->
+
+<!--    <rich-text-box v-model="value"></rich-text-box>-->
 
     <!--    <el-form ref="form" :model="model">-->
     <!--      <el-form-item prop="config" label="配置" required>-->
@@ -46,7 +49,7 @@ export default {
   components: {AuthSet},
   data() {
     return {
-      value: '',
+      value: [],
       visible: false,
       treeMeta: {
         "objectPrimaryKey": "id",
@@ -160,21 +163,9 @@ export default {
     }
   },
   created() {
-    // setTimeout(() => {
-      this.formMeta = {
-        component_name: 'FormView',
-        columns: [
-          {
-            component_name: 'JsonBox',
-            name: 'config',
-            label: '配置',
-            conf: {
-              "rules": [{required: true, message: "必填字段", trigger: "blur"}]
-            }
-          }
-        ]
-      }
-    // }, 0)
+    setTimeout(() => {
+      this.value = [{name: 'SB', url: 'www.baidu.com'}]
+    }, 2000)
   }
 }
 </script>
