@@ -10,7 +10,7 @@
         <el-option v-for="item in innerMeta.themes" :key="item" :label="item" :value="item"></el-option>
       </el-select>
     </div>
-    <textarea ref="sqlEditor" type="textarea" :value="nativeValue"></textarea>
+    <textarea ref="editor" type="textarea" :value="nativeValue"></textarea>
   </div>
 </template>
 
@@ -29,11 +29,14 @@ import {assertEmpty} from "../../../utils/common";
 
 export default {
   name: "CodeBox",
-  label: "SQL编辑框",
+  label: "代码编辑框",
   mixins: [Meta(DefaultMeta, assembleMeta), Val()],
   props: {
     value: String,
-    showBar: Boolean
+    showBar: {
+      type: Boolean,
+      default: () => null
+    }
   },
   data() {
     return {
@@ -54,7 +57,7 @@ export default {
   },
   mounted() {
     let {innerMeta: {height, conf}} = this;
-    this.editor = CodeMirror.fromTextArea(this.$refs.sqlEditor, conf);
+    this.editor = CodeMirror.fromTextArea(this.$refs.editor, conf);
     this.editor.on('change', (instance) => {
       this.nativeValue = instance.getValue();
     });

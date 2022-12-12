@@ -11,13 +11,20 @@ import org.junit.jupiter.api.Test;
  */
 @Slf4j
 public class UtilTest {
+    final static String KEY = "DB-Metadata is delicious";
 
     @Test
     public void testEncrypt() {
-        final String key = "DB-Metadata is delicious";
-        String encryptPass = SecureUtil.aes(key.getBytes()).encryptHex("2m7lcQUK2X6AbhurgPyl7A==");
+        String encryptPass = SecureUtil.aes(KEY.getBytes()).encryptHex("2m7lcQUK2X6AbhurgPyl7A==");
         log.info("encryptPass: {}", encryptPass);
-        log.info("decryptPass: {}", SecureUtil.aes(key.getBytes()).decryptStr(encryptPass));
+        log.info("decryptPass: {}", SecureUtil.aes(KEY.getBytes()).decryptStr(encryptPass));
+    }
+
+    @Test
+    public void testDecrypt() {
+        final String encryptPass = "424cee8178299a325ca27f3de89b6a9c";
+        String clearPass = SecureUtil.aes(KEY.getBytes()).decryptStr(encryptPass);
+        log.info(clearPass);
     }
 
     @Test

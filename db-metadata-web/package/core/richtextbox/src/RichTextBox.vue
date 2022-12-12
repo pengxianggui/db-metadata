@@ -9,6 +9,7 @@ import VueTinymceText from 'vue-tinymce-text'
 import Val from "../../mixins/value"
 import Meta from '../../mixins/meta'
 import defaultMeta from '../ui-conf'
+import {utils} from "../../../index";
 
 export default {
   name: "RichTextBox",
@@ -56,7 +57,10 @@ export default {
     conf() {
       const {innerMeta: {conf = {}}, baseURL} = this
       this.$reverseMerge(conf, {
-        images_upload_url: baseURL + conf.images_upload_url
+        images_upload_url: utils.compile(baseURL + conf.images_upload_url, { // 兼容单独使用RichTextBox的情况，无objectCode和fieldCode，导致url未编译
+          objectCode: null,
+          fieldCode: null
+        })
       })
       return conf
     }
