@@ -7,7 +7,23 @@
                      :data-url="getObjectCodeUrl(value.master)" @change="resetMasterRelate(value.master)"></drop-down-box>
     </el-form-item>
     <el-form-item label="关联主键" prop="master.config.primaryKey" required error="必填">
+      <template #label>
+        <span>关联主键</span>
+        <el-tooltip content="此字段必须和从表的【关联主键】对应上，即从表的该值为主表此值的外键字段。">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
+      </template>
       <drop-down-box v-model="value.master.config.primaryKey" :filterable="true"
+                     :data-url="getFieldCodeUrl(value.master)"></drop-down-box>
+    </el-form-item>
+    <el-form-item label="显示字段" prop="master.config.labelKey" required error="必填">
+      <template #label>
+        <span>显示字段</span>
+        <el-tooltip content="当展开子表时，需要使用主表哪个字段的数据作为子表顶部的展示。它应该是一个易读的值。">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
+      </template>
+      <drop-down-box v-model="value.master.config.labelKey" :filterable="true"
                      :data-url="getFieldCodeUrl(value.master)"></drop-down-box>
     </el-form-item>
 
@@ -41,8 +57,23 @@
                          @change="resetSlaveRelate(slave)"></drop-down-box>
         </el-form-item>
         <el-form-item label="关联主键" :prop="'slaves.' + index + '.config.foreignPrimaryKey'" required error="必填">
+          <template #label>
+            <span>关联主键</span>
+            <el-tooltip content="此字段必须和主表的【关联主键】对应上，即此值为主表此值的外键字段。">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </template>
           <drop-down-box v-model="slave.config.foreignPrimaryKey" :filterable="true"
                          :data-url="getFieldCodeUrl(slave)"></drop-down-box>
+        </el-form-item>
+        <el-form-item label="显示值" prop="slave.config.labelKey">
+          <template #label>
+            <span>显示值</span>
+            <el-tooltip content="当存在多个子表时，会以tab形态以便切换展示。你会希望配置一个易读的值作为标签上显示的内容，如果不配置会使用元对象编码。">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </template>
+          <el-input v-model="slave.config.labelKey"></el-input>
         </el-form-item>
 
         <el-divider content-position="right">

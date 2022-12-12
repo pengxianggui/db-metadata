@@ -34,6 +34,7 @@
 
       <template #inner-before-extend-btn="scope">
         <slot name="inner-before-extend-btn" v-bind="scope"></slot>
+        <el-button icon="el-icon-connection" size="mini" @click.stop="openDrawer(scope)"></el-button>
       </template>
       <template #view-btn="scope">
         <slot name="view-btn" v-bind="scope"></slot>
@@ -57,132 +58,144 @@
 
     <el-divider></el-divider>
 
-    <!-- multi slave -->
-    <div class="el-card md_el-card" v-if="config.slaves.length > 1">
-      <el-tabs type="border-card">
-        <el-tab-pane v-for="slave in config.slaves" :key="slave.config.objectCode" :label="slave.config.objectCode">
-          <search-view :ic="slave.instanceCodes.SearchView" @search="sHandleSearch(slave, arguments)"></search-view>
-          <table-view :ref="slave.config.objectCode" :filter-params="slave.filterParams" :page="{ size: 5 }">
-            <tempalte #operation-bar="scope">
-              <slot :name="slave.config.objectCode + '_operation-bar'" v-bind="scope"></slot>
-            </tempalte>
-            <!-- 子表操作栏扩展插槽 -->
-            <template #prefix-btn="scope">
-              <slot :name="slave.config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
-            </template>
-            <template #add-btn="scope">
-              <slot :name="slave.config.objectCode + '_add-btn'"
-                    v-bind:conf="scope.conf" v-bind:add="handleAdd"
-                    v-bind:params="config.slaves[0]"
-                    v-bind:activeMData="activeMData">
-                <el-button v-bind="scope.conf.conf" @click="handleAdd(config.slaves[0])"
-                           v-authorize="scope.conf.authorize">新增</el-button>
-              </slot>
-            </template>
-            <template #batch-delete-btn="scope">
-              <slot :name="slave.config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
-            </template>
-            <template #suffix-btn="scope">
-              <slot :name="slave.config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
-            </template>
-            <template #float-right-btn="scope">
-              <slot :name="slave.config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
-            </template>
+    <el-drawer
+        :title="clickMData | drawerTitle(config.master.config)"
+        :visible.sync="drawerVisible"
+        size="80%"
+        :append-to-body="true"
+        :close-on-press-escape="true"
+        direction="rtl" class="drawer">
 
-            <template #buttons="scope">
-              <slot :name="slave.config.objectCode + '_buttons'" v-bind="scope"></slot>
-            </template>
+      <!-- multi slave -->
+      <div class="el-card md_el-card" v-if="config.slaves.length > 1">
+        <el-tabs type="border-card">
+          <el-tab-pane v-for="slave in config.slaves" :key="slave.config.objectCode" :label="slave.config | slaveLabel">
+            <search-view :ic="slave.instanceCodes.SearchView" @search="sHandleSearch(slave, arguments)"></search-view>
+            <table-view :ref="slave.config.objectCode" :ic="slave.instanceCodes.TableView" :filter-params="slave.filterParams" :page="{ size: 5 }">
+              <tempalte #operation-bar="scope">
+                <slot :name="slave.config.objectCode + '_operation-bar'" v-bind="scope"></slot>
+              </tempalte>
+              <!-- 子表操作栏扩展插槽 -->
+              <template #prefix-btn="scope">
+                <slot :name="slave.config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
+              </template>
+              <template #add-btn="scope">
+                <slot :name="slave.config.objectCode + '_add-btn'"
+                      v-bind:conf="scope.conf" v-bind:add="handleAdd"
+                      v-bind:params="slave"
+                      v-bind:activeMData="clickMData">
+                  <el-button v-bind="scope.conf.conf" @click="handleAdd(slave)"
+                             v-authorize="scope.conf.authorize">新增
+                  </el-button>
+                </slot>
+              </template>
+              <template #batch-delete-btn="scope">
+                <slot :name="slave.config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
+              </template>
+              <template #suffix-btn="scope">
+                <slot :name="slave.config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
+              </template>
+              <template #float-right-btn="scope">
+                <slot :name="slave.config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
+              </template>
 
-            <!-- 子表单条纪录操作扩展插槽 -->
-            <template #inner-before-extend-btn="scope">
-              <slot :name="slave.config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
-            </template>
-            <template #view-btn="scope">
-              <slot :name="slave.config.objectCode + '_view-btn'" v-bind="scope"></slot>
-            </template>
-            <template #edit-btn="scope">
-              <slot :name="slave.config.objectCode + '_edit-btn'" v-bind="scope"></slot>
-            </template>
-            <template #delete-btn="scope">
-              <slot :name="slave.config.objectCode + '_delete-btn'" v-bind="scope"></slot>
-            </template>
-            <template #inner-after-extend-btn="scope">
-              <slot :name="slave.config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
-            </template>
+              <template #buttons="scope">
+                <slot :name="slave.config.objectCode + '_buttons'" v-bind="scope"></slot>
+              </template>
 
-            <template #pagination-extend="scope">
-              <slot :name="slave.config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
-            </template>
+              <!-- 子表单条纪录操作扩展插槽 -->
+              <template #inner-before-extend-btn="scope">
+                <slot :name="slave.config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
+              </template>
+              <template #view-btn="scope">
+                <slot :name="slave.config.objectCode + '_view-btn'" v-bind="scope"></slot>
+              </template>
+              <template #edit-btn="scope">
+                <slot :name="slave.config.objectCode + '_edit-btn'" v-bind="scope"></slot>
+              </template>
+              <template #delete-btn="scope">
+                <slot :name="slave.config.objectCode + '_delete-btn'" v-bind="scope"></slot>
+              </template>
+              <template #inner-after-extend-btn="scope">
+                <slot :name="slave.config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
+              </template>
 
-          </table-view>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+              <template #pagination-extend="scope">
+                <slot :name="slave.config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
+              </template>
 
-    <!-- single slave -->
-    <div class="el-card md_el-card" v-if="config.slaves.length === 1">
-      <search-view :ic="config.slaves[0].instanceCodes.SearchView"
-                   @search="sHandleSearch(config.slaves[0], arguments)"></search-view>
-      <table-view :ref="config.slaves[0].config.objectCode"
-                  :ic="config.slaves[0].instanceCodes.TableView"
-                  :filter-params="config.slaves[0].filterParams"
-                  @open-form-view="openSlaveFormView($event, config.slaves[0])"
-                  :page="{ size: 5 }">
+            </table-view>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
 
-        <tempalte #operation-bar="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_operation-bar'" v-bind="scope"></slot>
-        </tempalte>
-        <!-- 子表操作栏扩展插槽 -->
-        <template #prefix-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
-        </template>
-        <template #add-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_add-btn'"
-                v-bind:conf="scope.conf"
-                v-bind:add="handleAdd"
-                v-bind:params="config.slaves[0]"
-                v-bind:activeMData="activeMData">
-            <el-button v-bind="scope.conf.conf" @click="handleAdd(config.slaves[0])"
-                       v-authorize="scope.conf.authorize">新增</el-button>
-          </slot>
-        </template>
-        <template #batch-delete-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
-        </template>
-        <template #suffix-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
-        </template>
-        <template #float-right-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
-        </template>
+      <!-- single slave -->
+      <div class="el-card md_el-card" v-if="config.slaves.length === 1">
+        <search-view :ic="config.slaves[0].instanceCodes.SearchView"
+                     @search="sHandleSearch(config.slaves[0], arguments)"></search-view>
+        <table-view :ref="config.slaves[0].config.objectCode"
+                    :ic="config.slaves[0].instanceCodes.TableView"
+                    :filter-params="config.slaves[0].filterParams"
+                    @open-form-view="openSlaveFormView($event, config.slaves[0])"
+                    :page="{ size: 5 }">
 
-        <template #buttons="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_buttons'" v-bind="scope"></slot>
-        </template>
+          <tempalte #operation-bar="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_operation-bar'" v-bind="scope"></slot>
+          </tempalte>
+          <!-- 子表操作栏扩展插槽 -->
+          <template #prefix-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_prefix-btn'" v-bind="scope"></slot>
+          </template>
+          <template #add-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_add-btn'"
+                  v-bind:conf="scope.conf"
+                  v-bind:add="handleAdd"
+                  v-bind:params="config.slaves[0]"
+                  v-bind:activeMData="clickMData">
+              <el-button v-bind="scope.conf.conf" @click="handleAdd(config.slaves[0])"
+                         v-authorize="scope.conf.authorize">新增
+              </el-button>
+            </slot>
+          </template>
+          <template #batch-delete-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_batch-delete-btn'" v-bind="scope"></slot>
+          </template>
+          <template #suffix-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_suffix-btn'" v-bind="scope"></slot>
+          </template>
+          <template #float-right-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_float-right-btn'" v-bind="scope"></slot>
+          </template>
 
-        <!-- 子表单条纪录操作扩展插槽 -->
-        <template #inner-before-extend-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
-        </template>
-        <template #view-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_view-btn'" v-bind="scope"></slot>
-        </template>
-        <template #edit-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_edit-btn'" v-bind="scope"></slot>
-        </template>
-        <template #delete-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_delete-btn'" v-bind="scope"></slot>
-        </template>
-        <template #inner-after-extend-btn="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
-        </template>
+          <template #buttons="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_buttons'" v-bind="scope"></slot>
+          </template>
 
-        <template #pagination-extend="scope">
-          <slot :name="config.slaves[0].config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
-        </template>
+          <!-- 子表单条纪录操作扩展插槽 -->
+          <template #inner-before-extend-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_inner-before-extend-btn'" v-bind="scope"></slot>
+          </template>
+          <template #view-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_view-btn'" v-bind="scope"></slot>
+          </template>
+          <template #edit-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_edit-btn'" v-bind="scope"></slot>
+          </template>
+          <template #delete-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_delete-btn'" v-bind="scope"></slot>
+          </template>
+          <template #inner-after-extend-btn="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_inner-after-extend-btn'" v-bind="scope"></slot>
+          </template>
 
-      </table-view>
-    </div>
+          <template #pagination-extend="scope">
+            <slot :name="config.slaves[0].config.objectCode + '_pagination-extend'" v-bind="scope"></slot>
+          </template>
+
+        </table-view>
+      </div>
+
+    </el-drawer>
   </div>
 </template>
 
@@ -217,7 +230,20 @@ export default {
     return {
       featureCode: featureCode,
       activeMData: {}, // 主表选中的行
+      clickMData: {}, // 展开子表时, 点击的主表
       filterParams: {},
+      drawerVisible: false
+    }
+  },
+  filters: {
+    drawerTitle(data, config) {
+      const {primaryKey, labelKey} = config
+      const labelField = utils.assertEmpty(labelKey, primaryKey)
+      return data[labelField]
+    },
+    slaveLabel(config) {
+      const {primaryKey, labelKey} = config
+      return utils.assertEmpty(labelKey, primaryKey)
     }
   },
   methods: {
@@ -237,7 +263,6 @@ export default {
     handleActiveChange(row) {
       const {config: {master}} = this;
       this.activeMData = row;
-      this.refreshSlavesData();
       this.$emit('m-active-change', {
         row: row, // 主表选中的单条记录
         masterObjectCode: master.config.objectCode,   // 主表的元对象编码
@@ -268,31 +293,36 @@ export default {
       });
     },
     refreshSlaveData(slave) {
-      const {config: {master: {config: {primaryKey}}}, activeMData} = this;
-      const foreignPrimaryValue = activeMData[primaryKey];
+      const {config: {master: {config: {primaryKey}}}, clickMData} = this;
+      const foreignPrimaryValue = clickMData[primaryKey];
       const {config: {objectCode: refName, foreignPrimaryKey}} = slave
 
-      if (utils.isEmpty(foreignPrimaryValue)) {
-        this.$nextTick(() => {
-          this.$refs[refName].emptyData(); // 主表未选择，子表置空
-        })
-      } else {
-        slave.filterParams[foreignPrimaryKey + "_eq"] = foreignPrimaryValue
-        this.$nextTick(() => {
-          this.$refs[refName].getData();
-        })
-      }
+      this.$nextTick(() => {
+        let ref = this.$refs[refName]
+        if (Array.isArray(ref)) { // vue 官方解释： 当v-for用于元素或组件时，ref将是包含DOM节点或组件实例的数组。因此当为多个子元对象时，存在v-for
+          ref = ref[0]
+        }
+
+        console.log(ref)
+        if (utils.isEmpty(foreignPrimaryValue)) {
+          ref.emptyData(); // 主表未选择，子表置空
+        } else {
+          slave.filterParams[foreignPrimaryKey + "_eq"] = foreignPrimaryValue
+          ref.getData();
+        }
+
+      })
     },
     handleAdd(slave) {
-      if (utils.isEmpty(this.activeMData)) {
+      if (utils.isEmpty(this.clickMData)) {
         this.$message.warning('请先选择一条主表记录', '提示');
         return;
       }
 
-      const {featureCode, activeMData, config: {master: {config: {primaryKey}}}} = this;
+      const {featureCode, clickMData, config: {master: {config: {primaryKey}}}} = this;
       const {config: {foreignPrimaryKey: foreignKeyName}} = slave
       const sObjectCode = slave.config.objectCode;
-      const foreignKeyValue = activeMData[primaryKey];
+      const foreignKeyValue = clickMData[primaryKey];
       const url = restUrl.MASTER_SLAVE_TO_ADD_S
       const params = {
         objectCode: sObjectCode,
@@ -319,6 +349,11 @@ export default {
           utils.printInfo('您取消了表单')
         })
       })
+    },
+    openDrawer({scope: {row}}) {
+      this.clickMData = row
+      this.drawerVisible = true
+      this.refreshSlavesData();
     },
     openSlaveFormView({url, params = {}}, slave) {
       this.$merge(params, {
@@ -370,5 +405,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.drawer {
+  &::v-deep {
+    .el-drawer__body {
+      overflow: auto;
+    }
+  }
+}
 </style>

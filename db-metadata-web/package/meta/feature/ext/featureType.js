@@ -109,7 +109,8 @@ export const FEATURE_TYPE = {
             "master": {
                 "config": {
                     "objectCode": null,
-                    "primaryKey": null,
+                    "primaryKey": null, // 主表关联字段
+                    "labelKey": null, // 主表显示字段
                 },
                 "instanceCodes": {
                     "SearchView": null,
@@ -121,7 +122,8 @@ export const FEATURE_TYPE = {
                 {
                     "config": {
                         "objectCode": null,
-                        "foreignPrimaryKey": null,
+                        "foreignPrimaryKey": null, // 从表关联字段
+                        "labelKey": null, // 从表显示字段
                         "order": 0
                     },
                     "instanceCodes": {

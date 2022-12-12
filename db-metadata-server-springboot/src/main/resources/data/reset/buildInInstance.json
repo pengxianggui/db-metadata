@@ -168,7 +168,15 @@
         }
       }
     },
-    "TableView": {},
+    "TableView": {
+      "config": {
+        "operation-column": {
+          "conf": {
+            "width": "240"
+          }
+        }
+      }
+    },
     "FormView": {
       "config": {
         "style": {
