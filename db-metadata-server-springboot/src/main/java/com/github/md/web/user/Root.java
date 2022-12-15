@@ -35,7 +35,12 @@ public final class Root implements UserWithRolesWrapper {
         this.username = root.getOrDefault(loginKey, "ROOT");
         this.password = root.getOrDefault(passKey, PassKit.encryptPass("888888"));
         this.avatar = root.getOrDefault("avatar", "root");
-        this.attrs = root;
+
+        Map<String, String> attrs = new HashMap<>();
+        attrs.put("id", id);
+        attrs.put("username", username);
+        attrs.put("avatar", avatar);
+        this.attrs = attrs;
     }
 
     public static Root me() {

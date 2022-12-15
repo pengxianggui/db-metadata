@@ -9,10 +9,22 @@ package com.github.md.web.user;
 public interface TokenGenerator<U extends User> {
 
     /**
-     * 由user生成token, 此方法必须保证幂等。
+     * 由user生成token。若覆盖此方法，务必覆盖{@link #parse(String)}
      *
      * @param user
+     * @return 返回token
+     */
+    default String generate(U user) {
+        return user.userId();
+    }
+
+    /**
+     * 由token解析出userId。若覆盖此方法，务必覆盖{@link #generate(User)}
+     *
+     * @param token
      * @return
      */
-    String generate(U user);
+    default String parse(String token) {
+        return token;
+    }
 }

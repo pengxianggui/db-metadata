@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 基于本地文件的用户服务，文件名可通过入参传入，内部可默认加载./config, jar同目录，以及绝对路径。文件格式可参考: user.json
  * <p> @Date : 2019/12/13 </p>
  * <p> @Project : db-meta-serve</p>
  *

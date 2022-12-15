@@ -31,7 +31,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     protected final TokenGenerator tokenGenerator;
 
     public DefaultUserService() {
-        this.tokenGenerator = new DefaultTokenGenerator();
+        this.tokenGenerator = new JWTTokenGenerator();
     }
 
     private DbPro db() {
@@ -130,7 +130,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     @Override
     public LoginVO setLogged(DefaultUserWithRoles user) {
         String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
+        AuthenticationManager.me().getLoginUsers().put(user.userId(), user); // 缓存到内存中
         return createLoginVO(token, user);
     }
 
@@ -152,8 +152,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public boolean logout(DefaultUserWithRoles user) {
-        String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().invalidate(token);
+        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
         return !logged(user);
     }
 

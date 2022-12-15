@@ -1,9 +1,17 @@
 package com.github.md.web.utils;
 
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTHeader;
+import cn.hutool.jwt.JWTUtil;
 import com.github.md.analysis.db.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author pengxg
@@ -28,7 +36,24 @@ public class UtilTest {
     }
 
     @Test
-    public void testSnowFlake () {
+    public void testSnowFlake() {
         System.out.println(SnowFlake.me().nextId());
+    }
+
+
+    @Test
+    public void testJwt() {
+        Map<String, Object> payload = new HashMap<>();
+        String userId = "1234567890";
+        payload.put("userId", userId);
+        payload.put("timestamp", new Date().getTime());
+        final String token = JWTUtil.createToken(payload, userId.getBytes());
+        log.info("token: {}", token);
+
+        JWT jwt = JWTUtil.parseToken(token);
+        jwt.getHeader(JWTHeader.TYPE);
+        String expectUserId = (String) jwt.getPayload("userId");
+        log.info("userId: {}, expectUserId: {}", userId, expectUserId);
+        Assertions.assertEquals(userId, expectUserId);
     }
 }

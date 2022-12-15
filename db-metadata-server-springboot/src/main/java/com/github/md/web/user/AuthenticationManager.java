@@ -2,13 +2,12 @@ package com.github.md.web.user;
 
 import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
-import com.github.md.analysis.kit.Kv;
 import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.github.md.web.user.support.defaults.DefaultTokenGenerator;
+import com.github.md.web.user.support.defaults.JWTTokenGenerator;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.jfinal.kit.StrKit;
@@ -124,7 +123,7 @@ public class AuthenticationManager {
             AssertUtil.isTrue(encryptedPass.equals(root.getLoginPass()), "密码错误！"); // TODO 超过4次将锁定ROOT账号
 
             userWithRolesWrapper = Root.me();
-            String token = new DefaultTokenGenerator().generate(userWithRolesWrapper);
+            String token = new JWTTokenGenerator().generate(userWithRolesWrapper);
             AuthenticationManager.me().getLoginUsers().put(token, userWithRolesWrapper);
             return DefaultLoginVO.builder().token(token)
                     .id(userWithRolesWrapper.userId())
@@ -167,7 +166,7 @@ public class AuthenticationManager {
     public LoginVO getInfo(HttpServletRequest request) {
         UserWithRolesWrapper user = getUser(request);
         if (isRoot(user)) {
-            String token = new DefaultTokenGenerator().generate(user);
+            String token = new JWTTokenGenerator().generate(user);
             return DefaultLoginVO.builder().token(token)
                     .id(user.userId())
                     .username(user.userName())
@@ -186,8 +185,7 @@ public class AuthenticationManager {
      */
     public boolean logout(UserWithRolesWrapper user) {
         if (isRoot(user)) {
-            String token = new DefaultTokenGenerator().generate(user);
-            getLoginUsers().invalidate(token);
+            getLoginUsers().invalidate(user.userId());
             return true;
         }
 
