@@ -41,7 +41,7 @@ public class LoginController extends ControllerAdapter {
     public Ret logout() {
         UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
         if (Objects.isNull(user)) {
-            throw new UserException("未登录");
+            return Ret.ok("msg", "用户未登录");
         }
         boolean flag = AuthenticationManager.me().logout(user);
         return flag ? Ret.ok() : Ret.fail();
