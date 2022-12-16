@@ -8,6 +8,7 @@ import assembleDynamicRoute from './data/dynamic'
 import {routeUrl} from "../constant/url";
 import {assert, isArray, isBoolean, isEmpty, isFunction, isString} from "../utils/common";
 import {appConfig} from "../config";
+import {utils} from "../index";
 
 /**
  * 最终处理路由。并返回处理的结果。
@@ -110,7 +111,8 @@ const permit = function (to, from, next) {
         } else { // 需要鉴权
             if (isEmpty(access.user.id)) { // 无用户信息
                 clearUser()
-                next(routeUrl.R_LOGIN)
+                const loginPath = utils.resolvePath(routeUrl.R_LOGIN, { redirect_url: path })
+                next(loginPath)
             } else if ((permit_by === 'role' && hasRole(parseRolesOrAuth(roles, to, from, next), role_match_mode))
                 || (permit_by === 'auth' && hasAuth(parseRolesOrAuth(auths, to, from, next), auth_match_mode))) { // 有权限
                 next()

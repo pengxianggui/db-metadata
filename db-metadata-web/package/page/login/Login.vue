@@ -10,10 +10,11 @@
 </template>
 
 <script>
-import {restUrl} from "@/../package/constant/url";
+import {restUrl, routeUrl} from "@/../package/constant/url";
 import {appConfig} from "../../config";
 import {isEmpty} from "../../utils/common";
 import Token from "../../token";
+import {utils} from "../../index";
 
 export default {
   name: "Login",
@@ -77,13 +78,19 @@ export default {
 
       this.$axios.safePost(restUrl.LOGIN_URL, formData).then(({data}) => {
         Token.set(data.token)
-        this.$router.push('/').then(() => {
+        this.$router.push(this.redirectUrl).then(() => {
           location.reload()
         })
       })
     },
     register(model) {
       this.$message.warning("NOT FINISHED")
+    }
+  },
+  computed: {
+    redirectUrl() {
+      const {query: {redirect_url}} = this.$route
+      return utils.assertEmpty(redirect_url, routeUrl.R_INDEX)
     }
   }
 }
