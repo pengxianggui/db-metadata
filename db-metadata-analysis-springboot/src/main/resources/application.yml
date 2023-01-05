@@ -11,6 +11,12 @@ md:
   devMode: true
   analysis:
     db-source:
+      master:
+        username: root
+        password: gongwei911
+        url: jdbc:mysql://localhost:3309/metadata?useSSL=false&characterEncoding=utf-8
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
       ds1:
         username: root
         password: gongwei911

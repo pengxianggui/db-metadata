@@ -37,9 +37,10 @@ public class MDDataSource implements IDataSource {
         }
         //resolve schemaName
         if (isAlibabaDruid) {
-            this.schemaName = fetchSchemaFromJdbcUrl(getDruidDataSource().getUrl());
+            this.schemaName = fetchSchemaFromJdbcUrl(((DruidDataSource) dataSource).getUrl());
         } else {
             try {
+                // FIXME 对于非DruidDataSource数据源，这个方式常常拿到null值，如何稳妥的拿到schema呢?
                 this.schemaName = dataSource.getConnection().getSchema();
             } catch (SQLException e) {
                 log.error(e.getMessage(), e);
@@ -64,10 +65,6 @@ public class MDDataSource implements IDataSource {
             dbName = matcher.group(1);
         }
         return StrKit.defaultIfBlank(dbName, "");
-    }
-
-    private DruidDataSource getDruidDataSource() {
-        return (DruidDataSource) dataSource;
     }
 
     @Override

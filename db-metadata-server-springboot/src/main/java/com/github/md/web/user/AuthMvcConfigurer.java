@@ -15,19 +15,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class AuthMvcConfigurer implements WebMvcConfigurer {
 
     private MetaProperties metaProperties;
+    private AuthenticationManager authenticationManager;
 
-    public AuthMvcConfigurer(MetaProperties metaProperties) {
+    public AuthMvcConfigurer(MetaProperties metaProperties, AuthenticationManager authenticationManager) {
         this.metaProperties = metaProperties;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         if (metaProperties.getServer().isEnableCertification()) {
-            registry.addInterceptor(AuthenticationManager.me().getUserIntercept())
+            registry.addInterceptor(authenticationManager.getUserIntercept())
                     .addPathPatterns(metaProperties.getServer().getLogin().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getLogin().getExcludes());
 
-            registry.addInterceptor(AuthenticationManager.me().getAuthIntercept())
+            registry.addInterceptor(authenticationManager.getAuthIntercept())
                     .addPathPatterns(metaProperties.getServer().getAuth().getIncludes())
                     .excludePathPatterns(metaProperties.getServer().getAuth().getExcludes());
 

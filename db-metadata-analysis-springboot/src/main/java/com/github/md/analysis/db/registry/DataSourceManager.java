@@ -44,6 +44,7 @@ public class DataSourceManager {
         return dataSourceRegistrar.mainSource();
     }
 
+    @Deprecated
     public DruidDataSource mainSourceOfDruid() {
         return (DruidDataSource) dataSourceRegistrar.mainSource();
     }

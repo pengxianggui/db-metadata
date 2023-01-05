@@ -7,10 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.md.analysis.AnalysisConstant.*;
 
@@ -27,38 +24,56 @@ import static com.github.md.analysis.AnalysisConstant.*;
 @Configuration
 public class DataSourceInitializer {
 
-    /**
-     * 1. 自动初始化Spring source 的 bean
-     * 2. 不满足时从业务库中取第一个
-     */
-    @Bean(MAIN_DATA_SOURCE_RAW_BEAN_NAME)
-    @ConfigurationProperties(DEFAULT_DATA_SOURCE_PROPERTY_NAME)
-    //    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
-    public DruidDataSource mainDataSource() {
-        return new DruidDataSource();
+    @Bean(BIZ_DATA_SOURCE_PROPERTIES)
+    @ConfigurationProperties(DATA_SOURCE_KEY)
+    public Map<String, DataSourceProperties> otherSourcesProperties() {
+        return new HashMap<>();
     }
 
+//    /**
+//     * 1. 自动初始化Spring source 的 bean
+//     * 2. 不满足时从业务库中取第一个
+//     */
+////    @ConditionalOnMissingBean(DataSource.class)
+////    @Bean(MAIN_DATA_SOURCE_RAW_BEAN_NAME)
+////    @ConfigurationProperties(DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+//    //    @ConditionalOnProperty(name = DEFAULT_DATA_SOURCE_PROPERTY_NAME)
+//    public DruidDataSource mainDataSource(DataSourceProperties dataSourceProperties) {
+//        DruidDataSource druidDataSource = new DruidDataSource();
+//        druidDataSource.setUrl(dataSourceProperties.getUrl());
+//        druidDataSource.setUsername(dataSourceProperties.getUsername());
+//        druidDataSource.setPassword(dataSourceProperties.getPassword());
+//        druidDataSource.setDriverClassName(dataSourceProperties.getDriverClassName());
+//        return druidDataSource;
+//    }
+
     @Bean(MAIN_DATA_SOURCE_BEAN_NAME)
-    public IDataSource mainSource(@Qualifier(MAIN_DATA_SOURCE_RAW_BEAN_NAME) DruidDataSource druidDataSource) {
+    public IDataSource mainSource(DataSourceProperties dataSourceProperties, @Qualifier(BIZ_DATA_SOURCE_PROPERTIES) Map<String, DataSourceProperties> otherSourcesProperties) {
+        DataSourceProperties mainDataSourceProperties;
+        if (otherSourcesProperties.containsKey(MAIN_DATA_SOURCE_KEY)) {
+            mainDataSourceProperties = otherSourcesProperties.remove(MAIN_DATA_SOURCE_KEY);
+        } else {
+            mainDataSourceProperties = dataSourceProperties;
+        }
+
+        DruidDataSource druidDataSource = new DruidDataSource();
+        druidDataSource.setUrl(mainDataSourceProperties.getUrl());
+        druidDataSource.setUsername(mainDataSourceProperties.getUsername());
+        druidDataSource.setPassword(mainDataSourceProperties.getPassword());
+        druidDataSource.setDriverClassName(mainDataSourceProperties.getDriverClassName());
         return MDDataSource.Main(druidDataSource);
     }
 
     @Bean
-    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource dataSource,
+    public DataSourceRegistrar dataSourceRegistrar(@Qualifier(MAIN_DATA_SOURCE_BEAN_NAME) IDataSource mainSource,
                                                    @Qualifier(BIZ_DATA_SOURCE) List<IDataSource> bizDataSources) {
-        return new DefaultDataSourceRegistrar(dataSource, bizDataSources);
-    }
-
-    @Bean(BIZ_DATA_SOURCE_PROPERTIES)
-    @ConfigurationProperties("md.analysis.db-source")
-    public Map<String, DataSourceProperties> otherSourcesProperteis() {
-        return new HashMap<>();
+        return new DefaultDataSourceRegistrar(mainSource, bizDataSources);
     }
 
     @Bean(BIZ_DATA_SOURCE)
-    public List<IDataSource> otherSources(@Qualifier(BIZ_DATA_SOURCE_PROPERTIES) Map<String, DataSourceProperties> otherSourceProp) {
+    public List<IDataSource> bizDataSources(@Qualifier(BIZ_DATA_SOURCE_PROPERTIES) Map<String, DataSourceProperties> otherSourcesProperties) {
         List<IDataSource> bizDataSources = new ArrayList<>(4);
-        otherSourceProp.forEach((k, v) -> {
+        otherSourcesProperties.forEach((k, v) -> {
             bizDataSources.add(MDDataSource.Biz(v.initializeDataSourceBuilder().build()));
         });
         return bizDataSources;

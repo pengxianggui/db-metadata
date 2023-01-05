@@ -25,8 +25,7 @@ import java.util.concurrent.TimeUnit;
  * <p> @author konbluesky </p>
  */
 public class AuthenticationManager {
-
-    private static final AuthenticationManager me = new AuthenticationManager();
+    private static AuthenticationManager me = null;
 
     /**
      * 需要注意得是loginUsers得put动作 只能由loginService来做
@@ -54,11 +53,18 @@ public class AuthenticationManager {
     private final Map<Class<? extends MResource>, MRPermit> resourcePermitMapping;
 
     public static AuthenticationManager me() {
+        if (me == null) {
+            synchronized (AuthenticationManager.class) {
+                if (me == null) {
+                    DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+                    AuthenticationManager.me = new AuthenticationManager(configurer);
+                }
+            }
+        }
         return me;
     }
 
-    private AuthenticationManager() {
-        AuthenticationConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+    public AuthenticationManager(DbMetaConfigurer configurer) {
         AuthenticationRegistry registry = new AuthenticationRegistry();
         configurer.configAuthentication(registry);
         userService = registry.getUserService();
@@ -68,6 +74,7 @@ public class AuthenticationManager {
         userIntercept = new UserIntercept(registry.getUserInterceptDoer());
         authIntercept = new MRAuthIntercept(registry.getAuthInterceptDoers());
         resourcePermitMapping = registry.getResourcePermitMapping();
+        me = this;
     }
 
     /**
@@ -166,7 +173,7 @@ public class AuthenticationManager {
     public LoginVO getInfo(HttpServletRequest request) {
         UserWithRolesWrapper user = getUser(request);
         if (isRoot(user)) {
-            String token = new JWTTokenGenerator().generate(user);
+            String token = request.getHeader(loginService.tokenKey());
             return DefaultLoginVO.builder().token(token)
                     .id(user.userId())
                     .username(user.userName())
