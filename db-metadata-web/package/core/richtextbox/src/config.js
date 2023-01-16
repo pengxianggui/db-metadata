@@ -1,9 +1,7 @@
 /**
  * tinymce富文本编辑器的配置
  * 更多配置, 参见: https://www.tiny.cloud/docs/configure/editor-appearance
- * TODO 1.图片上传:  https://www.tiny.cloud/docs/general-configuration-guide/upload-images/
- * TODO 2.主题更新，默认太丑
- * TODO 3.编辑器最大化
+ * 图片上传:  https://www.tiny.cloud/docs/general-configuration-guide/upload-images/
  *
  * @type {{toolbar: string, menubar: boolean, plugins: [string, string, string], height: number}}
  */
@@ -12,7 +10,7 @@ export const EditorConf = {
     menubar: false,
     plugins: [
         'advlist autolink lists link image charmap print preview anchor',
-        'searchreplace visualblocks code fullscreen',
+        'searchreplace visualblocks code codesample fullscreen',
         'insertdatetime media table paste code help wordcount'
     ],
     toolbar: `

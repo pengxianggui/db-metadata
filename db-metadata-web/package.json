@@ -21,7 +21,6 @@
     "release": "npm version patch && npm run lib && npm run pub"
   },
   "dependencies": {
-    "vuepress": "^1.9.7",
     "@pxg/vue-address": "0.0.4",
     "axios": "^0.19.0",
     "clipboard-copy": "^3.1.0",
@@ -36,8 +35,9 @@
     "vue-json-editor": "^1.4.0",
     "vue-markdown": "^2.2.4",
     "vue-router": "3.1.3",
-    "vue-tinymce-text": "^1.0.3",
+    "vue-tinymce-text": "^1.0.5",
     "vuedraggable": "^2.23.0",
+    "vuepress": "^1.9.7",
     "xml-loader": "^1.2.1"
   },
   "devDependencies": {

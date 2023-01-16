@@ -12,9 +12,13 @@ const remove = function () {
     localStorage.removeItem(appConfig.tokenKey)
 }
 
+const getTokenKey = function () {
+    return appConfig.tokenKey
+}
 
 export default {
     set,
     get,
-    remove
+    remove,
+    getTokenKey
 }

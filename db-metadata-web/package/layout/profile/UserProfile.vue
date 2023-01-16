@@ -29,10 +29,9 @@
 
 <script>
 import {access, clearUser, hasAuth, hasRole} from "../../access";
-import {isEmpty, randomInt, strSplitToArray} from "../../utils/common";
+import {strSplitToArray} from "../../utils/common";
 import {restUrl, routeUrl} from '../../constant/url'
 import {appConfig} from '../../config'
-import {resolve} from "../../utils/url";
 
 // 判断是否有指定菜单的权限
 const hasMenuAuth = function (menu) {

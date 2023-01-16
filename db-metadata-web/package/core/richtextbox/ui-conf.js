@@ -5,7 +5,8 @@ const defaultMeta = {
     "name": "RichTextBox",
     "label": "富文本",
     "conf": {
-        "images_upload_url": "/file/upload/rich-text?objectCode={objectCode}&fieldCode={fieldCode}" // 富文本的上传路径
+        "images_upload_url": "/file/upload/rich-text?objectCode={objectCode}&fieldCode={fieldCode}", // 富文本的上传路径
+        "files_upload_url": "/file/upload/rich-text?objectCode={objectCode}&fieldCode={fieldCode}" // 富文本的上传路径
     },
     "explain": ""
 }
@@ -18,6 +19,10 @@ export const callback = function (objectCode, fieldCode) {
     utils.reverseMerge(meta, {
         conf: {
             images_upload_url: utils.compile(defaultMeta.conf.images_upload_url, {
+                objectCode: objectCode,
+                fieldCode: fieldCode
+            }),
+            files_upload_url: utils.compile(defaultMeta.conf.files_upload_url, {
                 objectCode: objectCode,
                 fieldCode: fieldCode
             })

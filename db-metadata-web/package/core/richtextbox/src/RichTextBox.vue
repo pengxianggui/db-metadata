@@ -60,7 +60,12 @@ export default {
         images_upload_url: utils.compile(baseURL + conf.images_upload_url, { // 兼容单独使用RichTextBox的情况，无objectCode和fieldCode，导致url未编译
           objectCode: null,
           fieldCode: null
-        })
+        }),
+        files_upload_url: utils.compile(baseURL + conf.files_upload_url, { // 兼容单独使用RichTextBox的情况，无objectCode和fieldCode，导致url未编译
+          objectCode: null,
+          fieldCode: null
+        }),
+
       })
       return conf
     }
