@@ -1,5 +1,5 @@
 <template>
-  <vue-tinymce-text v-model="nativeValue"
+  <vue-tinymce-text ref="tinymce" v-model="nativeValue"
                     :toolbar="toolbar" :menubar="menubar"
                     :width="width" :height="height" v-bind:config="conf"></vue-tinymce-text>
 </template>
@@ -72,6 +72,11 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    setContent(value) {
+      this.$refs['tinymce'].setContent(value)
+    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 {
   "name": "db-metadata",
-  "version": "2.2.58",
+  "version": "2.2.59",
   "description": "The frontend of Rapid development platform named DBMS(db-metadata-service)",
   "main": "lib/db-metadata.common.js",
   "keywords": [
@@ -35,7 +35,7 @@
     "vue-json-editor": "^1.4.0",
     "vue-markdown": "^2.2.4",
     "vue-router": "3.1.3",
-    "vue-tinymce-text": "^1.0.5",
+    "vue-tinymce-text": "^1.0.6",
     "vuedraggable": "^2.23.0",
     "vuepress": "^1.9.7",
     "xml-loader": "^1.2.1"
