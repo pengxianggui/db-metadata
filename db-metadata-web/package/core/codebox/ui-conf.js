@@ -31,6 +31,7 @@ export default {
         "smartIndent": true,
         "matchBrackets": true,
         "extraKeys": {'Ctrl': 'autocomplete'}, //自定义快捷键
+        "viewportMargin": Infinity
     },
     "explain": "" // 字段解释
 }

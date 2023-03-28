@@ -8,10 +8,10 @@
                @focus="$emit('focus', $event)">
         <template v-if="!innerMeta.group">
             <slot name="options" v-bind:options="innerOptions">
-                <el-option v-for="item in innerOptions" :key="item.value" :label="item.key||item.value"
-                           :value="item.value | stringify">
+                <el-option v-for="item in innerOptions" :key="item.value" :label="item.key || item.value"
+                           :value="item.value">
                     <slot :name="item.value" v-bind:option="item">
-                        {{item.key||item.value}}
+                        {{item.key || item.value}}
                     </slot>
                 </el-option>
             </slot>
@@ -22,10 +22,10 @@
                     :key="group.label"
                     :label="group.label">
                 <slot name="options" v-bind:options="innerOptions">
-                    <el-option v-for="item in group.options" :key="item.value" :label="item.key||item.value"
-                               :value="(item.value ? item.value : item) | stringify">
+                    <el-option v-for="item in group.options" :key="item.value" :label="item.key || item.value"
+                               :value="item.value ? item.value : item">
                         <slot :name="item.value" v-bind:options="item">
-                            {{item.key||item.value}}
+                            {{item.key || item.value}}
                         </slot>
                     </el-option>
                 </slot>

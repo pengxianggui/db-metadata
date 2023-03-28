@@ -5,7 +5,8 @@ export default function (value) {   // value could be String or Array
         case "[object String]":
             return utils.isEmpty(value) ? [] : value.split(','); // "1,2,3" => ["1", "2", "3"]
         case "[object Array]":
-            return value.map(ele => utils.convertToString(ele));    // [1,2,3] => ["1", "2", "3"]   (统一转为字符串)
+            // return value.map(ele => utils.convertToString(ele));    // [1,2,3] => ["1", "2", "3"]   (统一转为字符串)
+            return value;
         default:
             return [];
     }
