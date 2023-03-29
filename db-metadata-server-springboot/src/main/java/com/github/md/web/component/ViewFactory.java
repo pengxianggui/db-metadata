@@ -3,9 +3,11 @@ package com.github.md.web.component;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentRender;
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.form.FormView;
+import com.github.md.web.component.render.FreeViewRender;
 import com.github.md.web.component.render.MetaViewRender;
 import com.github.md.web.component.render.TreeInTableViewRender;
 import com.github.md.web.component.render.TreeViewRender;
@@ -37,6 +39,20 @@ public class ViewFactory {
     public static FormView formView(IMetaObject metaObject) {
         ComponentInstanceConfig instanceFlatConfig = ServiceManager.componentService().loadObjectConfig(ComponentType.FORMVIEW.getCode(), metaObject.code());
         return formView(metaObject, instanceFlatConfig);
+    }
+
+    /**
+     * 将meta反向构造为formView对象
+     *
+     * @param meta
+     * @return
+     */
+    public static FormView formView(Kv meta) {
+        FormView formView = new FormView(meta.getStr("name"), meta.getStr("label"));
+        ComponentRender<FormView> componentRender = new FreeViewRender<>(formView, meta);
+        formView.setRender(componentRender);
+        formView.buildChildren();
+        return formView;
     }
 
     public static FormView formView(IMetaObject metaObject, ComponentInstanceConfig instanceFlatConfig) {

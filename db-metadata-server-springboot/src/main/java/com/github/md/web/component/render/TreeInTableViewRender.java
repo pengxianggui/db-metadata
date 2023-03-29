@@ -45,6 +45,7 @@ public class TreeInTableViewRender implements ComponentRender<TableTreeView> {
     public Kv render() {
         Kv kv = UtilKit.getKv(componentInstanceConfig, metaObject.code());
         UtilKit.deepMerge(component.getMeta(), kv, false);
+        component.getFields().clear();
 
         for (IMetaField metaField : metaObject.fields()) {
             Kv config = UtilKit.getKv(componentInstanceConfig.getFieldsMap(), metaField.fieldCode());

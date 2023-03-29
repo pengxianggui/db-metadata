@@ -13,5 +13,10 @@ public interface ComponentRender<C> {
 
     C component();
 
+    /**
+     * 渲染json配置，即生成json。需要保证幂等，防止重复调用render导致重复数据
+     *
+     * @return
+     */
     Kv render();
 }

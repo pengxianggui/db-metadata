@@ -1,5 +1,7 @@
 package com.github.md.web.component.form;
 
+import com.github.md.web.component.render.FreeFormFieldRender;
+import com.github.md.web.component.render.FreeViewRender;
 import com.github.md.web.component.render.MetaFormFieldRender;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.component.ViewContainer;
@@ -30,7 +32,6 @@ public class FormFieldFactory {
      *
      * @param metaField
      * @param fieldInstanceConfig
-     *
      * @return
      */
     public static FormField createFormFieldDefault(IMetaField metaField, Kv fieldInstanceConfig) {
@@ -44,7 +45,6 @@ public class FormFieldFactory {
      * @param metaField
      * @param fieldInstanceConfig
      * @param viewContainer
-     *
      * @return
      */
     public static FormField createFormFieldInContainer(IMetaField metaField, Kv fieldInstanceConfig, ViewContainer viewContainer) {
@@ -63,7 +63,6 @@ public class FormFieldFactory {
      *
      * @param metaField
      * @param instanceFieldConfig 假定所有列都有对应存在的配置
-     *
      * @return
      */
     public static FormField createFormField(IMetaField metaField, Kv instanceFieldConfig) {
@@ -119,5 +118,69 @@ public class FormFieldFactory {
         }
         //if type == unknow  use TextBox
         return create(textBox, metaField, instanceFieldConfig);
+    }
+
+    /**
+     * 将meta反向构造formField对象
+     *
+     * @param meta
+     * @return
+     */
+    public static FormField createFormField(Kv meta) {
+        FormField formField;
+
+        ComponentType type = ComponentType.V(meta.getStr("component_name"));
+
+        switch (type) {
+            case CHECKBOX:
+                formField = new CheckBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case DROPDOWN:
+                formField = new DropDownBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case RADIOBOX:
+                formField = new RadioBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case NUMBERBOX:
+                formField = new NumberBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case BOOLBOX:
+                formField = new BoolBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case TEXTAREABOX:
+                formField = new TextAreaBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case DATEBOX:
+                formField = new DateBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case TIMEBOX:
+                formField = new TimeBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case DATETIMEBOX:
+                formField = new DateTimeBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case JSONBOX:
+                formField = new JsonBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case MINIFORMBOX:
+                formField = new MiniFormBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case FILEBOX:
+                formField = new FileBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case FINDBOX:
+                formField = new FindBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case IMAGEBOX:
+                formField = new ImageBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+            case TEXTBOX:
+            default:
+                formField = new TextBox(meta.getStr("name"), meta.getStr("label"));
+                break;
+        }
+
+        formField.setRender(new FreeFormFieldRender<>(formField, meta));
+        return formField;
     }
 }
