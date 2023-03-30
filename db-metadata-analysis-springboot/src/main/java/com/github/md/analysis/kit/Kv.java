@@ -29,7 +29,7 @@ import java.util.Map;
  * Kv para = Kv.by("id", 123);
  * User user = user.findFirst(getSqlPara("find", para));
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Kv extends HashMap {
 
     private static final long serialVersionUID = -6086130186405306902L;
@@ -81,6 +81,39 @@ public class Kv extends HashMap {
 
     public <T> T getAs(Object key) {
         return (T) get(key);
+    }
+
+    /**
+     * 获取key对应的value, 期望的类型为kv。
+     * 若值不存在，则创建一个空的kv并且put，若值存在但是类型不是kv, 则：
+     * <pre>
+     * 1. 若值为null，则用空的kv替换旧值, 并返回空kv
+     * 2. 若值为kv, 则直接返回
+     * 3. 若值为map, 或map子类，则转为kv并刷新旧值后返回kv
+     * 4. 若值为其他类型的值，则抛出异常 {@link ClassCastException}
+     * </pre>
+     * <b>注意：此方法虽为get, 但是可能会改变内部key对应的value值</b>
+     *
+     * @param key
+     * @return
+     */
+    public Kv getKvPutIfAbsent(Object key) {
+        Kv value;
+        Object obj = get(key);
+
+        if (obj == null) {
+            value = Kv.create();
+            put(key, value);
+            return value;
+        } else if (obj instanceof Kv) {
+            return (Kv) obj;
+        } else if (obj instanceof Map) {
+            value = Kv.create().set((Map) obj);
+            put(key, value);
+            return value;
+        } else {
+            throw new ClassCastException(obj.getClass().toString() + " cannot be cast to " + this.getClass().toString());
+        }
     }
 
     public String getStr(Object key) {

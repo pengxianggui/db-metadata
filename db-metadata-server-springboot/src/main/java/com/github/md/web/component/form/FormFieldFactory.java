@@ -180,7 +180,9 @@ public class FormFieldFactory {
                 break;
         }
 
-        formField.setRender(new FreeFormFieldRender<>(formField, meta));
+        FreeFormFieldRender render = new FreeFormFieldRender<>(formField, meta);
+        render.render(); // 直接渲染将render中的meta数据反向填充到formField
+        formField.setRender(render);
         return formField;
     }
 }

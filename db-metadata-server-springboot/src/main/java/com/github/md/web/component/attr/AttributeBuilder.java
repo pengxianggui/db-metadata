@@ -271,14 +271,14 @@ public class AttributeBuilder {
         @Override
         public TreeTableAttr hasChildren(String functionName) {
             setConf("tree-props", Kv.create());
-            ((Kv) ((Kv) config.getAs("conf")).getAs("tree-props")).setIfNotBlank("hasChildren", functionName);
+            config.getKvPutIfAbsent("conf").getKvPutIfAbsent("tree-props").setIfNotBlank("hasChildren", functionName);
             return this;
         }
 
         @Override
         public TreeTableAttr children(String childPropertyName) {
             setConf("tree-props", Kv.create());
-            ((Kv) ((Kv) config.getAs("conf")).getAs("tree-props")).setIfNotBlank("children", childPropertyName);
+            config.getKvPutIfAbsent("conf").getKvPutIfAbsent("tree-props").setIfNotBlank("children", childPropertyName);
             return this;
         }
 
@@ -384,7 +384,7 @@ public class AttributeBuilder {
 
         public FatAttributeBuilder setConf(String key, Object value) {
             config.putIfAbsent("conf", Kv.create());
-            ((Kv) config.getAs("conf")).setIfNotNull(key, value);
+            config.getKvPutIfAbsent("conf").setIfNotNull(key, value);
             return this;
         }
 

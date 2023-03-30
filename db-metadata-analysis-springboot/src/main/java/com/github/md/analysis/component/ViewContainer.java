@@ -4,6 +4,7 @@ import com.github.md.analysis.kit.Kv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +35,10 @@ public abstract class ViewContainer extends Component {
 
     public void remove(Component component) {
         fields.remove(component);
+    }
+
+    public void remove(Predicate<Component> predicate) {
+        fields.removeIf(predicate);
     }
 
     public List<Component> getFields() {
