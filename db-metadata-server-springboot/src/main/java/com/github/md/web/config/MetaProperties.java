@@ -103,6 +103,7 @@ public class MetaProperties {
     @Data
     public static class Login {
         private String tokenKey = "X-TOKEN";
+        private String tokenIn = "localStorage"; // token在前端的存储位置，默认是localStorage
         private String cookieKey = "DB-Metadata";
         private String loginKey = "username";
         private String pwdKey = "password";

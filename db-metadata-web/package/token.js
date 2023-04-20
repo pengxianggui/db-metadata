@@ -1,15 +1,45 @@
 import {appConfig} from "./config";
+import {setCookie, getCookie, deleteCookie} from "./utils/cookies";
 
 const set = function (token) {
-    localStorage.setItem(appConfig.tokenKey, token)
+    const {tokenKey, tokenIn} = appConfig
+    switch (tokenIn) {
+        case 'cookies':
+            setCookie(tokenKey, token)
+            break;
+        case 'localStorage':
+        default:
+            localStorage.setItem(tokenKey, token)
+            break;
+    }
 }
 
 const get = function () {
-    return localStorage.getItem(appConfig.tokenKey)
+    const {tokenKey, tokenIn} = appConfig
+    let tokenValue
+    switch (tokenIn) {
+        case 'cookies':
+            tokenValue = getCookie(tokenKey)
+            break;
+        case 'localStorage':
+        default:
+            tokenValue = localStorage.getItem(tokenKey)
+            break;
+    }
+    return tokenValue
 }
 
 const remove = function () {
-    localStorage.removeItem(appConfig.tokenKey)
+    const {tokenKey, tokenIn} = appConfig
+    switch (tokenIn) {
+        case 'cookies':
+            deleteCookie(tokenKey)
+            break;
+        case 'localStorage':
+        default:
+            localStorage.removeItem(tokenKey)
+            break;
+    }
 }
 
 const getTokenKey = function () {

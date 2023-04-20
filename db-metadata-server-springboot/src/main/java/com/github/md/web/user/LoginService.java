@@ -26,9 +26,19 @@ public interface LoginService<U extends UserWithRolesWrapper> {
     }
 
     /**
+     * 从Request中获取用户标识时需要用到的tokenIn, 标识token是存储在cookie中，还是请求头中
+     *
+     * @return
+     */
+    default String tokenIn() {
+        return ServiceManager.getAppProperties().getServer().getLogin().getTokenIn();
+    }
+
+    /**
      * 从cookie中获取用户标志时需要用到的key
      *
      * @return
+     * @deprecated 废弃，前端请求时无论token放在header还是cookie， 其键名都通过{@link #tokenKey()}指定
      */
     @Deprecated
     default String cookieKey() {

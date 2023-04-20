@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * 按优先级依次从cookie或请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。
- * 登录的用户也将存储在内存中。
+ * 从请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。你可以覆盖{@link #getUser(HttpServletRequest)}方法，依据request对象
+ * 获取已登录的用户并返回。通常，这需要和登录成功时缓存用户处，进行配合呼应
  *
  * <p> @Date : 2019/12/13 </p>
  * <p> @Project : db-meta-serve</p>

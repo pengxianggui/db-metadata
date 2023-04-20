@@ -20,6 +20,7 @@ public class AppPropVO {
     private boolean enableCertification; // 启用登录
     private boolean devMode; // 开发模式
     private String tokenKey; // 前后端token存储于header中key
+    private String tokenIn; // 前端token存储位置，可选: localStorage 或 cookies
     private String loginKey; // 登录时的用户名键
     private String pwdKey; // 登录时的密码键
     private String loginBg;
@@ -38,6 +39,7 @@ public class AppPropVO {
                      boolean enableCertification,
                      boolean devMode,
                      String tokenKey,
+                     String tokenIn,
                      String loginKey,
                      String pwdKey,
                      String loginBg,
@@ -53,6 +55,7 @@ public class AppPropVO {
         this.enableCertification = enableCertification;
         this.devMode = devMode;
         this.tokenKey = tokenKey;
+        this.tokenIn = tokenIn;
         this.loginKey = loginKey;
         this.pwdKey = pwdKey;
         this.loginBg = loginBg;

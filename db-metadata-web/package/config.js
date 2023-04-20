@@ -21,6 +21,7 @@ export const appConfig = {
     enableCertification: true,
     devMode: false,
     tokenKey: 'X-TOKEN',
+    tokenIn: 'localStorage',
     loginKey: 'username',
     pwdKey: 'password',
     showGreeting: true,
@@ -46,7 +47,7 @@ export const configApp = function (Vue, opts = {}) {
                 JSON.stringify(appConfig),
                 utils.assertEmpty(message, msg))
         } else {
-            utils.reverseMerge(appConfig, data)
+            utils.reverseMerge(appConfig, data, true, true)
         }
 
     } else { // 系统配置失败，则系统不可用
