@@ -12,31 +12,19 @@
 >
 > 如果2.3发布后存在bug, 则会在2.3.x上进行bug修复，多次修复并发布则多次自增x, 但是无论修正版本号加到多少。后端的2.3.x和前端的2.3.x一定是兼容的，互相玩得转的。
 
-
-
 若选择某个版本的dbmeta时，例如2.3版本，则后端可以使用: `2.3`或`2.3.x`(若有后者说明存在bug修复)，也可以用`2.3-SNAPSHOT`（2.3还未发布，仍处于开发中的情况，注意，SNAPSHOT不保证可靠）；前端的话可以使用：`~2.3.0`。
 
 > **以上规范从2.3开始践行**
 
 
+## v2.4
+
+* [ ]  移除静态配置的ROOT用户，改为从动态user中进行鉴别，user是否为ROOT由业务系统去定义。
+* [ ]  移除asoco-common的所有依赖
+* [ ]  修复当树表中的pid设置为不在表格中显示时，列表无法呈现树结构的问题
+* [ ]  升级认证鉴权模块，使业务系统满足更多场景。如：1. 用户、角色、权限托管在第三方的场景；
+
+
 ## v2.3
 
-后端:
-
-```xml
-<dependency>
-    <groupId>com.github.md</groupId>
-    <artifactId>db-metadata-server-springboot</artifactId>
-    <version>2.3</version>
-</dependency>
-```
-
-前端:
-
-```json
-{
-  "dependencies": {
-    "db-metadata": "~2.3.0"
-  }
-}
-```
+略~
