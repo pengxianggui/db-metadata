@@ -57,8 +57,6 @@
 
 <script>
 import access from "../../access";
-import {isEmpty, randomInt} from "../../utils/common";
-import {resolve} from "../../utils/url";
 import {restUrl} from "../../constant/url";
 
 export default {

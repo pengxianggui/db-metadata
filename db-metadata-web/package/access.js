@@ -15,7 +15,11 @@ export const access = {
     user: {
         id: null,
         username: null,
-        avatar: 'avatar' + randomInt(1, 14)
+        avatar: 'avatar' + randomInt(1, 14),
+        roles: [],
+        auths: [],
+        root: false,
+        attrs: {}
     }
 }
 
@@ -52,9 +56,7 @@ export const detect = function (Vue) {
  * @returns {boolean}
  */
 export function isRoot() {
-    const rootUserId = access.root;
-    const {user: {id}} = access
-    return rootUserId === id
+    return access.user.root
 }
 
 export function hasRole(needRoles, mode = 'any') {

@@ -17,7 +17,10 @@ import java.util.Map;
  *
  * @author pengxg
  * @date 2022/3/7 8:55 上午
+ * @deprecated 静态用户的缺点是很明显的。首先是灵活度上ROOT用户只能有一个账号，而且ROOT用户存在于配置文件中，跟数据库里的用户表是分开的，处理上很不便(这也是为什么
+ * {@link AuthenticationManager#login(String, String)})中需要区分对待ROOT账号的原因，而且安全性上，也比较欠妥。
  */
+@Deprecated
 public final class Root implements UserWithRolesWrapper {
     private static Root instance;
 

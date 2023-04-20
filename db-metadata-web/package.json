@@ -18,7 +18,8 @@
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name db-metadata --dest lib package/index.js",
     "pub": "npm publish --registry https://registry.npmjs.org/",
-    "release": "npm version patch && npm run lib && npm run pub"
+    "release": "npm run lib && npm run pub",
+    "patch": "npm version patch && npm run release"
   },
   "dependencies": {
     "@pxg/vue-address": "0.0.4",

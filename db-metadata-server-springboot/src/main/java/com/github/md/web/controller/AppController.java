@@ -23,7 +23,7 @@ public class AppController extends ControllerAdapter {
     @GetMapping("config")
     public Ret config() {
         AppPropVO vo = new AppPropVO(
-                AppConst.version,
+                metaProperties.getVersion(),
                 metaProperties.getApp().getName(),
                 metaProperties.getApp().getShowVersion(),
                 metaProperties.getApp().getLogo(),

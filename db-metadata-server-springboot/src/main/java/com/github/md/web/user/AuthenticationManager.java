@@ -92,8 +92,8 @@ public class AuthenticationManager {
         // 此资源需要鉴权，必定需要用户登录
         AssertUtil.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
 
-        if (isRoot(user)) {
-            return true; // ROOT权限一切放行
+        if (user.isRoot()) { // root不校验
+            return true;
         }
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {
@@ -110,7 +110,9 @@ public class AuthenticationManager {
      *
      * @param user
      * @return
+     * @deprecated 直接使用 {@link User#isRoot()}
      */
+    @Deprecated
     public boolean isRoot(User user) {
         return Root.me().equals(user);
     }
@@ -118,49 +120,27 @@ public class AuthenticationManager {
     /**
      * 兼容ROOT登录
      *
-     * @param uid
-     * @param pwd
+     * @param identity 身份，可以是账号名，或手机号，亦或是其他
+     * @param pwd      密码
      * @return
+     * @deprecated 请直接使用 {@link LoginService#login(String, String)}，若如此，请确保其内部调用了缓存了用户({@link LoginService#setLogged(UserWithRolesWrapper)})
      */
-    public LoginVO login(String uid, String pwd) {
-        Root root = Root.me();
-        UserWithRolesWrapper userWithRolesWrapper;
-        if (uid.equals(root.getLoginName())) { // 优先鉴定ROOT
-            String encryptedPass = PassKit.encryptPass(pwd);
-            AssertUtil.isTrue(encryptedPass.equals(root.getLoginPass()), "密码错误！"); // TODO 超过4次将锁定ROOT账号
-
-            userWithRolesWrapper = Root.me();
-            String token = new JWTTokenGenerator().generate(userWithRolesWrapper);
-            AuthenticationManager.me().getLoginUsers().put(token, userWithRolesWrapper);
-            return DefaultLoginVO.builder().token(token)
-                    .id(userWithRolesWrapper.userId())
-                    .username(userWithRolesWrapper.userName())
-                    .avatar(userWithRolesWrapper.avatar())
-                    .attrs(userWithRolesWrapper.attrs()).build();
-        }
-
-        userWithRolesWrapper = loginService.login(uid, pwd);
+    @Deprecated
+    public LoginVO login(String identity, String pwd) {
+        UserWithRolesWrapper userWithRolesWrapper = loginService.login(identity, pwd);
         AssertUtil.isTrue(userWithRolesWrapper != null, "用户名或密码输入错误");
         return loginService.setLogged(userWithRolesWrapper);
     }
 
     /**
-     * 获取当前登录用户, 兼容ROOT
+     * 获取当前登录用户
      *
      * @param request
      * @return
+     * @deprecated 直接使用 {@link LoginService#getUser(HttpServletRequest)}
      */
+    @Deprecated
     public UserWithRolesWrapper getUser(HttpServletRequest request) {
-        String token = request.getHeader(loginService.tokenKey());
-        if (StrKit.isBlank(token)) {
-            return null;
-        }
-
-        UserWithRolesWrapper user = getLoginUsers().getIfPresent(token);
-        if (isRoot(user)) {
-            return user;
-        }
-
         return this.loginService.getUser(request);
     }
 
@@ -169,18 +149,10 @@ public class AuthenticationManager {
      *
      * @param request
      * @return
+     * @deprecated 直接使用 {@link LoginService#getInfo(HttpServletRequest)}
      */
+    @Deprecated
     public LoginVO getInfo(HttpServletRequest request) {
-        UserWithRolesWrapper user = getUser(request);
-        if (isRoot(user)) {
-            String token = request.getHeader(loginService.tokenKey());
-            return DefaultLoginVO.builder().token(token)
-                    .id(user.userId())
-                    .username(user.userName())
-                    .avatar(user.avatar())
-                    .attrs(user.attrs()).build();
-        }
-
         return this.loginService.getInfo(request);
     }
 
@@ -189,13 +161,10 @@ public class AuthenticationManager {
      *
      * @param user
      * @return
+     * @deprecated 直接使用 {@link LoginService#logout(UserWithRolesWrapper)}
      */
+    @Deprecated
     public boolean logout(UserWithRolesWrapper user) {
-        if (isRoot(user)) {
-            getLoginUsers().invalidate(user.userId());
-            return true;
-        }
-
         return loginService.logout(user);
     }
 }

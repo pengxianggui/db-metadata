@@ -29,7 +29,8 @@ public class LoginController extends ControllerAdapter {
         String uid = parameterHelper().getPara(AuthenticationManager.me().getLoginService().loginKey());
         String pwd = parameterHelper().getPara(AuthenticationManager.me().getLoginService().pwdKey());
 
-        LoginVO loginVO = AuthenticationManager.me().login(uid, pwd);
+        UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().login(uid, pwd);
+        LoginVO loginVO = AuthenticationManager.me().getLoginService().setLogged(user);
         if (loginVO != null) {
             return Ret.ok("data", loginVO);
         } else {

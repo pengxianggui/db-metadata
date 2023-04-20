@@ -84,13 +84,13 @@ public interface LoginService<U extends UserWithRolesWrapper> {
     }
 
     /**
-     * 登录验证。若验证成功，则返回用户。
+     * 登录验证。若验证成功，则返回用户。你应当在此方法中调用 {@link #setLogged(UserWithRolesWrapper)}, 以便缓存登录用户
      *
-     * @param username
+     * @param identity
      * @param password
      * @return
      */
-    U login(String username, String password);
+    U login(String identity, String password);
 
     /**
      * 获取登录信息

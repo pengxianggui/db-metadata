@@ -5,11 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
+import com.github.md.web.AppConst;
 import com.github.md.web.WebException;
 import com.github.md.web.kit.tree.TreeNode;
-import com.github.md.web.user.Root;
 import com.github.md.web.user.User;
-import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.UserThreadLocal;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -103,7 +102,7 @@ public class UtilKit {
             data.put("created_by", user.userId());
             data.put("created_time", new Date());
         } else {
-            data.put("created_by", Root.me().userId());
+            data.put("created_by", AppConst.UN_KNOW_USERNAME);
             data.put("created_time", new Date());
         }
     }
@@ -114,7 +113,7 @@ public class UtilKit {
             data.put("updated_by", user.userId());
             data.put("updated_time", new Date());
         } else {
-            data.put("created_by", Root.me().userId());
+            data.put("created_by", AppConst.UN_KNOW_USERNAME);
             data.put("created_time", new Date());
         }
     }

@@ -10,6 +10,7 @@ import com.github.md.web.user.role.UserWithRolesWrapper;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  */
 public class LocalUser implements User, UserWithRolesWrapper, LoginVO {
 
+    private static final String ROOT_USER_ID = "0";
     public static final String ID_KEY = "userId";
 
     Kv attrs;
@@ -64,6 +66,11 @@ public class LocalUser implements User, UserWithRolesWrapper, LoginVO {
     public Kv attrs(Map attrs) {
         UtilKit.deepMerge(this.attrs, attrs, true);
         return this.attrs;
+    }
+
+    @Override
+    public boolean isRoot() {
+        return Objects.equals(userId(), ROOT_USER_ID); // 将id为0视作ROOT
     }
 
     @Override

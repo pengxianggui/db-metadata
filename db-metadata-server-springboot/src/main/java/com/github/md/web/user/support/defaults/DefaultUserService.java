@@ -106,9 +106,9 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     }
 
     @Override
-    public DefaultUserWithRoles login(String username, String password) {
+    public DefaultUserWithRoles login(String identity, String password) {
         Record record = db().findFirst("select * from meta_user where username=? and password=?",
-                username, PassKit.encryptPass(password));
+                identity, PassKit.encryptPass(password));
 
         if (record == null) {
             return null;
@@ -137,6 +137,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     private LoginVO createLoginVO(String token, UserWithRolesWrapper user) {
         return DefaultLoginVO.builder()
                 .token(token)
+                .root(user.isRoot())
                 .id(user.userId())
                 .username(user.userName())
                 .avatar(user.avatar())

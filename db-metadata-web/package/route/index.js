@@ -6,7 +6,7 @@ import systemRoutes from './data/system'
 import assembleMetaRoute from './data/meta'
 import assembleDynamicRoute from './data/dynamic'
 import {routeUrl} from "../constant/url";
-import {assert, isArray, isBoolean, isEmpty, isFunction, isString} from "../utils/common";
+import {assert, isArray, isBoolean, isEmpty, isFunction} from "../utils/common";
 import {appConfig} from "../config";
 import {utils} from "../index";
 

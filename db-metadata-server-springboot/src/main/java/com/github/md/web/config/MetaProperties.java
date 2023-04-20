@@ -26,6 +26,8 @@ public class MetaProperties {
 
     private boolean devMode = false;
 
+    private String version;
+
     /**
      * !!! Very important !!!
      * Inject the configuration used by the analysis module

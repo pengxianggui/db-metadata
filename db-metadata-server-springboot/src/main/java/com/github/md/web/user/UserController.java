@@ -67,8 +67,8 @@ public class UserController extends ControllerAdapter {
     @MetaAccess
     @GetMapping("roles")
     public Ret getRoles() {
-        UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        List<MRRole> roles = AuthenticationManager.me().isRoot(user)
+        UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().getUser(getRequest());
+        List<MRRole> roles = user.isRoot()
                 ? AuthenticationManager.me().getRoleService().findAll()
                 : AuthenticationManager.me().getRoleService().findByUser(user.userId());
 
@@ -79,8 +79,8 @@ public class UserController extends ControllerAdapter {
     @Authorize(justSign = true)
     @GetMapping("auths")
     public Ret getAuths() {
-        UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        List<IAuth> auths = AuthenticationManager.me().isRoot(user)
+        UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().getUser(getRequest());
+        List<IAuth> auths = user.isRoot()
                 ? AuthenticationManager.me().getAuthService().findAll()
                 : AuthenticationManager.me().getAuthService().findByUser(user.userId());
 

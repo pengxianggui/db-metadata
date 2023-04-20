@@ -20,4 +20,5 @@ public class DefaultLoginVO implements LoginVO {
     private Set<String> roles;
     private Set<String> auths;
     private Map<String, Object> attrs;
+    private boolean root;
 }

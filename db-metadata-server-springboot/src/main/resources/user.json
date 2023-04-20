@@ -1,6 +1,15 @@
 {
   "users": [
     {
+      "userId": 0,
+      "userName": "ROOT",
+      "password": "888888",
+      "attrs": {
+        "sex": 1,
+        "address": "嘉兴市南湖区"
+      }
+    },
+    {
       "userId": 1,
       "userName": "administrator",
       "password": "123456",

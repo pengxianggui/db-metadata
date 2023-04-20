@@ -45,9 +45,9 @@ public class LocalUserService extends AbstractUserService<LocalUser, LocalUser> 
     }
 
     @Override
-    public LocalUser login(String username, String password) {
+    public LocalUser login(String identity, String password) {
         LocalUser user = null;
-        List<LocalUser> userList = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(username) && l.password().equals(password)).collect(Collectors.toList());
+        List<LocalUser> userList = findAll().stream().filter(l -> l.userName().equalsIgnoreCase(identity) && l.password().equals(password)).collect(Collectors.toList());
 
         if (!userList.isEmpty()) {
             user = userList.get(0);
