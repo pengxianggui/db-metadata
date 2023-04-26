@@ -1,27 +1,26 @@
 package com.github.md.web.component;
 
-import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSON;
-import com.github.md.web.WebException;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.SnowFlake;
+import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.web.kit.DateKit;
+import com.github.md.web.kit.Okv;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.user.User;
 import com.github.md.web.user.UserThreadLocal;
-import com.github.md.web.kit.DateKit;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.web.kit.Okv;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -256,7 +255,7 @@ public class ComponentService {
         AtomicReference<String> objectCode = new AtomicReference<>();
         AtomicReference<String> instanceName = new AtomicReference<>();
 
-        AssertUtil.isTrue(!CollectionUtils.isEmpty(records), new WebException("容器实例配置不存在, ic=%s", ic));
+        Assert.isTrue(!CollectionUtils.isEmpty(records), String.format("容器实例配置不存在, ic=%s", ic));
 
         records.forEach(record -> {
             if (record.getStr("type").equals(INSTANCE.META_OBJECT.toString())) {

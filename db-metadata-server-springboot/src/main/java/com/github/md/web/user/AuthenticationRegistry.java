@@ -1,14 +1,13 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.web.user.auth.AuthService;
 import com.github.md.web.user.auth.MRAuthInterceptDoer;
 import com.github.md.web.user.auth.MRPermit;
 import com.github.md.web.user.auth.MResource;
+import com.github.md.web.user.auth.annotations.Authorize;
 import com.github.md.web.user.auth.defaults.*;
 import com.github.md.web.user.role.DefaultRoleService;
 import com.github.md.web.user.role.RoleService;
-import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.github.md.web.user.support.defaults.DefaultUserService;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;

@@ -1,6 +1,6 @@
 package com.github.md.web.user.auth;
 
-import cn.com.asoco.util.AssertUtil;
+import com.github.md.web.kit.AssertKit;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -41,7 +41,7 @@ public class MRAuthIntercept implements HandlerInterceptor {
             }
         }
 
-        AssertUtil.isTrue(flag, new UnauthorizedException("无权限访问!"));
+        AssertKit.isTrue(flag, new UnauthorizedException("无权限访问!"));
 
         return true;
     }

@@ -1,6 +1,6 @@
 package com.github.md.web.user.auth;
 
-import cn.com.asoco.util.AssertUtil;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.UnLoginException;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.defaults.AnnotateApiResource;
@@ -38,7 +38,7 @@ public class MRManager {
     private final Map<String, MResource> allMResource = new HashMap<>();
 
     /**
-     * 资源、判定器映射表，指定资源要使用的判定器
+     * 资源、判定器映射表，指定资源以及此资源所使用的判定器。
      */
     private final Map<Class<? extends MResource>, MRPermit> resourcePermitMapping = new HashMap<>();
 
@@ -107,7 +107,7 @@ public class MRManager {
         }
 
         // 此资源需要鉴权，必定需要用户登录
-        AssertUtil.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
+        AssertKit.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
 
         for (Map.Entry<Class<? extends MResource>, MRPermit> entry : resourcePermitMapping.entrySet()) {
             if (entry.getKey().isInstance(mResource)) {

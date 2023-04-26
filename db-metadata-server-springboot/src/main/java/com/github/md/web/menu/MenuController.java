@@ -2,7 +2,7 @@ package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.web.kit.tree.TreeConfig;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("menu")
 public class MenuController extends ControllerAdapter {
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping
     public Ret index() {
         IMetaObject metaObject = metaService().findByCode("meta_menu");
@@ -45,7 +45,7 @@ public class MenuController extends ControllerAdapter {
         return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("profile")
     public Ret profileMenu() {
         IMetaObject metaObject = metaService().findByCode("meta_profile_menu");

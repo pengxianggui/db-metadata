@@ -1,11 +1,11 @@
 package com.github.md.web.user.role;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.auth.IAuth;
+import com.github.md.web.user.auth.annotations.Authorize;
 import com.jfinal.kit.StrKit;
 import org.springframework.web.bind.annotation.*;
 

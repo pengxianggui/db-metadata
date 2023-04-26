@@ -21,7 +21,6 @@
         <fastjson.version>1.2.83</fastjson.version>
         <druid.version>1.2.6</druid.version>
         <activerecord.version>4.9.16</activerecord.version>
-        <asoco-common.version>2.2.0-SNAPSHOT</asoco-common.version>
         <guava.version>30.1.1-jre</guava.version>
         <hutool.version>5.7.20</hutool.version>
         <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
@@ -50,11 +49,6 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.hthjsj</groupId>
-                <artifactId>asoco-common</artifactId>
-                <version>${asoco-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -154,83 +148,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-shade-plugin</artifactId>-->
-            <!--                <version>3.2.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>shade</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            &lt;!&ndash;                            自动排除不使用的类&ndash;&gt;-->
-            <!--                            &lt;!&ndash;                            <minimizeJar>true</minimizeJar>&ndash;&gt;-->
-            <!--                            <createDependencyReducedPom>false</createDependencyReducedPom>-->
-            <!--                            <transformers>-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-            <!--                                    <mainClass>com.hthjsj.web.DynamicWebConfigFacade</mainClass>-->
-            <!--                                </transformer>-->
-
-            <!--                                &lt;!&ndash;-->
-            <!--                                    下面的配置支持排除指定文件打包到 jar 之中，可以用于排除需要修改的配置文件以便于在外部的 config 目录下的-->
-            <!--                                    同名配置文件生效，建议使用 Prop.appendIfExists(xxx_pro.txt) 在外部放一个非同名配置来覆盖开发环境的配置-->
-            <!--                                    则可以不用使用下面的配置，文档参考:-->
-            <!--                                        https://www.jianshu.com/p/7a0e20b30401-->
-            <!--                                        http://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html#DontIncludeResourceTransformer-->
-            <!--                                &ndash;&gt;-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">-->
-            <!--                                    <resources>-->
-            <!--                                        &lt;!&ndash; <resource>demo-config-dev.txt</resource> &ndash;&gt;-->
-            <!--                                        &lt;!&ndash; <resource>.PDF</resource> &ndash;&gt;-->
-            <!--                                        &lt;!&ndash; <resource>READ.md</resource> &ndash;&gt;-->
-            <!--                                    </resources>-->
-            <!--                                </transformer>-->
-            <!--                            </transformers>-->
-            <!--                            <artifactSet>-->
-            <!--                                <excludes>-->
-            <!--                                    <exclude>org.jboss.logging:*</exclude>-->
-            <!--                                    <exclude>io.undertow:*</exclude>-->
-            <!--                                    <exclude>com.jfinal:*</exclude>-->
-            <!--                                    <exclude>org.checkerframework:*</exclude>-->
-            <!--                                    <exclude>com.alibaba:druid:jar:</exclude>-->
-            <!--                                </excludes>-->
-            <!--                            </artifactSet>-->
-            <!--                            &lt;!&ndash;-->
-            <!--                                解决 fatjar 的 "java.lang.SecurityException: Invalid signature file digest-->
-            <!--                                for Manifest main attributes" 问题-->
-            <!--                            &ndash;&gt;-->
-            <!--                            <filters>-->
-            <!--                                <filter>-->
-            <!--                                    <artifact>*:*</artifact>-->
-            <!--                                    <excludes>-->
-            <!--                                        <exclude>META-INF/*.SF</exclude>-->
-            <!--                                        <exclude>META-INF/*.DSA</exclude>-->
-            <!--                                        <exclude>META-INF/*.RSA</exclude>-->
-            <!--                                    </excludes>-->
-            <!--                                </filter>-->
-            <!--                            </filters>-->
-            <!--                            <relocations>-->
-            <!--                                <relocation>-->
-            <!--                                    <pattern>com.google.guava</pattern>-->
-            <!--                                    <shadedPattern>com.github.konbluesky.google.guava</shadedPattern>-->
-            <!--                                </relocation>-->
-            <!--                                <relocation>-->
-            <!--                                    <pattern>com.google.common</pattern>-->
-            <!--                                    <shadedPattern>com.github.konbluesky.google.common</shadedPattern>-->
-            <!--                                </relocation>-->
-            <!--&lt;!&ndash;                                <relocation>&ndash;&gt;-->
-            <!--&lt;!&ndash;                                    <pattern>com.github.konbluesky</pattern>&ndash;&gt;-->
-            <!--&lt;!&ndash;                                    <shadedPattern>com.digitalcitylab.md</shadedPattern>&ndash;&gt;-->
-            <!--&lt;!&ndash;                                </relocation>&ndash;&gt;-->
-            <!--                            </relocations>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 

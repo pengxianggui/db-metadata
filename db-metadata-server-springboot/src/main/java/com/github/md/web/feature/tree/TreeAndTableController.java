@@ -25,7 +25,7 @@ import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.ui.UIManager;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -60,7 +60,7 @@ public class TreeAndTableController extends ControllerAdapter {
      * 1. 显式指定Tree组件的Data_Url
      * 2. 显式指定Table组件的DataUrl
      */
-    @MetaAccess(value = Type.API_WITH_META_FEATURE)
+    @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
@@ -82,7 +82,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return (Ret.ok("data", Kv.create().set("table", tableView.toKv()).set("tree", treeMeta).set("search", searchView.toKv())));
     }
 
-    @MetaAccess(value = Type.API_WITH_META_FEATURE)
+    @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -135,7 +135,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
-    @MetaAccess(value = Type.API_WITH_META_FEATURE)
+    @ApiType(value = Type.API_WITH_META_FEATURE)
     @PostMapping("doAdd")
     public Ret doAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -181,7 +181,7 @@ public class TreeAndTableController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_FEATURE)
+    @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("tableList")
     public Object tableList() {
         /**

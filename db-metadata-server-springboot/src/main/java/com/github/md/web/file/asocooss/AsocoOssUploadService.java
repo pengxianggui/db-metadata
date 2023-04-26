@@ -1,11 +1,10 @@
 package com.github.md.web.file.asocooss;
 
-import cn.com.asoco.http.HttpResult;
-import cn.com.asoco.util.AssertUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.web.file.FileUploadException;
 import com.github.md.web.file.UploadService;
+import com.github.md.web.kit.AssertKit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,10 +45,10 @@ public class AsocoOssUploadService implements UploadService {
             paramsMap.put("bucketName", this.asocoOssProperties.getBucketName());
 
             String resultStr = HttpUtil.post(this.asocoOssProperties.getBasicServiceUrl() + this.asocoOssProperties.getUploadPath(), paramsMap);
-            HttpResult result = JSONObject.parseObject(resultStr, HttpResult.class);
+            JSONObject result = JSONObject.parseObject(resultStr);
 
-            AssertUtil.isTrue(result.getCode() == 0, result.getMessage());
-            return this.asocoOssProperties.getBasicServiceUrl() + result.getData();
+            AssertKit.isTrue(result.getInteger("code") == 0, result.getString("message"));
+            return this.asocoOssProperties.getBasicServiceUrl() + result.getString("data");
 
         } catch (Exception e) {
             throw new FileUploadException(file, e);

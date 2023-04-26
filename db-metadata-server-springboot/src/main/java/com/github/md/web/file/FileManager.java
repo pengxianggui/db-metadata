@@ -1,6 +1,5 @@
 package com.github.md.web.file;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.DbMetaConfigException;
 import com.github.md.web.DbMetaConfigurer;
@@ -8,6 +7,7 @@ import com.github.md.web.ServiceManager;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.file.asocooss.AsocoOssUploadService;
 import com.github.md.web.file.local.LocalFileService;
+import com.github.md.web.kit.AssertKit;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,8 +58,8 @@ public class FileManager {
     }
 
     private void config(String mode, UploadService uploadService) {
-        AssertUtil.isTrue(StrKit.notBlank(mode), "请指定mode！");
-        AssertUtil.isTrue(uploadService != null, "uploadService不能为null");
+        AssertKit.isTrue(StrKit.notBlank(mode), "请指定mode！");
+        AssertKit.isTrue(uploadService != null, "uploadService不能为null");
 
         if (registeredUploadService.containsKey(mode)) {
             log.warn("已经存在mode为{}的上传服务, 将覆盖，请知晓!", mode);
@@ -69,8 +69,8 @@ public class FileManager {
     }
 
     private void config(String mode, DownloadService downloadService) {
-        AssertUtil.isTrue(StrKit.notBlank(mode), "请指定mode！");
-        AssertUtil.isTrue(downloadService != null, "uploadService不能为null");
+        AssertKit.isTrue(StrKit.notBlank(mode), "请指定mode！");
+        AssertKit.isTrue(downloadService != null, "uploadService不能为null");
 
         if (registeredDownloadService.containsKey(mode)) {
             log.warn("已经存在mode为{}的下载服务, 将覆盖原有模式的配置!", mode);
@@ -95,7 +95,7 @@ public class FileManager {
      * @return
      */
     public UploadService getUploadService(String mode) {
-        AssertUtil.isTrue(registeredUploadService.containsKey(mode), new DbMetaConfigException(String.format("未配置model为%s的上传服务！", mode)));
+        AssertKit.isTrue(registeredUploadService.containsKey(mode), new DbMetaConfigException(String.format("未配置model为%s的上传服务！", mode)));
         return registeredUploadService.get(mode);
     }
 
@@ -114,7 +114,7 @@ public class FileManager {
      * @return
      */
     public DownloadService getDownloadService(String mode) {
-        AssertUtil.isTrue(registeredDownloadService.containsKey(mode), new DbMetaConfigException(String.format("未配置mode为%s的下载服务!", mode)));
+        AssertKit.isTrue(registeredDownloadService.containsKey(mode), new DbMetaConfigException(String.format("未配置mode为%s的下载服务!", mode)));
         return registeredDownloadService.get(mode);
     }
 

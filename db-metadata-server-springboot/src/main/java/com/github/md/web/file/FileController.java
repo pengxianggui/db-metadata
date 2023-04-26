@@ -1,21 +1,19 @@
 package com.github.md.web.file;
 
-import cn.com.asoco.util.AssertUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ZipUtil;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
-import com.github.md.web.WebException;
-import com.google.common.base.Preconditions;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.web.component.form.RichTextBox;
-import com.github.md.web.controller.ControllerAdapter;
-import com.github.md.web.query.QueryHelper;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.web.WebException;
+import com.github.md.web.component.form.RichTextBox;
+import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.kit.AssertKit;
+import com.github.md.web.query.QueryHelper;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.Preconditions;
 import com.jfinal.kit.StrKit;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -45,19 +43,17 @@ import java.util.Optional;
  * <p> @author konbluesky </p>
  */
 @Slf4j
-@Api(tags = "文件上传、下载")
 @RestController
 @RequestMapping("file")
 public class FileController extends ControllerAdapter {
 
     /**
-     * /**
+     * 兼容普通上传和dbmeta内置上传组件的上传。Content-Type: multipart/form-data; 文件上传key为file。响应数据格式为{"name":name, "value":path, "url":url}
      * param objectCode
      * param fieldCode
      * param file
      */
-    @ApiOperation(value = "文件上传", notes = "兼容普通上传和dbmeta内置上传组件的上传。Content-Type: multipart/form-data; 文件上传key为file。响应数据格式为{\"name\":name, \"value\":path, \"url\":url}")
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @PostMapping(value = "upload", consumes = {"multipart/form-data"})
     public Ret index(MultipartRequest request) {
 
@@ -97,10 +93,10 @@ public class FileController extends ControllerAdapter {
     }
 
     /**
-     * 富文本中的图片上传
+     * 富文本中的图片上传。
+     * dbmeta内置组件富文本中的文件上传略有区别，响应数据需要包装成json
      */
-    @ApiOperation(value = "文件上传(富文本中)", notes = "dbmeta内置组件富文本中的文件上传略有区别，响应数据需要包装成json")
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @PostMapping("upload/rich-text")
     public Kv richText(MultipartFile file) {
         QueryHelper queryHelper = queryHelper();
@@ -113,12 +109,13 @@ public class FileController extends ControllerAdapter {
     }
 
     /**
+     * 文件下载。
+     * 适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)，仅适用于dbmeta文件(/图片)控件的下载
      * param objectCode
      * param fieldCode
      * param 业务记录 id
      */
-    @ApiOperation(value = "文件下载", notes = "适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)，仅适用于dbmeta文件(/图片)控件的下载")
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("down")
     public ResponseEntity<FileSystemResource> down() {
         String id = parameterHelper().get("id");
@@ -139,7 +136,7 @@ public class FileController extends ControllerAdapter {
         List<File> files = downloadService.getFile(metaField, id, fieldValue);
 
         File targetFile;
-        AssertUtil.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
+        AssertKit.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
         if (files.size() == 1) {
             targetFile = files.get(0);
         } else {  // 当有多个文件时，应当一并压缩打包下载
@@ -148,7 +145,7 @@ public class FileController extends ControllerAdapter {
             ZipUtil.zip(targetFile, false, files.toArray(new File[files.size()]));
         }
 
-        AssertUtil.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
+        AssertKit.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -160,12 +157,14 @@ public class FileController extends ControllerAdapter {
     }
 
     /**
+     * 图片预览/文件下载。
+     * <p>
+     * 适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)
      * TODO 问题: 这种方式开辟了,只要有相对路径就能够通过该接口访问上传目录下的文件
      * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
      * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
-    @ApiOperation(value = "图片预览/文件下载", notes = "适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)")
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("preview")
     public ResponseEntity<FileSystemResource> tmpPre() {
         String path = parameterHelper().getPara("path", "");

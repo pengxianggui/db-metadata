@@ -1,6 +1,5 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
@@ -10,11 +9,11 @@ import com.github.md.web.event.EventKit;
 import com.github.md.web.event.user.UserStatusChangeMessage;
 import com.github.md.web.query.FormDataFactory;
 import com.github.md.web.user.auth.IAuth;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Authorize;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.jfinal.kit.StrKit;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("user")
 public class UserController extends ControllerAdapter {
 
+    // optimize 虽然dbmeta内置了此基于注解校验(解决了带参接口path的鉴权问题)，但动态数据鉴权还是需要支持path参数的，只需更新buildInBizData.sql即可——————？？？带参数，关键点在于检索匹配数据库里动态接口资源
     @Authorize(justSign = true)
     @GetMapping("{userId}/roles")
     public Ret getRoles(@PathVariable("userId") String userId) {
@@ -63,8 +63,12 @@ public class UserController extends ControllerAdapter {
         return flag ? Ret.ok() : Ret.fail();
     }
 
-    @ApiOperation("获取当前登录用户拥有的角色")
-    @MetaAccess
+    /**
+     * 获取当前登录用户拥有的角色
+     *
+     * @return
+     */
+    @ApiType
     @GetMapping("roles")
     public Ret getRoles() {
         UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().getUser(getRequest());
@@ -75,7 +79,10 @@ public class UserController extends ControllerAdapter {
         return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
-    @ApiOperation("获取当前登录用户拥有的权限")
+    /**
+     * 获取当前登录用户拥有的权限
+     * @return
+     */
     @Authorize(justSign = true)
     @GetMapping("auths")
     public Ret getAuths() {
@@ -87,8 +94,11 @@ public class UserController extends ControllerAdapter {
         return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
-    @MetaAccess
-    @ApiOperation("重置用户密码")
+    /**
+     * 重置用户密码
+     * @return
+     */
+    @ApiType
     @PostMapping("reset-pass")
     public Ret resetPass() {
         String userId = parameterHelper().get("userId");

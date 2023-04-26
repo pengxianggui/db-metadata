@@ -1,6 +1,5 @@
 package com.github.md.web.controller.itp;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaObject;
@@ -11,6 +10,7 @@ import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.ui.MetaFieldViewAdapter;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.UIManager;
@@ -85,7 +85,7 @@ public class MetaFieldEditPointCut implements UpdatePointCut, DeletePointCut {
 
         for (Object id : ids) {
             Record record = ServiceManager.businessService().findDataByIds(metaObject, id);
-            AssertUtil.isTrue(record != null, new WebException("数据不存在，请尝试刷新页面"));
+            AssertKit.isTrue(record != null, new WebException("数据不存在，请尝试刷新页面"));
 
             ServiceManager.componentService().deleteFieldConfig(record.getStr("object_code"), record.getStr("field_code"));
         }

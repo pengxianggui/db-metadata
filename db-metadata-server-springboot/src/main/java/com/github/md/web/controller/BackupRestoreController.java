@@ -3,7 +3,7 @@ package com.github.md.web.controller;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.backup_restore.MetaDataExport;
 import com.github.md.web.backup_restore.MetaDataImport;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -29,7 +29,7 @@ import java.nio.file.Paths;
 @RequestMapping("meta")
 public class BackupRestoreController {
 
-    @MetaAccess(Type.API)
+    @ApiType(Type.API)
     @PostMapping("backup")
     public ResponseEntity<FileSystemResource> exportZip() {
         try {
@@ -47,7 +47,7 @@ public class BackupRestoreController {
         }
     }
 
-    @MetaAccess(Type.API)
+    @ApiType(Type.API)
     @PostMapping("restore")
     public Ret importZip(MultipartFile file) {
         try {

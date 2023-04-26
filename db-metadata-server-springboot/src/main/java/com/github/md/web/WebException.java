@@ -1,6 +1,5 @@
 package com.github.md.web;
 
-import cn.com.asoco.exception.UserVisibleException;
 import lombok.Getter;
 
 /**
@@ -15,22 +14,24 @@ import lombok.Getter;
  * <p> @author konbluesky </p>
  */
 @Getter
-public class WebException extends UserVisibleException {
+public class WebException extends RuntimeException {
+    private Integer code;
     public WebException(Exception ex) {
         super(ex);
     }
 
     public WebException(String message) {
-        super(message, 500);
+        super(message);
     }
 
     public WebException(String messageTmpl, String... args) {
         super(resolveString(messageTmpl, args));
-        set(500, resolveString(messageTmpl, args));
     }
 
     public WebException(String msg, int code) {
-        super(msg, code);
+        // TODO code 如何跟错误模板挂钩，要利用国际化的message.properties吗
+        super(msg);
+        this.code = code;
     }
 
     private static String resolveString(String errorMsgTemplate, String... args) {
@@ -38,17 +39,6 @@ public class WebException extends UserVisibleException {
             errorMsgTemplate = String.format(errorMsgTemplate, args);
         }
         return errorMsgTemplate;
-    }
-
-    /**
-     * 仅供子类使用设置code,msg
-     *
-     * @param code
-     * @param msg
-     */
-    protected void set(int code, String msg) {
-        this.code = code;
-        this.msg = msg;
     }
 
 }

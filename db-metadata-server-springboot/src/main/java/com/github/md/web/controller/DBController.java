@@ -1,7 +1,7 @@
 package com.github.md.web.controller;
 
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.db.Table;
@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p> @Date : 2019/10/9 </p>
@@ -62,7 +60,7 @@ public class DBController extends ControllerAdapter {
         return Ret.ok("data", results);
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @Transactional
     @PostMapping("init")
     public Ret init() {

@@ -1,7 +1,6 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.util.AssertUtil;
-import com.github.md.web.WebException;
+import com.github.md.web.kit.AssertKit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,7 +19,7 @@ public class UserIntercept implements HandlerInterceptor {
     private UserInterceptDoer userInterceptDoer;
 
     public UserIntercept(UserInterceptDoer userInterceptDoer) {
-        AssertUtil.isTrue(userInterceptDoer != null, new WebException("未配置用户认证执行器：configUserInterceptDoer"));
+        AssertKit.isTrue(userInterceptDoer != null, "未配置用户认证执行器：configUserInterceptDoer");
         this.userInterceptDoer = userInterceptDoer;
     }
 

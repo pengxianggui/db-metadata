@@ -1,13 +1,12 @@
 package com.github.md.web.controller.itp;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.DeleteInvocation;
 import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.github.md.web.ex.OprNotSupportException;
+import com.github.md.web.kit.AssertKit;
 import com.jfinal.plugin.activerecord.Record;
 
 /**
@@ -27,8 +26,8 @@ public class BuildInDataPointCut implements DeletePointCut {
 
         for (Object id : ids) {
             Record record = ServiceManager.businessService().findDataByIds(metaObject, id);
-            AssertUtil.isTrue(record != null, new WebException("数据不存在，请尝试刷新页面"));
-            AssertUtil.isTrue(!record.getBoolean(BUILD_IN_FIELD), new OprNotSupportException("内建数据不允许删除"));
+            AssertKit.isTrue(record != null, new WebException("数据不存在，请尝试刷新页面"));
+            AssertKit.isTrue(!record.getBoolean(BUILD_IN_FIELD), new OprNotSupportException("内建数据不允许删除"));
         }
 
         return true;

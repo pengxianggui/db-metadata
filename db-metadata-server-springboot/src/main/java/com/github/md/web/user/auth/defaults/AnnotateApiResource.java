@@ -1,7 +1,7 @@
 package com.github.md.web.user.auth.defaults;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.web.user.auth.MResource;
+import com.github.md.web.user.auth.annotations.Authorize;
 import lombok.Getter;
 import org.springframework.web.method.HandlerMethod;
 

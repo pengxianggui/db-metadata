@@ -1,8 +1,8 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +51,7 @@ public class LoginController extends ControllerAdapter {
     @GetMapping("${md.server.login.ctrl.info-path:/user/info}")
     public Ret info() {
         LoginVO loginVO = AuthenticationManager.me().getInfo(getRequest());
-        AssertUtil.isTrue(loginVO != null, new UnLoginException("未登录"));
+        AssertKit.isTrue(loginVO != null, new UnLoginException("未登录"));
         return Ret.ok("data", loginVO);
     }
 

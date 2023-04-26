@@ -3,7 +3,7 @@ package com.github.md.web.feature.tree;
 import com.alibaba.fastjson.JSON;
 import com.github.md.web.kit.tree.TreeKit;
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.kit.tree.TreeNode;
@@ -42,7 +42,7 @@ public class TreeController extends ControllerAdapter {
      * objectCode=js_sys_area
      * config -> getConfig()
      */
-    @MetaAccess(value = Type.API_WITH_META_FEATURE)
+    @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping()
     public Ret index() {
         QueryHelper queryHelper = queryHelper();

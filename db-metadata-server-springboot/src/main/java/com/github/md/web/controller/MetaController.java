@@ -2,16 +2,13 @@ package com.github.md.web.controller;
 
 import com.github.md.analysis.meta.*;
 import com.github.md.web.ui.*;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.github.md.analysis.component.ComponentType;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.component.Components;
-import com.github.md.web.component.TableView;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.DropDownBox;
 import com.github.md.web.component.form.FormView;
@@ -22,7 +19,6 @@ import com.github.md.analysis.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,7 +79,7 @@ public class MetaController extends ControllerAdapter {
     /**
      * 右键菜单使用,直接编辑元对象配置信息
      */
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("editObject")
     public Ret editObject() {
         String objectCode = queryHelper().getObjectCode();
@@ -101,7 +97,7 @@ public class MetaController extends ControllerAdapter {
      * 右键菜单使用,直接编辑元字段配置信息
      * 成功更新后 -> 重新计算配置;
      */
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("editField")
     public Ret editField() {
         QueryHelper queryHelper = queryHelper();
@@ -117,7 +113,7 @@ public class MetaController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv().set("record", data));
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @PostMapping("doAdd")
     public Ret doAdd() {
         ParameterHelper parameterHelper = parameterHelper();
@@ -139,7 +135,7 @@ public class MetaController extends ControllerAdapter {
         return status ? Ret.ok() : Ret.fail();
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @DeleteMapping("delete")
     public Ret delete() {
         String objectCodess = queryHelper().getObjectCode();
@@ -169,7 +165,7 @@ public class MetaController extends ControllerAdapter {
      *      scope: vertical | single (default)
      * </pre>
      */
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("incrementImport")
     public Ret incrementImport() {
         String scope = parameterHelper().getPara("scope", "single");

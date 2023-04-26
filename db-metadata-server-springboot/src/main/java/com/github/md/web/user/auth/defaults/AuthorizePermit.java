@@ -1,10 +1,10 @@
 package com.github.md.web.user.auth.defaults;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.MRPermit;
+import com.github.md.web.user.auth.annotations.Authorize;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import lombok.extern.slf4j.Slf4j;

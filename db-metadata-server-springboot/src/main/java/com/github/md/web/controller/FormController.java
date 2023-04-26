@@ -1,11 +1,11 @@
 package com.github.md.web.controller;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.*;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.ui.ComponentInstanceConfig;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.collect.Lists;
 import com.github.md.web.component.ViewFactory;
@@ -49,12 +49,12 @@ public class FormController extends ControllerAdapter {
      *  TODO 控制字段只读,url带参 存在前端伪造的风险, 带参这部分逻辑等module模块敲定后,可以绑定在"功能"中
      * </pre>
      */
-    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
+    @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toAdd")
     public Ret toAdd() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
         ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
 
         String objectCode = componentInstanceConfig.getObjectCode();
@@ -75,7 +75,7 @@ public class FormController extends ControllerAdapter {
         return Ret.ok("data", formView.toKv());
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doAdd")
     public Ret doAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -118,13 +118,13 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
+    @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toUpdate")
     public Ret toUpdate() {
         QueryHelper queryHelper = queryHelper();
 
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
         ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
 
         String objectCode = componentInstanceConfig.getObjectCode();
@@ -143,7 +143,7 @@ public class FormController extends ControllerAdapter {
         return (Ret.ok("data", formView.toKv().set("record", d)));
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
     public Ret doUpdate() {
         QueryHelper queryHelper = queryHelper();
@@ -184,13 +184,13 @@ public class FormController extends ControllerAdapter {
         return invocation.getRet();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_INSTANCE)
+    @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("detail")
     public Ret detail() {
         QueryHelper queryHelper = queryHelper();
 
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
         ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
 
         String objectCode = componentInstanceConfig.getObjectCode();

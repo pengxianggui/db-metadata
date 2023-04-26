@@ -1,17 +1,15 @@
 package com.github.md.web.feature;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.github.md.web.kit.UtilKit;
-import com.github.md.web.kit.tree.TreeBuilder;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.analysis.kit.Kv;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,7 +30,7 @@ import java.util.List;
 @RequestMapping(value = { "feature" })
 public class FeatureController extends ControllerAdapter {
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("list")
     public Ret list() {
         List<Kv> results = Lists.newArrayList();
@@ -45,7 +42,7 @@ public class FeatureController extends ControllerAdapter {
         return Ret.ok("data", results);
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @PostMapping("doAdd")
     public Ret doAdd() {
         QueryHelper queryHelper = queryHelper();
@@ -114,7 +111,7 @@ public class FeatureController extends ControllerAdapter {
         return "/main" + prefix + "?featureCode=" + featureCode;
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("delete")
     public Ret delete() {
         String idss = parameterHelper().getPara("ids");

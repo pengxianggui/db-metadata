@@ -87,7 +87,7 @@ public class GlobalMetaException {
             log.error(ex.getMessage());
         }
         if (e instanceof WebException) {
-            return ret.set("code", ((WebException) e).getCode()).set("msg", ((WebException) e).getMsg());
+            return ret.set("code", ((WebException) e).getCode()).set("msg", e.getMessage());
         }
         return ret.set("code", 500).set("msg", e.getMessage());
     }

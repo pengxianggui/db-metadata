@@ -1,11 +1,11 @@
 package com.github.md.web.user.auth.defaults;
 
-import cn.com.asoco.annotation.Authorize;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.config.QuickJudge;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Authorize;
 import com.github.md.web.user.auth.annotations.Type;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.method.HandlerMethod;
@@ -42,7 +42,7 @@ public class ApiResourceFactory {
 
         Type type;
         String metaCode = null;
-        MetaAccess access = handlerMethod.getMethodAnnotation(MetaAccess.class);
+        ApiType access = handlerMethod.getMethodAnnotation(ApiType.class);
         if (access == null || access.value() == Type.API) {
             type = Type.API;
             return getApiResource(type, uri);

@@ -1,22 +1,21 @@
 package com.github.md.web.feature.ms;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.component.ComponentType;
-import com.github.md.web.WebException;
-import com.github.md.web.ui.ComponentInstanceConfig;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ViewFactory;
-import com.google.common.base.Preconditions;
-import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.ui.ComponentInstanceConfig;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.Preconditions;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +50,7 @@ public class MasterSlaveController extends ControllerAdapter {
     /**
      * ?featureCode=feature1&instanceCode=meta_field.FormView&object_code=meta_object
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("toAddS")
     public Ret toAddS() {
         QueryHelper queryHelper = queryHelper();
@@ -59,17 +58,17 @@ public class MasterSlaveController extends ControllerAdapter {
 
         // 加载功能配置
         String featureCode = queryHelper.getFeatureCode();
-        AssertUtil.isTrue(StrKit.notBlank(featureCode), "功能编码不能为空");
+        Assert.isTrue(StrKit.notBlank(featureCode), "功能编码不能为空");
         MasterSlaveConfig config = ServiceManager.featureService().loadFeatureConfig(featureCode);
         Preconditions.checkNotNull(config, "功能配置加载失败");
 
         // 加载实例配置
         String objectCode = queryHelper.getObjectCode(); // 指定子表的元对象
-        AssertUtil.isTrue(StrKit.notBlank(objectCode), "元对象编码不能为空"); // 否则无法确定是哪个子表(主子表支持1对多)
+        Assert.isTrue(StrKit.notBlank(objectCode), "元对象编码不能为空"); // 否则无法确定是哪个子表(主子表支持1对多)
         String instanceCode = config.get(objectCode).getInstanceCode(ComponentType.FORMVIEW);
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        Assert.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
         ComponentInstanceConfig componentInstanceConfig = ServiceManager.componentService().loadObjectConfig(instanceCode);
-        AssertUtil.isTrue(componentInstanceConfig != null, new WebException("实例配置(%s)不存在", instanceCode));
+        Assert.isTrue(componentInstanceConfig != null, String.format("实例配置(%s)不存在", instanceCode));
 
         IMetaObject metaObject = metaService().findByCode(objectCode);
 

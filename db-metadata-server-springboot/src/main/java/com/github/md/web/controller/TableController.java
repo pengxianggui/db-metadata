@@ -3,7 +3,7 @@ package com.github.md.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.md.analysis.meta.*;
 import com.github.md.analysis.meta.aop.*;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequestMapping("table")
 public class TableController extends ControllerAdapter {
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
     public Object list() {
         /*
@@ -152,7 +152,7 @@ public class TableController extends ControllerAdapter {
      *     3. 构建Object[] ids 与普通原对象共用删除逻辑
      * </pre>
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @DeleteMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
@@ -221,7 +221,7 @@ public class TableController extends ControllerAdapter {
      * 树型数据
      * https://blog.csdn.net/u011627980/article/details/51454323?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("tree")
     public Ret tree() {
         QueryHelper queryHelper = queryHelper();

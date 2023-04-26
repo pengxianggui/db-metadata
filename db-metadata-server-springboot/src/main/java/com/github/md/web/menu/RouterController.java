@@ -2,7 +2,7 @@ package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.analysis.meta.IMetaObject;
@@ -32,7 +32,7 @@ public class RouterController extends ControllerAdapter {
         return "meta_router";
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping
     public Object index() {
         ParameterHelper parameterHelper = parameterHelper();

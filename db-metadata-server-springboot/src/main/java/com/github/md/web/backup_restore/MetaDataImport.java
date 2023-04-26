@@ -1,10 +1,10 @@
 package com.github.md.web.backup_restore;
 
-import cn.com.asoco.util.AssertUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.WebException;
+import com.github.md.web.kit.AssertKit;
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -40,7 +40,7 @@ public class MetaDataImport {
                 log.debug("开始执行sql文件... {}", file.getAbsolutePath());
                 try {
                     boolean flag = executeSQLFile(file);
-                    AssertUtil.isTrue(flag, new WebException("导入失败！"));
+                    AssertKit.isTrue(flag, new WebException("导入失败！"));
                     log.debug("Sql文件执行成功! {}", file.getAbsolutePath());
                 } catch (ActiveRecordException e) {
                     log.error(e.getMessage(), e);

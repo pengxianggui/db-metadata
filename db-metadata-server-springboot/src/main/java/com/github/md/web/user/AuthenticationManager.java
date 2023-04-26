@@ -1,16 +1,14 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.DbMetaConfigurer;
-import com.github.md.web.kit.PassKit;
+import com.github.md.web.WebException;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.role.RoleService;
 import com.github.md.web.user.role.UserWithRolesWrapper;
-import com.github.md.web.user.support.defaults.JWTTokenGenerator;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.jfinal.kit.StrKit;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,7 +88,7 @@ public class AuthenticationManager {
         }
 
         // 此资源需要鉴权，必定需要用户登录
-        AssertUtil.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
+        AssertKit.isTrue(user != null, new UnLoginException("会话过期，请重新登录"));
 
         if (user.isRoot()) { // root不校验
             return true;
@@ -128,7 +126,7 @@ public class AuthenticationManager {
     @Deprecated
     public LoginVO login(String identity, String pwd) {
         UserWithRolesWrapper userWithRolesWrapper = loginService.login(identity, pwd);
-        AssertUtil.isTrue(userWithRolesWrapper != null, "用户名或密码输入错误");
+        AssertKit.isTrue(userWithRolesWrapper != null, new WebException("用户名或密码输入错误"));
         return loginService.setLogged(userWithRolesWrapper);
     }
 

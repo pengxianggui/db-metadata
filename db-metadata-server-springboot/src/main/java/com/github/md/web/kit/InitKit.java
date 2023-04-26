@@ -1,6 +1,5 @@
 package com.github.md.web.kit;
 
-import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -154,7 +153,7 @@ public class InitKit {
             MetaData config = JSON.parseObject(JSONObject.toJSONString(configJson), type.getConfigEntity());
 
             boolean flag = ServiceManager.featureService().saveFeature(type, name, code, config, true);
-            AssertUtil.isTrue(flag, "导入系统内置功能时发生错误, 数据未导入库， 功能编码:" + code);
+            AssertKit.isTrue(flag, "导入系统内置功能时发生错误, 数据未导入库， 功能编码:%s", code);
         }
         return this;
     }

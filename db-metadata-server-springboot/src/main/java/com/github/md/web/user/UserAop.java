@@ -1,6 +1,5 @@
 package com.github.md.web.user;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.aop.AddPointCut;
@@ -10,6 +9,7 @@ import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.github.md.web.config.MetaProperties;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.kit.PassKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +48,7 @@ public class UserAop implements AddPointCut, UpdatePointCut {
 
     private void check(AopInvocation invocation) {
         IMetaObject metaObject = invocation.getMetaObject();
-        AssertUtil.isTrue(metaObject.code().equals(OBJECT_CODE), new WebException("AOP: %s 只能作用于元对象: %s",
+        AssertKit.isTrue(metaObject.code().equals(OBJECT_CODE), new WebException("AOP: %s 只能作用于元对象: %s",
                 this.getClass().getCanonicalName(), OBJECT_CODE));
     }
 }

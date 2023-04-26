@@ -1,6 +1,5 @@
 package com.github.md.web.controller;
 
-import cn.com.asoco.util.AssertUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
@@ -8,9 +7,10 @@ import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.component.AbstractComponent;
 import com.github.md.web.component.ComponentException;
@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,11 +43,11 @@ import java.util.List;
 @RequestMapping("/component")
 public class ComponentController extends ControllerAdapter {
 
-    @MetaAccess(Type.API_WITH_META_INSTANCE)
+    @ApiType(Type.API_WITH_META_INSTANCE)
     @GetMapping("meta")
     public Ret metaByIc() {
         String ic = queryHelper().getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(ic), "实例编码(ic)未指定");
+        AssertKit.isTrue(StrKit.notBlank(ic), "实例编码(ic)未指定");
 
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(ic);
         return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
@@ -57,7 +56,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 获取指定元对象+容器下的实例配置列表
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("contact")
     public Ret contact() {
         QueryHelper queryHelper = queryHelper();
@@ -80,7 +79,7 @@ public class ComponentController extends ControllerAdapter {
     public Ret componentInstanceBrief() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
+        AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
 
         Record record = componentService().getComponentInstanceBrief(instanceCode);
         return Ret.ok("data", record);
@@ -114,7 +113,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 加载组件配置。包括组件全局配置 和 组件实例配置
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("load")
     public Ret load() {
         QueryHelper queryHelper = queryHelper();
@@ -162,7 +161,7 @@ public class ComponentController extends ControllerAdapter {
     /**
      * 一键自动计算
      */
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("import-auto-computed")
     public Ret oneKeyAutoComputed() {
         QueryHelper queryHelper = queryHelper();
@@ -172,14 +171,14 @@ public class ComponentController extends ControllerAdapter {
 
         String[] compCodeArr = compCodes.split(",");
         String[] instanceCodeArr = instanceCodes.split(",");
-        AssertUtil.isTrue(compCodeArr.length == instanceCodeArr.length, "组件和实例编码长度不匹配");
+        AssertKit.isTrue(compCodeArr.length == instanceCodeArr.length, "组件和实例编码长度不匹配");
 
         Db.tx(() -> {
             for (int i = 0; i < instanceCodeArr.length; i++) {
                 String instanceCode = instanceCodeArr[i];
                 String compCode = compCodeArr[i];
 
-                AssertUtil.isTrue(StrKit.notBlank(objectCode, compCode, instanceCode), "参数错误");
+                AssertKit.isTrue(StrKit.notBlank(objectCode, compCode, instanceCode), "参数错误");
                 if (componentService().hasObjectConfig(instanceCode)) {
                     throw new ComponentException("默认的instanceCode:%s已经存在!", instanceCode);
                 }
@@ -207,7 +206,7 @@ public class ComponentController extends ControllerAdapter {
         return Ret.ok();
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
     public Ret doUpdate() {
         /**
@@ -242,12 +241,12 @@ public class ComponentController extends ControllerAdapter {
         }
     }
 
-    @MetaAccess(value = Type.API)
+    @ApiType(value = Type.API)
     @GetMapping("delete")
     public Ret delete() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
-        AssertUtil.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定要删除的实例编码"));
+        AssertKit.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定要删除的实例编码"));
         componentService().deleteObjectConfig(instanceCode);
         return Ret.ok("msg", "UI实例删除成功, 实例编码:" + instanceCode);
     }

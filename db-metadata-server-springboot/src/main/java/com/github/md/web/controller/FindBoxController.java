@@ -12,7 +12,7 @@ import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
 import com.jfinal.plugin.activerecord.Page;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("find")
 public class FindBoxController extends ControllerAdapter {
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("meta")
     public Ret meta() {
         QueryHelper queryHelper = queryHelper();
@@ -56,7 +56,7 @@ public class FindBoxController extends ControllerAdapter {
         return Ret.ok("data", result);
     }
 
-    @MetaAccess(value = Type.API_WITH_META_OBJECT)
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
     public Object list() {
         /**

@@ -1,12 +1,13 @@
 package com.github.md.web.aop;
 
-import cn.com.asoco.util.AssertUtil;
 import com.github.md.analysis.meta.DbMetaService;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.aop.DeleteInvocation;
 import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
+import com.github.md.web.ex.OprNotSupportException;
+import com.github.md.web.kit.AssertKit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -42,8 +43,8 @@ public class MetaObjectAop implements DeletePointCut {
             Object id = ((Object[]) ids)[0];
             IMetaObject metaObjectOfData = dbMetaService.findById(String.valueOf(id));
 
-            AssertUtil.isTrue(metaObjectOfData != null, new WebException("元对象不存在, id: %s", String.valueOf(id)));
-            AssertUtil.isTrue(!metaObjectOfData.buildIn(), new WebException("元对象(%s)为系统内置, 不允许删除", metaObjectOfData.code()));
+            AssertKit.isTrue(metaObjectOfData != null, new WebException("元对象不存在, id: %s", String.valueOf(id)));
+            AssertKit.isTrue(!metaObjectOfData.buildIn(), new OprNotSupportException("元对象(%s)为系统内置, 不允许删除", metaObjectOfData.code()));
 
             // 删除元字段
             log.info("删除元对象{}数据", metaObjectOfData.code());

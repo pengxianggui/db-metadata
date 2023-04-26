@@ -1,13 +1,11 @@
 package com.github.md.web.user.auth;
 
-import cn.com.asoco.annotation.Authorize;
-import cn.com.asoco.http.HttpResult;
+import com.github.md.analysis.kit.Ret;
 import com.github.md.web.user.AuthenticationManager;
+import com.github.md.web.user.auth.annotations.Authorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author pengxg
@@ -19,7 +17,7 @@ public class AuthController {
 
     @Authorize(justSign = true)
     @GetMapping("list")
-    public HttpResult<List<IAuth>> all() {
-        return HttpResult.success(AuthenticationManager.me().getAuthService().findAll());
+    public Ret all() {
+        return Ret.ok("data", AuthenticationManager.me().getAuthService().findAll());
     }
 }

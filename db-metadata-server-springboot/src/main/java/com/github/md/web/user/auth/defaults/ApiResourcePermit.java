@@ -4,7 +4,7 @@ import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.MRPermit;
-import com.github.md.web.user.auth.annotations.MetaAccess;
+import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.role.MRRole;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.collect.Lists;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author pengxg
  * @date 2021/10/15 9:49 上午
  * @see MetaApiResource
- * @see MetaAccess
+ * @see ApiType
  */
 @Slf4j
 public class ApiResourcePermit implements MRPermit<User, MetaApiResource> {

@@ -1,7 +1,7 @@
 package com.github.md.web.ui;
 
-import cn.com.asoco.util.AssertUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -22,6 +22,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.List;
@@ -113,7 +114,7 @@ public class OptionsKit {
             res = HttpUtil.get(url, 20000);
         } catch (Exception e) {
             log.error("url请求失败。 url: {}, errMsg: {}", url, e.getMessage());
-            throw new WebException("接口请求失败, url: %s, errMsg: %s", url, e.getMessage());
+            throw new HttpException("接口请求失败, url: %s, errMsg: %s", url, e.getMessage());
         }
 
         try {
@@ -121,7 +122,7 @@ public class OptionsKit {
             JSONArray data = resJson.getJSONArray("data");
             for (Object option : data) {
                 JSONObject optionObj = JSONObject.parseObject(JSONObject.toJSONString(option));
-                AssertUtil.isTrue(optionObj.containsKey("key") && optionObj.containsKey("value"), "data数组中元素对象必须同时含有key和value");
+                Assert.isTrue(optionObj.containsKey("key") && optionObj.containsKey("value"), "data数组中元素对象必须同时含有key和value");
                 options.add(Kv.create().set(optionObj));
             }
 
@@ -129,12 +130,12 @@ public class OptionsKit {
                 JSONObject optionObj = JSONObject.parseObject(JSONObject.toJSONString(option));
                 return optionObj.containsKey("key") && optionObj.containsKey("value");
             });
-            AssertUtil.isTrue(valid, new WebException("data数组中元素必须同时含有key和value"));
+            Assert.isTrue(valid, "data数组中元素必须同时含有key和value");
 
             return options;
         } catch (Exception e) {
             log.error("url响应数据格式不符合要求。 url: {}, 响应数据: {}, errMsg: {}", url, res, e.getMessage());
-            throw new WebException("url响应数据格式不符合要求, 响应数据格式不符合要求。 url: %s, 响应数据: %s, errMsg: %s", url, res, e.getMessage());
+            throw new HttpException("url响应数据格式不符合要求, 响应数据格式不符合要求。 url: %s, 响应数据: %s, errMsg: %s", url, res, e.getMessage());
         }
     }
 
