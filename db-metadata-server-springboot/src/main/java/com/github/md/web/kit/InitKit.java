@@ -50,7 +50,7 @@ public class InitKit {
 
     private static final String FEATURE_JSON = "data/reset/buildInFeature.json"; // 系统内置的功能配置
 
-    private static final String BIZ_DATA_SQL = "data/reset/buildInBizData.sql"; // 内建业务数据
+    private static final String BIZ_DATA_SQL = "data/reset/buildInSysData.sql"; // 内建业务数据
 
     private static JSONObject jsonObjectConfig = new JSONObject();
 

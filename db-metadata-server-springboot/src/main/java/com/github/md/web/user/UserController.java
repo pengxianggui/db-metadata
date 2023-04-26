@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("user")
 public class UserController extends ControllerAdapter {
 
-    // optimize 虽然dbmeta内置了此基于注解校验(解决了带参接口path的鉴权问题)，但动态数据鉴权还是需要支持path参数的，只需更新buildInBizData.sql即可——————？？？带参数，关键点在于检索匹配数据库里动态接口资源
+    // optimize 虽然dbmeta内置了此基于注解校验(解决了带参接口path的鉴权问题)，但动态数据鉴权还是需要支持path参数的，只需更新buildInSysData.sql即可——————？？？带参数，关键点在于检索匹配数据库里动态接口资源
     @Authorize(justSign = true)
     @GetMapping("{userId}/roles")
     public Ret getRoles(@PathVariable("userId") String userId) {
