@@ -10,6 +10,7 @@ import com.github.md.web.user.role.UserWithRolesWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
  *
  * <p> @author konbluesky </p>
  */
+@Slf4j
 public class AuthenticationManager {
     private static AuthenticationManager me = null;
 
@@ -99,8 +101,9 @@ public class AuthenticationManager {
                 return entry.getValue().permit(user, mResource);
             }
         }
-        throw new MRException("资源%s无法确定应该使用什么判定器进行判定, 请在%s中指定",
-                mResource.getClass().toString(), this.getClass().toString());
+
+        log.error("资源%s无法确定应该使用什么判定器进行判定, 视为无权限！请通过dbmeta扩展配置进行指定。", mResource.getClass().toString());
+        return false;
     }
 
     /**
