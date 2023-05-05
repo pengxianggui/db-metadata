@@ -2,7 +2,6 @@ package com.github.md.web.config;
 
 import com.github.md.analysis.AnalysisProperties;
 import com.github.md.web.file.local.LocalProperties;
-import com.github.md.web.file.asocooss.AsocoOssProperties;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -81,8 +80,6 @@ public class MetaProperties {
         private String mode = "local";
 
         private LocalProperties local;
-
-        private AsocoOssProperties asocoOss;
     }
 
     @Data

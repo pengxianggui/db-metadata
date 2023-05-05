@@ -22,12 +22,17 @@ import java.nio.file.Paths;
  */
 @Slf4j
 public class LocalFileService implements UploadService, DownloadService {
-    public static final String modeName = "local";
+    public static final String modeName = "local"; // 本地上传/下载的模式编码
 
     private final LocalProperties properties;
 
     public LocalFileService(LocalProperties properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public String getMode() {
+        return modeName;
     }
 
     @Override
@@ -39,8 +44,8 @@ public class LocalFileService implements UploadService, DownloadService {
     }
 
     @Override
-    public File getFile(String filePath) {
-        String path = Paths.get(getBasePath(), filePath).toString();
+    public File getFile(String fileUrl) {
+        String path = Paths.get(getBasePath(), fileUrl).toString();
         return new File(path);
     }
 

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * dbmeta自动配置类。
+ *
  * @author pengxg
  * @date 2022/4/25 9:38 上午
  */
@@ -22,10 +24,15 @@ public class DbMetaAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean
     public DbMetaConfigurer dbMetaConfigurer() {
-        return new DbMetaConfigurer() {
-        };
+        return new DefaultDbMetaConfigurer();
     }
 
+    /**
+     * 权限管理类。
+     *
+     * @param dbMetaConfigurer
+     * @return
+     */
     @Bean
     public AuthenticationManager authenticationManager(DbMetaConfigurer dbMetaConfigurer) {
         return new AuthenticationManager(dbMetaConfigurer);

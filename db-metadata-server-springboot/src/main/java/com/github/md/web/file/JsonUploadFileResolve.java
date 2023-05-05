@@ -1,41 +1,33 @@
 package com.github.md.web.file;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Lists;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 将数据库字段值作为JSON数组，解析文件
+ * 将数据库字段值作为JSON数组，解析文件。json格式为对象数组，其中的对象应当满足 {@link UploadFile} 格式
  * <p> @Date : 2021/9/13 </p>
  * <p> @Project : db-metadata-server-springboot</p>
  *
  * <p> @author konbluesky </p>
  */
 @Slf4j
-public class JsonUploadFileResolve implements UploadFileResolve {
-
-    @Getter
-    private List<UploadFile> files;
+public class JsonUploadFileResolve extends UploadFileResolve {
 
     public JsonUploadFileResolve(String fileJsonData) {
-        try {
-            this.files = JSON.parseArray(fileJsonData, UploadFile.class);
-        } catch (Exception e) {
-            this.files = Lists.newArrayList();
-            log.error(e.getMessage(), e.getCause());
-        }
+        super(fileJsonData);
     }
 
     @Override
-    public boolean hasFile() {
-        return files != null && !files.isEmpty();
-    }
-
-    public boolean onlyOne() {
-        return files.size() == 1;
+    protected List<UploadFile> parseToFiles(String columnValue) {
+        try {
+            return JSON.parseArray(columnValue, UploadFile.class);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e.getCause());
+            return new ArrayList<>();
+        }
     }
 
     @Deprecated

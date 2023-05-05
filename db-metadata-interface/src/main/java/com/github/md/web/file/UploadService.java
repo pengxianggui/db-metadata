@@ -1,9 +1,9 @@
 package com.github.md.web.file;
 
-import com.github.md.web.kit.DateKit;
 import com.google.common.io.Files;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * <p> @author konbluesky </p>
  */
-public interface UploadService {
+public interface UploadService extends Mode {
 
     /**
      * 上传文件。当使用DbMeta基于元数据生成的文件上传控件时会调用此方法进行文件保存
@@ -35,7 +35,7 @@ public interface UploadService {
      * @return 带有时间格式后缀的文件名
      */
     default String getFileNameWithAffix(MultipartFile file) {
-        return Files.getNameWithoutExtension(file.getOriginalFilename()) + "_" + DateKit.toStr(new Date(), "yyyyMMdd_HH_mm_ss_SSS") + "."
+        return Files.getNameWithoutExtension(file.getOriginalFilename()) + "_" + new SimpleDateFormat("yyyyMMdd_HH_mm_ss_SSS").format(new Date()) + "."
                 + Files.getFileExtension(file.getOriginalFilename());
     }
 }

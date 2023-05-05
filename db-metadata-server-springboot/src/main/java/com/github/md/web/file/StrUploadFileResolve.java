@@ -11,38 +11,27 @@ import java.util.List;
  * @author pengxg
  * @date 2022/4/22 2:36 下午
  */
-public class StrUploadFileResolve implements UploadFileResolve {
-
-    private List<UploadFile> files;
+public class StrUploadFileResolve extends UploadFileResolve {
 
     /**
      * 传入字段值，解析文件
      *
-     * @param value
+     * @param columnValue
      */
-    public StrUploadFileResolve(String value) {
-        this.files = new ArrayList<>();
-        if (StrKit.notBlank(value)) {
+    public StrUploadFileResolve(String columnValue) {
+        super(columnValue);
+    }
+
+    @Override
+    protected List<UploadFile> parseToFiles(String columnValue) {
+        List<UploadFile> files = new ArrayList<>();
+        if (StrKit.notBlank(columnValue)) {
             UploadFile file = new UploadFile();
             file.setName("");
             file.setSeat("");
-            file.setUrl(value);
-            this.files.add(file);
+            file.setUrl(columnValue);
+            files.add(file);
         }
-    }
-
-    @Override
-    public boolean hasFile() {
-        return !this.files.isEmpty();
-    }
-
-    @Override
-    public boolean onlyOne() {
-        return this.files.size() == 1;
-    }
-
-    @Override
-    public List<UploadFile> getFiles() {
         return files;
     }
 }

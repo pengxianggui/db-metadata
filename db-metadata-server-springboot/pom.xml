@@ -17,6 +17,10 @@
     <dependencies>
         <dependency>
             <groupId>com.github.md</groupId>
+            <artifactId>db-metadata-interface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.md</groupId>
             <artifactId>db-metadata-analysis-springboot</artifactId>
         </dependency>
         <dependency>

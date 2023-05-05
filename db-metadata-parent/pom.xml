@@ -27,6 +27,7 @@
     </properties>
 
     <modules>
+        <module>../db-metadata-interface</module>
         <module>../db-metadata-server-springboot</module>
         <module>../db-metadata-analysis-springboot</module>
     </modules>
@@ -40,6 +41,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.md</groupId>
+                <artifactId>db-metadata-interface</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.md</groupId>
                 <artifactId>db-metadata-analysis-springboot</artifactId>

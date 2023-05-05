@@ -29,10 +29,12 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 文件上传/下载
@@ -109,7 +111,7 @@ public class FileController extends ControllerAdapter {
     }
 
     /**
-     * 文件下载。
+     * 基于元数据精准定位的文件下载，只适用于本地文件存储服务。
      * 适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)，仅适用于dbmeta文件(/图片)控件的下载
      * param objectCode
      * param fieldCode
@@ -133,7 +135,8 @@ public class FileController extends ControllerAdapter {
         Preconditions.checkNotNull(fieldValue, "未找到可下载的文件地址");
 
         DownloadService downloadService = downloadService();
-        List<File> files = downloadService.getFile(metaField, id, fieldValue);
+        List<Path> filePaths = getFilePaths(metaField, id, fieldValue);
+        List<File> files = filePaths.stream().map(path -> downloadService.getFile(path.toString())).collect(Collectors.toList());
 
         File targetFile;
         AssertKit.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
@@ -145,15 +148,21 @@ public class FileController extends ControllerAdapter {
             ZipUtil.zip(targetFile, false, files.toArray(new File[files.size()]));
         }
 
-        AssertKit.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
+        return responseFile(targetFile);
+    }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", targetFile.getName()));
-        headers.add("Pragma", "no-cache");
-        headers.add("Expires", "0");
-
-        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
+    /**
+     * 文件下载。
+     * 通用的文件下载，将直接调用配置的{@link DownloadService#getFile(String)}下载文件，具体调用哪个实现类，取决于配置的文件存储服务(md.server.upload.mode)
+     *
+     * @return
+     */
+    @ApiType(value = Type.API)
+    @GetMapping("download")
+    public ResponseEntity<FileSystemResource> download() {
+        String url = parameterHelper().get("url");
+        File targetFile = downloadService().getFile(url);
+        return responseFile(targetFile);
     }
 
     /**
@@ -180,5 +189,60 @@ public class FileController extends ControllerAdapter {
 
         Optional<MediaType> optional = MediaTypeFactory.getMediaType(fileName);
         return ResponseEntity.ok().headers(headers).contentType(optional.orElse(MediaType.APPLICATION_OCTET_STREAM)).body(new FileSystemResource(targetFile));
+    }
+
+    /**
+     * 响应文件
+     *
+     * @param targetFile
+     * @return
+     */
+    private ResponseEntity<FileSystemResource> responseFile(File targetFile) {
+        AssertKit.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", targetFile.getName()));
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
+    }
+
+
+    /**
+     * 根据元字段获取文件。 用于获取指定字段值中存储的所有文件，当需要通过元字段进行下载时会有用。
+     *
+     * @param metaField    元字段。 指定字段对应的元字段
+     * @param primaryValue 文件关联记录的主键值。值对应的记录主键。
+     * @param fieldValue   该字段该记录的值。字段值，其中存储了文件地址信息。当fieldValue为json数组字符串时，可能存储多个文件内容。需要内部去判断。
+     *                     当metaField字段类型为json时，fieldValue为json数组。
+     * @return
+     */
+    private List<Path> getFilePaths(IMetaField metaField, String primaryValue, String fieldValue) {
+        UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
+        String objectCode = metaField.objectCode(),
+                fieldCode = metaField.fieldCode();
+        if (uploadFileResolve.hasFile()) {
+            return uploadFileResolve.getFiles().stream()
+                    .map(f -> Paths.get(objectCode, fieldCode, f.getUploadedName()))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * 文件解析器
+     *
+     * @param metaField  元字段
+     * @param fieldValue 数据库里存储的字段值
+     * @return
+     */
+    private UploadFileResolve getFileResolver(IMetaField metaField, String fieldValue) {
+        if (metaField.dbType().isJson()) {
+            return new JsonUploadFileResolve(fieldValue);
+        } else {
+            return new StrUploadFileResolve(fieldValue);
+        }
     }
 }

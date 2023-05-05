@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 认证/鉴权 注册器。
+ *
  * @author pengxg
  * @date 2022/4/25 10:38 上午
  */

@@ -5,7 +5,6 @@ import com.github.md.web.DbMetaConfigException;
 import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.config.MetaProperties;
-import com.github.md.web.file.asocooss.AsocoOssUploadService;
 import com.github.md.web.file.local.LocalFileService;
 import com.github.md.web.kit.AssertKit;
 import com.jfinal.kit.StrKit;
@@ -33,7 +32,8 @@ public class FileManager {
 
     private FileManager() {
         MetaProperties metaProperties = ServiceManager.getAppProperties();
-        defaultMode = StrKit.defaultIfBlank(metaProperties.getServer().getUpload().getMode(), LocalFileService.modeName);
+        defaultMode = StrKit.defaultIfBlank(metaProperties.getServer().getUpload().getMode(), LocalFileService.modeName); // 未配置，就采用local——本地上传模式
+
         configDefault(metaProperties.getServer().getUpload());
 
         FileConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
@@ -48,29 +48,33 @@ public class FileManager {
         }
     }
 
+    /**
+     * 配置默认的上传/下载模式——本地上传下载模式。详见{@link LocalFileService}
+     *
+     * @param properties
+     */
     private void configDefault(MetaProperties.UploadProperties properties) {
         // 配置内置的文件服务
         LocalFileService localFileService = new LocalFileService(properties.getLocal());
         config(LocalFileService.modeName, (UploadService) localFileService);
         config(LocalFileService.modeName, (DownloadService) localFileService);
-
-        config(AsocoOssUploadService.modeName, new AsocoOssUploadService(properties.getAsocoOss())); // 默认的asoco-oss无需下载服务
     }
 
     private void config(String mode, UploadService uploadService) {
         AssertKit.isTrue(StrKit.notBlank(mode), "请指定mode！");
-        AssertKit.isTrue(uploadService != null, "uploadService不能为null");
+        AssertKit.isTrue(uploadService != null, "uploadService: 不能为null! mode: %s", mode);
 
-        if (registeredUploadService.containsKey(mode)) {
-            log.warn("已经存在mode为{}的上传服务, 将覆盖，请知晓!", mode);
-        }
-        log.debug("文件上传服务配置, mode={}, uploadService={}", mode, uploadService.getClass().getTypeName());
+        AssertKit.isTrue(!registeredUploadService.containsKey(mode),
+                "上传模式编码冲突！已经存在mode为%s的上传服务:%s! 当前注册: %s", mode,
+                registeredUploadService.get(mode).getClass().getName(), uploadService.getClass().getName());
+
         registeredUploadService.put(mode, uploadService);
+        log.debug("文件上传服务配置成功, mode={}, uploadService={}", mode, uploadService.getClass().getTypeName());
     }
 
     private void config(String mode, DownloadService downloadService) {
         AssertKit.isTrue(StrKit.notBlank(mode), "请指定mode！");
-        AssertKit.isTrue(downloadService != null, "uploadService不能为null");
+        AssertKit.isTrue(downloadService != null, "uploadService不能为null! mode:%s", mode);
 
         if (registeredDownloadService.containsKey(mode)) {
             log.warn("已经存在mode为{}的下载服务, 将覆盖原有模式的配置!", mode);
