@@ -20,7 +20,8 @@
 
 * [X]  移除静态配置的ROOT用户，改为从动态user中进行鉴别，user是否为ROOT由业务系统去定义。
 * [X]  移除asoco-common的所有依赖
-* [ ]  将公司内部的oss上传相关代码从dbmeta中移出，以spring-boot-starter的形式自动装配。
+* [X]  将公司内部的oss上传相关代码从dbmeta中移出，以spring-boot-starter的形式自动装配。
+* [X]  内置提供DefaultDbMetaConfigurer配置器，默认会自动装配spring容器中的文件服务类(上传/下载)
 * [ ]  修复当树表中的pid设置为不在表格中显示时，列表无法呈现树结构的问题
 * [ ]  将自定义接口响应的Ret改为java 接口定义，并支持业务系统扩展。
 * [ ]  升级认证鉴权模块，使业务系统满足更多场景。如：1. 用户、角色、权限托管在第三方的场景；
