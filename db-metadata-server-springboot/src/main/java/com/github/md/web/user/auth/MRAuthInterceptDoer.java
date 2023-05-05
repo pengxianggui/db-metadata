@@ -14,10 +14,10 @@ public interface MRAuthInterceptDoer extends Comparable<MRAuthInterceptDoer> {
     /**
      * 排序。决定鉴权拦截器的先后顺序。
      *
-     * @return 返回值越小，优先级越高, 默认最低优先级
+     * @return 返回值越小，优先级越高, 默认最低优先级, 默认优先级是0
      */
     default int order() {
-        return Integer.MAX_VALUE;
+        return 0;
     }
 
     /**
@@ -43,12 +43,13 @@ public interface MRAuthInterceptDoer extends Comparable<MRAuthInterceptDoer> {
     boolean preAuth(HttpServletRequest request, HttpServletResponse response, Object handler);
 
     /**
-     * 是否中断后续鉴权链。若返回true，则 优先级{@link #order()} 小于当前鉴权执行器的 则不会执行。
+     * 是否中断后续鉴权链。当此鉴权执行器鉴权结果{@link #preAuth(HttpServletRequest, HttpServletResponse, Object)}为true——即有权限时，
+     * 若此时这个方法返回true，则 优先级{@link #order()} 小于当前鉴权执行器的 则不会继续执行鉴权判定，而是直接认定为有权限。
      *
      * @param request
      * @param response
      * @param handler
-     * @return
+     * @return 默认false
      */
     default boolean interruptAuthChain(HttpServletRequest request, HttpServletResponse response, Object handler) {
         return false;

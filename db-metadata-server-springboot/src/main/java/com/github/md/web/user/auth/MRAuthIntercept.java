@@ -24,7 +24,7 @@ public class MRAuthIntercept implements HandlerInterceptor {
 
     public MRAuthIntercept(List<MRAuthInterceptDoer> interceptDoers) {
         this.interceptDoers = CollectionUtils.isEmpty(interceptDoers) ? Lists.newArrayList() : interceptDoers;
-        Collections.sort(this.interceptDoers);
+        Collections.sort(this.interceptDoers); // very important!
     }
 
     @Override

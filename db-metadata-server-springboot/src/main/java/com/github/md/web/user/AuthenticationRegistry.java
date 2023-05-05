@@ -1,10 +1,6 @@
 package com.github.md.web.user;
 
-import com.github.md.web.user.auth.AuthService;
-import com.github.md.web.user.auth.MRAuthInterceptDoer;
-import com.github.md.web.user.auth.MRPermit;
-import com.github.md.web.user.auth.MResource;
-import com.github.md.web.user.auth.annotations.Authorize;
+import com.github.md.web.user.auth.*;
 import com.github.md.web.user.auth.defaults.*;
 import com.github.md.web.user.role.DefaultRoleService;
 import com.github.md.web.user.role.RoleService;
@@ -13,10 +9,7 @@ import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.method.HandlerMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,31 +43,8 @@ public class AuthenticationRegistry {
         roleService = new DefaultRoleService();
         authService = new DefaultAuthService();
         userInterceptDoer = new DefaultUserInterceptDoer();
-
-        // 内置的权限判定执行器
-        MRAuthInterceptDoer doer = new MRAuthInterceptDoer() {
-            @Override
-            public int order() {
-                return 0;
-            }
-
-            @Override
-            public boolean preAuth(HttpServletRequest request, HttpServletResponse response, Object handler) {
-                if (!(handler instanceof HandlerMethod)) {
-                    return true;
-                }
-
-                MResource resource = (((HandlerMethod) handler).getMethodAnnotation(Authorize.class) != null)
-                        ? ApiResourceFactory.createAnnotateApiResource(request, (HandlerMethod) handler)
-                        : ApiResourceFactory.createMetaApiResource(request, (HandlerMethod) handler);
-
-//                UserWithRolesWrapper user = AuthenticationManager.me().getUser(request);
-                User user = UserThreadLocal.getUser();
-                return AuthenticationManager.me().permit(user, resource);
-
-            }
-        };
-        authInterceptDoers.add(doer);
+        authInterceptDoers.add(new AuthorizeMRAuthInterceptDoer());
+        authInterceptDoers.add(new DataMRAuthInterceptDoer());
 
         // 内置的资源-判定器映射
         resourcePermitMapping.put(MetaApiResource.class, new ApiResourcePermit()); // 基于数据的接口资源判定

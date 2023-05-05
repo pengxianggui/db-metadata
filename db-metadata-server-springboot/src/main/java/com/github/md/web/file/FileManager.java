@@ -64,9 +64,11 @@ public class FileManager {
         AssertKit.isTrue(StrKit.notBlank(mode), "请指定mode！");
         AssertKit.isTrue(uploadService != null, "uploadService: 不能为null! mode: %s", mode);
 
-        AssertKit.isTrue(!registeredUploadService.containsKey(mode),
-                "上传模式编码冲突！已经存在mode为%s的上传服务:%s! 当前注册: %s", mode,
-                registeredUploadService.get(mode).getClass().getName(), uploadService.getClass().getName());
+        if (registeredUploadService.containsKey(mode)) {
+            log.warn("上传模式编码重复！已经存在mode为%s的上传服务:{}! 当前注册: {}。将覆盖之前的上传服务",
+                    registeredUploadService.get(mode).getClass().getName(), uploadService.getClass().getName());
+            return;
+        }
 
         registeredUploadService.put(mode, uploadService);
         log.debug("文件上传服务配置成功, mode={}, uploadService={}", mode, uploadService.getClass().getTypeName());
@@ -77,10 +79,12 @@ public class FileManager {
         AssertKit.isTrue(downloadService != null, "uploadService不能为null! mode:%s", mode);
 
         if (registeredDownloadService.containsKey(mode)) {
-            log.warn("已经存在mode为{}的下载服务, 将覆盖原有模式的配置!", mode);
+            log.warn("上传模式编码重复！已经存在mode为%s的下载服务:{}! 当前注册: {}。将覆盖之前的下载服务",
+                    registeredDownloadService.get(mode).getClass().getName(), downloadService.getClass().getName());
         }
-        log.debug("文件下载服务配置, mode={}, uploadService={}", mode, downloadService.getClass().getTypeName());
+
         registeredDownloadService.put(mode, downloadService);
+        log.debug("文件下载服务配置成功, mode={}, uploadService={}", mode, downloadService.getClass().getTypeName());
     }
 
     /**
