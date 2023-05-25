@@ -111,7 +111,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
                 identity, PassKit.encryptPass(password));
 
         if (record == null) {
-            return null;
+            throw new UnLoginException("认证错误");
         }
 
         DefaultUser user = new DefaultUser(record);
@@ -130,7 +130,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     @Override
     public LoginVO setLogged(DefaultUserWithRoles user) {
         String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().put(user.userId(), user); // 缓存到内存中
+        AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
         return createLoginVO(token, user);
     }
 
@@ -153,7 +153,8 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public boolean logout(DefaultUserWithRoles user) {
-        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
+        String token = tokenGenerator.generate(user);
+        AuthenticationManager.me().getLoginUsers().invalidate(token);
         return !logged(user);
     }
 

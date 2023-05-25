@@ -8,6 +8,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.component.ComponentType;
+import com.github.md.analysis.db.SnowFlake;
 import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
@@ -28,6 +29,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -372,6 +374,23 @@ public class InitKit {
             return true;
         }));
         return this;
+    }
+
+    /**
+     * 初始化账号ROOT
+     */
+    public void initROOTAccount() {
+        IMetaObject metaObject = ServiceManager.metaService().findByCode(AppConst.INNER_TABLE.META_USER.getTableName());
+        MetaData metaData = new MetaData();
+        metaData.set("id", SnowFlake.me().nextId())
+                .set("username", "ROOT")
+                .set("password", PassKit.encryptPass())
+                .set("nickname", "ROOT")
+                .set("realname", "ROOT")
+                .set("build_in", true)
+                .set("created_time", new Date())
+                .set("created_by", "SYSTEM");
+        ServiceManager.businessService().saveData(metaObject, metaData);
     }
 }
 

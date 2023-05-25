@@ -76,6 +76,11 @@ public class DefaultUser implements User {
     }
 
     @Override
+    public boolean isRoot() {
+        return "ROOT".equals(userName());
+    }
+
+    @Override
     public Kv attrs() {
         return Kv.create().set(JSONObject.parseObject(data.get("attrs")));
     }

@@ -68,6 +68,11 @@ public class DefaultUserWithRoles implements UserWithRolesWrapper {
     }
 
     @Override
+    public boolean isRoot() {
+        return user.isRoot();
+    }
+
+    @Override
     public Kv toKv() {
         return this.user.toKv()
                 .set("id", userId())

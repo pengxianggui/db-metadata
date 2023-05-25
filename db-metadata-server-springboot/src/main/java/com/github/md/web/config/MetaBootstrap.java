@@ -151,6 +151,8 @@ public class MetaBootstrap {
                         .updateInstanceConfig()            // 依据buildInInstance.json覆盖已入库的UI实例配置
                         .updateFeatureConfig()             // 更新内置功能
                         .updateBizData();                  // 依据buildInData.sql 导入其他内建数据
+
+                InitKit.me().initROOTAccount(); // 初始化账号(ROOT)
             }
         }
     }
