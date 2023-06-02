@@ -1,6 +1,6 @@
 # db-metadata
 
-一个公司自研的低/零代码快速开发工具。
+一个自研的低/零代码快速开发工具。
 
 ## 传送门
 
@@ -65,9 +65,8 @@
 
 ### 分支说明
 
-- master: db-metadata最早基于Jfinal开发, 因此Jfinal版本托管在master分支; 注意: 此分支很久没有改动了。考虑到Jfinal的小众, 不再维护；
-- spring-boot: 基于SpringBoot的db-metadata， 无Jfinal依赖, 完全在SpringBoot基础上搭建的。适合SpringBoot项目集成。
-- 其他分支非主分支。
+- master: 主分支，给予springboot 实现，标准的spring-boot-starter
+- jf: 基于jfinal实现的，没有spring内容，版本较老，不再维护。
 
 ### 架构设计
 
@@ -98,20 +97,20 @@
 
 #### 扩展
 
-> 为了能更好的融入其他系统，DBMS对常见的模块做了抽象，用少量的接口保证足够的灵活性
+> 为了能更好的融入其他系统，dbmeta对常见的模块做了抽象，用少量的接口保证足够的灵活性
 
 ##### 用户体系
 
-> 用户体系单独拎出可以作为一个庞大的子系统来开发，在DBMS种对用户做了一定抽象
+> 用户体系单独拎出可以作为一个庞大的子系统来开发，在dbmeta种对用户做了一定抽象
 
 > 核心接口 User(用户实体接口)，LoginService（登录服务），UserService（用户查询服务）,UserFactory(工厂)
 > ![元对象接口](db/images/user.png)
 
 ##### 权限体系
 
-> DBMS并未实现RBAC之列的权限控制模块，而是留了扩展接口
+> dbmeta并未实现RBAC之列的权限控制模块，而是留了扩展接口
 
-> DBMS种权限核心接口是MResource(资源)，MRPermit(资源判定器),MRLoader(资源加载器)
+> dbmeta中权限核心接口是MResource(资源)，MRPermit(资源判定器),MRLoader(资源加载器)、AuthenticationManager(权限中央管理器), 权限注册器(AuthenticationRegistry)
 > ![元对象接口](db/images/auth.png)
 
 ### 核心数据结构
