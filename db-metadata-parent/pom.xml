@@ -33,9 +33,9 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:http://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</developerConnection>
-        <connection>scm:git:http://gitlab.asoco.com.cn/hthjAssets/db-metadata.git</connection>
-        <url>https://gitlab.asoco.com.cn/hthjAssets/db-metadata/tree/spring-boot</url>
+        <connection>scm:git:https://github.com/pengxianggui/db-metadata.git</connection>
+        <developerConnection>scm:git:https://github.com/pengxianggui/db-metadata.git</developerConnection>
+        <url>https://github.com/pengxianggui/db-metadata/tree/master</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -171,39 +171,36 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <!-- 配置maven远程仓库，若本地找不到，则会从这里配置的远程仓库寻找依赖，最后是中央仓库 -->
     <repositories>
         <repository>
             <id>maven-ali</id>
+            <name>阿里云远程maven仓库</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <layout>default</layout> <!--用于定位和排序构件的仓库布局类型-可以是default（默认）或者legacy（遗留）-->
             <releases>
-                <enabled>true</enabled>
+                <enabled>true</enabled> <!--可从此仓库下载releases版本的依赖-->
             </releases>
             <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>Aosco Nexus</id>
-            <url>http://nexus.asoco.com.cn/nexus/content/groups/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
+                <enabled>false</enabled> <!--禁止从此仓库下载shapshots版本的依赖，公共仓库的snapshot版本往往不稳定且不受控制-->
+<!--                <updatePolicy>always</updatePolicy>--> <!-- 上面设置为false后，这两条配置就没意义了，注释掉 -->
+<!--                <checksumPolicy>warn</checksumPolicy>-->
             </snapshots>
         </repository>
     </repositories>
 
+    <!-- 配置打包发布的远程仓库 TODO 还没整好，参考：https://juejin.cn/post/7160481629318676511 -->
     <distributionManagement>
         <repository>
-            <id>asoco-nexus-release</id>
-            <url>http://nexus.asoco.com.cn/nexus/content/repositories/releases/</url>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
 
         <snapshotRepository>
-            <id>asoco-nexus-snapshot</id>
-            <url>http://nexus.asoco.com.cn/nexus/content/repositories/snapshots/</url>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

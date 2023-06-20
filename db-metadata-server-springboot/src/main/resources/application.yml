@@ -25,16 +25,17 @@ md:
   app: # 应用配置
     name: DB-Metadata低代码开发工具 # 系统名
     logo: meta # 系统logo, svg图，http地址
-    registerable: true # 系统是否支持用户自行注册
+    registerable: true # 系统是否支持用户自行注册 TODO 尚未兑现
     addable: true # 系统是否支持用户添加其他用户
     default_pass: 888888 # 默认(初始)密码， 当添加用户时、用户注册(未提供密码时)，将使用此默认密码
-    pass-encrypt-key: DB-Metadata is delicious # 用户密码加密密钥。无论什么方式，入库的明文密码都需要使用此密钥进行加密。加密方式为AES对称加密。此密钥一旦设定，如果更改，可能导致用户服务登录，只能重置了。
+    pass-encrypt-key: DB-Metadata is delicious # 用户密码加密密钥。无论什么方式，入库的明文密码都需要使用此密钥进行加密入库。加密方式为AES对称加密。此密钥一旦设定，如果更改，可能导致用户无法登录，只能重置了。
     login-bg: \#2f4a75 # 登录页背景色(如blue、#0000FF)或背景图(地址，会设置到url()中)
-    reset-pass: dbmeta # 重置口令, 默认dbmeta
-    show-greeting: true # 显示问候语
+    reset-pass: dbmeta # dbmeta内置元数据的重置口令, 默认dbmeta
+    show-version: false # 在系统名后显示当前dbmeta版本号
+    show-greeting: true # 显示问候语，用户登录后在右上角显示问候语
     show-theme-setting: true # 显示主题设置入口, 设为false，则用户无法设置主题
     allow-custom-theme: false # 是否允许用户自由配置主题。用户界面上设置的主题只影响其本地。
-    doc-url: https://doc-dbmeta.asoco.com.cn # db-meta文档地址
+    doc-url: http://dbmeta.pengxg.cc/ # db-meta文档地址
 
   server:
     enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。
@@ -62,7 +63,7 @@ md:
     #        - /router
     #        - /user/login
     upload: # 上传配置
-      mode: local # 默认值local, 可以不配置
+      mode: local # 上传采用的模式。默认为local, 表示上传到服务器本地目录(具体路径取决于md.server.upload.local下的配置)。
       local:
         base-upload-path: /opt/www/db-meta-serve # 当mode为local时有效，配置的本地上传根路径。这也是默认值，可以不配置
     event-enabled: true

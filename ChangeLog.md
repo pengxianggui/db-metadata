@@ -18,7 +18,7 @@
 
 ## v2.4
 
-* [X]  移除静态配置的ROOT用户，改为从动态user中进行鉴别，user是否为ROOT由业务系统去定义。
+* [X]  移除静态配置的ROOT用户，改为从动态user中进行鉴别，user是否为ROOT由业务系统去定义。默认情况下，用户名为ROOT的视为ROOT用户。
 * [X]  移除asoco-common的所有依赖
 * [X]  将公司内部的oss上传相关代码从dbmeta中移出，以spring-boot-starter的形式自动装配。
 * [X]  内置提供DefaultDbMetaConfigurer配置器，默认会自动装配spring容器中的文件服务类(上传/下载)
