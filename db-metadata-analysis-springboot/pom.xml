@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.md</groupId>
+        <groupId>io.github.pengxianggui</groupId>
         <artifactId>db-metadata-parent</artifactId>
         <version>2.4-SNAPSHOT</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
-    <groupId>com.github.md</groupId>
+    <groupId>io.github.pengxianggui</groupId>
     <artifactId>db-metadata-analysis-springboot</artifactId>
     <version>${parent.version}</version>
 
