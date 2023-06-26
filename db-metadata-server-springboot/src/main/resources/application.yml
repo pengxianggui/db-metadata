@@ -35,7 +35,7 @@ md:
     show-greeting: true # 显示问候语，用户登录后在右上角显示问候语
     show-theme-setting: true # 显示主题设置入口, 设为false，则用户无法设置主题
     allow-custom-theme: false # 是否允许用户自由配置主题。用户界面上设置的主题只影响其本地。
-    doc-url: http://dbmeta.pengxg.cc/ # db-meta文档地址
+    doc-url: http://dbmeta.pengxg.cc/ # db-meta文档地址, 前端的针对元数据的配置界面会提供帮助链接
 
   server:
     enable-certification: true # 是否启用认证，若关闭, 则不用登录，不用鉴权。
