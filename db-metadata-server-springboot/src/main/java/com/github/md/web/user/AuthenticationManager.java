@@ -28,7 +28,7 @@ public class AuthenticationManager {
     private static AuthenticationManager me = null;
 
     /**
-     * 需要注意得是loginUsers得put动作 只能由loginService来做
+     * 需要注意得是loginUsers的put动作 只能由loginService来做。key一般为用户token
      */
     @Getter
     private final Cache<String, UserWithRolesWrapper> loginUsers = CacheBuilder.newBuilder()

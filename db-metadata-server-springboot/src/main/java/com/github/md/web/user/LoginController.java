@@ -40,11 +40,7 @@ public class LoginController extends ControllerAdapter {
 
     @PostMapping("${md.server.login.ctrl.logout-path:/user/logout}")
     public Ret logout() {
-        UserWithRolesWrapper user = AuthenticationManager.me().getUser(getRequest());
-        if (Objects.isNull(user)) {
-            return Ret.ok("msg", "用户未登录");
-        }
-        boolean flag = AuthenticationManager.me().logout(user);
+        boolean flag = AuthenticationManager.me().getLoginService().logout(getRequest());
         return flag ? Ret.ok() : Ret.fail();
     }
 

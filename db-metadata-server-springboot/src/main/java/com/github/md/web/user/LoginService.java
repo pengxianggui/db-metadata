@@ -129,8 +129,18 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @param user
      * @return
+     * @deprecated 使用 {@link #logout(HttpServletRequest)} 替代。
      */
+    @Deprecated
     boolean logout(U user);
+
+    /**
+     * 登出操作。用户自己主动登出。
+     *
+     * @param request
+     * @return
+     */
+    boolean logout(HttpServletRequest request);
 
     /**
      * 获取所有已登录的用户

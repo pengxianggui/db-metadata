@@ -19,8 +19,13 @@ import java.util.Map;
 @AllArgsConstructor
 public abstract class AbstractUserService<U extends User, UR extends UserWithRolesWrapper> implements UserService<U>, LoginService<UR> {
 
-    @Override
-    public UR getUser(HttpServletRequest request) {
+    /**
+     * 获取请求中的token
+     *
+     * @param request
+     * @return
+     */
+    protected String getToken(HttpServletRequest request) {
         //cookie load
         String token = "";
 // TODO cookie和token是否需要都支持，然后配置应用？目前我们token用的居多，暂时不启用cookie
@@ -32,7 +37,13 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
 //        }
 
         //request load
-        token = StrKit.defaultIfBlank(token, request.getHeader(tokenKey()));
+        return StrKit.defaultIfBlank(token, request.getHeader(tokenKey()));
+    }
+
+    @Override
+    public UR getUser(HttpServletRequest request) {
+        //request load
+        String token = getToken(request);
         if (StrKit.notBlank(token)) {
             UR user = (UR) AuthenticationManager.me().getLoginUsers().getIfPresent(token);
             return user;
@@ -43,6 +54,13 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
     @Override
     public Map<String, UR> getAllLoggedUsers() {
         return (Map<String, UR>) AuthenticationManager.me().getLoginUsers().asMap();
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest request) {
+        final String token = getToken(request);
+        AuthenticationManager.me().getLoginUsers().invalidate(token);
+        return true;
     }
 
     @Override
