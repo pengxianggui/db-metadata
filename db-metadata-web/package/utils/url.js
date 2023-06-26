@@ -122,9 +122,10 @@ export function resolvePath(url, params) {
  *
  * @param baseURL
  * @param path
+ * @param preventRepeat 防止重复，若path已经是baseURL开头的，则不在重复追加baseURL前缀了。默认为false
  * @returns {string|*}
  */
-export function resolve(baseURL, path) {
+export function resolve(baseURL, path, preventRepeat = false) {
     if (isExternal(path)) {
         return path
     }
@@ -135,9 +136,29 @@ export function resolve(baseURL, path) {
         return baseURL
     }
 
+    if (preventRepeat && path.startsWith(baseURL)) {
+        return path
+    }
+
     if (path.startsWith('/')) {
         return baseURL + path
     } else {
         return baseURL + '/' + path
     }
+}
+
+/**
+ * 逆拼接两个path, 判断path参数前缀是否是baseURL, 若是，则移除此前缀，并返回移出后的值
+ * @param baseURL
+ * @param path
+ * @return
+ */
+export function unResolve(baseURL, path) {
+    if (isEmpty(baseURL) || isEmpty(path)) {
+        return path
+    }
+    if (path.startsWith(baseURL)) {
+        path.substring(baseURL.length)
+    }
+    return path
 }

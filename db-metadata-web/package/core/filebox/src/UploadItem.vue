@@ -26,23 +26,47 @@ import Meta from "../../mixins/meta";
 import Val from "../../mixins/value";
 import {appConfig} from "../../../config";
 import Token from "../../../token";
-import {resolve} from "../../../utils/url";
 
+/**
+ * 入参如果是相对路径，则拼接前缀baseURL，以便代理命中
+ * @param value 对象数组或对象
+ * @returns {*[]}
+ */
 const conver = function (value) {
-  return (utils.isArray(value) ? value : [value])
+  let arr;
+  if (utils.isArray(value)) {
+    arr = value
+  } else {
+    arr = utils.isObject(value) ? [value] :[]
+  }
+  utils.assert(arr.every(f => utils.isObject(f) && !utils.isEmpty(f.url)), "数据错误, 格式必须满足[{url:''}] 或 {url:''}")
+
+  return arr.map(f => {
+    if (!utils.isExternal(f.url)) {
+      f.url = utils.resolve(this.baseURL, f.url, true)
+    }
+    return f
+  })
 }
 
+/**
+ * 出参如果是相对路径，则移除前缀baseURL, 防止前缀被作为路径的一部分保存。
+ * @param value 对象数组或对象
+ * @returns {*|{}|{}}
+ */
 const reverse = function (value) {
-  if (this.mode === 'default') { // 输出数组
-    return value
+  let arr;
+  if (utils.isArray(value)) {
+    arr = value
   } else {
-    if (utils.isArray(value)) {
-      return value.length > 0 ? value[0] : {}
-    }
-    if (utils.isObject(value)) {
-      return value
-    }
-    return {}
+    arr = utils.isObject(value) ? [value] :[]
+  }
+  utils.assert(arr.every(f => utils.isObject(f) && !utils.isEmpty(f.url)), "数据错误, 格式必须满足[{url:''}] 或 {url:''}")
+
+  if (this.mode === 'default') { // 输出数组
+    return arr
+  } else { // seat模式，输出对象
+    return value.length > 0 ? value[0] :[]
   }
 }
 
@@ -60,7 +84,7 @@ export default {
       type: String,
       default: () => ''
     },
-    mode: {
+    mode: { // 模式: default/seat, default模式value入参为对象数组; seat模式value入参为对象
       type: String,
       default: () => 'default'
     }
@@ -80,9 +104,7 @@ export default {
       this.nativeValue = fileList
     },
     handlePreview(file) {
-      // 兼容外部链接(http://)和相对链接(/file/upload/...), 通常前者是dbmeta上传模式启用了oss存储, 后者是启用的本地存储模式
-      const url = utils.isExternal(file.url) ? file.url : file.url.substring(this.baseURL.length)
-      window.open(url)
+      window.open(file.url)
     },
     handleExceed(/*files, fileList*/) {
       const {conf: {limit}} = this
@@ -90,7 +112,7 @@ export default {
     },
     beforeRemove(file/*, fileList*/) {
       let fileName = utils.isEmpty(file.name) ? file.url : file.name
-      return this.$confirm(`确定移除 ${fileName}？`).then((data) => {
+      return this.$confirm(`确定移除 ${fileName}？`).then((/*data*/) => {
       });
     },
     handleOnError(err/*, file, fileList*/) {
@@ -132,7 +154,7 @@ export default {
 
       const {action} = finalConf
       return this.$reverseMerge(finalConf, {
-        action: resolve(baseURL, action),
+        action: utils.resolve(baseURL, action),
         limit: mode === 'default' ? finalConf.limit : 1 // default模式依据配置决定limit，非default模式(即seat模式)则限制只能传1个文件
       })
     }

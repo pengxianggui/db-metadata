@@ -46,8 +46,8 @@
             imgSrc() {
                 if (this.valueType === 'internal') {
                   const {defaults: {baseURL} = {}} = this.$axios
-                  return utils.resolve(baseURL, this.value)
-                } else if (this.valueType === 'relative') {
+                  return utils.resolve(baseURL, this.value, true)
+                } else {
                   return this.value
                 }
             },
