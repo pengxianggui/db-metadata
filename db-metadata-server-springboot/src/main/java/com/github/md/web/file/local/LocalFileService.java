@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.file.Paths;
 
 /**
@@ -37,9 +38,9 @@ public class LocalFileService implements UploadService, DownloadService {
 
     @Override
     public String upload(MultipartFile file, String... splitMarkers) {
-        String destPath = Joiner.on("/").skipNulls().join(splitMarkers);
+        String destPath = Joiner.on(File.separator).skipNulls().join(splitMarkers);
         File targetFile = toTargetFile(getBasePath() + destPath, file);
-        String url = targetFile.getPath().replaceFirst(getBasePath(), "");
+        String url = destPath + File.separator + targetFile.getName();
         return previewUrl(url);
     }
 
@@ -50,8 +51,8 @@ public class LocalFileService implements UploadService, DownloadService {
     }
 
     private File toTargetFile(String dirPath, MultipartFile file) {
-        if (!dirPath.endsWith("/")) {
-            dirPath += "/";
+        if (!dirPath.endsWith(File.separator)) {
+            dirPath += File.separator;
         }
 
         String fileName = getFileNameWithAffix(file);
@@ -73,13 +74,13 @@ public class LocalFileService implements UploadService, DownloadService {
 
     private String getBasePath() {
         String basePath = StrKit.defaultIfBlank(properties.getBaseUploadPath(), "/opt/www/db-meta-serve");
-        if (!basePath.endsWith("/")) {
-            basePath += "/";
+        if (!basePath.endsWith(File.separator)) {
+            basePath += File.separator;
         }
         return basePath;
     }
 
     private String previewUrl(String url) {
-        return "/file/preview?path=" + url;
+        return "/file/preview?path=" + URLEncoder.encode(url);
     }
 }

@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 默认的用户服务，继承了登录服务。使用meta_user表，配合header中携带token进行认证访问控制
+ *
  * @author pengxg
  * @date 2022/2/18 10:40 上午
  */
@@ -123,13 +125,12 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     @Override
     public LoginVO getInfo(HttpServletRequest request) {
         UserWithRolesWrapper user = getUser(request);
-        String token = tokenGenerator.generate(user);
-        return createLoginVO(token, user);
+        return createLoginVO(getToken(request), user);
     }
 
     @Override
     public LoginVO setLogged(DefaultUserWithRoles user) {
-        String token = tokenGenerator.generate(user);
+        final String token = tokenGenerator.generate(user);
         AuthenticationManager.me().getLoginUsers().put(token, user); // 缓存到内存中
         return createLoginVO(token, user);
     }
@@ -148,15 +149,15 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public boolean logged(DefaultUserWithRoles user) {
-        return logged(user.userId());
+        return super.logged(user.userId());
     }
 
     @Override
     public boolean logout(DefaultUserWithRoles user) {
-        String token = tokenGenerator.generate(user);
-        AuthenticationManager.me().getLoginUsers().invalidate(token);
+        AuthenticationManager.me().getLoginUsers().invalidate(user.userId());
         return !logged(user);
     }
+
 
     @Override
     public boolean resetPass(Object userId) {
