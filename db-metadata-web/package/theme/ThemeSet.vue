@@ -192,13 +192,13 @@ export default {
 $headerHeight: 100px;
 $footerHeight: 40px;
 
-/deep/ .el-drawer__header {
+::v-deep .el-drawer__header {
   margin-bottom: 0;
   padding: 20px;
   box-sizing: border-box;
   height: $headerHeight;
 }
-/deep/ .el-drawer__body {
+::v-deep .el-drawer__body {
   background-color: #e0e0e0;
   height: calc(100% - 140px);
   overflow: hidden auto;
@@ -209,10 +209,10 @@ $footerHeight: 40px;
   margin-bottom: $footerHeight;
 
   .hidden-radio {
-    /deep/ .el-radio__label {
+    ::v-deep .el-radio__label {
       padding: 0;
     }
-    /deep/ .el-radio__input {
+    ::v-deep .el-radio__input {
       display: none;
     }
   }
@@ -229,7 +229,7 @@ $footerHeight: 40px;
   }
 
   .theme-radio {
-    /deep/ .el-radio {
+    ::v-deep .el-radio {
       width: 30px;
       height: 30px;
     }

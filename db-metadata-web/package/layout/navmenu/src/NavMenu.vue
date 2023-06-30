@@ -62,7 +62,7 @@ div.container {
   .toggle-button {
     position: absolute;
     top: 50%;
-    margin-top: -$toggleButtonHeight / 2;
+    margin-top: calc(-1 * $toggleButtonHeight / 2);
     right: 0;
     width: $toggleButtonWidth;
     height: $toggleButtonHeight;

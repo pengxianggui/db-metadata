@@ -50,7 +50,7 @@ export default {
 <style scoped lang="scss">
 .mini-form {
 
-  /deep/ .indent-block {
+  ::v-deep .indent-block {
     & > .el-form-item__label {
       display: block;
       text-align: left;

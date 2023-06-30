@@ -245,12 +245,12 @@ export default {
 }
 
 .form-item-options {
-  /deep/ .el-form-item__content {
+  ::v-deep .el-form-item__content {
     margin-left: 5px !important;
   }
 
   .sub-form-item-sql {
-    /deep/ .el-form-item__label {
+    ::v-deep .el-form-item__label {
       width: 100% !important;
     }
   }

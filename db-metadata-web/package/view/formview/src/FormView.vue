@@ -206,7 +206,7 @@ export default {
 // 保持el-form-item下的表单控件撑开到100%, 这样可以对齐，提升表单显示效果
 .form-view {
   & :not(.form-item-button) {
-    /deep/ .el-form-item__content {
+    ::v-deep .el-form-item__content {
       & > *:not(.el-button) {
         width: 100%;
       }
@@ -214,7 +214,7 @@ export default {
   }
 
   .form-item-button {
-    /deep/ .el-form-item__content {
+    ::v-deep .el-form-item__content {
       margin-left: 0 !important;
       text-align: center;
     }

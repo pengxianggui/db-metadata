@@ -136,7 +136,7 @@ $headerHeight: 60px;
     .avatar {
       width: $avatarSideLength;
       height: $avatarSideLength;
-      border-radius: $avatarSideLength / 2;
+      border-radius: calc($avatarSideLength / 2);
       vertical-align: middle;
       cursor: pointer;
     }

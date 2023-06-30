@@ -159,7 +159,7 @@ export default {
       width: $avatarBorderLength;
       height: $avatarBorderLength;
       font-size: $avatarBorderLength;
-      border-radius: $avatarBorderLength / 2;
+      border-radius: calc($avatarBorderLength / 2);
     }
   }
 }
