@@ -1,50 +1,43 @@
-# meta-element
+# db-metadata前端组件库
 
-> 数据驱动的前端组件库(基于`Vue + elementUI`).需要配合后端(db-metadata-service)使用, 形成快速开发平台.以表驱动一套完整的业务模块.　
-需要做的仅仅是做一些配置.或开发自己的模板. 后端地址: [db-metadata-service]()
+> 数据驱动的前端组件库(基于`Vue + elementUI`).需要配合后端(DBMS)使用, 形成快速开发平台.以表驱动一套完整的业务模块.　
+需要做的仅仅是做一些配置.或开发自己的模板. 后端地址: [db-metadata-service](../db-metadata-server-springboot/README.md)
 
 ## 使用方式
 1. iframe嵌入: 基于fatjar(前段整合进后端中), 具体使用参见后端说明
 2. 代码集成(npm install): 前端组件已经发布至npm, 可以下载使用, 基于组件库(配合后端接口)快速开发业务模块;
+> 推荐第2种方式
 
 ### iframe引入
 
 在fatjar项目中创建对应的元对象和菜单功能后, 访问对应的url, 即可渲染既定的模板实例. 如:
 
 ```html
-<iframe style="width: 100%; height: 100%;" src="http://localhost:8080/#/table?featureCode=iot_dict" frameborder="0"></iframe>
+<iframe style="width: 100%; height: 100%;" src="src" frameborder="0"></iframe>
 ```
 
 其中src的值需要参考系统支持的[内置模板]().
 
-### 项目启动
+### 项目构建
+> 推荐:
+> node: 16.16.0, npm: 8.11.0
+> 
+> 如果使用node18+, 可能报错: `0308010C:digital envelope routines::unsupported`, 具体原因和解决办法见[这篇文章](https://juejin.cn/post/7202639428132044858)
 
+构建方式: 
 ```shell
-npm install;
-npm run serve;
-
-# node-gyp
-npm ERR! gyp: No Xcode or CLT version detected!
-npm ERR! gyp ERR! configure error 
-npm ERR! gyp ERR! stack Error: `gyp` failed with exit code: 1
-npm ERR! gyp ERR! stack     at ChildProcess.onCpExit (/Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/node-gyp/lib/configure.js:345:16)
-npm ERR! gyp ERR! stack     at ChildProcess.emit (node:events:394:28)
-npm ERR! gyp ERR! stack     at Process.ChildProcess._handle.onexit (node:internal/child_process:290:12)
-npm ERR! gyp ERR! System Darwin 20.6.0
-npm ERR! gyp ERR! command "/Users/konbluesky/.nvm/versions/node/v16.9.1/bin/node" "/Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/.bin/node-gyp" "rebuild"
-npm ERR! gyp ERR! cwd /Users/konbluesky/work/db-meta-serve/db-metadata-web/node_modules/node-sass
-npm ERR! gyp ERR! node -v v16.9.1
-npm ERR! gyp ERR! node-gyp -v v3.8.0
-npm ERR! gyp ERR! not ok
-
-#上述错误可以尝试手动安装gyp 模块
-npm install -g node-gyp
-
-
-https://blog.csdn.net/qq_42762909/article/details/119361279
+npm install
+npm run build
 ``` 
+其他命令：
+- `npm run serve:local`: 运行并连接到本地的后端。这需要你本地跑一个集成了dbmeta的后端。(注意: 当前工程中已经移除了后端demo，独立到这个[工程](https://github.com/pengxianggui/db-metadata-demo)中)
+- `npm run serve:dev`: 运行并连接到开发(演示)环境。无需本地跑后端服务。
+- `npm run lint`: 执行lint
+- `npm run lib`: 执行打包
+- `npm run pub`: 执行发布，通常先执行打包，然后把打包的内容发布到npm中央仓库
+- `npm run release`: 等同于先执行`npm run lib`，再执行`npm run pub`
+- `npm run patch`: 将修复版本号自增，然后执行`npm run release`
 
-### 代码集成
 
 1.`cdn`
 
@@ -56,26 +49,26 @@ https://blog.csdn.net/qq_42762909/article/details/119361279
 
 (1). 下载
 ```bash
-npm i meta-element -S
+npm i db-metadata -S
 # 或
-yarn add meta-element
+yarn add db-metadata
 ```
 
-(2). 安装
+(2). 装配
 ```javascript
 import Vue from 'vue'
-import metaElement from 'meta-element'
+import DbMeta from 'db-metadata'
 const config = {
    axios: {
-       bashURL: ''
+      baseURL: '/api'
    },
-   authorities: ['ADMIN'],
-   // ...
+   router: router, // 你自己的router实例
+   menus: menus, // 编程菜单
+   components: [], // 你定义的全局组件，import过来，塞进去
 };
-Vue.use(metaElement, config)
+Vue.use(DbMeta, config)
 ```
-> 由于`meta-element`内部使用`element`, `axios`等,　因此有关配置用户可通过`config`自定义.
-更多关于自定义配置的说明参见[配置说明]()
+> 更多内容可以参考[demo](https://github.com/pengxianggui/db-metadata-demo/tree/master/web)
 
 (3). 使用
 
