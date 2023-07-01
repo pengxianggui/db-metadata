@@ -11,71 +11,32 @@
         :on-exceed="handleExceed"
         :before-upload="handleBeforeUpload"
         :file-list="nativeValue" :class="{__hide: hideUploadButton}">
-
-      <div slot="default" class="upload-btn">
-        <i class="seat-name" v-if="seat">请上传{{ seat }}：</i>
-        <i class="icon el-icon-plus" v-if="!isView"></i>
-      </div>
+      <slot v-bind:seat="seat" v-bind:isView="isView">
+      </slot>
     </el-upload>
+    <file-preview-dialog :mime="conf.accept"
+                         :visible.sync="dialogVisible"
+                         :url="imageUrl"></file-preview-dialog>
   </div>
 </template>
 
 <script>
+import FilePreviewDialog from "./FilePreviewDialog.vue";
 import utils from "../../../utils";
 import Meta from "../../mixins/meta";
 import Val from "../../mixins/value";
 import {appConfig} from "../../../config";
 import Token from "../../../token";
-
-/**
- * 入参如果是相对路径，则拼接前缀baseURL，以便代理命中
- * @param value 对象数组或对象
- * @returns {*[]}
- */
-const conver = function (value) {
-  let arr;
-  if (utils.isArray(value)) {
-    arr = value
-  } else {
-    arr = utils.isObject(value) ? [value] :[]
-  }
-  utils.assert(arr.every(f => utils.isObject(f) && !utils.isEmpty(f.url)), "数据错误, 格式必须满足[{url:''}] 或 {url:''}")
-
-  return arr.map(f => {
-    if (!utils.isExternal(f.url)) {
-      f.url = utils.resolve(this.baseURL, f.url, true)
-    }
-    return f
-  })
-}
-
-/**
- * 出参如果是相对路径，则移除前缀baseURL, 防止前缀被作为路径的一部分保存。
- * @param value 对象数组或对象
- * @returns {*|{}|{}}
- */
-const reverse = function (value) {
-  let arr;
-  if (utils.isArray(value)) {
-    arr = value
-  } else {
-    arr = utils.isObject(value) ? [value] :[]
-  }
-  utils.assert(arr.every(f => utils.isObject(f) && !utils.isEmpty(f.url)), "数据错误, 格式必须满足[{url:''}] 或 {url:''}")
-
-  if (this.mode === 'default') { // 输出数组
-    return arr
-  } else { // seat模式，输出对象
-    return value.length > 0 ? value[0] :[]
-  }
-}
+import conver from "./conver";
+import reverse from "./reverse";
 
 export default {
-  name: "UploadItem",
+  name: "UploadBox",
   mixins: [Meta(), Val(conver, reverse)],
   inject: {
     isView: {default: false}
   },
+  components: { FilePreviewDialog },
   props: {
     value: {
       type: [Object, Array]
@@ -93,18 +54,21 @@ export default {
     const header = {}
     header[appConfig.tokenKey] = Token.get()
     return {
+      imageUrl: '',
+      dialogVisible: false,
       headers: header
     };
   },
   methods: {
     handleBeforeUpload(file) {
-      return file;
+      this.$emit('before-upload', file)
     },
     handleRemove(file, fileList) {
       this.nativeValue = fileList
     },
     handlePreview(file) {
-      window.open(file.url)
+      this.imageUrl = file.url;
+      this.dialogVisible = true
     },
     handleExceed(/*files, fileList*/) {
       const {conf: {limit}} = this
@@ -115,6 +79,9 @@ export default {
       return this.$confirm(`确定移除 ${fileName}？`).then((/*data*/) => {
       });
     },
+    handleDownload(file) {
+      window.open(file.url)
+    },
     handleOnError(err/*, file, fileList*/) {
       const {message = '上传失败'} = err
       this.$message.warning(message)
@@ -122,7 +89,7 @@ export default {
     handleOnSuccess(response, file, fileList) {
       const {seat} = this
       const {state, code, message} = response
-      if (state === 'ok' || code === 0) {
+      if (state === 'ok' || code == 0) {
         this.$message.success('文件上传成功!');
         const {url, name, value} = response.data
 
@@ -132,17 +99,18 @@ export default {
         file.value = value;
         file.seat = seat;
 
+        this.imageUrl = file.url;
         this.nativeValue = fileList
       } else {
-        this.$message.error('文件上传失败:' + message);
+        this.$message.error('文件上传失败: ' + message);
       }
-    },
-  },
-  mounted() {
+    }
   },
   computed: {
     hideUploadButton() {
-      return !utils.isEmpty(this.value) && this.mode !== 'default'
+      const notEmptyWhenSeat = (!utils.isEmpty(this.value) && this.mode !== 'default'); // seat模式下, 此坑有值时
+      const isView = this.isView // 查看视图时
+      return notEmptyWhenSeat || isView
     },
     baseURL() {
       const {defaults: {baseURL} = {}} = this.$axios
@@ -162,25 +130,25 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.upload-item {
-  ::v-deep {
-    .__hide .el-upload--text {
-      display: none;
-    }
-  }
+<style lang="scss">
+.upload-item > .__hide .el-upload {
+  display: none;
 }
 </style>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .upload-item {
   .upload-btn {
     height: 100%;
     line-height: 20px;
     padding: 10px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 
     & > .seat-name {
       overflow: hidden;
+      font-size: 12px;
     }
   }
 }

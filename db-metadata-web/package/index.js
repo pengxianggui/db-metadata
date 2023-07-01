@@ -15,11 +15,12 @@ import DateBox from './core/datebox'
 import DateTimeBox from './core/datetimebox'
 import DialogBox from './core/dialogbox'
 import DropDownBox from './core/dropdownbox'
-import FileBox from './core/filebox'
 import FindBox from './core/findbox'
 import RowGrid from './core/rowgrid'
 import IconBox from './core/iconbox'
+import Uploadbox from "./core/uploadbox";
 import ImgBox from './core/imgbox'
+import FileBox from './core/filebox'
 import JsonBox from './core/jsonbox'
 import MiniFormBox from './core/miniformbox'
 import NumBox from './core/numbox'
@@ -90,12 +91,13 @@ const components = [
     DateTimeBox,
     DialogBox,
     DropDownBox,
-    FileBox,
     FindBox,
     FormView,
     RowGrid,
     IconBox,
+    Uploadbox,
     ImgBox,
+    FileBox,
     JsonBox,
     MiniFormBox,
     MiniFormObject,

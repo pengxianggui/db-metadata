@@ -158,7 +158,7 @@ export function unResolve(baseURL, path) {
         return path
     }
     if (path.startsWith(baseURL)) {
-        path.substring(baseURL.length)
+        return path.substring(baseURL.length)
     }
     return path
 }
