@@ -1,6 +1,7 @@
 <template>
   <div class="upload-item">
     <el-upload
+        :action="conf.action"
         v-bind="conf"
         :headers="headers"
         :on-preview="handlePreview"
@@ -89,7 +90,7 @@ export default {
     handleOnSuccess(response, file, fileList) {
       const {seat} = this
       const {state, code, message} = response
-      if (state === 'ok' || code == 0) {
+      if (state === 'ok' || code === 0) {
         this.$message.success('文件上传成功!');
         const {url, name, value} = response.data
 
@@ -107,11 +108,6 @@ export default {
     }
   },
   computed: {
-    hideUploadButton() {
-      const notEmptyWhenSeat = (!utils.isEmpty(this.value) && this.mode !== 'default'); // seat模式下, 此坑有值时
-      const isView = this.isView // 查看视图时
-      return notEmptyWhenSeat || isView
-    },
     baseURL() {
       const {defaults: {baseURL} = {}} = this.$axios
       return baseURL
@@ -125,7 +121,19 @@ export default {
         action: utils.resolve(baseURL, action),
         limit: mode === 'default' ? finalConf.limit : 1 // default模式依据配置决定limit，非default模式(即seat模式)则限制只能传1个文件
       })
-    }
+    },
+    // 是否隐藏上传按钮：1. 表单查看时(isView); 2. seat模式下此seat有值时; 3. 当前文件数量>=limit限制时
+    // 满足上述任一条件时返回true
+    hideUploadButton() {
+      const isView = this.isView // 表单查看时(isView);
+
+      const notEmptyWhenSeat = (!utils.isEmpty(this.value) && this.mode !== 'default'); // seat模式下此seat有值时
+
+      const { conf: { limit }, nativeValue } = this
+      const isLeLimit = nativeValue.length >= limit // 当前文件数量>=limit限制时
+
+      return notEmptyWhenSeat || isView || isLeLimit
+    },
   }
 }
 </script>
