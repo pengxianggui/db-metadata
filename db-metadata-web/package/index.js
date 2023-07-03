@@ -18,7 +18,7 @@ import DropDownBox from './core/dropdownbox'
 import FindBox from './core/findbox'
 import RowGrid from './core/rowgrid'
 import IconBox from './core/iconbox'
-import Uploadbox from "./core/uploadbox";
+import UploadBox from "./core/uploadbox";
 import ImgBox from './core/imgbox'
 import FileBox from './core/filebox'
 import JsonBox from './core/jsonbox'
@@ -95,7 +95,7 @@ const components = [
     FormView,
     RowGrid,
     IconBox,
-    Uploadbox,
+    UploadBox,
     ImgBox,
     FileBox,
     JsonBox,

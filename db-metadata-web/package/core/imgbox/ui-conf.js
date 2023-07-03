@@ -13,6 +13,7 @@ const defaultMeta = {
         "show-file-list": true,
         "limit": 1,
         "multiple": false,  // 暂时单选
+        "accept": "image/*" // 只接受图片的MIME
     },
     "explain": ""
 }

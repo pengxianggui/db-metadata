@@ -664,6 +664,7 @@ export function execute(fn, params) {
  * 删除一个对象所有的属性
  * @param value
  * @param ignoreKeys 不删的key数组，也可以传一个key字符串
+ * @return 返回执行删除操作后的对象
  */
 export function deleteAllAttrs(value, ignoreKeys = []) {
     if (!isObject(value)) {

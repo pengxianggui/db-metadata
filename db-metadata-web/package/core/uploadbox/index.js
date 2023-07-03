@@ -1,4 +1,4 @@
-import UploadBox from './src/UploadItem.vue'
+import UploadBox from './src/UploadBox.vue'
 
 UploadBox.install = function (Vue) {
     Vue.component(UploadBox.name, UploadBox);
