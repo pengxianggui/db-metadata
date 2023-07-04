@@ -1,6 +1,7 @@
 package com.github.md.web.user.support.defaults;
 
 import com.github.md.analysis.SpringAnalysisManager;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.kit.PassKit;
 import com.github.md.web.user.*;
 import com.github.md.web.user.auth.IAuth;
@@ -125,6 +126,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     @Override
     public LoginVO getInfo(HttpServletRequest request) {
         UserWithRolesWrapper user = getUser(request);
+        AssertKit.isTrue(user != null, new UnLoginException("用户会话已过期"));
         return createLoginVO(getToken(request), user);
     }
 
