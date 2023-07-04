@@ -2,6 +2,8 @@ package com.github.md.web.user.auth.annotations;
 
 import com.github.md.web.user.auth.defaults.AuthorizePermit;
 
+import java.lang.annotation.*;
+
 /**
  * 此注解用于修饰API接口方法，生效于dbmeta内置的注解数据鉴权。与此注解相互配合的判定器为{@link AuthorizePermit}
  * <p>
@@ -14,6 +16,9 @@ import com.github.md.web.user.auth.defaults.AuthorizePermit;
  * @date 2023/4/26 11:31
  * @see AuthorizePermit 注解鉴权判定器。
  */
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
 public @interface Authorize {
 
     /**
