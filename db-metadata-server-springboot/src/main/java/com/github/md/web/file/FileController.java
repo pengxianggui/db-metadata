@@ -2,6 +2,7 @@ package com.github.md.web.file;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ZipUtil;
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaField;
@@ -27,8 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -60,9 +67,7 @@ public class FileController extends ControllerAdapter {
     public Ret index(MultipartRequest request) {
 
         List<MultipartFile> uploadFiles = new ArrayList<>();
-        request.getFileMap().forEach((k, v) -> {
-            uploadFiles.add(v);
-        });
+        request.getFileMap().forEach((k, v) -> uploadFiles.add(v));
 
         if (uploadFiles.size() == 0) {
             throw new WebException("未发现文件资源");
@@ -106,13 +111,13 @@ public class FileController extends ControllerAdapter {
         String fieldCode = queryHelper.getFieldCode();
 
         String url = uploadService().upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
-        Kv result = Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, url);
-        return result; // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
+
+        // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
+        return Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, url);
     }
 
     /**
-     * 基于元数据精准定位的文件下载，只适用于本地文件存储服务。
-     * 适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)，仅适用于dbmeta文件(/图片)控件的下载
+     * 基于元数据精准定位的文件下载，只适用于本地文件存储服务。仅适用于dbmeta文件(/图片)控件的下载
      * param objectCode
      * param fieldCode
      * param 业务记录 id
@@ -154,48 +159,58 @@ public class FileController extends ControllerAdapter {
     /**
      * 文件下载。
      * 通用的文件下载，将直接调用配置的{@link DownloadService#getFile(String)}下载文件，具体调用哪个实现类，取决于配置的文件存储服务(md.server.upload.mode)
-     *
-     * @return
+     * <p>
+     * param: path。
+     * @return 返回下载的文件
      */
     @ApiType(value = Type.API)
     @GetMapping("download")
     public ResponseEntity<FileSystemResource> download() {
-        String url = parameterHelper().get("url");
+        String url = StrKit.defaultIfBlank(parameterHelper().get("path"), parameterHelper().get("url"));
         File targetFile = downloadService().getFile(url);
         return responseFile(targetFile);
     }
 
     /**
-     * 图片预览/文件下载。
+     * 图片预览/文件下载。先通过{@link DownloadService}获取文件(默认的local模式，直接本地定位文件位置；若采用云存储模式，
+     * 则应当在{@link DownloadService#getFile(String)}中实现下载)。然后借助ResourceHttpRequestHandler返回本地资源。
+     * 可在视频模式下支持range分段返回。
      * <p>
-     * 适用于dbmeta内置的本地文件存储服务(md.server.upload.mode=local)
-     * TODO 问题: 这种方式开辟了,只要有相对路径就能够通过该接口访问上传目录下的文件
-     * 这样架空了"file/down" 亦或是增加了一个文件下载的接口?
-     * 后面非图片类型的文件是否可以通过这个接口来完成预览?
      */
     @ApiType(value = Type.API)
     @GetMapping("preview")
-    public ResponseEntity<FileSystemResource> tmpPre() {
+    public void tmpPre() {
         String path = parameterHelper().getPara("path", "");
 
+        HttpServletRequest request = getRequest();
+        HttpServletResponse response = getResponse();
+
         File targetFile = downloadService().getFile(path);
+        if (!targetFile.exists()) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+            return;
+        }
 
-        String fileName = URLEncoder.encode(targetFile.getName());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));
-        headers.add("Pragma", "no-cache");
-        headers.add("Expires", "0");
+        try {
+            String fileName = URLEncoder.encode(targetFile.getName(), Charset.defaultCharset().toString());
+            Optional<MediaType> optional = MediaTypeFactory.getMediaType(fileName);
+            response.setContentType(optional.orElse(MediaType.APPLICATION_OCTET_STREAM).getType());
+            response.setHeader("Connection", "close");
 
-        Optional<MediaType> optional = MediaTypeFactory.getMediaType(fileName);
-        return ResponseEntity.ok().headers(headers).contentType(optional.orElse(MediaType.APPLICATION_OCTET_STREAM)).body(new FileSystemResource(targetFile));
+            FileResourceHttpRequestHandler fileResourceHttpRequestHandler = AnalysisSpringUtil.getBean(FileResourceHttpRequestHandler.class);
+            request.setAttribute(FileResourceHttpRequestHandler.FILE_PATH, targetFile.getAbsolutePath());
+            fileResourceHttpRequestHandler.handleRequest(request, response);
+        } catch (IOException | ServletException e) {
+            log.error(e.getMessage());
+        }
     }
 
     /**
      * 响应文件
      *
-     * @param targetFile
-     * @return
+     * @param targetFile 待响应的文件
+     * @return 返回响应体
      */
     private ResponseEntity<FileSystemResource> responseFile(File targetFile) {
         AssertKit.isTrue(targetFile.exists(), new WebException("文件未找到, %s", targetFile.getPath()));
@@ -206,7 +221,8 @@ public class FileController extends ControllerAdapter {
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
 
-        return ResponseEntity.ok().headers(headers).contentType(MediaTypeFactory.getMediaType(targetFile.getName()).get()).body(new FileSystemResource(targetFile));
+        MediaType mediaType = MediaTypeFactory.getMediaType(targetFile.getName()).orElse(MediaType.APPLICATION_OCTET_STREAM);
+        return ResponseEntity.ok().headers(headers).contentType(mediaType).body(new FileSystemResource(targetFile));
     }
 
 
@@ -217,18 +233,27 @@ public class FileController extends ControllerAdapter {
      * @param primaryValue 文件关联记录的主键值。值对应的记录主键。
      * @param fieldValue   该字段该记录的值。字段值，其中存储了文件地址信息。当fieldValue为json数组字符串时，可能存储多个文件内容。需要内部去判断。
      *                     当metaField字段类型为json时，fieldValue为json数组。
-     * @return
+     * @return 返回此元字段包含的文件路径列表
      */
     private List<Path> getFilePaths(IMetaField metaField, String primaryValue, String fieldValue) {
+        List<Path> list;
         UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
         String objectCode = metaField.objectCode(),
                 fieldCode = metaField.fieldCode();
         if (uploadFileResolve.hasFile()) {
-            return uploadFileResolve.getFiles().stream()
+            list = uploadFileResolve.getFiles().stream()
                     .map(f -> Paths.get(objectCode, fieldCode, f.getUploadedName()))
                     .collect(Collectors.toList());
+        } else {
+            list = new ArrayList<>();
         }
-        return new ArrayList<>();
+
+        log.debug("获取[{}]表中主键为[{}]记录的[{}]字段中的文件列表,共有[{}]个文件",
+                metaField.getParent().tableName(), primaryValue, metaField.fieldCode(), list.size());
+        if (!metaField.configParser().isFile()) {
+            log.warn("元字段[{}.{}]未设置为文件类型，请勾选元字段配置中【是否为文件】", metaField.getParent().code(), metaField.fieldCode());
+        }
+        return list;
     }
 
     /**
@@ -236,7 +261,7 @@ public class FileController extends ControllerAdapter {
      *
      * @param metaField  元字段
      * @param fieldValue 数据库里存储的字段值
-     * @return
+     * @return 返回上传文件解析器
      */
     private UploadFileResolve getFileResolver(IMetaField metaField, String fieldValue) {
         if (metaField.dbType().isJson()) {
