@@ -403,3 +403,10 @@ INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `compon
 INSERT INTO `meta_router`(`id`, `pid`, `name`, `cn`, `path`, `redirect`, `component`, `components`, `props`, `layout`, `disable`, `order`, `meta`, `need_permit`, `permit_by`, `auths`, `auth_match_mode`, `roles`, `role_match_mode`, `remark`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES('776879995753730048','698272484012724224', 'SysSetting', '系统设置', 'sys-setting', NULL, 'SysSetting', NULL, NULL, b'0', b'0', 9, '{}', b'1', 'auth', 'module:sys_setting', 'any', NULL, 'any', NULL, b'1', NOW(), 'SYSTEM', NULL, NULL) ON DUPLICATE KEY UPDATE build_in = b'1', created_by = 'SYSTEM',  created_time = NOW();
 COMMIT;
 
+
+-- ----------------------------
+-- Records of meta_router
+-- ----------------------------
+BEGIN;
+INSERT INTO `meta_app_config` (`id`, `name`, `logo`, `registerable`, `default_pass`, `pass_encrypt_key`, `login_bg`, `reset_pass`, `show_greeting`, `show_theme_setting`, `allow_custom_theme`, `version`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('0', 'DB-Metadata低代码开发工具', 'meta', b'0', '888888', 'DB-Metadata is delicious', '#2f4a75', 'dbmeta', b'1', b'1', b'0', 1, NOW(), NULL, NULL, NULL);
+COMMIT;

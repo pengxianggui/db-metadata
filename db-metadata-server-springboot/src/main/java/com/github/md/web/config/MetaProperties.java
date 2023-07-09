@@ -23,9 +23,15 @@ public class MetaProperties {
 
     private AnalysisProperties analysis;
 
+    /**
+     * 当前是否处于开发模式
+     */
     private boolean devMode = false;
 
-    private String version;
+    /**
+     * dbmeta文档地址
+     */
+    private String docUrl;
 
     /**
      * !!! Very important !!!

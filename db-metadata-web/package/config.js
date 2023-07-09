@@ -1,7 +1,6 @@
 import {restUrl} from "./constant/url";
 import utils from "./utils";
 import {clearUser} from "./access";
-import {printErr} from "./utils/common";
 
 export const elementVersion = '2.12.0';
 
@@ -17,7 +16,6 @@ export const appConfig = {
     name: 'DB-Metadata低代码开发工具————Data drive everything',
     logo: null,
     registerable: true,
-    addable: true,
     enableCertification: true,
     devMode: false,
     tokenKey: 'X-TOKEN',

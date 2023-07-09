@@ -6,8 +6,7 @@
         <el-button size="mini" v-bind="scope.conf" icon="el-icon-lock" @click="resetPass(scope)"></el-button>
       </template>
       <template #add-btn="{conf, add}">
-        <el-button v-bind="conf.conf" @click="add" v-if="addable">新增</el-button>
-        <span v-else></span>
+        <el-button v-bind="conf.conf" @click="add">新增</el-button>
       </template>
     </single-grid-tmpl>
     <el-dialog :visible.sync="visible" width="800px"
@@ -39,7 +38,6 @@ export default {
   data() {
     return {
       fc: 'meta_user',
-      addable: appConfig.addable,
       visible: false,
       activeRow: {}
     }

@@ -27,15 +27,13 @@ public class AppPropVO {
     private boolean showGreeting = true; // 显示问候
     private boolean showThemeSetting = true; // 显示主题设置入口
     private boolean allowCustomTheme = false; // 是否允许用户自定义主题
-    private String docUrl;
+    private String docUrl; // dbmeta官方文档地址
 
 
     public AppPropVO(String version,
                      String name,
-                     boolean showVersion,
                      String logo,
                      boolean registerable,
-                     boolean addable,
                      boolean enableCertification,
                      boolean devMode,
                      String tokenKey,
@@ -48,10 +46,9 @@ public class AppPropVO {
                      boolean allowCustomTheme,
                      String docUrl) {
         this.version = version;
-        this.name = (showVersion ? name + "(" + version + ")" : name);
+        this.name = name;
         this.logo = logo;
         this.registerable = registerable;
-        this.addable = addable;
         this.enableCertification = enableCertification;
         this.devMode = devMode;
         this.tokenKey = tokenKey;

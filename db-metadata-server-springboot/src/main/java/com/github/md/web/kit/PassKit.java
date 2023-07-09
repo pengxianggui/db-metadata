@@ -2,7 +2,7 @@ package com.github.md.web.kit;
 
 import cn.hutool.crypto.SecureUtil;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.config.MetaProperties;
+import com.github.md.web.app.AppConfig;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +21,10 @@ public class PassKit {
      * @return
      */
     public static String encryptPass() {
-        MetaProperties metaProperties = ServiceManager.getAppProperties();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
 
-        String defaultPass = Optional.ofNullable(metaProperties)
-                .map(MetaProperties::getApp)
-                .map(MetaProperties.AppProperties::getDefaultPass).orElse(null);
+        String defaultPass = Optional.ofNullable(appConfig)
+                .map(AppConfig::getDefaultPass).orElse(null);
 
         return encryptPass(StrKit.defaultIfBlank(defaultPass, "888888"));
     }
@@ -37,14 +36,13 @@ public class PassKit {
      * @return
      */
     public static String encryptPass(String clearPass) {
-        MetaProperties metaProperties = ServiceManager.getAppProperties();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
 
-        String passEncryptKey = Optional.ofNullable(metaProperties)
-                .map(MetaProperties::getApp)
-                .map(MetaProperties.AppProperties::getPassEncryptKey).orElse(null);
+        String passEncryptKey = Optional.ofNullable(appConfig)
+                .map(AppConfig::getPassEncryptKey).orElse(null);
 
         if (StrKit.isBlank(passEncryptKey)) {
-            log.warn("您未配置密码加密密钥(请配置: md.app.pass-encrypt-key), 无法加密, 将输出原内容。");
+            log.warn("您未配置密码加密密钥(请于【系统管理】>【系统设置】>【基础设置】中设置用户密码加密密钥), 无法加密, 将输出原内容。");
             return clearPass;
         }
 
@@ -58,14 +56,13 @@ public class PassKit {
      * @return
      */
     public static String decryptPass(String encryptPass) {
-        MetaProperties metaProperties = ServiceManager.getAppProperties();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
 
-        String passEncryptKey = Optional.ofNullable(metaProperties)
-                .map(MetaProperties::getApp)
-                .map(MetaProperties.AppProperties::getPassEncryptKey).orElse(null);
+        String passEncryptKey = Optional.ofNullable(appConfig)
+                .map(AppConfig::getPassEncryptKey).orElse(null);
 
         if (StrKit.isBlank(passEncryptKey)) {
-            log.warn("您未配置密码加密密钥(请配置: md.app.pass-encrypt-key), 无法加密, 将输出原内容。");
+            log.warn("您未配置密码加密密钥(请于【系统管理】>【系统设置】>【基础设置】中设置用户密码加密密钥), 无法加密, 将输出原内容。");
             return encryptPass;
         }
 

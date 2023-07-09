@@ -2,6 +2,8 @@ package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.AppConst;
+import com.github.md.web.ServiceManager;
+import com.github.md.web.app.AppConfig;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.controller.vo.AppPropVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +24,23 @@ public class AppController extends ControllerAdapter {
 
     @GetMapping("config")
     public Ret config() {
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
         AppPropVO vo = new AppPropVO(
-                metaProperties.getVersion(),
-                metaProperties.getApp().getName(),
-                metaProperties.getApp().getShowVersion(),
-                metaProperties.getApp().getLogo(),
-                metaProperties.getApp().getRegisterable(),
-                metaProperties.getApp().getAddable(),
+                AppConst.version,
+                appConfig.getName(),
+                appConfig.getLogo(),
+                appConfig.getRegisterable(),
                 metaProperties.getServer().isEnableCertification(),
                 metaProperties.isDevMode(),
                 metaProperties.getServer().getLogin().getTokenKey(),
                 metaProperties.getServer().getLogin().getTokenIn(),
                 metaProperties.getServer().getLogin().getLoginKey(),
                 metaProperties.getServer().getLogin().getPwdKey(),
-                metaProperties.getApp().getLoginBg(),
-                metaProperties.getApp().getShowGreeting(),
-                metaProperties.getApp().getShowThemeSetting(),
-                metaProperties.getApp().getAllowCustomTheme(),
-                metaProperties.getApp().getDocUrl()
+                appConfig.getLoginBg(),
+                appConfig.getShowGreeting(),
+                appConfig.getShowThemeSetting(),
+                appConfig.getAllowCustomTheme(),
+                metaProperties.getDocUrl()
         );
         return Ret.ok("data", vo);
     }

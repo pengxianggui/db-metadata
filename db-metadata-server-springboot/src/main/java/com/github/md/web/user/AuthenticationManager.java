@@ -115,7 +115,8 @@ public class AuthenticationManager {
      */
     @Deprecated
     public boolean isRoot(User user) {
-        return Root.me().equals(user);
+//        return Root.me().equals(user);
+        return false;
     }
 
     /**
