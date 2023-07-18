@@ -2404,5 +2404,224 @@
         }
       }
     }
+  },
+  "meta_snippet": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_snippet",
+      "structure": "list",
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
+      "code": {
+        "cn": "编码",
+        "config": {
+          "isSearch": true,
+          "isUnique": true,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "title": {
+        "config": {
+          "isSearch": true,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "description": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "content": {
+        "cn": "代码内容",
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": false,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      }
+    }
+  },
+  "meta_var": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_var",
+      "structure": "list",
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": true,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
+      "name": {
+        "cn": "变量名",
+        "config": {
+          "isSearch": true,
+          "isUnique": true,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "value": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "description": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      }
+    }
   }
 }

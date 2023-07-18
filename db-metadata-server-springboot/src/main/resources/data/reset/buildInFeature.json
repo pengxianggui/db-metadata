@@ -239,5 +239,35 @@
         "FormView": "meta_role.FormView"
       }
     }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "代码片段",
+    "code": "meta_snippet",
+    "config": {
+      "config": {
+        "objectCode": "meta_snippet"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_snippet.SearchView",
+        "TableView": "meta_snippet.TableView",
+        "FormView": "meta_snippet.FormView"
+      }
+    }
+  },
+  {
+    "type": "SingleGrid",
+    "name": "变量",
+    "code": "meta_var",
+    "config": {
+      "config": {
+        "objectCode": "meta_var"
+      },
+      "instanceCodes": {
+        "SearchView": "meta_var.SearchView",
+        "TableView": "meta_var.TableView",
+        "FormView": "meta_var.FormView"
+      }
+    }
   }
 ]

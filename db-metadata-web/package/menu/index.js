@@ -64,6 +64,14 @@ const metaMenus = [{
             "auths": ['menu:meta_router']
         },
         {
+            "path": "/meta/snippet",
+            "title": "代码片段",
+            "icon": "code",
+            "disable": false,
+            "hidden": false,
+            "auths": ['menu:meta_snippet']
+        },
+        {
             "path": "/meta/api-resource",
             "title": "接口资源",
             "icon": "api",

@@ -10,6 +10,7 @@ import DictList from "./dict/DictList";
 import ExceptionList from "./ex/ExceptionList";
 import SysSetting from "./sys-setting/SysSetting";
 import Profile from "./user/Profile";
+import SnippetList from "./snippet/SnippetList";
 
 export default [
     Dashboard,
@@ -22,6 +23,7 @@ export default [
     DictList,
     ExceptionList,
     SysSetting,
+    SnippetList,
     Page404,
     Page401
 ]

@@ -9,6 +9,7 @@ import ProfileMenuManager from "../../meta/profile-menu/ProfileMenuManager";
 import InstanceConfEditor from "../../meta/instance-component/InstanceConfEditor";
 import ApiResourceList from "../../page/api-resource/ApiResourceList";
 import AuthList from "../../page/auth/AuthList";
+import SnippetList from "../../page/snippet/SnippetList.vue";
 
 const routes = [
     {
@@ -119,6 +120,18 @@ const routes = [
         },
         hidden: false,
         component: ProfileMenuManager
+    }, {
+        path: '/meta/snippet',
+        name: 'SnippetList',
+        meta: {
+            title: '代码片段',
+            icon: 'code',
+            noCache: false,
+            need_permit: true,
+            auths: ['route:meta_snippet']
+        },
+        hidden: false,
+        component: SnippetList
     }, {
         path: '/meta/api-resource',
         name: 'ApiResourceList',

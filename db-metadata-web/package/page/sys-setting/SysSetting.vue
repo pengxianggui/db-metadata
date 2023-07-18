@@ -142,8 +142,9 @@ export default {
             inputType: 'password',
             inputPlaceholder: '请输入口令..',
             dangerouslyUseHTMLString: true,
+            customClass: '__md_overflow',
             inputValidator: function (val) {
-              return !isEmpty(val) ? true : '请输入口令(参见系统配置)';
+              return !isEmpty(val) ? true : '请输入口令(参见系统设置)';
             }
           }).then(data => {
 
@@ -169,6 +170,12 @@ export default {
 }
 </script>
 
+<style>
+.__md_overflow {
+  overflow: auto;
+  max-height: 100%;
+}
+</style>
 <style scoped lang="scss">
 .md_page-container {
   padding: 20px 50px !important;
