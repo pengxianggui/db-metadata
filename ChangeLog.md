@@ -28,7 +28,7 @@
 * [ ]  升级认证鉴权模块，使业务系统满足更多场景。如：1. 用户、角色、权限托管在第三方的场景；
 * [x]  修复上传控件(FileBox和ImgBox)在seat模式下删除前面图片导致的前移问题。 
 * [ ]  TableView中字段的render改为下拉选择Code Snippet, dbmeta建表支持单独维护。
-* [ ]  将application.yml中关于`md.app`下的配置改为动态维护， 存储于表`meta_app_config`中。
+* [x]  将application.yml中关于`md.app`下的配置改为动态维护， 存储于表`meta_app_config`中。
 
 ## v2.3
 

@@ -1778,6 +1778,80 @@
         "operation-column": {
           "show": false
         }
+      },
+      "_fields": {
+        "name": {
+          "conf": {
+            "width": "180px"
+          }
+        },
+        "logo": {
+          "conf": {
+            "width": "150px"
+          },
+          "render": "function (h, value) {\n    if (value && value.length > 0) {\n        let url = '/api' + value;\n        return h('el-image', {\n            attrs: {\n                src: url,\n                \"preview-src-list\": [url]\n            },\n            style: {\n                width: '30px',\n                height: '30px'\n            }\n        }, null)\n    }\n    return h('span', value)\n}"
+        },
+        "registerable": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "default_pass": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "pass_encrypt_key": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "login_bg": {
+          "conf": {
+            "width": "150px"
+          },
+          "render": "function (h, value) {\n    if (value && value.length > 0) {\n        let url = '/api' + value;\n        return h('el-image', {\n            attrs: {\n                src: url,\n                \"preview-src-list\": [url]\n            },\n            style: {\n                width: '30px',\n                height: '30px'\n            }\n        }, null)\n    }\n    return h('span', value)\n}"
+        },
+        "reset_pass": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "show_greeting": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "show_theme_setting": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "allow_custom_theme": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "version": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "build_in": {
+          "conf": {
+            "width": "120px"
+          }
+        },
+        "created_time": {
+          "conf": {
+            "width": "150px"
+          }
+        },
+        "created_by": {
+          "conf": {
+            "width": "150px"
+          }
+        }
       }
     },
     "FormView": {

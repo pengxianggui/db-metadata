@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button type="text" @click="openHistory">查看历史变更</el-button>
     <form-view ref="meta_app_config.formView" ic="meta_app_config.formView" form-type="add" :model="model"
                @submit="handleSubmit" @cancel="handleCancel" @ok="handleOk"
                v-if="model.id">
@@ -69,6 +70,12 @@ export default {
         this.model.show_theme_setting = showThemeSetting
         this.model.allow_custom_theme = allowCustomTheme
         this.model.version = version
+      })
+    },
+    openHistory() {
+      this.$dialog({ic: 'meta_app_config.TableView'}, null, {
+        title: '系统基础设置历史变更',
+        width: '80%'
       })
     },
     handleSubmit(model) {

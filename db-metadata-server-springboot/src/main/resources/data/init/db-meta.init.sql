@@ -458,7 +458,7 @@ CREATE TABLE `meta_app_config`  (
                                         `show_greeting` bit(1) NULL DEFAULT b'1' COMMENT '显示问候语',
                                         `show_theme_setting` bit(1) NULL DEFAULT b'1' COMMENT '显示主题设置入口',
                                         `allow_custom_theme` bit(1) NULL DEFAULT b'0' COMMENT '是否允许自定义主题',
-                                        `version` int(9) NOT NULL AUTO_INCREMENT COMMENT '当前app配置的版本号',
+                                        `version` int(9) NOT NULL AUTO_INCREMENT COMMENT '版本号',
                                         `build_in` bit(1) NOT NULL DEFAULT b'0' COMMENT '系统内置',
                                         `created_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
                                         `created_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
