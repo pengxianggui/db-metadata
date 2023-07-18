@@ -365,7 +365,7 @@ public class InitKit {
      * @return
      */
     public InitKit updateBizData() {
-        log.info("即将对内置业务数据(接口资源、权限、权限模块、字典、菜单、路由、角色)进行更新，更新依据为{}...", BIZ_DATA_SQL);
+        log.info("即将对内置业务数据(接口资源、权限、权限模块、字典、菜单、路由、角色、系统设置)进行更新，更新依据为{}...", BIZ_DATA_SQL);
         String sql = UtilKit.loadConfigByFile(BIZ_DATA_SQL);
 
         Resource sqlResource = new ByteArrayResource(sql.getBytes());

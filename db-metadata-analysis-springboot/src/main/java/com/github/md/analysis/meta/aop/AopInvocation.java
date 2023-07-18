@@ -1,9 +1,8 @@
 package com.github.md.analysis.meta.aop;
 
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
+import com.github.md.analysis.meta.IMetaObject;
 import lombok.Data;
 
 import javax.servlet.http.HttpServletRequest;

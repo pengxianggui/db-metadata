@@ -72,7 +72,7 @@ public class MetaDataExport {
      */
     public void exportToSQL(File sqlFile) throws IOException {
         SpringAnalysisManager springAnalysisManager = SpringAnalysisManager.me();
-        final String systemName = ServiceManager.getAppProperties().getApp().getName();
+        final String systemName = ServiceManager.getAppConfigService().getLatest().getName();
         final String schemaName = springAnalysisManager.getDataSourceManager().mainSource().schemaName();
 
         FileWriter fileWriter = new FileWriter(sqlFile);

@@ -1,17 +1,17 @@
 package com.github.md.web.controller;
 
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.github.md.analysis.db.Table;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.kit.Ret;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Db;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +78,8 @@ public class DBController extends ControllerAdapter {
                 .updateFeatureConfig()             // 依据buildInFeature.json覆盖系统内置的功能配置
                 .updateBizData();                  // 依据buildInData.sql 导入其他内建数据
 
+        InitKit.me().initROOTAccount(); // 初始化账号(ROOT)
+
         log.info("重置完毕！");
         return Ret.ok();
     }
@@ -88,8 +90,6 @@ public class DBController extends ControllerAdapter {
      * @return
      */
     private Ret truncate() {
-        preConditionCheck();
-
         StringBuilder sb = new StringBuilder();
 
         Set<AppConst.INNER_TABLE> resetableTable = AppConst.INNER_TABLE.getResetableTable();
@@ -112,6 +112,6 @@ public class DBController extends ControllerAdapter {
     private void preConditionCheck() {
         String token = parameterHelper().getPara("token");
         Preconditions.checkArgument(quickJudge().isDevMode(), "未处于开发模式,无法执行该操作");
-        Preconditions.checkArgument(token.equalsIgnoreCase(ServiceManager.getAppProperties().getApp().getResetPass()), "口令错误,不能初始化系统");
+        Preconditions.checkArgument(token.equalsIgnoreCase(ServiceManager.getAppConfigService().getLatest().getResetPass()), "口令错误,不能初始化系统");
     }
 }

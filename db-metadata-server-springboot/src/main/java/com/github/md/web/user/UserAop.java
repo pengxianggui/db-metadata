@@ -6,9 +6,7 @@ import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
-import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
-import com.github.md.web.config.MetaProperties;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.kit.PassKit;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +24,6 @@ public class UserAop implements AddPointCut, UpdatePointCut {
     @Override
     public boolean addBefore(FormInvocation invocation) {
         check(invocation);
-
-        MetaProperties metaProperties = ServiceManager.getAppProperties();
-        if (!metaProperties.getApp().getAddable()) {
-            throw new UnsupportedOperationException("已配置用户体系不允许新增用户, 如需支持新增, 请开启配置项(md.server.user.addable=true)");
-        }
 
         // 设置默认加密密码
         MetaData formData = invocation.getFormData();

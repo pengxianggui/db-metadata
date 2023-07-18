@@ -36,11 +36,25 @@ public interface UserService<U extends User> {
     boolean bindRolesForUser(String userId, String... roleIds);
 
     /**
-     * 密码重置
+     * 密码重置, 重置为默认密码
      *
      * @return
      */
     boolean resetPass(Object userId);
+
+    /**
+     * 刷新所有用户的密码。此操作不改变用户密码的明文值，但会更改数据库里存储的密文值。当加密密钥发生变化时，执行此方法。
+     * <p>
+     * 数据库里密码是加密的，若系统配置的加密密钥发生变化，则需要重新加密更新用户的密文密码(对应的明文值是不变的), 否则系统设置时，若更改
+     * 了加密密钥，所有用户将无法登陆。
+     *
+     * @param oldEncryptKey 旧的加密密钥，因为必须要用到之前的密钥进行解密
+     * @param newEncryptKey 新的加密密钥
+     * @return 所有用户执行成功则返回true，确保事务
+     */
+    default boolean refreshPass(String oldEncryptKey, String newEncryptKey) {
+        return false;
+    }
 
     /**
      * 用户元对象编码

@@ -769,3 +769,17 @@ export function group(arr, key, defGroupName = '默认') {
 export function randomInt(begin, end) {
     return Math.floor(Math.random() * ((end + 1) - begin) + 1)
 }
+
+/**
+ * 判断字符串是否为合法的AES加密密钥。
+ *
+ * @param str AES加密密钥
+ * @returns {boolean} 若非字符串，或者长度不满足以下任一值：16、24、32, 则返回false。否则返回true
+ */
+export function isIegalAesKey(str) {
+    if (!isString(str) || isEmpty(str)) {
+        return false
+    }
+
+    return str.length === 16 || str.length === 24 || str.length === 32
+}

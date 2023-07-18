@@ -75,7 +75,7 @@ public class ApiResourceFactory {
     }
 
     private static MetaApiResource getApiResource(Type type, String uri) {
-        Record record = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_api_resource where type=? and uri=? and (meta_code=null or meta_code = '')", type.getCode(), uri);
+        Record record = SpringAnalysisManager.me().dbMain().findFirst("select * from meta_api_resource where type=? and uri=?", type.getCode(), uri);
         if (record == null) {
             return null;
         }

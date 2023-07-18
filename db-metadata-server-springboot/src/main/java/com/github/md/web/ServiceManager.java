@@ -4,6 +4,7 @@ import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.db.MysqlService;
 import com.github.md.analysis.meta.BusinessService;
 import com.github.md.analysis.meta.DbMetaService;
+import com.github.md.web.app.AppConfigService;
 import com.github.md.web.component.ComponentService;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.config.QuickJudge;
@@ -65,5 +66,9 @@ public class ServiceManager {
 
     public static MetaProperties getAppProperties() {
         return AnalysisSpringUtil.getBean(MetaProperties.class);
+    }
+
+    public static AppConfigService getAppConfigService() {
+        return AnalysisSpringUtil.getBean(AppConfigService.class);
     }
 }

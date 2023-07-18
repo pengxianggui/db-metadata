@@ -106,6 +106,8 @@ $headerHeight: 60px;
   .logo {
     font-size: 50px;
     margin-right: 10px;
+    width: 0.8em;
+    height: 0.8em;
   }
 
   .name {

@@ -1,5 +1,8 @@
 package com.github.md.web.controller.vo;
 
+import com.github.md.web.AppConst;
+import com.github.md.web.app.AppConfig;
+import com.github.md.web.config.MetaProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,41 +30,24 @@ public class AppPropVO {
     private boolean showGreeting = true; // 显示问候
     private boolean showThemeSetting = true; // 显示主题设置入口
     private boolean allowCustomTheme = false; // 是否允许用户自定义主题
-    private String docUrl;
+    private String docUrl; // dbmeta官方文档地址
 
 
-    public AppPropVO(String version,
-                     String name,
-                     boolean showVersion,
-                     String logo,
-                     boolean registerable,
-                     boolean addable,
-                     boolean enableCertification,
-                     boolean devMode,
-                     String tokenKey,
-                     String tokenIn,
-                     String loginKey,
-                     String pwdKey,
-                     String loginBg,
-                     boolean showGreeting,
-                     boolean showThemeSetting,
-                     boolean allowCustomTheme,
-                     String docUrl) {
-        this.version = version;
-        this.name = (showVersion ? name + "(" + version + ")" : name);
-        this.logo = logo;
-        this.registerable = registerable;
-        this.addable = addable;
-        this.enableCertification = enableCertification;
-        this.devMode = devMode;
-        this.tokenKey = tokenKey;
-        this.tokenIn = tokenIn;
-        this.loginKey = loginKey;
-        this.pwdKey = pwdKey;
-        this.loginBg = loginBg;
-        this.showGreeting = showGreeting;
-        this.showThemeSetting = showThemeSetting;
-        this.allowCustomTheme = allowCustomTheme;
-        this.docUrl = docUrl;
+    public AppPropVO(MetaProperties metaProperties, AppConfig appConfig) {
+        this.version = AppConst.version;
+        this.name = appConfig.getName();
+        this.logo = appConfig.getLogo();
+        this.registerable = appConfig.getRegisterable();
+        this.enableCertification = metaProperties.getServer().isEnableCertification();
+        this.devMode = metaProperties.isDevMode();
+        this.tokenKey = metaProperties.getServer().getLogin().getTokenKey();
+        this.tokenIn = metaProperties.getServer().getLogin().getTokenIn();
+        this.loginKey = metaProperties.getServer().getLogin().getLoginKey();
+        this.pwdKey = metaProperties.getServer().getLogin().getPwdKey();
+        this.loginBg = appConfig.getLoginBg();
+        this.showGreeting = appConfig.getShowGreeting();
+        this.showThemeSetting = appConfig.getShowThemeSetting();
+        this.allowCustomTheme = appConfig.getAllowCustomTheme();
+        this.docUrl = metaProperties.getDocUrl();
     }
 }

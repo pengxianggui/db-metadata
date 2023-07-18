@@ -1,7 +1,8 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Ret;
-import com.github.md.web.AppConst;
+import com.github.md.web.ServiceManager;
+import com.github.md.web.app.AppConfig;
 import com.github.md.web.config.MetaProperties;
 import com.github.md.web.controller.vo.AppPropVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +21,26 @@ public class AppController extends ControllerAdapter {
     @Autowired
     private MetaProperties metaProperties;
 
+    /**
+     * 获取系统配置。包含配置文件维护的静态配置 + 数据库维护的动态配置。
+     *
+     * @return
+     */
     @GetMapping("config")
     public Ret config() {
-        AppPropVO vo = new AppPropVO(
-                metaProperties.getVersion(),
-                metaProperties.getApp().getName(),
-                metaProperties.getApp().getShowVersion(),
-                metaProperties.getApp().getLogo(),
-                metaProperties.getApp().getRegisterable(),
-                metaProperties.getApp().getAddable(),
-                metaProperties.getServer().isEnableCertification(),
-                metaProperties.isDevMode(),
-                metaProperties.getServer().getLogin().getTokenKey(),
-                metaProperties.getServer().getLogin().getTokenIn(),
-                metaProperties.getServer().getLogin().getLoginKey(),
-                metaProperties.getServer().getLogin().getPwdKey(),
-                metaProperties.getApp().getLoginBg(),
-                metaProperties.getApp().getShowGreeting(),
-                metaProperties.getApp().getShowThemeSetting(),
-                metaProperties.getApp().getAllowCustomTheme(),
-                metaProperties.getApp().getDocUrl()
-        );
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppPropVO vo = new AppPropVO(metaProperties, appConfig);
         return Ret.ok("data", vo);
+    }
+
+    /**
+     * 获取系统动态配置，即meta_app_config表中最新应用的动态配置。
+     *
+     * @return
+     */
+    @GetMapping("dynamic-config")
+    public Ret dynamicConfig() {
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        return Ret.ok("data", appConfig);
     }
 }

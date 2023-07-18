@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
  * <p> @author konbluesky </p>
  */
 public class AppConst {
+    /**
+     * 当前dbmeta版本。不能放到配置文件里，否则可能被用户覆盖。这个值必须真实反应当前依赖的dbmeta的版本，每次升级必须记得更新此值。
+     * 后面可以考虑借助此值实现增量脚本的自动更新。
+     */
+    public static final String version = "2.4";
 
     /**
      * 未知用户的缺省用户名
@@ -45,6 +50,7 @@ public class AppConst {
         META_ROLE_AUTH_RELA("meta_role_auth_rela", true, true, false),
         META_USER("meta_user", true, true, false),
         META_USER_ROLE_RELA("meta_user_role_rela", true, true, false),
+        META_APP_CONFIG("meta_app_config", true, true, false),
         ;
 
         /**
