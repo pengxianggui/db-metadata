@@ -1,11 +1,14 @@
 package com.github.md.web.kit;
 
+import cn.hutool.crypto.CryptoException;
 import cn.hutool.crypto.SecureUtil;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.WebException;
 import com.github.md.web.app.AppConfig;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;
 
+import java.security.InvalidKeyException;
 import java.util.Optional;
 
 /**
@@ -46,7 +49,25 @@ public class PassKit {
             return clearPass;
         }
 
-        return SecureUtil.aes(passEncryptKey.getBytes()).encryptHex(clearPass);
+        return encryptPass(clearPass, passEncryptKey);
+    }
+
+    /**
+     * 加密密码
+     *
+     * @param clearPass  明文密码
+     * @param encryptKey 加密密钥
+     * @return
+     */
+    public static String encryptPass(String clearPass, String encryptKey) {
+        try {
+            return SecureUtil.aes(encryptKey.getBytes()).encryptHex(clearPass);
+        } catch (CryptoException e) {
+            if (e.getCause() instanceof InvalidKeyException) {
+                throw new WebException("加密密钥配置有误");
+            }
+            throw new WebException(e);
+        }
     }
 
     /**
@@ -66,6 +87,23 @@ public class PassKit {
             return encryptPass;
         }
 
-        return SecureUtil.aes(passEncryptKey.getBytes()).decryptStr(encryptPass);
+        return decryptPass(encryptPass, passEncryptKey);
+    }
+
+    /**
+     * 解密密文
+     * @param encryptPass
+     * @param encryptKey
+     * @return
+     */
+    public static String decryptPass(String encryptPass, String encryptKey) {
+        try {
+            return SecureUtil.aes(encryptKey.getBytes()).decryptStr(encryptPass);
+        } catch (CryptoException e) {
+            if (e.getCause() instanceof InvalidKeyException) {
+                throw new WebException("加密密钥配置有误");
+            }
+            throw new WebException(e);
+        }
     }
 }

@@ -1747,9 +1747,7 @@
         },
         "avatar": {
           "component_name": "ImgBox",
-          "seats": [
-            ""
-          ],
+          "seats": [],
           "sort": 2,
           "conf": {
             "action": "/file/upload?objectCode=meta_user&fieldCode=avatar"
@@ -1761,6 +1759,217 @@
         "attrs": {
           "explain": "您可以在此处扩展任意属性, 数据将保存到数据表json字段中。",
           "sort": 7
+        }
+      }
+    }
+  },
+  "meta_app_config": {
+    "TableView": {
+      "config": {
+        "conf": {
+          "fit": true,
+          "size": "medium",
+          "highlight-current-row": true
+        },
+        "multi_select": false,
+        "operation-bar": {
+          "show": false
+        },
+        "operation-column": {
+          "show": false
+        }
+      }
+    },
+    "FormView": {
+      "config": {
+        "conf": {
+          "size": "medium",
+          "rules": {},
+          "inline": false,
+          "disabled": false,
+          "label-width": "140px"
+        },
+        "buttons": {
+          "show": true,
+          "cancel": {
+            "conf": {},
+            "show": true,
+            "label": "撤销更改"
+          },
+          "submit": {
+            "conf": {
+              "type": "primary"
+            },
+            "show": true,
+            "label": "提交"
+          }
+        }
+      },
+      "_fields": {
+        "name": {
+          "conf": {
+            "rules": [
+              {
+                "type": "string",
+                "message": "[系统名]是必须填写的",
+                "trigger": [
+                  "blur"
+                ],
+                "required": true
+              }
+            ],
+            "clearable": true,
+            "maxlength": 45,
+            "placeholder": "请输入系统名.."
+          },
+          "name": "name",
+          "sort": 1,
+          "label": "系统名",
+          "explain": "",
+          "default_value": "DB-Metadata低代码开发工具",
+          "component_name": "TextBox"
+        },
+        "logo": {
+          "conf": {
+            "drag": false,
+            "limit": 1,
+            "accept": "image/*",
+            "action": "/file/upload?objectCode=meta_app_config&fieldCode=logo",
+            "multiple": false,
+            "list-type": "picture-card",
+            "auto-upload": true,
+            "show-file-list": true
+          },
+          "name": "logo",
+          "sort": 2,
+          "label": "系统logo",
+          "seats": [],
+          "explain": "",
+          "component_name": "ImgBox"
+        },
+        "registerable": {
+          "conf": {},
+          "name": "registerable",
+          "sort": 3,
+          "label": "是否开放注册",
+          "explain": "开放注册将会在登录页提供注册入口",
+          "default_value": false,
+          "component_name": "BoolBox"
+        },
+        "default_pass": {
+          "conf": {
+            "rules": [
+              {
+                "type": "string",
+                "message": "[默认(初始)密码]是必须填写的",
+                "trigger": [
+                  "blur"
+                ],
+                "required": true
+              }
+            ],
+            "clearable": true,
+            "maxlength": 20,
+            "placeholder": "请输入默认用户密码，不填是888888",
+            "show-password": true
+          },
+          "name": "default_pass",
+          "sort": 4,
+          "label": "用户(初始)密码",
+          "explain": "",
+          "default_value": "888888",
+          "component_name": "TextBox"
+        },
+        "pass_encrypt_key": {
+          "conf": {
+            "clearable": true,
+            "placeholder": "请输入密钥..",
+            "show-password": true
+          },
+          "name": "pass_encrypt_key",
+          "sort": 14,
+          "label": "加密密钥",
+          "explain": "注意：密钥一旦设置避免变更，否则对存量用户而言，可能必须重置密码才能登录。",
+          "component_name": "PassBox"
+        },
+        "login_bg": {
+          "conf": {
+            "drag": false,
+            "limit": 1,
+            "accept": "image/*",
+            "action": "/file/upload?objectCode=meta_app_config&fieldCode=login_bg",
+            "multiple": false,
+            "list-type": "picture-card",
+            "auto-upload": true,
+            "show-file-list": true
+          },
+          "name": "login_bg",
+          "sort": 6,
+          "label": "登录页背景",
+          "seats": [],
+          "explain": "",
+          "component_name": "ImgBox"
+        },
+        "reset_pass": {
+          "conf": {
+            "rules": [
+              {
+                "type": "string",
+                "message": "[系统元数据重置口令]是必须填写的",
+                "trigger": [
+                  "blur"
+                ],
+                "required": true
+              }
+            ],
+            "clearable": true,
+            "maxlength": 45,
+            "placeholder": "请输入内容..",
+            "show-password": true
+          },
+          "name": "reset_pass",
+          "sort": 5,
+          "label": "元数据重置口令",
+          "explain": "口令用于重置内置的元数据",
+          "default_value": "dbmeta",
+          "component_name": "TextBox"
+        },
+        "show_greeting": {
+          "conf": {},
+          "name": "show_greeting",
+          "sort": 7,
+          "label": "显示问候语",
+          "explain": "",
+          "default_value": true,
+          "component_name": "BoolBox"
+        },
+        "show_theme_setting": {
+          "conf": {},
+          "name": "show_theme_setting",
+          "sort": 9,
+          "label": "显示主题设置入口",
+          "explain": "",
+          "default_value": true,
+          "component_name": "BoolBox"
+        },
+        "allow_custom_theme": {
+          "conf": {},
+          "name": "allow_custom_theme",
+          "sort": 8,
+          "label": "是否允许自定义主题",
+          "explain": "",
+          "default_value": false,
+          "component_name": "BoolBox"
+        },
+        "version": {
+          "conf": {
+            "controls": false
+          },
+          "name": "version",
+          "sort": 15,
+          "label": "版本",
+          "explain": "保存后会自增",
+          "component_name": "NumBox"
         }
       }
     }

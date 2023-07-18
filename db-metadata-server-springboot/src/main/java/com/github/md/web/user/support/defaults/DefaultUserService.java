@@ -75,21 +75,19 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
         return Db.tx(() -> {
             db().delete("delete from meta_user_role_rela where user_id=?", userId);
 
-            List<Record> inserts = Arrays.stream(roleIds).filter(roleId -> StrKit.notBlank(roleId))
-                    .distinct().map(roleId -> {
-                        Record rela = new Record();
-                        rela.set("user_id", userId);
-                        rela.set("role_id", roleId);
-                        return rela;
-                    }).collect(Collectors.toList());
+            List<Record> inserts = Arrays.stream(roleIds).filter(roleId -> StrKit.notBlank(roleId)).distinct().map(roleId -> {
+                Record rela = new Record();
+                rela.set("user_id", userId);
+                rela.set("role_id", roleId);
+                return rela;
+            }).collect(Collectors.toList());
             return db().batchSave("meta_user_role_rela", inserts, 20).length == inserts.size();
         });
     }
 
     @Override
     public void refresh(String userId) {
-        Map.Entry<String, DefaultUserWithRoles> hitEntry = getAllLoggedUsers().entrySet().stream()
-                .filter(entry -> entry.getValue().userId().equals(userId)).findFirst().orElse(null);
+        Map.Entry<String, DefaultUserWithRoles> hitEntry = getAllLoggedUsers().entrySet().stream().filter(entry -> entry.getValue().userId().equals(userId)).findFirst().orElse(null);
         if (hitEntry == null) {
             log.warn("user is not logged! can refresh. userId: {}", userId);
             return;
@@ -110,8 +108,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
 
     @Override
     public DefaultUserWithRoles login(String identity, String password) {
-        Record record = db().findFirst("select * from meta_user where username=? and password=?",
-                identity, PassKit.encryptPass(password));
+        Record record = db().findFirst("select * from meta_user where username=? and password=?", identity, PassKit.encryptPass(password));
 
         if (record == null) {
             throw new UnLoginException("认证错误");
@@ -138,15 +135,7 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     }
 
     private LoginVO createLoginVO(String token, UserWithRolesWrapper user) {
-        return DefaultLoginVO.builder()
-                .token(token)
-                .root(user.isRoot())
-                .id(user.userId())
-                .username(user.userName())
-                .avatar(user.avatar())
-                .roles(Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet()))
-                .auths(Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet()))
-                .attrs(user.attrs()).build();
+        return DefaultLoginVO.builder().token(token).root(user.isRoot()).id(user.userId()).username(user.userName()).avatar(user.avatar()).roles(Arrays.stream(user.roles()).map(MRRole::code).collect(Collectors.toSet())).auths(Arrays.stream(user.auths()).map(IAuth::code).collect(Collectors.toSet())).attrs(user.attrs()).build();
     }
 
     @Override
@@ -165,6 +154,22 @@ public class DefaultUserService extends AbstractUserService<DefaultUser, Default
     public boolean resetPass(Object userId) {
         db().update("update meta_user set password = ? where id=?", PassKit.encryptPass(), userId);
         return true;
+    }
+
+    @Override
+    public boolean refreshPass(String oldEncryptKey, String newEncryptKey) {
+        return db().tx(() -> {
+            List<Record> uRecords = findAll().stream().map(u -> {
+                Record r = u.getData();
+                String encryptPass = r.getStr("password");
+                String clearPass = PassKit.decryptPass(encryptPass, oldEncryptKey);
+                String newEncryptPass = PassKit.encryptPass(clearPass, newEncryptKey);
+                r.set("password", newEncryptPass);
+                return r;
+            }).collect(Collectors.toList());
+            int[] rows = db().batchUpdate("meta_user", uRecords, 50);
+            return Arrays.stream(rows).sum() == uRecords.size();
+        });
     }
 
     @Override

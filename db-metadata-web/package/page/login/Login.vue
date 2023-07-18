@@ -28,6 +28,9 @@ export default {
     if (!isEmpty(loginBg)) {
       if (loginBg.startsWith('http') || loginBg.startsWith('.')) {
         style['background-image'] = `url(${loginBg})`
+      } else if (loginBg.startsWith('/')) {
+        const {defaults: {baseURL} = {}} = this.$axios
+        style['background-image'] = `url(${baseURL}${loginBg})`
       } else {
         style['background'] = `${loginBg}`
       }
@@ -115,6 +118,7 @@ export default {
   .el-card {
     width: 500px;
     margin: 0 auto;
+    background-color: rgba(255,255,255, 0.8);
 
     .form {
       width: 100% !important;

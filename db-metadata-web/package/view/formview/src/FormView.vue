@@ -82,7 +82,7 @@ export default {
     setItem(name, value) {
       this.$set(this.model, name, value)
     },
-    doSubmit(ev) {
+    doSubmit() {
       let {meta, model: params, objectCode} = this;
 
       let url = this.$compile(meta.action, {objectCode: objectCode});
@@ -98,7 +98,7 @@ export default {
         console.error(msg || message)
       })
     },
-    onSubmit(ev) {
+    onSubmit() {
       const {meta: {name: refName}, isView} = this
       if (isView) {
         printErr('查看模式下，禁止表单提交')
@@ -112,7 +112,7 @@ export default {
             this.$emit(fn, this.model)
             return;
           }
-          this.doSubmit(ev) // do submit
+          this.doSubmit() // do submit
         } else {
           return false;
         }

@@ -32,4 +32,9 @@ public class AppConfigService {
         }
         return new AppConfig(r);
     }
+
+    public AppConfig getById(String id) {
+        Record r = SpringAnalysisManager.me().dbMain().findById(TABLE_NAME, id);
+        return r != null ? new AppConfig(r) : null;
+    }
 }

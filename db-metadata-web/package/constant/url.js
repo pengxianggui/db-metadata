@@ -16,6 +16,7 @@ export const routeUrl = {
 
 export const restUrl = {
     GET_APP_CONFIG: '/app/config',
+    GET_APP_DYNAMIC_CONFIG: '/app/dynamic-config',
     META_OBJECT_TO_ADD: '/meta/toAdd',   // 元对象新增(TO)
     META_OBJECT_TO_EDIT: '/meta/editObject/?objectCode={objectCode}', // 元对象编辑(TO)
     META_OBJECT_DELETE: '/meta/delete?objectCode={objectCode}',  // 元对象删除(DO)

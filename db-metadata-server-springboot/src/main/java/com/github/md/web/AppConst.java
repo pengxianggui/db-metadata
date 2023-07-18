@@ -50,6 +50,7 @@ public class AppConst {
         META_ROLE_AUTH_RELA("meta_role_auth_rela", true, true, false),
         META_USER("meta_user", true, true, false),
         META_USER_ROLE_RELA("meta_user_role_rela", true, true, false),
+        META_APP_CONFIG("meta_app_config", true, true, false),
         ;
 
         /**

@@ -1,7 +1,6 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Ret;
-import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.app.AppConfig;
 import com.github.md.web.config.MetaProperties;
@@ -22,26 +21,26 @@ public class AppController extends ControllerAdapter {
     @Autowired
     private MetaProperties metaProperties;
 
+    /**
+     * 获取系统配置。包含配置文件维护的静态配置 + 数据库维护的动态配置。
+     *
+     * @return
+     */
     @GetMapping("config")
     public Ret config() {
         AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
-        AppPropVO vo = new AppPropVO(
-                AppConst.version,
-                appConfig.getName(),
-                appConfig.getLogo(),
-                appConfig.getRegisterable(),
-                metaProperties.getServer().isEnableCertification(),
-                metaProperties.isDevMode(),
-                metaProperties.getServer().getLogin().getTokenKey(),
-                metaProperties.getServer().getLogin().getTokenIn(),
-                metaProperties.getServer().getLogin().getLoginKey(),
-                metaProperties.getServer().getLogin().getPwdKey(),
-                appConfig.getLoginBg(),
-                appConfig.getShowGreeting(),
-                appConfig.getShowThemeSetting(),
-                appConfig.getAllowCustomTheme(),
-                metaProperties.getDocUrl()
-        );
+        AppPropVO vo = new AppPropVO(metaProperties, appConfig);
         return Ret.ok("data", vo);
+    }
+
+    /**
+     * 获取系统动态配置，即meta_app_config表中最新应用的动态配置。
+     *
+     * @return
+     */
+    @GetMapping("dynamic-config")
+    public Ret dynamicConfig() {
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        return Ret.ok("data", appConfig);
     }
 }

@@ -405,8 +405,8 @@ COMMIT;
 
 
 -- ----------------------------
--- Records of meta_router
+-- Records of meta_app_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `meta_app_config` (`id`, `name`, `logo`, `registerable`, `default_pass`, `pass_encrypt_key`, `login_bg`, `reset_pass`, `show_greeting`, `show_theme_setting`, `allow_custom_theme`, `version`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('0', 'DB-Metadata低代码开发工具', 'meta', b'0', '888888', 'DB-Metadata is delicious', '#2f4a75', 'dbmeta', b'1', b'1', b'0', 1, NOW(), NULL, NULL, NULL);
+INSERT INTO `meta_app_config` (`id`, `name`, `logo`, `registerable`, `default_pass`, `pass_encrypt_key`, `login_bg`, `reset_pass`, `show_greeting`, `show_theme_setting`, `allow_custom_theme`, `version`, `build_in`, `created_time`, `created_by`, `updated_time`, `updated_by`) VALUES ('0', 'DB-Metadata低代码开发工具', '/img/meta.svg', b'0', '888888', 'DB-Metadata is delicious', '/img/default_bg.jpg', 'dbmeta', b'1', b'1', b'0', 1, b'1', NOW(), 'SYSTEM', NULL, NULL);
 COMMIT;

@@ -1,47 +1,51 @@
 <template>
   <div class="md_page-container">
-    <el-tabs tab-position="right">
+    <el-tabs v-model="active" tab-position="right">
       <el-tab-pane label="基础设置" name="basic">
-        <basic-setting></basic-setting>
+        <el-card>
+          <basic-setting></basic-setting>
+        </el-card>
       </el-tab-pane>
       <el-tab-pane label="元数据导入/导出" name="meta">
-        <h4>元数据备份/还原</h4>
-        <div>
-          <el-button type="primary" icon="el-icon-download" @click="exportBackup">导出元数据备份</el-button>
-          <uploader-button url="/meta/restore" panel-title="备份还原，请上传导出的ZIP文件" v-any-auths="['meta:restore']">
-            <template #default="{click}">
-              <el-button type="danger" plain icon="el-icon-upload2" @click="click">导入元数据还原</el-button>
-            </template>
-            <template #alert>
-              <el-alert type="warning" show-icon :closable="false" :center="false">
-                <div>注意! 导入的元数据将执行全量覆盖, 且数据无法找回。以下数据可能被覆盖:</div>
-                <ul>
-                  <li>元对象和元字段</li>
-                  <li>功能配置</li>
-                  <li>组件全局配置</li>
-                  <li>组件实例配置</li>
-                  <li>动态菜单</li>
-                  <li>动态Profile菜单</li>
-                  <li>动态路由</li>
-                  <li>字典数据</li>
-                  <li>接口资源</li>
-                  <li>权限分组和权限数据</li>
-                </ul>
-                <div>具体覆盖范围，取决于你导入的ZIP文件中包含的范围。默认上述范围。</div>
-                <div><b style="color: indianred">导入前, 建议先在当前应用中执行【导出元数据备份】</b></div>
-              </el-alert>
-            </template>
-          </uploader-button>
-        </div>
+        <el-card>
+          <h4>元数据备份/还原</h4>
+          <div>
+            <el-button type="primary" icon="el-icon-download" @click="exportBackup">导出元数据备份</el-button>
+            <uploader-button url="/meta/restore" panel-title="备份还原，请上传导出的ZIP文件" v-any-auths="['meta:restore']">
+              <template #default="{click}">
+                <el-button type="danger" plain icon="el-icon-upload2" @click="click">导入元数据还原</el-button>
+              </template>
+              <template #alert>
+                <el-alert type="warning" show-icon :closable="false" :center="false">
+                  <div>注意! 导入的元数据将执行全量覆盖, 且数据无法找回。以下数据可能被覆盖:</div>
+                  <ul>
+                    <li>元对象和元字段</li>
+                    <li>功能配置</li>
+                    <li>组件全局配置</li>
+                    <li>组件实例配置</li>
+                    <li>动态菜单</li>
+                    <li>动态Profile菜单</li>
+                    <li>动态路由</li>
+                    <li>字典数据</li>
+                    <li>接口资源</li>
+                    <li>权限分组和权限数据</li>
+                  </ul>
+                  <div>具体覆盖范围，取决于你导入的ZIP文件中包含的范围。默认上述范围。</div>
+                  <div><b style="color: indianred">导入前, 建议先在当前应用中执行【导出元数据备份】</b></div>
+                </el-alert>
+              </template>
+            </uploader-button>
+          </div>
 
-        <el-divider></el-divider>
-        <h4>元数据重置</h4>
-        <div v-any-auths="['api:app-init']">
-          <el-button type="danger" @click="init">
-            <svg-icon value="reset"></svg-icon>
-            <span>重置内置元数据</span>
-          </el-button>
-        </div>
+          <el-divider></el-divider>
+          <h4>元数据重置</h4>
+          <div v-any-auths="['api:app-init']">
+            <el-button type="danger" @click="init">
+              <svg-icon value="reset"></svg-icon>
+              <span>重置内置元数据</span>
+            </el-button>
+          </div>
+        </el-card>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -63,7 +67,7 @@ export default {
   components: {BasicSetting, UploaderButton},
   data() {
     return {
-      active: ['1', '2']
+      active: 'basic'
     }
   },
   methods: {
