@@ -2152,8 +2152,7 @@
         "description": {
           "component_name": "TextAreaBox",
           "conf": {
-            "placeholder": "请输入此代码片段的描述说明..",
-            "required": false
+            "placeholder": "请输入此代码片段的描述说明.."
           }
         },
         "content": {
@@ -2258,7 +2257,6 @@
         "name": {
           "conf": {
             "filterable": true,
-            "required": true,
             "placeholder": "请输入变量名(唯一).."
           },
           "explain": "变量名必须唯一且一般为英文。例如, 变量baseURL, 则在代码片段中，可以通过: ${baseURL}进行引用。"
@@ -2266,7 +2264,6 @@
         "value": {
           "conf": {
             "filterable": true,
-            "required": false,
             "placeholder": "请输入变量值.."
           },
           "explain": "变量值形式为字符串。 若写的是数值, 则自行在代码片段中通过js进行转换。"
@@ -2274,7 +2271,6 @@
         "description": {
           "component_name": "TextAreaBox",
           "conf": {
-            "required": false,
             "placeholder": "请输入此变量的描述说明.."
           }
         }

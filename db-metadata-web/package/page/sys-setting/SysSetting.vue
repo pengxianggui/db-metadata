@@ -129,6 +129,8 @@ export default {
                 <li>系统内置的接口资源</li>
                 <li>系统内置的权限和角色</li>
                 <li>系统内置的字典</li>
+                <li>系统内置的代码片段</li>
+                <li>系统内置的全局变量</li>
             </ul>
             <p>注意: </p>
             <ol>
@@ -150,12 +152,14 @@ export default {
 
         const loadingInstance = this.$loading({
           lock: true,
-          text: '元数据重置中, 请勿刷新页面, 并耐心等待..',
+          text: '元数据重置中, 请勿刷新页面, 并耐心等待，预计需要5分钟..',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
 
-        this.$axios.post('/db/init?token=' + data.value).then(({msg = '初始化成功'}) => {
+        this.$axios.post('/db/init?token=' + data.value, {}, {
+          timeout: 1000 * 60 * 6
+        }).then(({msg = '初始化成功'}) => {
           this.$message.success(msg);
           this.$router.go(0);
         }).catch(({msg = '发生错误'}) => {

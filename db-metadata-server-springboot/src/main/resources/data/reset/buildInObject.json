@@ -2501,7 +2501,7 @@
           "addStatus": 100,
           "isListShow": true,
           "isMultiple": false,
-          "isNullable": false,
+          "isNullable": true,
           "viewStatus": 30,
           "updateStatus": 100
         }
@@ -2617,7 +2617,7 @@
           "addStatus": 100,
           "isListShow": true,
           "isMultiple": false,
-          "isNullable": false,
+          "isNullable": true,
           "viewStatus": 30,
           "updateStatus": 100
         }
