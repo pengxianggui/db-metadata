@@ -468,4 +468,43 @@ CREATE TABLE `meta_app_config`  (
                                         UNIQUE KEY `uk_version` (`version`) USING HASH
 ) COMMENT = '系统配置';
 
+
+-- ----------------------------
+-- Table structure for meta_var
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_var`;
+CREATE TABLE `meta_var`  (
+                             `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
+                             `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '变量名(唯一)',
+                             `value` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '变量值',
+                             `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '描述',
+                             `build_in` bit(1) NOT NULL DEFAULT b'0' COMMENT '系统内置',
+                             `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `created_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+                             `updated_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+                             `updated_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             UNIQUE INDEX `uk_name`(`name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '变量(应用于代码片段等场景)' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for meta_snippet
+-- ----------------------------
+DROP TABLE IF EXISTS `meta_snippet`;
+CREATE TABLE `meta_snippet`  (
+                                 `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
+                                 `code` varchar(255) NOT NULL COMMENT '编码(唯一)',
+                                 `title` varchar(45) NOT NULL COMMENT '标题',
+                                 `description` text NULL COMMENT '描述',
+                                 `content` text NOT NULL COMMENT '内容(js代码)',
+                                 `build_in` bit(1) NOT NULL DEFAULT b'0' COMMENT '系统内置',
+                                 `created_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+                                 `created_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+                                 `updated_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
+                                 `updated_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
+                                 PRIMARY KEY (`id`),
+                                 UNIQUE INDEX `uk_code`(`code`)
+) COMMENT = '代码片段';
+
 SET FOREIGN_KEY_CHECKS = 1;

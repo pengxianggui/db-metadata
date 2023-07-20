@@ -370,8 +370,13 @@ public class InitKit {
 
         Resource sqlResource = new ByteArrayResource(sql.getBytes());
         SpringAnalysisManager.me().dbMain().execute((conn -> {
-            ScriptUtils.executeSqlScript(conn, sqlResource);
-            return true;
+            try {
+                ScriptUtils.executeSqlScript(conn, sqlResource);
+                return true;
+            } catch (Exception e) {
+                conn.rollback();
+                throw new RuntimeException(e.getMessage());
+            }
         }));
         return this;
     }

@@ -64,8 +64,7 @@
                        :key="item.code"
                        v-bind="item.conf"
                        :prop="item.name"
-                       :label="item.label"
-                       show-overflow-tooltip>
+                       :label="item.label">
         <template #header>
           <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
             <template #label>{{ item.label }}</template>

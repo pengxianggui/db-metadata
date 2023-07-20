@@ -2202,7 +2202,7 @@
     "_fields": {
       "id": {
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false
         }
       },
@@ -2401,6 +2401,226 @@
           "isNullable": false,
           "viewStatus": 30,
           "updateStatus": "30"
+        }
+      }
+    }
+  },
+  "meta_snippet": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_snippet",
+      "structure": "list",
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
+      "code": {
+        "cn": "编码",
+        "config": {
+          "isSearch": true,
+          "isUnique": true,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "title": {
+        "config": {
+          "isSearch": true,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "description": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "content": {
+        "cn": "代码内容",
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "defaultVal": "/**\n * @param h \t\tvue中的渲染函数:createElement\n * @param value \t原始值。例如表格场景下，此值为单元格原始值\n * @param record\t整行记录值。例如表格场景下，此值为value所在行的记录\n * @param meta\t\t字段的实例配置。例如表格场景下，此值为value所在列的实例配置。\n */\nfunction (h, value, record, meta) {\n  // TODO 利用h进行动态渲染, 例如, 下面这行将原始值渲染成红色字体\n  // return h('span', {style: {color: 'red'}},  value)\n}",
+          "addStatus": 100,
+          "isListShow": false,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      }
+    }
+  },
+  "meta_var": {
+    "build_in": true,
+    "config": {
+      "objectCode": "meta_var",
+      "structure": "list",
+      "isNumberSequence": true,
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "orderBy": "created_time desc"
+    },
+    "_fields": {
+      "id": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false
+        }
+      },
+      "created_by": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "created_time": {
+        "config": {
+          "isListShow": false,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_by": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "updated_time": {
+        "config": {
+          "isSearch": false,
+          "isListShow": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30
+        }
+      },
+      "build_in": {
+        "cn": "系统内置",
+        "config": {
+          "defaultVal": false,
+          "isListShow": true,
+          "isSearch": false,
+          "addStatus": 10,
+          "updateStatus": 10,
+          "viewStatus": 30,
+          "scopeDict": "yn"
+        }
+      },
+      "name": {
+        "cn": "变量名",
+        "config": {
+          "isSearch": true,
+          "isUnique": true,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": false,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "value": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "viewStatus": 30,
+          "updateStatus": 100
+        }
+      },
+      "description": {
+        "config": {
+          "isSearch": false,
+          "isUnique": false,
+          "addStatus": 100,
+          "isListShow": true,
+          "isMultiple": false,
+          "isNullable": true,
+          "viewStatus": 30,
+          "updateStatus": 100
         }
       }
     }

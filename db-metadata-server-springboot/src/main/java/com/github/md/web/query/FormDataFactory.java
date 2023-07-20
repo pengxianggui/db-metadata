@@ -12,6 +12,9 @@ import com.github.md.analysis.meta.MetaData;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
 import com.github.md.web.WebException;
 import com.github.md.web.component.form.FormView;
+import com.github.md.web.file.JsonUploadFileResolve;
+import com.github.md.web.file.StrUploadFileResolve;
+import com.github.md.web.file.UploadFileResolve;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.file.UploadFile;
 import com.jfinal.kit.StrKit;
@@ -101,7 +104,7 @@ public class FormDataFactory {
 
                 // 文件类型处理
                 if (metaField.configParser().isFile()) {
-                    List<UploadFile> files = JSON.parseArray(String.valueOf(castedValue), UploadFile.class);
+                    List<UploadFile> files = new JsonUploadFileResolve(String.valueOf(castedValue)).getFiles();
 
                     if (metaField.dbType().isJson()) {
                         // 确保入库的文件字段 必须是有效的[]
@@ -158,7 +161,6 @@ public class FormDataFactory {
                         if (StrKit.notBlank(metaField.configParser().defaultVal())) {
                             formData.set(metaField.fieldCode(), metaField.configParser().defaultVal());
                         } else {
-//                            formData.set(metaField.fieldCode(), ""); // 导致入库时本应该为null的值变成空字符串, 如果字段唯一约束, 则会抛出异常
                             formData.set(metaField.fieldCode(), null);
                         }
                     }
@@ -210,17 +212,15 @@ public class FormDataFactory {
                         continue;
                     }
 
-                    JSONArray valueJSON;
+                    UploadFileResolve uploadFileResolve;
                     if (metaField.dbType().isJson()) {
-                        valueJSON = JSON.parseArray(value);
+                        uploadFileResolve = new JsonUploadFileResolve(value);
                     } else { // 包装成JSON
-                        valueJSON = new JSONArray();
-                        valueJSON.add(new JSONObject(Kv.by("url", value)));
+                        uploadFileResolve = new StrUploadFileResolve(value);
                     }
 
-                    record.set(metaField.fieldCode(), valueJSON);
+                    record.set(metaField.fieldCode(), uploadFileResolve.getFiles());
                     continue;
-
                 }
 
                 if (metaField.dbType().isJson()) {

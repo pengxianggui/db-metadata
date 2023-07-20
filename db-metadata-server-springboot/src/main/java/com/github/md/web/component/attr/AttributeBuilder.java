@@ -2,6 +2,7 @@ package com.github.md.web.component.attr;
 
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -157,6 +158,7 @@ public class AttributeBuilder {
 
     public static class FatAttributeBuilder implements AttrAbility, InputAttr, AttrRender, AttrCustomMeta, TableAttr, FileUploadAttr, TreeTableAttr, TreeAttr, UploadAbility {
 
+        @Getter
         private Kv config = Kv.create();
 
         public FatAttributeBuilder() {

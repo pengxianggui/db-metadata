@@ -48,9 +48,11 @@ public class AppConst {
         META_AUTH_MODULE("meta_auth_module", true, true, true),
         META_ROLE("meta_role", true, true, false),
         META_ROLE_AUTH_RELA("meta_role_auth_rela", true, true, false),
-        META_USER("meta_user", true, true, false),
+        META_USER("meta_user", true, false, false),
         META_USER_ROLE_RELA("meta_user_role_rela", true, true, false),
         META_APP_CONFIG("meta_app_config", true, true, false),
+        META_SNIPPET("meta_snippet", true, true, false),
+        META_VAR("meta_var", true, true, false),
         ;
 
         /**
@@ -62,7 +64,7 @@ public class AppConst {
          */
         private boolean resetable;
         /**
-         * 内建数据是否存在于sql中维护
+         * 内建数据是否存在于buildInSysData.sql中维护，若为true, 则系统元数据重置时，会保留用户更新过的内置数据；否则内置数据将被重置。
          */
         private boolean buildInSql;
 

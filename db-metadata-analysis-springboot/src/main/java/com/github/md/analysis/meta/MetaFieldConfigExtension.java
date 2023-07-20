@@ -1,9 +1,6 @@
-package com.github.md.web.ui.meta;
+package com.github.md.analysis.meta;
 
 import com.github.md.analysis.component.ComponentType;
-import com.github.md.analysis.meta.ConfigExtension;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.kit.Kv;
 
 /**
  * 元子段配置扩展
@@ -12,15 +9,15 @@ import com.github.md.analysis.kit.Kv;
  *
  * <p> @author konbluesky </p>
  */
-public class MetaFieldConfigExtension implements ConfigExtension<IMetaField, Kv, ComponentType> {
+public class MetaFieldConfigExtension implements ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType> {
 
     @Override
-    public void config(IMetaField metaField, Kv config, ComponentType containerType) {
+    public void config(IMetaField metaField, MetaFieldConfigParse parse, ComponentType containerType) {
 
         // attention: 初始化field配置时 , 名称包含file的 并且 数据库字段类型为json的 默认设定isFile = true
         if (metaField.fieldCode().contains("file") && metaField.dbType().isJson()) {
-            config.set("isFile", true);
-            config.set("seats", "[]");
+            parse.set("isFile", true);
+            parse.set("seats", "[]");
         }
     }
 }

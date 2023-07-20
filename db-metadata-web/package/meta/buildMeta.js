@@ -3,7 +3,6 @@ import TextBox from "../core/textbox";
 import NumBox from "../core/numbox";
 import BoolBox from "../core/boolbox";
 import DropDownBox from "../core/dropdownbox";
-import CodeBox from "../core/codebox";
 import JsonBox from "../core/jsonbox";
 import MiniFormBox from '../core/miniformbox'
 import DefaultMiniFormBoxMeta from '../core/miniformbox/ui-conf'
@@ -51,10 +50,17 @@ const specials = {
     },
     "TableView": {
         "render": {
-            component_name: CodeBox.name,
+            component_name: DropDownBox.name,
             name: 'render',
-            label: 'render',
-            height: "250px"
+            label: '渲染函数',
+            data_url: "/snippet/options",
+            width: '100%',
+            conf: {
+                filterable: true,
+                style: {
+                    width: '100%'
+                }
+            }
         },
         "icon": {
             component_name: IconBox.name,
@@ -64,12 +70,19 @@ const specials = {
     },
     "TableTreeView": {
         "render": {
-            component_name: CodeBox.name,
+            component_name: DropDownBox.name,
             name: 'render',
-            label: 'render',
-            height: "250px"
+            label: '渲染函数',
+            data_url: "/snippet/options",
+            width: '100%',
+            conf: {
+                filterable: true,
+                style: {
+                    width: '100%'
+                }
+            }
         }
-    },
+    }
 };
 
 function buildMetaByString(key, value) {

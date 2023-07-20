@@ -19,10 +19,10 @@ import java.util.List;
 public class MetaConfigFactory {
 
     @Getter
-    private static List<ConfigExtension> fieldExtensions;
+    private static List<ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType>> fieldExtensions;
 
     @Getter
-    private static List<ConfigExtension> objectExtensions;
+    private static List<ConfigExtension<IMetaObject, MetaObjectConfigParse, ComponentType>> objectExtensions;
 
     public static MetaObjectConfigParse createV1ObjectConfig(IMetaObject metaObject) {
         Kv config = Kv.create();
@@ -30,12 +30,14 @@ public class MetaConfigFactory {
         config.set("isNumberSequence", false);  //数字序列,雪花算法
         config.set("isAutoIncrement", false);   //数据库自增
         config.set("objectCode", metaObject.code());
+
+        MetaObjectConfigParse parse = new MetaObjectConfigParse(config);
         if (objectExtensions != null) {
-            for (ConfigExtension extension : objectExtensions) {
-                extension.config(metaObject, config, ComponentType.UNKNOWN);
+            for (ConfigExtension<IMetaObject, MetaObjectConfigParse, ComponentType> extension : objectExtensions) {
+                extension.config(metaObject, parse, ComponentType.UNKNOWN);
             }
         }
-        return new MetaObjectConfigParse(config);
+        return parse;
     }
 
     public static MetaFieldConfigParse createV1FieldConfig(IMetaField metaField, String defaultValue, String isNUll) {
@@ -61,12 +63,14 @@ public class MetaConfigFactory {
         config.set("isListShow", true);
         config.set("isSearch", false); // 默认都不加入搜索
 
+        MetaFieldConfigParse parse = new MetaFieldConfigParse(config);
+
         if (fieldExtensions != null) {
-            for (ConfigExtension extension : fieldExtensions) {
-                extension.config(metaField, config, ComponentType.UNKNOWN);
+            for (ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType> extension : fieldExtensions) {
+                extension.config(metaField, parse, ComponentType.UNKNOWN);
             }
         }
-        return new MetaFieldConfigParse(config);
+        return parse;
     }
 
     @Deprecated
@@ -79,14 +83,14 @@ public class MetaConfigFactory {
         }
     }
 
-    public static void addFieldExtension(ConfigExtension extension) {
+    public static void addFieldExtension(ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType> extension) {
         if (fieldExtensions == null) {
             fieldExtensions = new ArrayList<>();
         }
         fieldExtensions.add(extension);
     }
 
-    public static void addObjectExtension(ConfigExtension extension) {
+    public static void addObjectExtension(ConfigExtension<IMetaObject, MetaObjectConfigParse, ComponentType> extension) {
         if (objectExtensions == null) {
             objectExtensions = new ArrayList<>();
         }
