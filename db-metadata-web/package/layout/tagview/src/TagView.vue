@@ -10,11 +10,12 @@
               :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
               tag="span"
               class="router-link"
-              @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
+              @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''"
           >
             <svg-icon value="affix" v-if="isAffix(tag)" class="affixed-icon" style="font-size: 9px;"></svg-icon>
             <span>{{ tag.meta.title }}</span>
-            <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"/>
+            <el-button type="text" icon="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"
+                       class="close" v-if="!isAffix(tag)"></el-button>
           </router-link>
         </template>
         <list direction="column" class="tag-menu" @mouseleave.native="closePopMenu('popMenu' + index)">
@@ -272,7 +273,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-$tagBarHeight: 40px;
+$tagBarHeight: 30px;
 #md_view-container {
   height: $tagBarHeight;
   box-sizing: border-box;
@@ -292,12 +293,10 @@ $tagBarHeight: 40px;
     line-height: $tagHeight;
     border-right: 1px solid #d8dce5;
     font-size: 12px;
-    //margin: 4px 2px;
     margin: 0px;
 
     .router-link {
-      display: block;
-      padding: 0 10px;
+      padding: 0 20px 0 10px;
 
       .affixed-icon {
         margin-top: 3px;
@@ -313,13 +312,19 @@ $tagBarHeight: 40px;
       //margin-right: 5px;
     }
 
-    .el-icon-close {
-      display: none;
+    .close {
+      visibility: hidden;
+      position: absolute;
+      right: 3px;
+      color: inherit;
+      &:hover {
+        transform: rotate(90deg);
+      }
     }
 
     &:hover {
-      .el-icon-close {
-        display: inline;
+      .close {
+        visibility: visible;
       }
     }
   }

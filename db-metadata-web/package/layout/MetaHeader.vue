@@ -90,7 +90,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-$headerHeight: 60px;
+$headerHeight: 50px;
 .header {
   height: $headerHeight;
   line-height: $headerHeight;
@@ -102,6 +102,7 @@ $headerHeight: 60px;
   background-color: #001529;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
   z-index: 1;
+  font-size: 0.8em;
 
   .logo {
     font-size: 50px;
@@ -112,6 +113,7 @@ $headerHeight: 60px;
 
   .name {
     margin: 0;
+    font-size: 1.2em;
   }
 
   div.nav {
