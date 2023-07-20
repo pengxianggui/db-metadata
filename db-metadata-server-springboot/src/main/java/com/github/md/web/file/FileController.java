@@ -172,14 +172,14 @@ public class FileController extends ControllerAdapter {
     }
 
     /**
-     * 图片预览/文件下载。先通过{@link DownloadService}获取文件(默认的local模式，直接本地定位文件位置；若采用云存储模式，
+     * 图片、视频预览/文件下载。先通过{@link DownloadService}获取文件(默认的local模式，直接本地定位文件位置；若采用云存储模式，
      * 则应当在{@link DownloadService#getFile(String)}中实现下载)。然后借助ResourceHttpRequestHandler返回本地资源。
-     * 可在视频模式下支持range分段返回。
+     * 可在预览视频文件时支持range分段返回。
      * <p>
      */
     @ApiType(value = Type.API)
     @GetMapping("preview")
-    public void tmpPre() {
+    public void preview() {
         String path = parameterHelper().getPara("path", "");
 
         HttpServletRequest request = getRequest();
@@ -197,6 +197,7 @@ public class FileController extends ControllerAdapter {
             Optional<MediaType> optional = MediaTypeFactory.getMediaType(fileName);
             response.setContentType(optional.orElse(MediaType.APPLICATION_OCTET_STREAM).getType());
             response.setHeader("Connection", "close");
+            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));
 
             FileResourceHttpRequestHandler fileResourceHttpRequestHandler = AnalysisSpringUtil.getBean(FileResourceHttpRequestHandler.class);
             request.setAttribute(FileResourceHttpRequestHandler.FILE_PATH, targetFile.getAbsolutePath());

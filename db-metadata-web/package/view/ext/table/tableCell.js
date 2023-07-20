@@ -46,20 +46,19 @@ export default {
                 try {
                     render = utils.strToFn(meta.render);
                 } catch (e) {
-                    console.error('[Meta-Element] the render(in field meta) is not function, meta: %o, value: %s, will show original value', meta, value);
+                    utils.printErr('the render(in field meta) is not function, meta: %o, value: %s, will show original value', meta, value)
                     return h('span', null, value);
                 }
 
                 try {
-                    return render(h, value, row);
+                    return render.call(utils, h, value, row, meta);
                 } catch (e) {
-                    console.error("[Meta-Element] s% 的render函数运行发生错误, 请检查!", meta.name)
-                    console.error(e)
+                    utils.printErr("%s 的render函数运行发生错误, 请检查! errMsg: %s", meta.name, e.message)
                 }
             }
             return h('span', null, value);
         } else {
-            // todo 编辑模式, 即 多行编辑, 根据meta和value, 渲染表单控件
+            // todo  编辑模式, 即 多行编辑, 根据meta和value, 渲染表单控件
 
         }
     },

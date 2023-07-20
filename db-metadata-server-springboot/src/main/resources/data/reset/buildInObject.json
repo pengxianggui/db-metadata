@@ -2202,7 +2202,7 @@
     "_fields": {
       "id": {
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false
         }
       },
@@ -2417,7 +2417,7 @@
     "_fields": {
       "id": {
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false
         }
       },
@@ -2511,6 +2511,7 @@
         "config": {
           "isSearch": false,
           "isUnique": false,
+          "defaultVal": "/**\n * @param h \t\tvue中的渲染函数:createElement\n * @param value \t原始值。例如表格场景下，此值为单元格原始值\n * @param record\t整行记录值。例如表格场景下，此值为value所在行的记录\n * @param meta\t\t字段的实例配置。例如表格场景下，此值为value所在列的实例配置。\n */\nfunction (h, value, record, meta) {\n  // TODO 利用h进行动态渲染, 例如, 下面这行将原始值渲染成红色字体\n  // return h('span', {style: {color: 'red'}},  value)\n}",
           "addStatus": 100,
           "isListShow": false,
           "isMultiple": false,
@@ -2533,7 +2534,7 @@
     "_fields": {
       "id": {
         "config": {
-          "isListShow": true,
+          "isListShow": false,
           "isSearch": false
         }
       },

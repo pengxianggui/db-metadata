@@ -10,6 +10,7 @@ import com.github.md.web.config.MetaProperties;
 import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
+import com.github.md.web.snippet.SnippetService;
 import com.github.md.web.ui.SqlAnalysis;
 import com.github.md.web.file.DownloadService;
 import com.github.md.web.file.FileManager;
@@ -70,5 +71,9 @@ public class ServiceManager {
 
     public static AppConfigService getAppConfigService() {
         return AnalysisSpringUtil.getBean(AppConfigService.class);
+    }
+
+    public static SnippetService getSnippetService() {
+        return AnalysisSpringUtil.getBean(SnippetService.class);
     }
 }

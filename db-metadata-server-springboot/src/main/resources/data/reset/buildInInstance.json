@@ -699,7 +699,14 @@
         }
       }
     },
-    "TableTreeView": {},
+    "TableTreeView": {
+      "config": {},
+      "_fields": {
+        "icon": {
+          "render": "ICON_RENDER"
+        }
+      }
+    },
     "FormView": {
       "config": {
         "conf": {
@@ -905,7 +912,14 @@
         }
       }
     },
-    "TableView": {},
+    "TableView": {
+      "config": {},
+      "_fields": {
+        "icon": {
+          "render": "ICON_RENDER"
+        }
+      }
+    },
     "FormView": {
       "config": {
         "conf": {
@@ -1648,7 +1662,7 @@
       },
       "_fields": {
         "avatar": {
-          "render": " function(h, value) {\n  if (value.length > 0) {\n\tlet url = value;\n  return h('el-image', {\n    attrs: {\n      src: url,\n      \"preview-src-list\": [url]\n    },\n      style: {\n      width: '30px',\n      height: '30px'\n      }\n  }, null)\n  }\n  return h('span', null, null)\n}"
+          "render": "STR_IMG_RENDER"
         }
       }
     },
@@ -1789,7 +1803,7 @@
           "conf": {
             "width": "150px"
           },
-          "render": "function (h, value) {\n    if (value && value.length > 0) {\n        let url = '/api' + value;\n        return h('el-image', {\n            attrs: {\n                src: url,\n                \"preview-src-list\": [url]\n            },\n            style: {\n                width: '30px',\n                height: '30px'\n            }\n        }, null)\n    }\n    return h('span', value)\n}"
+          "render": "STR_IMG_RENDER"
         },
         "registerable": {
           "conf": {
@@ -1810,7 +1824,7 @@
           "conf": {
             "width": "150px"
           },
-          "render": "function (h, value) {\n    if (value && value.length > 0) {\n        let url = '/api' + value;\n        return h('el-image', {\n            attrs: {\n                src: url,\n                \"preview-src-list\": [url]\n            },\n            style: {\n                width: '30px',\n                height: '30px'\n            }\n        }, null)\n    }\n    return h('span', value)\n}"
+          "render": "STR_IMG_RENDER"
         },
         "reset_pass": {
           "conf": {
@@ -2089,37 +2103,43 @@
       "_fields": {
         "code": {
           "conf": {
-            "width": "150px"
+            "min-width": "150px",
+            "width": "auto"
           }
         },
         "title": {
           "conf": {
-            "width": "180px"
+            "min-width": "180px",
+            "width": "auto"
           }
         },
         "description": {
           "conf": {
-            "width": "200px"
+            "min-width": "200px",
+            "width": "auto"
           }
         },
         "content": {
           "conf": {
-            "width": "200px"
+            "min-width": "200px",
+            "width": "auto"
           }
         },
         "build_in": {
           "conf": {
-            "width": "120px"
+            "width": "90px"
           }
         },
         "created_time": {
           "conf": {
-            "width": "150px"
+            "min-width": "150px",
+            "width": "auto"
           }
         },
         "created_by": {
           "conf": {
-            "width": "150px"
+            "min-width": "150px",
+            "width": "auto"
           }
         }
       }
@@ -2173,7 +2193,7 @@
             "matchBrackets": true,
             "extraKeys": {"Ctrl": "autocomplete"}
           },
-          "explain": "代码片段可能会应用在一些特殊场景，例如表格单元的数据渲染：字段值可能是一个图片地址，但我们希望表格单元里展示一个图片，就需要借助代码片段预设渲染函数。"
+          "explain": "代码片段应用在一些容器组件的渲染中，主要是表格单元。\n 例如：字段值可能是一个图片地址，但我们希望表格单元里展示一个图片，就需要借助代码片段预设渲染函数。\n渲染函数中,可以使用全局变量和一些内置的js函数。全局变量由您自己维护，可使用的js函数参见官方文档。"
         }
       }
     }

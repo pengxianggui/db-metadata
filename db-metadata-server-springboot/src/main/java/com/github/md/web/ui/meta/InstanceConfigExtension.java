@@ -38,6 +38,7 @@ public class InstanceConfigExtension implements ConfigExtension<IMetaField, Attr
         formFieldConfigExtensions.add(new JsonRecommend());
         formFieldConfigExtensions.add(new OptionsRecommend());
         formFieldConfigExtensions.add(new FileRecommend());
+        formFieldConfigExtensions.add(new CCUUFieldConfigExtension());
 
         tableViewFieldConfigExtensions.add(new TableColumnConfigExtension());
     }

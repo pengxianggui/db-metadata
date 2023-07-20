@@ -1,9 +1,9 @@
 package com.github.md.analysis;
 
+import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.db.registry.DataSourceManager;
 import com.github.md.analysis.db.registry.JFinalActiveRecordPluginManager;
-import com.github.md.analysis.meta.ConfigExtension;
-import com.github.md.analysis.meta.MetaConfigFactory;
+import com.github.md.analysis.meta.*;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import lombok.Getter;
@@ -49,19 +49,19 @@ public class SpringAnalysisManager {
         me = this;
     }
 
-    public void addMetaFieldConfigExtension(ConfigExtension extension) {
+    public void addMetaFieldConfigExtension(ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType> extension) {
         MetaConfigFactory.addFieldExtension(extension);
     }
 
-    public List<ConfigExtension> getMetaFieldConfigExtension() {
+    public List<ConfigExtension<IMetaField, MetaFieldConfigParse, ComponentType>> getMetaFieldConfigExtension() {
         return MetaConfigFactory.getFieldExtensions();
     }
 
-    public void addMetaObjectConfigExtension(ConfigExtension extension) {
+    public void addMetaObjectConfigExtension(ConfigExtension<IMetaObject, MetaObjectConfigParse, ComponentType> extension) {
         MetaConfigFactory.addObjectExtension(extension);
     }
 
-    public List<ConfigExtension> getMetaObjectConfigExtension() {
+    public List<ConfigExtension<IMetaObject, MetaObjectConfigParse, ComponentType>> getMetaObjectConfigExtension() {
         return MetaConfigFactory.getObjectExtensions();
     }
 }

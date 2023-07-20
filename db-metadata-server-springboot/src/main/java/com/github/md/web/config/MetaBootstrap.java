@@ -1,11 +1,15 @@
 package com.github.md.web.config;
 
 import com.github.md.analysis.SpringAnalysisManager;
+import com.github.md.analysis.meta.MetaFieldConfigExtension;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.aop.AuditPointCut;
 import com.github.md.web.aop.UniqueConstraintAop;
 import com.github.md.web.component.Components;
+import com.github.md.web.component.render.RenderKit;
+import com.github.md.web.component.render.form.FormFieldRenderExtension;
+import com.github.md.web.component.render.table.TableCellRenderExtension;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
 import com.github.md.web.event.user.UserStatusChangeListener;
@@ -13,9 +17,7 @@ import com.github.md.web.feature.tree.PreventInfiniteLoopPointCut;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.ui.ComputeKit;
-import com.github.md.web.ui.meta.CCUUConfigExtension;
 import com.github.md.web.ui.meta.InstanceConfigExtension;
-import com.github.md.web.ui.meta.MetaFieldConfigExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -120,9 +122,15 @@ public class MetaBootstrap {
 
         @Override
         public void init() {
+            // 针对元对象和元字段的扩展
             SpringAnalysisManager.me().addMetaFieldConfigExtension(new MetaFieldConfigExtension());
+
+            // 针对实例配置生成时(计算时)的扩展
             ComputeKit.addInstanceExtension(new InstanceConfigExtension());
-            ComputeKit.addInstanceExtension(new CCUUConfigExtension());
+
+            // 针对实例配置渲染时的扩展
+            RenderKit.addRenderExtension(new FormFieldRenderExtension());
+            RenderKit.addRenderExtension(new TableCellRenderExtension());
 
             PointCutChain.registerGlobalPointCut(new AuditPointCut()); // 审计
             PointCutChain.registerGlobalPointCut(new UniqueConstraintAop()); // 唯一约束校验
