@@ -52,6 +52,12 @@ md:
       mode: local # 上传采用的模式。默认为local, 表示上传到服务器本地目录(具体路径取决于md.server.upload.local下的配置)。
       local:
         base-upload-path: /opt/www/db-meta-serve # 当mode为local时有效，配置的本地上传根路径。这也是默认值，可以不配置
+      aliyunoss:
+        endpoint:
+        bucket:
+        access-key:
+        access-secret:
+        dir:
     event-enabled: true
     component:
       replace-from-json-file: false # 是否开启每次启动时从json文件(buildInComponent.json、buildInInstance.json)中推导组件实例配置，并覆盖数据库

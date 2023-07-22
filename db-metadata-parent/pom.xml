@@ -31,6 +31,7 @@
         <module>../db-metadata-interface</module>
         <module>../db-metadata-server-springboot</module>
         <module>../db-metadata-analysis-springboot</module>
+        <module>../db-metadata-extends</module>
     </modules>
 
     <licenses>
