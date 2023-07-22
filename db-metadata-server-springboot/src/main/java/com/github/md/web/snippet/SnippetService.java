@@ -61,7 +61,9 @@ public class SnippetService {
         }
 
         Map<String, String> varsMap = getAllVars().stream()
-                .collect(Collectors.toMap(r -> r.getStr("name"), r -> r.getStr("value")));
+                .collect(Collectors.toMap(
+                        r -> r.getStr("name"),
+                        r -> StrKit.defaultIfBlank(r.getStr("value"), "")));
 
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig().setCustomEngine(BeetlEngine.class));
         Template template = engine.getTemplate(snippet);
