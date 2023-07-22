@@ -358,26 +358,26 @@ public class UtilKit {
     }
 
     /**
-     * 过滤字段
+     * 过滤字段。依据fields、excludeFields，从metaFields中返回子集。
      *
-     * @param fields
-     * @param efields
-     * @param metaFields
+     * @param fields        显示的字段
+     * @param excludeFields 需要排除的字段
+     * @param metaFields    元字段列表
      * @return
      */
-    public static Collection<IMetaField> filter(String[] fields, String[] efields, Collection<IMetaField> metaFields) {
+    public static Collection<IMetaField> filter(String[] fields, String[] excludeFields, Collection<IMetaField> metaFields) {
         Collection<IMetaField> iMetaFields = new ArrayList<>(metaFields);
         //不需要过滤时,原样返回
-        if (fields.length == 0 && efields.length == 0) {
+        if (fields.length == 0 && excludeFields.length == 0) {
             return iMetaFields;
         }
         Iterator<IMetaField> metaFieldIterator = iMetaFields.iterator();
         //important Arrays.binarySearch 必须操作有序数组,所以要对fields,efiedls排序
         Arrays.sort(fields);
-        Arrays.sort(efields);
+        Arrays.sort(excludeFields);
         //相同集合直接返回
-        if (StrKit.notBlank(fields) && StrKit.notBlank(efields) && Arrays.equals(fields, efields)) {
-            throw new WebException("显示列数组与排除列数组相同,fields:[%s];efields[%s]", Arrays.toString(fields), Arrays.toString(efields));
+        if (StrKit.notBlank(fields) && StrKit.notBlank(excludeFields) && Arrays.equals(fields, excludeFields)) {
+            throw new WebException("显示列数组与排除列数组相同,fields:[%s];excludeFields[%s]", Arrays.toString(fields), Arrays.toString(excludeFields));
         }
         //过滤字段
         while (metaFieldIterator.hasNext()) {
@@ -390,8 +390,8 @@ public class UtilKit {
                 }
             }
             //在排除列表中的 剔除
-            if (efields != null && efields.length > 0) {
-                if (Arrays.binarySearch(efields, metaField.en()) >= 0) {
+            if (excludeFields != null && excludeFields.length > 0) {
+                if (Arrays.binarySearch(excludeFields, metaField.en()) >= 0) {
                     metaFieldIterator.remove();
                     continue;
                 }

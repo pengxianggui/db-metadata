@@ -12,7 +12,12 @@
         <el-checkbox v-model="nativeValue.isNullable" label="允许为空" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isUnique" label="是否唯一" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isSearch" label="允许搜索" border></el-checkbox>
-        <el-checkbox v-model="nativeValue.isListShow" label="列表显示" border></el-checkbox>
+        <el-checkbox v-model="nativeValue.isListShow" border>
+          <span>列表显示</span>&nbsp;
+          <el-tooltip content="列表视图时,此项表示sql语句中此列是否被select,页面上的显隐可通过字段实例配置hidden控制">
+            <i class="el-icon-question"></i>
+          </el-tooltip>
+        </el-checkbox>
         <el-checkbox v-model="nativeValue.isMultiple" label="允许多值" border></el-checkbox>
         <el-checkbox v-model="nativeValue.isFile" label="是否文件" border></el-checkbox>
         <el-tooltip content="上传文件/图片需要勾选" placement="right">
