@@ -1,8 +1,10 @@
 package com.github.md.web.config;
 
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.meta.MetaFieldConfigExtension;
 import com.github.md.analysis.meta.aop.PointCutChain;
+import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.aop.AuditPointCut;
 import com.github.md.web.aop.UniqueConstraintAop;
@@ -14,10 +16,12 @@ import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormListener;
 import com.github.md.web.event.user.UserStatusChangeListener;
 import com.github.md.web.feature.tree.PreventInfiniteLoopPointCut;
+import com.github.md.web.file.FileManager;
 import com.github.md.web.kit.InitKit;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.ui.ComputeKit;
 import com.github.md.web.ui.meta.InstanceConfigExtension;
+import com.github.md.web.user.AuthenticationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -54,6 +58,7 @@ public class MetaBootstrap {
     }
 
     private void startInit() {
+        stepList.add(new DbMetaConfigInit()); // dbmeta java配置
         stepList.add(new DbTableStructureInit()); // 首先初始化表结构
         stepList.add(new ExtensionInitStep()); // 配置扩展： 配置扩展必须在数据刷入之前注册，否则扩展对于 初始化时刷入的数据 不生效
         stepList.add(new DbTableDataInit()); // 初始数据初始化
@@ -68,6 +73,16 @@ public class MetaBootstrap {
     interface InitStep {
 
         void init();
+    }
+
+    class DbMetaConfigInit implements InitStep {
+
+        @Override
+        public void init() {
+            DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+            AuthenticationManager.config(configurer);
+            FileManager.config(configurer);
+        }
     }
 
     /**

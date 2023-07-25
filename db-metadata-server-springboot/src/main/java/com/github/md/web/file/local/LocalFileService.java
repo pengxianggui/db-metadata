@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.net.URLEncoder;
 import java.nio.file.Paths;
 
 /**
@@ -41,7 +40,7 @@ public class LocalFileService implements UploadService, DownloadService {
         String destPath = Joiner.on(File.separator).skipNulls().join(splitMarkers);
         File targetFile = toTargetFile(getBasePath() + destPath, file);
         String url = destPath + File.separator + targetFile.getName();
-        return previewUrl(url);
+        return buildFileUrl(url).toString();
     }
 
     @Override
@@ -80,7 +79,4 @@ public class LocalFileService implements UploadService, DownloadService {
         return basePath;
     }
 
-    private String previewUrl(String url) {
-        return "/file/preview?path=" + URLEncoder.encode(url);
-    }
 }

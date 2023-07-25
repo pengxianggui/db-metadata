@@ -19,24 +19,34 @@ import java.util.Map;
  */
 @Slf4j
 public class FileManager {
-    private static final FileManager me = new FileManager();
+    private static FileManager me = null;
 
     private final Map<String, UploadService> registeredUploadService = new HashMap<>();
     private final Map<String, DownloadService> registeredDownloadService = new HashMap<>();
     private final String defaultMode;
 
-
     public static FileManager me() {
+        if (me == null) {
+            synchronized (FileManager.class) {
+                if (me == null) {
+                    DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+                    config(configurer);
+                }
+            }
+        }
         return me;
     }
 
-    private FileManager() {
+    public static void config(DbMetaConfigurer configurer) {
+        me = new FileManager(configurer);
+    }
+
+    private FileManager(DbMetaConfigurer configurer) {
         MetaProperties metaProperties = ServiceManager.getAppProperties();
         defaultMode = StrKit.defaultIfBlank(metaProperties.getServer().getUpload().getMode(), LocalFileService.modeName); // 未配置，就采用local——本地上传模式
 
         configDefault(metaProperties.getServer().getUpload());
 
-        FileConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
         FileRegistry fileRegistry = new FileRegistry();
         configurer.configFileService(fileRegistry);
 

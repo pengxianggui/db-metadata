@@ -37,10 +37,22 @@ public class ServiceManager {
         return AnalysisSpringUtil.getBean(ComponentService.class);
     }
 
+    /**
+     * 直接使用 {@link FileManager#getUploadService()}
+     *
+     * @return
+     */
+    @Deprecated
     public static UploadService uploadService() {
         return FileManager.me().getUploadService();
     }
 
+    /**
+     * 直接使用 {@link FileManager#getDownloadService()}
+     *
+     * @return
+     */
+    @Deprecated
     public static DownloadService downloadService() {
         return FileManager.me().getDownloadService();
     }

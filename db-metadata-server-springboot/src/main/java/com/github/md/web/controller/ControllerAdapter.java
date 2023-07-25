@@ -11,6 +11,7 @@ import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ComponentService;
 import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
+import com.github.md.web.file.FileManager;
 import com.github.md.web.kit.tree.TreeService;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.file.DownloadService;
@@ -48,10 +49,24 @@ public class ControllerAdapter {
         return ServiceManager.featureService();
     }
 
+    /**
+     * 获取默认的上传服务。即:{@link com.github.md.web.file.local.LocalFileService}
+     *
+     * @return
+     * @deprecated 直接使用 {@link FileManager#getUploadService()}
+     */
+    @Deprecated
     public UploadService uploadService() {
         return ServiceManager.uploadService();
     }
 
+    /**
+     * 获取默认的下载服务，即{@link com.github.md.web.file.local.LocalFileService}
+     *
+     * @return
+     * @deprecated 直接使用 {@link FileManager#getDownloadService()}
+     */
+    @Deprecated
     public DownloadService downloadService() {
         return ServiceManager.downloadService();
     }
@@ -87,12 +102,12 @@ public class ControllerAdapter {
             simplePropertyPreFilter.getExcludes().addAll(Arrays.asList(excludes));
 
             return JSON.toJSONString(data,
-                                     simplePropertyPreFilter,
-                                     SerializerFeature.DisableCircularReferenceDetect,
-                                     SerializerFeature.WriteDateUseDateFormat,
-                                     SerializerFeature.WriteNullListAsEmpty,
-                                     SerializerFeature.WriteMapNullValue,
-                                     SerializerFeature.WriteNullStringAsEmpty);
+                    simplePropertyPreFilter,
+                    SerializerFeature.DisableCircularReferenceDetect,
+                    SerializerFeature.WriteDateUseDateFormat,
+                    SerializerFeature.WriteNullListAsEmpty,
+                    SerializerFeature.WriteMapNullValue,
+                    SerializerFeature.WriteNullStringAsEmpty);
         } else {
             return data;
         }

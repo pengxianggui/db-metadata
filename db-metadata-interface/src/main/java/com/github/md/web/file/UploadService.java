@@ -3,6 +3,7 @@ package com.github.md.web.file;
 import com.google.common.io.Files;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,5 +38,15 @@ public interface UploadService extends Mode {
     default String getFileNameWithAffix(MultipartFile file) {
         return Files.getNameWithoutExtension(file.getOriginalFilename()) + "_" + new SimpleDateFormat("yyyyMMdd_HH_mm_ss_SSS").format(new Date()) + "."
                 + Files.getFileExtension(file.getOriginalFilename());
+    }
+
+    /**
+     * 构建代理地址。即originUrl指向的资源，通过本地服务代理。
+     *
+     * @param originUrl 原始的url。{@link #getMode()}不同时，originUrl格式也不同。本地模式时，值为本地路径
+     * @return
+     */
+    default PreviewUrl buildFileUrl(String originUrl) {
+        return new PreviewUrl(URLEncoder.encode(originUrl), getMode());
     }
 }

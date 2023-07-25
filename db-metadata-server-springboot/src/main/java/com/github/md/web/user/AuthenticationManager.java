@@ -57,11 +57,15 @@ public class AuthenticationManager {
             synchronized (AuthenticationManager.class) {
                 if (me == null) {
                     DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
-                    AuthenticationManager.me = new AuthenticationManager(configurer);
+                    config(configurer);
                 }
             }
         }
         return me;
+    }
+
+    public static void config(DbMetaConfigurer configurer) {
+        me = new AuthenticationManager(configurer);
     }
 
     public AuthenticationManager(DbMetaConfigurer configurer) {

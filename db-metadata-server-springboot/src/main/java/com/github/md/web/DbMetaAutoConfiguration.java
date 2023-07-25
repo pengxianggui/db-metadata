@@ -32,7 +32,9 @@ public class DbMetaAutoConfiguration {
      *
      * @param dbMetaConfigurer
      * @return
+     * @deprecated 无需配置为bean, 系统由{@link AuthenticationManager#me()}调用
      */
+    @Deprecated
     @Bean
     public AuthenticationManager authenticationManager(DbMetaConfigurer dbMetaConfigurer) {
         return new AuthenticationManager(dbMetaConfigurer);

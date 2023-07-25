@@ -13,7 +13,7 @@
     <artifactId>db-metadata-extends</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>db-metadata-extends-oss</module>
+        <module>db-metadata-extends-aliyunoss</module>
     </modules>
 
     <properties>
@@ -26,6 +26,31 @@
         <dependency>
             <groupId>io.github.pengxianggui</groupId>
             <artifactId>db-metadata-interface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

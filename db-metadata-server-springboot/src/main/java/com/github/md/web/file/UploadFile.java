@@ -18,6 +18,6 @@ public class UploadFile {
     private String seat;
 
     public String getUploadedName() {
-        return url.substring(url.lastIndexOf("/")+1);
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }

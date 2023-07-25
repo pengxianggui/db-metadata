@@ -9,6 +9,7 @@ import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.WebException;
 import com.github.md.web.component.form.RichTextBox;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.file.local.LocalFileService;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.user.auth.annotations.ApiType;
@@ -36,7 +37,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class FileController extends ControllerAdapter {
         }
         MultipartFile file = uploadFiles.get(0);
 
-        UploadService uploadService = uploadService();
+        UploadService uploadService = FileManager.me().getUploadService(); // 默认上传模式
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -110,7 +110,8 @@ public class FileController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
 
-        String url = uploadService().upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
+        // 默认的上传模式
+        String url = FileManager.me().getUploadService().upload(file, StrKit.defaultIfBlank(objectCode, "anonymous"), StrKit.defaultIfBlank(fieldCode, "anonymous"));
 
         // richText使用的Tinymce, 它要求返回的数据格式为: { "location": "http://xxxx" }
         return Kv.by(RichTextBox.IMAGE_UPLOAD_RETURN_KEY, url);
@@ -139,9 +140,13 @@ public class FileController extends ControllerAdapter {
 
         Preconditions.checkNotNull(fieldValue, "未找到可下载的文件地址");
 
-        DownloadService downloadService = downloadService();
-        List<Path> filePaths = getFilePaths(metaField, id, fieldValue);
-        List<File> files = filePaths.stream().map(path -> downloadService.getFile(path.toString())).collect(Collectors.toList());
+        UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
+        List<File> files = uploadFileResolve.getFiles().stream()
+                .filter(uf -> PreviewUrl.legal(uf.getUrl())) // TODO: 不排除可能有合法的绝对地址url, 如http://开头的。也需要下载的
+                .map(uf -> {
+                    PreviewUrl previewUrl = PreviewUrl.parse(uf.getUrl());
+                    return FileManager.me().getDownloadService(previewUrl.getMode()).getFile(previewUrl.getPath());
+                }).collect(Collectors.toList());
 
         File targetFile;
         AssertKit.isTrue(CollectionUtil.isNotEmpty(files), "文件资源未找到！");
@@ -161,13 +166,16 @@ public class FileController extends ControllerAdapter {
      * 通用的文件下载，将直接调用配置的{@link DownloadService#getFile(String)}下载文件，具体调用哪个实现类，取决于配置的文件存储服务(md.server.upload.mode)
      * <p>
      * param: path。
+     *
      * @return 返回下载的文件
      */
     @ApiType(value = Type.API)
     @GetMapping("download")
     public ResponseEntity<FileSystemResource> download() {
         String url = StrKit.defaultIfBlank(parameterHelper().get("path"), parameterHelper().get("url"));
-        File targetFile = downloadService().getFile(url);
+        String mode = StrKit.defaultIfBlank(parameterHelper().get("mode"), LocalFileService.modeName);
+
+        File targetFile = FileManager.me().getDownloadService(mode).getFile(url);
         return responseFile(targetFile);
     }
 
@@ -181,11 +189,12 @@ public class FileController extends ControllerAdapter {
     @GetMapping("preview")
     public void preview() {
         String path = parameterHelper().getPara("path", "");
+        String mode = parameterHelper().getPara("mode", LocalFileService.modeName);
 
         HttpServletRequest request = getRequest();
         HttpServletResponse response = getResponse();
 
-        File targetFile = downloadService().getFile(path);
+        File targetFile = FileManager.me().getDownloadService(mode).getFile(path);
         if (!targetFile.exists()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
@@ -224,37 +233,6 @@ public class FileController extends ControllerAdapter {
 
         MediaType mediaType = MediaTypeFactory.getMediaType(targetFile.getName()).orElse(MediaType.APPLICATION_OCTET_STREAM);
         return ResponseEntity.ok().headers(headers).contentType(mediaType).body(new FileSystemResource(targetFile));
-    }
-
-
-    /**
-     * 根据元字段获取文件。 用于获取指定字段值中存储的所有文件，当需要通过元字段进行下载时会有用。
-     *
-     * @param metaField    元字段。 指定字段对应的元字段
-     * @param primaryValue 文件关联记录的主键值。值对应的记录主键。
-     * @param fieldValue   该字段该记录的值。字段值，其中存储了文件地址信息。当fieldValue为json数组字符串时，可能存储多个文件内容。需要内部去判断。
-     *                     当metaField字段类型为json时，fieldValue为json数组。
-     * @return 返回此元字段包含的文件路径列表
-     */
-    private List<Path> getFilePaths(IMetaField metaField, String primaryValue, String fieldValue) {
-        List<Path> list;
-        UploadFileResolve uploadFileResolve = getFileResolver(metaField, fieldValue);
-        String objectCode = metaField.objectCode(),
-                fieldCode = metaField.fieldCode();
-        if (uploadFileResolve.hasFile()) {
-            list = uploadFileResolve.getFiles().stream()
-                    .map(f -> Paths.get(objectCode, fieldCode, f.getUploadedName()))
-                    .collect(Collectors.toList());
-        } else {
-            list = new ArrayList<>();
-        }
-
-        log.debug("获取[{}]表中主键为[{}]记录的[{}]字段中的文件列表,共有[{}]个文件",
-                metaField.getParent().tableName(), primaryValue, metaField.fieldCode(), list.size());
-        if (!metaField.configParser().isFile()) {
-            log.warn("元字段[{}.{}]未设置为文件类型，请勾选元字段配置中【是否为文件】", metaField.getParent().code(), metaField.fieldCode());
-        }
-        return list;
     }
 
     /**
