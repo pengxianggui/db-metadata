@@ -51,6 +51,7 @@ export default {
         this.$axios.get(this.$compile(restUrl.META_FIELD_SYNC, {objectCode: code}))
             .then(({msg = '同步成功'}) => {
               this.$message.success(msg)
+              this.$refs[this.fc].refresh()
             }).catch(({msg = '同步发生错误'}) => {
           console.error(msg)
         })

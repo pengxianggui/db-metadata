@@ -10,10 +10,9 @@
               :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
               tag="span"
               class="router-link"
-              @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-          >
+              @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''">
             <svg-icon value="affix" v-if="isAffix(tag)" class="affixed-icon" style="font-size: 9px;"></svg-icon>
-            <span>{{ tag.meta.title }}</span>
+            <span :title="tag.meta.title">{{ tag.meta.title | subStr(10, '..') }}</span>
             <el-button type="text" icon="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"
                        class="close" v-if="!isAffix(tag)"></el-button>
           </router-link>
@@ -317,6 +316,9 @@ $tagBarHeight: 30px;
       position: absolute;
       right: 3px;
       color: inherit;
+      padding: 0;
+      line-height: $tagBarHeight;
+
       &:hover {
         transform: rotate(90deg);
       }

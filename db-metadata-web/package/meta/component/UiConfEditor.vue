@@ -2,8 +2,16 @@
   <div>
     <el-form size="mini" :model="value" label-position="top" v-show="formType">
       <template v-for="key in keys">
-        <template v-if="editableJudge(value.component_name, key)">
-          <el-form-item :key="key" :label="key">
+        <template v-if="editableJudge(value, key)">
+          <el-form-item :key="key">
+
+            <template #label>
+              <span>{{attrsConfMeta[key]['label'] || key}}</span>
+              <el-tooltip placement="right" v-if="attrsConfMeta[key]['explain']">
+                <div slot="content" v-html="attrsConfMeta[key]['explain']" style="white-space: pre-wrap;"></div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </template>
 
             <component-selector v-model="value.component_name" @change="handleCompChange"
                                 scope="field" :components="fieldComponents"
@@ -53,7 +61,7 @@
 
 <script>
 import buildMeta from "../buildMeta";
-import confFilter from "../form-builder/relate/confFilter";
+import confFilter from "./confFilter";
 import {isLayoutComp} from "../form-builder/relate/componentData";
 import ComponentSelector from "./ComponentSelector";
 import MetaFieldConfigButton from "./MetaFieldConfigButton";
@@ -121,8 +129,8 @@ export default {
       utils.deleteAllAttrs(this.value)
       this.$merge(this.value, newV)
     },
-    editableJudge(componentName, key) {
-      return confFilter(componentName, key);
+    editableJudge(meta, key) {
+      return confFilter(meta, key, this.viewComponentCode);
     },
     isLayoutComp(componentName) {
       return isLayoutComp(componentName)

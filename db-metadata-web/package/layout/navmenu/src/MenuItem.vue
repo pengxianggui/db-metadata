@@ -10,7 +10,7 @@
             <el-menu-item :index="resolvePath(item.path)" :disabled="item.disable"
                           :class="{'submenu-title-noDropdown':!isNest}">
               <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
-              <span slot="title">{{ item.title }}</span>
+              <span slot="title" class="title">{{ item.title }}</span>
             </el-menu-item>
           </template>
           <list>
@@ -25,10 +25,9 @@
       <template slot="title">
         <div>
           <svg-icon :value="item.icon" v-if="item.icon"></svg-icon>
-
           <pop-menu trigger="right-click" :disabled="!metaEditable">
             <template #label>
-              <span slot="title">{{ item.title }}</span>
+              <span slot="title" class="title">{{ item.title }}</span>
             </template>
             <list>
               <list-item @click="editMenuMeta(item)">编辑元菜单</list-item>
@@ -132,3 +131,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  margin-left: 5px;
+}
+</style>

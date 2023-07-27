@@ -11,14 +11,13 @@
     其余类别的组件全部是eq逻辑
 -->
 <template>
-  <z-toggle-panel :label-position="meta['label-position']" :default-open="meta['expand']"
-                  v-if="meta.columns && meta.columns.length > 0">
     <div class="md_view-container">
       <el-form :ref="meta['name']" v-bind="formConf" :model="model" inline
-               @keyup.enter.native="emitSearch" @submit.native.prevent class="search-form">
-        <template v-for="item in meta.columns">
+               @keyup.enter.native="emitSearch" @submit.native.prevent class="search-form"
+               v-if="meta.columns.length > 0">
+        <template v-for="(item, index) in meta.columns">
           <el-form-item class="form-item" :key="item.name" :label="item.label || item.name" :prop="item.name"
-                        v-if="model.hasOwnProperty(item.name)">
+                        v-if="model.hasOwnProperty(item.name)" v-show="meta.expand || index == 0">
 
             <component v-model="model[item.name]['value']"
                        :is="item.component_name === 'NumBox' ? 'TextBox' : item.component_name"
@@ -36,6 +35,7 @@
             </component>
           </el-form-item>
         </template>
+
         <el-form-item>
           <slot name="action" v-bind:model="model" v-bind:conf="buttonsConf">
             <el-button type="primary" @click="emitSearch"
@@ -44,17 +44,13 @@
                        v-bind="buttonsConf.reset.conf" v-if="buttonsConf.reset.show">{{buttonsConf.reset.label}}</el-button>
           </slot>
         </el-form-item>
+
+        <el-button :icon="meta.expand ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"
+                   class="expand md_no-padding" circle size="mini"
+                   @click="meta.expand = !meta.expand"
+                   v-if="meta.columns.length > 1"></el-button>
       </el-form>
     </div>
-
-    <template #label>
-      <slot name="label-bar">
-        <el-divider class="divider">
-          <i class="el-icon-search"></i>
-        </el-divider>
-      </slot>
-    </template>
-  </z-toggle-panel>
 </template>
 
 <script>
@@ -74,7 +70,8 @@ export default {
   components: {MetaEasyEdit},
   data() {
     return {
-      model: {}
+      model: {},
+      showOnlyOne: false
     }
   },
   methods: {
@@ -151,6 +148,7 @@ export default {
 }
 
 .search-form {
+  position: relative;
   .el-form-item {
     margin: 5px;
 
@@ -163,6 +161,14 @@ export default {
         -moz-appearance: textfield;
       }
     }
+  }
+  .expand {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 20px;
+    bottom: -16px;
+    padding: 0;
   }
 }
 

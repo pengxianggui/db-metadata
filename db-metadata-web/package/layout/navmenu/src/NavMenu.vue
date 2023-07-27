@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{'min-width': !nativeCollapse}" style="height: 100%">
+  <el-scrollbar class="container" :class="{'min-width': !nativeCollapse}">
     <slot name="toggle-button">
       <div class="toggle-button" @click="toggleMenu" v-if="showCollapseButton">
         <i :class="nativeCollapse ? 'el-icon-caret-right' : 'el-icon-caret-left'"></i>
@@ -11,7 +11,7 @@
              id="__DEFAULT_MENU" style="width: 100%">
       <slot></slot>
     </el-menu>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -55,9 +55,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.container {
-  $toggleButtonHeight: 100px;
-  $toggleButtonWidth: 10px;
+$toggleButtonHeight: 100px;
+$toggleButtonWidth: 10px;
+
+.container {
+  height: 100%;
+
+  ::v-deep {
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+    }
+  }
 
   .toggle-button {
     position: absolute;
@@ -73,7 +81,7 @@ div.container {
     overflow: hidden;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    z-index: 1;
+    z-index: 9; // 保证在滚动条上面
 
     i {
       width: $toggleButtonWidth;
@@ -94,6 +102,7 @@ div.container {
   #__DEFAULT_MENU {
     height: 100%;
     position: relative;
+    //overflow: hidden auto;
   }
 }
 

@@ -18,7 +18,7 @@ const specials = {
         "component_name": {
             component_name: DropDownBox.name,
             name: 'component_name',
-            label: 'component_name',
+            label: '组件名',
             data_url: "/component/list?view=false",
             conf: {
                 filterable: true,
@@ -29,6 +29,12 @@ const specials = {
             component_name: IconBox.name,
             name: 'icon',
             label: '图标'
+        },
+        "expand": {
+            component_name: BoolBox.name,
+            name: 'expand',
+            label: '显示全部搜索项',
+            explain: '若取消勾选，当搜索项超过1个时, 会收缩为只显示一个(可通过按钮展开)'
         }
     },
     "FormView": {
@@ -176,9 +182,11 @@ function buildMeta(key, value, componentCode) {
 }
 
 /**
+ * 根据一个值构建适配此值类型的 组件元数据。
  * value在前, 防止只传了value
- * @param value
- * @param key
+ * @param value 值，必须
+ * @param key 键名，此值对应的name，非必须。
+ * @param componentCode 容器组件名，表示构建返回的组件(元数据)是存在于哪个容器组件下。
  * @returns {*|{component_name, name, label, value}}
  */
 export default function (value, key, componentCode) {

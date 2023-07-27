@@ -113,7 +113,6 @@ export default {
 <style scoped lang="scss">
 .menu {
   height: 100%;
-  overflow: hidden auto;
   position: relative;
   border-right: 1px solid #ceced0;
 }

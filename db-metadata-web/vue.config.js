@@ -34,13 +34,14 @@ module.exports = {
     chainWebpack: config => {
         config.module.rule('js')
             .include.add('/package').end()
-            .use('babel').loader('babel-loader').tap(options => options)
+            .use('babel').loader('babel-loader').tap(options => options);
 
         // set svg-sprite-loader
         config.module
             .rule('svg')
             .exclude.add(path.join(__dirname, 'package/asserts/svg/src'))
-            .end()
+            .end();
+
         config.module
             .rule('icons')
             .test(/\.svg$/)
@@ -51,6 +52,12 @@ module.exports = {
             .options({
                 symbolId: 'me-icon-[name]'
             })
-            .end()
+            .end();
+
+        config.plugin('html')
+            .tap(args => {
+                args[0].favicon = path.resolve('public/logo.png');
+                return args
+            });
     }
 };
