@@ -13,6 +13,11 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
+  cache:
+    type: CAFFEINE # 使用caffeine缓存——内存缓存
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+
   servlet:
     multipart:
       max-file-size: 50MB

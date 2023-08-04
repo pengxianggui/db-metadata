@@ -3,6 +3,8 @@ package com.github.md.web.app;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +20,10 @@ public class AppConfigService {
     /**
      * 获取最新版本的系统配置。若{@link AppConfigService#TABLE_NAME}中无数据，则按照表字段默认值初始化一条并返回。
      * <p>
-     * TODO 引入缓存，避免每次查库
      *
      * @return
      */
+    @Cacheable(value = "meta_app_config")
     public AppConfig getLatest() {
         Record r = SpringAnalysisManager.me().dbMain().findFirst("select * from " + TABLE_NAME + " order by version desc limit 1");
         if (r == null) {
@@ -36,5 +38,9 @@ public class AppConfigService {
     public AppConfig getById(String id) {
         Record r = SpringAnalysisManager.me().dbMain().findById(TABLE_NAME, id);
         return r != null ? new AppConfig(r) : null;
+    }
+
+    @CacheEvict(value = "meta_app_config")
+    public void clearCache() {
     }
 }

@@ -1,6 +1,7 @@
 package com.github.md.analysis.db.registry;
 
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.activerecord.cache.ICache;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -23,6 +24,10 @@ public class JFinalActiveRecordPluginManager {
             log.warn("The [{}] duplicate data source registration", sourceName);
         }
         REGISTRY.put(sourceName, plugin);
+    }
+
+    public void setCache(ICache cache) {
+        REGISTRY.values().forEach(plugin -> plugin.setCache(cache));
     }
 
     public Collection<ActiveRecordPlugin> list() {

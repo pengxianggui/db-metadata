@@ -6,6 +6,7 @@ import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.WebException;
 import com.github.md.web.app.AppConfig;
+import com.github.md.web.app.AppConfigService;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.AuthenticationManager;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,8 @@ public class AppConfigAop implements AddPointCut, UpdatePointCut {
     public boolean addAfter(FormInvocation invocation) {
         String oldId = invocation.getHttpParams().getStr("id");
 
-        AppConfig appConfig = ServiceManager.getAppConfigService().getById(oldId);
+        AppConfigService appConfigService = ServiceManager.getAppConfigService();
+        AppConfig appConfig = appConfigService.getById(oldId);
         String oldEncryptKey = appConfig.getPassEncryptKey();
         String newEncryptKey = invocation.getFormData().getStr("pass_encrypt_key");
 
@@ -51,6 +53,8 @@ public class AppConfigAop implements AddPointCut, UpdatePointCut {
         log.warn("The login passwords for all users are going to refresh based on the new encryption key!");
         boolean flag = AuthenticationManager.me().getUserService().refreshPass(oldEncryptKey, newEncryptKey);
         AssertKit.isTrue(flag == true, "您更改了加密密钥, 但系统未成功重新加密用户密码，系统配置将不会保存。");
+
+        appConfigService.clearCache();
 
         return true;
     }

@@ -2,12 +2,15 @@ package com.github.md.web.config;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.SpringAnalysisManager;
+import com.github.md.analysis.db.registry.JFinalActiveRecordPluginManager;
 import com.github.md.analysis.meta.MetaFieldConfigExtension;
 import com.github.md.analysis.meta.aop.PointCutChain;
 import com.github.md.web.DbMetaConfigurer;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.aop.AuditPointCut;
 import com.github.md.web.aop.UniqueConstraintAop;
+import com.github.md.web.cache.CacheRegistry;
+import com.github.md.web.cache.MdCache;
 import com.github.md.web.component.Components;
 import com.github.md.web.component.render.RenderKit;
 import com.github.md.web.component.render.form.FormFieldRenderExtension;
@@ -80,8 +83,18 @@ public class MetaBootstrap {
         @Override
         public void init() {
             DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+
+            // 配置AuthenticationManager
             AuthenticationManager.config(configurer);
+
+            // 配置FileManager
             FileManager.config(configurer);
+
+            // 配置Cache
+            JFinalActiveRecordPluginManager jFinalActiveRecordPluginManager = AnalysisSpringUtil.getBean(JFinalActiveRecordPluginManager.class);
+            CacheRegistry cacheRegistry = new CacheRegistry();
+            configurer.configCacheManager(cacheRegistry);
+            jFinalActiveRecordPluginManager.setCache(new MdCache(cacheRegistry.getCacheManager()));
         }
     }
 
