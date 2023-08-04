@@ -8,21 +8,29 @@
             <list-item @click="toEditMetaObject">编辑元对象({{ objectCode }})</list-item>
             <list-item @click="toEditMetaField">编辑元字段({{ fieldCode }})</list-item>
             <list-item @hover="getInstanceCode">
-              <pop-menu trigger="hover" placement="right">
-                <template #label>编辑({{ objectCode }})的UI实例配置</template>
+              <pop-menu class="pop-menu" trigger="hover" placement="right" :append-to-body="false">
+                <template #label>
+                  <div>编辑({{ objectCode }})的UI实例配置}</div>
+                </template>
                 <template #default>
                   <list direction="column">
-                    <list-item v-for="ic in instanceCodes" :key="ic"@click="toEditInstanceConf(ic)">{{ic}}</list-item>
+                    <list-item v-for="ic in instanceCodes" :key="ic"
+                               @click="toEditInstanceConf(ic)"
+                               class="list-item"
+                    >{{ic}}</list-item>
                   </list>
                 </template>
               </pop-menu>
             </list-item>
             <list-item @hover="getInstanceCode">
-              <pop-menu trigger="hover" placement="right">
+              <pop-menu class="pop-menu" trigger="hover" placement="right" :append-to-body="false">
                 <template #label>编辑实例字段UI配置({{ fieldCode }})</template>
                 <template #default>
                   <list direction="column">
-                    <list-item v-for="ic in instanceCodes" :key="ic" @click="toEditInstanceConf(ic, fieldCode)">{{ic}}</list-item>
+                    <list-item v-for="ic in instanceCodes" :key="ic"
+                               @click="toEditInstanceConf(ic, fieldCode)"
+                               class="list-item"
+                    >{{ic}}</list-item>
                   </list>
                 </template>
               </pop-menu>
@@ -125,6 +133,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.pop-menu {
+  &::v-deep {
+    .el-popover {
+      margin-left: 0;
+    }
+  }
 
+  .list-item {
+    white-space: nowrap;
+    padding: 5px;
+  }
+}
 </style>
