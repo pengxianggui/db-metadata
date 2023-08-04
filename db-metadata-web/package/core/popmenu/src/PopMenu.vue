@@ -41,7 +41,7 @@ export default {
   methods: {
     rightClickHander(ev) {
       let self = this;
-      if (self.trigger === 'right-click') {
+      if (self.trigger === 'right-click') { // el-popover没有right-click, 单独针对right-click处理
         ev.preventDefault();
         self.visible = true;
         // self.$emit('update:visible', true)
