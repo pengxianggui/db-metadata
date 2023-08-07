@@ -1,6 +1,5 @@
 package com.github.md.web.file.oss;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
 import com.github.md.web.file.DownloadService;
 import com.github.md.web.file.UploadService;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 
 /**
  * 阿里云oss文件服务, 上传/下载。使用配置: md.server.upload.aliyunoss
@@ -37,9 +37,15 @@ public class AliyunOssFileService implements UploadService, DownloadService {
     public File getFile(String fileUrl) {
         try {
             String decodeFileUrl = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8.name());
+            String tmpdir = System.getProperty("java.io.tmpdir");
+            File file = Paths.get(tmpdir, decodeFileUrl).toFile();
+            if (file.exists()) { // 缓存，避免频繁获取阿里云对象
+                return file;
+            }
+
             URL url = ossUtil.getFileUrl(decodeFileUrl);
-            File file = File.createTempFile(FileUtil.getName(decodeFileUrl), "." + FileUtil.getSuffix(decodeFileUrl));
             HttpUtil.downloadFile(url.toString(), file);
+            file.deleteOnExit(); // TODO: 优化为除了deleteOnExit, 还可以提供一个值自动过期，比如1天, 以避免临时文件太多。
             return file;
         } catch (IOException e) {
             throw new RuntimeException(e);

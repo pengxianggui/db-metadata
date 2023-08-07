@@ -1,4 +1,4 @@
-package com.github.md.web.snippet;
+package com.github.md.web.snippet_var;
 
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
@@ -8,8 +8,12 @@ import cn.hutool.extra.template.engine.beetl.BeetlEngine;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.AppConst;
+import com.github.md.web.ServiceManager;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -17,11 +21,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class SnippetService {
+    private static final String SNIPPET_CACHE_NAME = "meta_snippet";
+    private VarService varService;
+
+    public SnippetService(VarService varService) {
+        this.varService = varService;
+    }
 
     public List<Kv> listForOptions() {
-        return SpringAnalysisManager.me().dbMain().findAll(AppConst.INNER_TABLE.META_SNIPPET.getTableName()).stream().map(r -> Kv.by("key", String.format("%s-%s", r.getStr("code"), r.getStr("title"))).set("value", r.getStr("code"))).collect(Collectors.toList());
+        // ServiceManager.getSnippetService().getAllSnippets() 避免AOP代理问题导致缓存不生效
+        return ServiceManager.getSnippetService().getAllSnippets().stream()
+                .map(r ->
+                        Kv.by("key", String.format("%s-%s", r.getStr("code"), r.getStr("title")))
+                                .set("value", r.getStr("code")))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -35,7 +51,7 @@ public class SnippetService {
      * 入参renderFnOrSnippetCode, 并依据入参ifCompileVar决定是否返回编译后的snippet代码片段。
      */
     public String getSnippet(String renderFnOrSnippetCode, boolean ifCompileVar) {
-        List<Record> records = getAllSnippets();
+        List<Record> records = ServiceManager.getSnippetService().getAllSnippets(); //避免AOP代理问题导致缓存不生效
         if (CollectionUtils.isEmpty(records)) {
             return renderFnOrSnippetCode;
         }
@@ -60,7 +76,7 @@ public class SnippetService {
             return snippet;
         }
 
-        Map<String, String> varsMap = getAllVars().stream()
+        Map<String, String> varsMap = varService.getAllVars().stream()
                 .collect(Collectors.toMap(
                         r -> r.getStr("name"),
                         r -> StrKit.defaultIfBlank(r.getStr("value"), "")));
@@ -70,21 +86,20 @@ public class SnippetService {
         return template.render(varsMap);
     }
 
-    /**
-     * 获取所有的全局变量。 TODO 缓存
-     *
-     * @return
-     */
-    public List<Record> getAllVars() {
-        return SpringAnalysisManager.me().dbMain().findAll(AppConst.INNER_TABLE.META_VAR.getTableName());
-    }
 
     /**
-     * 获取所有的代码片段。TODO 缓存
+     * 获取所有的代码片段。
      *
      * @return
      */
+    @Cacheable(value = SNIPPET_CACHE_NAME, key = "'all'")
     public List<Record> getAllSnippets() {
         return SpringAnalysisManager.me().dbMain().findAll(AppConst.INNER_TABLE.META_SNIPPET.getTableName());
     }
+
+    @CacheEvict(value = SNIPPET_CACHE_NAME, key = "'all'")
+    public void clearCache() {
+        log.debug("The cache of {} has been cleared", SNIPPET_CACHE_NAME);
+    }
+
 }

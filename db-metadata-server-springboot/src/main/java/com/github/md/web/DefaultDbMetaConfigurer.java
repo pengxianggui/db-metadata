@@ -1,13 +1,11 @@
 package com.github.md.web;
 
-import com.github.md.web.cache.CacheRegistry;
 import com.github.md.web.event.ExtensibleListenerRegistry;
 import com.github.md.web.file.DownloadService;
 import com.github.md.web.file.FileRegistry;
 import com.github.md.web.file.UploadService;
 import com.github.md.web.user.AuthenticationRegistry;
 import org.springframework.beans.BeansException;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.CollectionUtils;
@@ -52,12 +50,6 @@ public class DefaultDbMetaConfigurer extends DbMetaConfigurer implements Applica
                 fileRegistry.config(service.getMode(), service);
             }
         }
-    }
-
-    @Override
-    public void configCacheManager(CacheRegistry cacheRegistry) {
-        CacheManager cacheManager = applicationContext.getBean(CacheManager.class);
-        cacheRegistry.setCacheManager(cacheManager);
     }
 
     @Override

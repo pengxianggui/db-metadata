@@ -39,9 +39,11 @@ public class AppConfigAop implements AddPointCut, UpdatePointCut {
      */
     @Override
     public boolean addAfter(FormInvocation invocation) {
+        AppConfigService appConfigService = ServiceManager.getAppConfigService();
+        appConfigService.clearCache(); // 系统设置有新版本后，及时清理缓存
+
         String oldId = invocation.getHttpParams().getStr("id");
 
-        AppConfigService appConfigService = ServiceManager.getAppConfigService();
         AppConfig appConfig = appConfigService.getById(oldId);
         String oldEncryptKey = appConfig.getPassEncryptKey();
         String newEncryptKey = invocation.getFormData().getStr("pass_encrypt_key");
@@ -53,8 +55,6 @@ public class AppConfigAop implements AddPointCut, UpdatePointCut {
         log.warn("The login passwords for all users are going to refresh based on the new encryption key!");
         boolean flag = AuthenticationManager.me().getUserService().refreshPass(oldEncryptKey, newEncryptKey);
         AssertKit.isTrue(flag == true, "您更改了加密密钥, 但系统未成功重新加密用户密码，系统配置将不会保存。");
-
-        appConfigService.clearCache();
 
         return true;
     }

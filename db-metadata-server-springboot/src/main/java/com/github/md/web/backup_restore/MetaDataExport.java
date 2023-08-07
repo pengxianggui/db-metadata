@@ -6,14 +6,18 @@ import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.web.AppConst;
 import com.github.md.web.ServiceManager;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
 import com.jfinal.plugin.activerecord.Record;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +76,7 @@ public class MetaDataExport {
      */
     public void exportToSQL(File sqlFile) throws IOException {
         SpringAnalysisManager springAnalysisManager = SpringAnalysisManager.me();
-        final String systemName = ServiceManager.getAppConfigService().getLatest().getName();
+        final String systemName = ServiceManager.getAppConfigService().getLatest(false).getName();
         final String schemaName = springAnalysisManager.getDataSourceManager().mainSource().schemaName();
 
         FileWriter fileWriter = new FileWriter(sqlFile);

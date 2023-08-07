@@ -28,7 +28,7 @@ public class AppController extends ControllerAdapter {
      */
     @GetMapping("config")
     public Ret config() {
-        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(true);
         AppPropVO vo = new AppPropVO(metaProperties, appConfig);
         return Ret.ok("data", vo);
     }
@@ -40,7 +40,7 @@ public class AppController extends ControllerAdapter {
      */
     @GetMapping("dynamic-config")
     public Ret dynamicConfig() {
-        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(false);
         return Ret.ok("data", appConfig);
     }
 }

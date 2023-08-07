@@ -24,7 +24,7 @@ public class PassKit {
      * @return
      */
     public static String encryptPass() {
-        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(true);
 
         String defaultPass = Optional.ofNullable(appConfig)
                 .map(AppConfig::getDefaultPass).orElse(null);
@@ -39,7 +39,7 @@ public class PassKit {
      * @return
      */
     public static String encryptPass(String clearPass) {
-        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(true);
 
         String passEncryptKey = Optional.ofNullable(appConfig)
                 .map(AppConfig::getPassEncryptKey).orElse(null);
@@ -77,7 +77,7 @@ public class PassKit {
      * @return
      */
     public static String decryptPass(String encryptPass) {
-        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest();
+        AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(true);
 
         String passEncryptKey = Optional.ofNullable(appConfig)
                 .map(AppConfig::getPassEncryptKey).orElse(null);

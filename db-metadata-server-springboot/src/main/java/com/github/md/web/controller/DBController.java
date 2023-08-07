@@ -112,6 +112,6 @@ public class DBController extends ControllerAdapter {
     private void preConditionCheck() {
         String token = parameterHelper().getPara("token");
         Preconditions.checkArgument(quickJudge().isDevMode(), "未处于开发模式,无法执行该操作");
-        Preconditions.checkArgument(token.equalsIgnoreCase(ServiceManager.getAppConfigService().getLatest().getResetPass()), "口令错误,不能初始化系统");
+        Preconditions.checkArgument(token.equalsIgnoreCase(ServiceManager.getAppConfigService().getLatest(true).getResetPass()), "口令错误,不能初始化系统");
     }
 }

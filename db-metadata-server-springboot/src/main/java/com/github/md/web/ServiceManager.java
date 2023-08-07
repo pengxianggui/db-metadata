@@ -10,7 +10,8 @@ import com.github.md.web.config.MetaProperties;
 import com.github.md.web.config.QuickJudge;
 import com.github.md.web.feature.FeatureService;
 import com.github.md.web.kit.tree.TreeService;
-import com.github.md.web.snippet.SnippetService;
+import com.github.md.web.snippet_var.SnippetService;
+import com.github.md.web.snippet_var.VarService;
 import com.github.md.web.ui.SqlAnalysis;
 import com.github.md.web.file.DownloadService;
 import com.github.md.web.file.FileManager;
@@ -87,5 +88,9 @@ public class ServiceManager {
 
     public static SnippetService getSnippetService() {
         return AnalysisSpringUtil.getBean(SnippetService.class);
+    }
+
+    public static VarService getVarService() {
+        return AnalysisSpringUtil.getBean(VarService.class);
     }
 }

@@ -9,7 +9,11 @@ import org.springframework.cache.CacheManager;
 import java.util.Optional;
 
 /**
- * 装饰器模式?
+ * MdCache为{@link ICache}实现类，用于满足ActiveRecord原生API中需要使用缓存的操作,
+ * 例如: {@link com.jfinal.plugin.activerecord.Db#findByCache(String, Object, String)}
+ * <p>
+ * 内部对{@link ICache}的实现方式均通过Spring支持的{@link CacheManager}实现。
+ * 因此是装饰模式的应用。
  */
 @Slf4j
 public class MdCache implements ICache {

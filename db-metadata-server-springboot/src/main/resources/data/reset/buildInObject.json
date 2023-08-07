@@ -2411,7 +2411,7 @@
       "objectCode": "meta_snippet",
       "structure": "list",
       "isNumberSequence": true,
-      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut,com.github.md.web.snippet_var.SnippetAop",
       "orderBy": "created_time desc"
     },
     "_fields": {
@@ -2528,7 +2528,7 @@
       "objectCode": "meta_var",
       "structure": "list",
       "isNumberSequence": true,
-      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut",
+      "bizInterceptor": "com.github.md.web.controller.itp.BuildInDataPointCut,com.github.md.web.snippet_var.VarAop",
       "orderBy": "created_time desc"
     },
     "_fields": {
