@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -145,7 +147,13 @@ public class FileController extends ControllerAdapter {
                 .filter(uf -> PreviewUrl.legal(uf.getUrl())) // TODO: 不排除可能有合法的绝对地址url, 如http://开头的。也需要下载的
                 .map(uf -> {
                     PreviewUrl previewUrl = PreviewUrl.parse(uf.getUrl());
-                    return FileManager.me().getDownloadService(previewUrl.getMode()).getFile(previewUrl.getPath());
+                    String decodeUrl;
+                    try {
+                        decodeUrl = URLDecoder.decode(previewUrl.getPath(), StandardCharsets.UTF_8.name());
+                    } catch (UnsupportedEncodingException e) {
+                        decodeUrl = URLDecoder.decode(previewUrl.getPath());
+                    }
+                    return FileManager.me().getDownloadService(previewUrl.getMode()).getFile(decodeUrl);
                 }).collect(Collectors.toList());
 
         File targetFile;
@@ -175,7 +183,13 @@ public class FileController extends ControllerAdapter {
         String url = StrKit.defaultIfBlank(parameterHelper().get("path"), parameterHelper().get("url"));
         String mode = StrKit.defaultIfBlank(parameterHelper().get("mode"), LocalFileService.modeName);
 
-        File targetFile = FileManager.me().getDownloadService(mode).getFile(url);
+        String decodeUrl;
+        try {
+            decodeUrl = URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            decodeUrl = URLDecoder.decode(url);
+        }
+        File targetFile = FileManager.me().getDownloadService(mode).getFile(decodeUrl);
         return responseFile(targetFile);
     }
 
@@ -194,7 +208,13 @@ public class FileController extends ControllerAdapter {
         HttpServletRequest request = getRequest();
         HttpServletResponse response = getResponse();
 
-        File targetFile = FileManager.me().getDownloadService(mode).getFile(path);
+        String decodeUrl;
+        try {
+            decodeUrl = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            decodeUrl = URLDecoder.decode(path);
+        }
+        File targetFile = FileManager.me().getDownloadService(mode).getFile(decodeUrl);
         if (!targetFile.exists()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setCharacterEncoding(StandardCharsets.UTF_8.toString());

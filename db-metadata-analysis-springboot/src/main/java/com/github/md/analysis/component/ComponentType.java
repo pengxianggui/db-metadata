@@ -37,6 +37,7 @@ public enum ComponentType {
     TABLETREEVIEW("tabletreeview", "树形表格组件", "TableTreeView", true),
     FILEBOX("filebox", "上传控件", "FileBox"),
     IMAGEBOX("imagebox", "图片控件", "ImgBox"),
+    CODEBOX("codebox", "代码框", "CodeBox"),
     UNKNOWN("unknow", "未知控件", "unknow");
 
     @Getter(AccessLevel.PUBLIC)

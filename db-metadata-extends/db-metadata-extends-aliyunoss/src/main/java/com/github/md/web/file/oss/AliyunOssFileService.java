@@ -9,8 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 /**
@@ -39,21 +37,16 @@ public class AliyunOssFileService implements UploadService, DownloadService {
      */
     @Override
     public File getFile(String fileUrl) {
-        try {
-            String decodeFileUrl = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8.name());
-            String tmpdir = System.getProperty("java.io.tmpdir");
-            File file = Paths.get(tmpdir, decodeFileUrl).toFile();
-            if (file.exists()) { // 缓存，避免频繁获取阿里云对象
-                return file;
-            }
-
-            URL url = ossUtil.getFileUrl(decodeFileUrl);
-            HttpUtil.downloadFile(url.toString(), file);
-            file.deleteOnExit();
+        String tmpdir = System.getProperty("java.io.tmpdir");
+        File file = Paths.get(tmpdir, fileUrl).toFile();
+        if (file.exists()) { // 缓存，避免频繁获取阿里云对象
             return file;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+
+        URL url = ossUtil.getFileUrl(fileUrl);
+        HttpUtil.downloadFile(url.toString(), file);
+        file.deleteOnExit();
+        return file;
     }
 
     @Override
