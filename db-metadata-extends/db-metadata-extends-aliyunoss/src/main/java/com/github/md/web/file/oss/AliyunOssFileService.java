@@ -27,7 +27,11 @@ public class AliyunOssFileService implements UploadService, DownloadService {
     }
 
     /**
-     * 下载文件并返回
+     * 下载文件并返回。
+     * <p>
+     * 若临时目录中含有fileUrl对应的文件，则直接返回临时文件。optimize: 临时文件只会在程序退出时自动删除，若程序长时间运行会积累
+     * 过多临时文件，为避免临时文件过多，应当由主程序跑一个检测线程——针对java.io.tmpdir目录占用空间进行检测，超出设定大小后，则
+     * 针对设定时间前的文件执行删除(这是一个全局功能)
      *
      * @param fileUrl {@link #upload(MultipartFile, String...)}决定了此值为固定的oss中的targetName(即bucket中的完整路径+文件名)，但这个
      *                地址浏览器不可直接访问。需要调用aliyun oss sdk获取资源的临时访问地址，因为资源可能不是public的，访问可能受到阿里云控制。
@@ -45,7 +49,7 @@ public class AliyunOssFileService implements UploadService, DownloadService {
 
             URL url = ossUtil.getFileUrl(decodeFileUrl);
             HttpUtil.downloadFile(url.toString(), file);
-            file.deleteOnExit(); // TODO: 优化为除了deleteOnExit, 还可以提供一个值自动过期，比如1天, 以避免临时文件太多。
+            file.deleteOnExit();
             return file;
         } catch (IOException e) {
             throw new RuntimeException(e);
