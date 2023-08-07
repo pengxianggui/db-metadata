@@ -267,6 +267,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 13px 10px;
+    font-size: 0.8em;
   }
 }
 </style>
