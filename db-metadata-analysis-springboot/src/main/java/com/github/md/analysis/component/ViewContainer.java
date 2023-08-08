@@ -41,6 +41,10 @@ public abstract class ViewContainer extends Component {
         fields.removeIf(predicate);
     }
 
+    public boolean containField(String fieldCode) {
+        return getFields().stream().anyMatch(f -> fieldCode.equals(f.getName()));
+    }
+
     public List<Component> getFields() {
         return fields;
     }

@@ -4,6 +4,7 @@ import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;
@@ -82,8 +83,12 @@ public class MasterSlaveController extends ControllerAdapter {
 
         //手工build,方便后面编程式操作表单内元子控件
         formView.buildChildren();
-        formView.getField(foreignPrimaryKey).disabled(true).defaultVal(foreignPrimaryValue);
 
+        if (!formView.containField(foreignPrimaryKey)) { // 关联字段可能被设置为禁用，此时formView里不包含关联字段
+            throw new WebException("表单中的%s域被禁用, 此元字段为主子表关联键, 请设置为只读或隐藏", foreignPrimaryKey);
+        }
+
+        formView.getField(foreignPrimaryKey).disabled(true).defaultVal(foreignPrimaryValue);
         return Ret.ok("data", formView.toKv());
     }
 

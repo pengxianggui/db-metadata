@@ -1,10 +1,13 @@
 package com.github.md.web.component.form;
 
+import com.github.md.analysis.component.Component;
 import com.github.md.web.component.ComponentException;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.component.ManualRender;
 import com.github.md.analysis.component.ViewContainer;
 import com.github.md.analysis.kit.Kv;
+
+import java.util.Optional;
 
 /**
  * <p> Class title: </p>
@@ -46,11 +49,11 @@ public class FormView extends ViewContainer {
      * @return
      */
     public FormField getField(String name) {
-        FormField field = (FormField) getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().get();
-        if (field == null) {
+        Optional<Component> optional = getFields().stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst();
+        if (!optional.isPresent()) {
             throw new ComponentException("FormView 实例中不包含 %s 组件", name);
         }
-        return field;
+        return (FormField) optional.get();
     }
 
     public FormView action(String url) {
