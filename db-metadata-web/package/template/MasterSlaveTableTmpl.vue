@@ -355,6 +355,9 @@ export default {
       this.drawerVisible = true
       this.refreshSlavesData();
     },
+    closeDrawer() {
+      this.drawerVisible = false
+    },
     openSlaveFormView({url, params = {}}, slave) {
       this.$merge(params, {
         instanceCode: slave.instanceCodes.FormView

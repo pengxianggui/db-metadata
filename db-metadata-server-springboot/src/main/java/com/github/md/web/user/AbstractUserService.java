@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * 从请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。你可以覆盖{@link #getUser(HttpServletRequest)}方法，依据request对象
+ * 此抽象类将登录用户缓存到内存中。集群模式下会有问题，需要单独实现LoginService或覆盖此抽象类的相关方法。
+ * <p>
+ * 从请求头中获取key，根据key值从内置的内存缓存中获取已登录对象。
+ * 你可以覆盖{@link #getUser(HttpServletRequest)}和{@link #getUser(String)}方法，依据request对象
  * 获取已登录的用户并返回。通常，这需要和登录成功时缓存用户处，进行配合呼应
  *
  * <p> @Date : 2019/12/13 </p>
@@ -42,8 +45,11 @@ public abstract class AbstractUserService<U extends User, UR extends UserWithRol
 
     @Override
     public UR getUser(HttpServletRequest request) {
-        //request load
-        String token = getToken(request);
+        return getUser(getToken(request));
+    }
+
+    @Override
+    public UR getUser(String token) {
         if (StrKit.notBlank(token)) {
             UR user = (UR) AuthenticationManager.me().getLoginUsers().getIfPresent(token);
             return user;

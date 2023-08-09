@@ -73,6 +73,14 @@ public interface LoginService<U extends UserWithRolesWrapper> {
     U getUser(HttpServletRequest request);
 
     /**
+     * 通过token获取用户信息
+     *
+     * @param token
+     * @return
+     */
+    U getUser(String token);
+
+    /**
      * 刷新已登录的用户，主要是当用户角色、权限发生变化，需要刷新缓存中的登录用户信息，否则用户需要重新登录，体验不好。
      * <p>
      * 若用户未登录，则不执行任何操作。
