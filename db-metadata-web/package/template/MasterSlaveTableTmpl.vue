@@ -34,7 +34,8 @@
 
       <template #inner-before-extend-btn="scope">
         <slot name="inner-before-extend-btn" v-bind="scope"></slot>
-        <el-button icon="el-icon-connection" size="mini" @click.stop="openDrawer(scope)"></el-button>
+        <el-button v-bind="extractLinkConf(scope.conf)['conf']" v-authorize="extractLinkConf(scope.conf)['authorize']"
+                   @click.stop="openDrawer(scope)"></el-button>
       </template>
       <template #view-btn="scope">
         <slot name="view-btn" v-bind="scope"></slot>
@@ -71,7 +72,8 @@
         <el-tabs type="border-card">
           <el-tab-pane v-for="slave in config.slaves" :key="slave.config.objectCode" :label="slave.config | slaveLabel">
             <search-view :ic="slave.instanceCodes.SearchView" @search="sHandleSearch(slave, arguments)"></search-view>
-            <table-view :ref="slave.config.objectCode" :ic="slave.instanceCodes.TableView" :filter-params="slave.filterParams" :page="{ size: 5 }">
+            <table-view :ref="slave.config.objectCode" :ic="slave.instanceCodes.TableView"
+                        :filter-params="slave.filterParams" :page="{ size: 5 }">
               <tempalte #operation-bar="scope">
                 <slot :name="slave.config.objectCode + '_operation-bar'" v-bind="scope"></slot>
               </tempalte>
@@ -303,7 +305,6 @@ export default {
           ref = ref[0]
         }
 
-        console.log(ref)
         if (utils.isEmpty(foreignPrimaryValue)) {
           ref.emptyData(); // 主表未选择，子表置空
         } else {
@@ -333,7 +334,7 @@ export default {
       this.openSlaveFormView({url: url, params: params}, slave);
     },
     openMasterFormView({url, params = {}}) {
-      // TODO 2.3 表单的打开方式可以配置到功能里: 1-弹窗(当前已实现) ;2-路由(系统预置FormTmpl模板以及内置的/form/:fc路由后，即可实现)
+      // TODO 2.4 表单的打开方式可以配置到功能里: 1-弹窗(当前已实现) ;2-路由(系统预置FormTmpl模板以及内置的/form/:fc路由后，即可实现)
       this.$merge(params, {
         instanceCode: this.config.master.instanceCodes.FormView
       })
@@ -343,7 +344,7 @@ export default {
         const {form_type} = meta
         this.$dialog(meta, null, {
           title: getNameOfFormTypes(form_type)
-        }).then(value => {
+        }).then((/*value*/) => {
           this.refreshMasterData()
         }).catch(() => {
           utils.printInfo('您取消了表单')
@@ -369,12 +370,24 @@ export default {
         const {form_type} = meta
         this.$dialog(meta, null, {
           title: getNameOfFormTypes(form_type)
-        }).then(value => {
+        }).then((/*value*/) => {
           this.refreshSlaveData(slave)
         }).catch(() => {
           utils.printInfo('您取消了表单')
         })
       })
+    },
+    extractLinkConf(config) {
+      const {
+        link = {
+          conf: {
+            icon: 'el-icon-connection',
+            size: 'mini',
+            type: 'info'
+          }
+        }
+      } = config
+      return link;
     }
   },
   created() {
