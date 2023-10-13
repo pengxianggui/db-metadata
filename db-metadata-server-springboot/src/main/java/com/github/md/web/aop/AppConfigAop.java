@@ -4,7 +4,7 @@ import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.app.AppConfig;
 import com.github.md.web.app.AppConfigService;
 import com.github.md.web.kit.AssertKit;

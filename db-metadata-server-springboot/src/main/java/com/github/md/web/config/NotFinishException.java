@@ -1,6 +1,6 @@
 package com.github.md.web.config;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 
 /**
  * <p> @Date : 2021/9/7 </p>

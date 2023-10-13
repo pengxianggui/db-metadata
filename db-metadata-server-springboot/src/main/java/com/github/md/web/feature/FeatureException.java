@@ -1,6 +1,6 @@
 package com.github.md.web.feature;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 
 /**
  * <p> @Date : 2019/11/22 </p>

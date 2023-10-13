@@ -6,7 +6,7 @@ import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaField;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.component.form.RichTextBox;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.file.local.LocalFileService;

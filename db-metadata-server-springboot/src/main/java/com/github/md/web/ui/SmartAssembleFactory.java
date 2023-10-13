@@ -3,7 +3,7 @@ package com.github.md.web.ui;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.attr.AttributeBuilder;
 import com.github.md.web.component.form.FormFieldFactory;

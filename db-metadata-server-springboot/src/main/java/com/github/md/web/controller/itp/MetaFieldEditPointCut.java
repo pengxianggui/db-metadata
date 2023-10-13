@@ -9,7 +9,7 @@ import com.github.md.analysis.meta.aop.DeletePointCut;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.ui.MetaFieldViewAdapter;
 import com.github.md.web.ui.MetaObjectViewAdapter;

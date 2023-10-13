@@ -4,6 +4,7 @@ import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.web.AppConst;
+import com.github.md.web.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.kit.InitKit;
@@ -35,9 +36,9 @@ import java.util.Set;
 public class DBController extends ControllerAdapter {
 
     @GetMapping(value = {"index"})
-    public Ret list() {
+    public Res list() {
         List<String> schemas = ServiceManager.mysqlService().showSchema();
-        return Ret.ok("data", OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
+        return Res.ok(OptionsKit.transKeyValue(schemas.toArray(new String[schemas.size()])));
     }
 
     /**
@@ -48,7 +49,7 @@ public class DBController extends ControllerAdapter {
      * </pre>
      */
     @GetMapping("tables")
-    public Ret tables() {
+    public Res tables() {
         ParameterHelper parameterHelper = parameterHelper();
         String schemaName = parameterHelper.getPara("schemaName");
         Preconditions.checkNotNull(schemaName, "[schemaName]数据库名称是必填参数");
@@ -57,13 +58,13 @@ public class DBController extends ControllerAdapter {
         tables.forEach(r -> {
             results.add(Kv.create().set("key", r.getTableName()).set("value", r.getTableName()));
         });
-        return Ret.ok("data", results);
+        return Res.ok(results);
     }
 
     @ApiType(value = Type.API)
     @Transactional
     @PostMapping("init")
-    public Ret init() {
+    public Res init() {
         preConditionCheck();
         truncate();
 
@@ -81,7 +82,7 @@ public class DBController extends ControllerAdapter {
         InitKit.me().initROOTAccount(); // 初始化账号(ROOT)
 
         log.info("重置完毕！");
-        return Ret.ok();
+        return Res.ok();
     }
 
     /**
@@ -89,7 +90,7 @@ public class DBController extends ControllerAdapter {
      *
      * @return
      */
-    private Ret truncate() {
+    private Res truncate() {
         StringBuilder sb = new StringBuilder();
 
         Set<AppConst.INNER_TABLE> resetableTable = AppConst.INNER_TABLE.getResetableTable();
@@ -106,7 +107,7 @@ public class DBController extends ControllerAdapter {
             }
         });
 
-        return Ret.ok("msg", sb.toString());
+        return Res.ok(null, sb.toString());
     }
 
     private void preConditionCheck() {

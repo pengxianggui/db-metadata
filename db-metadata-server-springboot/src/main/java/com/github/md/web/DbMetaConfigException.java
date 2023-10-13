@@ -1,5 +1,7 @@
 package com.github.md.web;
 
+import com.github.md.web.ex.WebException;
+
 /**
  * dbmeta配置异常
  *

@@ -1,13 +1,12 @@
 package com.github.md.web.config;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Throwables;
-import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.SnowFlake;
-import com.github.md.web.WebException;
+import com.github.md.web.Res;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.UtilKit;
-import com.github.md.analysis.kit.Ret;
+import com.google.common.base.Throwables;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +38,8 @@ import java.util.regex.Pattern;
 public class GlobalMetaException {
 
     @ExceptionHandler(value = {Exception.class})
-    public Ret arithmeticExceptionHandle(Exception e) {
+    public Res arithmeticExceptionHandle(Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        MetaServerManager metaServerManager = AnalysisSpringUtil.getBean(MetaServerManager.class);
-        Ret ret = Ret.fail();
 
         log.error("url: {}", request.getRequestURI());
         if (e instanceof WebException) {
@@ -51,10 +48,6 @@ public class GlobalMetaException {
             log.error(e.getMessage(), e);
         }
 
-        if (metaServerManager.getMetaServerProperties().isDevMode()) {
-            ret.set("request_uri", request.getRequestURI());
-            //                ret.set("ex_msg", Throwables.getStackTraceAsString(e));
-        }
         /**
          * 异常信息保存在数据库中,方便在线查阅
          * 过滤TemplateUtils生成的exception信息
@@ -86,9 +79,7 @@ public class GlobalMetaException {
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
-        if (e instanceof WebException) {
-            return ret.set("code", ((WebException) e).getCode()).set("msg", e.getMessage());
-        }
-        return ret.set("code", 500).set("msg", e.getMessage());
+
+        return (e instanceof WebException) ? Res.fail(((WebException) e)) : Res.fail("500", e);
     }
 }

@@ -4,7 +4,7 @@ import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;

@@ -1,6 +1,6 @@
 package com.github.md.web.query.dynamic;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 
 /**
  * <p> @Date : 2020/8/25 </p>

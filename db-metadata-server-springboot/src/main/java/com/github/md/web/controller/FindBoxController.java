@@ -3,6 +3,7 @@ package com.github.md.web.controller;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.*;
+import com.github.md.web.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
@@ -33,7 +34,7 @@ public class FindBoxController extends ControllerAdapter {
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("meta")
-    public Ret meta() {
+    public Res meta() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -52,8 +53,7 @@ public class FindBoxController extends ControllerAdapter {
         searchView = ViewFactory.searchView(metaObject);
         Kv result = Kv.by("table", tableView.toKv()).set("search", searchView.toKv());
 
-
-        return Ret.ok("data", result);
+        return Res.ok(result);
     }
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
@@ -104,7 +104,7 @@ public class FindBoxController extends ControllerAdapter {
             result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
         }
 
-        return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
+        return renderJsonExcludes(Res.ok(result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
                                   excludeFields);
     }
 }

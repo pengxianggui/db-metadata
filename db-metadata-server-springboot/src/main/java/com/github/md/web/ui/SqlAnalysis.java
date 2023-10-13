@@ -11,7 +11,7 @@ import com.alibaba.druid.sql.parser.ParserException;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.util.JdbcConstants;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import lombok.Data;
 
 /**

@@ -2,7 +2,7 @@ package com.github.md.web.user;
 
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.web.DbMetaConfigurer;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.role.RoleService;

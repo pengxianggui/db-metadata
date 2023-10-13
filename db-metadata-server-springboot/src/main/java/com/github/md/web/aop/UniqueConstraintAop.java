@@ -7,7 +7,7 @@ import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 

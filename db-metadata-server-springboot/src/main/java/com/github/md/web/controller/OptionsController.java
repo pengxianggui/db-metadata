@@ -3,7 +3,7 @@ package com.github.md.web.controller;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.Dicts;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;
