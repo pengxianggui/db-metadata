@@ -1,15 +1,15 @@
 package com.github.md.web.feature.ms;
 
 import com.github.md.analysis.component.ComponentType;
-import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.ex.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.query.QueryHelper;
+import com.github.md.web.res.Res;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
@@ -53,7 +53,7 @@ public class MasterSlaveController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("toAddS")
-    public Ret toAddS() {
+    public Res toAddS() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
 
@@ -89,7 +89,7 @@ public class MasterSlaveController extends ControllerAdapter {
         }
 
         formView.getField(foreignPrimaryKey).disabled(true).defaultVal(foreignPrimaryValue);
-        return Ret.ok("data", formView.toKv());
+        return Res.ok(formView.toKv());
     }
 
 }

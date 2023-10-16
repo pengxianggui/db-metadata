@@ -1,6 +1,6 @@
 package com.github.md.web.user.auth;
 
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
 import com.github.md.web.user.AuthenticationManager;
 import com.github.md.web.user.auth.annotations.Authorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class AuthController {
 
     @Authorize(justSign = true)
     @GetMapping("list")
-    public Ret all() {
-        return Ret.ok("data", AuthenticationManager.me().getAuthService().findAll());
+    public Res all() {
+        return Res.ok(AuthenticationManager.me().getAuthService().findAll());
     }
 }

@@ -42,16 +42,16 @@ public class ComponentConfDeletePointCut implements DeletePointCut {
             }
         }
         log.debug("the instanceCodes will be deleted: {}", Joiner.on(",").join(instanceCodes));
-        invocation.getRet().set("instanceCodes", instanceCodes);
+        invocation.addContextParam("instanceCodes", instanceCodes);
         return true;
     }
 
     @Override
     public boolean deleteAfter(DeleteInvocation invocation) {
-        List<String> instanceCodes = (List<String>) invocation.getRet().get("instanceCodes");
+        List instanceCodes = invocation.getContextParam("instanceCodes", List.class);
 
-        for (String instanceCode : instanceCodes) {
-            ServiceManager.componentService().deleteObjectConfig(instanceCode);
+        for (Object instanceCode : instanceCodes) {
+            ServiceManager.componentService().deleteObjectConfig((String) instanceCode);
         }
 
         return true;

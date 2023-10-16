@@ -2,9 +2,8 @@ package com.github.md.web.controller;
 
 import com.github.md.analysis.db.Table;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
 import com.github.md.web.AppConst;
-import com.github.md.web.Res;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.Components;
 import com.github.md.web.kit.InitKit;

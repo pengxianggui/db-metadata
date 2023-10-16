@@ -45,7 +45,6 @@ public class PreventInfiniteLoopPointCut implements UpdatePointCut {
                 if (infiniteLoop) {
                     final String cn = getFieldCn(metaObject, treeConfig);
                     final String msg = String.format("[%s]不允许设置为自身或子节点", cn);
-                    invocation.getRet().set("msg", msg);
                     throw new WebException(msg);
                 }
             }

@@ -1,7 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.kit.Ret;
-import com.github.md.web.Res;
+import com.github.md.web.res.Res;
 import com.github.md.web.backup_restore.MetaDataExport;
 import com.github.md.web.backup_restore.MetaDataImport;
 import com.github.md.web.user.auth.annotations.ApiType;

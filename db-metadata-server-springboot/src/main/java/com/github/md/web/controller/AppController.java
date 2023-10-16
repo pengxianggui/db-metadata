@@ -1,7 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.kit.Ret;
-import com.github.md.web.Res;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.app.AppConfig;
 import com.github.md.web.config.MetaProperties;

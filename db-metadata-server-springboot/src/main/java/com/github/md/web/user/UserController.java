@@ -1,13 +1,13 @@
 package com.github.md.web.user;
 
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.analysis.meta.MetaData;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.user.UserStatusChangeMessage;
 import com.github.md.web.query.FormDataFactory;
+import com.github.md.web.res.Res;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Authorize;
@@ -30,14 +30,14 @@ public class UserController extends ControllerAdapter {
     // optimize 虽然dbmeta内置了此基于注解校验(解决了带参接口path的鉴权问题)，但动态数据鉴权还是需要支持path参数的，只需更新buildInSysData.sql即可——————？？？带参数，关键点在于检索匹配数据库里动态接口资源
     @Authorize(justSign = true)
     @GetMapping("{userId}/roles")
-    public Ret getRoles(@PathVariable("userId") String userId) {
+    public Res getRoles(@PathVariable("userId") String userId) {
         List<MRRole> roles = AuthenticationManager.me().getRoleService().findByUser(userId);
-        return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
+        return Res.ok(roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
     @Authorize(value = "bind:roles:to-user")
     @PostMapping("{userId}/roles")
-    public Ret bindRoles(@PathVariable("userId") String userId) {
+    public Res bindRoles(@PathVariable("userId") String userId) {
         Kv kv = parameterHelper().getKv();
         String roleId = StrKit.defaultIfBlank(kv.getStr("roleId"), "");
 
@@ -48,19 +48,20 @@ public class UserController extends ControllerAdapter {
 
         if (flag) {
             EventKit.post(UserStatusChangeMessage.create(userId, UserStatusChangeMessage.Type.ROLE));
+            return Res.ok();
         }
-        return flag ? Ret.ok() : Ret.fail();
+        return Res.fail("操作失败，请稍后重试");
     }
 
     @Authorize(justSign = true)
     @PostMapping("update")
-    public Ret updateUserData() {
+    public Res updateUserData() {
         IMetaObject metaObject = metaService().findByCode(AuthenticationManager.me().getUserService().userObjectCode());
         MetaData metadata = FormDataFactory.buildFormData(getRequest().getParameterMap(), metaObject, true);
         String userId = UserThreadLocal.getUser().userId();
         metadata.set(metaObject.primaryKey(), userId);
         boolean flag = AuthenticationManager.me().getUserService().updateById(userId, metadata);
-        return flag ? Ret.ok() : Ret.fail();
+        return flag ? Res.ok() : Res.fail("操作失败，请稍后重试");
     }
 
     /**
@@ -70,13 +71,13 @@ public class UserController extends ControllerAdapter {
      */
     @ApiType
     @GetMapping("roles")
-    public Ret getRoles() {
+    public Res getRoles() {
         UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().getUser(getRequest());
         List<MRRole> roles = user.isRoot()
                 ? AuthenticationManager.me().getRoleService().findAll()
                 : AuthenticationManager.me().getRoleService().findByUser(user.userId());
 
-        return Ret.ok("data", roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
+        return Res.ok(roles.stream().map(MRRole::toKv).collect(Collectors.toList()));
     }
 
     /**
@@ -85,13 +86,13 @@ public class UserController extends ControllerAdapter {
      */
     @Authorize(justSign = true)
     @GetMapping("auths")
-    public Ret getAuths() {
+    public Res getAuths() {
         UserWithRolesWrapper user = AuthenticationManager.me().getLoginService().getUser(getRequest());
         List<IAuth> auths = user.isRoot()
                 ? AuthenticationManager.me().getAuthService().findAll()
                 : AuthenticationManager.me().getAuthService().findByUser(user.userId());
 
-        return Ret.ok("data", auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
+        return Res.ok(auths.stream().map(IAuth::toKv).collect(Collectors.toList()));
     }
 
     /**
@@ -100,18 +101,18 @@ public class UserController extends ControllerAdapter {
      */
     @ApiType
     @PostMapping("reset-pass")
-    public Ret resetPass() {
+    public Res resetPass() {
         String userId = parameterHelper().get("userId");
         boolean flag = AuthenticationManager.me().getUserService().resetPass(userId);
-        return flag ? Ret.ok().set("msg", "重置成功") : Ret.fail();
+        return flag ? Res.ok(null, "重置成功") : Res.fail("操作失败，请稍后重试");
     }
 
     @Authorize(justSign = true)
     @PostMapping("set-pass")
-    public Ret setPass() {
+    public Res setPass() {
         String password = parameterHelper().get("password");
         String userId = UserThreadLocal.getUser().userId();
         boolean flag = AuthenticationManager.me().getUserService().setPass(userId, password);
-        return flag ? Ret.ok().set("msg", "密码修改成功") : Ret.fail();
+        return flag ? Res.ok(null, "密码修改成功") : Res.fail("操作失败，请稍后重试");
     }
 }

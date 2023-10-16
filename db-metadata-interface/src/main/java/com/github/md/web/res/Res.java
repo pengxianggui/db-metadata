@@ -1,4 +1,4 @@
-package com.github.md.web;
+package com.github.md.web.res;
 
 import com.github.md.web.ex.WebException;
 import lombok.Getter;
@@ -80,5 +80,12 @@ public class Res<T> {
 
     public static Res fail(WebException e) {
         return Res.fail(String.valueOf(e.getCode()), e);
+    }
+
+    public static Res fail(Exception e) {
+        if (e instanceof WebException) {
+            return Res.fail(String.valueOf(((WebException) e).getCode()), e);
+        }
+        return Res.fail(e != null ? e.getMessage(): "系统错误");
     }
 }

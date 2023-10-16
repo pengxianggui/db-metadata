@@ -3,7 +3,7 @@ package com.github.md.web.config;
 import com.alibaba.fastjson.JSON;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.SnowFlake;
-import com.github.md.web.Res;
+import com.github.md.web.res.Res;
 import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.UtilKit;
 import com.google.common.base.Throwables;

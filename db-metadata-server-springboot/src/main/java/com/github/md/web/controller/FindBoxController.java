@@ -1,9 +1,12 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
-import com.github.md.analysis.meta.*;
-import com.github.md.web.Res;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaFactory;
+import com.github.md.analysis.meta.MetaSqlKit;
+import com.github.md.web.kit.PageKit;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
@@ -58,7 +61,7 @@ public class FindBoxController extends ControllerAdapter {
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
-    public Object list() {
+    public Res list() {
         /**
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -104,7 +107,6 @@ public class FindBoxController extends ControllerAdapter {
             result.setList(OptionsKit.trans(metaObject.fields(), result.getList()));
         }
 
-        return renderJsonExcludes(Res.ok(result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
-                                  excludeFields);
+        return Res.ok(renderJsonExcludes(PageKit.toPage(result), excludeFields));
     }
 }

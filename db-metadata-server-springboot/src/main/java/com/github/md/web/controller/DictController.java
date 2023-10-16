@@ -1,7 +1,7 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Kv;
-import com.github.md.web.Res;
+import com.github.md.web.res.Res;
 import com.github.md.web.kit.Dicts;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;

@@ -2,18 +2,18 @@ package com.github.md.web.feature;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.analysis.kit.Kv;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,19 +32,19 @@ public class FeatureController extends ControllerAdapter {
 
     @ApiType(value = Type.API)
     @GetMapping("list")
-    public Ret list() {
+    public Res list() {
         List<Kv> results = Lists.newArrayList();
         for (FeatureType type : FeatureType.values()) {
             if (type != FeatureType.UNKNOWN) {
                 results.add(Kv.by("key", type.name).set("value", type.code));
             }
         }
-        return Ret.ok("data", results);
+        return Res.ok();
     }
 
     @ApiType(value = Type.API)
     @PostMapping("doAdd")
-    public Ret doAdd() {
+    public Res doAdd() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
 
@@ -54,17 +54,17 @@ public class FeatureController extends ControllerAdapter {
         String code = parameterHelper.getPara("code");
         String jsonStr = parameterHelper.getPara("config");
         featureService().createFeature(type, name, code, JSON.parseObject(jsonStr, type.configEntity));
-        return Ret.ok();
+        return Res.ok();
     }
 
     /**
      * 功能 = ((元对象(表),元对象(视图),元对象(非表)) + 控件) * n
      */
     @GetMapping("load")
-    public Ret load() {
+    public Res load() {
         String featureCode = queryHelper().getFeatureCode();
         FeatureConfig feature = featureService().loadFeatureConfig(featureCode);
-        return Ret.ok("data", feature);
+        return Res.ok(feature);
     }
 //
 //    /**
@@ -113,11 +113,11 @@ public class FeatureController extends ControllerAdapter {
 
     @ApiType(value = Type.API)
     @GetMapping("delete")
-    public Ret delete() {
+    public Res delete() {
         String idss = parameterHelper().getPara("ids");
         List<String> ids = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(idss);
         boolean status = featureService().deleteFeature(ids.toArray(new String[0]));
-        return (status ? Ret.ok() : Ret.fail());
+        return (status ? Res.ok() : Res.fail("删除失败，请稍后重试"));
     }
 
     class FeatureNode implements TreeNode<String, Record> {
