@@ -3,7 +3,7 @@ package com.github.md.web.feature.tree;
 import com.alibaba.fastjson.JSON;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.google.common.collect.Lists;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.IMetaObject;
@@ -45,7 +45,6 @@ public class PreventInfiniteLoopPointCut implements UpdatePointCut {
                 if (infiniteLoop) {
                     final String cn = getFieldCn(metaObject, treeConfig);
                     final String msg = String.format("[%s]不允许设置为自身或子节点", cn);
-                    invocation.getRet().set("msg", msg);
                     throw new WebException(msg);
                 }
             }

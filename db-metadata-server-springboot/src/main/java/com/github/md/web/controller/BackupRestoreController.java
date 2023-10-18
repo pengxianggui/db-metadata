@@ -1,6 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
 import com.github.md.web.backup_restore.MetaDataExport;
 import com.github.md.web.backup_restore.MetaDataImport;
 import com.github.md.web.user.auth.annotations.ApiType;
@@ -49,15 +49,15 @@ public class BackupRestoreController {
 
     @ApiType(Type.API)
     @PostMapping("restore")
-    public Ret importZip(MultipartFile file) {
+    public Res importZip(MultipartFile file) {
         try {
             File tempFile = Paths.get(System.getProperty("java.io.tmpdir"), file.getOriginalFilename()).toFile();
             file.transferTo(tempFile);
             new MetaDataImport().importZip(tempFile);
-            return Ret.ok();
+            return Res.ok();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            return Ret.fail("message", "上传解析失败");
+            return Res.fail("message", "上传解析失败");
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.app.AppConfig;
 import com.github.md.web.config.MetaProperties;
@@ -27,10 +27,9 @@ public class AppController extends ControllerAdapter {
      * @return
      */
     @GetMapping("config")
-    public Ret config() {
+    public Res config() {
         AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(true);
-        AppPropVO vo = new AppPropVO(metaProperties, appConfig);
-        return Ret.ok("data", vo);
+        return Res.ok(new AppPropVO(metaProperties, appConfig));
     }
 
     /**
@@ -39,8 +38,8 @@ public class AppController extends ControllerAdapter {
      * @return
      */
     @GetMapping("dynamic-config")
-    public Ret dynamicConfig() {
+    public Res dynamicConfig() {
         AppConfig appConfig = ServiceManager.getAppConfigService().getLatest(false);
-        return Ret.ok("data", appConfig);
+        return Res.ok(appConfig);
     }
 }

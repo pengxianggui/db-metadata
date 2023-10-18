@@ -4,22 +4,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.component.Component;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
-import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
-import com.github.md.web.kit.AssertKit;
-import com.github.md.web.kit.UtilKit;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.web.res.Res;
+import com.github.md.web.ServiceManager;
 import com.github.md.web.component.AbstractComponent;
 import com.github.md.web.component.ComponentException;
 import com.github.md.web.component.ViewFactory;
+import com.github.md.web.ex.WebException;
+import com.github.md.web.kit.AssertKit;
+import com.github.md.web.kit.UtilKit;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.ui.UIManager;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -45,12 +45,12 @@ public class ComponentController extends ControllerAdapter {
 
     @ApiType(Type.API_WITH_META_INSTANCE)
     @GetMapping("meta")
-    public Ret metaByIc() {
+    public Res metaByIc() {
         String ic = queryHelper().getInstanceCode();
         AssertKit.isTrue(StrKit.notBlank(ic), "实例编码(ic)未指定");
 
         MetaObjectViewAdapter metaObjectViewAdapter = UIManager.getView(ic);
-        return Ret.ok("data", metaObjectViewAdapter.getComponent().toKv());
+        return Res.ok(metaObjectViewAdapter.getComponent().toKv());
     }
 
     /**
@@ -58,16 +58,16 @@ public class ComponentController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("contact")
-    public Ret contact() {
+    public Res contact() {
         QueryHelper queryHelper = queryHelper();
         String componentCode = queryHelper.getComponentCode();
         String objectCode = queryHelper.getObjectCode();
         boolean kv = parameterHelper().getBoolean("kv", false);
         List<String> result = componentService().loadInstanceCodeByObjectCode(objectCode, ComponentType.V(componentCode));
         if (kv) {
-            return Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0])));
+            return Res.ok(OptionsKit.transKeyValue(result.toArray(new String[0])));
         }
-        return Ret.ok("data", result);
+        return Res.ok(result);
     }
 
     /**
@@ -76,17 +76,17 @@ public class ComponentController extends ControllerAdapter {
      * @return
      */
     @GetMapping(value = "instance/brief")
-    public Ret componentInstanceBrief() {
+    public Res componentInstanceBrief() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
         AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
 
         Record record = componentService().getComponentInstanceBrief(instanceCode);
-        return Ret.ok("data", record);
+        return Res.ok(record);
     }
 
     @GetMapping("list")
-    public Ret list() {
+    public Res list() {
         Boolean view;
         try {
             view = parameterHelper().getBoolean("view");
@@ -107,7 +107,7 @@ public class ComponentController extends ControllerAdapter {
         }).forEach(r -> {
             results.add(Kv.create().set("key", r.getStr("cn")).set("value", r.getStr("en")));
         });
-        return Ret.ok("data", results);
+        return Res.ok(results);
     }
 
     /**
@@ -115,21 +115,21 @@ public class ComponentController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("load")
-    public Ret load() {
+    public Res load() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
         String compCode = queryHelper.getComponentCode();
 
         if (StrKit.notBlank(instanceCode)) { // 有instanceCode 则获取UI实例配置
             if (componentService().hasObjectConfig(instanceCode)) {
-                return Ret.ok("data", componentService().loadObjectConfig(instanceCode));
+                return Res.ok(componentService().loadObjectConfig(instanceCode));
             } else {
-                return Ret.fail("msg", "请先为此实例编码生成UI配置!");
+                return Res.fail("请先为此实例编码生成UI配置!");
             }
         } else if (StrKit.notBlank(compCode)) { // 加载组件全局配置
-            return Ret.ok("data", Kv.by(compCode, componentService().loadDefault(compCode).getStr("config")));
+            return Res.ok(Kv.by(compCode, componentService().loadDefault(compCode).getStr("config")));
         } else {
-            return Ret.fail("msg", "请指定实例编码或组件编码");
+            return Res.fail("请指定实例编码或组件编码");
         }
 
 
@@ -163,7 +163,7 @@ public class ComponentController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("import-auto-computed")
-    public Ret oneKeyAutoComputed() {
+    public Res oneKeyAutoComputed() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String compCodes = parameterHelper().getPara("componentCodes");
@@ -203,12 +203,12 @@ public class ComponentController extends ControllerAdapter {
             return true;
         });
 
-        return Ret.ok();
+        return Res.ok();
     }
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
-    public Ret doUpdate() {
+    public Res doUpdate() {
         /**
          * object Code
          * component Type
@@ -232,22 +232,22 @@ public class ComponentController extends ControllerAdapter {
                     instanceName,
                     component.componentType());
             componentService().updateObjectConfig(component, metaObject, newComponentInstanceConfig);
-            return Ret.ok();
+            return Res.ok();
         } else if (StrKit.notBlank(compCode)) {
             componentService().updateDefault(compCode, UtilKit.getKv(config.getStr(compCode)));
-            return Ret.ok();
+            return Res.ok();
         } else {
-            return Ret.fail("msg", "参数不正确");
+            return Res.fail("参数不正确");
         }
     }
 
     @ApiType(value = Type.API)
     @GetMapping("delete")
-    public Ret delete() {
+    public Res delete() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
         AssertKit.isTrue(StrKit.notBlank(instanceCode), new WebException("请指定要删除的实例编码"));
         componentService().deleteObjectConfig(instanceCode);
-        return Ret.ok("msg", "UI实例删除成功, 实例编码:" + instanceCode);
+        return Res.ok("UI实例删除成功, 实例编码:" + instanceCode);
     }
 }

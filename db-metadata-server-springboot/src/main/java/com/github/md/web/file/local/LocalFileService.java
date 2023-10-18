@@ -1,6 +1,6 @@
 package com.github.md.web.file.local;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.file.DownloadService;
 import com.github.md.web.file.UploadService;
 import com.google.common.base.Joiner;

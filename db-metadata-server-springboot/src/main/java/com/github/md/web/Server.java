@@ -1,5 +1,6 @@
 package com.github.md.web;
 
+import com.github.md.web.ex.WebException;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;

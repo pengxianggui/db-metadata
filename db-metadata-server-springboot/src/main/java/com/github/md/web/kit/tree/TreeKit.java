@@ -1,7 +1,7 @@
 package com.github.md.web.kit.tree;
 
 import com.alibaba.fastjson.serializer.AfterFilter;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.util.List;

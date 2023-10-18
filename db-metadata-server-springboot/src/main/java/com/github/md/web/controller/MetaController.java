@@ -1,13 +1,9 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.meta.*;
-import com.github.md.web.ui.*;
-import com.github.md.web.user.auth.annotations.ApiType;
-import com.github.md.web.user.auth.annotations.Type;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.github.md.analysis.meta.DbMetaService;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.DropDownBox;
@@ -15,7 +11,13 @@ import com.github.md.web.component.form.FormView;
 import com.github.md.web.component.form.TextBox;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.ui.*;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
@@ -51,13 +53,13 @@ public class MetaController extends ControllerAdapter {
      * @return
      */
     @GetMapping("toAdd")
-    public Ret toAdd() {
+    public Res toAdd() {
         FormView formView = FormView.POST("/meta/doAdd", "meta_add");
         formView.getFields().add(new DropDownBox("schemaName", "数据源").dataUrl("/db/index"));
         formView.getFields().add(new DropDownBox("tableName", "数据表名").dataUrl("/db/tables?schemaName={schemaName}").dependency("schemaName"));
         formView.getFields().add(new TextBox("objectName", "元对象名称"));
         formView.getFields().add(new TextBox("objectCode", "元对象编码"));
-        return Ret.ok("data", formView.toKv());
+        return Res.ok(formView.toKv());
     }
 
 //    /**
@@ -81,7 +83,7 @@ public class MetaController extends ControllerAdapter {
      */
     @ApiType(value = Type.API)
     @GetMapping("editObject")
-    public Ret editObject() {
+    public Res editObject() {
         String objectCode = queryHelper().getObjectCode();
         Preconditions.checkArgument(StrKit.notBlank(objectCode), "元对象的更新动作,必须指定objectCode.");
 
@@ -90,7 +92,7 @@ public class MetaController extends ControllerAdapter {
         Record data = metaService().findObjectRecordByCode(objectCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
-        return Ret.ok("data", formView.toKv().set("record", data));
+        return Res.ok(formView.toKv().set("record", data));
     }
 
     /**
@@ -99,7 +101,7 @@ public class MetaController extends ControllerAdapter {
      */
     @ApiType(value = Type.API)
     @GetMapping("editField")
-    public Ret editField() {
+    public Res editField() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
@@ -110,12 +112,12 @@ public class MetaController extends ControllerAdapter {
         Record data = metaService().findFieldRecordByCode(objectCode, fieldCode);
 
         FormView formView = ViewFactory.formView(metaObject).action("/form/doUpdate").updateForm();
-        return Ret.ok("data", formView.toKv().set("record", data));
+        return Res.ok(formView.toKv().set("record", data));
     }
 
     @ApiType(value = Type.API)
     @PostMapping("doAdd")
-    public Ret doAdd() {
+    public Res doAdd() {
         ParameterHelper parameterHelper = parameterHelper();
         String schemaName = parameterHelper.getPara("schemaName");
         String tableName = parameterHelper.getPara("tableName");
@@ -132,12 +134,12 @@ public class MetaController extends ControllerAdapter {
 
         boolean status = dbMetaService.saveMetaObject(metaObject, true);
 
-        return status ? Ret.ok() : Ret.fail();
+        return status ? Res.ok() : Res.fail("元对象创建失败");
     }
 
     @ApiType(value = Type.API)
     @DeleteMapping("delete")
-    public Ret delete() {
+    public Res delete() {
         String objectCodess = queryHelper().getObjectCode();
         DbMetaService dbMetaService = metaService();
         String[] objectCodes = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(objectCodess).toArray(new String[0]);
@@ -151,7 +153,7 @@ public class MetaController extends ControllerAdapter {
             log.info("删除元对象{}实例配置", metaObject.code());
             componentService().deleteObjectAll(objectCode);
         }
-        return Ret.ok();
+        return Res.ok();
     }
 
     /**
@@ -167,7 +169,7 @@ public class MetaController extends ControllerAdapter {
      */
     @ApiType(value = Type.API)
     @GetMapping("incrementImport")
-    public Ret incrementImport() {
+    public Res incrementImport() {
         String scope = parameterHelper().getPara("scope", "single");
         String objectCode = queryHelper().getObjectCode();
         IMetaObject seedMetaObject = metaService().findByCode(objectCode);
@@ -187,7 +189,7 @@ public class MetaController extends ControllerAdapter {
             Set<String> incrementFields = Sets.difference(newFieldNames, oldFieldNames);
             if (incrementFields.isEmpty()) {
                 log.info("未检测到新字段");
-                return Ret.ok().set("msg", "未检测到新字段，不会执行同步操作");
+                return Res.ok(null, "未检测到新字段，不会执行同步操作");
             } else {
                 for (String fieldName : incrementFields) {
                     IMetaField metaField = newMetaObject.getField(fieldName);
@@ -218,7 +220,7 @@ public class MetaController extends ControllerAdapter {
                 }
             }
         }
-        return Ret.ok();
+        return Res.ok();
     }
 //
 //    /**
@@ -275,14 +277,14 @@ public class MetaController extends ControllerAdapter {
      * 返回某元对象的关联Component 实例
      */
     @GetMapping("contact")
-    public Ret contact() {
+    public Res contact() {
         String objectCode = queryHelper().getObjectCode();
         boolean kv = parameterHelper().getBoolean("kv", false);
         List<String> result = componentService().loadTypesByObjectCode(objectCode).stream().map(c -> c.getCode()).collect(Collectors.toList());
 
         if (kv) {
-            return Ret.ok("data", OptionsKit.transKeyValue(result.toArray(new String[0])));
+            return Res.ok(OptionsKit.transKeyValue(result.toArray(new String[0])));
         }
-        return Ret.ok("data", result);
+        return Res.ok(result);
     }
 }

@@ -4,14 +4,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.IMetaField;
-import com.github.md.web.WebException;
 import com.github.md.web.component.form.RichTextBox;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.file.local.LocalFileService;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.query.QueryHelper;
+import com.github.md.web.res.Res;
 import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
@@ -66,7 +66,7 @@ public class FileController extends ControllerAdapter {
      */
     @ApiType(value = Type.API)
     @PostMapping(value = "upload", consumes = {"multipart/form-data"})
-    public Ret index(MultipartRequest request) {
+    public Res index(MultipartRequest request) {
 
         List<MultipartFile> uploadFiles = new ArrayList<>();
         request.getFileMap().forEach((k, v) -> uploadFiles.add(v));
@@ -98,7 +98,7 @@ public class FileController extends ControllerAdapter {
         Kv result = Kv.by("name", file.getOriginalFilename());
         result.set("value", url);
         result.set("url", url);
-        return Ret.ok("data", result);
+        return Res.ok(result);
     }
 
     /**

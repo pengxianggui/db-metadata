@@ -1,7 +1,6 @@
 package com.github.md.web.ui;
 
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormFieldFactory;
 import com.google.common.collect.Lists;

@@ -1,15 +1,15 @@
 package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
-import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.kit.tree.TreeConfig;
 import com.github.md.web.kit.tree.TreeKit;
 import com.github.md.web.kit.tree.TreeNode;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +45,7 @@ public class RouterController extends ControllerAdapter {
             treeConfig.setRootIdentify(pid);
         }
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
-        return renderJsonExcludes(Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))), "created_time", "updated_time");
+        return renderJsonExcludes(Res.ok(JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter))), "created_time", "updated_time");
     }
 
     private TreeConfig treeConfig() {

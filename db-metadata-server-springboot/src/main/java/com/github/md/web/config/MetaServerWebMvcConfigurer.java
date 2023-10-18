@@ -5,8 +5,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.md.analysis.db.DateTime;
-import com.github.md.web.config.json.FastJsonRecordSerializer;
 import com.github.md.web.config.json.JsonParameterToMapHandler;
+import com.github.md.web.config.json.RecordSerializer;
 import com.github.md.web.config.register.DynamicRegisterControllerHandlerMapping;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
@@ -94,7 +94,7 @@ public class MetaServerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegis
         mediaTypeList.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(mediaTypeList);
         // 支持序列化 ActiveRecord 的 Record 类型
-        SerializeConfig.getGlobalInstance().put(Record.class, new FastJsonRecordSerializer());
+        SerializeConfig.getGlobalInstance().put(Record.class, new RecordSerializer());
 
         // TODO 2.3 序列化对全局生效, 如何避免对业务系统的强制影响, 仅仅只作用于Record中的日期类型
         SerializeConfig.getGlobalInstance().put(Timestamp.class, (jsonSerializer, o, o1, type, i) -> jsonSerializer.write(o == null ? null : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Timestamp) o)));

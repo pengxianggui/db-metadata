@@ -1,7 +1,7 @@
 package com.github.md.web.controller;
 
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
 import com.github.md.web.kit.Dicts;
 import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
@@ -30,12 +30,12 @@ public class DictController extends ControllerAdapter {
      * @return
      */
     @GetMapping
-    public Ret index() {
+    public Res index() {
         ParameterHelper parameterHelper = parameterHelper();
         String pValue = parameterHelper.getPara("name");
 
         if (StrKit.isBlank(pValue)) {
-            return Ret.ok("data", Lists.newArrayList());
+            return Res.ok(Lists.newArrayList());
         }
 
         List<Kv> result = Dicts.me().getKvs(pValue);
@@ -43,13 +43,13 @@ public class DictController extends ControllerAdapter {
         if (CollectionUtils.isEmpty(result)) {
             String msg = String.format("指定字典不存在: %s, 请检查是否有此字典项", pValue);
             log.info(msg);
-            return Ret.fail().set("msg", msg);
+            return Res.fail(msg);
         }
-        return Ret.ok("data", result);
+        return Res.ok(result);
     }
 
     @GetMapping("names")
-    public Ret names() {
-        return Ret.ok("data", Dicts.me().names());
+    public Res names() {
+        return Res.ok(Dicts.me().names());
     }
 }

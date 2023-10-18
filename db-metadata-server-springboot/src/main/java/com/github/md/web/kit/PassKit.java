@@ -3,7 +3,7 @@ package com.github.md.web.kit;
 import cn.hutool.crypto.CryptoException;
 import cn.hutool.crypto.SecureUtil;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.app.AppConfig;
 import com.jfinal.kit.StrKit;
 import lombok.extern.slf4j.Slf4j;

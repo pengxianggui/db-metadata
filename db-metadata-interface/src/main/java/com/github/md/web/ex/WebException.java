@@ -1,4 +1,4 @@
-package com.github.md.web;
+package com.github.md.web.ex;
 
 import lombok.Getter;
 

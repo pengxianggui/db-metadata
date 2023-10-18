@@ -10,7 +10,7 @@ import com.github.md.analysis.meta.IMetaField;
 import com.github.md.analysis.meta.MetaFieldConfigParse;
 import com.github.md.web.Server;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.Dicts;
 import com.github.md.web.query.dynamic.CompileRuntime;
 import com.github.md.web.query.dynamic.DefaultContext;

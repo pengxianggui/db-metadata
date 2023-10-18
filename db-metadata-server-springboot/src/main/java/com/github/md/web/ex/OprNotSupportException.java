@@ -1,7 +1,6 @@
 package com.github.md.web.ex;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.md.web.WebException;
 
 /**
  * @author pengxg

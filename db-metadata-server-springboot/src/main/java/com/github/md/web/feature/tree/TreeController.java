@@ -1,14 +1,14 @@
 package com.github.md.web.feature.tree;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.web.kit.tree.TreeKit;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.controller.ControllerAdapter;
+import com.github.md.web.kit.tree.TreeKit;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.query.QueryHelper;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +44,7 @@ public class TreeController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping()
-    public Ret index() {
+    public Res index() {
         QueryHelper queryHelper = queryHelper();
         String featureCode = queryHelper.getFeatureCode();
         String objectCode = queryHelper.getObjectCode();
@@ -53,6 +53,6 @@ public class TreeController extends ControllerAdapter {
         TreeConfigGetter treeConfigGetter = featureService().loadFeatureConfig(featureCode);
 
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfigGetter.getTreeConfig());
-        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
+        return Res.ok(JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 }
