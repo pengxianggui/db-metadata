@@ -1,6 +1,5 @@
 package com.github.md.web;
 
-import com.github.md.web.user.AuthenticationManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,18 +24,5 @@ public class DbMetaAutoConfiguration {
     @Bean
     public DbMetaConfigurer dbMetaConfigurer() {
         return new DefaultDbMetaConfigurer();
-    }
-
-    /**
-     * 权限管理类。
-     *
-     * @param dbMetaConfigurer
-     * @return
-     * @deprecated 无需配置为bean, 系统由{@link AuthenticationManager#me()}调用
-     */
-    @Deprecated
-    @Bean
-    public AuthenticationManager authenticationManager(DbMetaConfigurer dbMetaConfigurer) {
-        return new AuthenticationManager(dbMetaConfigurer);
     }
 }

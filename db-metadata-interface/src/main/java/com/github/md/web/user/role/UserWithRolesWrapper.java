@@ -1,13 +1,10 @@
 package com.github.md.web.user.role;
 
-import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.google.common.collect.Lists;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,13 +86,14 @@ public interface UserWithRolesWrapper extends User {
     }
 
     @Override
-    default Kv toKv() {
-        return Kv.create()
-                .set("id", userId())
-                .set("username", userName())
-                .set("avatar", avatar())
-                .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
-                .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
-                .set("attrs", attrs());
+    default Map toKv() {
+        Map map = new HashMap();
+        map.put("id", userId());
+        map.put("username", userName());
+        map.put("avatar", avatar());
+        map.put("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()));
+        map.put("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()));
+        map.put("attrs", attrs());
+        return map;
     }
 }

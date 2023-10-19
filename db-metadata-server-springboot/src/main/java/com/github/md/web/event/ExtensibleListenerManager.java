@@ -21,7 +21,7 @@ public class ExtensibleListenerManager {
     }
 
     private ExtensibleListenerManager() {
-        ExtensibleListenerConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+        ExtensibleListenerConfigurer configurer = AnalysisSpringUtil.getBean(ExtensibleListenerConfigurer.class);
         this.registry = new ExtensibleListenerRegistry();
         configurer.configListener(this.registry);
     }

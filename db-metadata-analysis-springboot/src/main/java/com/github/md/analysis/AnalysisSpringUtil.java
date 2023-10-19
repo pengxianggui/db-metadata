@@ -35,7 +35,7 @@ public class AnalysisSpringUtil implements ApplicationContextAware {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<?> clz) throws BeansException {
+    public static <T> T getBean(Class<T> clz) throws BeansException {
         return (T) applicationContext.getBean(clz);
     }
 

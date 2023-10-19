@@ -45,7 +45,7 @@ public class LoginController extends ControllerAdapter {
 
     @GetMapping("${md.server.login.ctrl.info-path:/user/info}")
     public Res info() {
-        LoginVO loginVO = AuthenticationManager.me().getInfo(getRequest());
+        LoginVO loginVO = AuthenticationManager.me().getLoginService().getInfo(getRequest());
         AssertKit.isTrue(loginVO != null, new UnLoginException("未登录"));
         return Res.ok(loginVO);
     }

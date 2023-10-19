@@ -35,14 +35,14 @@ const configInterceptor = function (router, axios) {
             return Promise.resolve(res)
         }
 
-        if (state !== 'ok' && code != 0) {
+        if (state !== 'ok' && code != '0') {
             Message({
                 message: utils.assertEmpty(msg, message),
                 type: "error",
                 customClass: 'md_max-z-index'
             })
 
-            if (code === 401) { // 未认证
+            if (code === '401') { // 未认证
                 clearUser()
                 router.push(routeUrl.R_LOGIN)
             }

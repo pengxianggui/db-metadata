@@ -1,6 +1,5 @@
 package com.github.md.web.user.auth.defaults;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
 import com.github.md.web.user.auth.annotations.Type;

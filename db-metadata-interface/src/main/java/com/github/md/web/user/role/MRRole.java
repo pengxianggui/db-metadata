@@ -1,7 +1,8 @@
 package com.github.md.web.user.role;
 
-import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
+
+import java.util.Map;
 
 /**
  * 角色抽象
@@ -44,5 +45,5 @@ public interface MRRole {
      */
     boolean hasAuth(IAuth auth);
 
-    Kv toKv();
+    Map toKv();
 }

@@ -1,8 +1,9 @@
 package com.github.md.analysis.meta;
 
+import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.builder.SQLSelectBuilder;
 import com.alibaba.druid.sql.builder.impl.SQLSelectBuilderImpl;
-import com.alibaba.druid.sql.parser.Keywords;
+import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.Token;
 import com.alibaba.druid.util.JdbcConstants;
 import com.jfinal.kit.StrKit;
@@ -56,8 +57,9 @@ public class MetaSqlKit {
      * @return
      */
     public static String discernColumns(String columnName) {
-        Token token = Keywords.DEFAULT_KEYWORDS.getKeyword(columnName.toUpperCase());
-        if (Keywords.DEFAULT_KEYWORDS.containsValue(token)) {
+        Token token = SQLParserUtils.createLexer("select 1", DbType.mysql).getKeywords()
+                .getKeyword(columnName.toUpperCase());
+        if (token != null) {
             return "`" + columnName + "`";
         }
         return columnName;

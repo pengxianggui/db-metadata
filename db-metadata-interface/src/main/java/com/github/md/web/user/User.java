@@ -1,8 +1,8 @@
 package com.github.md.web.user;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.github.md.analysis.kit.Kv;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,9 +36,9 @@ public interface User {
      * @return
      */
     @JSONField(name = "attrs")
-    Kv attrs();
+    Map attrs();
 
-    Kv attrs(Map attrs);
+    Map attrs(Map attrs);
 
     /**
      * ROOT身份标识。若一个用户标识为ROOT, 则其拥有系统的所有权限(实际上，是基于dbmeta的鉴权体系针对ROOT标识的用户不予鉴权)。
@@ -56,14 +56,15 @@ public interface User {
      *
      * @return
      */
-    default Kv toKv() {
-        return Kv.create()
-                .set("id", userId())
-                .set("username", userName())
-                .set("email", email())
-                .set("phone", phone())
-                .set("avatar", avatar())
-                .set("attrs", attrs());
+    default Map toKv() {
+        Map map = new HashMap();
+        map.put("id", userId());
+        map.put("username", userName());
+        map.put("email", email());
+        map.put("phone", phone());
+        map.put("avatar", avatar());
+        map.put("attrs", attrs());
+        return map;
     }
 
 }

@@ -375,13 +375,11 @@ export default {
       this.$axios.safeGet(data_url, {
         params: params
       }).then(resp => {
-        const {data} = resp
-        const {list} = data
+        const {data: {list, index, size, total}} = resp
         this.innerData = list
         this.$emit("data-change", list)
-        if (utils.hasProp(resp, 'page')) {
-          this.setPageModel(data);
-        }
+
+        this.setPageModel({index, size, total});
         if (index > 1 && (isEmpty(list) || list.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }

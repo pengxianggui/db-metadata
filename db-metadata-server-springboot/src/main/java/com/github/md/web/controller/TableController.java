@@ -62,6 +62,62 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TableController extends ControllerAdapter {
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
+    @GetMapping("all")
+    public Res all() {
+        QueryHelper queryHelper = queryHelper();
+        String objectCode = queryHelper.getObjectCode();
+        String[] fields = queryHelper.list().fields();
+        String[] excludeFields = queryHelper.list().excludeFields();
+
+        IMetaObject metaObject = metaService().findByCode(objectCode);
+
+        Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
+        SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
+        /* 编译where后条件 */
+        String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
+
+        List<Record> result = businessService().findData(
+                metaObject,
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
+
+        /*
+         * escape field value;
+         * 1. 是否需要默认转义的规则;
+         */
+        OptionsKit.trans(filteredFields, result);
+
+        /*
+         * 别名替换,参数中遇
+         * a->b=123
+         * c->d=123
+         * 执行别名替换处理
+         * TODO 废弃
+         */
+        Kv alias = Kv.create();
+        AtomicBoolean hasAlias = new AtomicBoolean(false);
+        UtilKit.toObjectFlat(getRequest().getParameterMap()).forEach((key, value) -> {
+            if (key.contains("->")) {
+                String[] ss = key.split("->");
+                alias.set(ss[0], ss[1]);
+                hasAlias.set(true);
+            }
+        });
+        if (hasAlias.get()) {
+            UtilKit.aliasList(result, alias);
+        }
+
+        // 序列化时排除
+        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
+        filter.getExcludes().addAll(Arrays.asList(excludeFields));
+        RecordSerializer.setFilters(filter);
+
+        return Res.ok(result);
+    }
+
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
     public Res list() {
         /*

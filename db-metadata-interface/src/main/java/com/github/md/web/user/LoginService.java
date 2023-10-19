@@ -1,7 +1,6 @@
 package com.github.md.web.user;
 
-import com.github.md.web.ServiceManager;
-import com.github.md.web.ex.OprNotSupportException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.user.role.UserWithRolesWrapper;
 import org.springframework.util.CollectionUtils;
 
@@ -21,18 +20,14 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @return
      */
-    default String tokenKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getTokenKey();
-    }
+    String tokenKey();
 
     /**
      * 从Request中获取用户标识时需要用到的tokenIn, 标识token是存储在cookie中，还是请求头中
      *
      * @return
      */
-    default String tokenIn() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getTokenIn();
-    }
+    String tokenIn();
 
     /**
      * 从cookie中获取用户标志时需要用到的key
@@ -42,7 +37,7 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      */
     @Deprecated
     default String cookieKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getCookieKey();
+        return null;
     }
 
     /**
@@ -51,18 +46,14 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      *
      * @return
      */
-    default String loginKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getLoginKey();
-    }
+    String loginKey();
 
     /**
      * 登录时 获取密码的key
      *
      * @return
      */
-    default String pwdKey() {
-        return ServiceManager.getAppProperties().getServer().getLogin().getPwdKey();
-    }
+    String pwdKey();
 
     /**
      * 从请求中构建用户，只能获取已登录的用户。
@@ -116,7 +107,7 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * @param attr
      */
     default boolean register(String username, String password, Map attr) {
-        throw new OprNotSupportException("请实现注册方法！");
+        throw new WebException("请实现注册方法！");
     }
 
     /**

@@ -39,7 +39,7 @@ public class FeatureController extends ControllerAdapter {
                 results.add(Kv.by("key", type.name).set("value", type.code));
             }
         }
-        return Res.ok();
+        return Res.ok(results);
     }
 
     @ApiType(value = Type.API)
