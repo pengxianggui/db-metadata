@@ -1,14 +1,14 @@
 <template>
   <div id="md_main">
-    <div class="fixed-header">
+    <div id="fixed-header">
       <tag-view></tag-view>
     </div>
-    <div class="stage">
+    <div id="stage">
       <!--  keep-alive必须为router-view的直接父级, 否则keep-alive机制不生效 -->
-      <keep-alive>
-        <router-view :key="$route.fullPath" v-if="cacheCurrentRoute"></router-view>
+      <keep-alive v-if="cacheCurrentRoute">
+        <router-view :key="$route.fullPath"></router-view>
       </keep-alive>
-      <router-view :key="$route.fullPath" v-if="!cacheCurrentRoute"></router-view>
+      <router-view :key="$route.fullPath" v-else></router-view>
     </div>
   </div>
 </template>
@@ -43,12 +43,12 @@ export default {
   display: flex;
   flex-direction: column;
 
-  .fixed-header {
+  #fixed-header {
     right: 0;
     width: 100%;
   }
 
-  .stage {
+  #stage {
     flex: 1;
     overflow: auto;
     position: relative;

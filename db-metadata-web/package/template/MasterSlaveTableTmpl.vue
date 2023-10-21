@@ -6,7 +6,9 @@
                 :filter-params="config.master.filterParams"
                 @open-form-view="openMasterFormView"
                 @active-change="handleActiveChange"
-                @chose-change="handleChoseChange" :page="{ size: 5 }">
+                @chose-change="handleChoseChange" :page="{ size: 5 }"
+                class="flex-container flex-item"
+                :height="tableHeight">
       <tempalte #operation-bar="{conf, choseData}">
         <slot name="operation-bar" v-bind:conf="conf" v-bind:choseData="choseData"></slot>
       </tempalte>
@@ -56,8 +58,6 @@
         <slot name="pagination-extend" v-bind="scope"></slot>
       </template>
     </table-view>
-
-    <el-divider></el-divider>
 
     <el-drawer
         :title="clickMData | drawerTitle(config.master.config)"
@@ -132,14 +132,16 @@
       </div>
 
       <!-- single slave -->
-      <div class="el-card md_el-card" v-if="config.slaves.length === 1">
+      <div class="el-card md_el-card md_page-container" style="height: 100%" v-if="config.slaves.length === 1">
         <search-view :ic="config.slaves[0].instanceCodes.SearchView"
                      @search="sHandleSearch(config.slaves[0], arguments)"></search-view>
         <table-view :ref="config.slaves[0].config.objectCode"
                     :ic="config.slaves[0].instanceCodes.TableView"
                     :filter-params="config.slaves[0].filterParams"
                     @open-form-view="openSlaveFormView($event, config.slaves[0])"
-                    :page="{ size: 5 }">
+                    :page="{ size: 5 }"
+                    class="flex-container flex-item"
+                    :height="tableHeight">
 
           <tempalte #operation-bar="scope">
             <slot :name="config.slaves[0].config.objectCode + '_operation-bar'" v-bind="scope"></slot>
@@ -234,7 +236,8 @@ export default {
       activeMData: {}, // 主表选中的行
       clickMData: {}, // 展开子表时, 点击的主表
       filterParams: {},
-      drawerVisible: false
+      drawerVisible: false,
+      componentHeight: 480
     }
   },
   filters: {
@@ -247,6 +250,45 @@ export default {
       const {primaryKey, labelKey} = config
       return utils.assertEmpty(labelKey, primaryKey)
     }
+  },
+  created() {
+    this.$merge(this.config, FEATURE_TYPE.MasterSlaveGrid.value)
+
+    if (!isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      }).catch(() => {
+      }).finally(() => {
+        const {master, slaves = []} = this.config
+
+        // 初始化主表外部过滤参数
+        this.$merge(master, {
+          filterParams: {}
+        })
+
+        // 初始化子表外部过滤参数
+        slaves.forEach(slave => {
+          const {config: {foreignPrimaryKey}} = slave
+          const filterParams = {}
+          // 通过向子表的数据请求参数中植入未编译的参数项，达到——主表未选择时，子表不出数据的目的
+          filterParams[foreignPrimaryKey + "_eq"] = `{${foreignPrimaryKey}}`
+          this.$merge(slave, {
+            filterParams: filterParams
+          })
+        })
+      })
+    }
+  },
+  computed: {
+    tableHeight() {
+      // 动态计算表格高度，以便内部生成滚动条
+      return this.componentHeight - 28 - 32;
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.componentHeight = this.$el.offsetHeight
+    })
   },
   methods: {
     refresh() {
@@ -390,34 +432,6 @@ export default {
       return link;
     }
   },
-  created() {
-    this.$merge(this.config, FEATURE_TYPE.MasterSlaveGrid.value)
-
-    if (!isEmpty(this.featureCode)) {
-      loadFeature(this.$axios, this.featureCode).then(resp => {
-        this.$reverseMerge(this.config, resp.data)
-      }).catch(() => {
-      }).finally(() => {
-        const {master, slaves = []} = this.config
-
-        // 初始化主表外部过滤参数
-        this.$merge(master, {
-          filterParams: {}
-        })
-
-        // 初始化子表外部过滤参数
-        slaves.forEach(slave => {
-          const {config: {foreignPrimaryKey}} = slave
-          const filterParams = {}
-          // 通过向子表的数据请求参数中植入未编译的参数项，达到——主表未选择时，子表不出数据的目的
-          filterParams[foreignPrimaryKey + "_eq"] = `{${foreignPrimaryKey}}`
-          this.$merge(slave, {
-            filterParams: filterParams
-          })
-        })
-      })
-    }
-  }
 }
 </script>
 

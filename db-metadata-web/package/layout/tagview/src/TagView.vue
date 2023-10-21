@@ -297,6 +297,8 @@ $tagBarHeight: 30px;
 
     .router-link {
       padding: 0 20px 0 10px;
+      display: inline-block;
+      height: 100%;
 
       .affixed-icon {
         margin-top: 3px;

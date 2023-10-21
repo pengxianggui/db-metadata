@@ -154,7 +154,7 @@ import assembleMeta from './assembleMeta'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "@/../package/view/ext/table/columnsValid";
-import {assertBoolean, isEmpty} from "@/../package/utils/common";
+import {isEmpty} from "@/../package/utils/common";
 import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
 
 export default {
@@ -179,6 +179,16 @@ export default {
   props: {
     filterParams: Object, // 搜索面板过滤参数
   },
+  watch: {
+    '$route': {
+      handler() {
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
+      },
+      immediate: true
+    }
+  },
   methods: {
     handleSelectionChange(selection) {
       if (this.multiSelect) {
@@ -187,7 +197,7 @@ export default {
       }
       this.$emit('selection-change', selection)
     },
-    handleView(ev, row, index) {
+    handleView(ev, row, /*index*/) {
       if (ev) ev.stopPropagation()
 
       const {primaryKey} = this
@@ -199,7 +209,7 @@ export default {
       }
       this.openFormView(url, params);
     },
-    handleEdit(ev, row, index) { // edit/add
+    handleEdit(ev, row, /*index*/) { // edit/add
       if (ev) ev.stopPropagation();
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);

@@ -183,5 +183,12 @@ export default {
 <style scoped lang="scss">
 .md_page-container {
   padding: 20px 50px !important;
+
+  &::v-deep {
+    .el-tabs__content {
+      height: 100%;
+      overflow: auto;
+    }
+  }
 }
 </style>

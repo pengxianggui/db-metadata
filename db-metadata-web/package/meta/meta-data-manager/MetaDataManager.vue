@@ -20,7 +20,7 @@
 
 <script>
 import utils from '@/../package/utils'
-import {restUrl, routeUrl} from '@/../package/constant/url';
+import {restUrl} from '@/../package/constant/url';
 import MetaImport from './ext/MetaImport'
 
 export default {

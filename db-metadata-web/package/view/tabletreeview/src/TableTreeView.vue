@@ -49,8 +49,8 @@
       </slot>
     </div>
 
-    <el-table :id="meta.name"
-              :ref="meta.name"
+    <el-table :id="tableRefName"
+              :ref="tableRefName"
               :data="innerData"
               :load="handleLoad"
               v-bind="tableConf"
@@ -143,9 +143,7 @@ import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import columnsValid from "@/../package/view/ext/table/columnsValid"
-import {resolvePath} from '../../../utils/url'
 import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
-import {assertBoolean} from "../../../utils/common";
 
 export default {
   name: "TableTreeView",
@@ -164,6 +162,16 @@ export default {
   },
   props: {
     filterParams: Object,   // 搜索面板过滤参数
+  },
+  watch: {
+    '$route': {
+      handler() {
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
+      },
+      immediate: true
+    }
   },
   methods: {
     tableReRender() {
@@ -216,7 +224,7 @@ export default {
       const {primaryKey} = this;
       return utils.extractValue(row, primaryKey);
     },
-    handleView(ev, row, index) {
+    handleView(ev, row, /*index*/) {
       if (ev) ev.stopPropagation()
 
       const {primaryKey} = this
@@ -238,7 +246,7 @@ export default {
       }
       this.openFormView(utils.resolvePath(restUrl.RECORD_TO_ADD, params))
     },
-    handleEdit(ev, row, index) { // edit/add
+    handleEdit(ev, row, /*index*/) { // edit/add
       if (ev) ev.stopPropagation();
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);
@@ -420,8 +428,11 @@ export default {
       return operationBarConf;
     },
     tableConf() {
-      const {meta: {conf}} = this
-      return conf
+      const {meta: {conf}, $attrs} = this
+      const tableConf = {}
+      this.$reverseMerge(tableConf, conf)
+      this.$reverseMerge(tableConf, $attrs)
+      return tableConf
     },
     operationColumnConf() {
       const {

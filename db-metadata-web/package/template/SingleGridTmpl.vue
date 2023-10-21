@@ -1,12 +1,14 @@
 <template>
-  <div class="md_page-container">
+  <div class="md_page-container" ref="container">
     <search-view :ic="config.instanceCodes.SearchView"
                  @search="handleSearch"></search-view>
 
     <table-view :ref="tableRefName"
                 :ic="config.instanceCodes.TableView"
                 :filter-params="filterParams"
-                @open-form-view="openFormView">
+                @open-form-view="openFormView"
+                class="flex-container flex-item"
+                :height="tableHeight">
 
       <tempalte #operation-bar="scope">
         <slot name="operation-bar" v-bind="scope"></slot>
@@ -84,7 +86,8 @@ export default {
     const featureCode = utils.assertUndefined(this.fc, R_fc);
     return {
       featureCode: featureCode,
-      filterParams: {}
+      filterParams: {},
+      componentHeight: 480 // default value
     }
   },
   methods: {
@@ -110,7 +113,7 @@ export default {
         const {form_type} = meta
         this.$dialog(meta, null, {
           title: getNameOfFormTypes(form_type)
-        }).then(value => {
+        }).then((/*value*/) => {
           this.refresh()
         }).catch(() => {
           utils.printInfo('您取消了表单')
@@ -127,15 +130,23 @@ export default {
       })
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.componentHeight = this.$el.offsetHeight
+    })
+  },
   computed: {
     tableRefName() {
       const {config: {config: {objectCode}}} = this
       return objectCode;
+    },
+    tableHeight() {
+      // 动态计算表格高度，以便内部生成滚动条
+      return this.componentHeight - 28 - 32;
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 </style>
