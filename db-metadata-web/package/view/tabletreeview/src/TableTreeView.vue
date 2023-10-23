@@ -70,12 +70,8 @@
                        :key="item.name"
                        :prop="item.name"
                        :label="item.label"
-                       show-overflow-tooltip>
-        <template slot="header">
-          <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
-            <template #label>{{ item.label}}</template>
-          </meta-easy-edit>
-        </template>
+                       show-overflow-tooltip
+                       :render-header="renderHeader">
         <template #default="scope">
           <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
         </template>
@@ -163,17 +159,21 @@ export default {
   props: {
     filterParams: Object,   // 搜索面板过滤参数
   },
-  watch: {
-    '$route': {
-      handler() {
-        this.$nextTick(() => {
-          this.$refs[this.tableRefName].doLayout();
-        })
-      },
-      immediate: true
-    }
-  },
   methods: {
+    renderHeader(h, { column, /*$index*/ }) {
+      let span = document.createElement('span'); // 新建一个 span
+      span.innerText = column.label; // 设置表头名称
+      document.body.appendChild(span); // 临时插入 document
+      column.minWidth = span.getBoundingClientRect().width + 20;
+      document.body.removeChild(span);
+      const field = this.columns.find(c => c.name === column.property)
+      return h('meta-easy-edit', {
+        attrs: {
+          'object-code': this.objectCode,
+          'field-code': field.name
+        }
+      }, column.label);
+    },
     tableReRender() {
       this.show = false;
       this.$nextTick(() => {
@@ -391,6 +391,10 @@ export default {
         const {data} = resp
         this.innerData = data
         this.$emit('data-change', data)
+
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
       })
     },
     emptyData() {

@@ -64,12 +64,8 @@
                        :key="item.code"
                        v-bind="item.conf"
                        :prop="item.name"
-                       :label="item.label">
-        <template #header>
-          <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
-            <template #label>{{ item.label }}</template>
-          </meta-easy-edit>
-        </template>
+                       :label="item.label"
+                       :render-header="renderHeader">
         <template #default="scope">
           <!--  TODO 2.4 如何将内容列也作为插槽提供扩展 -->
           <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
@@ -179,17 +175,21 @@ export default {
   props: {
     filterParams: Object, // 搜索面板过滤参数
   },
-  watch: {
-    '$route': {
-      handler() {
-        this.$nextTick(() => {
-          this.$refs[this.tableRefName].doLayout();
-        })
-      },
-      immediate: true
-    }
-  },
   methods: {
+    renderHeader(h, { column, /*$index*/ }) {
+      let span = document.createElement('span'); // 新建一个 span
+      span.innerText = column.label; // 设置表头名称
+      document.body.appendChild(span); // 临时插入 document
+      column.minWidth = span.getBoundingClientRect().width + 20;
+      document.body.removeChild(span);
+      const field = this.columns.find(c => c.name === column.property)
+      return h('meta-easy-edit', {
+        attrs: {
+          'object-code': this.objectCode,
+          'field-code': field.name
+        }
+      }, column.label);
+    },
     handleSelectionChange(selection) {
       if (this.multiSelect) {
         this.choseData = selection;
@@ -393,6 +393,10 @@ export default {
         if (index > 1 && (isEmpty(list) || list.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
+
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
       })
     },
     // set business data to empty
