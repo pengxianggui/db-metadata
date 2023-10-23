@@ -58,6 +58,7 @@
               @sort-change="sortChange"
               @selection-change="handleSelectionChange"
               @row-dblclick="$emit('row-dblclick', $event)"
+              v-loading="loading"
               v-if="show">
 
       <!-- multi select conf -->
@@ -148,6 +149,7 @@ export default {
   data() {
     return {
       multiEdit: false, // 多行编辑模式
+      loading: false,
       show: true, // use to reRender for table
       innerData: [],
       choseData: [],
@@ -385,6 +387,7 @@ export default {
         'fs': columnNames.join(',')
       });
 
+      this.loading = true
       this.$axios.safeGet(data_url, {
         params: params
       }).then((resp) => {
@@ -395,6 +398,8 @@ export default {
         this.$nextTick(() => {
           this.$refs[this.tableRefName].doLayout();
         })
+      }).finally(() => {
+        this.loading = false
       })
     },
     emptyData() {

@@ -49,7 +49,7 @@
               @row-click="handleRowClick"
               @row-dblclick="handleRowDbClick"
               @sort-change="sortChange"
-              @selection-change="handleSelectionChange">
+              @selection-change="handleSelectionChange" v-loading="loading">
 
       <!-- multi select conf -->
       <template v-if="multiSelect">
@@ -160,6 +160,7 @@ export default {
   data() {
     return {
       multiEdit: false, // 多行编辑模式
+      loading: false,
       innerData: [],
       choseData: [],
       activeData: {},
@@ -382,6 +383,7 @@ export default {
         's': size
       });
 
+      this.loading = true
       this.$axios.safeGet(data_url, {
         params: params
       }).then(resp => {
@@ -397,6 +399,8 @@ export default {
         this.$nextTick(() => {
           this.$refs[this.tableRefName].doLayout();
         })
+      }).finally(() => {
+        this.loading = false
       })
     },
     // set business data to empty
