@@ -242,9 +242,9 @@
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <arguments>-DskipTests</arguments>
-                        <!--   手动push。 release:prepare执行时总是无法自动push代码，这里改为手动。在
-                                release:prepare 执行完毕后，手动push(tag也要), 再执行 release:perform-->
-                        <pushChanges>false</pushChanges>
+<!--                        &lt;!&ndash;   手动push。 release:prepare执行时总是无法自动push代码，这里改为手动。在-->
+<!--                                release:prepare 执行完毕后，手动push(tag也要), 再执行 release:perform&ndash;&gt;-->
+<!--                        <pushChanges>false</pushChanges>-->
                     </configuration>
                 </plugin>
             </plugins>
