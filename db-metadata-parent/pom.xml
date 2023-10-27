@@ -44,8 +44,8 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:https://github.com/pengxianggui/db-metadata.git</connection>
-        <developerConnection>scm:git:https://github.com/pengxianggui/db-metadata.git</developerConnection>
+        <connection>scm:git:git@github.com:pengxianggui/db-metadata.git</connection>
+        <developerConnection>scm:git:git@github.com:pengxianggui/db-metadata.git</developerConnection>
         <url>https://github.com/pengxianggui/db-metadata</url>
         <tag>v@{project.version}</tag>
     </scm>
