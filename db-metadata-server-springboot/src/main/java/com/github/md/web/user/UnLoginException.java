@@ -1,6 +1,6 @@
 package com.github.md.web.user;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 
 /**
  * @author pengxg

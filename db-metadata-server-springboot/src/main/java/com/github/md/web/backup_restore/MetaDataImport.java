@@ -3,7 +3,7 @@ package com.github.md.web.backup_restore;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.github.md.analysis.SpringAnalysisManager;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.AssertKit;
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import lombok.extern.slf4j.Slf4j;

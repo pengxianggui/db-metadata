@@ -26,7 +26,7 @@ public class UserVariable implements VariableDefinition {
 
     @Override
     public Object init() {
-        User user = AuthenticationManager.me().getUser(request);
+        User user = AuthenticationManager.me().getLoginService().getUser(request);
         return user;
     }
 }

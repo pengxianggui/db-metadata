@@ -1,19 +1,24 @@
 package com.github.md.web.feature.tree;
 
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.github.md.analysis.component.ComponentType;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
 import com.github.md.analysis.meta.*;
-import com.github.md.analysis.meta.aop.*;
+import com.github.md.analysis.meta.aop.AddPointCut;
+import com.github.md.analysis.meta.aop.FormInvocation;
+import com.github.md.analysis.meta.aop.PointCutChain;
+import com.github.md.analysis.meta.aop.TableQueryPointCut;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.component.SearchView;
 import com.github.md.web.component.TableView;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
+import com.github.md.web.config.json.RecordSerializer;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormMessage;
+import com.github.md.web.kit.PageKit;
 import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.query.FormDataFactory;
@@ -21,6 +26,7 @@ import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.QueryUrlBuilder;
 import com.github.md.web.query.dynamic.CompileRuntime;
+import com.github.md.web.res.Res;
 import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.MetaObjectViewAdapter;
 import com.github.md.web.ui.OptionsKit;
@@ -41,6 +47,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -62,7 +69,7 @@ public class TreeAndTableController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("meta")
-    public Ret meta() {
+    public Res meta() {
         QueryHelper queryHelper = queryHelper();
         String featureCode = queryHelper.getFeatureCode();
 
@@ -79,12 +86,12 @@ public class TreeAndTableController extends ControllerAdapter {
         MetaObjectViewAdapter metaObjectSearchViewAdapter = UIManager.getView(metaObject, ComponentType.SEARCHVIEW);
         SearchView searchView = (SearchView) metaObjectSearchViewAdapter.getComponent();
 
-        return (Ret.ok("data", Kv.create().set("table", tableView.toKv()).set("tree", treeMeta).set("search", searchView.toKv())));
+        return (Res.ok(Kv.create().set("table", tableView.toKv()).set("tree", treeMeta).set("search", searchView.toKv())));
     }
 
     @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("toAdd")
-    public Ret toAdd() {
+    public Res toAdd() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
         String featureCode = queryHelper.getFeatureCode();
@@ -132,12 +139,12 @@ public class TreeAndTableController extends ControllerAdapter {
             });
         }
 
-        return Ret.ok("data", formView.toKv());
+        return Res.ok(formView.toKv());
     }
 
     @ApiType(value = Type.API_WITH_META_FEATURE)
     @PostMapping("doAdd")
-    public Ret doAdd() {
+    public Res doAdd() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
         String featureCode = queryHelper.getFeatureCode();
@@ -157,7 +164,7 @@ public class TreeAndTableController extends ControllerAdapter {
 
             @Override
             public boolean run() throws SQLException {
-                boolean s = false;
+                boolean s;
                 try {
                     PointCutChain.addBefore(pointCut, invocation);
                     s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
@@ -165,10 +172,11 @@ public class TreeAndTableController extends ControllerAdapter {
                     PointCutChain.addAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
-                    log.error(e.getMessage(), e);
-                    invocation.getRet().setFail();
+                    if (log.isDebugEnabled()) {
+                        log.error(e.getMessage(), e);
+                    }
+                    invocation.getContextParams().setEx(e);
                     s = false;
-                    throw e;
                 }
                 return s;
             }
@@ -176,14 +184,15 @@ public class TreeAndTableController extends ControllerAdapter {
 
         if (status) {
             EventKit.post(FormMessage.AddMessage(invocation));
+            return Res.ok();
         }
 
-        return invocation.getRet();
+        return Res.fail(invocation.getContextParams().getEx());
     }
 
     @ApiType(value = Type.API_WITH_META_FEATURE)
     @GetMapping("tableList")
-    public Object tableList() {
+    public Res tableList() {
         /**
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -262,7 +271,12 @@ public class TreeAndTableController extends ControllerAdapter {
         if (hasAlias.get()) {
             result.setList(UtilKit.aliasList(result.getList(), alias));
         }
-        return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
-                excludeFields);
+
+        // 序列化时排除
+        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
+        filter.getExcludes().addAll(Arrays.asList(excludeFields));
+        RecordSerializer.setFilters(filter);
+
+        return Res.ok(PageKit.toPage(result));
     }
 }

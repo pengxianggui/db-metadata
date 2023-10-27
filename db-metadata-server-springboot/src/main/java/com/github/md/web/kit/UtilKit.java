@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.analysis.meta.IMetaField;
 import com.github.md.web.AppConst;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.user.User;
 import com.github.md.web.user.UserThreadLocal;

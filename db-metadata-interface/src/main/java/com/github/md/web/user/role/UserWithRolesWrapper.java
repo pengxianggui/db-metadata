@@ -1,13 +1,10 @@
 package com.github.md.web.user.role;
 
-import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.User;
 import com.github.md.web.user.auth.IAuth;
 import com.google.common.collect.Lists;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -24,8 +21,8 @@ public interface UserWithRolesWrapper extends User {
     MRRole[] roles();
 
     /**
-     * @param nameOrCode
-     * @return
+     * @param nameOrCode 角色名或编码
+     * @return 拥有此角色或编码则返回true
      */
     default boolean hasRole(String nameOrCode) {
         for (MRRole role : roles()) {
@@ -53,7 +50,7 @@ public interface UserWithRolesWrapper extends User {
      * 全部拥有，则返回true。 匹配权限编码
      *
      * @param authCodes 权限编码
-     * @return
+     * @return 拥有所有入参的权限则返回true
      */
     default boolean hasAuth(String... authCodes) {
         IAuth[] all = auths();
@@ -68,10 +65,10 @@ public interface UserWithRolesWrapper extends User {
     }
 
     /**
-     * 全部拥有，则返回true。匹配权限编码
+     * 匹配权限编码
      *
-     * @param auths
-     * @return
+     * @param auths 权限数组
+     * @return 全部拥有，则返回true
      */
     default boolean hasAuth(IAuth... auths) {
         // 依据IAuth.equals
@@ -89,13 +86,14 @@ public interface UserWithRolesWrapper extends User {
     }
 
     @Override
-    default Kv toKv() {
-        return Kv.create()
-                .set("id", userId())
-                .set("username", userName())
-                .set("avatar", avatar())
-                .set("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()))
-                .set("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()))
-                .set("attrs", attrs());
+    default Map toKv() {
+        Map map = new HashMap();
+        map.put("id", userId());
+        map.put("username", userName());
+        map.put("avatar", avatar());
+        map.put("roles", Arrays.stream(roles()).map(MRRole::code).collect(Collectors.toSet()));
+        map.put("auths", Arrays.stream(auths()).map(IAuth::code).collect(Collectors.toSet()));
+        map.put("attrs", attrs());
+        return map;
     }
 }

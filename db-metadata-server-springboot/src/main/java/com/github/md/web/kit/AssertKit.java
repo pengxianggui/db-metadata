@@ -1,7 +1,7 @@
 package com.github.md.web.kit;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 
 /**
  * 断言工具类

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="md_page-container">
     <single-grid-tmpl :fc="snippetFc">
       <template #float-right-btn="{conf}">
         <el-button type="text" :size="conf.conf.size" @click="openVarList">

@@ -1,6 +1,6 @@
 package com.github.md.web.file;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,15 +1,15 @@
 package com.github.md.web.menu;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.web.user.auth.annotations.Type;
-import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.analysis.meta.IMetaObject;
 import com.github.md.web.controller.ControllerAdapter;
 import com.github.md.web.controller.ParameterHelper;
 import com.github.md.web.kit.tree.TreeConfig;
 import com.github.md.web.kit.tree.TreeKit;
 import com.github.md.web.kit.tree.TreeNode;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class MenuController extends ControllerAdapter {
 
     @ApiType(value = Type.API)
     @GetMapping
-    public Ret index() {
+    public Res index() {
         IMetaObject metaObject = metaService().findByCode("meta_menu");
         ParameterHelper parameterHelper = parameterHelper();
         TreeConfig treeConfig = treeConfig();
@@ -42,15 +42,15 @@ public class MenuController extends ControllerAdapter {
         }
 
         List<TreeNode<String, Record>> tree = treeService().tree(metaObject, treeConfig);
-        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
+        return Res.ok(JSON.parseArray(JSON.toJSONString(tree, TreeKit.afterFilter)));
     }
 
     @ApiType(value = Type.API)
     @GetMapping("profile")
-    public Ret profileMenu() {
+    public Res profileMenu() {
         IMetaObject metaObject = metaService().findByCode("meta_profile_menu");
         List<Record> records = businessService().findData(metaObject);
-        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(records)));
+        return Res.ok(records);
     }
 
     private TreeConfig treeConfig() {

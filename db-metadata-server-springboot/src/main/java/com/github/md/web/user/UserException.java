@@ -1,7 +1,6 @@
 package com.github.md.web.user;
 
-import com.github.md.web.WebException;
-import lombok.AllArgsConstructor;
+import com.github.md.web.ex.WebException;
 
 /**
  * <p> @Date : 2019/12/17 </p>

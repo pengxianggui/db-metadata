@@ -21,8 +21,8 @@ public interface MRPermit<U, R> {
      * 资源判定动作.
      *
      * @param resourceHolder 资源持有对象
-     * @param mResource
-     * @return
+     * @param mResource      资源对象
+     * @return 判定有权限访问，则返回true
      */
     boolean permit(U resourceHolder, R mResource);
 }

@@ -3,7 +3,6 @@ package com.github.md.analysis.meta;
 import com.github.md.analysis.SpringAnalysisManager;
 import com.github.md.analysis.db.*;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.extern.slf4j.Slf4j;

@@ -44,7 +44,7 @@ public interface UploadService extends Mode {
      * 构建代理地址。即originUrl指向的资源，通过本地服务代理。
      *
      * @param originUrl 原始的url。{@link #getMode()}不同时，originUrl格式也不同。本地模式时，值为本地路径
-     * @return
+     * @return 预览url
      */
     default PreviewUrl buildFileUrl(String originUrl) {
         return new PreviewUrl(URLEncoder.encode(originUrl), getMode());

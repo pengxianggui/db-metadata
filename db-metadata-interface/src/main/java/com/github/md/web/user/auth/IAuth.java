@@ -1,6 +1,6 @@
 package com.github.md.web.user.auth;
 
-import com.github.md.analysis.kit.Kv;
+import java.util.Map;
 
 /**
  * 权限抽象
@@ -38,5 +38,5 @@ public interface IAuth {
         return "Empty moduleId.";
     }
 
-    Kv toKv();
+    Map toKv();
 }

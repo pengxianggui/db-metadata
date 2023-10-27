@@ -3,7 +3,6 @@ package com.github.md.web.user.role;
 import com.alibaba.fastjson.JSONObject;
 import com.github.md.analysis.kit.Kv;
 import com.github.md.web.user.auth.IAuth;
-import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Record;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

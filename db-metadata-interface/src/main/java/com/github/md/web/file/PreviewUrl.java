@@ -26,8 +26,8 @@ public class PreviewUrl {
     /**
      * 验证是否合法。合法的url必须路径是: /file/preview，能匹配此文件预览接口
      *
-     * @param url
-     * @return
+     * @param url 接口path
+     * @return 返回此url是否合法
      */
     public static boolean legal(String url) {
         if (!url.startsWith(REST_PATH)) {

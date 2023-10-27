@@ -29,7 +29,7 @@ public class FileManager {
         if (me == null) {
             synchronized (FileManager.class) {
                 if (me == null) {
-                    DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+                    FileConfigurer configurer = AnalysisSpringUtil.getBean(FileConfigurer.class);
                     config(configurer);
                 }
             }
@@ -37,11 +37,11 @@ public class FileManager {
         return me;
     }
 
-    public static void config(DbMetaConfigurer configurer) {
+    public static void config(FileConfigurer configurer) {
         me = new FileManager(configurer);
     }
 
-    private FileManager(DbMetaConfigurer configurer) {
+    private FileManager(FileConfigurer configurer) {
         MetaProperties metaProperties = ServiceManager.getAppProperties();
         defaultMode = StrKit.defaultIfBlank(metaProperties.getServer().getUpload().getMode(), LocalFileService.modeName); // 未配置，就采用local——本地上传模式
 

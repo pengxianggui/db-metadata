@@ -20,7 +20,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +47,7 @@ public class MetaDataTypeConvert {
             // MySQL
             put("BIT", Boolean.class);
             put("TEXT", String.class);
+            put("TINYTEXT", String.class);
             put("DATE", Date.class);
             put("DATETIME", DateTime.class);
             put("TIMESTAMP", Timestamp.class);
@@ -79,14 +79,13 @@ public class MetaDataTypeConvert {
         }
     };
 
-    private static final DateTimeFormatter forPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public static Class getType(String dataType) {
-        return map.get(dataType.toUpperCase());
+        String dataTypeUpper = dataType.toUpperCase();
+        return map.containsKey(dataTypeUpper) ? map.get(dataType.toUpperCase()) : String.class;
     }
 
     public static String getTypeName(String dataType) {
-        return map.get(dataType).getTypeName();
+        return getType(dataType).getTypeName();
     }
 
     public static Object convert(IMetaField field, Object o) {

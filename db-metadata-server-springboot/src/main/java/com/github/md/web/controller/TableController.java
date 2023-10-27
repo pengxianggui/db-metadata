@@ -1,13 +1,19 @@
 package com.github.md.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.github.md.analysis.meta.*;
-import com.github.md.analysis.meta.aop.*;
-import com.github.md.web.user.auth.annotations.ApiType;
-import com.github.md.web.user.auth.annotations.Type;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.meta.IMetaField;
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaObjectConfigParse;
+import com.github.md.analysis.meta.MetaSqlKit;
+import com.github.md.analysis.meta.aop.DeleteInvocation;
+import com.github.md.analysis.meta.aop.DeletePointCut;
+import com.github.md.analysis.meta.aop.PointCutChain;
+import com.github.md.analysis.meta.aop.TableQueryPointCut;
 import com.github.md.web.ServiceManager;
+import com.github.md.web.config.json.RecordSerializer;
+import com.github.md.web.kit.PageKit;
 import com.github.md.web.kit.SqlParaExt;
 import com.github.md.web.kit.UtilKit;
 import com.github.md.web.kit.tree.TreeConfig;
@@ -16,9 +22,12 @@ import com.github.md.web.kit.tree.TreeNode;
 import com.github.md.web.query.QueryConditionForMetaObject;
 import com.github.md.web.query.QueryHelper;
 import com.github.md.web.query.dynamic.CompileRuntime;
+import com.github.md.web.res.Res;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
@@ -32,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,8 +62,64 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TableController extends ControllerAdapter {
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
+    @GetMapping("all")
+    public Res all() {
+        QueryHelper queryHelper = queryHelper();
+        String objectCode = queryHelper.getObjectCode();
+        String[] fields = queryHelper.list().fields();
+        String[] excludeFields = queryHelper.list().excludeFields();
+
+        IMetaObject metaObject = metaService().findByCode(objectCode);
+
+        Collection<IMetaField> filteredFields = UtilKit.filter(fields, excludeFields, metaObject.fields());
+        QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, filteredFields);
+        SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);
+        /* 编译where后条件 */
+        String compileWhere = new CompileRuntime().compile(metaObject.configParser().where(), getRequest());
+
+        List<Record> result = businessService().findData(
+                metaObject,
+                sqlPara.getSelect(),
+                MetaSqlKit.where(sqlPara.getSql(), compileWhere, metaObject.configParser().orderBy()),
+                sqlPara.getPara());
+
+        /*
+         * escape field value;
+         * 1. 是否需要默认转义的规则;
+         */
+        OptionsKit.trans(filteredFields, result);
+
+        /*
+         * 别名替换,参数中遇
+         * a->b=123
+         * c->d=123
+         * 执行别名替换处理
+         * TODO 废弃
+         */
+        Kv alias = Kv.create();
+        AtomicBoolean hasAlias = new AtomicBoolean(false);
+        UtilKit.toObjectFlat(getRequest().getParameterMap()).forEach((key, value) -> {
+            if (key.contains("->")) {
+                String[] ss = key.split("->");
+                alias.set(ss[0], ss[1]);
+                hasAlias.set(true);
+            }
+        });
+        if (hasAlias.get()) {
+            UtilKit.aliasList(result, alias);
+        }
+
+        // 序列化时排除
+        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
+        filter.getExcludes().addAll(Arrays.asList(excludeFields));
+        RecordSerializer.setFilters(filter);
+
+        return Res.ok(result);
+    }
+
+    @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
-    public Object list() {
+    public Res list() {
         /*
          * 1. query data by metaObject
          *  [x] 1.1 query all data paging
@@ -131,8 +197,12 @@ public class TableController extends ControllerAdapter {
             result.setList(UtilKit.aliasList(result.getList(), alias));
         }
 
-        return renderJsonExcludes(Ret.ok("data", result.getList()).set("page", toPage(result.getTotalRow(), result.getPageNumber(), result.getPageSize())),
-                excludeFields);
+        // 序列化时排除
+        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
+        filter.getExcludes().addAll(Arrays.asList(excludeFields));
+        RecordSerializer.setFilters(filter);
+
+        return Res.ok(PageKit.toPage(result));
     }
 
     /**
@@ -154,7 +224,7 @@ public class TableController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @DeleteMapping("delete")
-    public Ret delete() {
+    public Res delete() {
         QueryHelper queryHelper = queryHelper();
         ParameterHelper parameterHelper = parameterHelper();
         String objectCode = queryHelper.getObjectCode();
@@ -196,7 +266,7 @@ public class TableController extends ControllerAdapter {
 
             @Override
             public boolean run() throws SQLException {
-                boolean s = false;
+                boolean s;
                 try {
                     PointCutChain.deleteBefore(pointCut, invocation);
                     s = metaService().deleteDatas(metaObject, ids);
@@ -207,14 +277,19 @@ public class TableController extends ControllerAdapter {
                     if (log.isDebugEnabled()) {
                         log.error(e.getMessage(), e);
                     }
-                    invocation.getRet().setFail(e);
+                    invocation.getContextParams().setEx(e);
                     s = false;
                 }
                 return s;
             }
         });
 
-        return invocation.getRet();
+        if (status) {
+            // TODO 发布删除事件
+            return Res.ok();
+        }
+
+        return Res.fail(invocation.getContextParams().getEx());
     }
 
     /**
@@ -223,7 +298,7 @@ public class TableController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("tree")
-    public Ret tree() {
+    public Res tree() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
         IMetaObject metaObject = metaService().findByCode(objectCode);
@@ -247,7 +322,7 @@ public class TableController extends ControllerAdapter {
 
         List<TreeNode<String, Record>> tree = ServiceManager.treeService().treeByHitRecords(metaObject, result, treeConfig);
 
-        return Ret.ok("data", JSON.parseArray(JSON.toJSONString(tree, TreeKit.getAfterFilter(
+        return Res.ok(JSON.parseArray(JSON.toJSONString(tree, TreeKit.getAfterFilter(
                 record -> OptionsKit.trans(filteredFields, Lists.newArrayList(record)) // 递归序列化时进行转义
         ))));
     }

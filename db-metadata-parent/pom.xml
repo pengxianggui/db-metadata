@@ -11,11 +11,13 @@
     <name>db-metadata-parent</name>
 
     <properties>
-        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 指定maven编译的java项目是java8。有这两个，一般就无需 maven-compiler-plugin了 [start]-->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- ********************************************************************* [end]-->
+
         <spring-boot.version>2.5.4</spring-boot.version>
         <lombok.version>1.18.20</lombok.version>
         <fastjson.version>1.2.83</fastjson.version>
@@ -45,7 +47,7 @@
         <connection>scm:git:https://github.com/pengxianggui/db-metadata.git</connection>
         <developerConnection>scm:git:https://github.com/pengxianggui/db-metadata.git</developerConnection>
         <url>https://github.com/pengxianggui/db-metadata/tree/master</url>
-        <tag>HEAD</tag>
+        <tag>v${project.version}</tag>
     </scm>
     <developers>
         <developer>
@@ -61,6 +63,7 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -143,60 +146,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-source-plugin</artifactId>-->
-<!--                        <configuration>-->
-<!--                            <attach>true</attach>-->
-<!--                        </configuration>-->
-<!--                        <executions>-->
-<!--                            <execution>-->
-<!--                                <id>attach-source</id>-->
-<!--                                <goals>-->
-<!--                                    <goal>jar-no-fork</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                        </executions>-->
-<!--                    </plugin>-->
-                    <!-- javadoc文档生成插件 -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.4.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- gpg签名插件 -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <pluginRepositories>
         <pluginRepository>
             <id>maven-ali</id>
@@ -232,12 +181,12 @@
     <!-- 配置打包发布的远程仓库 -->
     <distributionManagement>
         <snapshotRepository>
-            <id>oss</id>
+            <id>ossrh</id>
             <name>Sonatype Nexus Snapshots</name>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>oss</id>
+            <id>ossrh</id>
             <name>Nexus Release Repository</name>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
@@ -246,60 +195,71 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!-- 生成项目的源代码 JAR 文件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>3.2.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-source</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
+                <!-- javadoc文档生成插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.10.1</version>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.4.0</version>
+                    <configuration>
+                        <!-- jdk1.8要加上: 防止注释中的非标准标记(如@date) -->
+                        <additionalJOptions>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
+                        </additionalJOptions>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
+                <!-- release plugin，用于发布到release仓库部署插件 -->
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.7</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <tagNameFormat>v${project.version}</tagNameFormat>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <arguments>-DskipTests</arguments>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
 
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-source</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-            <!-- sonatype提供了自动release的插件，这意味着运行mvn clean deploy后不用手动去close-> release了，此插件会自动release我们的项目到Maven中央仓库。 -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>oss</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>versions-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <generateBackupPoms>false</generateBackupPoms>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 </project>

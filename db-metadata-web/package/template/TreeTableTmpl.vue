@@ -1,20 +1,23 @@
 <template>
   <div class="md_page-container">
-    <row-grid :span="[6, 18]">
-      <template #0>
+    <el-row class="row">
+      <el-col :span="6" class="col">
         <tree-view :ref="config.tree.config.objectCode"
                    :ic="config.tree.instanceCodes.TreeView"
                    @open-form-view="openTreeFormView"
                    @active-change="handleActiveChange"
-                   @chose-change="handleChoseChange"></tree-view>
-      </template>
-      <template #1>
+                   @chose-change="handleChoseChange"
+                   class="tree-view"></tree-view>
+      </el-col>
+      <el-col :span="18" class="col flex-container">
         <!-- SearchView的meta来源 -->
         <search-view :ic="config.table.instanceCodes.SearchView" @search="handleSearch"></search-view>
         <table-view :ref="config.table.config.objectCode"
                     :ic="config.table.instanceCodes.TableView"
                     @open-form-view="openTableFormView"
-                    :filter-params="filterParams">
+                    :filter-params="filterParams"
+                    class="flex-container flex-item"
+                    :height="tableHeight">
 
           <tempalte #operation-bar="scope">
             <slot name="operation-bar" v-bind="scope"></slot>
@@ -61,8 +64,8 @@
             <slot name="pagination-extend" v-bind="scope"></slot>
           </template>
         </table-view>
-      </template>
-    </row-grid>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -98,8 +101,29 @@ export default {
     return {
       featureCode: featureCode,
       activeTreeData: {},
-      filterParams: {}
+      filterParams: {},
+      componentHeight: 480
     }
+  },
+  computed: {
+    tableHeight() {
+      // 动态计算表格高度，以便内部生成滚动条
+      return this.componentHeight - 28 - 32;
+    }
+  },
+  created() {
+    this.$merge(this.config, FEATURE_TYPE.TreeTable.value)
+
+    if (!isEmpty(this.featureCode)) {
+      loadFeature(this.$axios, this.featureCode).then(resp => {
+        this.$reverseMerge(this.config, resp.data)
+      })
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.componentHeight = this.$el.offsetHeight
+    })
   },
   methods: {
     refresh() {
@@ -189,7 +213,7 @@ export default {
         const {form_type} = meta
         this.$dialog(meta, null, {
           title: getNameOfFormTypes(form_type)
-        }).then(value => {
+        }).then((/*value*/) => {
           this.refreshTableData()
         }).catch(() => {
           utils.printInfo('您取消了表单')
@@ -208,7 +232,7 @@ export default {
         const {form_type} = meta
         this.$dialog(meta, null, {
           title: getNameOfFormTypes(form_type)
-        }).then(value => {
+        }).then((/*value*/) => {
           this.refreshTreeData()
         }).catch(() => {
           utils.printInfo('您取消了表单')
@@ -216,18 +240,23 @@ export default {
       })
     }
   },
-  created() {
-    this.$merge(this.config, FEATURE_TYPE.TreeTable.value)
-
-    if (!isEmpty(this.featureCode)) {
-      loadFeature(this.$axios, this.featureCode).then(resp => {
-        this.$reverseMerge(this.config, resp.data)
-      })
-    }
-  }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.row {
+  height: 100%;
+  .col {
+    height: 100%;
 
+    .tree-view {
+      height: 100%;
+    }
+
+    .flex-item {
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}
 </style>

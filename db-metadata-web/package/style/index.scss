@@ -29,30 +29,36 @@ form .inline {
 
 
 
-#md_main {
-  // 页面容器
+// 页面容器
 .md_page-container {
-    height: 100%;
-    width: 100%;
-    color: #303133;
-    padding: 5px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  color: #303133;
+  padding: 5px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
-    // 嵌套只留外层的padding, 防止padding过多
-    & .md_page-container {
-      padding: 0;
-    }
+  & > .flex-item {
+    flex: 1;
+    overflow: hidden;
   }
 
-  // 容器视图
-  .md_view-container {
-    border: 1px solid #EBEEF5;
-    padding: 5px;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    background-color: #FFFFFF;
+  // 嵌套只留外层的padding, 防止padding过多
+  & .md_page-container {
+    padding: 0;
   }
+}
+
+// 容器视图
+.md_view-container {
+  border: 1px solid #EBEEF5;
+  padding: 5px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  background-color: #FFFFFF;
 }
 
 .md_max-z-index {
@@ -62,6 +68,15 @@ form .inline {
 .md_doc-link {
   & * {
     font-size: 12px !important;
+  }
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+
+  & > .flex-item {
+    flex: 1;
   }
 }
 

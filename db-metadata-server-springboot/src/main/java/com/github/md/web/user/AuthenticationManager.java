@@ -1,8 +1,6 @@
 package com.github.md.web.user;
 
 import com.github.md.analysis.AnalysisSpringUtil;
-import com.github.md.web.DbMetaConfigurer;
-import com.github.md.web.WebException;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.user.auth.*;
 import com.github.md.web.user.role.RoleService;
@@ -12,7 +10,6 @@ import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +53,7 @@ public class AuthenticationManager {
         if (me == null) {
             synchronized (AuthenticationManager.class) {
                 if (me == null) {
-                    DbMetaConfigurer configurer = AnalysisSpringUtil.getBean(DbMetaConfigurer.class);
+                    AuthenticationConfigurer configurer = AnalysisSpringUtil.getBean(AuthenticationConfigurer.class);
                     config(configurer);
                 }
             }
@@ -64,11 +61,11 @@ public class AuthenticationManager {
         return me;
     }
 
-    public static void config(DbMetaConfigurer configurer) {
+    public static void config(AuthenticationConfigurer configurer) {
         me = new AuthenticationManager(configurer);
     }
 
-    public AuthenticationManager(DbMetaConfigurer configurer) {
+    public AuthenticationManager(AuthenticationConfigurer configurer) {
         AuthenticationRegistry registry = new AuthenticationRegistry();
         configurer.configAuthentication(registry);
         userService = registry.getUserService();
@@ -108,69 +105,5 @@ public class AuthenticationManager {
 
         log.error("资源%s无法确定应该使用什么判定器进行判定, 视为无权限！请通过dbmeta扩展配置进行指定。", mResource.getClass().toString());
         return false;
-    }
-
-    /**
-     * 判断是否为ROOT用户
-     *
-     * @param user
-     * @return
-     * @deprecated 直接使用 {@link User#isRoot()}
-     */
-    @Deprecated
-    public boolean isRoot(User user) {
-//        return Root.me().equals(user);
-        return false;
-    }
-
-    /**
-     * 兼容ROOT登录
-     *
-     * @param identity 身份，可以是账号名，或手机号，亦或是其他
-     * @param pwd      密码
-     * @return
-     * @deprecated 请直接使用 {@link LoginService#login(String, String)}，若如此，请确保其内部调用了缓存了用户({@link LoginService#setLogged(UserWithRolesWrapper)})
-     */
-    @Deprecated
-    public LoginVO login(String identity, String pwd) {
-        UserWithRolesWrapper userWithRolesWrapper = loginService.login(identity, pwd);
-        AssertKit.isTrue(userWithRolesWrapper != null, new WebException("用户名或密码输入错误"));
-        return loginService.setLogged(userWithRolesWrapper);
-    }
-
-    /**
-     * 获取当前登录用户
-     *
-     * @param request
-     * @return
-     * @deprecated 直接使用 {@link LoginService#getUser(HttpServletRequest)}
-     */
-    @Deprecated
-    public UserWithRolesWrapper getUser(HttpServletRequest request) {
-        return this.loginService.getUser(request);
-    }
-
-    /**
-     * 获取当前登录的用户信息，兼容ROOT
-     *
-     * @param request
-     * @return
-     * @deprecated 直接使用 {@link LoginService#getInfo(HttpServletRequest)}
-     */
-    @Deprecated
-    public LoginVO getInfo(HttpServletRequest request) {
-        return this.loginService.getInfo(request);
-    }
-
-    /**
-     * 兼容ROOT登出
-     *
-     * @param user
-     * @return
-     * @deprecated 直接使用 {@link LoginService#logout(UserWithRolesWrapper)}
-     */
-    @Deprecated
-    public boolean logout(UserWithRolesWrapper user) {
-        return loginService.logout(user);
     }
 }

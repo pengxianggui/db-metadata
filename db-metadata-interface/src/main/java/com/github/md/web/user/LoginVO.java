@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * very important! 此接口是前后端用户数据结构一致的保证。若默认的 {@link DefaultLoginVO} 不满足需求，可以自定义一个继承类。
- * 登录返回。
+ * very important! 此接口是前后端用户数据结构一致的保证。
  *
  * @author pengxg
  * @date 2022/2/28 6:10 下午

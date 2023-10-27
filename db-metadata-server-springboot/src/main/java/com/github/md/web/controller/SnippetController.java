@@ -1,6 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
 import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Authorize;
@@ -16,7 +16,7 @@ public class SnippetController {
     @ApiType(Type.API)
     @Authorize(justSign = true)
     @GetMapping("options")
-    public Ret options() {
-        return Ret.ok("data", ServiceManager.getSnippetService().listForOptions());
+    public Res options() {
+        return Res.ok(ServiceManager.getSnippetService().listForOptions());
     }
 }

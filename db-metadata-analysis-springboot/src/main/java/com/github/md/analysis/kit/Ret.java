@@ -57,7 +57,9 @@ import java.util.Map;
  *   }
  *
  * </pre>
+ * @Deprecated 2.5 使用Res类替代
  */
+@Deprecated
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class Ret extends HashMap {
 

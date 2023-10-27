@@ -1,22 +1,24 @@
 package com.github.md.web.controller;
 
-import com.github.md.analysis.meta.*;
+import com.github.md.analysis.kit.Kv;
+import com.github.md.analysis.meta.IMetaObject;
+import com.github.md.analysis.meta.MetaData;
+import com.github.md.analysis.meta.MetaObjectConfigParse;
 import com.github.md.analysis.meta.aop.*;
+import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
-import com.github.md.web.kit.AssertKit;
-import com.github.md.web.ui.ComponentInstanceConfig;
-import com.github.md.web.user.auth.annotations.ApiType;
-import com.github.md.web.user.auth.annotations.Type;
-import com.google.common.collect.Lists;
 import com.github.md.web.component.ViewFactory;
 import com.github.md.web.component.form.FormView;
 import com.github.md.web.event.EventKit;
 import com.github.md.web.event.FormMessage;
+import com.github.md.web.kit.AssertKit;
 import com.github.md.web.query.FormDataFactory;
 import com.github.md.web.query.QueryHelper;
+import com.github.md.web.ui.ComponentInstanceConfig;
 import com.github.md.web.ui.OptionsKit;
-import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.kit.Ret;
+import com.github.md.web.user.auth.annotations.ApiType;
+import com.github.md.web.user.auth.annotations.Type;
+import com.google.common.collect.Lists;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
@@ -51,7 +53,7 @@ public class FormController extends ControllerAdapter {
      */
     @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toAdd")
-    public Ret toAdd() {
+    public Res toAdd() {
         QueryHelper queryHelper = queryHelper();
         String instanceCode = queryHelper.getInstanceCode();
         AssertKit.isTrue(StrKit.notBlank(instanceCode), "实例编码不能为空");
@@ -72,15 +74,14 @@ public class FormController extends ControllerAdapter {
                 formView.getField(String.valueOf(key)).defaultVal(value);
             });
         }
-        return Ret.ok("data", formView.toKv());
+        return Res.ok(formView.toKv());
     }
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doAdd")
-    public Ret doAdd() {
+    public Res doAdd() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
-
         IMetaObject metaObject = metaService().findByCode(objectCode);
 
         // TODO 2.3 在buildFormData 前应当校验 getRequest().getParameterMap() 参数的合法性
@@ -94,7 +95,7 @@ public class FormController extends ControllerAdapter {
 
             @Override
             public boolean run() throws SQLException {
-                boolean s = false;
+                boolean s;
                 try {
                     PointCutChain.addBefore(pointCut, invocation);
                     s = metaService().saveData(invocation.getMetaObject(), invocation.getFormData());
@@ -102,10 +103,11 @@ public class FormController extends ControllerAdapter {
                     PointCutChain.addAfter(pointCut, invocation);
                 } catch (Exception e) {
                     log.error("保存异常\n元对象:{},错误信息:{}", metaObject.code(), e.getMessage());
-                    log.error(e.getMessage(), e);
-                    invocation.getRet().setFail();
+                    if (log.isDebugEnabled()) {
+                        log.error(e.getMessage(), e);
+                    }
+                    invocation.getContextParams().setEx(e);
                     s = false;
-                    throw e;
                 }
                 return s;
             }
@@ -113,14 +115,15 @@ public class FormController extends ControllerAdapter {
 
         if (status) {
             EventKit.post(FormMessage.AddMessage(invocation));
+            return Res.ok();
         }
 
-        return invocation.getRet();
+        return Res.fail(invocation.getContextParams().getEx());
     }
 
     @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("toUpdate")
-    public Ret toUpdate() {
+    public Res toUpdate() {
         QueryHelper queryHelper = queryHelper();
 
         String instanceCode = queryHelper.getInstanceCode();
@@ -140,12 +143,12 @@ public class FormController extends ControllerAdapter {
 
         FormDataFactory.buildFormData(metaObject, d, FormView.FormType.UPDATE);
 
-        return (Ret.ok("data", formView.toKv().set("record", d)));
+        return (Res.ok(formView.toKv().set("record", d)));
     }
 
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @PostMapping("doUpdate")
-    public Ret doUpdate() {
+    public Res doUpdate() {
         QueryHelper queryHelper = queryHelper();
         String objectCode = queryHelper.getObjectCode();
 
@@ -161,7 +164,7 @@ public class FormController extends ControllerAdapter {
 
             @Override
             public boolean run() throws SQLException {
-                boolean s = false;
+                boolean s;
                 try {
                     PointCutChain.updateBefore(pointCut, invocation);
                     s = metaService().updateData(invocation.getMetaObject(), invocation.getFormData());
@@ -172,21 +175,23 @@ public class FormController extends ControllerAdapter {
                     if (log.isDebugEnabled()) {
                         log.error(e.getMessage(), e);
                     }
-                    invocation.getRet().setFail().set("msg", e.getMessage());
+                    invocation.getContextParams().setEx(e);
                     s = false;
                 }
                 return s;
             }
         });
+
         if (status) {
             EventKit.post(FormMessage.UpdateMessage(invocation));
+            return Res.ok();
         }
-        return invocation.getRet();
+        return Res.fail(invocation.getContextParams().getEx());
     }
 
     @ApiType(value = Type.API_WITH_META_INSTANCE)
     @GetMapping("detail")
-    public Ret detail() {
+    public Res detail() {
         QueryHelper queryHelper = queryHelper();
 
         String instanceCode = queryHelper.getInstanceCode();
@@ -215,13 +220,15 @@ public class FormController extends ControllerAdapter {
                 PointCutChain.viewAfter(viewPointCuts, invocation);
             } catch (Exception e) {
                 log.error("获取记录详情错误\n元对象:{}, 错误信息:{}", metaObject.code(), e.getMessage());
-                invocation.getRet().setFail();
+                invocation.getContextParams().setEx(e);
                 s = false;
             }
             return s;
         });
 
-        //        renderJson(Ret.ok("data", formView.toKv().set("record", d)));
-        return invocation.getRet().setOk().set("data", formView.toKv().set("record", invocation.getData()));
+        if (status) {
+            return Res.ok(formView.toKv().set("record", invocation.getData()));
+        }
+        return Res.fail(invocation.getContextParams().getEx());
     }
 }

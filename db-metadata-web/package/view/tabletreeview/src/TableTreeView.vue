@@ -49,8 +49,8 @@
       </slot>
     </div>
 
-    <el-table :id="meta.name"
-              :ref="meta.name"
+    <el-table :id="tableRefName"
+              :ref="tableRefName"
               :data="innerData"
               :load="handleLoad"
               v-bind="tableConf"
@@ -58,6 +58,7 @@
               @sort-change="sortChange"
               @selection-change="handleSelectionChange"
               @row-dblclick="$emit('row-dblclick', $event)"
+              v-loading="loading"
               v-if="show">
 
       <!-- multi select conf -->
@@ -70,12 +71,8 @@
                        :key="item.name"
                        :prop="item.name"
                        :label="item.label"
-                       show-overflow-tooltip>
-        <template slot="header">
-          <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
-            <template #label>{{ item.label}}</template>
-          </meta-easy-edit>
-        </template>
+                       show-overflow-tooltip
+                       :render-header="renderHeader">
         <template #default="scope">
           <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
         </template>
@@ -143,9 +140,7 @@ import assembleMeta from './assembleMeta'
 import DefaultMeta from '../ui-conf'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import columnsValid from "@/../package/view/ext/table/columnsValid"
-import {resolvePath} from '../../../utils/url'
 import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
-import {assertBoolean} from "../../../utils/common";
 
 export default {
   name: "TableTreeView",
@@ -154,6 +149,7 @@ export default {
   data() {
     return {
       multiEdit: false, // 多行编辑模式
+      loading: false,
       show: true, // use to reRender for table
       innerData: [],
       choseData: [],
@@ -166,6 +162,20 @@ export default {
     filterParams: Object,   // 搜索面板过滤参数
   },
   methods: {
+    renderHeader(h, { column, /*$index*/ }) {
+      let span = document.createElement('span'); // 新建一个 span
+      span.innerText = column.label; // 设置表头名称
+      document.body.appendChild(span); // 临时插入 document
+      column.minWidth = span.getBoundingClientRect().width + 20;
+      document.body.removeChild(span);
+      const field = this.columns.find(c => c.name === column.property)
+      return h('meta-easy-edit', {
+        attrs: {
+          'object-code': this.objectCode,
+          'field-code': field.name
+        }
+      }, column.label);
+    },
     tableReRender() {
       this.show = false;
       this.$nextTick(() => {
@@ -216,7 +226,7 @@ export default {
       const {primaryKey} = this;
       return utils.extractValue(row, primaryKey);
     },
-    handleView(ev, row, index) {
+    handleView(ev, row, /*index*/) {
       if (ev) ev.stopPropagation()
 
       const {primaryKey} = this
@@ -238,7 +248,7 @@ export default {
       }
       this.openFormView(utils.resolvePath(restUrl.RECORD_TO_ADD, params))
     },
-    handleEdit(ev, row, index) { // edit/add
+    handleEdit(ev, row, /*index*/) { // edit/add
       if (ev) ev.stopPropagation();
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);
@@ -377,12 +387,19 @@ export default {
         'fs': columnNames.join(',')
       });
 
+      this.loading = true
       this.$axios.safeGet(data_url, {
         params: params
       }).then((resp) => {
         const {data} = resp
         this.innerData = data
         this.$emit('data-change', data)
+
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
+      }).finally(() => {
+        this.loading = false
       })
     },
     emptyData() {
@@ -420,8 +437,11 @@ export default {
       return operationBarConf;
     },
     tableConf() {
-      const {meta: {conf}} = this
-      return conf
+      const {meta: {conf}, $attrs} = this
+      const tableConf = {}
+      this.$reverseMerge(tableConf, conf)
+      this.$reverseMerge(tableConf, $attrs)
+      return tableConf
     },
     operationColumnConf() {
       const {

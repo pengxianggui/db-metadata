@@ -46,7 +46,7 @@ public class DefaultUserInterceptDoer implements UserInterceptDoer {
     protected UserWithRolesWrapper getUser(HttpServletRequest request) {
         UserWithRolesWrapper user;
         try {
-            user = AuthenticationManager.me().getUser(request);
+            user = AuthenticationManager.me().getLoginService().getUser(request);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

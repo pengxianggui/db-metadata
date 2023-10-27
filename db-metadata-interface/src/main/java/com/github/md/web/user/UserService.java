@@ -18,8 +18,8 @@ public interface UserService<U extends User> {
     /**
      * 提供一种松散的方式更新用户数据。需要注意, data中的key应当与用户表的字段保持一致。DbMeta不会做 下划线与驼峰的转换
      *
-     * @param idValue
-     * @param data
+     * @param idValue 用户主键
+     * @param data    属性数据的map，键名需要匹配数据表字段名
      * @return
      */
     boolean updateById(Object idValue, Map data);

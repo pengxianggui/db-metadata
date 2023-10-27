@@ -6,7 +6,7 @@ import com.github.md.analysis.meta.aop.AddPointCut;
 import com.github.md.analysis.meta.aop.AopInvocation;
 import com.github.md.analysis.meta.aop.FormInvocation;
 import com.github.md.analysis.meta.aop.UpdatePointCut;
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.AssertKit;
 import com.github.md.web.kit.PassKit;
 import lombok.extern.slf4j.Slf4j;

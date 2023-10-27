@@ -49,7 +49,7 @@
               @row-click="handleRowClick"
               @row-dblclick="handleRowDbClick"
               @sort-change="sortChange"
-              @selection-change="handleSelectionChange">
+              @selection-change="handleSelectionChange" v-loading="loading">
 
       <!-- multi select conf -->
       <template v-if="multiSelect">
@@ -64,12 +64,8 @@
                        :key="item.code"
                        v-bind="item.conf"
                        :prop="item.name"
-                       :label="item.label">
-        <template #header>
-          <meta-easy-edit :object-code="objectCode" :field-code="item.name" :label="item.label">
-            <template #label>{{ item.label }}</template>
-          </meta-easy-edit>
-        </template>
+                       :label="item.label"
+                       :render-header="renderHeader">
         <template #default="scope">
           <!--  TODO 2.4 如何将内容列也作为插槽提供扩展 -->
           <table-cell :edit="multiEdit" :data="scope" :meta="item"></table-cell>
@@ -154,7 +150,7 @@ import assembleMeta from './assembleMeta'
 import TableCell from '@/../package/view/ext/table/tableCell'
 import DefaultMeta from '../ui-conf'
 import columnsValid from "@/../package/view/ext/table/columnsValid";
-import {assertBoolean, isEmpty} from "@/../package/utils/common";
+import {isEmpty} from "@/../package/utils/common";
 import {ViewMixin, ViewMetaBuilder} from '../../ext/mixins'
 
 export default {
@@ -164,6 +160,7 @@ export default {
   data() {
     return {
       multiEdit: false, // 多行编辑模式
+      loading: false,
       innerData: [],
       choseData: [],
       activeData: {},
@@ -180,6 +177,20 @@ export default {
     filterParams: Object, // 搜索面板过滤参数
   },
   methods: {
+    renderHeader(h, { column, /*$index*/ }) {
+      let span = document.createElement('span'); // 新建一个 span
+      span.innerText = column.label; // 设置表头名称
+      document.body.appendChild(span); // 临时插入 document
+      column.minWidth = span.getBoundingClientRect().width + 20;
+      document.body.removeChild(span);
+      const field = this.columns.find(c => c.name === column.property)
+      return h('meta-easy-edit', {
+        attrs: {
+          'object-code': this.objectCode,
+          'field-code': field.name
+        }
+      }, column.label);
+    },
     handleSelectionChange(selection) {
       if (this.multiSelect) {
         this.choseData = selection;
@@ -187,7 +198,7 @@ export default {
       }
       this.$emit('selection-change', selection)
     },
-    handleView(ev, row, index) {
+    handleView(ev, row, /*index*/) {
       if (ev) ev.stopPropagation()
 
       const {primaryKey} = this
@@ -199,7 +210,7 @@ export default {
       }
       this.openFormView(url, params);
     },
-    handleEdit(ev, row, index) { // edit/add
+    handleEdit(ev, row, /*index*/) { // edit/add
       if (ev) ev.stopPropagation();
       const {primaryKey} = this;
       const primaryValue = utils.extractValue(row, primaryKey);
@@ -372,18 +383,24 @@ export default {
         's': size
       });
 
+      this.loading = true
       this.$axios.safeGet(data_url, {
         params: params
       }).then(resp => {
-        const {data, page} = resp
-        this.innerData = data
-        this.$emit("data-change", data)
-        if (utils.hasProp(resp, 'page')) {
-          this.setPageModel(page);
-        }
-        if (index > 1 && (isEmpty(data) || data.length <= 0)) {
+        const {data: {list, index, size, total}} = resp
+        this.innerData = list
+        this.$emit("data-change", list)
+
+        this.setPageModel({index, size, total});
+        if (index > 1 && (isEmpty(list) || list.length <= 0)) {
           this.setPage(1) // 若查询的是非首页, 且没有数据, 则默认回到首页
         }
+
+        this.$nextTick(() => {
+          this.$refs[this.tableRefName].doLayout();
+        })
+      }).finally(() => {
+        this.loading = false
       })
     },
     // set business data to empty

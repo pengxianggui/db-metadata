@@ -3,7 +3,9 @@
     <template v-if="enable">
       <template>
         <pop-menu trigger="right-click">
-          <template #label>{{ label }}</template>
+          <template #label>
+            <slot>{{ label }}</slot>
+          </template>
           <list direction="column">
             <list-item @click="toEditMetaObject">编辑元对象({{ objectCode }})</list-item>
             <list-item @click="toEditMetaField">编辑元字段({{ fieldCode }})</list-item>
@@ -46,7 +48,9 @@
         </dialog-box>
       </template>
     </template>
-    <template v-else>{{ label }}</template>
+    <template v-else>
+      <slot>{{ label }}</slot>
+    </template>
   </span>
 </template>
 

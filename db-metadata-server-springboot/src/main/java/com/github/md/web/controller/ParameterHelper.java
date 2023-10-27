@@ -1,6 +1,6 @@
 package com.github.md.web.controller;
 
-import com.github.md.web.WebException;
+import com.github.md.web.ex.WebException;
 import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
 
