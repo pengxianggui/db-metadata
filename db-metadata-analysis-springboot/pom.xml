@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.pengxianggui</groupId>
         <artifactId>db-metadata-parent</artifactId>
-        <version>2.4-SNAPSHOT</version>
+        <version>2.4</version>
         <relativePath>../db-metadata-parent/pom.xml</relativePath>
     </parent>
     <groupId>io.github.pengxianggui</groupId>
     <artifactId>db-metadata-analysis-springboot</artifactId>
-    <version>${parent.version}</version>
+    <version>2.4</version>
 
     <name>db-metadata-analysis-springboot</name>
     <description>db-metadata-analysis-springboot</description>
