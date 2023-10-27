@@ -18,7 +18,7 @@ public interface Mode {
     /**
      * 返回一个字符串，标识模式编码。注意，全局应当唯一。如果冲突，dbmeta会报错。
      *
-     * @return
+     * @return 返回模式编码，此编码必须与配置中的 md.server.upload.mode 保持一致(如果启用此模式的话)
      */
     String getMode();
 }

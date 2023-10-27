@@ -18,21 +18,21 @@ public interface LoginService<U extends UserWithRolesWrapper> {
     /**
      * 从Request中获取用户标识时需要用到得key;
      *
-     * @return
+     * @return request中存储token的key值
      */
     String tokenKey();
 
     /**
      * 从Request中获取用户标识时需要用到的tokenIn, 标识token是存储在cookie中，还是请求头中
      *
-     * @return
+     * @return 返回token在浏览器中存储的位置。如在session还是localStorage中
      */
     String tokenIn();
 
     /**
      * 从cookie中获取用户标志时需要用到的key
      *
-     * @return
+     * @return token在cookie中存储的key值
      * @deprecated 废弃，前端请求时无论token放在header还是cookie， 其键名都通过{@link #tokenKey()}指定
      */
     @Deprecated
@@ -44,14 +44,14 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 登录时 获取用户名的key
      * 如:username
      *
-     * @return
+     * @return 登录时用户名的键值
      */
     String loginKey();
 
     /**
      * 登录时 获取密码的key
      *
-     * @return
+     * @return 登录时密码的键名
      */
     String pwdKey();
 
@@ -59,7 +59,7 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 从请求中构建用户，只能获取已登录的用户。
      *
      * @param request
-     * @return
+     * @return 登录的用户对象
      */
     U getUser(HttpServletRequest request);
 
@@ -77,7 +77,6 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 若用户未登录，则不执行任何操作。
      *
      * @param userId 用户主键
-     * @return
      */
     default void refresh(String userId) {
     }
@@ -85,9 +84,9 @@ public interface LoginService<U extends UserWithRolesWrapper> {
     /**
      * 登录验证。若验证成功，则返回用户。你应当在此方法中调用 {@link #setLogged(UserWithRolesWrapper)}, 以便缓存登录用户
      *
-     * @param identity
-     * @param password
-     * @return
+     * @param identity 一般为用户名、或手机号，也可以是其它能唯一定位用户的属性(取决于实现)
+     * @param password 密码
+     * @return 返回验证成功的用户对象
      */
     U login(String identity, String password);
 
@@ -95,16 +94,17 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 获取登录信息
      *
      * @param request
-     * @return
+     * @return 登录信息
      */
     LoginVO getInfo(HttpServletRequest request);
 
     /**
      * 新建用户动作(注册)
      *
-     * @param username
-     * @param password
-     * @param attr
+     * @param username 用户名
+     * @param password 密码
+     * @param attr 其它属性
+     * @return 成功与否
      */
     default boolean register(String username, String password, Map attr) {
         throw new WebException("请实现注册方法！");
@@ -137,19 +137,19 @@ public interface LoginService<U extends UserWithRolesWrapper> {
      * 登出操作。用户自己主动登出。
      *
      * @param request
-     * @return
+     * @return 是否登出成功
      */
     boolean logout(HttpServletRequest request);
 
     /**
      * 获取所有已登录的用户
      *
-     * @return
+     * @return 返回所有已登录用户。key一般为用户id(或其他能唯一标识用户的属性，取决于具体实现)
      */
     Map<String, U> getAllLoggedUsers();
 
     /**
-     * 判断用户是否登录。
+     * 判断用户是否已登录。
      *
      * @param user
      * @return

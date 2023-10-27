@@ -21,8 +21,8 @@ public interface UserWithRolesWrapper extends User {
     MRRole[] roles();
 
     /**
-     * @param nameOrCode
-     * @return
+     * @param nameOrCode 角色名或编码
+     * @return 拥有此角色或编码则返回true
      */
     default boolean hasRole(String nameOrCode) {
         for (MRRole role : roles()) {
@@ -50,7 +50,7 @@ public interface UserWithRolesWrapper extends User {
      * 全部拥有，则返回true。 匹配权限编码
      *
      * @param authCodes 权限编码
-     * @return
+     * @return 拥有所有入参的权限则返回true
      */
     default boolean hasAuth(String... authCodes) {
         IAuth[] all = auths();
@@ -65,10 +65,10 @@ public interface UserWithRolesWrapper extends User {
     }
 
     /**
-     * 全部拥有，则返回true。匹配权限编码
+     * 匹配权限编码
      *
-     * @param auths
-     * @return
+     * @param auths 权限数组
+     * @return 全部拥有，则返回true
      */
     default boolean hasAuth(IAuth... auths) {
         // 依据IAuth.equals
