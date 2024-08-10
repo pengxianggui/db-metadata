@@ -31,13 +31,18 @@
         name: "FindBox",
         label: "查找框",
         components: {FindPanel},
+        inject: ['formData'],
         props: {
             value: [String, Number, Array]
         },
         data() {
             return {
                 findPanelMeta: {},
-                dialogMeta: {},
+                dialogMeta: {
+                  conf: {
+                    width: '70%'
+                  }
+                },
                 dialogVisible: false
             }
         },
@@ -62,23 +67,58 @@
             handlerOk(row) {
                 const {table: tableMeta} = this.findPanelMeta;
                 const {objectPrimaryKey} = tableMeta;
+
+                this.callbackOk(row);
                 const feedBackValue = utils.extractValue(row, objectPrimaryKey);
                 if (this.$listeners.hasOwnProperty('ok')) {
                     this.$emit('ok', {row, meta: tableMeta});
                     this.dialogVisible = false;
                     return;
                 }
-
                 this.nativeValue = feedBackValue[0];
                 this.dialogVisible = false;
             },
             handlerCancel() {
                 this.nativeValue = null;
                 this.dialogVisible = false;
+                this.callbackCancel();
             },
             handlerClear(ev) {
                 if (ev) ev.stopPropagation();
                 this.$emit('clear', ev);
+                this.callbackCancel();
+            },
+            callbackOk(row) {
+              const {name, okFn} = this.innerMeta;
+              let okFunction
+              try {
+                okFunction = utils.strToFn(okFn);
+              } catch (e) {
+                utils.printErr('%s 的callback.ok配置不是合法的函数, 请检查! row:%s', name, JSON.stringify(row))
+                return;
+              }
+
+              try {
+                return okFunction.call(utils, row, this.formData);
+              } catch (e) {
+                utils.printErr("%s 的callback.ok函数运行发生错误, 请检查! 错误信息: %s", name, e.message)
+              }
+            },
+            callbackCancel() {
+              const {name, cancelFn} = this.innerMeta;
+              let cancelFunction
+              try {
+                cancelFunction = utils.strToFn(cancelFn);
+              } catch (e) {
+                utils.printErr('%s 的callback.cancel配置不是合法的函数, 请检查! row:%s', name, JSON.stringify(row))
+                return;
+              }
+
+              try {
+                return cancelFunction.call(utils, this.formData);
+              } catch (e) {
+                utils.printErr("%s 的callback.cancel函数运行发生错误, 请检查! 错误信息: %s", name, e.message)
+              }
             }
         }
     }

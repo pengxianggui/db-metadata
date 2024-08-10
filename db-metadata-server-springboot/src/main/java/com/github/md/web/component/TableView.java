@@ -31,6 +31,10 @@ public class TableView extends ViewContainer {
         return this;
     }
 
+    public String getDataUrl() {
+        return meta.getStr("data_url");
+    }
+
     @Override
     protected void renderCustomMeta(Kv meta) {
         meta.setIfNotBlank("name", name);

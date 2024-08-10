@@ -5,7 +5,10 @@ import com.alibaba.druid.sql.ast.statement.SQLSelectQueryBlock;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.ast.statement.SQLTableSource;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
+import com.github.md.analysis.AnalysisSpringUtil;
+import com.github.md.analysis.kit.Kv;
 import com.jfinal.kit.StrKit;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -81,11 +84,26 @@ public class MetaFactory {
             }
         }
         if (!StrKit.notBlank(manualMetaObject.primaryKey())) {
-            throw new MetaOperateException("使用sql创建的元对象,必须包含名[id]列,原始Sql:{}", sql);
+            throw new MetaOperateException("使用sql创建的元对象,必须包含名[id]列,原始Sql:%s", sql);
         }
         manualMetaObject.tableName(tableName);
         manualMetaObject.code(objectCode);
         return manualMetaObject;
+    }
+
+    /**
+     * 从scopeMeta中构造源对象
+     * @param scopeMeta，参见{@link MetaFieldConfigParse#scopeMeta()}
+     * @return
+     */
+    public static IMetaObject createByScopeMeta(Kv scopeMeta) {
+        String objectCode = scopeMeta.getStr("objectCode");
+        if (StrKit.isBlank(objectCode)) {
+            throw new MetaOperateException("使用scopeMeta创建源对象时,必须指定objectCode!");
+        }
+        IMetaObject metaObject = AnalysisSpringUtil.getBean(DbMetaService.class).findByCode(objectCode);
+        // TODO
+        return null;
     }
 
     public static IMetaField createMetaField(IMetaObject parent) {

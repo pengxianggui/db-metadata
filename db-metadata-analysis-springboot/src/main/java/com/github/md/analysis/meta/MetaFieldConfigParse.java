@@ -54,7 +54,7 @@ public class MetaFieldConfigParse extends MetaData {
          * 2. hasDataOpts
          * 3. 指定数据源
          */
-        return isSql() || isOptions() || isDict() || isUrl();
+        return isSql() || isOptions() || isDict() || isUrl() || isMeta();
     }
 
     /**
@@ -71,12 +71,12 @@ public class MetaFieldConfigParse extends MetaData {
     }
 
     public boolean isOptions() {
-        return options().size() > 0;
+        return !options().isEmpty();
     }
 
     public List<Kv> options() {
         String jsonArray = getStr("scopeOptions");
-        if (jsonArray == null) {
+        if (StrKit.isBlank(jsonArray)) {
             return new ArrayList<>();
         }
         return JSONArray.parseArray(jsonArray, Kv.class);
@@ -97,6 +97,29 @@ public class MetaFieldConfigParse extends MetaData {
 
     public boolean isUrl() {
         return StrKit.notBlank(scopeUrl());
+    }
+
+    public boolean isMeta() {
+        return !scopeMeta().isEmpty();
+    }
+
+    /**
+     * scopeMeta, eg:
+     * <pre>
+     *     {
+     *         "objectCode": "xxx",
+     *         "fs": "id,col1,col2",
+     *         "where": "col1_eq=123&col2_in=1,2"
+     *     }
+     * </pre>
+     * @return
+     */
+    public Kv scopeMeta() {
+        String metaConfigStr = getStr("scopeMeta");
+        if (StrKit.isBlank(metaConfigStr)) {
+            return Kv.create();
+        }
+        return JSONObject.parseObject(metaConfigStr, Kv.class);
     }
 
     public String scopeSql() {

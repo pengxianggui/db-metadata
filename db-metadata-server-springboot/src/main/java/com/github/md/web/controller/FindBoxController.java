@@ -1,10 +1,10 @@
 package com.github.md.web.controller;
 
+import cn.hutool.core.lang.Assert;
+import com.github.md.analysis.AnalysisSpringUtil;
 import com.github.md.analysis.kit.Kv;
-import com.github.md.analysis.meta.IMetaField;
-import com.github.md.analysis.meta.IMetaObject;
-import com.github.md.analysis.meta.MetaFactory;
-import com.github.md.analysis.meta.MetaSqlKit;
+import com.github.md.analysis.meta.*;
+import com.github.md.web.ex.WebException;
 import com.github.md.web.kit.PageKit;
 import com.github.md.web.res.Res;
 import com.github.md.web.ServiceManager;
@@ -19,6 +19,7 @@ import com.github.md.web.ui.OptionsKit;
 import com.github.md.web.user.auth.annotations.ApiType;
 import com.github.md.web.user.auth.annotations.Type;
 import com.google.common.base.Preconditions;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,15 +43,18 @@ public class FindBoxController extends ControllerAdapter {
         String objectCode = queryHelper.getObjectCode();
         String fieldCode = queryHelper.getFieldCode();
         IMetaField metaField = ServiceManager.metaService().findFieldByCode(objectCode, fieldCode);
-        Preconditions.checkArgument(metaField.configParser().isSql(), "必须为该元子段配置数据源属性,指定sql");
+
+        // 调整为: sql针对的是下拉, 元数据针对查找框
+        Preconditions.checkArgument(metaField.configParser().isMeta(), "必须为该元字段配置数据源属性,指定meta信息");
 
         TableView tableView = null;
         SearchView searchView = null;
-        String sql = metaField.configParser().scopeSql();
-        IMetaObject metaObject = MetaFactory.createBySql(sql, objectCode);
+        Kv scopeMeta = metaField.configParser().scopeMeta();
+        Assert.notBlank(scopeMeta.getStr("objectCode"), () -> new WebException("请检查原字段数据源配置中的meta信息, 必须指定一个有效的objectCode值!"));
+        IMetaObject metaObject = AnalysisSpringUtil.getBean(DbMetaService.class).findByCode(scopeMeta.getStr("objectCode"));
         tableView = ViewFactory.tableView(metaObject);
 
-        String url = CoreUrlBuilder.findBoxMetaUrl(objectCode, fieldCode);
+        String url = CoreUrlBuilder.findBoxMetaUrl(scopeMeta);
         tableView.dataUrl(url);
 
         searchView = ViewFactory.searchView(metaObject);
@@ -59,6 +63,7 @@ public class FindBoxController extends ControllerAdapter {
         return Res.ok(result);
     }
 
+    @Deprecated
     @ApiType(value = Type.API_WITH_META_OBJECT)
     @GetMapping("list")
     public Res list() {
@@ -86,7 +91,8 @@ public class FindBoxController extends ControllerAdapter {
         if (metaField.configParser().isSql()) {
             String sql = metaField.configParser().scopeSql();
             metaObject = MetaFactory.createBySql(sql, objectCode);
-            metaObject.schemaName(metaField.configParser().dbConfig());
+            String dbConfig = StrKit.defaultIfBlank(metaField.configParser().dbConfig(), metaObject.schemaName());
+            metaObject.schemaName(dbConfig);
         }
         QueryConditionForMetaObject queryConditionForMetaObject = new QueryConditionForMetaObject(metaObject, null);
         SqlParaExt sqlPara = queryConditionForMetaObject.resolve(getRequest().getParameterMap(), fields, excludeFields);

@@ -63,21 +63,19 @@
         <el-radio-button label="10">禁用</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="数据源" class="form-item-options">
+    <el-form-item label="下拉数据源" class="form-item-options">
       <z-toggle-panel :default-open="hasTranslation" label-position="top-left">
         <template #label="{open}">
           <el-tooltip placement="right">
             <i class="el-icon-question"></i>
             <div slot="content">
-              <span>优先级: 静态数组 > 字典名 > 接口 > 指定SQL</span>
               <doc-link path="/guide/further-use/metaFieldConfig.html#数据源">
-                <span>更多详见:</span>
+                <span>下拉框数据源配合下拉框使用, 优先级: 静态数组 > 字典名 > 接口 > 指定SQL. 更多详见:</span>
                 <template #link="{open}"><el-link @click="open">文档</el-link></template>
               </doc-link>
             </div>
-          </el-tooltip>
-          &nbsp;
-          <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
+          </el-tooltip>&nbsp;
+          <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>&nbsp;
         </template>
         <el-tabs v-model="activeOption">
           <el-tab-pane label="静态数组" name="scopeOptions">
@@ -106,18 +104,42 @@
               <el-button @click="checkSql(nativeValue.scopeSql)" type="primary">校验</el-button>
             </div>
           </el-tab-pane>
+          <el-tab-pane label="meta" name="scopeMeta">
+            <el-input v-model="nativeValue.scopeMeta.objectCode" placeholder="填写元对象编码(必填)"></el-input>
+            <el-input v-model="nativeValue.scopeMeta.fs" placeholder="指定显示列(英文逗号分隔), 例如: id,col1,col2"></el-input>
+            <el-input v-model="nativeValue.scopeMeta.where" placeholder="输入过滤条件表达式, 例如: col1_eq=123&col2_in=1,2"></el-input>
+          </el-tab-pane>
         </el-tabs>
+        <div>
+          <bool-box v-model="nativeValue.escape">是否转义</bool-box>&nbsp;
+          <el-tooltip placement="right">
+            <div slot="content">勾选后, 列表页、详情页等显示处, 会自动将原始值转义为显示值(转义依据参考【数据源】配置)</div>
+            <i class="el-icon-question"></i>
+          </el-tooltip>
+        </div>
       </z-toggle-panel>
     </el-form-item>
-    <el-form-item>
-      <template #label>
-        <span>是否转义</span>&nbsp;
-        <el-tooltip placement="right">
-          <div slot="content">勾选后, 列表页、详情页等显示处, 会自动将原始值转义为显示值(转义依据参考【数据源】配置)</div>
-          <i class="el-icon-question"></i>
-        </el-tooltip>
-      </template>
-      <bool-box v-model="nativeValue.escape"></bool-box>
+    <el-form-item label="查找框数据源" class="form-item-options">
+      <z-toggle-panel :default-open="hasTranslation" label-position="top-left">
+        <template #label="{open}">
+          <el-tooltip placement="right">
+            <i class="el-icon-question"></i>
+            <div slot="content">
+              <doc-link path="/guide/further-use/metaFieldConfig.html#数据源">
+                <span>查找框数据源配合查找框使用, 更多详见:</span>
+                <template #link="{open}"><el-link @click="open">文档</el-link></template>
+              </doc-link>
+            </div>
+          </el-tooltip>
+          &nbsp;
+          <i :class="{'el-icon-caret-bottom': !open, 'el-icon-caret-top': open}"></i>
+        </template>
+        <div>
+          <el-input v-model="nativeValue.scopeMeta.objectCode" placeholder="填写元对象编码(必填)"></el-input>
+          <el-input v-model="nativeValue.scopeMeta.fs" placeholder="指定显示列(英文逗号分隔), 例如: id,col1,col2"></el-input>
+          <el-input v-model="nativeValue.scopeMeta.where" placeholder="输入过滤条件表达式, 例如: col1_eq=123&col2_in=1,2"></el-input>
+        </div>
+      </z-toggle-panel>
     </el-form-item>
 
     <el-divider content-position="left">
@@ -166,10 +188,11 @@ export default {
         isSearch: false,
         isMultiple: false,
         isFile: false,
-        scopeSql: null,
-        scopeUrl: null,
         scopeOptions: [],
         scopeDict: null, // 字典名
+        scopeUrl: null,
+        scopeSql: null,
+        scopeMeta: {},
         isListShow: true,
         escape: true
       }

@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import MetaEasyEdit from '@/../package/core/meta/src/MetaEasyEdit'
 import utils from '../../../utils'
 import DefaultBehaviors from './defaultBehaviors'
 import DefaultMeta from '../ui-conf'
@@ -46,12 +45,13 @@ import {printErr} from "../../../utils/common";
 
 export default {
   name: "FormView",
-  components: {MetaEasyEdit, NestFormItem, ...DefaultBehaviors},
+  components: {NestFormItem, ...DefaultBehaviors},
   mixins: [ViewMetaBuilder(DefaultMeta), ViewMixin],
   provide() {
     return {
       isView: this.isView,
-      objectCode: this.objectCode
+      objectCode: this.objectCode,
+      formData: this.model
     }
   },
   props: {

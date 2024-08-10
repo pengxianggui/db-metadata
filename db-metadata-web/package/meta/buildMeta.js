@@ -8,6 +8,7 @@ import MiniFormBox from '../core/miniformbox'
 import DefaultMiniFormBoxMeta from '../core/miniformbox/ui-conf'
 import DefaultJsonBoxMeta from '../core/jsonbox/ui-conf'
 import IconBox from "../core/iconbox/src/IconBox";
+import Codebox from "../core/codebox";
 
 /**
  * 定义各容器组件下的特殊的配置字段(包括容器组件和域组件)
@@ -91,6 +92,26 @@ const specials = {
     }
 };
 
+/**
+ * 正则匹配的特殊
+ * @type {{}}
+ */
+const regexSpecials = [
+    {
+        regex: /Fn$/,
+        config: {
+            component_name: Codebox.name,
+            name: 'ok',
+            label: '点选回调',
+            width: '100%',
+            height: "120px",
+            'show-theme-chose': false,
+            "show-mode-chose": false,
+            "show-bar": false
+        }
+    }
+]
+
 function buildMetaByString(key, value) {
     return {
         component_name: TextBox.name,
@@ -161,7 +182,14 @@ function buildMetaByArray(key, value) {
  */
 function buildMeta(key, value, componentCode) {
     if (utils.hasProp(specials[componentCode], key)) {
-        return specials[componentCode][key];
+        return utils.deepClone(specials[componentCode][key]);
+    }
+
+    const regexItem = regexSpecials.find(item => item.regex.test(key));
+    if (regexItem) {
+        const config = utils.deepClone(regexItem.config);
+        config.label = key
+        return config;
     }
 
     const type = utils.typeOf(value);
@@ -186,9 +214,9 @@ function buildMeta(key, value, componentCode) {
  * value在前, 防止只传了value
  * @param value 值，必须
  * @param key 键名，此值对应的name，非必须。
- * @param componentCode 容器组件名，表示构建返回的组件(元数据)是存在于哪个容器组件下。
+ * @param viewComponentCode 容器组件名，表示构建返回的组件(元数据)是存在于哪个容器组件下。
  * @returns {*|{component_name, name, label, value}}
  */
-export default function (value, key, componentCode) {
-    return buildMeta(key, value, componentCode)
+export default function (value, key, viewComponentCode) {
+    return buildMeta(key, value, viewComponentCode)
 }
