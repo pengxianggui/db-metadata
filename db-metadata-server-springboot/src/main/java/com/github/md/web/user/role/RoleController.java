@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 @RequestMapping("role")
 public class RoleController extends ControllerAdapter {
 
+    @Authorize(justSign = true)
+    @GetMapping("list")
+    public Res all() {
+        return Res.ok(AuthenticationManager.me().getRoleService().findAll());
+    }
+
     @GetMapping("{roleId}/auths")
     public Res getAuths(@PathVariable("roleId") String roleId) {
         List<IAuth> auths = AuthenticationManager.me().getAuthService().findByRole(roleId);

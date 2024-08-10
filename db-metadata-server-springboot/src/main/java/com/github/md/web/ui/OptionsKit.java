@@ -67,8 +67,8 @@ public class OptionsKit {
         List<Kv> result = Lists.newArrayList();
         for (Record record : records) {
             if (record.getColumns().containsKey("id") && record.getColumns().containsKey("cn")) {
-                log.debug("id-{},cn-{}", record.getStr("id"), record.getStr("cn"));
-                result.add(Kv.by("value", record.getStr("id")).set("key", record.getStr("cn")));
+                log.debug("id-{},cn-{}", record.get("id"), record.get("cn"));
+                result.add(Kv.by("value", record.get("id")).set("key", record.get("cn")));
             }
         }
         return result;
@@ -153,9 +153,7 @@ public class OptionsKit {
         Preconditions.checkArgument(SqlAnalysis.check(sql), "无效的SQL配置,%s", sql);
         Kv mapped = Kv.create();
         List<Record> optionsRecord = Db.use(dbConfig).find(sql);
-        optionsRecord.forEach(r -> {
-            mapped.set(r.getStr("id"), r.getStr("cn"));
-        });
+        optionsRecord.forEach(r -> mapped.set(r.get("id"), r.get("cn")));
         return mapped;
     }
 
