@@ -91,21 +91,6 @@ public class MetaFactory {
         return manualMetaObject;
     }
 
-    /**
-     * 从scopeMeta中构造源对象
-     * @param scopeMeta，参见{@link MetaFieldConfigParse#scopeMeta()}
-     * @return
-     */
-    public static IMetaObject createByScopeMeta(Kv scopeMeta) {
-        String objectCode = scopeMeta.getStr("objectCode");
-        if (StrKit.isBlank(objectCode)) {
-            throw new MetaOperateException("使用scopeMeta创建源对象时,必须指定objectCode!");
-        }
-        IMetaObject metaObject = AnalysisSpringUtil.getBean(DbMetaService.class).findByCode(objectCode);
-        // TODO
-        return null;
-    }
-
     public static IMetaField createMetaField(IMetaObject parent) {
         return new MetaField(parent);
     }
