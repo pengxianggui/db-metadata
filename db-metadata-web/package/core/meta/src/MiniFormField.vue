@@ -104,11 +104,6 @@
               <el-button @click="checkSql(nativeValue.scopeSql)" type="primary">校验</el-button>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="meta" name="scopeMeta">
-            <el-input v-model="nativeValue.scopeMeta.objectCode" placeholder="填写元对象编码(必填)"></el-input>
-            <el-input v-model="nativeValue.scopeMeta.fs" placeholder="指定显示列(英文逗号分隔), 例如: id,col1,col2"></el-input>
-            <el-input v-model="nativeValue.scopeMeta.where" placeholder="输入过滤条件表达式, 例如: col1_eq=123&col2_in=1,2"></el-input>
-          </el-tab-pane>
         </el-tabs>
         <div>
           <bool-box v-model="nativeValue.escape">是否转义</bool-box>&nbsp;

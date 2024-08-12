@@ -65,17 +65,17 @@
                 })
             },
             handlerOk(row) {
-                const {table: tableMeta} = this.findPanelMeta;
-                const {objectPrimaryKey} = tableMeta;
+                // const {table: tableMeta} = this.findPanelMeta;
+                // const {objectPrimaryKey} = tableMeta;
 
                 this.callbackOk(row);
-                const feedBackValue = utils.extractValue(row, objectPrimaryKey);
-                if (this.$listeners.hasOwnProperty('ok')) {
-                    this.$emit('ok', {row, meta: tableMeta});
-                    this.dialogVisible = false;
-                    return;
-                }
-                this.nativeValue = feedBackValue[0];
+                // const feedBackValue = utils.extractValue(row, objectPrimaryKey);
+                // if (this.$listeners.hasOwnProperty('ok')) {
+                //     this.$emit('ok', {row, meta: tableMeta});
+                //     this.dialogVisible = false;
+                //     return;
+                // }
+                // this.nativeValue = feedBackValue[0];
                 this.dialogVisible = false;
             },
             handlerCancel() {

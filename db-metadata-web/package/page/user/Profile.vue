@@ -38,8 +38,8 @@
           </span>
         </p>
         <p>
-          <el-button type="primary" @click="editDialogVisible = true" v-if="!$isRoot()">编辑个人信息</el-button>
-          <el-button type="danger" @click="passResetDialogVisible = true" v-if="!$isRoot()">密码重置</el-button>
+          <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
+          <el-button type="danger" @click="passResetDialogVisible = true">密码重置</el-button>
         </p>
       </template>
     </row-grid>
